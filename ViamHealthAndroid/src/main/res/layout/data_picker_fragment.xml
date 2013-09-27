@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:paddingLeft="6.5dp"
+android:paddingTop="6dp"
+android:paddingRight="8.5dp"
+android:paddingBottom="8.5dp"
+android:background="@drawable/app_background">
+
+<DatePicker
+    android:id="@+id/datePicker"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:paddingBottom="40dp" />
+
+<LinearLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <Button
+        android:id="@+id/bCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1.0"
+        android:onClick="buttonCanceDatePickerOnclick"
+        android:text="Cancel" />
+
+    <Button
+        android:id="@+id/bSave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1.0"
+        android:onClick="buttonSaveDatePickerOnclick"
+        android:text="Save" />
+
+ </LinearLayout>
+ </FrameLayout>

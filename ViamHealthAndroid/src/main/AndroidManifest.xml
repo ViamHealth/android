@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.viamhealth.android"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.CAMERA"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.FLASHLIGHT"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.CALL_PHONE"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        android:required="false" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <application
+        android:name="com.viamhealth.android.Global_Application"
+        android:allowBackup="true"
+        android:debuggable="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="ViamHealth" >
+        <activity android:name="com.viamhealth.android.activities.Login" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.Home"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupActivityty"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupGoal"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupProfile"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupFiles"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupDiet"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupReminder"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupHome"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity
+            android:name="com.viamhealth.android.activities.TabGroupSettings"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity android:name="com.viamhealth.android.activities.TabGroupJournal" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.Goal" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.InviteUser"
+            android:theme="@style/FullHeightDialog"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddWeightGoal"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.AddWeightValue"  android:theme="@style/FullHeightDialog">
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.Profile" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.File" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddProfile"
+            android:theme="@style/FullHeightDialog"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.FoodDiary" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.AddBreakfast" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.Reminder" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.Settings"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.SignUp"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.UploadFile"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.Downlaod"
+            android:theme="@style/FullHeightDialog"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.Home"
+            android:label="@string/title_activity_home" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddReminder"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.FoodDetail" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.Watch"
+            android:label="@string/title_activity_watch" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddGlucoseGoal"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddCholesterolGoal"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullHeightDialog">
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddBPGoal"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddCholesterolValue"
+            android:label="@string/title_activity_add_cholesterol_value"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddGlucoseValue"
+            android:theme="@style/FullHeightDialog"
+            android:label="@string/title_activity_add_glucose_value" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddBPValue"
+            android:theme="@style/FullHeightDialog"
+            android:label="@string/title_activity_add_bpvalue" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddTest"
+            android:theme="@style/FullHeightDialog"
+            android:label="@string/title_activity_add_medicaletst" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddMedication"
+            android:theme="@style/FullHeightDialog"
+            android:label="@string/title_activity_add_medication" >
+        </activity>
+    </application>
+
+</manifest>

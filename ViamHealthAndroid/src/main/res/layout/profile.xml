@@ -1,0 +1,218 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".Profile" 
+    android:orientation="vertical"
+    android:background="#EFEFEF">
+
+  <FrameLayout 
+    android:id="@+id/main_layout"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+    <!-- Action Bar Start -->
+    <LinearLayout 
+        android:id="@+id/actionbarlayot"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:orientation="vertical">
+     <LinearLayout 
+        android:orientation="horizontal"
+        android:background="@drawable/top_bar"
+        android:layout_width="fill_parent"
+        android:gravity="center_vertical|center_horizontal"
+    	android:layout_height="wrap_content">
+    	<FrameLayout 
+    	    android:layout_width="fill_parent"
+    		android:layout_height="wrap_content">
+    		
+        <LinearLayout 
+             android:gravity="center_vertical|center_horizontal"
+            android:layout_width="fill_parent"
+    		android:layout_height="fill_parent">
+            <TextView 
+                android:id="@+id/heding_name_profile"
+                android:textSize="22sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Sharat Khurana"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_width="fill_parent"
+    			android:layout_height="fill_parent"/>
+        </LinearLayout>
+    	
+        <LinearLayout
+            android:orientation="horizontal" 
+            android:gravity="right"
+             android:layout_gravity="center_vertical|center"
+             android:layout_width="fill_parent"
+    		android:layout_height="wrap_content">
+            
+            <LinearLayout
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+            <ImageView 
+                android:src="@drawable/person_icon"
+                android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <RelativeLayout android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
+            <LinearLayout
+                android:id="@+id/menu_invite_profile"
+                android:paddingLeft="15dp"
+                android:paddingRight="20dp"
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+
+            <ImageButton
+               
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/menu_icon" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/menu_invite_out_profile"
+                android:visibility="invisible"
+                android:paddingLeft="15dp"
+                android:paddingRight="20dp"
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/menu_icon" />
+
+            </LinearLayout>
+            </RelativeLayout>
+                        
+                        
+                        
+        </LinearLayout>
+        
+        </FrameLayout>
+       </LinearLayout> 
+	  
+	  <!-- Action Bar End -->
+	  
+	  <!-- Profile Layout -->
+	  <LinearLayout android:layout_height="fill_parent"
+	      android:layout_width="fill_parent"
+	      android:orientation="vertical">
+	      
+	  
+			  <LinearLayout 
+			    android:id="@+id/profile_layout"
+		        android:orientation="vertical"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content">
+			        <LinearLayout 
+			            android:id="@+id/addprofile_layout"
+			            android:layout_height="wrap_content"
+			            android:layout_width="fill_parent">
+
+	        			<TextView 
+	        			    android:id="@+id/btn_add_profile"
+	        			    android:layout_height="wrap_content"
+	        			    android:layout_width="fill_parent"
+	        			    android:textColor="#000000"
+	        			    android:textSize="20sp"
+	        			    android:textStyle="bold"
+	        			    android:gravity="left"
+	        			    android:text="  Add a Profile"/>
+        			</LinearLayout>
+        			  <LinearLayout 
+        			    android:id="@+id/addgoal_layout"
+        			    android:layout_height="wrap_content"
+			            android:layout_width="fill_parent">
+	        			<TextView 
+	        			    android:id="@+id/btn_add_goal"
+	        			    android:layout_height="wrap_content"
+	        			    android:layout_width="fill_parent"
+	        			    android:textColor="#000000"
+	        			    android:textSize="20sp"
+	        			    android:textStyle="bold"
+	        			    android:gravity="left"
+	        			    android:text="  Add a Goal"/>
+        			</LinearLayout>
+        			  <LinearLayout 
+        			    android:id="@+id/addhelth_layout"
+        			    android:layout_height="wrap_content"
+			            android:layout_width="fill_parent" >
+	        			<TextView 
+	        			    android:id="@+id/btn_add_health"
+	        			    android:layout_height="wrap_content"
+	        			    android:layout_width="fill_parent"
+	        			    android:textColor="#000000"
+	        			    android:textStyle="bold"
+	        			    android:textSize="20sp"
+	        			    android:gravity="left"
+	        			    android:text="  Add a Health Record"/>
+        			</LinearLayout>
+		       </LinearLayout>
+		     <ScrollView 
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:splitMotionEvents="false"
+     android:fadingEdgeLength="0dp"
+     android:id="@+id/main_scroll"
+     android:layout_gravity="center_horizontal">
+    	    
+     <LinearLayout
+     android:orientation="vertical"
+     android:id="@+id/notification_layout"
+     android:layout_width="fill_parent"
+     android:layout_height="wrap_content"
+     android:layout_gravity="center_horizontal"
+     android:gravity="center_horizontal"
+   >
+  	   
+        
+     </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
+  
+    </LinearLayout>
+    	<LinearLayout android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/settiglayout_profile"
+            android:gravity="right"
+            android:visibility="invisible"
+            android:layout_gravity="right">
+
+             <ListView
+                 android:id="@+id/listView1"
+                 android:layout_width="210dp"
+                 android:layout_height="wrap_content"
+                 android:background="#efefef"
+                 android:divider="#10000000"
+                 android:dividerHeight="0px"
+               />
+              <LinearLayout 
+        android:id="@+id/footer_invite_user_goal" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+    <TextView 
+        android:text="+ Invite User" 
+        android:id="@+id/lbl_invite_user_profile" 
+        android:layout_width="210dp" 
+        android:layout_height="wrap_content" 
+        android:textSize="18sp"
+        android:gravity="center_horizontal"
+        android:padding="10dp" 
+        android:textStyle="bold" 
+        android:textColor="#4bddfe"
+        android:background="@drawable/listinvite" />
+    </LinearLayout>
+	    </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,437 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".AddNewValue" 
+    android:orientation="vertical"
+    android:background="#D9D9D9">
+    <FrameLayout 
+    android:id="@+id/main_layout"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+     <LinearLayout 
+        android:id="@+id/actionbarlayot"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:orientation="vertical">
+      <!-- Action Bar Start -->
+       
+	 <LinearLayout 
+        android:orientation="horizontal"
+        android:background="@drawable/top_bar"
+        android:layout_width="fill_parent"
+        android:gravity="center_vertical|center_horizontal"
+    	android:layout_height="wrap_content">
+    	<FrameLayout 
+    	    android:layout_width="fill_parent"
+    		android:layout_height="wrap_content">
+    		
+        <LinearLayout 
+             android:gravity="center_vertical|center_horizontal"
+            android:layout_width="fill_parent"
+    		android:layout_height="fill_parent"
+    		android:orientation="horizontal">
+    		    <ImageView 
+                android:src="@drawable/back"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:padding="5dp"
+                android:id="@+id/back"
+                android:layout_height="wrap_content"/>
+    		  
+ 			
+ 			
+ 		    <TextView 
+                android:id="@+id/heding_name_food"
+                android:textSize="22sp"
+                android:gravity="center_vertical|center"
+                android:text="Sharat Khurana"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_width="fill_parent"
+                android:layout_weight="1"
+    			android:layout_height="fill_parent"/>
+          
+            <LinearLayout
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+            <ImageView 
+                android:src="@drawable/person_icon"
+                android:layout_width="wrap_content"
+    			android:layout_height="fill_parent"/>
+            </LinearLayout>
+
+            <RelativeLayout android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
+            <LinearLayout
+                android:id="@+id/menu_invite_food"
+               
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+
+            <ImageButton
+               
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/menu_icon" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/menu_invite_out_food"
+                android:visibility="invisible"
+             
+            android:layout_width="wrap_content"
+    		android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/menu_icon" />
+
+            </LinearLayout>
+            </RelativeLayout>
+                        
+                        
+                        
+        </LinearLayout>
+        </FrameLayout>
+        </LinearLayout>
+	  <!-- Action Bar End -->
+	    	
+  <!-- date layout -->
+  
+     <LinearLayout
+            android:id="@+id/newval_main_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+           >
+
+           <TextView android:layout_height="wrap_content"
+               android:layout_width="wrap_content"
+               android:text="Add a New value"
+               android:textStyle="bold"
+               android:textColor="#000000"
+               android:textSize="17sp"/>
+            <LinearLayout android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="right|center_vertical">
+                <LinearLayout 
+                     android:id="@+id/btn_time_picker"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+		                <TextView android:id="@+id/lbl_newval_time"
+		                    android:layout_height="wrap_content"
+		                    android:layout_width="wrap_content"
+		                    android:text="10:45AM"
+		                     android:textColor="#000000"
+		                    android:textSize="12sp"/>
+		                 <ImageView
+		                      android:paddingLeft="5dp"
+		                        android:layout_height="wrap_content"
+		                        android:layout_width="wrap_content"
+		                        android:src="@drawable/picker_bg"/>
+                 </LinearLayout>
+                  <LinearLayout 
+                      android:id="@+id/btn_date_picker"
+                      android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp">
+		       
+		                 <TextView android:id="@+id/lbl_newval_date"
+		                    android:layout_height="wrap_content"
+		                    android:layout_width="wrap_content"
+		                    android:text="20 March 2013"
+		                     android:textColor="#000000"
+		                    android:textSize="12sp"
+		                    />
+		                 <ImageView 
+		                     	android:paddingLeft="5dp"
+		                        android:layout_height="wrap_content"
+		                        android:layout_width="wrap_content"
+		                        android:src="@drawable/picker_bg"
+		                       />
+                 </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+  <!-- date layout end -->
+  
+  <!-- value layout start -->
+   <ScrollView 
+     android:layout_width="fill_parent"
+     android:layout_height="0dp"
+	android:layout_weight="1"
+     android:splitMotionEvents="false"
+     android:fadingEdgeLength="0dp"
+     android:layout_gravity="center_horizontal">
+  <LinearLayout android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/newval_mid_layout"
+            android:layout_width="fill_parent"
+            android:orientation="vertical">
+			    
+						            <LinearLayout android:id="@+id/header_layout"
+						                android:layout_height="wrap_content"
+						                android:layout_width="fill_parent"
+						                android:orientation="horizontal"
+						                android:background="@drawable/newval_header">
+						                <ImageView 
+						                    android:id="@+id/newval_icon"
+						                    android:layout_height="wrap_content"
+						                    android:layout_width="wrap_content"
+						                    android:src="@drawable/bpicon"
+						                    android:layout_gravity="center_vertical" />
+						                <TextView 
+						                    android:id="@+id/goal_name"
+						                    android:layout_height="wrap_content"
+						                    android:layout_width="wrap_content"
+						                    android:text="Blood Presure"
+						                    android:layout_gravity="center_vertical"
+						                    android:textSize="18sp"
+						                     android:textColor="#000000"
+						                    android:textStyle="bold"/>
+						                 <TextView 
+						                    android:id="@+id/goal_desc" 
+						                    android:layout_height="wrap_content"
+						                    android:layout_width="fill_parent"
+						                    android:text=" AVG Blood Presure 100/69 mmHG"
+						                    android:layout_gravity="center_vertical"
+						                     android:textColor="#000000"
+						                    android:textSize="15sp"
+						                    android:paddingLeft="5dp"
+						                    />
+						            </LinearLayout>
+							            <LinearLayout 
+							                android:id="@+id/newval_submid_layout"
+							                android:layout_height="0dp"
+							                android:layout_weight="1"
+							                android:layout_width="fill_parent"
+							                android:orientation="vertical"
+							                >
+							                 <RelativeLayout android:layout_height="wrap_content"
+							                     android:layout_width="fill_parent">
+							                  <LinearLayout 
+							                        android:id="@+id/blood_presure_layout"
+									                android:layout_height="wrap_content"
+									                android:layout_width="fill_parent"
+									                android:orientation="vertical"
+									                android:background="@drawable/newval_middle_bg">
+									                   <TextView 
+									                            android:id="@+id/lbl_systolic"
+									                            android:layout_height="wrap_content"
+											                    android:layout_width="fill_parent"
+											                    android:text="Systolic (High)"
+											                    android:layout_gravity="center_vertical"
+											                    android:textSize="10sp"
+											                     android:textColor="#000000"
+											                    
+											                    />
+									                 <LinearLayout android:layout_height="wrap_content"
+									                     android:layout_width="fill_parent"
+									                     android:orientation="horizontal">
+									                    <SeekBar
+							                                android:id="@+id/seekbar_bar_systolic"
+							                                style="?android:attr/progressBarStyleHorizontal"
+							                                android:layout_width="wrap_content"
+							                                android:layout_height="wrap_content"
+							                                android:maxHeight="9dp"
+							                                android:minHeight="9dp"
+							                                android:max="180"
+							                                android:progressDrawable="@drawable/scrubber_progress_horizontal_holo_light"
+							                                android:thumb="@drawable/scrubber_control_selector_holo_light" />
+											                  
+											                  <TextView 
+											                      android:id="@+id/lbl_systolic_number"
+											                      android:layout_height="wrap_content"
+											                      android:layout_width="wrap_content"
+											                      android:text="0"
+											                       android:textColor="#000000"
+											                      android:textSize="25sp"
+											                      />
+											                   <TextView android:layout_height="wrap_content"
+											                      android:layout_width="wrap_content"
+											                      android:text="mmHG"
+											                       android:textColor="#000000"
+											                      android:textSize="10sp"
+											                      />
+									                  </LinearLayout>
+									                   <TextView 
+									                       		android:id="@+id/lbl_diastolic"
+									                       		android:layout_height="wrap_content"
+											                    android:layout_width="fill_parent"
+											                    android:text="Diastolic (Low)"
+											                    android:layout_gravity="center_vertical"
+											                    android:textSize="10sp"
+											                     android:textColor="#000000"
+											                    
+											                    />
+									                 <LinearLayout android:layout_height="wrap_content"
+									                     android:layout_width="fill_parent"
+									                     android:orientation="horizontal">
+									                    <SeekBar
+							                                android:id="@+id/seekbar_bar_diastolic"
+							                                style="?android:attr/progressBarStyleHorizontal"
+							                                android:layout_width="wrap_content"
+							                                android:layout_height="wrap_content"
+							                                android:maxHeight="9dp"
+							                                android:minHeight="9dp"
+							                                android:max="170"
+							                                 android:progressDrawable="@drawable/scrubber_progress_horizontal_holo_light"
+							                                android:thumb="@drawable/scrubber_control_selector_holo_light" />
+											                  
+											                  <TextView 
+											                      android:id="@+id/lbl_diastolic_number"
+											                      android:layout_height="wrap_content"
+											                      android:layout_width="wrap_content"
+											                      android:text="0"
+											                      android:textSize="25sp"
+											                       android:textColor="#000000"
+											                      />
+											                   <TextView android:layout_height="wrap_content"
+											                      android:layout_width="wrap_content"
+											                      android:text="mmHG"
+											                       android:textColor="#000000"
+											                      android:textSize="10sp"
+											                      />
+									                  </LinearLayout>
+									                   <TextView 
+									                       		android:id="@+id/lbl_pulse"
+									                       		android:layout_height="wrap_content"
+											                    android:layout_width="fill_parent"
+											                    android:text="Pulse"
+											                    android:layout_gravity="center_vertical"
+											                    android:textSize="10sp"
+											                     android:textColor="#000000"
+											                   
+											                    />
+									                 <LinearLayout android:layout_height="wrap_content"
+									                     android:layout_width="fill_parent"
+									                     android:orientation="horizontal">
+									                    <SeekBar
+							                                android:id="@+id/seekbar_bar_pulse"
+							                                style="?android:attr/progressBarStyleHorizontal"
+							                                android:layout_width="wrap_content"
+							                                android:layout_height="wrap_content"
+							                               android:maxHeight="9dp"
+							                                android:minHeight="9dp"
+							                                android:max="160"
+							                                 android:progressDrawable="@drawable/scrubber_progress_horizontal_holo_light"
+							                                android:thumb="@drawable/scrubber_control_selector_holo_light" />
+											                  
+											                  <TextView 
+											                      android:id="@+id/lbl_pulse_number"
+											                      android:layout_height="wrap_content"
+											                      android:layout_width="wrap_content"
+											                      android:text="0"
+											                      
+											                      android:textSize="25sp"
+											                       android:textColor="#000000"
+											                      />
+											                   <TextView android:layout_height="wrap_content"
+											                      android:layout_width="wrap_content"
+											                      android:text="mmHG"
+											                      android:textSize="10sp"
+											                       android:textColor="#000000"
+											                      />
+									                  </LinearLayout>
+									           </LinearLayout>
+									            
+							                </RelativeLayout>
+							            </LinearLayout>
+			          
+			        <!-- cmment layout start -->
+		         	 <!-- <LinearLayout 
+				                android:layout_height="wrap_content"
+				                android:layout_width="fill_parent"
+				                android:orientation="vertical"
+				                android:gravity="center_vertical"
+				                android:background="@drawable/newval_below_bg">
+				                   <LinearLayout 
+				                        android:id="@+id/newval_txt_layout" 
+				                         android:layout_height="wrap_content"
+						                android:layout_width="fill_parent"
+						                >
+							                 <EditText android:layout_height="wrap_content"
+							                     android:layout_width="fill_parent"
+							                     android:hint="Add a comment"
+							                     android:textColor="#000000"
+							                     android:background="@drawable/edit_text_holo_light"
+							                     />
+				                 </LinearLayout>
+				                  </LinearLayout>
+				          -->
+		                <!--cment layout end  -->
+		       
+  </LinearLayout>
+  </ScrollView>
+  <!-- value layout end -->
+  
+  <!--Button layout start  -->
+    <LinearLayout android:id="@+id/newval_btn_layout"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                      <Button
+                          android:id="@+id/btnSave"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/btn_save_toggle"
+                          android:gravity="center_vertical|center"
+                          android:text="Save"
+                          android:textColor="#ffffff"
+                          android:textSize="23sp" />
+                      
+				      <Button 
+				          android:id="@+id/btnCancle"
+				          android:layout_height="wrap_content"
+	                      android:layout_width="wrap_content"
+	                      android:background="@drawable/btn_cancel_toggle"
+	                      android:text="Cancel"
+	                      android:textColor="#ffffff"
+	                      android:textSize="23sp"
+	                      android:gravity="center_vertical|center"/>
+                
+            </LinearLayout>
+  <!--Button layout end  -->
+  
+   </LinearLayout>
+           <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/settiglayout_food"
+            android:gravity="right"
+            android:visibility="invisible"
+            android:layout_gravity="right">
+
+            <ListView
+                 android:id="@+id/listView1"
+                 android:layout_width="210dp"
+                 android:layout_height="wrap_content"
+                 android:background="#efefef"
+                 android:cacheColorHint="#00000000"
+ 				 android:divider="#00000000"
+ 				 android:dividerHeight="0dip"/>
+         
+
+    <TextView 
+        android:text="+ Add Profile" 
+        android:id="@+id/lbl_invite_user_food" 
+        android:layout_width="210dp" 
+        android:layout_height="wrap_content" 
+        android:textSize="21sp"
+        android:gravity="center_horizontal"
+        android:padding="10dp" 
+        android:textStyle="bold" 
+        android:textColor="#4bddfe"
+        android:background="@drawable/listinvite" />
+   
+	    </LinearLayout>
+       </FrameLayout>
+    
+</LinearLayout>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="1dip" >
+
+ <LinearLayout android:layout_height="wrap_content"
+     android:layout_width="fill_parent"
+     android:orientation="vertical">
+     
+     <LinearLayout android:layout_height="wrap_content"
+         android:layout_width="fill_parent"
+         android:orientation="horizontal"
+         android:gravity="center_vertical"
+         android:background="@drawable/r1">
+       <!--   <ImageView android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:src="@drawable/icon1"
+             android:visibility="invisible"
+             android:padding="5dp"/> -->
+         <TextView android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:layout_weight="1"
+             android:id="@+id/txtTitle"
+             android:textStyle="bold"
+             android:padding="5dp"
+             android:textColor="#000000"
+             android:text="hello"/>
+         <ImageView android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:paddingRight="10dp"
+             android:id="@+id/setting"
+             android:visibility="gone"
+             android:src="@drawable/settings9p"/>
+     </LinearLayout>
+     
+     <LinearLayout android:layout_height="wrap_content"
+         android:layout_width="fill_parent"
+         android:id="@+id/chart"
+         android:background="@drawable/r2_new"
+         android:paddingLeft="5dp"
+         android:orientation="vertical">
+         <ImageView  android:layout_height="wrap_content"
+             android:layout_width="wrap_content"
+             android:src="@drawable/delete_icon"
+             android:id="@+id/delete_reading"
+             android:padding="5dp"
+             android:visibility="invisible"/>
+     
+     
+     </LinearLayout>
+     
+     <LinearLayout android:layout_height="wrap_content"
+         android:layout_width="fill_parent"
+         android:background="@drawable/lblbelow"
+         android:orientation="horizontal"
+          android:id="@+id/below"
+          android:visibility="gone"
+         android:layout_gravity="center_vertical">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="fill_parent"
+               android:gravity="center"
+               android:textColor="#ffffff"
+               android:id="@+id/bmi"
+               android:text="BMI 18.50-17.20" />
+           <TextView
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:gravity="center_vertical|left"
+               android:paddingLeft="10dp"
+               android:textColor="#ffffff"
+               android:text="Healthy" />
+
+     </LinearLayout>
+      <LinearLayout android:layout_height="wrap_content"
+         android:layout_width="fill_parent"
+         android:id="@+id/below1"
+         android:visibility="gone"
+         android:background="@drawable/lblbelow1">
+          <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="fill_parent"
+               android:gravity="center"
+               android:id="@+id/weight"
+               android:textColor="#000000"
+               android:text="Average Weight" />
+           <TextView
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"
+               android:gravity="center_vertical|left"
+               android:paddingLeft="10dp"
+               android:textColor="#000000"
+               android:text="62 Kg(Last 20 Days)" />
+     </LinearLayout>
+ </LinearLayout>
+
+   
+</FrameLayout>

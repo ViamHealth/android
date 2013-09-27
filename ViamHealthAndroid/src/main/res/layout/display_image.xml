@@ -1,0 +1,95 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".DisplayImage" 
+    android:background="#EFEFEF"
+    android:orientation="vertical">
+
+   <LinearLayout 
+            android:id="@+id/profile_submid_layout"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:background="@drawable/profile_bg1"
+            android:orientation="vertical"
+            android:paddingTop="10dp">
+            <LinearLayout android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal">
+            	<LinearLayout android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/l1"
+                >
+            
+            	<ImageView android:layout_height="wrap_content"
+            	    android:layout_width="wrap_content"
+            	    android:src="@drawable/profile_photo"
+            	    android:id="@+id/img_display"/>
+            	</LinearLayout>
+            	<LinearLayout android:layout_height="wrap_content"
+            	    android:layout_width="wrap_content"
+            	    android:padding="10dp"
+            	    android:id="@+id/addphoto"
+            	    android:layout_gravity="center_vertical">
+            	<ImageView android:layout_height="wrap_content"
+            	    android:layout_width="wrap_content"
+            	    android:src="@drawable/add_photo"
+            	   android:layout_gravity="center_vertical"/>
+            	<TextView android:layout_height="wrap_content"
+            	    android:layout_width="wrap_content"
+            	    android:text="Upload Photo"
+            	    android:paddingLeft="10dp"
+            	    android:textColor="#444444"
+            	    android:textSize="18dp"
+            	  
+            	    android:layout_gravity="center_vertical"
+            	    android:textStyle="bold"/>
+            	</LinearLayout>
+            </LinearLayout>
+            
+   <LinearLayout android:layout_height="wrap_content"
+       android:layout_width="fill_parent"
+       android:orientation="horizontal"
+       android:paddingLeft="20dp"
+       android:paddingRight="20dp"
+       android:paddingTop="10dp">
+       <TextView android:layout_height="wrap_content"
+           android:layout_width="wrap_content"
+           android:paddingRight="10dp"
+           android:textColor="#000000"
+           android:text="Enter Description : "/>
+       <EditText android:layout_height="wrap_content"
+           android:layout_width="wrap_content"
+           android:id="@+id/file_desc"
+           android:background="@drawable/edt_bg"/>
+   </LinearLayout>
+ <LinearLayout android:id="@+id/newval_btn_layout"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal|bottom"
+                android:paddingBottom="20dp"
+                >
+                      <Button
+                          android:id="@+id/btnUpload"
+                          android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/btn_save_toggle"
+                          android:gravity="center_vertical|center"
+                          android:text="Save"
+                          android:textColor="#ffffff"
+                          android:textSize="23sp" />
+                      
+				      <Button 
+				          android:id="@+id/btnCancle"
+				          android:layout_height="wrap_content"
+	                      android:layout_width="wrap_content"
+	                      android:background="@drawable/btn_cancle_bg_pressed"
+	                      android:text="Cancel"
+	                      android:textColor="#ffffff"
+	                      android:textSize="23sp"
+	                      android:gravity="center_vertical|center"/>
+                
+            </LinearLayout>
+            </LinearLayout>
+</LinearLayout>
