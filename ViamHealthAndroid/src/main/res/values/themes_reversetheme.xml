@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="ReverseTheme" parent="android:Theme.Black">
+
+    <item name="android:editTextStyle">@style/EditTextReverseTheme</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewReverseTheme</item>
+
+    <item name="android:checkboxStyle">@style/CheckBoxReverseTheme</item>
+
+    <item name="android:radioButtonStyle">@style/RadioButtonReverseTheme</item>
+
+    <item name="android:buttonStyle">@style/ButtonReverseTheme</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonReverseTheme</item>
+
+    <item name="android:spinnerStyle">@style/SpinnerReverseTheme</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerReverseTheme.DropDown</item>
+
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemReverseTheme</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarReverseTheme</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarReverseTheme</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarReverseTheme</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigReverseTheme</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallReverseTheme</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleReverseTheme</item>
+
+    <item name="android:listViewStyle">@style/ListViewReverseTheme</item>
+
+    <item name="android:listViewWhiteStyle">@style/ListViewReverseTheme.White</item>
+
+    <item name="android:spinnerItemStyle">@style/SpinnerItemReverseTheme</item>
+
+  </style>
+
+</resources>

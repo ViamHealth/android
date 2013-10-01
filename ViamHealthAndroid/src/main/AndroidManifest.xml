@@ -48,10 +48,12 @@
     <application
         android:name="com.viamhealth.android.Global_Application"
         android:allowBackup="true"
-        android:debuggable="false"
+        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="ViamHealth" >
-        <activity android:name="com.viamhealth.android.activities.Login" >
+        <activity
+            android:name="com.viamhealth.android.activities.Login"
+            android:theme="@style/ReverseTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -119,7 +121,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/FullHeightDialog" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.AddWeightValue"  android:theme="@style/FullHeightDialog">
+        <activity
+            android:name="com.viamhealth.android.activities.AddWeightValue"
+            android:theme="@style/FullHeightDialog" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.Profile" >
         </activity>
@@ -141,7 +145,8 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.SignUp"
+            android:name="com.viamhealth.android.activities.Register"
+            android:theme="@style/ReverseTheme"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
         <activity
@@ -175,7 +180,7 @@
         <activity
             android:name="com.viamhealth.android.activities.AddCholesterolGoal"
             android:screenOrientation="portrait"
-            android:theme="@style/FullHeightDialog">
+            android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddBPGoal"
@@ -189,23 +194,27 @@
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddGlucoseValue"
-            android:theme="@style/FullHeightDialog"
-            android:label="@string/title_activity_add_glucose_value" >
+            android:label="@string/title_activity_add_glucose_value"
+            android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddBPValue"
-            android:theme="@style/FullHeightDialog"
-            android:label="@string/title_activity_add_bpvalue" >
+            android:label="@string/title_activity_add_bpvalue"
+            android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddTest"
-            android:theme="@style/FullHeightDialog"
-            android:label="@string/title_activity_add_medicaletst" >
+            android:label="@string/title_activity_add_medicaletst"
+            android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddMedication"
-            android:theme="@style/FullHeightDialog"
-            android:label="@string/title_activity_add_medication" >
+            android:label="@string/title_activity_add_medication"
+            android:theme="@style/FullHeightDialog" >
+        </activity>
+        <activity
+            android:name=".activities.NewProfile"
+            android:label="@string/title_activity_new_profile" >
         </activity>
     </application>
 

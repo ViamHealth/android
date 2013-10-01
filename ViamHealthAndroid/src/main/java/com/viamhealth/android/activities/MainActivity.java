@@ -21,13 +21,14 @@ public class MainActivity extends TabActivity
 {
     /** Called when the activity is first created. */
 	       
-	 Resources res;   
-	 TabHost tabHost;      
-	 TabSpec obj,obj1;                 
-	 Activity hehehe;  
-	 Intent intent;                
+     Resources res;
+     TabHost tabHost;
+     TabSpec obj,obj1;
+     Activity hehehe;
+     Intent intent;
      ViamHealthPrefs appPrefs;
-    @Override      
+
+    @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);

@@ -120,6 +120,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	    	while(cnt<(i+2)){
 	    		if(cnt<lstFamily.size()){
 	    			layout11[cnt] = new LinearLayout(Home.this);
+                    layout11[cnt].setTag(false);//Set Tag to true if the profile needs to be created
 	    	    	layout11[cnt].setOrientation(LinearLayout.VERTICAL);
 	    	    	layout11[cnt].setLayoutParams(new FrameLayout.LayoutParams(width/2,width/2));
 	    	    	layout11[cnt].setPadding(2, 2, 2, 2);
@@ -211,6 +212,7 @@ public class Home extends BaseActivity implements OnClickListener{
 		    		layout11[cnt].addView(img1);
 		    		layout11[cnt].setGravity(Gravity.CENTER_VERTICAL);
 		    		layout11[cnt].setId(i);
+                    layout11[cnt].setTag(true);//Set Tag to true if the profile needs to be created
 		    		layout11[cnt].setOnClickListener(Home.this);
 		    		layout1.addView(layout11[cnt]);
 	    		}
@@ -251,40 +253,35 @@ public class Home extends BaseActivity implements OnClickListener{
 	@Override    
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-	   for(int i=0;i<6;i++){
-			Log.e("TAG","id is : " + v.getId());
-			i=v.getId();
-			if(v.getId()==i && v.getId()<lstFamily.size()){
-				LinearLayout tr1lay=(LinearLayout)layout11[i];
-				FrameLayout tr1frm=(FrameLayout)frm[i];
-				LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
-				TextView txt = (TextView)tr1.getChildAt(0);
-				Log.e("TAG","profile name is : " + txt.getTag());
-				appPrefs.setProfileName(txt.getTag().toString());
-				appPrefs.setGoalDisable("0");
-				selecteduserid=lstFamily.get(i).getId();
-				
-				if(isInternetOn()){
-				     CalluserMeTask task = new CalluserMeTask();
-					 task.applicationContext = Home.this;
-					 task.execute();
-				
-				}else{
-					Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
-				}
-			
-				break;
-			}else{
-				Log.e("TAG","Invite user is call");
-				appPrefs.setGoalDisable("0");
-				ga.setInviteuser_flg(1);
-				Intent intent = new Intent(Home.this,MainActivity.class);
-				startActivity(intent);
-				/*Intent intent = new Intent(Home.this,InviteUser.class);
-				startActivity(intent);*/
-				break;
-			}  
-		}
+        int i=0;
+        Log.e("TAG","id is : " + v.getId());
+        i=v.getId();
+        LinearLayout tr1lay=(LinearLayout)layout11[i];
+        Boolean shouldCreateProfile = (Boolean) tr1lay.getTag();
+        if(shouldCreateProfile){
+            appPrefs.setBtnprofile_hide("1");
+            Intent addProfileIntent = new Intent(Home.this, AddProfile.class);
+
+            startActivity(addProfileIntent);
+        }else{
+            FrameLayout tr1frm=(FrameLayout)frm[i];
+            LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
+            TextView txt = (TextView)tr1.getChildAt(0);
+            Log.e("TAG","profile name is : " + txt.getTag());
+            appPrefs.setProfileName(txt.getTag().toString());
+            appPrefs.setGoalDisable("0");
+            selecteduserid=lstFamily.get(i).getId();
+
+            if(isInternetOn()){
+                CalluserMeTask task = new CalluserMeTask();
+                task.applicationContext = Home.this;
+                task.execute();
+
+            }else{
+                Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+        }
+
 	}
 	// async class for calling webservice and get responce message
 		public class CalluserMeTask extends AsyncTask <String, Void,String>

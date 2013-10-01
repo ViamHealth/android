@@ -1,37 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- These are the standard attributes that make up a complete theme. -->
-    <declare-styleable name="Theme">
-        <!-- ============== -->
-        <!-- Generic styles -->
-        <!-- ============== -->
-        <eat-comment />
-        </declare-styleable>
-         <!-- The DatePicker style. -->
-        <attr name="datePickerStyle" format="reference" />
+    <declare-styleable name="TabWidget">
 
-     
-        <!-- Fast scroller styles -->
-        <eat-comment />
+        <!-- Drawable used to draw the divider between tabs. -->
+        <attr name="divider" format="reference"/>
+        <!-- Determines whether the strip under the tab indicators is drawn or not. -->
+        <attr name="tabStripEnabled" format="boolean"/>
+        <!-- Drawable used to draw the left part of the strip underneath the tabs. -->
+        <attr name="tabStripLeft" format="reference"/>
+        <!-- Drawable used to draw the right part of the strip underneath the tabs. -->
+        <attr name="tabStripRight" format="reference"/>
+        <!-- Layout used to organize each tab's content. -->
+        <attr name="tabLayout" format="reference"/>
 
-        <!-- Drawable to use as the fast scroll thumb. -->
-        <attr name="fastScrollThumbDrawable" format="reference" />
-        <!-- Drawable to use as the fast scroll index preview window background
-             when shown on the right. -->
-        <attr name="fastScrollPreviewBackgroundRight" format="reference" />
-        <!-- Drawable to use as the fast scroll index preview window background
-             when shown on the left. -->
-        <attr name="fastScrollPreviewBackgroundLeft" format="reference" />
-        <!-- Drawable to use as the track for the fast scroll thumb.
-             This may be null. -->
-        <attr name="fastScrollTrackDrawable" format="reference" />
-        <!-- Position of the fast scroll index overlay window. -->
-        <attr name="fastScrollOverlayPosition">
-            <enum name="floating" value="0" />
-            <enum name="atThumb" value="1" />
-        </attr>
-        <!-- Text color for the fast scroll index overlay. Make sure it
-             plays nicely with fastScrollPreviewBackground[Left|Right]. -->
-        <attr name="fastScrollTextColor" format="color" />
-    
+    </declare-styleable>
+
 </resources>

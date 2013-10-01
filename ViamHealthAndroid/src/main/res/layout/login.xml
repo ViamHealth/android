@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal|center_vertical"
     android:orientation="vertical"
-    android:background="#5299C7">
+    android:background="#37aa4f">
 
-	<LinearLayout
+    <LinearLayout
 	    android:id="@+id/loginwrapper"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
@@ -14,12 +14,12 @@
 	    android:gravity="right"
 	     >
 
-	    	<ImageView 
+	    	<ImageView
 	    	    android:layout_height="wrap_content"
 	    	    android:layout_width="wrap_content"
 	    	    android:src="@drawable/betaimg"/>
 	    </LinearLayout>
-    <LinearLayout 
+    <LinearLayout
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center_horizontal|center_vertical"
@@ -39,28 +39,10 @@
     			android:layout_height="wrap_content">
 
                     <ImageView
-                        android:src="@drawable/ic_launcher"
+                        android:src="@drawable/white_logo_text"
                         android:layout_width="wrap_content"
     					android:layout_height="wrap_content"/>
-                    
-                    <TextView
-                        
-						android:paddingTop="10dp"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        android:text=" VIAM" 
-                        android:layout_width="wrap_content"
-    					android:layout_height="wrap_content"/>
-                    <TextView
-                        android:paddingTop="10dp"
-                        android:textColor="#FFFFFF"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        android:text="HEALTH" 
-                        android:layout_width="wrap_content"
-    					android:layout_height="wrap_content"/>
-                
+
             </TableRow>
         </TableLayout>
         
@@ -79,12 +61,8 @@
          		    android:inputType="text|textNoSuggestions"
          		    android:singleLine="true"
          		    android:paddingLeft="10dp"
-         		    android:textColor="#000000"
          		    android:textSize="18sp"
-         		    android:textColorHint="#CDCDCD"
-         		    android:hint="\@username"
-         		    android:text="thakerraj@rocketmail.com"
-         		    android:background="@drawable/edt_bg"
+         		    android:hint="\@email"
          		    android:layout_width="wrap_content"
     				android:layout_height="wrap_content"/>           
                 
@@ -100,15 +78,11 @@
          		    android:id="@+id/user_password"
          		    android:inputType="textPassword"
          		    android:singleLine="true"
-         		    android:textColor="#000000"
-         		    android:text="raj7ftj6"
-         		    android:textColorHint="#CDCDCD"
          		    android:paddingLeft="10dp" 
          		    android:textSize="18sp"
          		    android:hint="#password"
-         		    android:background="@drawable/edt_bg"
          		    android:layout_width="wrap_content"
-    				android:layout_height="wrap_content"/>           
+    				android:layout_height="wrap_content"/>
                 
             </TableRow>
 
@@ -120,7 +94,6 @@
     			android:layout_height="wrap_content">
          		<Button
          		    android:id="@+id/login_btn"
-         		    android:background="@drawable/login_toggle"
          		    android:layout_width="wrap_content"  
     				android:layout_height="wrap_content"
     				android:text="Sign In"
@@ -145,24 +118,18 @@
          		     android:layout_width="wrap_content"  
     				android:layout_height="wrap_content"
     				android:text="Register"
-    				android:textSize="18sp"
-    				
-    				android:textColor="#ffffff"/>    
+    				android:textSize="18sp"/>
     				<TextView
          		     android:layout_width="wrap_content"  
     				android:layout_height="wrap_content"
     				android:text="  |  "
-    				android:textSize="18sp"
-    				
-    				android:textColor="#ffffff"/>             
+    				android:textSize="18sp"/>
                 <TextView
          		    android:id="@+id/forgot_password"
          		     android:layout_width="wrap_content"  
     				android:layout_height="wrap_content"
     				android:text="Forgot Password"
-    				android:textSize="18sp"
-    				
-    				android:textColor="#ffffff"/>   
+    				android:textSize="18sp"/>
     				</LinearLayout>  
             </TableRow>
             

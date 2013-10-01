@@ -37,7 +37,7 @@ public class functionClass {
 		appPrefs=new ViamHealthPrefs(context);
 		
 	}
-	
+
 	// function for call signup service
 		public String SignUp(String username,String password) {
 			String	responsetxt="1";

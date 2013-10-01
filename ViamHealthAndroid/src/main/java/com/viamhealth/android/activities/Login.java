@@ -96,6 +96,7 @@ public class Login extends Activity implements OnClickListener
 			sign_up_row.setPadding(0, h15, 0, 0);
 			login_layout.setPadding(0, pt7, 0, 0);
 			user_name.setTypeface(tf);
+            user_name.setWidth(400);
 			user_password.setTypeface(tf);
 			
 			login_btn=(Button)findViewById(R.id.login_btn);
@@ -138,7 +139,7 @@ public class Login extends Activity implements OnClickListener
 		}
 		if(v==sign_up){
 			//redirect registration activity
-			Intent i = new Intent(Login.this,SignUp.class);
+			Intent i = new Intent(Login.this, Register.class);
 			startActivity(i);
 		}
 		

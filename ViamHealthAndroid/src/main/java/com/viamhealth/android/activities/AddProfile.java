@@ -12,8 +12,10 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
+import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.dao.restclient.functionClass;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -63,6 +65,9 @@ public class AddProfile extends BaseActivity implements OnClickListener {
      Calendar dateAndTime=Calendar.getInstance();
      int pYear,pMonth,pDay;
      private DisplayImageOptions options;
+
+     private Activity parentActivity = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,9 +75,14 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
 		setContentView(R.layout.add_profile);
-		
-		appPrefs=new ViamHealthPrefs(this.getParent());
-		obj = new functionClass(this.getParent());
+
+        parentActivity = this.getParent();
+        if(parentActivity==null){
+            //parentActivity = Home;
+        }
+
+		appPrefs=new ViamHealthPrefs(parentActivity);
+		obj = new functionClass(parentActivity);
 		
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		//for get screen height width
@@ -111,8 +121,7 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 	    person_icon.getLayoutParams().width = w20;
 	    person_icon.getLayoutParams().height = h20;
 	        
-	    options = new DisplayImageOptions.Builder()
- 		.build();
+	    options = new DisplayImageOptions.Builder().build();
  		
  		imageLoader.displayImage(appPrefs.getProfilepic(), person_icon, options, new SimpleImageLoadingListener() {
  			@Override
@@ -120,8 +129,6 @@ public class AddProfile extends BaseActivity implements OnClickListener {
  				Animation anim = AnimationUtils.loadAnimation(AddProfile.this, R.anim.fade_in);
  				person_icon.setAnimation(anim);
  				anim.start();
- 				
- 				
  			}
  		});
  		
@@ -192,27 +199,27 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 	     pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
 	    // updateDisplay();
 	}
-	 public static Bitmap getBitmapFromURL(String src) {
-	     try {
-	         URL url = new URL(src);
-	         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-	         connection.setDoInput(true);
-	         connection.connect();
-	         InputStream input = connection.getInputStream();
-	         Bitmap myBitmap = BitmapFactory.decodeStream(input);
-	         return myBitmap;
-	     } catch (IOException e) {
-	         e.printStackTrace();
-	         return null;
-	     }
-	 }
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 	public void ScreenDimension()
 	{
-		display = getWindowManager().getDefaultDisplay(); 
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		width = display.getWidth();
-		height = display.getHeight();
-
+        display = getWindowManager().getDefaultDisplay();
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        width = display.getWidth();
+        height = display.getHeight();
 	}
 
 	@Override
@@ -222,18 +229,18 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 			if(isInternetOn()){
 				if(validation()){
 				     CallAddProfileTask task = new CallAddProfileTask();
-					 task.applicationContext = this.getParent();
+					 task.applicationContext = parentActivity;
 					 task.execute();
 				}
 			}else{
-				Toast.makeText(this.getParent(),"Network is not available....",Toast.LENGTH_SHORT).show();
+				Toast.makeText(parentActivity,"Network is not available....",Toast.LENGTH_SHORT).show();
 			}
 		}
 		if(v==btnCancle){
 				finish();
 		}
 		if(v==date_picker_layout){
-			new DatePickerDialog(this.getParent(), d,pYear,
+			new DatePickerDialog(parentActivity, d,pYear,
                     pMonth,
                     pDay).show();
 		}
@@ -244,12 +251,11 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 			setting_layout.setVisibility(View.INVISIBLE);
 			menu_invite.setVisibility(View.VISIBLE);
 			menu_invite_out.setVisibility(View.INVISIBLE);
-			Intent i = new Intent(this.getParent(),InviteUser.class);
+			Intent i = new Intent(parentActivity,InviteUser.class);
 			startActivity(i);
-			
 		}
-		
-	}  
+	}
+
 	DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
 	    public void onDateSet(DatePicker view, int year, int monthOfYear,
 	                          int dayOfMonth) {
@@ -259,14 +265,16 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 	      updateDisplay();
 	    }
 	  };
-	  private void updateDisplay() {
-	        born_on.setText(
-	            new StringBuilder()
-	                    // Month is 0 based so add 1
-	                    .append(pYear).append("-")
-	                    .append(pMonth + 1).append("-")
-	                    .append(pDay).append(" "));
-	    }
+
+    private void updateDisplay() {
+        born_on.setText(
+        new StringBuilder()
+            // Month is 0 based so add 1
+            .append(pYear).append("-")
+            .append(pMonth + 1).append("-")
+            .append(pDay).append(" "));
+    }
+
 	public boolean validation(){
 		boolean valid=true;
 		if(first_name.getText().toString().length()==0){
@@ -306,6 +314,7 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 		}
 		return valid;
 	}
+
 	// async class for calling webservice and get responce message
 		public class CallAddProfileTask extends AsyncTask <String, Void,String>
 		{
