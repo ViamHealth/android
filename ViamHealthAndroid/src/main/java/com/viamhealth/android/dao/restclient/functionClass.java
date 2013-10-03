@@ -1339,7 +1339,7 @@ public class functionClass {
 				}
 				
 				// function for add medicates data
-				public ArrayList<MedicalData> addMedication(String name,String detail,String morning,String afternoon,
+				public ArrayList<MedicalData> addMedication(String name,String id,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
 														    String repeat_weekday,String repeat_day_interval){
@@ -1351,7 +1351,7 @@ public class functionClass {
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                     client.AddParam("type", "MEDICATION");//MJ
-                    client.AddParam("user", appPrefs.getUserid());//MJ
+                    client.AddParam("user", id.toString());//MJ
 					client.AddParam("name", name.toString());
 					client.AddParam("details", detail.toString());
 					client.AddParam("morning_count", morning.toString());
@@ -1657,12 +1657,12 @@ public class functionClass {
 				
 				
 				// function for add medicates data
-				public ArrayList<MedicalData> UpdateMedication(String id,String name,String detail,String morning,String afternoon,
+				public ArrayList<MedicalData> UpdateMedication(String id,String user_id,String name,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
 														    String repeat_weekday,String repeat_day_interval){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-					String baseurlString = Global_Application.url+"medications/"+id+"/?user="+appPrefs.getUserid();  
+					String baseurlString = Global_Application.url+"medications/"+id+"/?user="+user_id;
 					Log.e("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   

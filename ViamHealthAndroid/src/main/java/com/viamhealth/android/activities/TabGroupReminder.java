@@ -16,7 +16,10 @@ public class TabGroupReminder extends TabGroupActivity {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	    startChildActivity("ReminderPage", new Intent(this,Watch.class));
+        String userid=getIntent().getStringExtra("user_id");
+        Intent intent_watch=new Intent(this,Watch.class);
+        intent_watch.putExtra("user_id",userid);
+	    startChildActivity("ReminderPage",intent_watch);
 	}
 	@Override
 	public void onBackPressed() {

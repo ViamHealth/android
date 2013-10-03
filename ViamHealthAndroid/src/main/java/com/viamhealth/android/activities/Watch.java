@@ -74,6 +74,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 	
 	Typeface tf;
 	ViamHealthPrefs appPrefs;
+    String user_id;
 	functionClass obj;
 	Global_Application ga;
 	String selecteduserid="0";
@@ -88,7 +89,8 @@ public class Watch extends BaseActivity implements OnClickListener{
 	    
 		setContentView(R.layout.watch);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	        
+        user_id=getIntent().getStringExtra("user_id");
+        //Toast.makeText("").show();
 		appPrefs = new ViamHealthPrefs(this.getParent());
 		obj=new functionClass(this.getParent());
 		ga=((Global_Application)getApplicationContext());
@@ -222,9 +224,9 @@ public class Watch extends BaseActivity implements OnClickListener{
 	    lstReminderTest.setAdapter(adapter1);   
 	    */
 		
-	    mPager = (ViewPager)findViewById(R.id.pager);
+	    //mPager = (ViewPager)findViewById(R.id.pager);
         mPager1 = (ViewPager)findViewById(R.id.pager1);
-	    mPager.setOnPageChangeListener(new MyPageChangeListener());
+	   // mPager.setOnPageChangeListener(new MyPageChangeListener());
         mPager1.setOnPageChangeListener(new MyPageChangeListener());
 	   /*	search_layout = (LinearLayout)findViewById(R.id.search_layout);
 	   	search_layout.setPadding(w10, h10, w10, h10);
@@ -484,7 +486,58 @@ public class Watch extends BaseActivity implements OnClickListener{
 			lst.add("3-sep-2013");
 			lst.add("4-sep-2013");
 			lst.add("5-sep-2013");
-			mPager1.setAdapter(new ImagePagerAdapter(lst));
+			//mPager.setAdapter(new ImagePagerAdapter(lst));
+
+            RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
+
+            ArrayList<String> lstmedical = new ArrayList<String>();
+            lstmedical.add("ABC taken");
+            lstmedical.add("Fever medicine");
+            MedicalDataAdapter1 adapter = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, lstmedical);
+            lstReminderMedicine.setAdapter(adapter);
+
+            lstReminderMedicine.setOnItemClickListener(new OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    final ImageView img1=(ImageView)v.findViewById(R.id.img1);
+                    final ImageView img2=(ImageView)v.findViewById(R.id.img2);
+                    final int pos=position;
+                    final TextView name=(TextView)v.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)v.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)v.findViewById(R.id.txt_night);
+
+                    img1.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Toast.makeText(getApplicationContext(),"values =" +txt_morn.getText().toString()+ " " + txt_after.getText().toString(),Toast.LENGTH_LONG).show();
+
+                            Intent edit_med=new Intent(Watch.this,AddMedication.class);
+                            edit_med.putExtra("isedit",true);
+                            edit_med.putExtra("user_id",user_id);
+                            edit_med.putExtra("id",pos);
+                            edit_med.putExtra("name",name.getText().toString());
+                            edit_med.putExtra("morning",txt_morn.getText().toString());
+                            edit_med.putExtra("noon",txt_noon.getText().toString());
+                            edit_med.putExtra("night",txt_night.getText().toString());
+                            startActivity(edit_med);
+
+                        }
+                    });
+
+                    img2.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent edit_med1=new Intent(Watch.this,DeleteMedication.class);
+                            edit_med1.putExtra("user_id",user_id);
+                            edit_med1.putExtra("id",pos);
+                            startActivity(edit_med1);
+                        }
+                    });
+
+            }
+            });
+
 			/*if(isInternetOn()){
 		 			lstResult.clear();
 		 			CallMedicationTask task = new CallMedicationTask();
@@ -497,6 +550,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 		}
 		if(v==add_medicine_reminder){
 			Intent AddMedication = new Intent(Watch.this,AddMedication.class);
+            AddMedication.putExtra("user_id",user_id);
 			startActivity(AddMedication);
 		}
 		if(v==add_test_reminder){
@@ -537,6 +591,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 		}   
 		if(v==add_medicine){
 			Intent AddMedication = new Intent(Watch.this,AddMedication.class);
+            AddMedication.putExtra("user_id",user_id);
 			startActivity(AddMedication);
 		}    
 		if(v==add_test){

@@ -207,6 +207,11 @@
             android:theme="@style/FullHeightDialog"
             android:label="@string/title_activity_add_medication" >
         </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.DeleteMedication"
+            android:theme="@android:style/Theme.Dialog"
+            android:label="@string/title_activity_add_medication" >
+        </activity>
     </application>
 
 </manifest>

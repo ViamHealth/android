@@ -10,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class MedicalDataAdapter1 extends ArrayAdapter<String> {
 	Context context; 
@@ -99,7 +102,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<String> {
 						txt.setBackgroundColor(Color.GREEN);
 					}
 				});
-	            
+
 	            
 	            row.setTag(holder);
 	        }     
@@ -113,11 +116,12 @@ public class MedicalDataAdapter1 extends ArrayAdapter<String> {
 	      
 	        return row;
 	    }
-	    
+
+
+
 	    static class FileDataHolder
 	    {
 	        TextView txt_name,txt_morning,txt1,txt_noon,txt2,txt_night;
-	      
 	        
 	    }
 	    

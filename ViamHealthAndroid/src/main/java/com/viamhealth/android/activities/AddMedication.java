@@ -12,6 +12,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import com.viamhealth.android.model.MedicalData;
 import com.viamhealth.android.model.MedicationData;
+
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -58,13 +60,15 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 	ArrayList<MedicalData> lstData = new ArrayList<MedicalData>();
 	MedicationData medicationdt = new MedicationData();
 	ArrayList<String> lst = new ArrayList<String>();
-	
+	Boolean isMedicine=true;
 	private DisplayImageOptions options;
 	ViamHealthPrefs appPrefs;
 	functionClass obj;
+    String user_id;
 	Global_Application ga;
 	Typeface tf;
 	Calendar dateAndTime=Calendar.getInstance();
+    Intent int_edit=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -73,7 +77,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 	    
 		setContentView(R.layout.add_medication);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	        
+        user_id=getIntent().getStringExtra("user_id");
 		appPrefs = new ViamHealthPrefs(AddMedication.this);
 		obj=new functionClass(AddMedication.this);
 		ga=((Global_Application)getApplicationContext());
@@ -86,7 +90,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		// get screen height and width
 		ScreenDimension();
-		
+
 		  
 		w10=(int)((width*3.13)/100);  
 		w15=(int)((width*4.68)/100);
@@ -140,7 +144,15 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		morningval = (TextView)findViewById(R.id.morningval);
 		noonval = (TextView)findViewById(R.id.noonval);
 		nightval = (TextView)findViewById(R.id.nightval);
-		
+
+        int_edit=getIntent();
+        if(int_edit.getBooleanExtra("isedit",false)==true)
+        {
+            txt_name.setText((int_edit.getStringExtra("name")).toString());
+            morningval.setText((int_edit.getStringExtra("morning")).toString());
+            noonval.setText((int_edit.getStringExtra("noon")).toString());
+            nightval.setText((int_edit.getStringExtra("night")).toString());
+        }
 		/*	txt_detail = (EditText)findViewById(R.id.txt_detail);
 		txt_detail.setTypeface(tf);
 		
@@ -231,6 +243,12 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		}
 	}
 
+    protected void onResume()
+    {
+        super.onResume();
+        isMedicine=true;
+    }
+
     public class CustomOnItemSelectedListener implements OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
@@ -239,10 +257,11 @@ public class AddMedication extends BaseActivity implements OnClickListener{
                morning_layout.setVisibility(View.GONE);
                noon_layout.setVisibility(View.GONE);
                night_layout.setVisibility(View.GONE);
-
+               isMedicine=false;
             }
             else
             {
+                isMedicine=true;
                 morning_layout.setVisibility(View.VISIBLE);
                 noon_layout.setVisibility(View.VISIBLE);
                 night_layout.setVisibility(View.VISIBLE);
@@ -409,6 +428,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			Log.i("doInBackground--Object", "doInBackground--Object");
 			//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 			lstData = obj.addMedication(txt_name.getText().toString(),
+                                        user_id,
 					 					"null",
                                         morningval.getText().toString(),
 					 					noonval.getText().toString(),
@@ -463,20 +483,28 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-				lstData = obj.UpdateMedication(ga.getWatchupdate(),
-											txt_name.getText().toString(),
-						 					"null", //MJ:hardcoded
-                                            morningval.getText().toString(),
-                                            noonval.getText().toString(),
-						 					"0",
-                                            nightval.getText().toString(),
-						 					"0",
-						 					"0",//txt_hour.getText().toString()
-                                            "0",// txt_day.getText().toString()
-                                           "NONE",//ddl_repeate_mode.getSelectedItem().toString()
-                                            "0",// txt_min.getText().toString()
-                                            "1", //txt_week.getText().toString()
-                                            "0");//txt_day_interval.getText().toString()
+                if(isMedicine==true)
+                {
+                    lstData = obj.UpdateMedication(ga.getWatchupdate(),
+                                                user_id,
+                                                txt_name.getText().toString(),
+                                                "null", //MJ:hardcoded
+                                                morningval.getText().toString(),
+                                                noonval.getText().toString(),
+                                                "0",
+                                                nightval.getText().toString(),
+                                                "0",
+                                                "0",//txt_hour.getText().toString()
+                                                "0",// txt_day.getText().toString()
+                                               "NONE",//ddl_repeate_mode.getSelectedItem().toString()
+                                                "0",// txt_min.getText().toString()
+                                                "1", //txt_week.getText().toString()
+                                                "0");//txt_day_interval.getText().toString()
+                }
+                else
+                {
+
+                }
 					return null;
 			}
 			   
