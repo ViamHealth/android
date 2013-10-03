@@ -1,16 +1,187 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".NewProfile">
+    tools:context=".NewProfile"
+    android:background="#37aa4f"
+    android:orientation="vertical">
 
-    <fragment android:name="com.viamhealth.android.activities.fragments"
-        android:id="@+id/profileGeneral"
-        android:layout_weight="1"
-    ></fragment>
+    <ScrollView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:background="#ffffff"
+        android:layout_marginBottom="70dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top">
+
+            <com.facebook.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                facebook:confirm_logout="false"
+                facebook:fetch_user_info="true"
+                />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <FrameLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/layout_border"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_gravity="center">
+
+                <com.facebook.widget.ProfilePictureView
+                    android:id="@+id/profilepic"
+                    android:layout_height="120dp"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    facebook:preset_size="large"
+                    facebook:is_cropped="true"
+                    android:layout_gravity="center" />
+
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="@string/first_name"
+                    android:ems="15"
+                    android:id="@+id/profile_first_name"
+                    android:layout_gravity="center"
+                    android:enabled="true"
+                    android:editable="true" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:hint="@string/last_name"
+                    android:ems="15"
+                    android:id="@+id/profile_last_name"
+                    android:layout_gravity="center"
+                    android:enabled="true" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/profile_img_male"
+                        android:src="@drawable/ic_men_enabled"
+                        android:background="#ffffff"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:id="@+id/profile_img_female"
+                        android:src="@drawable/ic_woman_disabled"
+                        android:background="#ffffff"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+                </LinearLayout>
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/profile_dob"
+                    android:layout_gravity="center"
+                    android:hint="@string/dob" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:ems="10"
+                    android:id="@+id/profile_phone"
+                    android:layout_gravity="center"
+                    android:hint="@string/phone" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_location"
+                    android:layout_gravity="left|center_vertical"
+                    android:hint="@string/location" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_organization"
+                    android:layout_gravity="center"
+                    android:hint="@string/organization" />
+
+                <Spinner
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_blood_group"
+                    android:layout_gravity="center"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/blood_groups"
+                    android:focusableInTouchMode="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="-60dp"
+        android:layout_gravity="center">
+
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="fill_parent"
+            android:text="@string/save"
+            android:id="@+id/btnSave_profile"
+            android:layout_gravity="center|left"
+            style="@style/ButtonReverseTheme"
+            android:clickable="true" />
+
+        <Button
+            android:id="@+id/btnCancel_profile"
+            android:layout_width="180dp"
+            android:layout_height="fill_parent"
+            android:text="@string/cancel"
+            android:textSize="18sp"
+            android:layout_gravity="center|right"
+            style="@style/ButtonReverseTheme" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -136,7 +136,7 @@ public class Home extends BaseActivity implements OnClickListener{
 			    		//imgProfile.setImageResource(R.drawable.profilepic);
 			    		frm[cnt].addView(imgProfile);
 			    		
-			    		options = new DisplayImageOptions.Builder()
+			    		/*options = new DisplayImageOptions.Builder()
 						.build();
 						
 						imageLoader.displayImage(lstFamily.get(cnt).getProfile_picture_url(), imgProfile, options, new SimpleImageLoadingListener() {
@@ -148,8 +148,9 @@ public class Home extends BaseActivity implements OnClickListener{
 								
 								
 							}
-						});
-			    		
+						});*/
+
+
 			    		LinearLayout lay = new LinearLayout(Home.this);
 			    		lay.setOrientation(LinearLayout.VERTICAL);
 			    		lay.setGravity(Gravity.BOTTOM);
@@ -164,39 +165,6 @@ public class Home extends BaseActivity implements OnClickListener{
 			    		txtName.setBackgroundResource(R.color.textbg);
 			    		txtName.setGravity(Gravity.CENTER_VERTICAL);
 			    		
-			    		/*final TextView txtdesc = new TextView(Home.this);
-			    	 	txtdesc.setTextColor(Color.WHITE);
-			    	 	txtdesc.setGravity(Gravity.BOTTOM);
-			    	 	txtdesc.setPadding(w5, 0, w5, h5);
-			    	 	txtdesc.setBackgroundResource(R.color.textbg);
-
-			    	 	Timer _t = new Timer();
-		
-			    	     _t.scheduleAtFixedRate( new TimerTask() {
-			    	             @Override
-			    	             public void run() {
-			    	                
-		
-			    	                 runOnUiThread(new Runnable() //run on ui thread
-			    	                  {
-			    	                   public void run() 
-			    	                   { 
-			    	                	   if(_count<msgArray.size()){
-			    	                		   txtdesc.setText("  "+ msgArray.get(_count));
-			    	                      	   _count++;
-			    	                	   }
-			    	                      if(_count==msgArray.size()){
-			    	                    	  _count=0;
-			    	                      }
-			    	                  }
-			    	                  });   
-			    	             }
-			    	         }, 1000, 1000 ); 
-			    	 	*/
-			    		lay.addView(txtName);
-			    		/*lay.addView(txtdesc);
-			    	 	txtdesc.getLayoutParams().width=width/2;
-			    	 	txtdesc.setSingleLine();*/
 			    		frm[cnt].addView(lay);
 			    		layout11[cnt].setId(cnt);
 			    		layout11[cnt].addView(frm[cnt]);
@@ -219,33 +187,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	    		cnt++;
 	    	}
 	    	main_layout.addView(layout1);
-	    /*	if(i>str.length){
-	    		layout11[i] = new LinearLayout(Home.this);
-		    	layout11[i].setOrientation(LinearLayout.VERTICAL);
-		    	layout11[i].setLayoutParams(new FrameLayout.LayoutParams(width/2,width/2));
-		    	layout11[i].setBackgroundColor(Color.rgb(206,49, 49));
-	    		ImageView img = new ImageView(Home.this);
-	    		img.setImageResource(R.drawable.plus);
-	    		
-	    		TextView txt = new TextView(Home.this);
-	    		txt.setText("Add a ")
-	    		layout11[i].addView(img);
-	    		layout11[i].setGravity(Gravity.CENTER_VERTICAL);
-	    		layout11[i].setId(i);
-	    		layout11[i].setOnClickListener(Home.this);
-	    		layout1.addView(layout11[i]);
-	    		
-	    		layout11[i+1] = new LinearLayout(Home.this);
-		    	layout11[i+1].setOrientation(LinearLayout.VERTICAL);
-		    	layout11[i+1].setLayoutParams(new FrameLayout.LayoutParams(width/2,width/2));
-	    		ImageView img1 = new ImageView(Home.this);
-	    		img1.setImageResource(R.drawable.plus);
-	    		layout11[i+1].addView(img1);
-	    		layout11[i+1].setGravity(Gravity.CENTER_VERTICAL);
-	    		layout11[i+1].setId(i);
-	    		layout11[i+1].setOnClickListener(Home.this);
-	    		layout1.addView(layout11[i+1]);
-	    	}*/
+
 	    	}
 	    	
 
@@ -260,8 +202,8 @@ public class Home extends BaseActivity implements OnClickListener{
         Boolean shouldCreateProfile = (Boolean) tr1lay.getTag();
         if(shouldCreateProfile){
             appPrefs.setBtnprofile_hide("1");
-            Intent addProfileIntent = new Intent(Home.this, AddProfile.class);
-
+            Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
+            addProfileIntent.putExtra("registeredProfilesCount", lstFamily.size());
             startActivity(addProfileIntent);
         }else{
             FrameLayout tr1frm=(FrameLayout)frm[i];

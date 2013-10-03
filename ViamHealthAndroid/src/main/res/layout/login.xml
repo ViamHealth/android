@@ -39,9 +39,9 @@
     			android:layout_height="wrap_content">
 
                     <ImageView
-                        android:src="@drawable/white_logo_text"
-                        android:layout_width="wrap_content"
-    					android:layout_height="wrap_content"/>
+                        android:src="@drawable/original_logo_white"
+                        android:layout_width="250dp"
+    					android:layout_height="71dp"/>
 
             </TableRow>
         </TableLayout>

@@ -17,5 +17,11 @@
 	        
 	    </LinearLayout>
 	</ScrollView>
+
+    <FrameLayout android:id="@+id/profile_general_fragment"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:visibility="gone"
+            android:layout_weight="1"/>
    
 </LinearLayout>

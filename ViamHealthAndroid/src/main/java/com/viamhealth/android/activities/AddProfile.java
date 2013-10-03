@@ -76,9 +76,11 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 		
 		setContentView(R.layout.add_profile);
 
+        //Bundle extras = (Bundle)getIntent().getBundleExtra("parent");
         parentActivity = this.getParent();
         if(parentActivity==null){
-            //parentActivity = Home;
+            //if(extras!=null)
+              //  parentActivity = (Home) extras.get("parentClass");
         }
 
 		appPrefs=new ViamHealthPrefs(parentActivity);
