@@ -1,4 +1,4 @@
-package com.viamhealth.android.dao.restclient;
+package com.viamhealth.android.dao.restclient.core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +25,8 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import android.content.Context;
+
+import com.viamhealth.android.dao.restclient.old.RequestMethod;
 
 // Code from: http://lukencode.com/2010/04/27/calling-web-services-in-android-using-httpclient/
 public class RestClient {

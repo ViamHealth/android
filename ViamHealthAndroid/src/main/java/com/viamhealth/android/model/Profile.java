@@ -1,33 +1,44 @@
 package com.viamhealth.android.model;
 
+import android.content.Intent;
+
 import com.facebook.model.GraphLocation;
 import com.viamhealth.android.model.enums.BloodGroup;
-import com.viamhealth.android.model.enums.Sex;
+import com.viamhealth.android.model.enums.Gender;
 
 import java.util.Date;
 
 /**
  * Created by naren on 02/10/13.
  */
-public class ProfileData {
+public class Profile {
 
-    private String firstName;
-    private String lastName;
-    private String name;
-    private String email;
     private String organization;
     private String mobileNumber;
     private Location location;
     private BloodGroup bloodGroup;
     private Date dob;
-    private Sex sex;
-
-    private int heightInCms;
-    private int weightInKgs;
-
-    private Boolean isLoggedInUser = false;
+    private Gender gender;
+    private String profilePicURL;
 
     private String fbProfileId;
+    private String fbUsername;
+
+    public String getFbUsername() {
+        return fbUsername;
+    }
+
+    public void setFbUsername(String fbUsername) {
+        this.fbUsername = fbUsername;
+    }
+
+    public String getProfilePicURL() {
+        return profilePicURL;
+    }
+
+    public void setProfilePicURL(String profilePicURL) {
+        this.profilePicURL = profilePicURL;
+    }
 
     public String getFbProfileId() {
         return fbProfileId;
@@ -37,52 +48,12 @@ public class ProfileData {
         this.fbProfileId = fbProfileId;
     }
 
-    public Boolean isLoggedInUser() {
-        return isLoggedInUser;
+    public Gender getGender() {
+        return gender;
     }
 
-    public void setLoggedInUser(Boolean loggedInUser) {
-        isLoggedInUser = loggedInUser;
-    }
-
-    public Sex getSex() {
-        return sex;
-    }
-
-    public void setSex(Sex sex) {
-        this.sex = sex;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public String getOrganization() {
@@ -141,23 +112,7 @@ public class ProfileData {
         this.dob = dob;
     }
 
-    public int getHeightInCms() {
-        return heightInCms;
-    }
-
-    public void setHeightInCms(int heightInCms) {
-        this.heightInCms = heightInCms;
-    }
-
-    public int getWeightInKgs() {
-        return weightInKgs;
-    }
-
-    public void setWeightInKgs(int weightInKgs) {
-        this.weightInKgs = weightInKgs;
-    }
-
-    public ProfileData() {
+    public Profile() {
 
     }
 
@@ -170,6 +125,17 @@ public class ProfileData {
 
         double lattitude;
         double longitude;
+
+        //free text for now
+        String address;
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
 
         public String getStreet() {
             return street;
@@ -243,7 +209,18 @@ public class ProfileData {
         }
 
         public String toShortString() {
-            return this.city + "," + this.state + "," + this.country;
+            String ss = this.city;
+
+            if(ss==null || ss.isEmpty()) ss = this.state;
+            else ss += "," + this.state;
+
+            if(ss==null || ss.isEmpty()) ss = this.country;
+            else ss += "," + this.country;
+
+            if(ss==null || ss.isEmpty())
+                ss = this.address;
+
+            return ss;
         }
 
         @Override
@@ -256,7 +233,28 @@ public class ProfileData {
                     ", zip='" + zip + '\'' +
                     ", lattitude=" + lattitude +
                     ", longitude=" + longitude +
-                    '}';
+                    ", address='" + address + '\'' +
+                    "} " + super.toString();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", organization='" + organization + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", location=" + location +
+                ", bloodGroup=" + bloodGroup +
+                ", dob=" + dob +
+                ", gender=" + gender +
+                ", heightInCms=" + heightInCms +
+                ", weightInKgs=" + weightInKgs +
+                ", isLoggedInUser=" + isLoggedInUser +
+                ", fbProfileId='" + fbProfileId + '\'' +
+                "} " + super.toString();
     }
 }

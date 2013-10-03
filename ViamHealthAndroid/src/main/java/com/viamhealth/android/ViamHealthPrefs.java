@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.viamhealth.android.model.Profile;
+import com.viamhealth.android.model.User;
+
 public class ViamHealthPrefs {
 	public static final String USER_PREFS = "USER_PREFS";
 	public SharedPreferences appSharedPrefs;
@@ -34,7 +37,18 @@ public class ViamHealthPrefs {
 	public String bornon = "bornon";
 	public String profilepic = "profilepic";
 	//public String dateAdded = "dateAdded";
-	
+
+    private User loggedInUser;
+
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
+        this.loggedInUser.setLoggedInUser(true);
+    }
+
 	public ViamHealthPrefs(Context context) {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();

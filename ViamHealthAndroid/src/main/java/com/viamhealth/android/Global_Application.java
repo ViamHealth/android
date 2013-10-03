@@ -3,6 +3,7 @@ package com.viamhealth.android;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -10,6 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
+import com.viamhealth.android.model.Profile;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
 import com.viamhealth.android.model.FamilyData;
 import com.viamhealth.android.model.FoodData;
@@ -37,7 +39,7 @@ public class Global_Application extends Application
 	public String addvalType;
 	public String weightid,cholesterolid,glucoseid,bpid;
 	public boolean weightupdate, cholesterolupdate,glucoseupdate,bpupdate;
-	public static ArrayList<FamilyData> lstfamilyglobal = new ArrayList<FamilyData>();
+	public static List<Profile> lstfamilyglobal;
 	public boolean calcelflg;
 	@Override
 	public void onCreate() {

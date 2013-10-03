@@ -11,7 +11,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;

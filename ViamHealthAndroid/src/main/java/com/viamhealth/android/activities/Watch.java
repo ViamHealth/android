@@ -7,12 +7,11 @@ import java.util.List;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
-import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.MedicalData;
 
 import android.app.ProgressDialog;
@@ -45,7 +44,6 @@ import com.viamhealth.android.model.MedicationData;
 import com.viamhealth.android.ui.RefreshableListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;

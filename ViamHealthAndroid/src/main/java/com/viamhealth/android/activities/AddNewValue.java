@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;

@@ -1,7 +1,7 @@
 package com.viamhealth.android.activities;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,9 +27,8 @@ import android.net.NetworkInfo;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-   
-      
-   
+
+
 public class Login extends Activity implements OnClickListener 
 {
 	private static ProgressDialog dialog;
@@ -174,21 +173,21 @@ public class Login extends Activity implements OnClickListener
 			
 		}        
 		 
-		protected void onPostExecute(String result)
+		protected void onPostExecute(String response)
 		{
 			
 			Log.i("onPostExecute", "onPostExecute");
-			if(result.toString().equals("0")){
-				dialog.dismiss();
-				apPrefs.setUsername(user_name.getText().toString().trim());
-				Intent i=new Intent(Login.this, Home.class);
-				startActivity(i);
+			if(!response.equals("0")){
+                dialog.dismiss();
+                Toast.makeText(Login.this, "Incorrect user name and password",Toast.LENGTH_SHORT).show();
 			}else{
-				dialog.dismiss();    
-				Toast.makeText(Login.this, "Incorrect user name and password",Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                //apPrefs.setUsername(user_name.getText().toString().trim());
+                Intent i=new Intent(Login.this, Home.class);
+                startActivity(i);
 			}
 		}  
-   
+
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub

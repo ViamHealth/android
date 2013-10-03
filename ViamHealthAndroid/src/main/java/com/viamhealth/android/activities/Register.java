@@ -1,7 +1,7 @@
 package com.viamhealth.android.activities;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;

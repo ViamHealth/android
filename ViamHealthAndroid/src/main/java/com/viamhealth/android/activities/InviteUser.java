@@ -1,9 +1,9 @@
 package com.viamhealth.android.activities;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import com.viamhealth.android.dao.restclient.functionClass;
-import com.viamhealth.android.model.FamilyData;
+import com.viamhealth.android.dao.restclient.old.functionClass;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.Profile;
 
 public class InviteUser extends Activity implements OnClickListener {
 	
@@ -38,7 +39,7 @@ public class InviteUser extends Activity implements OnClickListener {
 	LinearLayout below_main_layout,below_invite_layout,middle_main_layout,inviteuser_layout;
 	EditText txt_email_id,txt_first_name,txt_last_name;
 	
-	 ArrayList<FamilyData> lstFamily = new ArrayList<FamilyData>();
+	 List<Profile> lstFamily = null;
 	
 	functionClass obj;
 	ViamHealthPrefs appPrefs;

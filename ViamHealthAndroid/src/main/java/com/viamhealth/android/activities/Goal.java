@@ -23,7 +23,7 @@ import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.BPData;
 import com.viamhealth.android.model.CholesterolData;
 import com.viamhealth.android.model.GlucoseData;

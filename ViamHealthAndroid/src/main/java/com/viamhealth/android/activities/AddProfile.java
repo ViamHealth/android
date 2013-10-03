@@ -12,8 +12,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-import com.viamhealth.android.activities.Home;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;

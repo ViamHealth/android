@@ -1,4 +1,4 @@
-package com.viamhealth.android.dao.restclient;
+package com.viamhealth.android.dao.restclient.old;
 public enum RequestMethod
 {
     GET,

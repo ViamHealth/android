@@ -7,9 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -18,7 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -31,9 +28,9 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.dao.restclient.functionClass;
-import com.viamhealth.android.model.ProfileData;
-import com.viamhealth.android.model.enums.Sex;
+import com.viamhealth.android.dao.restclient.old.functionClass;
+import com.viamhealth.android.model.Profile;
+import com.viamhealth.android.model.enums.Gender;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -65,7 +62,7 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
 
     ProfilePictureView profilePic;
 
-    ProfileData profileData = new ProfileData();
+    Profile profile = new com.viamhealth.android.model.Profile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +87,9 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
         if(registeredProfileCount==0)
-            profileData.setLoggedInUser(true);
+            profile.setLoggedInUser(true);
         else
-            profileData.setLoggedInUser(false);
+            profile.setLoggedInUser(false);
 
         imageLoader.displayImage(appPrefs.getProfilepic(), profile_image, options, new SimpleImageLoadingListener() {
             @Override
@@ -107,20 +104,20 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
         imgMale = (ImageButton) findViewById(R.id.profile_img_male);
         imgFemale = (ImageButton) findViewById(R.id.profile_img_female);
 
-        //by default set the sex as Male
-        updateSex(Sex.Male);
+        //by default set the gender as Male
+        updateGender(Gender.Male);
 
         imgMale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateSex(Sex.Male);
+                updateGender(Gender.Male);
             }
         });
 
         imgFemale.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateSex(Sex.Female);
+                updateGender(Gender.Female);
             }
         });
 
@@ -153,8 +150,9 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
                         // callback after Graph API response with user object
                         @Override
                         public void onCompleted(GraphUser user, Response response) {
-                            if (user != null && profileData.isLoggedInUser()) {
+                            if (user != null && profile.isLoggedInUser()) {
                                 updateProfileFromFBData(user);
+                                appPrefs.setLoggedInUser(profile);
                             }
                         }
                     });
@@ -163,10 +161,10 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
         });
     }
 
-    private void updateSex(Sex sex) {
+    private void updateGender(Gender gender) {
         int mresId, fresId;
 
-        if(sex == Sex.Male){
+        if(gender == Gender.Male){
             mresId = R.drawable.ic_men_enabled;
             fresId = R.drawable.ic_woman_disabled;
         }else{
@@ -176,22 +174,22 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
 
         imgMale.setImageResource(mresId);
         imgFemale.setImageResource(fresId);
-        profileData.setSex(sex);
+        profile.setGender(gender);
     }
 
     private void updateProfileFromFBData(GraphUser user){
         //get first name and last name
-        profileData.setFirstName(user.getFirstName());
-        firstName.setText(profileData.getFirstName());
-        profileData.setLastName(user.getLastName());
-        lastName.setText(profileData.getLastName());
+        profile.setFirstName(user.getFirstName());
+        firstName.setText(profile.getFirstName());
+        profile.setLastName(user.getLastName());
+        lastName.setText(profile.getLastName());
 
         Log.i("VH", "Data from FB - DOB = " + user.getBirthday());
         //get DOB
         try{
             SimpleDateFormat dateFormater = new SimpleDateFormat("MM/dd/yyyy");
             Date date = dateFormater.parse(user.getBirthday());
-            profileData.setDob(date);
+            profile.setDob(date);
 
             dateFormater.applyPattern("dd/MM/yyyy");
             dob.setText(dateFormater.format(date));
@@ -199,15 +197,15 @@ public class NewProfile extends BaseActivity implements View.OnClickListener{
             //Log.e("VH", "DOB reading exception", e.getCause());
         }
 
-        //get sex
+        //get gender
 
         //get the id
         profilePic.setProfileId(user.getId());
-        profileData.setFbProfileId(user.getId());
+        profile.setFbProfileId(user.getId());
 
         //get the location
-        profileData.setLocation(user.getLocation());
-        location.setText(profileData.getLocation().toShortString());
+        profile.setLocation(user.getLocation());
+        location.setText(profile.getLocation().toShortString());
 
 
         Log.i("VH", "Data from FB - Json = " + user.getInnerJSONObject());

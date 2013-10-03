@@ -2,15 +2,17 @@ package com.viamhealth.android.activities;
 
 import java.util.ArrayList;
 
+import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 
-import com.viamhealth.android.model.FamilyData;
+import com.viamhealth.android.model.Profile;
+
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -19,15 +21,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -48,10 +47,10 @@ public class Home extends BaseActivity implements OnClickListener{
 	int cnt=0,_count=0;
 	int w80,w90,h90,w20,h5,w5,w12,h30;
 	ArrayList<String> msgArray = new ArrayList<String>();
-	ArrayList<FamilyData> lstFamily = new ArrayList<FamilyData>();
+	ArrayList<Profile> lstFamily = null;
 	ProgressDialog dialog;
 	
-	String selecteduserid;
+	Long selecteduserid;
 	
 	functionClass obj;
 	private DisplayImageOptions options; 
@@ -82,13 +81,6 @@ public class Home extends BaseActivity implements OnClickListener{
 		ga=((Global_Application)getApplicationContext());
 		obj = new functionClass(this);
 		
-		msgArray.add("Update Weight...");
-		msgArray.add("Update Daily Food...");
-		msgArray.add("Vaccination due on...");
-		msgArray.add("Update Height...");
-		msgArray.add("Annual Health Checkup...");
-		/*msgArray.add("take test 6");
-		msgArray.add("take test 7");*/
 		//for generate square
 		main_layout = (LinearLayout)findViewById(R.id.main_layout);
 		
@@ -97,9 +89,9 @@ public class Home extends BaseActivity implements OnClickListener{
 			 task.applicationContext = Home.this;
 			 task.execute();
 		
-	}else{
-		Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
-	}
+        }else{
+            Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+        }
 	}     
 	public void ScreenDimension()
 		{
@@ -112,13 +104,13 @@ public class Home extends BaseActivity implements OnClickListener{
 	public void generateView(){
 	
 	  	Log.e("TAG","Generate view is call");
-	  	  String[] str = appPrefs.getMenuList().split(",");
+	  	String[] str = appPrefs.getMenuList().split(",");
 	    for(int i=0;i<6;i=i+2){
 	    	
 	    	LinearLayout layout1 = new LinearLayout(Home.this);
 	    	int cnt=i;
 	    	while(cnt<(i+2)){
-	    		if(cnt<lstFamily.size()){
+	    		if(lstFamily!=null && cnt<lstFamily.size()){
 	    			layout11[cnt] = new LinearLayout(Home.this);
                     layout11[cnt].setTag(false);//Set Tag to true if the profile needs to be created
 	    	    	layout11[cnt].setOrientation(LinearLayout.VERTICAL);
@@ -132,34 +124,25 @@ public class Home extends BaseActivity implements OnClickListener{
 			    		frm[cnt].setLayoutParams(lp);
 			    		frm[cnt].setId(cnt);
 			    		frm[cnt].setOnClickListener(Home.this);
-			    		final ImageView imgProfile = new ImageView(Home.this);
-			    		//imgProfile.setImageResource(R.drawable.profilepic);
-			    		frm[cnt].addView(imgProfile);
-			    		
-			    		/*options = new DisplayImageOptions.Builder()
-						.build();
-						
-						imageLoader.displayImage(lstFamily.get(cnt).getProfile_picture_url(), imgProfile, options, new SimpleImageLoadingListener() {
-							@Override
-							public void onLoadingComplete(Bitmap loadedImage) {
-								Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
-								imgProfile.setAnimation(anim);
-								anim.start();
-								
-								
-							}
-						});*/
 
+			    		final ProfilePictureView imgProfile = new ProfilePictureView(Home.this);
+                        imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+                        imgProfile.setProfileId(lstFamily.get(cnt).getFbProfileId());
+                        Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
+                        imgProfile.setAnimation(anim);
+                        anim.start();
+
+                        frm[cnt].addView(imgProfile);
 
 			    		LinearLayout lay = new LinearLayout(Home.this);
 			    		lay.setOrientation(LinearLayout.VERTICAL);
 			    		lay.setGravity(Gravity.BOTTOM);
 			    		
-			    		 TextView txtName = new TextView(Home.this);
+                         TextView txtName = new TextView(Home.this);
 			    		      
 			    		 
-			    		txtName.setText(lstFamily.get(cnt).getFirst_name() + " " + lstFamily.get(cnt).getLast_name());
-			    		txtName.setTag(lstFamily.get(cnt).getFirst_name() + " " + lstFamily.get(cnt).getLast_name());
+			    		txtName.setText(lstFamily.get(cnt).getName());
+			    		txtName.setTag(lstFamily.get(cnt).getName());
 			    		txtName.setPadding(w5, h5, w5, h5);
 			    		txtName.setTextColor(Color.WHITE); 
 			    		txtName.setBackgroundResource(R.color.textbg);
@@ -180,7 +163,7 @@ public class Home extends BaseActivity implements OnClickListener{
 		    		layout11[cnt].addView(img1);
 		    		layout11[cnt].setGravity(Gravity.CENTER_VERTICAL);
 		    		layout11[cnt].setId(i);
-                    layout11[cnt].setTag(true);//Set Tag to true if the profile needs to be created
+                    layout11[cnt].setTag(true);//Set Tag to true if the loggedIn user data needs to be updated/created
 		    		layout11[cnt].setOnClickListener(Home.this);
 		    		layout1.addView(layout11[cnt]);
 	    		}
@@ -292,7 +275,7 @@ public class Home extends BaseActivity implements OnClickListener{
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			Log.i("doInBackground--Object", "doInBackground--Object");
-			lstFamily = obj.GetFamilyMember(appPrefs.getUsername().toString());
+			lstFamily = obj.GetFamilyMember(appPrefs.getLoggedInUser());
 			return null;
 		}
 		   
