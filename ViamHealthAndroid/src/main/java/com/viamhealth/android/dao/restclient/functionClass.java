@@ -1344,11 +1344,14 @@ public class functionClass {
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
 														    String repeat_weekday,String repeat_day_interval){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-					String baseurlString = Global_Application.url+"medications/?user="+appPrefs.getUserid();  
-					Log.e("TAG","url is : " + baseurlString);
+					//String baseurlString = Global_Application.url+"medications/?user="+appPrefs.getUserid();
+                    String baseurlString = Global_Application.url+"reminders/"; //MJ:api add
+                    Log.e("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+                    client.AddParam("type", "MEDICATION");//MJ
+                    client.AddParam("user", appPrefs.getUserid());//MJ
 					client.AddParam("name", name.toString());
 					client.AddParam("details", detail.toString());
 					client.AddParam("morning_count", morning.toString());
@@ -1377,8 +1380,8 @@ public class functionClass {
 							try {
 								 jObject = new JSONObject(responseString);
 								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
-								 jarray = jObject.getJSONArray("results");
+          						 if((jarray = jObject.getJSONArray("results"))!= null)  //MJ
+								 {
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
 										 lstData.add(new MedicalData(c.getString("id").toString(), 
@@ -1392,7 +1395,8 @@ public class functionClass {
 												 					 c.getString("repeat_weekday").toString(), 
 												 					 c.getString("repeat_day_interval").toString()));
 				                     
-				  				 }
+                                     }
+                                     }
 				              
 							 Log.e("TAG","lstdata count is " + lstData.size());
 							 
@@ -1402,6 +1406,66 @@ public class functionClass {
 						}
 					return lstData;
 				}
+
+                public ArrayList<MedicationData> getMedicationInfo()
+                {
+                    ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
+                    //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
+                    String baseurlString = Global_Application.url+"reminders/?user=3"+"&"+"type=MEDICATION";
+
+                    Log.e("TAG","url is : " + baseurlString);
+
+                    RestClient client = new RestClient(baseurlString);
+                    client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+                    try
+                    {
+                        client.Execute(RequestMethod.GET);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    responseString = client.getResponse();
+                    Log.e("TAG","Response string " + responseString);
+
+                    try {
+                        jObject = new JSONObject(responseString);
+                        Log.e("TAG","res : " + responseString);
+                        Log.e("TAG",jObject.getString("next"));
+                        jarray = jObject.getJSONArray("results");
+                        for (int i = 0; i < jarray.length(); i++)
+                        {
+                            JSONObject c = jarray.getJSONObject(i);
+                            lstData.add(new MedicationData(c.getString("id").toString(),
+                            c.getString("name").toString(),
+                            "null",//c.getString("detail").toString()
+                            c.getString("morning_count").toString(),
+                            c.getString("afternoon_count").toString(),
+                            c.getString("evening_count").toString(),
+                            c.getString("night_count").toString(),
+                            c.getString("user").toString(),
+                            "null",
+                            "null",
+                            "null",
+                            "null",
+                            "null",
+                            "null",
+                            "null"));
+
+                        }
+                        Log.e("TAG","lstdata count is " + lstData.size());
+
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+
+                    return lstData;
+
+                }
+
 				// function for add medicates data
 				public ArrayList<MedicalData> getMedication(){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();

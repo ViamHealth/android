@@ -185,7 +185,7 @@
 	   
 	<!--    For Reminder section layout-->
 	 <ScrollView android:layout_height="0dp"
-     android:layout_weight="1"
+        android:layout_weight="1"
 	    android:layout_width="fill_parent"
 	     android:splitMotionEvents="false"
          android:fadingEdgeLength="0dp"
@@ -210,10 +210,10 @@
 					    	                    android:textColor="#000000"
 					    	                    android:textStyle="bold"/>
 					            </LinearLayout>
-			 <LinearLayout android:layout_height="wrap_content"
+			 <LinearLayout android:layout_height="fill_parent"
 			                android:layout_width="fill_parent"
 			                android:orientation="vertical">
-			            <LinearLayout android:layout_height="wrap_content"
+			            <LinearLayout android:layout_height="fill_parent"
 			                android:layout_width="fill_parent"
 			                 android:orientation="vertical"
 			                android:background="@drawable/r2">
@@ -270,6 +270,14 @@
 									                android:textSize="14sp"
 									                />
 								            </LinearLayout>
+                            <android.support.v4.view.ViewPager
+                                android:id="@+id/pager1"
+                                android:layout_width="fill_parent"
+                                android:layout_height="300dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                />
+                            <!--
 			                   <com.viamhealth.android.ui.RefreshableListView
 								    android:layout_width="fill_parent"
 								    android:cacheColorHint="#00000000"
@@ -282,11 +290,12 @@
 							        android:layout_height="200dp"
 							        android:listSelector="@drawable/list_item_selector"
 								    android:id="@+id/lstReminderMedicine" />
-			            </LinearLayout>
+			            -->
+                        </LinearLayout>
 			                 <Button  android:id="@+id/add_medicine_reminder"
 			    	                    android:layout_height="wrap_content"
 			    	                    android:layout_width="wrap_content"
-			    	                    android:text="Add Medicine"
+			    	                    android:text="Add Details"
 			    	                    android:gravity="center_vertical|center"
 			    	                    android:textColor="#ffffff"
 			    	                    android:textSize="18sp"
@@ -299,7 +308,8 @@
 			             <LinearLayout android:layout_height="wrap_content"
 			                android:layout_width="fill_parent"
 			                android:orientation="vertical"
-							android:paddingTop="10dp">
+							android:paddingTop="10dp"
+                             android:visibility="gone">
 			          <LinearLayout android:layout_height="wrap_content"
 			                android:layout_width="fill_parent"
 			                android:orientation="vertical"
@@ -316,7 +326,8 @@
 			            <LinearLayout android:layout_height="wrap_content"
 			                android:layout_width="fill_parent"
 			                 android:orientation="vertical"
-			                android:background="@drawable/r2">
+			                android:background="@drawable/r2"
+                            android:visibility="gone">
 			                   <com.viamhealth.android.ui.RefreshableListView
 								    android:layout_width="fill_parent"
 								    android:cacheColorHint="#00000000"
@@ -328,7 +339,8 @@
 							        android:footerDividersEnabled="false"
 							        android:layout_height="200dp"
 							        android:listSelector="@drawable/list_item_selector"
-								    android:id="@+id/lstReminderTest" />
+								    android:id="@+id/lstReminderTest"
+                                   />
 			            </LinearLayout>
 			             <Button  android:id="@+id/add_test_reminder"
 			    	                    android:layout_height="wrap_content"
@@ -340,7 +352,8 @@
 			    	                    android:paddingLeft="10dp"
 			    	                    android:paddingRight="10dp"
 			    	                    android:background="@drawable/btn_save_toggle"
-			    	                    android:textStyle="bold" />
+			    	                    android:textStyle="bold"
+                             android:visibility="gone"/>
 			       
 			         </LinearLayout>
 			         </ScrollView>
@@ -352,7 +365,7 @@
 				    android:layout_width="fill_parent"
 				     android:splitMotionEvents="false"
 			         android:fadingEdgeLength="0dp"
-			        android:visibility="visible"  
+			        android:visibility="gone"
 			           android:id="@+id/medicine_scrl">
 			       <LinearLayout android:layout_height="fill_parent"
 			            android:layout_width="fill_parent"
@@ -396,7 +409,7 @@
 			                 <Button  android:id="@+id/add_medicine"
 			    	                    android:layout_height="wrap_content"
 			    	                    android:layout_width="wrap_content"
-			    	                    android:text="Add Medicine"
+			    	                    android:text="Add Reminder"
 			    	                    android:gravity="center_vertical|center"
 			    	                    android:textColor="#ffffff"
 			    	                     android:textSize="18sp"
@@ -406,10 +419,11 @@
 			    	                    android:textStyle="bold" />
 			            </LinearLayout>
 			            </LinearLayout>
-			          <!--   <LinearLayout android:layout_height="wrap_content"
+			             <LinearLayout android:layout_height="wrap_content"
 			                android:layout_width="fill_parent"
 			                 android:orientation="vertical"
-			                android:background="@drawable/r2">
+			                android:background="@drawable/r2"
+                             android:visibility="gone">
 			                   <com.viamhealth.android.ui.RefreshableListView
 								    android:layout_width="fill_parent"
 								    android:cacheColorHint="#00000000"
@@ -422,7 +436,7 @@
 							        android:layout_height="200dp"
 							        android:listSelector="@drawable/list_item_selector"
 								    android:id="@+id/lstReminderTest" />
-			            </LinearLayout> -->
+			            </LinearLayout>
 			            
 			       
 			         </LinearLayout>
