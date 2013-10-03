@@ -9,6 +9,7 @@ import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.R;
+import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.restclient.functionClass;
@@ -40,9 +41,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.viamhealth.android.model.MedicationData;
 import com.viamhealth.android.ui.RefreshableListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -52,7 +55,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 	int width,height;
 	int w15,w20,w5,h40,h20,w10,h10,w150,w30;
 	ProgressDialog dialog;
-	
+    ProgressDialog dialog1;
 	
 	TextView mSelected,lbl_add,lbl_delete,txt_test,txt_medication,txt_reminder,txt_name,txt_time,txt_mode;;
 	ImageView back,person_icon;
@@ -63,7 +66,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 	ScrollView reminder_scrl,medicine_scrl,test_scrl;
 	TextView lbl_name,lbl_morning,txt1,lbl_noon,txt2,lbl_night;
 	
-	ViewPager mPager;  
+	ViewPager mPager,mPager1;
 	
 	ArrayList<MedicalData> lstResult = new ArrayList<MedicalData>();
 	int selection=0;  
@@ -75,6 +78,8 @@ public class Watch extends BaseActivity implements OnClickListener{
 	Global_Application ga;
 	String selecteduserid="0";
 	private DisplayImageOptions options;
+    ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -199,23 +204,28 @@ public class Watch extends BaseActivity implements OnClickListener{
 		
 		
 		  
-	   	lstReminderMedicine = (RefreshableListView)findViewById(R.id.lstReminderMedicine);
+	   	//lstReminderMedicine = (RefreshableListView)findViewById(R.id.lstReminderMedicine);
+		/*
 	   	ArrayList<String> lstmedical = new ArrayList<String>();
 	   	lstmedical.add("ABC taken");
 	   	lstmedical.add("Fever medicine");   
 	    MedicalDataAdapter adapter = new MedicalDataAdapter(this.getParent(),R.layout.row_medical_list, lstmedical);
 	    lstReminderMedicine.setAdapter(adapter);
-	      
+	      */
 	      
 		lstReminderTest = (RefreshableListView)findViewById(R.id.lstReminderTest);
+		/*
 	   	ArrayList<String> lsttest = new ArrayList<String>();
 	   	lsttest.add("Blood Test");
 	   	lsttest.add("Xyz");
 	    TestDataAdapter adapter1 = new TestDataAdapter(this.getParent(),R.layout.row_test_list, lsttest);
 	    lstReminderTest.setAdapter(adapter1);   
-	    
+	    */
+		
 	    mPager = (ViewPager)findViewById(R.id.pager);
+        mPager1 = (ViewPager)findViewById(R.id.pager1);
 	    mPager.setOnPageChangeListener(new MyPageChangeListener());
+        mPager1.setOnPageChangeListener(new MyPageChangeListener());
 	   /*	search_layout = (LinearLayout)findViewById(R.id.search_layout);
 	   	search_layout.setPadding(w10, h10, w10, h10);
 	   	
@@ -295,7 +305,105 @@ public class Watch extends BaseActivity implements OnClickListener{
 	   */
 	  
 	}
-	public void ScreenDimension()
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        /*
+        ArrayList<String> lstmedical = new ArrayList<String>();
+        lstmedical.add("Sugar");
+        lstmedical.add("Glucose");
+        MedicalDataAdapter adapter = new MedicalDataAdapter(this.getParent(),R.layout.row_medical_list, lstmedical);
+        lstReminderMedicine.setAdapter(adapter);
+
+
+
+        ArrayList<String> lsttest = new ArrayList<String>();
+        lsttest.add("Blood Test");
+        lsttest.add("Xyz");
+        TestDataAdapter adapter1 = new TestDataAdapter(this.getParent(),R.layout.row_test_list, lsttest);
+        lstReminderTest.setAdapter(adapter1);
+        */
+
+        RetrieveMedicalData task=new RetrieveMedicalData();
+        task.applicationContext=Watch.this;
+        task.execute();
+
+
+
+
+
+
+    }
+
+    public class RetrieveMedicalData extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+           // dialog1 = new ProgressDialog(Watch.this);
+            //dialog1.setMessage("Please Wait....");
+            //dialog1.show();
+            //Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+            Log.i("onPostExecute", "onPostExecute");
+            ArrayList<String> lst = new ArrayList<String>();
+            lst.add("1-sep-2013");
+            lst.add("2-sep-2013");
+            lst.add("3-sep-2013");
+            lst.add("4-sep-2013");
+            lst.add("5-sep-2013");
+            mPager1.setAdapter(new ImagePagerAdapter(lst));
+/*
+            MedicalDataAdapter adapter = new MedicalDataAdapter(Watch.this.getParent(),R.layout.row_medical_list, listData);
+           // lstReminderMedicine.setAdapter(adapter);
+
+            ArrayList<String> lsttest = new ArrayList<String>();
+            lsttest.add("Blood Test");
+            lsttest.add("Xyz");
+            TestDataAdapter adapter1 = new TestDataAdapter(Watch.this.getParent(),R.layout.row_test_list, lsttest);
+            //lstReminderMedicine.setAdapter(adapter1);
+
+            SeparatedListAdapter adapter3 = new SeparatedListAdapter(Watch.this);
+            adapter3.addSection("Medication",adapter);
+            adapter3.addSection("Rest All",adapter1);
+            //lstReminderMedicine.setAdapter(adapter3);
+*/
+            //dialog1.dismiss();
+            //listfood.removeAllViews();
+            //Log.e("TAG","size : " + lstData.size());
+            //if(lstData.size()>0){
+                //finish();
+          //  }else{
+                //Toast.makeText(getParent(), "Try again lalter...",Toast.LENGTH_SHORT).show();
+               // finish();
+           // }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            listData = obj.getMedicationInfo();
+            return null;
+        }
+
+    }
+
+
+    public void ScreenDimension()
 	{
 		display = getWindowManager().getDefaultDisplay(); 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -376,7 +484,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 			lst.add("3-sep-2013");
 			lst.add("4-sep-2013");
 			lst.add("5-sep-2013");
-			 mPager.setAdapter(new ImagePagerAdapter(lst));
+			mPager1.setAdapter(new ImagePagerAdapter(lst));
 			/*if(isInternetOn()){
 		 			lstResult.clear();
 		 			CallMedicationTask task = new CallMedicationTask();
@@ -419,6 +527,13 @@ public class Watch extends BaseActivity implements OnClickListener{
 			reminder_scrl.setVisibility(View.VISIBLE);
 			medicine_scrl.setVisibility(View.GONE);
 			test_scrl.setVisibility(View.GONE);
+            ArrayList<String> lst = new ArrayList<String>();
+            lst.add("1-sep-2013");
+            lst.add("2-sep-2013");
+            lst.add("3-sep-2013");
+            lst.add("4-sep-2013");
+            lst.add("5-sep-2013");
+            mPager.setAdapter(new ImagePagerAdapter(lst));
 		}   
 		if(v==add_medicine){
 			Intent AddMedication = new Intent(Watch.this,AddMedication.class);
@@ -902,10 +1017,12 @@ public class Watch extends BaseActivity implements OnClickListener{
 			{
 				View imageLayout = inflater.inflate(R.layout.item_pager_medicine, null);
 				TextView todayDate=(TextView)imageLayout.findViewById(R.id.todayDate);
-				RefreshableListView lstReminderMedicine1=(RefreshableListView)imageLayout.findViewById(R.id.lstReminderMedicine1);
-			
+
+                RefreshableListView lstReminderMedicine1=(RefreshableListView)imageLayout.findViewById(R.id.lstReminderMedicine1);
+
 				     
 				todayDate.setText(lstData.get(position));
+                /*
 				
 				ArrayList<String> lstmedical = new ArrayList<String>();
 			   	lstmedical.add("ABC taken");
@@ -916,9 +1033,23 @@ public class Watch extends BaseActivity implements OnClickListener{
 				
 			
 				((ViewPager) view).addView(imageLayout, 0);
-				
-				
-				
+				*/
+
+                MedicalDataAdapter adapter = new MedicalDataAdapter(Watch.this.getParent(),R.layout.row_medical_list, listData);
+                // lstReminderMedicine.setAdapter(adapter);
+
+                ArrayList<String> lsttest = new ArrayList<String>();
+                lsttest.add("Blood Test");
+                lsttest.add("Xyz");
+                TestDataAdapter adapter1 = new TestDataAdapter(Watch.this.getParent(),R.layout.row_test_list, lsttest);
+                //lstReminderMedicine.setAdapter(adapter1);
+
+                SeparatedListAdapter adapter3 = new SeparatedListAdapter(Watch.this);
+                adapter3.addSection("Medication",adapter);
+                adapter3.addSection("Rest All",adapter1);
+                ((ViewPager) view).addView(imageLayout, 0);
+                lstReminderMedicine1.setAdapter(adapter3);
+
 				return imageLayout;
 			}
 	   

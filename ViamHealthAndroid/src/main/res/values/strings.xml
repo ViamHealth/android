@@ -40,6 +40,22 @@
         <item>6 Weeks</item>
     </string-array>
 
+    <string-array name="reminder_types">
+        <item>Medicine</item>
+        <item>Rest all</item>
+    </string-array>
+
+    <string-array name="duration_type">
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+    </string-array>
+
+
+
+
+
     <string name="title_activity_add_breakfast">AddBreakfast</string>
     <string name="title_activity_tab_group_reminder">TabGroupReminder</string>
     <string name="title_activity_reminder">Reminder</string>
@@ -65,4 +81,7 @@
     <string name="ptr_release_to_refresh">Release to refresh</string>
     <string name="ptr_refreshing">Refreshing…</string>
     <string name="ptr_last_updated">Updated: %1$s</string>
+    <string name="reminder_type_prompt">Type</string>
+    <string name="duration_type_prompt">Duration</string>
+
 </resources>

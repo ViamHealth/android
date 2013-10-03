@@ -33,6 +33,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class AddMedication extends BaseActivity implements OnClickListener{
 	Display display;
@@ -45,13 +47,14 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 				 settiglayout_food,newval_submid_layout,newval_btn_layout;
 	EditText txt_name,txt_detail,txt_morning,txt_afternoon,txt_evening,txt_night,txt_time,txt_min,txt_hour,txt_day,txt_week,txt_day_interval;
 	Spinner ddl_repeate_mode;
+    Spinner reminder_type;
 	TextView btnSave,btnCancle;
 	TextView lbl_invite_user_food,heding_Addfood_name;
 	ImageView back,person_icon;
 	ImageView imgMorningMinus,imgMorningPlus,imgNoonMinus,imgNoonPlus,imgNightMinus,imgNightPlus;
 	int morning,night,noon;
 	TextView morningval,nightval,noonval;
-	
+	LinearLayout morning_layout,noon_layout,night_layout;
 	ArrayList<MedicalData> lstData = new ArrayList<MedicalData>();
 	MedicationData medicationdt = new MedicationData();
 	ArrayList<String> lst = new ArrayList<String>();
@@ -74,6 +77,11 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		appPrefs = new ViamHealthPrefs(AddMedication.this);
 		obj=new functionClass(AddMedication.this);
 		ga=((Global_Application)getApplicationContext());
+        reminder_type = (Spinner)findViewById(R.id.reminder_type);
+        reminder_type.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        morning_layout=(LinearLayout)findViewById(R.id.morning_layout);
+        noon_layout=(LinearLayout)findViewById(R.id.noon_layout);
+        night_layout=(LinearLayout)findViewById(R.id.night_layout);
 		   
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		// get screen height and width
@@ -222,7 +230,32 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			
 		}
 	}
-	
+
+    public class CustomOnItemSelectedListener implements OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
+            if(pos==1) //Rest all
+            {
+               morning_layout.setVisibility(View.GONE);
+               noon_layout.setVisibility(View.GONE);
+               night_layout.setVisibility(View.GONE);
+
+            }
+            else
+            {
+                morning_layout.setVisibility(View.VISIBLE);
+                noon_layout.setVisibility(View.VISIBLE);
+                night_layout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+            // TODO Auto-generated method stub
+        }
+
+    }
+
 	public void ScreenDimension()
 	{
 		display = getWindowManager().getDefaultDisplay(); 
@@ -307,7 +340,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 	}
 	 private void updateLabelTime() {
 		    
-		    txt_time.setText(dateAndTime.HOUR); //+":" +dateAndTime.MINUTE +":"+dateAndTime.SECOND);
+		    //txt_time.setText(dateAndTime.HOUR); //+":" +dateAndTime.MINUTE +":"+dateAndTime.SECOND);
 		  }
 	
 	  TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
@@ -324,6 +357,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			txt_name.setError("Enter name");
 			valid = false;
 		}
+        /*
 		if(txt_detail.getText().length()==0){
 			txt_detail.setError("Enter detail");
 			valid = false;
@@ -332,6 +366,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			txt_time.setError("Enter time");
 			valid=false;
 		}
+		*/
 		return valid;
 	}
 	// async class for calling webservice and get responce message
@@ -374,18 +409,18 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			Log.i("doInBackground--Object", "doInBackground--Object");
 			//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 			lstData = obj.addMedication(txt_name.getText().toString(),
-					 					txt_detail.getText().toString(), 
-					 					txt_morning.getText().toString(),
-					 					txt_afternoon.getText().toString(),
-					 					txt_evening.getText().toString(),
-					 					txt_night.getText().toString(), 
-					 					txt_time.getText().toString(), 
-					 					txt_hour.getText().toString(),
-					 					txt_day.getText().toString(), 
-					 					ddl_repeate_mode.getSelectedItem().toString(),
-					 					txt_min.getText().toString(), 
-					 					txt_week.getText().toString(), 
-					 					txt_day_interval.getText().toString());
+					 					"null",
+                                        morningval.getText().toString(),
+					 					noonval.getText().toString(),
+					 					"0",
+                                        nightval.getText().toString(),
+					 					"0",
+					 					"0", //txt_hour.getText().toString()
+					 					"0",//txt_day.getText().toString()
+					 					"NONE",//ddl_repeate_mode.getSelectedItem().toString()
+					 					"0", //ddl_repeate_mode.getSelectedItem().toString()
+                                        "1",//txt_week.getText().toString()
+                                        "0");//txt_day_interval.getText().toString()
 				return null;
 		}
 		   
@@ -430,18 +465,18 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 				lstData = obj.UpdateMedication(ga.getWatchupdate(),
 											txt_name.getText().toString(),
-						 					txt_detail.getText().toString(), 
-						 					txt_morning.getText().toString(),
-						 					txt_afternoon.getText().toString(),
-						 					txt_evening.getText().toString(),
-						 					txt_night.getText().toString(), 
-						 					txt_time.getText().toString(), 
-						 					txt_hour.getText().toString(),
-						 					txt_day.getText().toString(), 
-						 					ddl_repeate_mode.getSelectedItem().toString(),
-						 					txt_min.getText().toString(), 
-						 					txt_week.getText().toString(), 
-						 					txt_day_interval.getText().toString());
+						 					"null", //MJ:hardcoded
+                                            morningval.getText().toString(),
+                                            noonval.getText().toString(),
+						 					"0",
+                                            nightval.getText().toString(),
+						 					"0",
+						 					"0",//txt_hour.getText().toString()
+                                            "0",// txt_day.getText().toString()
+                                           "NONE",//ddl_repeate_mode.getSelectedItem().toString()
+                                            "0",// txt_min.getText().toString()
+                                            "1", //txt_week.getText().toString()
+                                            "0");//txt_day_interval.getText().toString()
 					return null;
 			}
 			   
