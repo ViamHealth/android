@@ -79,9 +79,12 @@ public class Watch extends BaseActivity implements OnClickListener{
 	Global_Application ga;
 	String selecteduserid="0";
 	private DisplayImageOptions options;
+    ArrayList<MedicationData>	allData = new ArrayList<MedicationData>();
     ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
     ArrayList<MedicationData> otherData = new ArrayList<MedicationData>();
     MedicationData med_edit=new MedicationData();
+    Intent edit_med=null;
+    int edit_pos=0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -367,10 +370,26 @@ public class Watch extends BaseActivity implements OnClickListener{
             lst.add("3-sep-2013");
             lst.add("4-sep-2013");
             lst.add("5-sep-2013");
+            int i=0,j=0,k=0;
+            listData.clear();
+            otherData.clear();
+            for (i=0;i<allData.size();i++)
+            {
+                if((allData.get(i).getType().equalsIgnoreCase("2")))
+                {
+                    listData.add(j,allData.get(i));
+                    j++;
+                }
+                else
+                {
+                    otherData.add(k,allData.get(i));
+                    k++;
+                }
+            }
             mPager1.setAdapter(new ImagePagerAdapter(lst));
-            RetrieveOtherData task1= new RetrieveOtherData();
-            task1.applicationContext=Watch.this;
-            task1.execute();
+            //RetrieveOtherData task1= new RetrieveOtherData();
+            //task1.applicationContext=Watch.this;
+            //task1.execute();
 
 
 /*
@@ -405,7 +424,7 @@ public class Watch extends BaseActivity implements OnClickListener{
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            listData = obj.getReminderInfo(user_id, "MEDICATION");
+            allData = obj.getReminderInfo(user_id, "MEDICATION");
             return null;
         }
 
@@ -429,7 +448,8 @@ public class Watch extends BaseActivity implements OnClickListener{
 
         protected void onPostExecute(String result)
         {
-
+            edit_med.putExtra("start_date",med_edit.getStart_date());
+            startActivity(edit_med);
 
         }
 
@@ -598,10 +618,10 @@ public class Watch extends BaseActivity implements OnClickListener{
 
             RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
 
-            ArrayList<String> lstmedical = new ArrayList<String>();
-            lstmedical.add("ABC taken");
-            lstmedical.add("Fever medicine");
-            MedicalDataAdapter1 adapter = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, lstmedical);
+            //ArrayList<String> lstmedical = new ArrayList<String>();
+            //lstmedical.add("ABC taken");
+            //lstmedical.add("Fever medicine");
+            MedicalDataAdapter1 adapter = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter);
 
             lstReminderMedicine.setOnItemClickListener(new OnItemClickListener(){
@@ -621,15 +641,20 @@ public class Watch extends BaseActivity implements OnClickListener{
                         public void onClick(View v) {
                             //Toast.makeText(getApplicationContext(),"values =" +txt_morn.getText().toString()+ " " + txt_after.getText().toString(),Toast.LENGTH_LONG).show();
 
-                            Intent edit_med=new Intent(Watch.this,AddMedication.class);
-                            edit_med.putExtra("iseditMed",true);
+                            edit_med=new Intent(Watch.this,AddMedication.class);
+                            edit_pos=pos;
+                            //edit_med.putExtra("iseditMed",true);
                             edit_med.putExtra("user_id",user_id);
-                            edit_med.putExtra("id",listData.get(pos).getId());
-                            edit_med.putExtra("start_date",med_edit.getStart_date());
+                            med_id=listData.get(pos).getId();
+                            edit_med.putExtra("id",med_id);
+                            edit_med.putExtra("start_date",listData.get(pos).getStart_date());
                             edit_med.putExtra("name",name.getText().toString());
                             edit_med.putExtra("morning",txt_morn.getText().toString());
                             edit_med.putExtra("noon",txt_noon.getText().toString());
                             edit_med.putExtra("night",txt_night.getText().toString());
+                            //RetrieveMedicalDataById task_med=new RetrieveMedicalDataById();
+                            //task_med.execute();
+                            //Start the async task here
                             startActivity(edit_med);
 
 
@@ -698,7 +723,7 @@ public class Watch extends BaseActivity implements OnClickListener{
             lst.add("3-sep-2013");
             lst.add("4-sep-2013");
             lst.add("5-sep-2013");
-            mPager.setAdapter(new ImagePagerAdapter(lst));
+            //mPager.setAdapter(new ImagePagerAdapter(lst));
 		}   
 		if(v==add_medicine){
 			Intent AddMedication = new Intent(Watch.this,AddMedication.class);
@@ -1207,6 +1232,16 @@ public class Watch extends BaseActivity implements OnClickListener{
                 //ArrayList<String> lsttest = new ArrayList<String>();
                 //lsttest.add("Blood Test");
                 //lsttest.add("Xyz");
+
+                RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
+
+                //ArrayList<String> lstmedical = new ArrayList<String>();
+                //lstmedical.add("ABC taken");
+                //lstmedical.add("Fever medicine");
+                MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, listData);
+                lstReminderMedicine.setAdapter(adapter4);
+
+
                 TestDataAdapter adapter1 = new TestDataAdapter(Watch.this.getParent(),R.layout.row_test_list, otherData);
                 //lstReminderMedicine.setAdapter(adapter1);
 

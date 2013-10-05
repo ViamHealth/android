@@ -40,6 +40,7 @@ public class DeleteMedication extends BaseActivity {
                 DeleteReminder d1= new DeleteReminder();
                 d1.applicationContext=DeleteMedication.this;
                 d1.execute();
+                finish();
             }
         });
 
@@ -62,7 +63,7 @@ public class DeleteMedication extends BaseActivity {
         {
 
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(DeleteMedication.this.getParent());
+            dialog = new ProgressDialog(DeleteMedication.this);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -85,7 +86,7 @@ public class DeleteMedication extends BaseActivity {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             String responseString=null;
-            responseString=obj.DeleteMedication("http://api.viamhealth.com/reminders/"+reminderid);
+            responseString=obj.DeleteMedication("http://api.viamhealth.com/reminders/"+reminderid+"/"+"?user="+getIntent.getStringExtra("user_id"));
             return null;
         }
 

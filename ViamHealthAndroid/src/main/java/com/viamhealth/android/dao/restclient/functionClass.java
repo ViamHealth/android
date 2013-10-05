@@ -1342,7 +1342,7 @@ public class functionClass {
 				public ArrayList<MedicalData> addMedication(String name,String id,String type,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
-														    String repeat_weekday,String repeat_day_interval,String repeat_every_x/*,String start_date,String end_date*/){
+														    String repeat_weekday,String repeat_day_interval,String repeat_every_x,String start_date,String end_date){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					//String baseurlString = Global_Application.url+"medications/?user="+appPrefs.getUserid();
                     String baseurlString = Global_Application.url+"reminders/"+"?user="+id.toString(); //MJ:api add
@@ -1369,8 +1369,8 @@ public class functionClass {
 					client.AddParam("repeat_weekday", repeat_weekday.toString());
 					client.AddParam("repeat_day_interval",repeat_day_interval.toString());
                     client.AddParam("repeat_every_x",repeat_every_x.toString());
-                    /*client.AddParam("start_date",start_date.toString());
-                    client.AddParam("end_date",end_date.toString());*/
+                    client.AddParam("start_date",start_date.toString());
+                    client.AddParam("end_date",end_date.toString());
 					
 					try
 					{
@@ -1445,6 +1445,7 @@ public class functionClass {
                             JSONObject c = jarray.getJSONObject(i);
                             lstData.add(new MedicationData(c.getString("id").toString(),
                             c.getString("name").toString(),
+                            c.getString("type").toString(),
                             "null",//c.getString("detail").toString()
                             c.getString("morning_count").toString(),
                             c.getString("afternoon_count").toString(),
@@ -1457,7 +1458,7 @@ public class functionClass {
                             "null",
                             "null",
                             "null",
-                            "null"));
+                            "null",c.getString("start_date").toString(),c.getString("end_date").toString()));
 
                         }
                         Log.e("TAG","lstdata count is " + lstData.size());
@@ -1607,6 +1608,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
+                    Log.e("TAG","Response string " + responseString);
 					
 					return responseString;
 				}
@@ -1669,7 +1671,7 @@ public class functionClass {
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
 														    String repeat_weekday,String repeat_day_interval){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-					String baseurlString = Global_Application.url+type+"/"+id+"/?user="+user_id;
+					String baseurlString = Global_Application.url+"reminders/"+id+"/"+"?type="+type;  //?user="+user_id;
 					Log.e("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
@@ -1677,6 +1679,7 @@ public class functionClass {
                     client.AddParam("user", user_id.toString());
 					client.AddParam("name", name.toString());
 					client.AddParam("details", detail.toString());
+                    client.AddParam("type", type);
                     if(type.equalsIgnoreCase("2"))
                     {
 					    client.AddParam("morning_count", morning.toString());

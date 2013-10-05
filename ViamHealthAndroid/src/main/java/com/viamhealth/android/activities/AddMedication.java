@@ -180,18 +180,22 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
         int_edit=getIntent();
         if(int_edit.getBooleanExtra("iseditMed",false)==true)
         {
+            ga.setUpdate("1");
             txt_name.setText((int_edit.getStringExtra("name")).toString());
-            morningval.setText((int_edit.getStringExtra("morning")).toString());
+            morningval.setText((int_edit.getStringExtra("morning")));
+
             noonval.setText((int_edit.getStringExtra("noon")).toString());
             nightval.setText((int_edit.getStringExtra("night")).toString());
             heading.setText("Edit Medication");
             morning_layout.setVisibility(View.VISIBLE);
             noon_layout.setVisibility(View.VISIBLE);
             night_layout.setVisibility(View.VISIBLE);
+            Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
 
         }
         else if(int_edit.getBooleanExtra("iseditOthers",false)==true)
         {
+            ga.setUpdate("1");
             heading.setText("Edit Others");
             morning_layout.setVisibility(View.GONE);
             noon_layout.setVisibility(View.GONE);
@@ -473,42 +477,42 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 		}
 		if(v==imgMorningMinus){
 			
-			morning = Integer.parseInt(morningval.getText().toString());
+			morning = (int)Float.parseFloat(morningval.getText().toString());
 			if(morning!=0){
 				morning--;
 			}
 			morningval.setText(morning+"");
 		}
 		if(v==imgMorningPlus){
-			morning = Integer.parseInt(morningval.getText().toString());
+			morning = (int)Float.parseFloat(morningval.getText().toString());
 			morning++;
 			morningval.setText(morning+"");
 		}
 		
 		if(v==imgNoonMinus){
 			
-			noon = Integer.parseInt(noonval.getText().toString());
+			noon = (int)Float.parseFloat(noonval.getText().toString());
 			if(noon!=0){
 				noon--;
 			}
 			noonval.setText(noon+"");
 		}
 		if(v==imgNoonPlus){
-			noon = Integer.parseInt(noonval.getText().toString());
+			noon = (int)Float.parseFloat(noonval.getText().toString());
 			noon++;
 			noonval.setText(noon+"");
 		}
 		
 		if(v==imgNightMinus){
 			
-			night = Integer.parseInt(nightval.getText().toString());
+			night = (int)Float.parseFloat(nightval.getText().toString());
 			if(night!=0){
 				night--;
 			}
 			nightval.setText(night+"");
 		}
 		if(v==imgNightPlus){
-			night = Integer.parseInt(nightval.getText().toString());
+			night = (int)Float.parseFloat(nightval.getText().toString());
 			night++;
 			nightval.setText(night+"");
 		}
@@ -551,8 +555,8 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 
        // YYYY[-MM[-DD]]
 
-        String dt = ""+start_year+"[-"+start_month+"[-"+start_day+"]]";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy[-MM[-dd]]");
+        String dt = ""+start_year+"-"+start_month+"-"+start_day+"]]";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         try {
             c.setTime(sdf.parse(dt));
@@ -581,7 +585,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 
 
           // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy[-MM[-dd]]");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
         Date resultdate = new Date(c.getTimeInMillis());
         end_date = sdf1.format(resultdate);
         //Toast.makeText(getApplicationContext(),"end date="+end_date,Toast.LENGTH_LONG).show();
@@ -624,6 +628,8 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 					//Toast.makeText(getParent(), "Try again lalter...",Toast.LENGTH_SHORT).show();
 					finish();
 				}
+                Toast.makeText(getApplicationContext(),"start date="+""+start_year+"-"+start_month+"-"+start_day,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"end date and isMedicine= "+end_date+""+ isMedicine,Toast.LENGTH_LONG).show();
 				 
 		}  
 
@@ -656,9 +662,9 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 					 					"0", //ddl_repeate_mode.getSelectedItem().toString()
                                         "1",//txt_week.getText().toString()
                                         "0",
-                                        txt_interval_val.getText().toString());/*,
-                                        ""+start_day+"/"+start_month+""+start_year,
-                                        end_date*);*///txt_day_interval.getText().toString()
+                                        txt_interval_val.getText().toString(),
+                                        ""+start_year+"-"+start_month+"-"+start_day,
+                                        end_date);//txt_day_interval.getText().toString()
 
 				return null;
 		}
@@ -714,7 +720,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                 {
                     type="1";
                 }
-                    lstData = obj.UpdateMedication(ga.getWatchupdate(),
+                    lstData = obj.UpdateMedication(int_edit.getStringExtra("id"),
                                                 user_id,
                                                 type,
                                                 txt_name.getText().toString(),
