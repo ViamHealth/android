@@ -1,7 +1,7 @@
 package com.viamhealth.android.model;
 
 public class MedicationData {
-	String id,name,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval;
+	String id,name,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval,start_date,end_date;
 
 	boolean checked=false;
 	
@@ -72,6 +72,21 @@ public class MedicationData {
 	public void setMorning_count(String morning_count) {
 		this.morning_count = morning_count;
 	}
+
+    public void setStart_date(String start_dt)
+    {
+        this.start_date=start_dt;
+    }
+
+    public void setEnd_date()
+    {
+        this.end_date=end_date;
+    }
+
+    public String getStart_date()
+    {
+        return start_date;
+    }
 
 	public String getAfternoon_count() {
 		return afternoon_count;
