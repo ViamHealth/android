@@ -1413,11 +1413,36 @@ public class functionClass {
 					return lstData;
 				}
 
+                public void storeReminderReading(String reminder_id)
+                {
+                    ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
+                    String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id;
+                    Log.e("TAG","url is : " + baseurlString);
+
+                    RestClient client = new RestClient(baseurlString);
+                    //client.AddParam();
+
+                    try
+                    {
+                        client.Execute(RequestMethod.PUT);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    responseString = client.getResponse();
+                    Log.e("TAG","Response string " + responseString);
+
+
+
+
+                }
+
                 public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype)
                 {
                     ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
                     //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
-                    String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type=MEDICATION";
+                    String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type="+remindertype;
 
                     Log.e("TAG","url is : " + baseurlString);
 

@@ -176,26 +176,35 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
         start_year=c.get(Calendar.YEAR);
         start_day=c.get(Calendar.DATE);
         start_month=c.get(Calendar.MONTH);
+        start_month++;
+
+        //Toast.makeText(getApplicationContext(),"start_month oncreate()="+start_month,Toast.LENGTH_LONG).show();
+
         heading=(TextView)findViewById(R.id.heading);
         int_edit=getIntent();
         if(int_edit.getBooleanExtra("iseditMed",false)==true)
         {
+            reminder_type.setVisibility(View.GONE);
             ga.setUpdate("1");
             txt_name.setText((int_edit.getStringExtra("name")).toString());
             morningval.setText((int_edit.getStringExtra("morning")));
-
+            isMedicine=true;
             noonval.setText((int_edit.getStringExtra("noon")).toString());
             nightval.setText((int_edit.getStringExtra("night")).toString());
             heading.setText("Edit Medication");
             morning_layout.setVisibility(View.VISIBLE);
             noon_layout.setVisibility(View.VISIBLE);
             night_layout.setVisibility(View.VISIBLE);
+            btnSave.setText("Edit");
             Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
 
         }
         else if(int_edit.getBooleanExtra("iseditOthers",false)==true)
         {
+            btnSave.setText("Edit");
+            reminder_type.setVisibility(View.GONE);
             ga.setUpdate("1");
+            isMedicine=false;
             heading.setText("Edit Others");
             morning_layout.setVisibility(View.GONE);
             noon_layout.setVisibility(View.GONE);
@@ -294,7 +303,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
     protected void onResume()
     {
         super.onResume();
-        isMedicine=true;
+        //isMedicine=true;
     }
 
 
@@ -314,6 +323,8 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                 year = c.get(Calendar.YEAR);
                 month = c.get(Calendar.MONTH);
                 day = c.get(Calendar.DAY_OF_MONTH);
+                start_month=month+1;
+                //Toast.makeText(AddMedication.this,"start_month onCreateDialog ="+month,Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -330,6 +341,8 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                 year = c1.get(Calendar.YEAR);
                 month = c1.get(Calendar.MONTH);
                 day = c1.get(Calendar.DAY_OF_MONTH);
+                start_month=month;
+               // Toast.makeText(AddMedication.this,"start_month onCreateDialog ="+month,Toast.LENGTH_SHORT).show();
             }
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -337,9 +350,10 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
+
             start_day=day;
-            start_month=month;
             start_year=year;
+           // Toast.makeText(AddMedication.this,"start_month On DataSet ="+start_month,Toast.LENGTH_SHORT).show();
 
         }
 
@@ -354,7 +368,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
     public class CustomOnItemSelectedListener implements OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-            if(pos==1) //Rest all
+            if(pos==1 && int_edit.getBooleanExtra("iseditOthers",false)==false) //Rest all
             {
                morning_layout.setVisibility(View.GONE);
                noon_layout.setVisibility(View.GONE);

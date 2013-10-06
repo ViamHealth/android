@@ -12,6 +12,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.adapters.TestDataAdapter1;
 import com.viamhealth.android.dao.restclient.functionClass;
 import com.viamhealth.android.model.MedicalData;
 
@@ -28,6 +29,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.viamhealth.android.model.MedicationData;
+import com.viamhealth.android.model.ReminderReadings;
 import com.viamhealth.android.ui.RefreshableListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -85,6 +88,7 @@ public class Watch extends BaseActivity implements OnClickListener{
     MedicationData med_edit=new MedicationData();
     Intent edit_med=null;
     int edit_pos=0;
+    ArrayList<ReminderReadings> rem_read=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -314,6 +318,12 @@ public class Watch extends BaseActivity implements OnClickListener{
 	}
 
     @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+    }
+    @Override
     protected void onResume() {
 
         super.onResume();
@@ -343,6 +353,38 @@ public class Watch extends BaseActivity implements OnClickListener{
 
 
     }
+
+
+    public class StoreReminders extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            allData = obj.getReminderInfo(user_id, "MEDICATION");
+            return null;
+        }
+
+    }
+
 
     public class RetrieveMedicalData extends AsyncTask <String, Void,String>
     {
@@ -424,7 +466,7 @@ public class Watch extends BaseActivity implements OnClickListener{
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            allData = obj.getReminderInfo(user_id, "MEDICATION");
+            allData = obj.getReminderInfo(user_id, "2");
             return null;
         }
 
@@ -616,6 +658,14 @@ public class Watch extends BaseActivity implements OnClickListener{
 			lst.add("5-sep-2013");
 			//mPager.setAdapter(new ImagePagerAdapter(lst));
 
+
+
+
+            RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);
+            TestDataAdapter1 adapter5 = new TestDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, otherData);
+            lstReminderTest.setAdapter(adapter5);
+
+
             RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
 
             //ArrayList<String> lstmedical = new ArrayList<String>();
@@ -643,7 +693,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 
                             edit_med=new Intent(Watch.this,AddMedication.class);
                             edit_pos=pos;
-                            //edit_med.putExtra("iseditMed",true);
+                            edit_med.putExtra("iseditMed",true);
                             edit_med.putExtra("user_id",user_id);
                             med_id=listData.get(pos).getId();
                             edit_med.putExtra("id",med_id);
@@ -701,6 +751,63 @@ public class Watch extends BaseActivity implements OnClickListener{
 			reminder_scrl.setVisibility(View.GONE);
 			medicine_scrl.setVisibility(View.GONE);       
 			test_scrl.setVisibility(View.VISIBLE);
+
+            RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
+            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, listData);
+            lstReminderMedicine.setAdapter(adapter4);
+
+
+            RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);
+            TestDataAdapter1 adapter = new TestDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, otherData);
+            lstReminderTest.setAdapter(adapter);
+
+            lstReminderTest.setOnItemClickListener(new OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    final ImageView img1=(ImageView)v.findViewById(R.id.img1);
+                    final ImageView img2=(ImageView)v.findViewById(R.id.img2);
+                    final int pos=position;
+
+
+
+
+                    final TextView name=(TextView)v.findViewById(R.id.txt_name);
+
+                    img1.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Toast.makeText(getApplicationContext(),"values =" +txt_morn.getText().toString()+ " " + txt_after.getText().toString(),Toast.LENGTH_LONG).show();
+
+                            edit_med=new Intent(Watch.this,AddMedication.class);
+                            edit_pos=pos;
+                            edit_med.putExtra("iseditOthers",true);
+                            edit_med.putExtra("user_id",user_id);
+                            med_id=otherData.get(pos).getId();
+                            edit_med.putExtra("id",med_id);
+                            edit_med.putExtra("start_date",listData.get(pos).getStart_date());
+                            edit_med.putExtra("name",name.getText().toString());
+                            //RetrieveMedicalDataById task_med=new RetrieveMedicalDataById();
+                            //task_med.execute();
+                            //Start the async task here
+                            startActivity(edit_med);
+
+
+                        }
+                    });
+
+                    img2.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent edit_med1=new Intent(Watch.this,DeleteMedication.class);
+                            edit_med1.putExtra("user_id",user_id);
+                            edit_med1.putExtra("id",otherData.get(pos).getId());
+                            startActivity(edit_med1);
+                        }
+                    });
+
+                }
+            });
+
 			/*if(isInternetOn()){
 				lstResult.clear();
 	 		    CallMedicalTask task = new CallMedicalTask();
@@ -1241,6 +1348,10 @@ public class Watch extends BaseActivity implements OnClickListener{
                 MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, listData);
                 lstReminderMedicine.setAdapter(adapter4);
 
+
+                RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);
+                TestDataAdapter1 adapter5 = new TestDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1, otherData);
+                lstReminderTest.setAdapter(adapter5);
 
                 TestDataAdapter adapter1 = new TestDataAdapter(Watch.this.getParent(),R.layout.row_test_list, otherData);
                 //lstReminderMedicine.setAdapter(adapter1);
