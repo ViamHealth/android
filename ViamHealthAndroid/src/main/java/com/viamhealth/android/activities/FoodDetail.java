@@ -327,6 +327,7 @@ public class FoodDetail extends BaseActivity implements OnClickListener{
 				dialog1.setCanceledOnTouchOutside(false);
 				dialog1.setMessage("Please Wait....");
 				dialog1.show();
+                Toast.makeText(getApplicationContext(),"Food Detail position before async task"+ga.getFoodPos(),Toast.LENGTH_LONG);
 				Log.i("onPreExecute", "onPreExecute");
 				
 			}       

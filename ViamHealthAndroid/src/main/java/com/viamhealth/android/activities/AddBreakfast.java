@@ -223,6 +223,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			
 				ga.setLstFood(lstResult);
 				ga.setFoodPos(position);
+                Toast.makeText(getApplicationContext(),"onItemClick position "+position,Toast.LENGTH_LONG);
 				Intent foodDetail = new Intent(getParent(),FoodDetail.class);
 				TabGroupActivity parentoption = (TabGroupActivity)getParent();
 				parentoption.startChildActivity("foodDetail",foodDetail);
