@@ -1,7 +1,7 @@
 package com.viamhealth.android.model;
 
 public class MedicationData {
-	String id,name,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval;
+	String id,name,type,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval,start_date,end_date;
 
 	boolean checked=false;
 	
@@ -10,14 +10,15 @@ public class MedicationData {
 		super();
 	}
 
-	public MedicationData(String id, String name, String details,
+	public MedicationData(String id, String name,String type,String details,
 			String morning_count, String afternoon_count, String evening_count,
 			String night_count, String user, String start_timestamp,
 			String repeat_hour, String repeat_day, String repeat_mode,
-			String repeat_min, String repeat_weekday, String repeat_day_interval) {
+			String repeat_min, String repeat_weekday, String repeat_day_interval,String start_date,String end_date) {
 		super();
 		this.id = id;
 		this.name = name;
+        this.type=type;
 		this.details = details;
 		this.morning_count = morning_count;
 		this.afternoon_count = afternoon_count;
@@ -31,6 +32,8 @@ public class MedicationData {
 		this.repeat_min = repeat_min;
 		this.repeat_weekday = repeat_weekday;
 		this.repeat_day_interval = repeat_day_interval;
+        this.start_date=start_date;
+        this.end_date=end_date;
 	}
 
 	public boolean isChecked() {
@@ -61,6 +64,16 @@ public class MedicationData {
 		return details;
 	}
 
+    public void setType(String typ)
+    {
+        this.type=typ;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
 	public void setDetails(String details) {
 		this.details = details;
 	}
@@ -72,6 +85,21 @@ public class MedicationData {
 	public void setMorning_count(String morning_count) {
 		this.morning_count = morning_count;
 	}
+
+    public void setStart_date(String start_dt)
+    {
+        this.start_date=start_dt;
+    }
+
+    public void setEnd_date()
+    {
+        this.end_date=end_date;
+    }
+
+    public String getStart_date()
+    {
+        return start_date;
+    }
 
 	public String getAfternoon_count() {
 		return afternoon_count;

@@ -34,6 +34,7 @@
                     android:text="Add Reminder"
                     android:paddingLeft="5dp"
                     android:textSize="20sp"
+                    android:id="@+id/heading"
                     android:textColor="#32B5E5"/>
 
 
@@ -106,6 +107,12 @@
                                               android:background="@drawable/edt_bg"
                                                android:padding="5dp"/>
                                      </LinearLayout> -->
+                                    <Button
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Start Date"
+                                        android:onClick="showDatePickerDialog" />
+
                                     <Spinner
                                         android:id="@+id/reminder_type"
                                         android:layout_width="wrap_content"
@@ -272,17 +279,18 @@
                                             android:textColor="#000000"/>
 
                                         <EditText
-                                            android:id="@+id/txt_night"
+                                            android:id="@+id/txt_interval_val"
                                             android:layout_height="wrap_content"
                                             android:layout_width="0dp"
                                             android:layout_weight="1"
                                             android:textSize="15sp"
                                             android:textColor="#000000"
                                             android:gravity="center"
-                                            android:inputType="number"/>
+                                            android:inputType="number"
+                                            android:defaultValue="1"/>
 
                                         <Spinner
-                                            android:id="@+id/spinner1"
+                                            android:id="@+id/interval_type"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
@@ -314,17 +322,18 @@
                                             android:textColor="#000000"/>
 
                                         <EditText
-                                            android:id="@+id/txt_night"
+                                            android:id="@+id/txt_duration_val"
                                             android:layout_height="wrap_content"
                                             android:layout_width="0dp"
                                             android:layout_weight="1"
                                             android:textSize="15sp"
                                             android:inputType="number"
                                             android:textColor="#000000"
-                                            android:gravity="center"/>
+                                            android:gravity="center"
+                                            android:defaultValue="1"/>
 
                                         <Spinner
-                                            android:id="@+id/spinner2"
+                                            android:id="@+id/duration_type"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"

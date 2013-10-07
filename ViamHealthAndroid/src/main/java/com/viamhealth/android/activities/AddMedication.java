@@ -1,7 +1,19 @@
 package com.viamhealth.android.activities;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.support.v4.app.DialogFragment;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -12,6 +24,8 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 
 import com.viamhealth.android.model.MedicalData;
 import com.viamhealth.android.model.MedicationData;
+
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -26,6 +40,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,7 +51,7 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AddMedication extends BaseActivity implements OnClickListener{
+public class AddMedication extends FragmentActivity implements OnClickListener{
 	Display display;
 	int height,width;
 	ProgressDialog dialog1;
@@ -45,26 +60,30 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 	
 	LinearLayout newval_main_layout,newval_mid_layout,mid_layout,ddl_repeate_mode_layout,menu_invite_addfood,menu_invite_out_addfood,
 				 settiglayout_food,newval_submid_layout,newval_btn_layout;
-	EditText txt_name,txt_detail,txt_morning,txt_afternoon,txt_evening,txt_night,txt_time,txt_min,txt_hour,txt_day,txt_week,txt_day_interval;
+	EditText txt_name,txt_detail,txt_morning,txt_afternoon,txt_evening,txt_night,txt_time,txt_min,txt_hour,txt_day,txt_week,txt_day_interval,txt_interval_val,txt_interval_type,txt_duration_val,txt_duration_type;
 	Spinner ddl_repeate_mode;
-    Spinner reminder_type;
-	TextView btnSave,btnCancle;
+    Spinner reminder_type,interval_type,duration_type;
+	TextView btnSave,btnCancle,heading;
 	TextView lbl_invite_user_food,heding_Addfood_name;
 	ImageView back,person_icon;
 	ImageView imgMorningMinus,imgMorningPlus,imgNoonMinus,imgNoonPlus,imgNightMinus,imgNightPlus;
 	int morning,night,noon;
 	TextView morningval,nightval,noonval;
+    String interval_type_sel="1",duration_type_sel="1",end_date;
+    int start_day,start_month,start_year,end_day,end_month,end_year;
 	LinearLayout morning_layout,noon_layout,night_layout;
 	ArrayList<MedicalData> lstData = new ArrayList<MedicalData>();
 	MedicationData medicationdt = new MedicationData();
 	ArrayList<String> lst = new ArrayList<String>();
-	
+	Boolean isMedicine=true;
 	private DisplayImageOptions options;
 	ViamHealthPrefs appPrefs;
 	functionClass obj;
+    String user_id;
 	Global_Application ga;
 	Typeface tf;
 	Calendar dateAndTime=Calendar.getInstance();
+    Intent int_edit=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -73,20 +92,31 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 	    
 		setContentView(R.layout.add_medication);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	        
+        user_id=getIntent().getStringExtra("user_id");
 		appPrefs = new ViamHealthPrefs(AddMedication.this);
 		obj=new functionClass(AddMedication.this);
 		ga=((Global_Application)getApplicationContext());
         reminder_type = (Spinner)findViewById(R.id.reminder_type);
         reminder_type.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+
+        interval_type = (Spinner)findViewById(R.id.interval_type);
+        interval_type.setOnItemSelectedListener(new IntervalOnItemSelectedListener());
+        interval_type_sel="1";
+        duration_type_sel="1";
+
+        duration_type = (Spinner)findViewById(R.id.duration_type);
+        duration_type.setOnItemSelectedListener(new DurationOnItemSelectedListener());
+
         morning_layout=(LinearLayout)findViewById(R.id.morning_layout);
         noon_layout=(LinearLayout)findViewById(R.id.noon_layout);
         night_layout=(LinearLayout)findViewById(R.id.night_layout);
+        txt_interval_val=(EditText)findViewById(R.id.txt_interval_val);
+        txt_duration_val=(EditText)findViewById(R.id.txt_duration_val);
 		   
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		// get screen height and width
 		ScreenDimension();
-		
+
 		  
 		w10=(int)((width*3.13)/100);  
 		w15=(int)((width*4.68)/100);
@@ -140,7 +170,46 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		morningval = (TextView)findViewById(R.id.morningval);
 		noonval = (TextView)findViewById(R.id.noonval);
 		nightval = (TextView)findViewById(R.id.nightval);
-		
+
+        //interval_val=
+        Calendar c = Calendar.getInstance();
+        start_year=c.get(Calendar.YEAR);
+        start_day=c.get(Calendar.DATE);
+        start_month=c.get(Calendar.MONTH);
+        start_month++;
+
+        //Toast.makeText(getApplicationContext(),"start_month oncreate()="+start_month,Toast.LENGTH_LONG).show();
+
+        heading=(TextView)findViewById(R.id.heading);
+        int_edit=getIntent();
+        if(int_edit.getBooleanExtra("iseditMed",false)==true)
+        {
+            reminder_type.setVisibility(View.GONE);
+            ga.setUpdate("1");
+            txt_name.setText((int_edit.getStringExtra("name")).toString());
+            morningval.setText((int_edit.getStringExtra("morning")));
+            isMedicine=true;
+            noonval.setText((int_edit.getStringExtra("noon")).toString());
+            nightval.setText((int_edit.getStringExtra("night")).toString());
+            heading.setText("Edit Medication");
+            morning_layout.setVisibility(View.VISIBLE);
+            noon_layout.setVisibility(View.VISIBLE);
+            night_layout.setVisibility(View.VISIBLE);
+            btnSave.setText("Edit");
+            Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
+
+        }
+        else if(int_edit.getBooleanExtra("iseditOthers",false)==true)
+        {
+            btnSave.setText("Edit");
+            reminder_type.setVisibility(View.GONE);
+            ga.setUpdate("1");
+            isMedicine=false;
+            heading.setText("Edit Others");
+            morning_layout.setVisibility(View.GONE);
+            noon_layout.setVisibility(View.GONE);
+            night_layout.setVisibility(View.GONE);
+        }
 		/*	txt_detail = (EditText)findViewById(R.id.txt_detail);
 		txt_detail.setTypeface(tf);
 		
@@ -231,18 +300,84 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		}
 	}
 
+    protected void onResume()
+    {
+        super.onResume();
+        //isMedicine=true;
+    }
+
+
+
+
+    public  class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year,month,day;
+            if(int_edit.getBooleanExtra("iseditMed",false)==false)
+            {
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+                start_month=month+1;
+                //Toast.makeText(AddMedication.this,"start_month onCreateDialog ="+month,Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date d1=new Date();
+                try {
+                    d1=sdf.parse(int_edit.getStringExtra("start_date"));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                Calendar c1= Calendar.getInstance();
+                c1.setTime(d1);
+
+                year = c1.get(Calendar.YEAR);
+                month = c1.get(Calendar.MONTH);
+                day = c1.get(Calendar.DAY_OF_MONTH);
+                start_month=month;
+               // Toast.makeText(AddMedication.this,"start_month onCreateDialog ="+month,Toast.LENGTH_SHORT).show();
+            }
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+
+            start_day=day;
+            start_year=year;
+           // Toast.makeText(AddMedication.this,"start_month On DataSet ="+start_month,Toast.LENGTH_SHORT).show();
+
+        }
+
+
+    }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
     public class CustomOnItemSelectedListener implements OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-            if(pos==1) //Rest all
+            if(pos==1 && int_edit.getBooleanExtra("iseditOthers",false)==false) //Rest all
             {
                morning_layout.setVisibility(View.GONE);
                noon_layout.setVisibility(View.GONE);
                night_layout.setVisibility(View.GONE);
-
+               isMedicine=false;
             }
             else
             {
+                isMedicine=true;
                 morning_layout.setVisibility(View.VISIBLE);
                 noon_layout.setVisibility(View.VISIBLE);
                 night_layout.setVisibility(View.VISIBLE);
@@ -256,6 +391,64 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 
     }
 
+    public class IntervalOnItemSelectedListener implements OnItemSelectedListener {
+
+        public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
+
+
+            if(pos==3) //Rest all
+            {
+                interval_type_sel="4";
+            }
+            else if(pos==2)
+            {
+                interval_type_sel="3";
+            }
+            else if(pos==1)
+            {
+                interval_type_sel="2";
+            }
+            else
+            {
+                interval_type_sel="1";
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> arg0) {
+            // TODO Auto-generated method stub
+        }
+    }
+
+        public class DurationOnItemSelectedListener implements OnItemSelectedListener {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
+
+                if(pos==3) //Rest all
+                {
+                    duration_type_sel="4";
+                }
+                else if(pos==2)
+                {
+                    duration_type_sel="3";
+                }
+                else if(pos==1)
+                {
+                    duration_type_sel="2";
+                }
+                else
+                {
+                    duration_type_sel="1";
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+
+        }
 	public void ScreenDimension()
 	{
 		display = getWindowManager().getDefaultDisplay(); 
@@ -298,42 +491,42 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		}
 		if(v==imgMorningMinus){
 			
-			morning = Integer.parseInt(morningval.getText().toString());
+			morning = (int)Float.parseFloat(morningval.getText().toString());
 			if(morning!=0){
 				morning--;
 			}
 			morningval.setText(morning+"");
 		}
 		if(v==imgMorningPlus){
-			morning = Integer.parseInt(morningval.getText().toString());
+			morning = (int)Float.parseFloat(morningval.getText().toString());
 			morning++;
 			morningval.setText(morning+"");
 		}
 		
 		if(v==imgNoonMinus){
 			
-			noon = Integer.parseInt(noonval.getText().toString());
+			noon = (int)Float.parseFloat(noonval.getText().toString());
 			if(noon!=0){
 				noon--;
 			}
 			noonval.setText(noon+"");
 		}
 		if(v==imgNoonPlus){
-			noon = Integer.parseInt(noonval.getText().toString());
+			noon = (int)Float.parseFloat(noonval.getText().toString());
 			noon++;
 			noonval.setText(noon+"");
 		}
 		
 		if(v==imgNightMinus){
 			
-			night = Integer.parseInt(nightval.getText().toString());
+			night = (int)Float.parseFloat(nightval.getText().toString());
 			if(night!=0){
 				night--;
 			}
 			nightval.setText(night+"");
 		}
 		if(v==imgNightPlus){
-			night = Integer.parseInt(nightval.getText().toString());
+			night = (int)Float.parseFloat(nightval.getText().toString());
 			night++;
 			nightval.setText(night+"");
 		}
@@ -369,6 +562,54 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 		*/
 		return valid;
 	}
+
+    public String getEndDate(String value)
+    {
+        String end_date="";
+
+       // YYYY[-MM[-DD]]
+
+        String dt = ""+start_year+"-"+start_month+"-"+start_day+"]]";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dt));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(duration_type_sel.equalsIgnoreCase("4"))
+        {
+            c.add(Calendar.YEAR,Integer.parseInt(txt_duration_val.getText().toString()));
+        }
+
+        else if(duration_type_sel.equalsIgnoreCase("3"))
+        {
+            c.add(Calendar.MONTH, Integer.parseInt(txt_duration_val.getText().toString()));
+        }
+        else if(duration_type_sel.equalsIgnoreCase("2"))
+        {
+            c.add(Calendar.WEEK_OF_YEAR, Integer.parseInt(txt_duration_val.getText().toString()));
+        }
+        else if(duration_type_sel.equalsIgnoreCase("1"))
+        {
+            c.add(Calendar.DATE, Integer.parseInt(txt_duration_val.getText().toString()));
+
+        }
+
+
+          // number of days to add, can also use Calendar.DAY_OF_MONTH in place of Calendar.DATE
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        Date resultdate = new Date(c.getTimeInMillis());
+        end_date = sdf1.format(resultdate);
+        //Toast.makeText(getApplicationContext(),"end date="+end_date,Toast.LENGTH_LONG).show();
+
+
+        return end_date;
+
+    }
+
+
 	// async class for calling webservice and get responce message
 	public class CallMedicalTask extends AsyncTask <String, Void,String>
 	{
@@ -384,6 +625,7 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			dialog1.setMessage("Please Wait....");
 			dialog1.show();
 			Log.i("onPreExecute", "onPreExecute");
+            end_date=getEndDate(txt_duration_val.getText().toString());
 			
 		}       
 		
@@ -400,6 +642,8 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 					//Toast.makeText(getParent(), "Try again lalter...",Toast.LENGTH_SHORT).show();
 					finish();
 				}
+                Toast.makeText(getApplicationContext(),"start date="+""+start_year+"-"+start_month+"-"+start_day,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"end date and isMedicine= "+end_date+""+ isMedicine,Toast.LENGTH_LONG).show();
 				 
 		}  
 
@@ -408,7 +652,18 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 			// TODO Auto-generated method stub
 			Log.i("doInBackground--Object", "doInBackground--Object");
 			//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            String type;
+            if(isMedicine==true)
+            {
+                type="2";
+            }
+            else
+            {
+                type="1";
+            }
 			lstData = obj.addMedication(txt_name.getText().toString(),
+                                        user_id,
+                                        type,
 					 					"null",
                                         morningval.getText().toString(),
 					 					noonval.getText().toString(),
@@ -417,14 +672,20 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 					 					"0",
 					 					"0", //txt_hour.getText().toString()
 					 					"0",//txt_day.getText().toString()
-					 					"NONE",//ddl_repeate_mode.getSelectedItem().toString()
+                                        interval_type_sel,//ddl_repeate_mode.getSelectedItem().toString()
 					 					"0", //ddl_repeate_mode.getSelectedItem().toString()
                                         "1",//txt_week.getText().toString()
-                                        "0");//txt_day_interval.getText().toString()
+                                        "0",
+                                        txt_interval_val.getText().toString(),
+                                        ""+start_year+"-"+start_month+"-"+start_day,
+                                        end_date);//txt_day_interval.getText().toString()
+
 				return null;
 		}
 		   
-	}     
+	}
+
+
 	// async class for calling webservice and get responce message
 		public class CallUpdateMedicalTask extends AsyncTask <String, Void,String>
 		{
@@ -463,21 +724,34 @@ public class AddMedication extends BaseActivity implements OnClickListener{
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-				lstData = obj.UpdateMedication(ga.getWatchupdate(),
-											txt_name.getText().toString(),
-						 					"null", //MJ:hardcoded
-                                            morningval.getText().toString(),
-                                            noonval.getText().toString(),
-						 					"0",
-                                            nightval.getText().toString(),
-						 					"0",
-						 					"0",//txt_hour.getText().toString()
-                                            "0",// txt_day.getText().toString()
-                                           "NONE",//ddl_repeate_mode.getSelectedItem().toString()
-                                            "0",// txt_min.getText().toString()
-                                            "1", //txt_week.getText().toString()
-                                            "0");//txt_day_interval.getText().toString()
-					return null;
+                String type;
+
+                if(isMedicine==true)
+                {
+                    type="2";
+                }
+                else
+                {
+                    type="1";
+                }
+                    lstData = obj.UpdateMedication(int_edit.getStringExtra("id"),
+                                                user_id,
+                                                type,
+                                                txt_name.getText().toString(),
+                                                "null", //MJ:hardcoded
+                                                morningval.getText().toString(),
+                                                noonval.getText().toString(),
+                                                "0",
+                                                nightval.getText().toString(),
+                                                "0",
+                                                "0",//txt_hour.getText().toString()
+                                                "0",// txt_day.getText().toString()
+                                                "0",//ddl_repeate_mode.getSelectedItem().toString()
+                                                "0",// txt_min.getText().toString()
+                                                "1", //txt_week.getText().toString()
+                                                "0");//txt_day_interval.getText().toString()
+
+			    return null;
 			}
 			   
 		}     

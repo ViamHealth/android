@@ -14,16 +14,17 @@ import android.widget.TextView;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.MedicationData;
 
-public class TestDataAdapter extends ArrayAdapter<String> {
+public class TestDataAdapter extends ArrayAdapter<MedicationData> {
 	Context context; 
 	int layoutResourceId;    
-	ArrayList<String> lstdata = null;
+	ArrayList<MedicationData> lstdata = null;
 	Typeface tf;
 	ViamHealthPrefs appPrefs;
 	int height,width,h5,w5,w3,w100,w45;
 	int on=0,off=0;
-	public TestDataAdapter(Context context, int layoutResourceId, ArrayList<String> lstdata) {
+	public TestDataAdapter(Context context, int layoutResourceId, ArrayList<MedicationData> lstdata) {
 		super(context, layoutResourceId, lstdata);
 		// TODO Auto-generated constructor stub
 		
@@ -107,7 +108,7 @@ public class TestDataAdapter extends ArrayAdapter<String> {
 	            holder = (FileDataHolder)row.getTag();
 	        }
 	        
-	        String data = lstdata.get(position);
+	        String data = lstdata.get(position).getName();
 	        holder.txt_name.setText(data);
 	      
 	        return row;

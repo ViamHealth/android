@@ -1083,32 +1083,38 @@ public class functionClass {
 				}
 				
 				// function for add medicates data
-				public ArrayList<MedicalData> addMedication(String name,String detail,String morning,String afternoon,
+				public ArrayList<MedicalData> addMedication(String name,String id,String type,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
-														    String repeat_weekday,String repeat_day_interval){
+														    String repeat_weekday,String repeat_day_interval,String repeat_every_x,String start_date,String end_date){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					//String baseurlString = Global_Application.url+"medications/?user="+appPrefs.getUserid();
-                    String baseurlString = Global_Application.url+"reminders/"; //MJ:api add
+                    String baseurlString = Global_Application.url+"reminders/"+"?user="+id.toString(); //MJ:api add
                     Log.e("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-                    client.AddParam("type", "MEDICATION");//MJ
-                    client.AddParam("user", appPrefs.getUserid());//MJ
+                    client.AddParam("type", type);//MJ
+                    client.AddParam("user", id.toString());//MJ
 					client.AddParam("name", name.toString());
 					client.AddParam("details", detail.toString());
-					client.AddParam("morning_count", morning.toString());
-					client.AddParam("afternoon_count", afternoon.toString());
-					client.AddParam("evening_count", evening.toString());
-					client.AddParam("night_count", night.toString());
+                    if(type.equalsIgnoreCase("2"))
+                    {
+					    client.AddParam("morning_count", morning.toString());
+					    client.AddParam("afternoon_count", afternoon.toString());
+					    client.AddParam("evening_count", evening.toString());
+					    client.AddParam("night_count", night.toString());
+                    }
 					client.AddParam("start_timestamp", start_timestamp.toString());
 					client.AddParam("repeat_hour", repeat_hour.toString());
 					client.AddParam("repeat_day", repeat_day.toString());
 					client.AddParam("repeat_mode", repeat_mode.toString());
 					client.AddParam("repeat_min", repeat_min.toString());
 					client.AddParam("repeat_weekday", repeat_weekday.toString());
-					client.AddParam("repeat_day_interval", repeat_day_interval.toString());
+					client.AddParam("repeat_day_interval",repeat_day_interval.toString());
+                    client.AddParam("repeat_every_x",repeat_every_x.toString());
+                    client.AddParam("start_date",start_date.toString());
+                    client.AddParam("end_date",end_date.toString());
 					
 					try
 					{
@@ -1151,11 +1157,36 @@ public class functionClass {
 					return lstData;
 				}
 
-                public ArrayList<MedicationData> getMedicationInfo()
+                public void storeReminderReading(String reminder_id)
+                {
+                    ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
+                    String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id;
+                    Log.e("TAG","url is : " + baseurlString);
+
+                    RestClient client = new RestClient(baseurlString);
+                    //client.AddParam();
+
+                    try
+                    {
+                        client.Execute(RequestMethod.PUT);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    responseString = client.getResponse();
+                    Log.e("TAG","Response string " + responseString);
+
+
+
+
+                }
+
+                public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype)
                 {
                     ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
                     //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
-                    String baseurlString = Global_Application.url+"reminders/?user=3"+"&"+"type=MEDICATION";
+                    String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type="+remindertype;
 
                     Log.e("TAG","url is : " + baseurlString);
 
@@ -1183,6 +1214,7 @@ public class functionClass {
                             JSONObject c = jarray.getJSONObject(i);
                             lstData.add(new MedicationData(c.getString("id").toString(),
                             c.getString("name").toString(),
+                            c.getString("type").toString(),
                             "null",//c.getString("detail").toString()
                             c.getString("morning_count").toString(),
                             c.getString("afternoon_count").toString(),
@@ -1195,7 +1227,7 @@ public class functionClass {
                             "null",
                             "null",
                             "null",
-                            "null"));
+                            "null",c.getString("start_date").toString(),c.getString("end_date").toString()));
 
                         }
                         Log.e("TAG","lstdata count is " + lstData.size());
@@ -1345,6 +1377,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
+                    Log.e("TAG","Response string " + responseString);
 					
 					return responseString;
 				}
@@ -1388,6 +1421,7 @@ public class functionClass {
 								 medicationdt.setRepeat_min(jObject.getString("repeat_min").toString());
 								 medicationdt.setRepeat_weekday(jObject.getString("repeat_weekday").toString());
 								 medicationdt.setRepeat_day_interval(jObject.getString("repeat_day_interval").toString());
+                                 medicationdt.setStart_date(jObject.getString("start_date").toString());
 				  				
 				              
 						
@@ -1401,22 +1435,27 @@ public class functionClass {
 				
 				
 				// function for add medicates data
-				public ArrayList<MedicalData> UpdateMedication(String id,String name,String detail,String morning,String afternoon,
+				public ArrayList<MedicalData> UpdateMedication(String id,String user_id,String type,String name,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
 														    String repeat_weekday,String repeat_day_interval){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-					String baseurlString = Global_Application.url+"medications/"+id+"/?user="+appPrefs.getUserid();  
+					String baseurlString = Global_Application.url+"reminders/"+id+"/"+"?type="+type;  //?user="+user_id;
 					Log.e("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+                    client.AddParam("user", user_id.toString());
 					client.AddParam("name", name.toString());
 					client.AddParam("details", detail.toString());
-					client.AddParam("morning_count", morning.toString());
-					client.AddParam("afternoon_count", afternoon.toString());
-					client.AddParam("evening_count", evening.toString());
-					client.AddParam("night_count", night.toString());
+                    client.AddParam("type", type);
+                    if(type.equalsIgnoreCase("2"))
+                    {
+					    client.AddParam("morning_count", morning.toString());
+					    client.AddParam("afternoon_count", afternoon.toString());
+					    client.AddParam("evening_count", evening.toString());
+					    client.AddParam("night_count", night.toString());
+                    }
 					client.AddParam("start_timestamp", start_timestamp.toString());
 					client.AddParam("repeat_hour", repeat_hour.toString());
 					client.AddParam("repeat_day", repeat_day.toString());

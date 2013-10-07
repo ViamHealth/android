@@ -103,6 +103,7 @@
     <string name="title_activity_new_home">NewHome</string>
     <string name="reminder_type_prompt">Type</string>
     <string name="duration_type_prompt">Duration</string>
+
     <string name="title_activity_fbfamily_list">Add Family Member</string>
     <string name="login">Login</string>
     <string name="password">#password</string>
@@ -120,5 +121,7 @@
     <string name="profile_email_not_present">email is a mandatory field to create a new profile</string>
     <string name="profile_email_not_valid">is this really a email-id?</string>
     <string name="profile_first_name_not_present">first name or last name is mandatory to create a new profile</string>
+
+    <string name="title_activity_delete_medication">Delete Medication</string>
 
 </resources>

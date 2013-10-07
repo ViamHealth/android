@@ -270,6 +270,7 @@ public class Home extends BaseActivity implements OnClickListener{
             selecteduserid=lstFamily.get(index).getId();
 
             Intent intent = new Intent(Home.this,MainActivity.class);
+            intent.putExtra("user_id", selecteduserid);
             startActivity(intent);
 
         }
@@ -354,7 +355,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 generateView();
 				dialog.dismiss();
 			}
-	   
+
 			@Override
 			protected String doInBackground(String... params) {
                 lstFamily.clear();

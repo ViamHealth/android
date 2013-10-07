@@ -231,6 +231,11 @@
             android:label="@string/title_activity_fbfamily_list"
             android:theme="@style/GreenTheme" >
         </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.DeleteMedication"
+            android:theme="@android:style/Theme.Dialog"
+            android:label="@string/title_activity_add_medication" >
+        </activity>
     </application>
 
 </manifest>
