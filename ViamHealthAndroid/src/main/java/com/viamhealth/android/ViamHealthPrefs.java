@@ -38,17 +38,6 @@ public class ViamHealthPrefs {
 	public String profilepic = "profilepic";
 	//public String dateAdded = "dateAdded";
 
-    private User loggedInUser;
-
-    public User getLoggedInUser() {
-        return loggedInUser;
-    }
-
-    public void setLoggedInUser(User loggedInUser) {
-        this.loggedInUser = loggedInUser;
-        this.loggedInUser.setLoggedInUser(true);
-    }
-
 	public ViamHealthPrefs(Context context) {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();

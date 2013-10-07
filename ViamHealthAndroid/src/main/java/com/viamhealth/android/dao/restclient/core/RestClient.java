@@ -64,7 +64,15 @@ public class RestClient {
 	public void AddHeader(String name, String value) {
 		headers.add(new BasicNameValuePair(name, value));
 	}
-	
+
+    public void AddParam(String name, Double value) {
+        AddParam(name, value.toString());
+    }
+
+    public void AddParam(String name, Integer value) {
+        AddParam(name, value.toString());
+    }
+
 	public void AddParam(String name, String value) {
 		params.add(new BasicNameValuePair(name, value));
 	}

@@ -1,6 +1,8 @@
 package com.viamhealth.android.model;
 
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.facebook.model.GraphLocation;
 import com.viamhealth.android.model.enums.BloodGroup;
@@ -11,14 +13,14 @@ import java.util.Date;
 /**
  * Created by naren on 02/10/13.
  */
-public class Profile {
+public class Profile implements Parcelable{
 
     private String organization;
     private String mobileNumber;
     private Location location;
-    private BloodGroup bloodGroup;
+    private BloodGroup bloodGroup = BloodGroup.O_Positive;
     private Date dob;
-    private Gender gender;
+    private Gender gender = Gender.Male;
     private String profilePicURL;
 
     private String fbProfileId;
@@ -84,16 +86,15 @@ public class Profile {
     public void setLocation(GraphLocation location) {
         if(this.location == null)
             this.location = new Location(location);
-        else {
-            this.location.setStreet(location.getStreet());
-            this.location.setCity(location.getCity());
-            this.location.setState(location.getState());
-            this.location.setCountry(location.getCountry());
-            this.location.setZip(location.getZip());
 
-            this.location.setLattitude(location.getLatitude());
-            this.location.setLongitude(location.getLongitude());
-        }
+        this.location.setStreet(location.getStreet());
+        this.location.setCity(location.getCity());
+        this.location.setState(location.getState());
+        this.location.setCountry(location.getCountry());
+        this.location.setZip(location.getZip());
+
+        this.location.setLattitude(location.getLatitude());
+        this.location.setLongitude(location.getLongitude());
     }
 
     public BloodGroup getBloodGroup() {
@@ -113,10 +114,10 @@ public class Profile {
     }
 
     public Profile() {
-
+        this.location = new Location();
     }
 
-    public class Location {
+    public class Location implements Parcelable{
         String street;
         String city;
         String state;
@@ -234,27 +235,95 @@ public class Profile {
                     ", lattitude=" + lattitude +
                     ", longitude=" + longitude +
                     ", address='" + address + '\'' +
-                    "} " + super.toString();
+                    "} ";
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(street);
+            dest.writeString(city);
+            dest.writeString(state);
+            dest.writeString(country);
+            dest.writeString(zip);
+            dest.writeString(address);
+            dest.writeDouble(lattitude);
+            dest.writeDouble(longitude);
+        }
+
+        public Location(Parcel in) {
+            this.street = in.readString();
+            this.city = in.readString();
+            this.state = in.readString();
+            this.country = in.readString();
+            this.zip = in.readString();
+            this.address = in.readString();
+            this.lattitude = in.readDouble();
+            this.longitude = in.readDouble();
+        }
+
     }
 
     @Override
     public String toString() {
         return "Profile{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", organization='" + organization + '\'' +
+                "organization='" + organization + '\'' +
                 ", mobileNumber='" + mobileNumber + '\'' +
                 ", location=" + location +
                 ", bloodGroup=" + bloodGroup +
                 ", dob=" + dob +
                 ", gender=" + gender +
-                ", heightInCms=" + heightInCms +
-                ", weightInKgs=" + weightInKgs +
-                ", isLoggedInUser=" + isLoggedInUser +
+                ", profilePicURL='" + profilePicURL + '\'' +
                 ", fbProfileId='" + fbProfileId + '\'' +
-                "} " + super.toString();
+                ", fbUsername='" + fbUsername + '\'' +
+                "} ";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        location.writeToParcel(dest, flags);
+
+        dest.writeString(organization);
+        dest.writeString(mobileNumber);
+        Integer bg = bloodGroup==null?null:bloodGroup.value();
+        dest.writeInt(bg);
+        Integer g = gender==null?Gender.Male.value():gender.value();
+        dest.writeInt(g);
+        dest.writeValue(dob);
+        dest.writeString(profilePicURL);
+        dest.writeString(fbProfileId);
+        dest.writeString(fbUsername);
+    }
+
+    public static final Parcelable.Creator<Profile> CREATOR
+            = new Parcelable.Creator<Profile>() {
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
+
+    public Profile(Parcel in) {
+        this.location = new Location(in);
+        this.organization = in.readString();
+        this.mobileNumber = in.readString();
+        this.bloodGroup = BloodGroup.get(in.readInt());
+        this.gender = Gender.get(in.readInt());
+        this.dob = (Date) in.readValue(null);
+        this.profilePicURL = in.readString();
+        this.fbProfileId = in.readString();
+        this.fbUsername = in.readString();
     }
 }

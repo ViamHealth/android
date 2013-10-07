@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import com.viamhealth.android.model.FoodData;
@@ -807,7 +808,8 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			Log.i("doInBackground--Object", "doInBackground--Object");
-			obj.GetUserProfile(ga.getLstfamilyglobal().get(Integer.parseInt(selecteduserid)).getId());
+			//UserEP userEP = new UserEP(AddBreakfast.this);
+            //userEP.getUserProfile(appPrefs.getLoggedInUser().getId());
 			return null;
 		}
 		   

@@ -1,42 +1,20 @@
 package com.viamhealth.android.activities;
 
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.viamhealth.android.ViamHealthPrefs;
 
 /**
- * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
+ * Created by naren on 05/10/13.
  */
-public abstract class BaseActivity extends Activity {
+public class BaseFragmentActivity extends FragmentActivity {
 
     Display display;
     int height,width;
     protected int w15,w20,h10,w10,w5,h40,h5,h8,h20;
-
-    protected ImageLoader imageLoader = ImageLoader.getInstance();
-
-    private boolean instanceStateSaved;
-    protected ViamHealthPrefs appPrefs;
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        instanceStateSaved = true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (!instanceStateSaved) {
-            imageLoader.stop();
-        }
-        super.onDestroy();
-    }
 
     protected void ScreenDimension()
     {
@@ -44,9 +22,6 @@ public abstract class BaseActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
         height = display.getHeight();
-
-        appPrefs.setSwidth(String.valueOf(width));
-        appPrefs.setSheight(String.valueOf(height));
 
         //calculate dynamic padding
         w15=(int)((width*4.68)/100);

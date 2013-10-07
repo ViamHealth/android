@@ -227,7 +227,7 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==btnSave){
-			if(isInternetOn()){
+			/*if(isInternetOn()){
 				if(validation()){
 				     CallAddProfileTask task = new CallAddProfileTask();
 					 task.applicationContext = parentActivity;
@@ -235,7 +235,7 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 				}
 			}else{
 				Toast.makeText(parentActivity,"Network is not available....",Toast.LENGTH_SHORT).show();
-			}
+			}*/
 		}
 		if(v==btnCancle){
 				finish();
@@ -316,74 +316,7 @@ public class AddProfile extends BaseActivity implements OnClickListener {
 		return valid;
 	}
 
-	// async class for calling webservice and get responce message
-		public class CallAddProfileTask extends AsyncTask <String, Void,String>
-		{
-			protected Context applicationContext;
 
-			@Override
-			protected void onPreExecute()     
-			{
-				
-				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-				dialog = new ProgressDialog(AddProfile.this);
-				dialog.setMessage("Please Wait....");
-				dialog.show();
-				Log.i("onPreExecute", "onPreExecute");
-				
-			}       
-			
-			protected void onPostExecute(String result)
-			{
-				
-				Log.i("onPostExecute", "onPostExecute");
-				if(result.toString().equals("0")){
-					dialog.dismiss();
-					finish();
-				}else{
-					dialog.dismiss();
-					Toast.makeText(AddProfile.this, "Can't able to add new profile...",Toast.LENGTH_SHORT).show();
-				}
-			}  
-	   
-			@Override
-			protected String doInBackground(String... params) {
-				// TODO Auto-generated method stub
-				Log.i("doInBackground--Object", "doInBackground--Object");
-				String sex = sex_name.getText().toString();
-				if(sex.equalsIgnoreCase("female")){
-					sex="F";
-				}else if(sex.equalsIgnoreCase("male")){
-					sex="M";
-				}
-				return obj.addProfile(first_name.getText().toString(), last_name.getText().toString(), sex,
-									  born_on.getText().toString(), txt_height.getText().toString(), txt_weight.getText().toString(),
-									  txt_emailid.getText().toString(), txt_phonenum.getText().toString());
-			}
-			   
-		}     
-		
-		// function for check internet is available or not
-		public final boolean isInternetOn() {
-
-			  ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-			  if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-			    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-			    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-			    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-			   return true;
-			  }
-
-			  else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-			    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-			   return false;
-			  }
-
-			  return false;
-			 }
-		
-		
 	 @Override
 		protected void onResume() {
 			// TODO Auto-generated method stub

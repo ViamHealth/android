@@ -12,17 +12,17 @@ public class ViamHealth {
     private String baseUrl;
 
     public ViamHealth(String baseUrl) {
-        this.baseurl = baseUrl;
+        this.baseUrl = baseUrl;
     }
 
     public String register() {
         String url = baseUrl + "signup/";
 
         RestClient client = new RestClient(url);
-        client.AddParam("username",username);
-        client.AddParam("password",password);
+        //client.AddParam("username",username);
+        //client.AddParam("password",password);
 
-        try{
+/*        try{
             client.Execute(RequestMethod.POST);
         }
         catch (Exception e) {
@@ -30,9 +30,9 @@ public class ViamHealth {
         }
 
         response = client.getResponse();
+*/
 
-
-
+        return null;
     }
 
 

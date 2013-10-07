@@ -1,6 +1,8 @@
 package com.viamhealth.android.activities;
 
+import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -27,26 +29,20 @@ import android.net.NetworkInfo;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.utils.Validator;
 
 
-
-public class Register extends Activity implements OnClickListener
+public class Register extends BaseActivity implements OnClickListener
 {
     private static ProgressDialog dialog;
 
     Button btnRegister;
-    Display display;
-    int width,height;
-    int w10,h10,h15;
-    int h40,h20,h30,pt7;
 
-    TableLayout title_table;
-    TableRow password_row, confirm_password_row, register_btn_row, cancel_btn_row;
-    LinearLayout login_layout;
     EditText user_name, password, confirm_password;
     TextView txtbtnCancel;
-    functionClass obj;
-    ViamHealthPrefs appPrefs;
+
+    UserEP obj;
+
     DataBaseAdapter dbAdapter;
     Typeface tf;
 
@@ -56,44 +52,22 @@ public class Register extends Activity implements OnClickListener
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.register_new);
 
         appPrefs = new ViamHealthPrefs(Register.this);
-        obj=new functionClass(Register.this);
+
+        obj=new UserEP(Register.this, (Global_Application)getApplicationContext());
 
         tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
         // get screen height and width
         ScreenDimension();
 
-        //calculate dynamic padding
-        w10=(int)((width*3.13)/100);
-        h10=(int)((height*2.09)/100);
-        h40=(int)((height*8.34)/100);
-        h15=(int)((height*3.13)/100);
-        h20=(int)((height*4.17)/100);
-        h30=(int)((height*6.25)/100);
-        pt7=(int)((height*2.19)/100);
-
-        //casting control and manage padding and call onclick method
-        title_table=(TableLayout)findViewById(R.id.title_table);
-        password_row=(TableRow)findViewById(R.id.password_row);
-        confirm_password_row=(TableRow)findViewById(R.id.confirm_password_row);
-        register_btn_row=(TableRow)findViewById(R.id.register_btn_row);
-        cancel_btn_row=(TableRow)findViewById(R.id.register_cancel_btn_row);
         user_name = (EditText)findViewById(R.id.user_name);
         password = (EditText)findViewById(R.id.user_password);
         confirm_password = (EditText)findViewById(R.id.confirm_user_password);
-        login_layout = (LinearLayout)findViewById(R.id.loginwrapper);
         password.setTypeface(tf);
         user_name.setTypeface(tf);
         confirm_password.setTypeface(tf);
-
-        title_table.setPadding(0, 0, 0, h40);
-        password_row.setPadding(0, h15, 0, 0);
-        confirm_password_row.setPadding(0, h15, 0, 0);
-        register_btn_row.setPadding(0, h30, 0, 0);
-        cancel_btn_row.setPadding(0, h20, 0, 0);
-        login_layout.setPadding(0, pt7, 0, 0);
 
         btnRegister=(Button)findViewById(R.id.btnRegister);
         btnRegister.setTypeface(tf);
@@ -102,17 +76,6 @@ public class Register extends Activity implements OnClickListener
         txtbtnCancel=(TextView)findViewById(R.id.txtbtnCancel);
         txtbtnCancel.setTypeface(tf);
         txtbtnCancel.setOnClickListener(this);
-    }
-
-    // for get screen diamention
-    public void ScreenDimension()
-    {
-        display = getWindowManager().getDefaultDisplay();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        width = display.getWidth();
-        height = display.getHeight();
-        appPrefs.setSwidth(String.valueOf(width));
-        appPrefs.setSheight(String.valueOf(height));
     }
 
     // onclick method of all clikable control
@@ -129,7 +92,7 @@ public class Register extends Activity implements OnClickListener
                     task.applicationContext = Register.this;
                     task.execute();
                 }else{
-                    Toast.makeText(Register.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Register.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -139,22 +102,21 @@ public class Register extends Activity implements OnClickListener
     public boolean validation(){
         boolean val= true;
         if(user_name.getText().length()==0){
-            user_name.setError("Enter email id");
+            user_name.setError(getString(R.string.register_user_name_not_present));
             val = false;
-        }else if(user_name.getText().toString().matches("^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")==false){
-            user_name.setError("Invalid email");
+        } else if(!Validator.isEmailValid(user_name.getText().toString())){
+            user_name.setError(getString(R.string.register_user_name_not_email));
             val = false;
         }
         if(password.getText().length()==0){
-            password.setError("Enter password");
+            password.setError(getString(R.string.register_user_password_not_present));
             val=false;
         }
-        if(confirm_password.getText().toString().length()==0){
-            confirm_password.setError("Enter confirm password");
+        if(confirm_password.getText().length()==0){
+            confirm_password.setError(getString(R.string.register_confirm_password_not_present));
             val = false;
-        }
-        if(!password.getText().toString().equals(confirm_password.getText().toString())){
-            confirm_password.setError("Password Mismatch");
+        } else if(!password.getText().toString().equals(confirm_password.getText().toString())){
+            confirm_password.setError(getString(R.string.register_passwords_mismatch));
             val=false;
         }
         return val;
@@ -169,7 +131,7 @@ public class Register extends Activity implements OnClickListener
         {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
             dialog = new ProgressDialog(Register.this);
-            dialog.setMessage("Please Wait....");
+            dialog.setMessage("we are creating your identity....");
             dialog.show();
             Log.i("onPreExecute", "onPreExecute");
         }
@@ -185,7 +147,7 @@ public class Register extends Activity implements OnClickListener
                 finish();
             }else{
                 dialog.dismiss();
-                user_name.setError("User with this user name already exist");
+                user_name.setError("already registered!");
                 //Toast.makeText(Register.this, "User with this user name already exist",Toast.LENGTH_SHORT).show();
             }
         }

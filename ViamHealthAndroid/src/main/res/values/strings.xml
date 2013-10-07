@@ -39,22 +39,16 @@
         <item>5 Weeks</item>
         <item>6 Weeks</item>
     </string-array>
-
     <string-array name="reminder_types">
         <item>Medicine</item>
         <item>Rest all</item>
     </string-array>
-
     <string-array name="duration_type">
         <item>Day</item>
         <item>Week</item>
         <item>Month</item>
         <item>Year</item>
     </string-array>
-
-
-
-
 
     <string name="title_activity_add_breakfast">AddBreakfast</string>
     <string name="title_activity_tab_group_reminder">TabGroupReminder</string>
@@ -81,7 +75,6 @@
     <string name="ptr_release_to_refresh">Release to refresh</string>
     <string name="ptr_refreshing">Refreshing…</string>
     <string name="ptr_last_updated">Updated: %1$s</string>
-
     <string name="register">Register</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_new_profile">NewProfile</string>
@@ -108,8 +101,24 @@
     <string name="app_id">477626235650508</string>
     <string name="save">Save</string>
     <string name="title_activity_new_home">NewHome</string>
-
     <string name="reminder_type_prompt">Type</string>
     <string name="duration_type_prompt">Duration</string>
+    <string name="title_activity_fbfamily_list">Add Family Member</string>
+    <string name="login">Login</string>
+    <string name="password">#password</string>
+    <string name="username">\@email</string>
+    <string name="resgiter">Register</string><string name="confirm_password">#password - confirm</string>
+
+    <string name="login_user_name_not_present">need your identity to log you in</string>
+    <string name="login_user_password_not_present">need your identity to log you in</string>
+    <string name="login_user_name_not_email">this doesnt look like an email-id</string>
+    <string name="register_user_name_not_present">need your identity to log you in</string>
+    <string name="register_user_password_not_present">need your identity to log you in</string>
+    <string name="register_user_name_not_email">this doesnt look like an email-id</string>
+    <string name="register_confirm_password_not_present">please confirm the password</string>
+    <string name="register_passwords_mismatch">buddy! passwords do not match</string>
+    <string name="profile_email_not_present">email is a mandatory field to create a new profile</string>
+    <string name="profile_email_not_valid">is this really a email-id?</string>
+    <string name="profile_first_name_not_present">first name or last name is mandatory to create a new profile</string>
 
 </resources>

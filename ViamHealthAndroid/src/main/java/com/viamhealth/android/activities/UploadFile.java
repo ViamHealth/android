@@ -20,6 +20,7 @@ import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import com.viamhealth.android.model.FileData;
@@ -459,7 +460,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
-				obj.GetUserProfile(ga.getLstfamilyglobal().get(Integer.parseInt(selecteduserid)).getId());
+                UserEP userEP = new UserEP(UploadFile.this, ga);
+				userEP.getUserProfile(ga.getLoggedInUser().getId());
 				return null;
 			}
 			   

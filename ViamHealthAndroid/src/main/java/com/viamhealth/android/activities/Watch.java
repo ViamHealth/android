@@ -11,6 +11,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.MedicalData;
 
@@ -980,7 +981,8 @@ public class Watch extends BaseActivity implements OnClickListener{
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
-				obj.GetUserProfile(ga.getLstfamilyglobal().get(Integer.parseInt(selecteduserid)).getId());
+                UserEP userEP = new UserEP(Watch.this, ga);
+                userEP.getUserProfile(ga.getLoggedInUser().getId());
 				return null;
 			}
 			   

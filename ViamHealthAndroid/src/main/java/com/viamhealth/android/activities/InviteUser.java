@@ -2,6 +2,7 @@ package com.viamhealth.android.activities;
 
 import java.util.List;
 
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import android.app.Activity;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.model.Profile;
+import com.viamhealth.android.model.User;
 
 public class InviteUser extends Activity implements OnClickListener {
 	
@@ -39,7 +41,7 @@ public class InviteUser extends Activity implements OnClickListener {
 	LinearLayout below_main_layout,below_invite_layout,middle_main_layout,inviteuser_layout;
 	EditText txt_email_id,txt_first_name,txt_last_name;
 	
-	 List<Profile> lstFamily = null;
+	 List<User> lstFamily = null;
 	
 	functionClass obj;
 	ViamHealthPrefs appPrefs;
@@ -187,8 +189,8 @@ public class InviteUser extends Activity implements OnClickListener {
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
-				
-				return obj.inviteUser(txt_email_id.getText().toString(), txt_first_name.getText().toString(),txt_last_name.getText().toString());
+                //UserEP userendpoint = new UserEP(InviteUser.this, );
+				return null;//userendpoint.inviteUser(null, null, null);
 			}
 			     
 		}     
@@ -221,7 +223,8 @@ public class InviteUser extends Activity implements OnClickListener {
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
-				lstFamily = obj.GetFamilyMember(appPrefs.getUsername().toString());
+                //UserEP userEP = new UserEP(InviteUser.this, null);
+				//lstFamily = userEP.GetFamilyMembers();
 				return null;
 			}
 			   

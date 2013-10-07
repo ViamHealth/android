@@ -11,11 +11,19 @@
     android:background="#37aa4f"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/fbLoginFragment"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"/>
+
     <ScrollView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:background="#ffffff"
-        android:layout_marginBottom="70dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="60dp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -23,20 +31,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top">
 
-            <com.facebook.widget.LoginButton
-                android:id="@+id/login_button"
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                facebook:confirm_logout="false"
-                facebook:fetch_user_info="true"
-                />
-
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:gravity="center_vertical|center_horizontal">
 
                 <FrameLayout
                     android:layout_height="wrap_content"
@@ -46,7 +46,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center_vertical|center_horizontal">
 
                 <com.facebook.widget.ProfilePictureView
                     android:id="@+id/profilepic"
@@ -55,7 +56,8 @@
                     android:layout_weight="1"
                     facebook:preset_size="large"
                     facebook:is_cropped="true"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center_vertical|center_horizontal" />
 
                 </FrameLayout>
             </LinearLayout>
@@ -68,13 +70,26 @@
                 <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/email"
+                    android:ems="15"
+                    android:id="@+id/profile_email"
+                    android:layout_gravity="center"
+                    android:enabled="true"
+                    android:editable="true"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:hint="@string/first_name"
                     android:ems="15"
                     android:id="@+id/profile_first_name"
                     android:layout_gravity="center"
                     android:enabled="true"
-                    android:editable="true" />
+                    android:editable="true"
+                    android:gravity="center_vertical|center_horizontal" />
 
                 <EditText
                     android:layout_width="fill_parent"
@@ -84,12 +99,14 @@
                     android:ems="15"
                     android:id="@+id/profile_last_name"
                     android:layout_gravity="center"
-                    android:enabled="true" />
+                    android:enabled="true"
+                    android:gravity="center_vertical|center_horizontal" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -98,7 +115,8 @@
                         android:src="@drawable/ic_men_enabled"
                         android:background="#ffffff"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp" />
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1" />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -106,8 +124,9 @@
                         android:id="@+id/profile_img_female"
                         android:src="@drawable/ic_woman_disabled"
                         android:background="#ffffff"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp" />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
                 <EditText
@@ -117,30 +136,8 @@
                     android:ems="10"
                     android:id="@+id/profile_dob"
                     android:layout_gravity="center"
-                    android:hint="@string/dob" />
-
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:ems="10"
-                    android:id="@+id/profile_phone"
-                    android:layout_gravity="center"
-                    android:hint="@string/phone" />
-
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/profile_location"
-                    android:layout_gravity="left|center_vertical"
-                    android:hint="@string/location" />
-
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/profile_organization"
-                    android:layout_gravity="center"
-                    android:hint="@string/organization" />
+                    android:hint="@string/dob"
+                    android:gravity="center_vertical|center_horizontal" />
 
                 <Spinner
                     android:layout_width="fill_parent"
@@ -149,7 +146,34 @@
                     android:layout_gravity="center"
                     android:spinnerMode="dropdown"
                     android:entries="@array/blood_groups"
-                    android:focusableInTouchMode="true" />
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:ems="10"
+                    android:id="@+id/profile_phone"
+                    android:layout_gravity="center"
+                    android:hint="@string/phone"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_location"
+                    android:layout_gravity="left|center_vertical"
+                    android:hint="@string/location"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/profile_organization"
+                    android:layout_gravity="center"
+                    android:hint="@string/organization"
+                    android:gravity="center_vertical|center_horizontal" />
 
             </LinearLayout>
 
@@ -160,26 +184,29 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="-60dp"
+        android:layout_marginTop="-50dp"
         android:layout_gravity="center">
 
+
         <Button
-            android:layout_width="180dp"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:text="@string/save"
             android:id="@+id/btnSave_profile"
             android:layout_gravity="center|left"
             style="@style/ButtonReverseTheme"
-            android:clickable="true" />
+            android:clickable="true"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/btnCancel_profile"
-            android:layout_width="180dp"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:text="@string/cancel"
             android:textSize="18sp"
             android:layout_gravity="center|right"
-            style="@style/ButtonReverseTheme" />
+            style="@style/ButtonReverseTheme"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

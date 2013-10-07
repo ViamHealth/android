@@ -614,7 +614,7 @@ public class File extends BaseActivity implements OnClickListener{
 						protected String doInBackground(String... params) {
 							// TODO Auto-generated method stub
 							Log.i("doInBackground--Object", "doInBackground--Object");
-							obj.GetUserProfile(ga.getLstfamilyglobal().get(Integer.parseInt(selecteduserid)).getId());
+							//obj.GetUserProfile(ga.getLstfamilyglobal().get(Integer.parseInt(selecteduserid)).getId());
 							return null;
 						}
 						   

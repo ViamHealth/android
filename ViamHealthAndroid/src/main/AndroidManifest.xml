@@ -226,6 +226,11 @@
             android:name="com.viamhealth.android.NewHome"
             android:label="@string/title_activity_new_home" >
         </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.FBFamilyListActivity"
+            android:label="@string/title_activity_fbfamily_list"
+            android:theme="@style/GreenTheme" >
+        </activity>
     </application>
 
 </manifest>

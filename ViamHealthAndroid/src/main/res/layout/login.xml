@@ -33,16 +33,17 @@
             android:gravity="center_horizontal"
             android:layout_width="fill_parent"
     		android:layout_height="wrap_content">
-            <TableRow 
-                 android:gravity="center_horizontal"
+
+            <TableRow
                 android:layout_width="fill_parent"
-    			android:layout_height="wrap_content">
+                android:layout_height="fill_parent">
 
-                    <ImageView
-                        android:src="@drawable/original_logo_white"
-                        android:layout_width="250dp"
-    					android:layout_height="71dp"/>
-
+                <ImageView
+                    android:src="@drawable/original_logo_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:scaleType="centerInside"
+                    android:layout_column="1" />
             </TableRow>
         </TableLayout>
         
@@ -58,13 +59,14 @@
     			android:layout_height="wrap_content">
          		<EditText 
          		    android:id="@+id/user_name"
-         		    android:inputType="text|textNoSuggestions"
+         		    android:inputType="text|textNoSuggestions|textEmailAddress"
          		    android:singleLine="true"
          		    android:paddingLeft="10dp"
-         		    android:textSize="18sp"
+         		    android:textSize="20sp"
          		    android:hint="\@email"
-         		    android:layout_width="wrap_content"
-    				android:layout_height="wrap_content"/>           
+         		    android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
                 
             </TableRow>
             
@@ -81,8 +83,10 @@
          		    android:paddingLeft="10dp" 
          		    android:textSize="18sp"
          		    android:hint="#password"
-         		    android:layout_width="wrap_content"
-    				android:layout_height="wrap_content"/>
+         		    android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center_vertical|fill_horizontal|center_horizontal" />
                 
             </TableRow>
 
@@ -94,9 +98,9 @@
     			android:layout_height="wrap_content">
          		<Button
          		    android:id="@+id/login_btn"
-         		    android:layout_width="wrap_content"  
+         		    android:layout_width="fill_parent"
     				android:layout_height="wrap_content"
-    				android:text="Sign In"
+    				android:text="@string/login"
     				android:textSize="20sp"
     				android:textColor="#ffffff"
     				/>           
@@ -123,13 +127,15 @@
          		     android:layout_width="wrap_content"  
     				android:layout_height="wrap_content"
     				android:text="  |  "
-    				android:textSize="18sp"/>
+    				android:textSize="18sp"
+                        android:visibility="gone" />
                 <TextView
          		    android:id="@+id/forgot_password"
          		     android:layout_width="wrap_content"  
     				android:layout_height="wrap_content"
     				android:text="Forgot Password"
-    				android:textSize="18sp"/>
+    				android:textSize="18sp"
+                    android:visibility="gone" />
     				</LinearLayout>  
             </TableRow>
             

@@ -40,8 +40,10 @@
 
                 <ImageView
                     android:src="@drawable/original_logo_white"
-                    android:layout_width="250dp"
-                    android:layout_height="71dp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:scaleType="centerInside"
+                    android:layout_column="1" />
 
             </TableRow>
         </TableLayout>
@@ -63,7 +65,7 @@
                     android:paddingLeft="10dp"
                     android:textSize="18sp"
                     android:hint="\@email"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"/>
 
             </TableRow>
@@ -81,7 +83,7 @@
                     android:paddingLeft="10dp"
                     android:textSize="18sp"
                     android:hint="#password"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"/>
 
 
@@ -101,7 +103,7 @@
                     android:paddingLeft="10dp"
                     android:textSize="18sp"
                     android:hint="#password - confirm"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"/>
 
 
@@ -138,7 +140,7 @@
                 android:layout_height="wrap_content">
                 <Button
                     android:id="@+id/btnRegister"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Register"
                     android:textSize="20sp"
