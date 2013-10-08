@@ -11,7 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.viamhealth.android.R;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 
 /**
  * Created by Administrator on 10/3/13.
