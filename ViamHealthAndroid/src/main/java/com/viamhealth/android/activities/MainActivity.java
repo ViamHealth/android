@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
+import android.widget.Toast;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -21,12 +22,13 @@ public class MainActivity extends TabActivity
 {
     /** Called when the activity is first created. */
 	       
-     Resources res;
-     TabHost tabHost;
-     TabSpec obj,obj1;
-     Activity hehehe;
-     Intent intent;
-     ViamHealthPrefs appPrefs;
+    Resources res;
+    TabHost tabHost;
+    TabSpec obj,obj1;
+    Activity hehehe;
+    Intent intent;
+    String userid;
+    ViamHealthPrefs appPrefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -34,6 +36,9 @@ public class MainActivity extends TabActivity
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.tablayout);
+        Intent user_info=getIntent();
+        userid=user_info.getStringExtra("user_id");
+        //Toast.makeText(MainActivity.this, "User Id=" + myinfo, Toast.LENGTH_LONG).show();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         appPrefs = new ViamHealthPrefs(MainActivity.this);
         setTabs();     
@@ -58,6 +63,7 @@ public class MainActivity extends TabActivity
 	{
 		TabHost tabHost = getTabHost();  
 		Intent intent = new Intent(this, c);
+        intent.putExtra("user_id",userid);
 		TabHost.TabSpec spec = tabHost.newTabSpec("tab" + labelId);	
 		
 		View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator, getTabWidget(), false);

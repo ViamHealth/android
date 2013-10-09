@@ -10,20 +10,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.MedicationData;
 
-public class MedicalDataAdapter1 extends ArrayAdapter<String> {
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 	Context context; 
 	int layoutResourceId;    
-	ArrayList<String> lstdata = null;
+	ArrayList<MedicationData> lstdata = null;
 	Typeface tf;
 	ViamHealthPrefs appPrefs;
 	int height,width,w30,w150,w10;
 	
-	public MedicalDataAdapter1(Context context, int layoutResourceId, ArrayList<String> lstdata) {
+	public MedicalDataAdapter1(Context context, int layoutResourceId, ArrayList<MedicationData> lstdata) {
 		super(context, layoutResourceId, lstdata);
 		// TODO Auto-generated constructor stub
 		
@@ -55,7 +60,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<String> {
 	            
 	            holder.txt_name = (TextView)row.findViewById(R.id.txt_name);
 	            holder.txt_name.getLayoutParams().width = w150;
-	          
+
 	            holder.txt_morning = (TextView)row.findViewById(R.id.txt_morning);
 	            holder.txt_morning.getLayoutParams().width = w30;
 	            
@@ -99,7 +104,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<String> {
 						txt.setBackgroundColor(Color.GREEN);
 					}
 				});
-	            
+
 	            
 	            row.setTag(holder);
 	        }     
@@ -108,16 +113,20 @@ public class MedicalDataAdapter1 extends ArrayAdapter<String> {
 	            holder = (FileDataHolder)row.getTag();
 	        }
 	        
-	        String data = lstdata.get(position);
+	        String data = lstdata.get(position).getName();
 	        holder.txt_name.setText(data);
+            holder.txt_morning.setText(lstdata.get(position).getMorning_count());
+            holder.txt_noon.setText(lstdata.get(position).getAfternoon_count());
+            holder.txt_night.setText(lstdata.get(position).getNight_count());
 	      
 	        return row;
 	    }
-	    
+
+
+
 	    static class FileDataHolder
 	    {
 	        TextView txt_name,txt_morning,txt1,txt_noon,txt2,txt_night;
-	      
 	        
 	    }
 	    

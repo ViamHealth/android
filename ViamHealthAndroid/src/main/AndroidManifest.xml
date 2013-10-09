@@ -226,6 +226,19 @@
             android:name="com.viamhealth.android.NewHome"
             android:label="@string/title_activity_new_home" >
         </activity>
+<<<<<<< HEAD
+        <activity
+            android:name="com.viamhealth.android.activities.FBFamilyListActivity"
+            android:label="@string/title_activity_fbfamily_list"
+            android:theme="@style/GreenTheme" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.DeleteMedication"
+            android:theme="@android:style/Theme.Dialog"
+            android:label="@string/title_activity_add_medication" >
+        </activity>
+=======
+>>>>>>> parent of 7240615... All necessary changed to the Register/Login and Home + Profile done
     </application>
 
 </manifest>

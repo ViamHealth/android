@@ -195,7 +195,19 @@ public class Home extends BaseActivity implements OnClickListener{
             Log.e("TAG","profile name is : " + txt.getTag());
             appPrefs.setProfileName(txt.getTag().toString());
             appPrefs.setGoalDisable("0");
+<<<<<<< HEAD
+            selecteduserid=lstFamily.get(index).getId();
+
+            Intent intent = new Intent(Home.this,MainActivity.class);
+            intent.putExtra("user_id", selecteduserid);
+            startActivity(intent);
+
+        }
+
+	}
+=======
             selecteduserid=lstFamily.get(i).getId();
+>>>>>>> parent of 7240615... All necessary changed to the Register/Login and Home + Profile done
 
             if(isInternetOn()){
                 CalluserMeTask task = new CalluserMeTask();
@@ -232,10 +244,15 @@ public class Home extends BaseActivity implements OnClickListener{
 				Log.i("onPostExecute", "onPostExecute");
 				//generateView();
 				dialog.dismiss();
+<<<<<<< HEAD
+			}
+
+=======
 				Intent intent = new Intent(Home.this,MainActivity.class);
 				startActivity(intent);
 			}  
 	   
+>>>>>>> parent of 7240615... All necessary changed to the Register/Login and Home + Profile done
 			@Override
 			protected String doInBackground(String... params) {
 				// TODO Auto-generated method stub
