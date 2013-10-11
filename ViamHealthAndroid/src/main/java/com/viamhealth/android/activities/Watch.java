@@ -16,6 +16,7 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.adapters.TestDataAdapter1;
+import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.model.MedicalData;
 
 import android.app.ProgressDialog;
