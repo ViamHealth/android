@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.viamhealth.android.model.Profile;
-import com.viamhealth.android.model.User;
-
 public class ViamHealthPrefs {
 	public static final String USER_PREFS = "USER_PREFS";
 	public SharedPreferences appSharedPrefs;

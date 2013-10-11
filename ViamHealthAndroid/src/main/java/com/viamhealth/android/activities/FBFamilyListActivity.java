@@ -1,39 +1,28 @@
 package com.viamhealth.android.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.facebook.*;
 import com.facebook.Settings;
 import com.viamhealth.android.R;
 
 import com.facebook.model.GraphObject;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.ProfilePictureView;
 import com.viamhealth.android.adapters.FamilyListAdapter;
-import com.viamhealth.android.model.FbFamily;
+import com.viamhealth.android.model.users.FbFamily;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class FBFamilyListActivity extends BaseActivity {
 

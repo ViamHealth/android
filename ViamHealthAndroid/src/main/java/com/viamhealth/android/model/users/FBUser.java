@@ -1,4 +1,4 @@
-package com.viamhealth.android.model;
+package com.viamhealth.android.model.users;
 
 import com.viamhealth.android.model.enums.Gender;
 

@@ -64,7 +64,7 @@ public class DataBaseAdapter {
 }
 	public ArrayList<GoalData> insertGoal(String gn,String gd,String gv,String dates,String val){
 		ArrayList<GoalData> lstdata = new ArrayList<GoalData>();
-		 Log.e("TAG","Insert Goal");
+		 Log.e("TAG","Insert GoalActivity");
 		try{		
 			myDatabase = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE, null);
 			

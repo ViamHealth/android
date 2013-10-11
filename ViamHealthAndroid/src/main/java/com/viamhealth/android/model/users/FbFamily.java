@@ -1,4 +1,4 @@
-package com.viamhealth.android.model;
+package com.viamhealth.android.model.users;
 
 /**
  * Created by naren on 04/10/13.

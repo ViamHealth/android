@@ -19,12 +19,15 @@
     <string name="title_activity_file">File</string>
     <string name="title_activity_food_diary">FoodDiary</string>
 
+    <string name="medical_conidtion_obese">Obesity</string>
+    <string name="medical_conidtion_bp">Blood Pressure</string>
+    <string name="medical_conidtion_diabetes">Diabetes</string>
+    <string name="medical_conidtion_cholesterol">Cholesterol</string>
     <string-array name="goal_name_array">
+        <item>Blood Glucose</item>
+        <item>Blood Presure</item>
         <item>Weight</item>
         <item>Cholestrol</item>
-        <item>Blood Glucose</item>
-        <item>Calories</item>
-        <item>Blood Presure</item>
     </string-array>
     <string-array name="goal_info_array">
         <item>Lower</item>
@@ -122,6 +125,10 @@
     <string name="profile_email_not_valid">is this really a email-id?</string>
     <string name="profile_first_name_not_present">first name or last name is mandatory to create a new profile</string>
 
-    <string name="title_activity_delete_medication">Delete Medication</string>
+    <string name="tab_label_goal">Goals</string>
+    <string name="tab_label_journal">Journal</string>
+    <string name="tab_label_reminder">Reminders</string>
+    <string name="tab_label_file">Files</string>
+    <string name="title_activity_delete_medication">Delete Medication</string><string name="addgoal">+ Add Goal</string><string name="title_add_goal">Add Goal</string><string name="goal_settings">Goal Settings</string><string name="present_values">Present Data (if you know)</string><string name="fbs">Fasting Blood Sugar</string><string name="rbs">Random Blood Sugar</string><string name="present_fbs">present fasting blood sugar (empty stomach)</string><string name="present_rbs">present random blood sugar (2 hrs after food)</string><string name="target_fbs">target fasting blood sugar</string><string name="target_rbs">target random blood sugar</string><string name="present_systolic">present systolic pressure (80 in 80-120)</string><string name="present_diastolic">present diastolic pressure (120 in 80-120)</string><string name="target_systolic">target systolic pressure (80 in 80-120)</string><string name="target_diastolic">target diastolic pressure (120 in 80-120)</string><string name="present_hdl">present hdl</string><string name="present_ldl">present ldl</string><string name="present_tryglecerides">present tryglecerides</string><string name="total_cholesterol">total cholesterol is</string><string name="target_hdl">target hdl</string><string name="target_ldl">target ldl</string><string name="target_tryglecerides">target tryglecerides</string>
 
 </resources>

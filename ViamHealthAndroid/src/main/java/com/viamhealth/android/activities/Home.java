@@ -1,7 +1,6 @@
 package com.viamhealth.android.activities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.facebook.widget.ProfilePictureView;
@@ -11,10 +10,8 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
-import com.viamhealth.android.dao.restclient.old.functionClass;
 
-import com.viamhealth.android.model.Profile;
-import com.viamhealth.android.model.User;
+import com.viamhealth.android.model.users.User;
 
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -55,8 +52,6 @@ public class Home extends BaseActivity implements OnClickListener{
 	ArrayList<String> msgArray = new ArrayList<String>();
 	List<User> lstFamily = null;
 	ProgressDialog dialog;
-	
-	Long selecteduserid;
 	
 	UserEP userEndPoint;
 	User user;
@@ -262,15 +257,14 @@ public class Home extends BaseActivity implements OnClickListener{
             addProfileIntent.putExtra("user", selectedUser);
             startActivityForResult(addProfileIntent, index);
         }else{
-            FrameLayout tr1frm=(FrameLayout) tiles.get(index).findViewWithTag("frame");
-            LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
-            TextView txt = (TextView)tr1.getChildAt(0);
-            appPrefs.setProfileName(selectedUser.getName());
-            appPrefs.setGoalDisable("0");
-            selecteduserid=lstFamily.get(index).getId();
+            //FrameLayout tr1frm=(FrameLayout) tiles.get(index).findViewWithTag("frame");
+            //LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
+            //TextView txt = (TextView)tr1.getChildAt(0);
+            //appPrefs.setProfileName(selectedUser.getName());
+            //appPrefs.setGoalDisable("0");
 
-            Intent intent = new Intent(Home.this,MainActivity.class);
-            intent.putExtra("user_id", selecteduserid);
+            Intent intent = new Intent(Home.this, TabActivity.class);
+            intent.putExtra("user", selectedUser);
             startActivity(intent);
 
         }

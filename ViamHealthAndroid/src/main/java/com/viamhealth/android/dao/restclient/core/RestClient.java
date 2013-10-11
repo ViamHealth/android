@@ -73,6 +73,10 @@ public class RestClient {
         AddParam(name, value.toString());
     }
 
+    public void AddParam(String name, Long value) {
+        AddParam(name, value.toString());
+    }
+
 	public void AddParam(String name, String value) {
 		params.add(new BasicNameValuePair(name, value));
 	}

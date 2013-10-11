@@ -1296,7 +1296,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 				Log.i("onPostExecute", "onPostExecute");
 				//generateView();
 				dialog1.dismiss();
-			/*	Intent intent = new Intent(Goal.this,MainActivity.class);
+			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 				startActivity(intent);*/
 			}  
 	   

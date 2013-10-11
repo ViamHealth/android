@@ -1,6 +1,5 @@
-package com.viamhealth.android.model;
+package com.viamhealth.android.model.users;
 
-import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 

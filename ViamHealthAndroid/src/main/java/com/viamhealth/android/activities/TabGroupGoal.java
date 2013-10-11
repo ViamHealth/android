@@ -6,9 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Window;
 
-import com.viamhealth.android.activities.Goal;
-import com.viamhealth.android.activities.TabGroupActivity;
-
 
 public class TabGroupGoal extends TabGroupActivity
 	{    
@@ -17,7 +14,7 @@ public class TabGroupGoal extends TabGroupActivity
 	        super.onCreate(savedInstanceState);
 	        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	        startChildActivity("HomePage", new Intent(this,Goal.class));
+	        startChildActivity("HomePage", new Intent(this,GoalActivity.class));
 	          
 	    }
   

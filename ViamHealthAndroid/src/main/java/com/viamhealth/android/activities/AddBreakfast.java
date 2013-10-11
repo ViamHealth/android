@@ -800,7 +800,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			Log.i("onPostExecute", "onPostExecute");
 			//generateView();
 			dialog1.dismiss();
-		/*	Intent intent = new Intent(Goal.this,MainActivity.class);
+		/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 			startActivity(intent);*/
 		}  
    

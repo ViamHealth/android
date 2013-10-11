@@ -1,0 +1,81 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="#ffffff">
+
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:background="@drawable/inviteuser_header"
+            android:gravity="center_vertical|center_horizontal">
+
+            <TextView android:id="@+id/lbl_add_goal"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/title_add_goal"
+                android:textSize="25sp"
+                android:textColor="#37AA4F" />
+        </LinearLayout>
+
+        <ScrollView android:layout_height="fill_parent"
+            android:layout_width="match_parent">
+
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:background="@drawable/inviteuser_header"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
+
+        <Spinner
+            android:layout_width="fill_parent"
+            android:layout_height="72dp"
+            android:id="@+id/add_goal_type_selector"
+            android:spinnerMode="dialog"
+            android:focusableInTouchMode="false"
+            style="@style/SpinnerGreenTheme" />
+
+        <LinearLayout
+            android:id="@+id/add_goal_data_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:background="#37AA4F">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:id="@+id/btnSave"
+                android:layout_gravity="center"
+                style="@style/ButtonReverseTheme" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/cancel"
+                android:id="@+id/btnCancel"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+
+</LinearLayout>

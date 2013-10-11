@@ -1,8 +1,6 @@
 package com.viamhealth.android.dao.restclient.old;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,23 +10,18 @@ import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.model.BPData;
 import com.viamhealth.android.model.CategoryFood;
 import com.viamhealth.android.model.CholesterolData;
-import com.viamhealth.android.model.FamilyData;
 import com.viamhealth.android.model.FileData;
 import com.viamhealth.android.model.FoodData;
 import com.viamhealth.android.model.GlucoseData;
 import com.viamhealth.android.model.GoalData;
 import com.viamhealth.android.model.MedicalData;
 import com.viamhealth.android.model.MedicationData;
-import com.viamhealth.android.model.Profile;
-import com.viamhealth.android.model.User;
 import com.viamhealth.android.model.WeightData;
 import android.content.Context;
 import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.model.enums.BloodGroup;
-import com.viamhealth.android.model.enums.Gender;
 
 public class functionClass {
 	Context context;

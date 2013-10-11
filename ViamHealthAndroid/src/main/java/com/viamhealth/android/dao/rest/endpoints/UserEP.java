@@ -5,12 +5,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
-import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
-import com.viamhealth.android.model.FamilyData;
-import com.viamhealth.android.model.Profile;
-import com.viamhealth.android.model.User;
+import com.viamhealth.android.model.users.BMIProfile;
+import com.viamhealth.android.model.users.Profile;
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 
@@ -164,6 +163,43 @@ public class UserEP extends BaseEP {
         return processUserResponse(responseString);
     }
 
+    public BMIProfile getUserBMIProfile(Long userId) {
+        String baseurlString = Global_Application.url+"users/"+userId+"/bmi-profile/";
+        Log.e("TAG","url is : " + baseurlString);
+
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+        try {
+            client.Execute(RequestMethod.GET);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+
+        return processBMIProfileResponse(responseString);
+    }
+
+    public BMIProfile updateBMIProfile(Long userId, BMIProfile profile) {
+        String baseurlString = Global_Application.url+"users/" + userId + "/bmi-profile/";
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+        client.AddParam("height", profile.getHeight());
+        client.AddParam("weight", profile.getWeight());
+        //TODO::lifestyle
+
+        try{
+            client.Execute(RequestMethod.PUT);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        return processBMIProfileResponse(responseString);
+    }
+
     public Profile updateProfile(long userId, Profile profile) {
         String responce="1";
         String baseurlString = Global_Application.url+"users/" + userId + "/profile/";
@@ -269,6 +305,38 @@ public class UserEP extends BaseEP {
         }
 
         return user;
+    }
+
+    private BMIProfile processBMIProfileResponse(String profileResponse){
+
+        BMIProfile pd = null;
+
+        try{
+            /* need to deserialize Profile object */
+            JSONObject jsonProfile = new JSONObject(profileResponse);
+            pd = processBMIProfileResponse(jsonProfile);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return pd;
+    }
+
+    private BMIProfile processBMIProfileResponse(JSONObject jsonProfile){
+
+        BMIProfile pd = new BMIProfile();
+        try{
+            /* need to deserialize Profile object */
+            pd.setHeight(jsonProfile.getInt("height"));
+            pd.setWeight(jsonProfile.getDouble("weight"));
+            pd.setBmr(jsonProfile.getInt("bmr"));
+            //pd.setBmiClassifier();
+            //pd.setLifeStyle();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return pd;
     }
     private Profile processProfileResponse(JSONObject jsonProfile){
 

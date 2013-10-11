@@ -11,17 +11,12 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
-import com.viamhealth.android.dao.rest.endpoints.UserEP;
-import com.viamhealth.android.model.Profile;
-import com.viamhealth.android.model.User;
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
-import com.viamhealth.android.model.FamilyData;
 import com.viamhealth.android.model.FoodData;
 import com.viamhealth.android.model.GoalData;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 
 

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.FbFamily;
+import com.viamhealth.android.model.users.FbFamily;
 
 import java.util.List;
 

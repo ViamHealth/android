@@ -2,7 +2,6 @@ package com.viamhealth.android.activities;
 
 import java.util.List;
 
-import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import android.app.Activity;
@@ -26,8 +25,7 @@ import android.widget.Toast;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.model.Profile;
-import com.viamhealth.android.model.User;
+import com.viamhealth.android.model.users.User;
 
 public class InviteUser extends Activity implements OnClickListener {
 	

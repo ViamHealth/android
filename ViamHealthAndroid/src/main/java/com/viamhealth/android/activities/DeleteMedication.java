@@ -11,7 +11,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import com.viamhealth.android.R;
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 
 /**
  * Created by Administrator on 10/3/13.
@@ -77,7 +77,7 @@ public class DeleteMedication extends BaseActivity {
             Log.i("onPostExecute", "onPostExecute");
             //generateView();
             dialog.dismiss();
-			/*	Intent intent = new Intent(Goal.this,MainActivity.class);
+			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 				startActivity(intent);*/
         }
 

@@ -21,9 +21,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Window;
 
-import com.viamhealth.android.activities.Goal;
-import com.viamhealth.android.activities.TabGroupActivity;
-
 
 public class TabGroupJournal extends TabGroupActivity
 {
@@ -40,7 +37,7 @@ public class TabGroupJournal extends TabGroupActivity
 	        super.onCreate(savedInstanceState);
 	        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	        startChildActivity("CameraPage", new Intent(this,Goal.class));
+	        startChildActivity("CameraPage", new Intent(this,GoalActivity.class));
 	          
 	    }
 	 

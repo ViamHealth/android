@@ -8,6 +8,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
 import com.viamhealth.android.R;
+import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -1272,7 +1273,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 				Log.i("onPostExecute", "onPostExecute");
 				//generateView();
 				dialog.dismiss();
-			/*	Intent intent = new Intent(Goal.this,MainActivity.class);
+			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 				startActivity(intent);*/
 			}  
 	   

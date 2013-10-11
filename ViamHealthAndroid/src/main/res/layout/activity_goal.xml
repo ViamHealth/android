@@ -3,113 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     tools:context=".Goal" 
-    
     android:background="#EFEFEF">
-<FrameLayout 
+
+    <FrameLayout
     android:id="@+id/main_layout"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent">
     <!-- Action Bar Start -->
-    <LinearLayout 
+    <LinearLayout
         android:id="@+id/actionbarlayot"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:orientation="vertical">
-    <LinearLayout 
-        android:orientation="horizontal"
-        android:background="@drawable/top_bar"
-        android:layout_width="fill_parent"
-        android:gravity="center_vertical|center_horizontal"
-    	android:layout_height="wrap_content">
-    	<FrameLayout 
-    	    android:layout_width="fill_parent"
-    		android:layout_height="wrap_content">
-    		
-        <LinearLayout 
-             android:gravity="center_vertical|center_horizontal"
-            android:layout_width="fill_parent"
-    		android:layout_height="fill_parent"
-    		android:orientation="horizontal">
-    		    <ImageView 
-                android:src="@drawable/back"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:padding="5dp"
-                android:id="@+id/back"
-                android:layout_height="wrap_content"/>
-    		  
- 			
- 			
- 		    <TextView 
-                android:id="@+id/heding_name_food"
-                android:textSize="22sp"
-                android:gravity="center_vertical|center"
-                android:text="Sharat Khurana"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-    			android:layout_height="fill_parent"/>
-          
-            <LinearLayout
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-            <ImageView 
-                android:id="@+id/person_icon"
-                android:src="@drawable/person_icon"
-                android:layout_width="wrap_content"
-    			android:layout_height="fill_parent"/>
-            </LinearLayout>
 
-            <RelativeLayout android:layout_height="wrap_content"
-                android:layout_width="wrap_content">
-            <LinearLayout
-                android:id="@+id/menu_invite_food"
-               
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-
-            <ImageButton
-               
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/menu_icon" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/menu_invite_out_food"
-                android:visibility="invisible"
-             
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/menu_icon" />
-
-            </LinearLayout>
-            </RelativeLayout>
-                        
-                        
-                        
-        </LinearLayout>
-        </FrameLayout>
-        </LinearLayout>
-        
-	  <!-- Action Bar End -->
-	  
 	  <!-- GOAL Layout -->
-	  <LinearLayout 
+	  <LinearLayout
 	    android:id="@+id/goal_txt_layout"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_width="fill_parent"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content">
-    	<TextView 
+    	<TextView
     	    android:gravity="left|center_vertical"
     	    android:textColor="#000000"
     	    android:textSize="20dp"
@@ -117,20 +34,20 @@
     	    android:layout_width="wrap_content"
     	    android:layout_height="fill_parent"
     	    android:text="Goals "
-    	   
+
     	    android:id="@+id/lbl_goals"/>
-    		
+
     	    <TextView
     	    android:id="@+id/lbl_count"
-    	    android:textColor="#000000" 
+    	    android:textColor="#000000"
     	    android:gravity="left|center_vertical"
     	    android:textSize="20dp"
     	    android:textStyle="bold"
     	    android:layout_width="wrap_content"
     	    android:layout_height="fill_parent"
     	    android:text="(0)"/>
-    	   
-    	    	
+
+
     	    <TextView
     	    android:clickable="true"
     	    android:id="@+id/Add_goal"
@@ -138,15 +55,15 @@
     	    android:textSize="20dp"
     	    android:text="+ Add Goal"
          	android:textStyle="bold"
-         	android:textColor="#2F9ACE" 
+         	android:textColor="#2F9ACE"
          	android:layout_width="fill_parent"
     	    android:layout_height="fill_parent"/>
-    	    	
+
     </LinearLayout>
-    
-	
-    	    
-   
+
+
+
+
       <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="fill_parent"
@@ -160,10 +77,10 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         />
-   
+
     </LinearLayout>
 
-  
+
            <LinearLayout android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:orientation="vertical"

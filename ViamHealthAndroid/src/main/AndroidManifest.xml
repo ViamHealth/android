@@ -110,7 +110,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity android:name="com.viamhealth.android.activities.TabGroupJournal" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.Goal" >
+        <activity android:name="com.viamhealth.android.activities.GoalActivity" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.InviteUser"
@@ -233,8 +233,17 @@
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"
-            android:theme="@android:style/Theme.Dialog"
-            android:label="@string/title_activity_add_medication" >
+            android:label="@string/title_activity_add_medication"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.TabActivity"
+            android:theme="@style/GreenTheme" >
+        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddGoalActivity"
+            android:label="@string/title_activity_add_goal"
+            android:theme="@style/FullHeightDialog">
         </activity>
     </application>
 

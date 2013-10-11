@@ -1,7 +1,9 @@
-package com.viamhealth.android.model;
+package com.viamhealth.android.model.users;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.viamhealth.android.model.BaseModel;
 
 /**
  * Created by naren on 03/10/13.
@@ -16,6 +18,16 @@ public class User extends BaseModel implements Parcelable {
     Boolean isLoggedInUser = false;
 
     Profile profile;
+    BMIProfile bmiProfile;
+
+
+    public BMIProfile getBmiProfile() {
+        return bmiProfile;
+    }
+
+    public void setBmiProfile(BMIProfile bmiProfile) {
+        this.bmiProfile = bmiProfile;
+    }
 
     public Boolean isLoggedInUser() {
         return isLoggedInUser;
@@ -138,6 +150,7 @@ public class User extends BaseModel implements Parcelable {
         dest.writeValue(this.isLoggedInUser);
 
         this.profile.writeToParcel(dest, flags);
+        this.bmiProfile.writeToParcel(dest, flags);
     }
 
     public User(Parcel in) {
@@ -149,6 +162,7 @@ public class User extends BaseModel implements Parcelable {
         this.name = in.readString();
         this.isLoggedInUser = (Boolean) in.readValue(null);
         this.profile = new Profile(in);
+        this.bmiProfile = new BMIProfile(in);
     }
 
     public static final Parcelable.Creator<User> CREATOR
@@ -164,5 +178,6 @@ public class User extends BaseModel implements Parcelable {
 
     public User() {
         this.profile = new Profile();
+        this.bmiProfile = new BMIProfile();
     }
 }

@@ -72,7 +72,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-public class Goal extends BaseActivity implements OnClickListener
+public class GoalActivity extends TabBaseActivity implements OnClickListener
 {
 	private static ProgressDialog dialog;
 	
@@ -199,7 +199,7 @@ public class Goal extends BaseActivity implements OnClickListener
 		// contol casting, set typeface of textview and edittext and manage onclicck of button
 		
 	    back=(ImageView)findViewById(R.id.back);
-	 	back.setOnClickListener(Goal.this);	
+	 	back.setOnClickListener(GoalActivity.this);
 	   
 	    lbl_invite_user=(TextView)findViewById(R.id.lbl_invite_user_food);
         lbl_invite_user.setTypeface(tf);
@@ -218,13 +218,12 @@ public class Goal extends BaseActivity implements OnClickListener
         person_icon.getLayoutParams().width = w20;
         person_icon.getLayoutParams().height = h20;
      
-        options = new DisplayImageOptions.Builder()
- 		.build();
+        options = new DisplayImageOptions.Builder().build();
  		
  		imageLoader.displayImage(appPrefs.getProfilepic(), person_icon, options, new SimpleImageLoadingListener() {
  			@Override
  			public void onLoadingComplete(Bitmap loadedImage) {
- 				Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_in);
+ 				Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_in);
  				person_icon.setAnimation(anim);
  				anim.start();
  				
@@ -293,19 +292,19 @@ public class Goal extends BaseActivity implements OnClickListener
 				@Override
 				public void onPageSelected(int arg0) {
 					// TODO Auto-generated method stub
-					Toast.makeText(Goal.this,"on page selected is call", Toast.LENGTH_SHORT).show();
+					Toast.makeText(GoalActivity.this,"on page selected is call", Toast.LENGTH_SHORT).show();
 				}
 				
 				@Override
 				public void onPageScrolled(int arg0, float arg1, int arg2) {
 					// TODO Auto-generated method stub
-					Toast.makeText(Goal.this,"on page scrolled is call", Toast.LENGTH_SHORT).show();
+					Toast.makeText(GoalActivity.this,"on page scrolled is call", Toast.LENGTH_SHORT).show();
 				}
 				
 				@Override
 				public void onPageScrollStateChanged(int arg0) {
 					// TODO Auto-generated method stub
-					Toast.makeText(Goal.this,"on page scroll state change is call", Toast.LENGTH_SHORT).show();
+					Toast.makeText(GoalActivity.this,"on page scroll state change is call", Toast.LENGTH_SHORT).show();
 				}
 			});*/
 		   
@@ -316,7 +315,7 @@ public class Goal extends BaseActivity implements OnClickListener
 					 task.execute();
 				
 			}else{
-				Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+				Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 			}
 	}
 		
@@ -353,7 +352,7 @@ public class Goal extends BaseActivity implements OnClickListener
 							((ImageView)view.findViewById(R.id.imgIcon)).setVisibility(View.INVISIBLE);
 						}
 				}
-		    		Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_out);
+		    		Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_out);
 					setting_layout.startAnimation(anim);
 					setting_layout.setVisibility(View.INVISIBLE);
 					menu_invite.setVisibility(View.VISIBLE);
@@ -362,7 +361,7 @@ public class Goal extends BaseActivity implements OnClickListener
 					selecteduserid = Integer.toString(position);
 				
 					CalluserMeTask task = new CalluserMeTask();
-					task.applicationContext =Goal.this.getParent();
+					task.applicationContext =GoalActivity.this.getParent();
 					task.execute();
 				}
 		    	
@@ -410,7 +409,7 @@ public class Goal extends BaseActivity implements OnClickListener
 		}
 		if(v==lbl_invite_user_goal){
 			Log.e("TAG","Selected value is " + "invite user is clicked");
-			Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_out);
+			Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_out);
 			setting_layout.startAnimation(anim);
 			setting_layout.setVisibility(View.INVISIBLE);
 			menu_invite.setVisibility(View.VISIBLE);
@@ -493,23 +492,23 @@ public class Goal extends BaseActivity implements OnClickListener
 				 task.execute();
 				// appPrefs.setReloadgraph("0");
 			}else{
-				Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+				Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 			}     
 		}*/
 		if(v==lbl_invite_user){
 			Log.e("TAG","Selected value is " + "invite user is clicked");
-			Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_out);
+			Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_out);
 			setting_layout.startAnimation(anim);
 			setting_layout.setVisibility(View.INVISIBLE);
 			menu_invite.setVisibility(View.VISIBLE);
 			menu_invite_out.setVisibility(View.INVISIBLE);
 			Log.e("TAG","Clicked");
-			Intent i = new Intent(Goal.this,InviteUser.class);
+			Intent i = new Intent(GoalActivity.this,InviteUser.class);
 			startActivity(i);
 		}
 		if(v==lbl_profile){
 			Log.e("TAG","Selected value is " + "invite user is clicked");
-			Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_out);
+			Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_out);
 			setting_layout.startAnimation(anim);
 			setting_layout.setVisibility(View.INVISIBLE);
 			menu_invite.setVisibility(View.VISIBLE);
@@ -525,13 +524,13 @@ public class Goal extends BaseActivity implements OnClickListener
 				setting_layout.setVisibility(View.VISIBLE);
 			menu_invite_out.setVisibility(View.VISIBLE);
 			menu_invite.setVisibility(View.INVISIBLE);
-			Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_in);
+			Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_in);
 			setting_layout.startAnimation(anim);
 			
 			Log.e("TAG","Clicked");
 		}
 		if(v==menu_invite_out){
-			Animation anim = AnimationUtils.loadAnimation(Goal.this, R.anim.fade_out);
+			Animation anim = AnimationUtils.loadAnimation(GoalActivity.this, R.anim.fade_out);
 			setting_layout.startAnimation(anim);
 			setting_layout.setVisibility(View.INVISIBLE);
 			menu_invite.setVisibility(View.VISIBLE);
@@ -550,27 +549,27 @@ public class Goal extends BaseActivity implements OnClickListener
 		for(int i=0;i<ga.lstResult.size();i++)
     	{
     	
-    	    tb=new TableLayout(Goal.this);
+    	    tb=new TableLayout(GoalActivity.this);
     		tb.setTag("maintbl");
     		tb.setPadding(0, 0, 0, h10);
     		tb.setGravity(Gravity.CENTER_HORIZONTAL);
-    		TableRow tr1=new TableRow(Goal.this);
+    		TableRow tr1=new TableRow(GoalActivity.this);
     		tr1.setTag("tr"+1);
     		//tr1.setPadding(2, 0, 2, 0);
-    		 tb11=new TableLayout(Goal.this);
+    		 tb11=new TableLayout(GoalActivity.this);
     			tb11.setBackgroundResource(R.drawable.r1); 
     			tb11.setTag("tb" + i);
     			tb11.setGravity(Gravity.CENTER_HORIZONTAL);
     			
-    				TableRow tb111=new TableRow(Goal.this);
+    				TableRow tb111=new TableRow(GoalActivity.this);
     				tb111.setGravity(Gravity.CENTER_VERTICAL);
     				tb111.setPadding(w20, h5, 0, h5);
     			
-    				ImageView icon1=new ImageView(Goal.this);
+    				ImageView icon1=new ImageView(GoalActivity.this);
     				icon1.setImageResource(R.drawable.icon1);
     				tb111.addView(icon1);  
     				
-    				TextView name=new TextView(Goal.this);    //Goal Name
+    				TextView name=new TextView(GoalActivity.this);    //GoalActivity Name
     				name.setPadding(w5, 0, 0, 0);
     				name.setTag(ga.lstResult.get(i).getGn() + "," + ga.lstResult.get(i).getGv());
     				name.setText(ga.lstResult.get(i).getGn().toString());
@@ -579,7 +578,7 @@ public class Goal extends BaseActivity implements OnClickListener
     				name.setTypeface(tf,Typeface.BOLD);
     				tb111.addView(name);
     				
-    				TextView desc=new TextView(Goal.this);    //Goal Desc
+    				TextView desc=new TextView(GoalActivity.this);    //GoalActivity Desc
     				desc.setTextSize(15);
     				desc.setTypeface(tf);
     				desc.setPadding(w5, 0, 0, 0);
@@ -587,7 +586,7 @@ public class Goal extends BaseActivity implements OnClickListener
     				desc.setTextColor(Color.BLACK);
     				tb111.addView(desc);
     				
-    				TextView goalid=new TextView(Goal.this);    //Goal Desc
+    				TextView goalid=new TextView(GoalActivity.this);    //GoalActivity Desc
     				goalid.setTextSize(15);
     				goalid.setTypeface(tf);
     				goalid.setPadding(w5, 0, 0, 0);
@@ -595,10 +594,10 @@ public class Goal extends BaseActivity implements OnClickListener
     				goalid.setTextColor(Color.BLACK);
     				tb111.addView(goalid);
     				goalid.setVisibility(View.INVISIBLE);
-    				LinearLayout layoutsetting = new LinearLayout(Goal.this);
+    				LinearLayout layoutsetting = new LinearLayout(GoalActivity.this);
     				layoutsetting.setGravity(Gravity.RIGHT);
     				layoutsetting.setPadding(w27, 0, 0, 0);
-    				ImageView settings = new ImageView(Goal.this);
+    				ImageView settings = new ImageView(GoalActivity.this);
     				settings.setImageResource(R.drawable.graphsetting);
     				
     				layoutsetting.addView(settings);
@@ -609,16 +608,16 @@ public class Goal extends BaseActivity implements OnClickListener
     		tb.addView(tr1);
     		
     		
-    		TableRow tr2=new TableRow(Goal.this);
+    		TableRow tr2=new TableRow(GoalActivity.this);
     		tr2.setTag("tr2");
     		//tr2.setGravity(Gravity.CENTER_HORIZONTAL);
     		//tr2.setPadding(0, 1, 0, 0);
-    	 		tb21=new TableLayout(Goal.this);
+    	 		tb21=new TableLayout(GoalActivity.this);
     	 		//tb21.setPadding(1, 0,0, 0);
-    	 		LinearLayout main = new LinearLayout(Goal.this);
+    	 		LinearLayout main = new LinearLayout(GoalActivity.this);
     	 		main.setBackgroundResource(R.drawable.r2); 
     	 		main.setPadding(w1, h5, w1, h5);
-	    		XYPlot xyplot = new XYPlot(Goal.this, "");
+	    		XYPlot xyplot = new XYPlot(GoalActivity.this, "");
 	    		xyplot.setLayoutParams(new LayoutParams(w280, h150));
 	    		//showGraph();
 	    		//setchart(xyplot,i);
@@ -628,11 +627,11 @@ public class Goal extends BaseActivity implements OnClickListener
     		tb.addView(tr2);
     
     		    
-    		TableRow tr3=new TableRow(Goal.this);
+    		TableRow tr3=new TableRow(GoalActivity.this);
     		tr3.setTag("tr3");
-    	     	TableLayout tb31=new TableLayout(Goal.this);
-    				TableRow tr311=new TableRow(Goal.this);
-    				TextView add = new TextView(Goal.this);
+    	     	TableLayout tb31=new TableLayout(GoalActivity.this);
+    				TableRow tr311=new TableRow(GoalActivity.this);
+    				TextView add = new TextView(GoalActivity.this);
     				add.setText("+New Value");
     				add.setBackgroundResource(R.drawable.valuebg_toggle);
     				add.setPadding(w7, h7, w7, h7);
@@ -646,7 +645,7 @@ public class Goal extends BaseActivity implements OnClickListener
     				tr311.addView(add);
     				 
     			  
-    				TextView editval=new TextView(Goal.this);
+    				TextView editval=new TextView(GoalActivity.this);
     				editval.setTypeface(tf);
     				editval.setBackgroundResource(R.drawable.otherbg_toggle);
     				editval.setPadding(w7, h7, w7, h7);
@@ -659,12 +658,12 @@ public class Goal extends BaseActivity implements OnClickListener
     				editval.setOnClickListener(this);
     				tr311.addView(editval);  
     					
-    				TextView editgoal=new TextView(Goal.this);
+    				TextView editgoal=new TextView(GoalActivity.this);
     				editgoal.setTypeface(tf);
     				editgoal.setBackgroundResource(R.drawable.otherbg_toggle);
     				editgoal.setPadding(w7, h7, w7, h7);
     				editgoal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.edt_icon, 0, 0, 0);
-    				editgoal.setText("   Edit Goal");
+    				editgoal.setText("   Edit GoalActivity");
     				editgoal.setTextColor(Color.rgb(101,102,102));
     				editgoal.setTextSize(11);
     				editgoal.setId(3);
@@ -672,15 +671,15 @@ public class Goal extends BaseActivity implements OnClickListener
     				editgoal.setOnClickListener(this);
     				tr311.addView(editgoal);  
     				
-    				TextView deletegoal=new TextView(Goal.this);
+    				TextView deletegoal=new TextView(GoalActivity.this);
     				deletegoal.setTypeface(tf);
     				deletegoal.setBackgroundResource(R.drawable.otherbg_toggle);
     				deletegoal.setPadding(w7, h7, w7, h7);
     				deletegoal.setCompoundDrawablesWithIntrinsicBounds(R.drawable.edt_delete, 0, 0, 0);
     				if(width==720){
-    					deletegoal.setText("   Delete Goal       ");
+    					deletegoal.setText("   Delete GoalActivity       ");
     				}else{
-    					deletegoal.setText("   Delete Goal");
+    					deletegoal.setText("   Delete GoalActivity");
     				}
     				deletegoal.setTextColor(Color.rgb(101,102,102));
     				deletegoal.setTextSize(11);
@@ -723,11 +722,11 @@ public class Goal extends BaseActivity implements OnClickListener
 			Log.i("onPostExecute", "onPostExecute");
 			 if(isInternetOn()){
 				 CallCholesteroltask task = new CallCholesteroltask();
-				 task.applicationContext =Goal.this.getParent();
+				 task.applicationContext =GoalActivity.this.getParent();
 				 task.execute();
 				// appPrefs.setReloadgraph("0");
 			}else{
-				Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+				Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 			}     
 		}
    
@@ -762,11 +761,11 @@ public class Goal extends BaseActivity implements OnClickListener
 				Log.i("onPostExecute", "onPostExecute");
 				 if(isInternetOn()){
 					 CallGlucosetask task = new CallGlucosetask();
-					 task.applicationContext =Goal.this.getParent();
+					 task.applicationContext =GoalActivity.this.getParent();
 					 task.execute();
 					// appPrefs.setReloadgraph("0");
 				}else{
-					Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+					Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 				}     
 			}     
 	   
@@ -800,11 +799,11 @@ public class Goal extends BaseActivity implements OnClickListener
 						Log.i("onPostExecute", "onPostExecute");
 						 if(isInternetOn()){
 							 CallGoalTask task = new CallGoalTask();
-							 task.applicationContext =Goal.this.getParent();
+							 task.applicationContext =GoalActivity.this.getParent();
 							 task.execute();
 							// appPrefs.setReloadgraph("0");
 						}else{
-							Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+							Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 						}     
 					}
 			   
@@ -914,7 +913,7 @@ public class Goal extends BaseActivity implements OnClickListener
 					{
 						
 						//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-						dialog = new ProgressDialog(Goal.this.getParent());
+						dialog = new ProgressDialog(GoalActivity.this.getParent());
 						dialog.setCanceledOnTouchOutside(false);
 						dialog.setMessage("Please Wait....");
 						dialog.show();
@@ -928,7 +927,7 @@ public class Goal extends BaseActivity implements OnClickListener
 						Log.i("onPostExecute", "onPostExecute");
 						//generateView();
 						dialog.dismiss();
-					/*	Intent intent = new Intent(Goal.this,MainActivity.class);
+					/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 						startActivity(intent);*/
 					}  
 			   
@@ -952,7 +951,7 @@ public class Goal extends BaseActivity implements OnClickListener
 					{
 						
 						//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-						dialog = new ProgressDialog(Goal.this.getParent());
+						dialog = new ProgressDialog(GoalActivity.this.getParent());
 						dialog.setCanceledOnTouchOutside(false);
 						dialog.setMessage("Please Wait....");
 						dialog.show();
@@ -968,11 +967,11 @@ public class Goal extends BaseActivity implements OnClickListener
 							if(isInternetOn()){
 								lstResultManage.clear();
 									 Callweightask task = new Callweightask();
-									 task.applicationContext =Goal.this.getParent();
+									 task.applicationContext =GoalActivity.this.getParent();
 									 task.execute();
 								
 							}else{
-								Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+								Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 							}
 							
 					}  
@@ -1041,7 +1040,7 @@ public class Goal extends BaseActivity implements OnClickListener
 		     public void onPageSelected(int position)
 		     {
 		    	 //Log.e("TAG","position is : " + position);
-		    	// Toast.makeText(Goal.this,"selected postion is " + position, Toast.LENGTH_SHORT).show();
+		    	// Toast.makeText(GoalActivity.this,"selected postion is " + position, Toast.LENGTH_SHORT).show();
 		         /*focusedPage = position;
 		         
 		         ga.setUserPhotoID(ga.getUserPhotoIDGlobal(focusedPage));
@@ -1222,23 +1221,23 @@ public class Goal extends BaseActivity implements OnClickListener
 			         	         
 			         	chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 			         	
-			         	//mChart.setOnClickListener(Goal.this);
-			         	//chart.setOnClickListener(Goal.this);
+			         	//mChart.setOnClickListener(GoalActivity.this);
+			         	//chart.setOnClickListener(GoalActivity.this);
 			         	txtTitle.setText("Weight");
 			         	
-			         //	txtTitle.setOnClickListener(Goal.this);
+			         //	txtTitle.setOnClickListener(GoalActivity.this);
 					}else{
 						mChart = (GraphicalView) ChartFactory.getTimeChartView(getBaseContext(), dataset, multiRenderer,"dd-MMM-yyyy");   		
 						chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-						//mChart.setOnClickListener(Goal.this);
-						//chart.setOnClickListener(Goal.this);
+						//mChart.setOnClickListener(GoalActivity.this);
+						//chart.setOnClickListener(GoalActivity.this);
 						txtTitle.setText("Weight");
-					//	txtTitle.setOnClickListener(Goal.this);
+					//	txtTitle.setOnClickListener(GoalActivity.this);
 					}
 					multiRenderer.setClickEnabled(true);
 					chart.setTag("Weight");
 					
-					//chart.setOnClickListener(Goal.this);
+					//chart.setOnClickListener(GoalActivity.this);
 				}
 				if(position==1 && cholesteroldt!=null){
     
@@ -1431,22 +1430,22 @@ public class Goal extends BaseActivity implements OnClickListener
 			         	multiRenderer.setYLabelsColor(0,Color.BLACK);	
 			         	chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 			         
-			         	//mChart.setOnClickListener(Goal.this);
-			         	//chart.setOnClickListener(Goal.this);
+			         	//mChart.setOnClickListener(GoalActivity.this);
+			         	//chart.setOnClickListener(GoalActivity.this);
 			         	txtTitle.setText("Cholestrol");
 			         
-			         //	txtTitle.setOnClickListener(Goal.this);
+			         //	txtTitle.setOnClickListener(GoalActivity.this);
 					}else{
 						mChart = (GraphicalView) ChartFactory.getTimeChartView(getBaseContext(), dataset, multiRenderer,"dd-MMM-yyyy");   		
 						chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-						//mChart.setOnClickListener(Goal.this);
-						//chart.setOnClickListener(Goal.this);
+						//mChart.setOnClickListener(GoalActivity.this);
+						//chart.setOnClickListener(GoalActivity.this);
 						txtTitle.setText("Cholestrol");
-						//txtTitle.setOnClickListener(Goal.this);
+						//txtTitle.setOnClickListener(GoalActivity.this);
 					}
 					multiRenderer.setClickEnabled(true);
 					chart.setTag("Cholestrol");
-					//chart.setOnClickListener(Goal.this);
+					//chart.setOnClickListener(GoalActivity.this);
 				
 				}
 				if(position==2 && glucosedt!=null){
@@ -1579,21 +1578,21 @@ public class Goal extends BaseActivity implements OnClickListener
 			         	multiRenderer.setYLabelsColor(0,Color.BLACK);	
 			         	
 			         	chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-			         	//mChart.setOnClickListener(Goal.this);
-			         	//chart.setOnClickListener(Goal.this);
+			         	//mChart.setOnClickListener(GoalActivity.this);
+			         	//chart.setOnClickListener(GoalActivity.this);
 			         	txtTitle.setText("Glucose");
 			         	
-			         //	txtTitle.setOnClickListener(Goal.this);
+			         //	txtTitle.setOnClickListener(GoalActivity.this);
 					}else{
 						mChart = (GraphicalView) ChartFactory.getTimeChartView(getBaseContext(), dataset, multiRenderer,"dd-MMM-yyyy");   		
 						chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-						//chart.setOnClickListener(Goal.this);
+						//chart.setOnClickListener(GoalActivity.this);
 						txtTitle.setText("Glucose");
-						//txtTitle.setOnClickListener(Goal.this);
+						//txtTitle.setOnClickListener(GoalActivity.this);
 					}
 					multiRenderer.setClickEnabled(true);
 					chart.setTag("Glucose");
-					//chart.setOnClickListener(Goal.this);
+					//chart.setOnClickListener(GoalActivity.this);
 				}
 				if(position==3 && bpdt!=null){
 					ArrayList<String> lst = new ArrayList<String>();
@@ -1723,22 +1722,22 @@ public class Goal extends BaseActivity implements OnClickListener
 			         	multiRenderer.setYLabelsColor(0,Color.BLACK);
 			         	multiRenderer.setShowLegend(true);
 			         	chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-			         	//mChart.setOnClickListener(Goal.this);
-			         //	chart.setOnClickListener(Goal.this);     
+			         	//mChart.setOnClickListener(GoalActivity.this);
+			         //	chart.setOnClickListener(GoalActivity.this);
 			         	txtTitle.setText("Blood Pressure");
 			         	
-			         //	txtTitle.setOnClickListener(Goal.this);
+			         //	txtTitle.setOnClickListener(GoalActivity.this);
 					}else{      
 						mChart = (GraphicalView) ChartFactory.getTimeChartView(getBaseContext(), dataset, multiRenderer,"dd-MMM-yyyy");   		
 						chart.addView(mChart,new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 						
-						chart.setOnClickListener(Goal.this);
+						chart.setOnClickListener(GoalActivity.this);
 						txtTitle.setText("Blood Pressure");
-						//txtTitle.setOnClickListener(Goal.this);
+						//txtTitle.setOnClickListener(GoalActivity.this);
 					}
 					multiRenderer.setClickEnabled(true);
 					chart.setTag("Blood Pressure");
-					//chart.setOnClickListener(Goal.this);    
+					//chart.setOnClickListener(GoalActivity.this);
 				}
 				  
 	    		
@@ -1811,7 +1810,7 @@ public class Goal extends BaseActivity implements OnClickListener
 										}
 									}
 									ga.setWeightid(weightdt.getId());
-									Intent AddNewVal = new Intent(Goal.this,AddWeightValue.class);
+									Intent AddNewVal = new Intent(GoalActivity.this,AddWeightValue.class);
 									startActivity(AddNewVal);
 									/*TabGroupActivity parentoption = (TabGroupActivity)getParent();
 									parentoption.startChildActivity("AddNewVal",AddNewVal);*/
@@ -1820,41 +1819,41 @@ public class Goal extends BaseActivity implements OnClickListener
 									/*Intent AddNewVal = new Intent(getParent(),AddWeightValue.class);
 									TabGroupActivity parentoption = (TabGroupActivity)getParent();
 									parentoption.startChildActivity("AddNewVal",AddNewVal);*/
-									Intent AddNewVal = new Intent(Goal.this,AddWeightValue.class);
+									Intent AddNewVal = new Intent(GoalActivity.this,AddWeightValue.class);
 									startActivity(AddNewVal);
 								}
 							}else{
-								Toast.makeText(Goal.this,"Add Weight goal first", Toast.LENGTH_SHORT).show();
+								Toast.makeText(GoalActivity.this,"Add Weight goal first", Toast.LENGTH_SHORT).show();
 							}
 						}
 						if(val.equals("Cholestrol")){
 							if(cholesteroldt.getId() != null){
 								ga.setCholesterolid(cholesteroldt.getId().toString());
-								Intent AddCholesterolValue = new Intent(Goal.this,AddCholesterolValue.class);
+								Intent AddCholesterolValue = new Intent(GoalActivity.this,AddCholesterolValue.class);
 								startActivity(AddCholesterolValue);
 							
 							}else{
-								Toast.makeText(Goal.this,"Add cholesterol goal first", Toast.LENGTH_SHORT).show();
+								Toast.makeText(GoalActivity.this,"Add cholesterol goal first", Toast.LENGTH_SHORT).show();
 							}
 						}
 						if(val.equals("Glucose")){
 							if(glucosedt.getId() != null){
 								ga.setGlucoseid(glucosedt.getId().toString());
-								Intent AddGlucoseValue = new Intent(Goal.this,AddGlucoseValue.class);
+								Intent AddGlucoseValue = new Intent(GoalActivity.this,AddGlucoseValue.class);
 								startActivity(AddGlucoseValue);
 								
 							}else{
-								Toast.makeText(Goal.this,"Add Glucose goal first", Toast.LENGTH_SHORT).show();
+								Toast.makeText(GoalActivity.this,"Add Glucose goal first", Toast.LENGTH_SHORT).show();
 							}
 						}
 						if(val.equals("Blood Pressure")){
 							if(bpdt.getId() != null){
 								ga.setBpid(bpdt.getId().toString());
-								Intent AddBPValue = new Intent(Goal.this,AddBPValue.class);
+								Intent AddBPValue = new Intent(GoalActivity.this,AddBPValue.class);
 								startActivity(AddBPValue);
 								
 							}else{
-								Toast.makeText(Goal.this,"Add Blood Pressure goal first", Toast.LENGTH_SHORT).show();
+								Toast.makeText(GoalActivity.this,"Add Blood Pressure goal first", Toast.LENGTH_SHORT).show();
 							}
 						}
 						
@@ -1870,7 +1869,7 @@ public class Goal extends BaseActivity implements OnClickListener
 						String val = chart.getTag().toString();
 						if(val.equals("Weight")){
 							urlDelete = ga.url+"weight-goals/"+ weightdt.getId()+"/destroy-reading/?reading_date="+CurrDate;
-							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Goal.this.getParent());
+							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GoalActivity.this.getParent());
 							 
 							// set title
 							alertDialogBuilder.setTitle("Confirm");
@@ -1887,11 +1886,11 @@ public class Goal extends BaseActivity implements OnClickListener
 										 if(isInternetOn()){
 											 dialog1.dismiss();
 											 CallDeleteTask task = new CallDeleteTask();
-											 task.applicationContext =Goal.this.getParent();
+											 task.applicationContext =GoalActivity.this.getParent();
 											 task.execute();
 											// appPrefs.setReloadgraph("0");
 										}else{
-											Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+											Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 										}     
 									}
 								})
@@ -1914,7 +1913,7 @@ public class Goal extends BaseActivity implements OnClickListener
 						}
 						if(val.equals("Cholestrol")){
 							urlDelete = ga.url+"cholesterol-goals/"+ cholesteroldt.getId()+"/destroy-reading/?reading_date="+CurrDate;
-							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Goal.this.getParent());
+							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GoalActivity.this.getParent());
 							 
 							// set title
 							alertDialogBuilder.setTitle("Confirm");
@@ -1931,11 +1930,11 @@ public class Goal extends BaseActivity implements OnClickListener
 										 if(isInternetOn()){
 											 dialog1.dismiss();
 											 CallDeleteTask task = new CallDeleteTask();
-											 task.applicationContext =Goal.this.getParent();
+											 task.applicationContext =GoalActivity.this.getParent();
 											 task.execute();
 											// appPrefs.setReloadgraph("0");
 										}else{
-											Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+											Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 										}     
 									}
 								})
@@ -1957,7 +1956,7 @@ public class Goal extends BaseActivity implements OnClickListener
 						}
 						if(val.equals("Glucose")){
 							urlDelete = ga.url+"glucose-goals/"+ glucosedt.getId()+"/destroy-reading/?reading_date="+CurrDate;
-							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Goal.this.getParent());
+							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GoalActivity.this.getParent());
 							 
 							// set title
 							alertDialogBuilder.setTitle("Confirm");
@@ -1974,11 +1973,11 @@ public class Goal extends BaseActivity implements OnClickListener
 										 if(isInternetOn()){
 											 dialog1.dismiss();
 											 CallDeleteTask task = new CallDeleteTask();
-											 task.applicationContext =Goal.this.getParent();
+											 task.applicationContext =GoalActivity.this.getParent();
 											 task.execute();
 											// appPrefs.setReloadgraph("0");
 										}else{
-											Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+											Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 										}     
 									}
 								})
@@ -2000,7 +1999,7 @@ public class Goal extends BaseActivity implements OnClickListener
 						}
 						if(val.equals("Blood Pressure")){
 							urlDelete = ga.url+"blood-pressure-goals/"+ bpdt.getId()+"/destroy-reading/?reading_date="+CurrDate;
-							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Goal.this.getParent());
+							AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(GoalActivity.this.getParent());
 							 
 							// set title
 							alertDialogBuilder.setTitle("Confirm");
@@ -2017,11 +2016,11 @@ public class Goal extends BaseActivity implements OnClickListener
 										 if(isInternetOn()){
 											 dialog1.dismiss();
 											 CallDeleteTask task = new CallDeleteTask();
-											 task.applicationContext =Goal.this.getParent();
+											 task.applicationContext =GoalActivity.this.getParent();
 											 task.execute();
 											// appPrefs.setReloadgraph("0");
 										}else{
-											Toast.makeText(Goal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+											Toast.makeText(GoalActivity.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 										}     
 									}
 								})

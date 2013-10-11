@@ -151,9 +151,9 @@ public class AddGoal extends Activity implements OnClickListener{
 	    pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
 	    
 	    if(appPrefs.getEdt().toString().equals("1")){
-	    	lbl_add_goal.setText("Edit Goal");
+	    	lbl_add_goal.setText("Edit GoalActivity");
 	    }else{
-	    	lbl_add_goal.setText("Add Goal");
+	    	lbl_add_goal.setText("Add GoalActivity");
 	    }
 	}
 
