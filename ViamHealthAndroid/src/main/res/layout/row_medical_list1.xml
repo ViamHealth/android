@@ -2,20 +2,52 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" 
+    android:orientation="horizontal"
     android:background="#ffffff">
-    
-    <LinearLayout 
+
+    <LinearLayout
+        android:id="@+id/main_list_edit"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_weight="2"
+        android:gravity="left"
+        android:orientation="horizontal"
+        android:background="@drawable/fading_bg_row">
+
+        <TextView android:id="@+id/txt_edit"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:text="EDIT"
+            android:paddingTop="10dp"
+            android:textSize="14sp"
+            android:rotation="270"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/main_list_layout"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:padding="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">   
-        
-      
+        android:gravity="center"
+        android:layout_weight="2"
+        android:orientation="vertical">
 
-        <TextView android:id="@+id/txt_name"
+        <LinearLayout
+            android:id="@+id/main_list_layout"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+
+            <TextView android:id="@+id/txt_name"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
@@ -23,7 +55,7 @@
                 android:textSize="14sp"
                 android:padding="5dp"
                 />
-             <TextView android:id="@+id/txt_morning"
+            <TextView android:id="@+id/txt_morning"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:gravity="center"
@@ -32,13 +64,13 @@
                 android:text="1"
                 android:textSize="14sp"
                 />
-               <TextView android:id="@+id/txt1"
+            <TextView android:id="@+id/txt1"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 />
-             <TextView android:id="@+id/txt_noon"
+            <TextView android:id="@+id/txt_noon"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
@@ -47,13 +79,13 @@
                 android:gravity="center"
                 android:textSize="14sp"
                 />
-              <TextView android:id="@+id/txt2"
+            <TextView android:id="@+id/txt2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 />
-             <TextView android:id="@+id/txt_night"
+            <TextView android:id="@+id/txt_night"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
@@ -62,18 +94,92 @@
                 android:gravity="center"
                 android:textSize="14sp"
                 />
-             <ImageView android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 android:src="@drawable/edit"
-                 android:id="@+id/img1"
-                 android:padding="5dp"/>
-             
-             <ImageView android:layout_height="wrap_content"
-                 android:layout_width="wrap_content"
-                 android:src="@drawable/delete_icon"
-                 android:id="@+id/img2"
-                 android:padding="5dp"/>
+            <ImageView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/edit"
+                android:id="@+id/img1"
+                android:padding="5dp"
+                android:visibility="gone"/>
+
+            <ImageView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:src="@drawable/delete_icon"
+                android:id="@+id/img2"
+                android:padding="5dp"
+                android:visibility="gone"/>
         </LinearLayout>
-     
-   
+
+        <LinearLayout
+            android:id="@+id/main_list_layout2"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView android:id="@+id/txt_description1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="From"
+                android:textSize="14sp"
+                />
+            <TextView android:id="@+id/txt_description1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="9/10/2013"
+                android:textSize="14sp"
+                />
+
+            <TextView android:id="@+id/txt_description1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="For"
+                android:textSize="14sp"
+                />
+
+            <TextView android:id="@+id/txt_description1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="5 Months"
+                android:textSize="14sp"
+                />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/main_list_delete"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:padding="5dp"
+        android:layout_weight="2"
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:background="@drawable/fading_bg_row">
+
+        <TextView android:id="@+id/txt_delete"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:text="DEL"
+            android:paddingTop="10dp"
+            android:textSize="14sp"
+            android:rotation="270"
+            />
+
+    </LinearLayout>
+
 </LinearLayout>
