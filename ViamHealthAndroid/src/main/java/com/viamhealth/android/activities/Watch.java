@@ -1258,7 +1258,6 @@ public class Watch extends BaseActivity implements OnClickListener{
 			@Override
 			protected void onPreExecute()        
 			{
-				
 				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
 				dialog = new ProgressDialog(Watch.this.getParent());
 				dialog.setCanceledOnTouchOutside(false);

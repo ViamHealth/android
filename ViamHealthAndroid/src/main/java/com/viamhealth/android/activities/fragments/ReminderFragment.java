@@ -1,5 +1,6 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -43,6 +44,9 @@ import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter1;
 import com.viamhealth.android.dao.restclient.old.functionClass;
+import com.viamhealth.android.model.MedicalData;
+import com.viamhealth.android.model.MedicationData;
+import com.viamhealth.android.model.ReminderReadings;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 
@@ -51,27 +55,55 @@ import java.util.ArrayList;
 /**
  * Created by naren on 08/10/13.
  */
-public class ReminderFragment extends Fragment {
+public class ReminderFragment extends Fragment implements View.OnClickListener {
 
     private User user;
-    private ViamHealthPrefs appPrefs;
-    private functionClass obj;
-    private Global_Application ga;
-    private Typeface tf;
+    private View view;
+    private Bundle savedInstanceState;
 
-    ScrollView reminder_scrl,medicine_scrl,test_scrl;
-    
     Display display;
     int width,height;
     int w15,w20,w5,h40,h20,w10,h10,w150,w30;
+    ProgressDialog dialog;
+    ProgressDialog dialog1;
+
+    TextView mSelected,lbl_add,lbl_delete,txt_test,txt_medication,txt_reminder,txt_name,txt_time,txt_mode;;
+    ImageView back,person_icon;
+    Button add_medicine,add_test,add_medicine_reminder,add_test_reminder;
+    TextView lbl_invite_user_food,heding_Addfood_name;
+    LinearLayout menu_invite_addfood,menu_invite_out_addfood,settiglayout_food,search_layout,watch_below_layout,lst_data;
+    RefreshableListView lstReminderMedicine,lstReminderTest,lstdata;
+    ScrollView reminder_scrl,medicine_scrl,test_scrl;
+    TextView lbl_name,lbl_morning,txt1,lbl_noon,txt2,lbl_night;
+
+    ViewPager mPager,mPager1;
+
+    ArrayList<MedicalData> lstResult = new ArrayList<MedicalData>();
+    int selection=0;
+    String delid;
+
+    Typeface tf;
+    ViamHealthPrefs appPrefs;
+    String med_id;
+    functionClass obj;
+    Global_Application ga;
+    String selecteduserid="0";
+    private DisplayImageOptions options;
+    ArrayList<MedicationData>	allData = new ArrayList<MedicationData>();
+    ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
+    ArrayList<MedicationData> otherData = new ArrayList<MedicationData>();
+    MedicationData med_edit=new MedicationData();
+    Intent edit_med=null;
+    int edit_pos=0;
+    ArrayList<ReminderReadings> rem_read=null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab_fragment_reminder, container, false);
-
+        view = inflater.inflate(R.layout.tab_fragment_reminder, container, false);
+        this.savedInstanceState = savedInstanceState;
         user=getArguments().getParcelable("user");
 
-        //Toast.makeText(getApplicationContext(),"user_id="+user_id,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"user.getId().toString()="+user.getId().toString(),Toast.LENGTH_LONG).show();
         appPrefs = new ViamHealthPrefs(getActivity());
         obj=new functionClass(getActivity());
         ga=((Global_Application)getActivity().getApplicationContext());
@@ -91,62 +123,61 @@ public class ReminderFragment extends Fragment {
         h20=(int)((height*4.17)/100);
         h10=(int)((height*2.09)/100);
 
-        reminder_scrl = (ScrollView)findViewById(R.id.reminder_scrl);
-        medicine_scrl = (ScrollView)findViewById(R.id.medicine_scrl);
-        test_scrl = (ScrollView)findViewById(R.id.test_scrl);
+        reminder_scrl = (ScrollView)view.findViewById(R.id.reminder_scrl);
+        medicine_scrl = (ScrollView)view.findViewById(R.id.medicine_scrl);
+        test_scrl = (ScrollView)view.findViewById(R.id.test_scrl);
         reminder_scrl.setVisibility(View.VISIBLE);
 
 
-        txt_reminder = (TextView)findViewById(R.id.txt_reminder);
-        txt_reminder.setOnClickListener(getActivity());
+        txt_reminder = (TextView)view.findViewById(R.id.txt_reminder);
+        txt_reminder.setOnClickListener(this);
         txt_reminder.setBackgroundResource(R.drawable.tabpressed);
 
-        txt_test = (TextView)findViewById(R.id.txt_test);
-        txt_test.setOnClickListener(getActivity());
+        txt_test = (TextView)view.findViewById(R.id.txt_test);
+        txt_test.setOnClickListener(this);
 
-        txt_medication = (TextView)findViewById(R.id.txt_medication);
-        txt_medication.setOnClickListener(getActivity());
+        txt_medication = (TextView)view.findViewById(R.id.txt_medication);
+        txt_medication.setOnClickListener(this);
 
-        add_medicine = (Button)findViewById(R.id.add_medicine);
+        add_medicine = (Button)view.findViewById(R.id.add_medicine);
         //add_medicine.setTypeface(tf);
-        add_medicine.setOnClickListener(getActivity());
+        add_medicine.setOnClickListener(this);
 
-        add_test = (Button)findViewById(R.id.add_test);
+        add_test = (Button)view.findViewById(R.id.add_test);
         //add_medicine.setTypeface(tf);
-        add_test.setOnClickListener(getActivity());
+        add_test.setOnClickListener(this);
 
-        add_medicine_reminder = (Button)findViewById(R.id.add_medicine_reminder);
+        add_medicine_reminder = (Button)view.findViewById(R.id.add_medicine_reminder);
         //add_medicine.setTypeface(tf);
-        add_medicine_reminder.setOnClickListener(getActivity());
+        add_medicine_reminder.setOnClickListener(this);
 
-        add_test_reminder = (Button)findViewById(R.id.add_test_reminder);
+        add_test_reminder = (Button)view.findViewById(R.id.add_test_reminder);
         //add_medicine.setTypeface(tf);
-        add_test_reminder.setOnClickListener(getActivity());
+        add_test_reminder.setOnClickListener(this);
 
         // for list heading
-        lbl_name = (TextView)findViewById(R.id.lbl_name);
+        lbl_name = (TextView)view.findViewById(R.id.lbl_name);
         lbl_name.getLayoutParams().width = w150;
 
-        lbl_morning = (TextView)findViewById(R.id.lbl_morning);
+        lbl_morning = (TextView)view.findViewById(R.id.lbl_morning);
         // lbl_morning.getLayoutParams().width = w30;
 
-        lbl_noon = (TextView)findViewById(R.id.lbl_noon);
+        lbl_noon = (TextView)view.findViewById(R.id.lbl_noon);
         // lbl_noon.getLayoutParams().width = w30;
 
-        lbl_night = (TextView)findViewById(R.id.lbl_night);
+        lbl_night = (TextView)view.findViewById(R.id.lbl_night);
         //lbl_night.getLayoutParams().width = w30;
 
-        txt1 = (TextView)findViewById(R.id.txt1);
+        txt1 = (TextView)view.findViewById(R.id.txt1);
         txt1.setPadding(w5, 0, 0, 0);
 
-        txt2 = (TextView)findViewById(R.id.txt2);
+        txt2 = (TextView)view.findViewById(R.id.txt2);
         txt2.setPadding(w10, 0, 0, 0);
 
-        lstReminderTest = (RefreshableListView)findViewById(R.id.lstReminderTest);
-        mPager1 = (ViewPager)findViewById(R.id.pager1);
+        lstReminderTest = (RefreshableListView)view.findViewById(R.id.lstReminderTest);
 
+        mPager1 = (ViewPager)view.findViewById(R.id.pager1);
         mPager1.setOnPageChangeListener(new MyPageChangeListener());
-
 
         return view;
     }
@@ -162,13 +193,6 @@ public class ReminderFragment extends Fragment {
 
     @Override
     public void onClick(View v) {
-        // TODO Auto-generated method stub
-        if(v==back){
-            Intent i=new Intent(getActivity(), Home.class);
-            startActivity(i);
-            finish();
-        }
-
         if(v==txt_medication){
             lstResult.clear();
             selection=1;
@@ -189,12 +213,12 @@ public class ReminderFragment extends Fragment {
 
 
 
-            RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);
+            RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter5 = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
 
 
-            RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
+            RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
             //ArrayList<String> lstmedical = new ArrayList<String>();
             //lstmedical.add("ABC taken");
@@ -222,7 +246,7 @@ public class ReminderFragment extends Fragment {
                             edit_med=new Intent(getActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditMed",true);
-                            edit_med.putExtra("user_id",user_id);
+                            edit_med.putExtra("user",user);
                             med_id=listData.get(pos).getId();
                             edit_med.putExtra("id",med_id);
                             edit_med.putExtra("start_date",listData.get(pos).getStart_date());
@@ -243,7 +267,7 @@ public class ReminderFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
-                            edit_med1.putExtra("user_id",user_id);
+                            edit_med1.putExtra("user",user);
                             edit_med1.putExtra("id",listData.get(pos).getId());
                             startActivity(edit_med1);
                         }
@@ -264,11 +288,11 @@ public class ReminderFragment extends Fragment {
         }
         if(v==add_medicine_reminder){
             Intent AddMedication = new Intent(getActivity(),AddMedication.class);
-            AddMedication.putExtra("user_id",user_id);
+            AddMedication.putExtra("user",user);
             startActivity(AddMedication);
         }
         if(v==add_test_reminder){
-            Intent AddTest = new Intent(getActivity(), com.viamhealth.android.activities.AddTest.class);
+            Intent AddTest = new Intent(getActivity(),AddTest.class);
             startActivity(AddTest);
         }
         if(v==txt_test){
@@ -280,12 +304,12 @@ public class ReminderFragment extends Fragment {
             medicine_scrl.setVisibility(View.GONE);
             test_scrl.setVisibility(View.VISIBLE);
 
-            RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
+            RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
             MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter4);
 
 
-            RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);
+            RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter);
 
@@ -309,7 +333,7 @@ public class ReminderFragment extends Fragment {
                             edit_med=new Intent(getActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditOthers",true);
-                            edit_med.putExtra("user_id",user_id);
+                            edit_med.putExtra("user",user);
                             med_id=otherData.get(pos).getId();
                             edit_med.putExtra("id",med_id);
                             edit_med.putExtra("start_date",listData.get(pos).getStart_date());
@@ -327,7 +351,7 @@ public class ReminderFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
-                            edit_med1.putExtra("user_id",user_id);
+                            edit_med1.putExtra("user",user);
                             edit_med1.putExtra("id",otherData.get(pos).getId());
                             startActivity(edit_med1);
                         }
@@ -362,100 +386,14 @@ public class ReminderFragment extends Fragment {
         }
         if(v==add_medicine){
             Intent AddMedication = new Intent(getActivity(),AddMedication.class);
-            AddMedication.putExtra("user_id",user_id);
+            AddMedication.putExtra("user",user);
             startActivity(AddMedication);
         }
         if(v==add_test){
             Intent AddTest = new Intent(getActivity(),AddTest.class);
             startActivity(AddTest);
         }
-		/*if(v==lbl_add){
-			if(selection==0){
-				Intent AddMedicaletst = new Intent(getParent(),AddMedical.class);
-				TabGroupActivity parentoption = (TabGroupActivity)getParent();
-				parentoption.startChildActivity("AddMedicaletst",AddMedicaletst);
-			}else{
-				Intent AddMedication = new Intent(getParent(),AddMedication.class);
-				TabGroupActivity parentoption = (TabGroupActivity)getParent();
-				parentoption.startChildActivity("AddMedication",AddMedication);
-			}
-		}
-		if(v==lbl_delete){
-			if(selection==1){
-				boolean val=false;
-				for(int i=0;i<lstResult.size();i++){
-					if(lstResult.get(i).isChecked()){
-						delid=lstResult.get(i).getId() + "," + delid;
-						val=true;
-					}
-				}
 
-				if(val==true){
-					Log.e("TAG",delid.toString().substring(0, delid.length()-5) + " th cb is checked");
-					if(isInternetOn()){
-						 DeleteMedicationTask task = new DeleteMedicationTask();
-						 task.applicationContext =this.getParent();
-						 task.execute();
-						 //appPrefs.setReloadgraph("0");
-					}else{
-						Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-					}
-				}else{
-					Toast.makeText(getActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
-				}
-			}else{
-				boolean val=false;
-				for(int i=0;i<lstResult.size();i++){
-					if(lstResult.get(i).isChecked()){
-						delid=lstResult.get(i).getId() + "," + delid;
-						val=true;
-					}
-				}
-
-				if(val==true){
-					Log.e("TAG",delid.toString().substring(0, delid.length()-5) + " th cb is checked");
-					if(isInternetOn()){
-						DeleteMedicalTask task = new DeleteMedicalTask();
-						 task.applicationContext =this.getParent();
-						 task.execute();
-						 //appPrefs.setReloadgraph("0");
-					}else{
-						Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-					}
-				}else{
-					Toast.makeText(getActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
-				}
-			}
-		}*/
-        if(v==lbl_invite_user_food){
-            Log.e("TAG", "Selected value is " + "invite user is clicked");
-            Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-            settiglayout_food.startAnimation(anim);
-            settiglayout_food.setVisibility(View.INVISIBLE);
-            menu_invite_addfood.setVisibility(View.VISIBLE);
-            menu_invite_out_addfood.setVisibility(View.INVISIBLE);
-            Log.e("TAG","Clicked");
-            Intent i = new Intent(getActivity(),InviteUser.class);
-            startActivity(i);
-        }
-        if(v==menu_invite_addfood){
-            actionmenu();
-            settiglayout_food.setVisibility(View.VISIBLE);
-            menu_invite_out_addfood.setVisibility(View.VISIBLE);
-            menu_invite_addfood.setVisibility(View.INVISIBLE);
-            Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-            settiglayout_food.startAnimation(anim);
-
-            Log.e("TAG","Clicked");
-        }
-        if(v==menu_invite_out_addfood){
-            Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-            settiglayout_food.startAnimation(anim);
-            settiglayout_food.setVisibility(View.INVISIBLE);
-            menu_invite_addfood.setVisibility(View.VISIBLE);
-            menu_invite_out_addfood.setVisibility(View.INVISIBLE);
-            Log.e("TAG","Clicked");
-        }
     }
 
     public class MyPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
@@ -476,7 +414,7 @@ public class ReminderFragment extends Fragment {
 
         ImagePagerAdapter(ArrayList<String> lstData) {
             this.lstData = lstData;
-            inflater = getLayoutInflater();
+            inflater = getLayoutInflater(savedInstanceState);
         }
 
         @Override
@@ -525,7 +463,7 @@ public class ReminderFragment extends Fragment {
             //lsttest.add("Blood Test");
             //lsttest.add("Xyz");
 
-            RefreshableListView lstReminderMedicine=(RefreshableListView)findViewById(R.id.lstReminderMedicine);
+            RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
             //ArrayList<String> lstmedical = new ArrayList<String>();
             //lstmedical.add("ABC taken");
@@ -534,7 +472,7 @@ public class ReminderFragment extends Fragment {
             lstReminderMedicine.setAdapter(adapter4);
 
 
-            RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);
+            RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter5 = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
 
@@ -595,7 +533,7 @@ public class ReminderFragment extends Fragment {
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
-            allData = obj.getReminderInfo(user_id, "MEDICATION");
+            allData = obj.getReminderInfo(user.getId().toString(), "MEDICATION");
             return null;
         }
 
@@ -645,36 +583,6 @@ public class ReminderFragment extends Fragment {
                 }
             }
             mPager1.setAdapter(new ImagePagerAdapter(lst));
-            //RetrieveOtherData task1= new RetrieveOtherData();
-            //task1.activity=getActivity();
-            //task1.execute();
-
-
-/*
-            MedicalDataAdapter adapter = new MedicalDataAdapter(getActivity(),R.layout.row_medical_list, listData);
-           // lstReminderMedicine.setAdapter(adapter);
-
-            ArrayList<String> lsttest = new ArrayList<String>();
-            lsttest.add("Blood Test");
-            lsttest.add("Xyz");
-            TestDataAdapter adapter1 = new TestDataAdapter(getActivity(),R.layout.row_test_list, lsttest);
-            //lstReminderMedicine.setAdapter(adapter1);
-
-            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getActivity());
-            adapter3.addSection("Medication",adapter);
-            adapter3.addSection("Rest All",adapter1);
-            //lstReminderMedicine.setAdapter(adapter3);
-*/
-            //dialog1.dismiss();
-            //listfood.removeAllViews();
-            //Log.e("TAG","size : " + lstData.size());
-            //if(lstData.size()>0){
-            //finish();
-            //  }else{
-            //Toast.makeText(getParent(), "Try again lalter...",Toast.LENGTH_SHORT).show();
-            // finish();
-            // }
-
         }
 
         @Override
@@ -682,7 +590,7 @@ public class ReminderFragment extends Fragment {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            allData = obj.getReminderInfo(user_id, "2");
+            allData = obj.getReminderInfo(user.getId().toString(), "2");
             return null;
         }
 
@@ -695,12 +603,6 @@ public class ReminderFragment extends Fragment {
         @Override
         protected void onPreExecute()
         {
-
-            //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            // dialog1 = new ProgressDialog(getActivity());
-            //dialog1.setMessage("Please Wait....");
-            //dialog1.show();
-            //Log.i("onPreExecute", "onPreExecute");
 
         }
 
@@ -773,7 +675,7 @@ public class ReminderFragment extends Fragment {
             //if(lstData.size()>0){
             //finish();
             //  }else{
-            //Toast.makeText(getParent(), "Try again lalter...",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
             // finish();
             // }
 
@@ -784,7 +686,7 @@ public class ReminderFragment extends Fragment {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            otherData = obj.getReminderInfo(user_id,"OTHER");
+            otherData = obj.getReminderInfo(user.getId().toString(),"OTHER");
             return null;
         }
 

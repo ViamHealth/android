@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
@@ -31,6 +32,11 @@ public class GoalFragment extends Fragment {
                 startActivity(i);
             }
         });
+
+        WebView webView = (WebView) view.findViewById(R.id.webView);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("file:///android_asset/weightgoal.html");
+
         return view;
     }
 
