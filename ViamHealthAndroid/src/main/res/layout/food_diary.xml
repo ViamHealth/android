@@ -14,90 +14,9 @@
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:orientation="vertical">
-      <!-- Action Bar Start --> 
-       <LinearLayout 
-        android:orientation="horizontal"
-        android:background="@drawable/top_bar"
-        android:layout_width="fill_parent"
-        android:gravity="center_vertical|center_horizontal"
-    	android:layout_height="wrap_content">
-    	<FrameLayout 
-    	    android:layout_width="fill_parent"
-    		android:layout_height="wrap_content">
-    		
-        <LinearLayout 
-             android:gravity="center_vertical|center_horizontal"
-            android:layout_width="fill_parent"
-    		android:layout_height="fill_parent"
-    		android:orientation="horizontal">
-    		    <ImageView 
-                android:src="@drawable/back"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:padding="5dp"
-                android:id="@+id/back"
-                android:layout_height="wrap_content"/>
-    		  
- 			
- 			
- 		    <TextView 
-                android:id="@+id/heding_name_food"
-                android:textSize="22sp"
-                android:gravity="center_vertical|center"
-                android:text="Sharat Khurana"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_width="fill_parent"
-                android:layout_weight="1"
-    			android:layout_height="fill_parent"/>
-          
-            <LinearLayout
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-            <ImageView 
-                android:id="@+id/person_icon"
-                android:src="@drawable/person_icon"
-                android:layout_width="wrap_content"
-    			android:layout_height="fill_parent"/>
-            </LinearLayout>
+      <!-- Action Bar Start -->
 
-            <RelativeLayout android:layout_height="wrap_content"
-                android:layout_width="wrap_content">
-            <LinearLayout
-                android:id="@+id/menu_invite_food"
-               
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-
-            <ImageButton
-               
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/menu_icon" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/menu_invite_out_food"
-                android:visibility="invisible"
-             
-            android:layout_width="wrap_content"
-    		android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/menu_icon" />
-
-            </LinearLayout>
-            </RelativeLayout>
-                        
-                        
-                        
-        </LinearLayout>
-        </FrameLayout>
-        </LinearLayout>
-        
-     <LinearLayout
+         <LinearLayout
         android:id="@+id/food_main_layout"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -558,39 +477,8 @@
          </LinearLayout>
         
        </LinearLayout>
-       
-         <LinearLayout android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/settiglayout_food"
-            android:gravity="right"
-            android:visibility="invisible"
-            android:layout_gravity="right">
 
-            <ListView
-                 android:id="@+id/listView1"
-                 android:layout_width="210dp"
-                 android:layout_height="wrap_content"
-                 android:background="#efefef"
-                 android:cacheColorHint="#00000000"
- 				 android:divider="#00000000"
- 				 android:dividerHeight="0dip"/>
-         
-
-    <TextView 
-        android:text="+ Add Profile" 
-        android:id="@+id/lbl_invite_user_food" 
-        android:layout_width="210dp" 
-        android:layout_height="wrap_content" 
-        android:textSize="21sp"
-        android:gravity="center_horizontal"
-        android:padding="10dp" 
-        android:textStyle="bold" 
-        android:textColor="#4bddfe"
-        android:background="@drawable/listinvite" />
-   
-	    </LinearLayout>
-       </FrameLayout>
+  </FrameLayout>
        
 
 </LinearLayout>

@@ -24,7 +24,7 @@
 
             <FrameLayout android:id="@+id/tabHeader"
                 android:layout_width="match_parent"
-                android:layout_height="48dp">
+                android:layout_height="58dp">
             </FrameLayout>
 
             <FrameLayout android:id="@+android:id/realtabcontent"

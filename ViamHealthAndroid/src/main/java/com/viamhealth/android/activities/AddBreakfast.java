@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.viamhealth.android.activities.fragments.TabHeaderFragment;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
@@ -19,6 +20,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -39,12 +42,13 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class AddBreakfast extends Activity implements OnClickListener{
+public class AddBreakfast extends BaseFragmentActivity implements OnClickListener{
 	Display display;
 	int height,width,w15,w20,w10,h10,w25,w50,w150,w5,h5,h40;
 	
@@ -68,6 +72,10 @@ public class AddBreakfast extends Activity implements OnClickListener{
 	ImageView back;
 	int temp=0;
 	String selecteduserid= "0";
+
+    User user;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,8 +84,8 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		
 		setContentView(R.layout.add_breakfast);
 		
-		appPrefs = new ViamHealthPrefs(this.getParent());
-		obj=new functionClass(this.getParent());
+		appPrefs = new ViamHealthPrefs(AddBreakfast.this);
+		obj=new functionClass(AddBreakfast.this);
 		ga=((Global_Application)getApplicationContext());
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		
@@ -94,33 +102,22 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		h10=(int)((height*2.083)/100);
 		h5=(int)((height*1.042)/100);
 		h40=(int)((height*8.33)/100);
-		
+
+        /* Add the header fragment*/
+        //headerlayout;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        TabHeaderFragment headerFragment = new TabHeaderFragment();
+        Intent intent = getIntent();
+        Bundle bundle = new Bundle();
+        user = intent.getParcelableExtra("user");
+        bundle.putParcelable("user", user);
+        headerFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.headerlayout, headerFragment);
+        fragmentTransaction.commit();
+
 		//control casting and control onclick management
-		
-		back=(ImageView)findViewById(R.id.back);
-		back.setOnClickListener(AddBreakfast.this);	
-		
-     	lbl_invite_user_food=(TextView)findViewById(R.id.lbl_invite_user_food);
-     	lbl_invite_user_food.setTypeface(tf);
-     	lbl_invite_user_food.setOnClickListener(this);
-     		
-     		
-     	menu_invite_addfood= (LinearLayout)findViewById(R.id.menu_invite_food);
-     	menu_invite_addfood.setPadding(w15, 0, w20, 0);
-     	menu_invite_addfood.setOnClickListener(this);
-     		
-     	heding_Addfood_name=(TextView)findViewById(R.id.heding_name_food);
-     	heding_Addfood_name.setText(appPrefs.getProfileName());
-     	heding_Addfood_name.setTypeface(tf);
-   		//heding_name_food.setPadding(0, 0, w50, 0);
-   		
-   		menu_invite_out_addfood = (LinearLayout)findViewById(R.id.menu_invite_out_food);
-   		menu_invite_out_addfood.setOnClickListener(this);
-   		menu_invite_out_addfood.setPadding(w15, 0, w20, 0);
-   		
-   		settiglayout_food = (LinearLayout)findViewById(R.id.settiglayout_food);
-   		settiglayout_food.setPadding(0, h40, w5, 0);
-   		
 		add_heding = (LinearLayout)findViewById(R.id.add_heding);
 		add_heding.setPadding(0, 0, 0, h10);
 		 
@@ -149,7 +146,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 				seach=edt_add_food_search.getText().toString();
 				if(isInternetOn()){
 					 CallSearchFoodTask task = new CallSearchFoodTask();
-					 task.applicationContext =AddBreakfast.this.getParent();
+					 task.applicationContext =AddBreakfast.this;
 					 task.execute();
 				}else{
 					Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -210,7 +207,6 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		txt8.setOnClickListener(this);
 		
 		
-		actionmenu();
 		listfood=(RefreshableListView)findViewById(R.id.lstfood);
 		  
 		
@@ -224,9 +220,11 @@ public class AddBreakfast extends Activity implements OnClickListener{
 				ga.setLstFood(lstResult);
 				ga.setFoodPos(position);
                 Toast.makeText(getApplicationContext(),"onItemClick position "+position,Toast.LENGTH_LONG);
-				Intent foodDetail = new Intent(getParent(),FoodDetail.class);
-				TabGroupActivity parentoption = (TabGroupActivity)getParent();
-				parentoption.startChildActivity("foodDetail",foodDetail);
+				Intent foodDetail = new Intent(AddBreakfast.this, FoodDetail.class);
+				//TabGroupActivity parentoption = (TabGroupActivity)AddBreakfast.this;
+				//parentoption.startChildActivity("foodDetail",foodDetail);
+                foodDetail.putExtra("user", user);
+                startActivityForResult(foodDetail, 1);
 			}
 		});
 		listfood.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
@@ -238,7 +236,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 					temp=0;
 					if(isInternetOn()){
 						CallNevigationFoodTask task = new CallNevigationFoodTask();
-						task.applicationContext =AddBreakfast.this.getParent();
+						task.applicationContext =AddBreakfast.this;
 						task.execute();
 					}else{
 						Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -252,54 +250,21 @@ public class AddBreakfast extends Activity implements OnClickListener{
 				
 			
 	}
-	
-	public void actionmenu(){
-		// for generate menu
-		 final List<String> Goal_data;
-		 Goal_data =Arrays.asList(appPrefs.getMenuList().toString().split("\\s*,\\s*"));
-		 final GoalDataAdapter adapter = new GoalDataAdapter(this,R.layout.listview_item_row, Goal_data);
-		        
-		final ListView listView1 = (ListView)findViewById(R.id.listView1);
-		listView1.setAdapter(adapter);
-	
-		listView1.setOnItemClickListener(new OnItemClickListener() {
-		    	
-		    	@Override    
-				public void onItemClick(AdapterView<?> arg0, View view,
-						int position, long arg3) {
-					// TODO Auto-generated method stub
-		    		String value = ((TextView)view.findViewById(R.id.txtName)).getText().toString();
-		    		/*((ImageView)view.findViewById(R.id.imgIcon)).setImageResource(R.drawable.tick);
-					Log.e("TAG","Selected value is " + value);*/
-		    	    
-		    		Log.e("TAG","Selected value is " + value);
-		    		appPrefs.setProfileName(value);
-		    		heding_Addfood_name.setText(appPrefs.getProfileName());
-		    		for(int i=0;i<Goal_data.size();i++){
-						if(value.toString().equals(appPrefs.getProfileName().toString())){
-							Log.e("TAG","visible");
-							((ImageView)view.findViewById(R.id.imgIcon)).setVisibility(View.VISIBLE);
-						}else{
-							Log.e("TAG","Invisible");
-							((ImageView)view.findViewById(R.id.imgIcon)).setVisibility(View.INVISIBLE);
-						}
-				}
-		    		Animation anim = AnimationUtils.loadAnimation(AddBreakfast.this, R.anim.fade_out);
-					settiglayout_food.startAnimation(anim);
-					settiglayout_food.setVisibility(View.INVISIBLE);
-					menu_invite_addfood.setVisibility(View.VISIBLE);
-					menu_invite_out_addfood.setVisibility(View.INVISIBLE);
-					
-					selecteduserid = Integer.toString(position);
-					
-					CalluserMeTask task = new CalluserMeTask();
-					task.applicationContext =AddBreakfast.this.getParent();
-					task.execute();
-				}
-			
-		       });
-	}
-	public void ScreenDimension()
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==1){
+            if(resultCode==RESULT_OK){
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("user", user);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        }
+    }
+
+    public void ScreenDimension()
 	{
 		display = getWindowManager().getDefaultDisplay(); 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -312,12 +277,6 @@ public class AddBreakfast extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		if(v==back){
-			Intent i = new Intent(this.getParent(),Home.class);
-			startActivity(i);
-			finish();
-		}
-		
 		if(v==txt1){
 			txt1.setTextColor(Color.RED);
 			txt2.setTextColor(Color.BLACK);
@@ -337,7 +296,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt1.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext = AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -362,7 +321,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt2.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -387,7 +346,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt3.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -412,7 +371,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt4.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -437,7 +396,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt5.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -463,7 +422,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt6.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -488,7 +447,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt7.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -513,7 +472,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			seach=txt8.getText().toString();
 			if(isInternetOn()){
 				 CallSearchFoodTask task = new CallSearchFoodTask();
-				 task.applicationContext =this.getParent();
+				 task.applicationContext =AddBreakfast.this;
 				 task.execute();
 			}else{
 				Toast.makeText(AddBreakfast.this,"Network is not available....",Toast.LENGTH_SHORT).show();
@@ -529,36 +488,6 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			cnt_next=cnt_next-1;
 			next(cnt_next);
 		}
-		if(v==lbl_invite_user_food){
-			Log.e("TAG","Selected value is " + "invite user is clicked");
-			Animation anim = AnimationUtils.loadAnimation(AddBreakfast.this, R.anim.fade_out);
-			settiglayout_food.startAnimation(anim);
-			settiglayout_food.setVisibility(View.INVISIBLE);
-			menu_invite_addfood.setVisibility(View.VISIBLE);
-			menu_invite_out_addfood.setVisibility(View.INVISIBLE);
-			Log.e("TAG","Clicked");
-			Intent i = new Intent(AddBreakfast.this,InviteUser.class);
-			startActivity(i);
-		}
-		if(v==menu_invite_addfood){
-			actionmenu();
-			settiglayout_food.setVisibility(View.VISIBLE);
-			menu_invite_out_addfood.setVisibility(View.VISIBLE);
-			menu_invite_addfood.setVisibility(View.INVISIBLE);
-			Animation anim = AnimationUtils.loadAnimation(AddBreakfast.this, R.anim.fade_in);
-			settiglayout_food.startAnimation(anim);
-			
-			Log.e("TAG","Clicked");
-		}
-		if(v==menu_invite_out_addfood){
-			Animation anim = AnimationUtils.loadAnimation(AddBreakfast.this, R.anim.fade_out);
-			settiglayout_food.startAnimation(anim);
-			settiglayout_food.setVisibility(View.INVISIBLE);
-			menu_invite_addfood.setVisibility(View.VISIBLE);
-			menu_invite_out_addfood.setVisibility(View.INVISIBLE);
-			Log.e("TAG","Clicked");
-		}
-	
 	}
 	public void next(int pos){
 		if(pos<5){
@@ -676,7 +605,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		{
 			
 			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-			dialog = new ProgressDialog(getParent());
+			dialog = new ProgressDialog(AddBreakfast.this);
 			dialog.setCanceledOnTouchOutside(false);
 			dialog.setMessage("Please Wait....");
 			dialog.show();
@@ -700,7 +629,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 				    listfood.onRefreshComplete();
 				}else{
 					dialog.dismiss();
-					Toast.makeText(getParent(), "No Food found...",Toast.LENGTH_SHORT).show();
+					Toast.makeText(AddBreakfast.this, "No Food found...",Toast.LENGTH_SHORT).show();
 					addfood_count.setText("("+lstResult+")");
 					   
 					}
@@ -714,7 +643,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 			//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 			lstResult.clear();
 			
-			lstResult = obj.SearchFoodItem(seach);
+			lstResult.addAll(obj.SearchFoodItem(seach));
 			dialog.dismiss();
 			return null;
 		}
@@ -730,7 +659,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		{
 			
 			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-			dialog1 = new ProgressDialog(getParent());
+			dialog1 = new ProgressDialog(AddBreakfast.this);
 			dialog1.setCanceledOnTouchOutside(false);
 			dialog1.setMessage("Please Wait....");
 			dialog1.show();
@@ -753,7 +682,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 				    listfood.onRefreshComplete();
 				}else{
 					dialog1.dismiss();
-					Toast.makeText(getParent(), "No Food found...",Toast.LENGTH_SHORT).show();
+					Toast.makeText(AddBreakfast.this, "No Food found...",Toast.LENGTH_SHORT).show();
 					addfood_count.setText("("+lstResult.size()+")");
 					   
 					}
@@ -787,7 +716,7 @@ public class AddBreakfast extends Activity implements OnClickListener{
 		{
 			
 			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-			dialog1 = new ProgressDialog(AddBreakfast.this.getParent());
+			dialog1 = new ProgressDialog(AddBreakfast.this);
 			dialog1.setCanceledOnTouchOutside(false);
 			dialog1.setMessage("Please Wait....");
 			dialog1.show();
