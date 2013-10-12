@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,6 +19,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYSeriesRenderer;
 
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.activities.Home;
+import com.viamhealth.android.activities.TabBaseActivity;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;

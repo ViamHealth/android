@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.viamhealth.android.activities.AddReminder;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 
 import com.viamhealth.android.model.ReminderData;

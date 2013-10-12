@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import android.app.Activity;
 import android.app.TabActivity;
@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
-import android.widget.Toast;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;

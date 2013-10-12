@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 
 
+import com.viamhealth.android.activities.oldones.InviteUser;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 
 import com.viamhealth.android.dao.restclient.old.functionClass;

@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -25,8 +25,8 @@ import android.graphics.Typeface;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -35,22 +35,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddCholesterolGoal extends Activity implements OnClickListener{
+public class AddBPGoal extends Activity implements OnClickListener{
 	Display display;
 	int width,height;
 	int w10,w15,w20,w25,w5,w220,h10,h5,h1,h40,h20,h15;
 	
-	TextView lbl_hdl,lbl_hdl_number,lbl_ldl,lbl_ldl_number,lbl_triglyceriders,lbl_trigly_number,lbl_total,lbl_total_number,
-			 lbl_add_goal,btn_goal_cancle,btn_goal_add;
-	SeekBar seekbar_bar_hdl,seekbar_bar_ldl,seekbar_bar_triglycerides,seekbar_bar_total;
+	TextView lbl_systolic,lbl_systolic_number,lbl_diastolic,lbl_diastolic_number,lbl_pulse,lbl_pulse_number,lbl_add_goal,btn_goal_add,btn_goal_cancle;
+	SeekBar seekbar_bar_systolic,seekbar_bar_diastolic,seekbar_bar_pulse;
 	EditText txt_target_date;
+	Spinner ddl_interval_num,ddl_interval_unit;
 	LinearLayout middle_goal_layout;
-	Spinner ddl_interval_unit,ddl_interval_num;
-	ProgressDialog dialog;
 	
 	ViamHealthPrefs appPrefs;
 	Global_Application ga;
 	functionClass obj;
+	ProgressDialog dialog;
 	
 	 DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
      Calendar dateAndTime=Calendar.getInstance();
@@ -63,11 +62,11 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-		setContentView(R.layout.add_cholesterol_goal);
+		setContentView(R.layout.add_bpgoal);
 		
-		appPrefs = new ViamHealthPrefs(AddCholesterolGoal.this);
+		appPrefs = new ViamHealthPrefs(AddBPGoal.this);
 		ga=((Global_Application)getApplicationContext());
-		obj=new functionClass(AddCholesterolGoal.this);
+		obj=new functionClass(AddBPGoal.this);
 		
 		
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
@@ -97,46 +96,38 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 		lbl_add_goal = (TextView)findViewById(R.id.lbl_add_goal);
 		lbl_add_goal.setPadding(w15, h15, w15, h15);
 		
-		lbl_hdl = (TextView)findViewById(R.id.lbl_hdl);
-		lbl_hdl.setTypeface(tf);
-		lbl_hdl.setPadding(w10, h10, w10, h10);
+		lbl_systolic = (TextView)findViewById(R.id.lbl_systolic);
+		lbl_systolic.setTypeface(tf);
+		lbl_systolic.setPadding(w10, h10, w10, h10);
 		
-		lbl_hdl_number = (TextView)findViewById(R.id.lbl_hdl_number);
-		lbl_hdl_number.setTypeface(digittf);
-		lbl_hdl_number.setPadding(w5, 0, 0, 0);
+		lbl_systolic_number = (TextView)findViewById(R.id.lbl_systolic_number);
+		lbl_systolic_number.setTypeface(digittf);
+		lbl_systolic_number.setPadding(w5, 0, 0, 0);
 		
-		lbl_ldl = (TextView)findViewById(R.id.lbl_ldl);
-		lbl_ldl.setTypeface(tf);
-		lbl_ldl.setPadding(w10, h10, w10, h10);
+		lbl_diastolic = (TextView)findViewById(R.id.lbl_diastolic);
+		lbl_diastolic.setTypeface(tf);
+		lbl_diastolic.setPadding(w10, h10, w10, h10);
 		
-		lbl_ldl_number = (TextView)findViewById(R.id.lbl_ldl_number);
-		lbl_ldl_number.setTypeface(digittf);
-		//lbl_ldl_number.setPadding(w5, 0, 0, 0);
+		lbl_diastolic_number = (TextView)findViewById(R.id.lbl_diastolic_number);
+		lbl_diastolic_number.setTypeface(digittf);
+		lbl_diastolic_number.setPadding(w5, 0, 0, 0);
 		
-		lbl_triglyceriders = (TextView)findViewById(R.id.lbl_triglyceriders);
-		lbl_triglyceriders.setTypeface(tf);
-		lbl_triglyceriders.setPadding(w10, h10, w10, h10);
+		lbl_pulse = (TextView)findViewById(R.id.lbl_pulse);
+		lbl_pulse.setTypeface(tf);
+		lbl_pulse.setPadding(w10, h10, w10, h10);
 		
-		lbl_trigly_number = (TextView)findViewById(R.id.lbl_trigly_number);
-		lbl_trigly_number.setTypeface(digittf);
-		lbl_trigly_number.setPadding(w5, 0, 0, 0);
-
-		lbl_total = (TextView)findViewById(R.id.lbl_total);
-		lbl_total.setTypeface(tf);
-	//	lbl_total.setPadding(w5, 0, 0, 0);
-		
-		lbl_total_number = (TextView)findViewById(R.id.lbl_total_number);
-		lbl_total_number.setTypeface(digittf);
-		lbl_total_number.setPadding(w5, 0, 0, 0);
+		lbl_pulse_number = (TextView)findViewById(R.id.lbl_pulse_number);
+		lbl_pulse_number.setTypeface(digittf);
+		lbl_pulse_number.setPadding(w5, 0, 0, 0);
 		
 		txt_target_date = (EditText)findViewById(R.id.txt_target_date);
 		txt_target_date.setTypeface(tf);
-		txt_target_date.setOnClickListener(AddCholesterolGoal.this);
+		txt_target_date.setOnClickListener(AddBPGoal.this);
 		
-		seekbar_bar_hdl=(SeekBar)findViewById(R.id.seekbar_bar_hdl);
-		seekbar_bar_hdl.setPadding(w15, 0, w15, 0);
+		seekbar_bar_systolic=(SeekBar)findViewById(R.id.seekbar_bar_systolic);
+		seekbar_bar_systolic.setPadding(w15, 0, w15, 0);
 		//seekbar_bar_systolic.getLayoutParams().width=w220;
-		seekbar_bar_hdl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+		seekbar_bar_systolic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -154,20 +145,20 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				// TODO Auto-generated method stub
-				if(seekBar.getProgress()==61){
-					lbl_hdl_number.setText("60");
-					lbl_hdl_number.setTextColor(Color.RED);
+				if(seekBar.getProgress()==180){
+					lbl_systolic_number.setTextColor(Color.RED);
+					lbl_systolic_number.setText(seekBar.getProgress()+"");
 				}else{
-					lbl_hdl_number.setTextColor(Color.BLACK);
-					lbl_hdl_number.setText(seekBar.getProgress()+"");
+					lbl_systolic_number.setTextColor(Color.BLACK);
+					lbl_systolic_number.setText(seekBar.getProgress()+"");
 				}
 			}
 		});
 		
-		seekbar_bar_ldl=(SeekBar)findViewById(R.id.seekbar_bar_ldl);
-		seekbar_bar_ldl.setPadding(w15, 0, w15, 0);
+		seekbar_bar_diastolic=(SeekBar)findViewById(R.id.seekbar_bar_diastolic);
+		seekbar_bar_diastolic.setPadding(w15, 0, w15, 0);
 		//seekbar_bar_diastolic.getLayoutParams().width=w220;
-		seekbar_bar_ldl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+		seekbar_bar_diastolic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -185,20 +176,20 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				// TODO Auto-generated method stub
-				if(seekBar.getProgress()==191){
-					lbl_ldl_number.setText("190");
-					lbl_ldl_number.setTextColor(Color.RED);
+				if(seekBar.getProgress()==110){
+					lbl_diastolic_number.setText(seekBar.getProgress()+"");
+					lbl_diastolic_number.setTextColor(Color.RED);
 				}else{
-					lbl_ldl_number.setTextColor(Color.BLACK);
-					lbl_ldl_number.setText(seekBar.getProgress()+"");
+					lbl_diastolic_number.setTextColor(Color.BLACK);
+					lbl_diastolic_number.setText(seekBar.getProgress()+"");
 				}
 			}
 		});
 		
-		seekbar_bar_triglycerides=(SeekBar)findViewById(R.id.seekbar_bar_triglycerides);
-		seekbar_bar_triglycerides.setPadding(w15, 0, w15, 0);
+		seekbar_bar_pulse=(SeekBar)findViewById(R.id.seekbar_bar_pulse);
+		seekbar_bar_pulse.setPadding(w15, 0, w15, 0);
 		//seekbar_bar_pulse.getLayoutParams().width=w220;
-		seekbar_bar_triglycerides.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+		seekbar_bar_pulse.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
@@ -216,42 +207,12 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 				// TODO Auto-generated method stub
-				if(seekBar.getProgress()==501){
-					lbl_trigly_number.setText("500");
-					lbl_trigly_number.setTextColor(Color.RED);
+				if(seekBar.getProgress()==160){
+					lbl_pulse_number.setText(seekBar.getProgress()+"");
+					lbl_pulse_number.setTextColor(Color.RED);
 				}else{
-					lbl_trigly_number.setTextColor(Color.BLACK);
-					lbl_trigly_number.setText(seekBar.getProgress()+"");
-				}
-			}
-		});
-		seekbar_bar_total=(SeekBar)findViewById(R.id.seekbar_bar_total);
-		seekbar_bar_total.setPadding(w15, 0, w15, 0);
-		//seekbar_bar_pulse.getLayoutParams().width=w220;
-		seekbar_bar_total.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				if(seekBar.getProgress()==251){
-					lbl_total_number.setText("250");
-					lbl_total_number.setTextColor(Color.RED);
-				}else{
-					lbl_total_number.setTextColor(Color.BLACK);
-					lbl_total_number.setText(seekBar.getProgress()+"");
+					lbl_pulse_number.setTextColor(Color.BLACK);
+					lbl_pulse_number.setText(seekBar.getProgress()+"");
 				}
 			}
 		});
@@ -306,11 +267,11 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 				}
 			}else{
 				if(ddl_interval_num.getSelectedItemId()==0){
-					Toast.makeText(AddCholesterolGoal.this, "Enter interval number", Toast.LENGTH_SHORT);
+					Toast.makeText(AddBPGoal.this, "Enter interval number", Toast.LENGTH_SHORT);
 					valid=false;
 				}
 				if(ddl_interval_unit.getSelectedItemId()==0){
-					Toast.makeText(AddCholesterolGoal.this, "Enter interval unit", Toast.LENGTH_SHORT);
+					Toast.makeText(AddBPGoal.this, "Enter interval unit", Toast.LENGTH_SHORT);
 					valid=false;
 				}
 			}
@@ -326,18 +287,18 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 					 task.applicationContext =this.getParent();
 					 task.execute();
 			}else{
-				Toast.makeText(AddCholesterolGoal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+				Toast.makeText(AddBPGoal.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 			}
 		}
 		}
 		if(v==txt_target_date){
-			new DatePickerDialog(AddCholesterolGoal.this, d,pYear,
+			new DatePickerDialog(AddBPGoal.this, d,pYear,
                     pMonth,
                     pDay).show();
 		}
 		if(v==btn_goal_cancle){
 			finish();
-		}
+		}   
 	}
 	DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
 	    public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -375,7 +336,7 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 			{
 				
 				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-				dialog = new ProgressDialog(AddCholesterolGoal.this);
+				dialog = new ProgressDialog(AddBPGoal.this);
 				dialog.setCanceledOnTouchOutside(false);
 				dialog.setMessage("Please Wait....");
 				dialog.show();
@@ -395,8 +356,8 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 					}else{
 						appPrefs.setReloadgraph("1");
 						ga.setCalcelflg(true);
-						finish();
-						//Toast.makeText(AddCholesterolGoal.this, "No goal added...",Toast.LENGTH_SHORT).show();
+						finish();	
+						//Toast.makeText(AddBPGoal.this, "No goal added...",Toast.LENGTH_SHORT).show();
 					}
 			}  
 	   
@@ -405,18 +366,17 @@ public class AddCholesterolGoal extends Activity implements OnClickListener{
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				
-			  return obj.addCholesterolGoal(lbl_hdl_number.getText().toString(),
-					                  lbl_ldl_number.getText().toString(), 
-					                  lbl_trigly_number.getText().toString(), 
-					                  lbl_total_number.getText().toString(), 
-					                  txt_target_date.getText().toString(), 
-					                  ddl_interval_num.getSelectedItem().toString(), 
-					                  ddl_interval_unit.getSelectedItem().toString());
-				
+			 
+				return obj.addBPGoal(lbl_systolic_number.getText().toString(), 
+				   		 lbl_diastolic_number.getText().toString(), 
+				   		 lbl_pulse_number.getText().toString(), 
+				   		 txt_target_date.getText().toString(), 
+				   		 ddl_interval_num.getSelectedItem().toString(), 
+				   		 ddl_interval_unit.getSelectedItem().toString());
 			}
 			   
 		}     
-		// function for check internet is available or not
+	// function for check internet is available or not
 		public final boolean isInternetOn() {
 
 			  ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

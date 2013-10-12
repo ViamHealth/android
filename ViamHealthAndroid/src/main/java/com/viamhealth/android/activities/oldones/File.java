@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +11,10 @@ import java.util.List;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
+import com.viamhealth.android.activities.BaseActivity;
+import com.viamhealth.android.activities.Downlaod;
+import com.viamhealth.android.activities.Home;
+import com.viamhealth.android.activities.UploadFile;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.adapters.GoalDataAdapter;

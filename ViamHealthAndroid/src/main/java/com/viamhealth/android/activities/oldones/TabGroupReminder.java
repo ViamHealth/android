@@ -1,14 +1,11 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.view.Window;
 
-import com.viamhealth.android.activities.Settings;
-import com.viamhealth.android.activities.TabGroupActivity;
-
-public class TabGroupSettings extends TabGroupActivity {
+public class TabGroupReminder extends TabGroupActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -16,7 +13,10 @@ public class TabGroupSettings extends TabGroupActivity {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	    startChildActivity("SettingsPage", new Intent(this,Settings.class));
+        String userid=getIntent().getStringExtra("user_id");
+        Intent intent_watch=new Intent(this,Watch.class);
+        intent_watch.putExtra("user_id",userid);
+	    startChildActivity("ReminderPage",intent_watch);
 	}
 	@Override
 	public void onBackPressed() {

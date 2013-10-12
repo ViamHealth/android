@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,8 +25,13 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import com.viamhealth.android.model.FileData;
+import com.viamhealth.android.model.users.User;
+
+import android.database.Cursor;
+import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,6 +44,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -74,7 +81,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 	Global_Application ga;
 	functionClass obj;
 	private static ProgressDialog dialog;
-	Button btn_upload,btn_cancle;
+	Button btn_upload;
+    TextView btn_cancle;
 	static int serverResponseCode = 0;
 	String upLoadServerUri = null;  
 	String filename=null;
@@ -84,15 +92,20 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 	
 	Typeface tf;
 	private DisplayImageOptions options;
+
+    User user;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.upload_file);
 		ga=((Global_Application)getApplicationContext());
-		obj = new functionClass(this.getParent());
+		obj = new functionClass(UploadFile.this);
 		appPrefs = new ViamHealthPrefs(UploadFile.this);
 		ScreenDimension();
-		
+
+        user = (User) getIntent().getParcelableExtra("user");
+
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		w15=(int)((width*4.68)/100);
 		w20=(int)((width*6.25)/100);
@@ -103,68 +116,25 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		h40=(int)((height*8.34)/100);
 		h20=(int)((height*4.17)/100);
 		
-	    back=(ImageView)findViewById(R.id.back);
-    	
-    	lbl_invite_user_food=(TextView)findViewById(R.id.lbl_invite_user_food);
-    	lbl_invite_user_food.setTypeface(tf);
-    	lbl_invite_user_food.setOnClickListener(this);
-    	    		
-    	menu_invite_food= (LinearLayout)findViewById(R.id.menu_invite_food);
-    	menu_invite_food.setPadding(w15, 0, w20, 0);
-    	menu_invite_food.setOnClickListener(this);
-    		
-    	heding_name_food=(TextView)findViewById(R.id.heding_name_food);
-  		heding_name_food.setText(appPrefs.getProfileName());
-  		heding_name_food.setTypeface(tf);
-  		//heding_name_food.setPadding(0, 0, w50, 0);
-  		
-  		menu_invite_out_food = (LinearLayout)findViewById(R.id.menu_invite_out_food);
-  		menu_invite_out_food.setOnClickListener(this);
-  		menu_invite_out_food.setPadding(w15, 0, w20, 0);
-  		
-  		settiglayout_food = (LinearLayout)findViewById(R.id.settiglayout_food);
-  		settiglayout_food.setPadding(0, h40, w5, 0);
-  		
+
 		img_display = (ImageView)findViewById(R.id.img_display);
-		img_display.getLayoutParams().width = w100;
-		img_display.getLayoutParams().height = w100;
-		
-		addphoto = (LinearLayout)findViewById(R.id.addphoto);
-		addphoto.setOnClickListener(UploadFile.this);
+        img_display.setOnClickListener(this);
+
 		btn_upload = (Button)findViewById(R.id.btnUpload);
 		btn_upload.setOnClickListener(this);
 		
-		btn_cancle=(Button)findViewById(R.id.btnCancle);
+		btn_cancle=(TextView)findViewById(R.id.btnCancle);
 		btn_cancle.setOnClickListener(this);
 		
-		 person_icon = (ImageView)findViewById(R.id.person_icon);
-	     person_icon.getLayoutParams().width = w20;
-	     person_icon.getLayoutParams().height = h20;
-	       
-	     options = new DisplayImageOptions.Builder()
-	 		.build();
-	 		
-	 		imageLoader.displayImage(appPrefs.getProfilepic(), person_icon, options, new SimpleImageLoadingListener() {
-	 			@Override
-	 			public void onLoadingComplete(Bitmap loadedImage) {
-	 				Animation anim = AnimationUtils.loadAnimation(UploadFile.this, R.anim.fade_in);
-	 				person_icon.setAnimation(anim);
-	 				anim.start();
-	 				
-	 				
-	 			}
-	 		});
-	 		
 		file_desc = (EditText)findViewById(R.id.file_desc);
 		
-		Log.e("TAG","parent " + this.getParent());
+		Log.e("TAG","parent " + UploadFile.this);
 		if(ga.getImg()==null){
 	//	selectImage();
 		}else{
 			img_display.setImageBitmap(ga.getImg());
 		}
-		actionmenu();
-		
+
 	}
 	public void ScreenDimension()
 	{
@@ -174,59 +144,14 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		height = display.getHeight();
 
 	}  
-	public void actionmenu(){
-		// for generate menu
-		 final List<String> Goal_data;
-		 Goal_data =Arrays.asList(appPrefs.getMenuList().toString().split("\\s*,\\s*"));
-		 final GoalDataAdapter adapter = new GoalDataAdapter(this,R.layout.listview_item_row, Goal_data);
-		        
-		final ListView listView1 = (ListView)findViewById(R.id.listView1);
-		listView1.setAdapter(adapter);
-	
-		listView1.setOnItemClickListener(new OnItemClickListener() {
-		    	
-		    	@Override    
-				public void onItemClick(AdapterView<?> arg0, View view,
-						int position, long arg3) {
-					// TODO Auto-generated method stub
-		    		String value = ((TextView)view.findViewById(R.id.txtName)).getText().toString();
-		    		/*((ImageView)view.findViewById(R.id.imgIcon)).setImageResource(R.drawable.tick);
-					Log.e("TAG","Selected value is " + value);*/
-		    	    
-		    		Log.e("TAG","Selected value is " + value);
-		    		appPrefs.setProfileName(value);
-		    		heding_name_food.setText(appPrefs.getProfileName());
-		    		for(int i=0;i<Goal_data.size();i++){
-						if(value.toString().equals(appPrefs.getProfileName().toString())){
-							Log.e("TAG","visible");
-							((ImageView)view.findViewById(R.id.imgIcon)).setVisibility(View.VISIBLE);
-						}else{
-							Log.e("TAG","Invisible");
-							((ImageView)view.findViewById(R.id.imgIcon)).setVisibility(View.INVISIBLE);
-						}
-				}
-		    		Animation anim = AnimationUtils.loadAnimation(UploadFile.this, R.anim.fade_out);
-					settiglayout_food.startAnimation(anim);
-					settiglayout_food.setVisibility(View.INVISIBLE);
-					menu_invite_food.setVisibility(View.VISIBLE);
-					menu_invite_out_food.setVisibility(View.INVISIBLE);
-					
-					selecteduserid = Integer.toString(position);
-					
-					CalluserMeTask task = new CalluserMeTask();
-					task.applicationContext =UploadFile.this.getParent();
-					task.execute();
-				}
-			
-		       });
-	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==btn_upload){
 			Log.e("TAG","uri is : " + ga.getFileuri());
 			if(ga.getFileuri()!=null){
-				dialog = new ProgressDialog(this.getParent());
+				dialog = new ProgressDialog(UploadFile.this);
 				dialog.setCanceledOnTouchOutside(false);
 				dialog.setMessage("Please Wait....");
 				dialog.show();
@@ -236,42 +161,11 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		if(v==btn_cancle){
 			finish();
 		}
-		if(v==addphoto){
-				selectImage();
+		if(v==img_display){
+		    selectImage();
 		}
-		if(v==lbl_invite_user_food){
-			Log.e("TAG","Selected value is " + "invite user is clicked");
-			Animation anim = AnimationUtils.loadAnimation(UploadFile.this, R.anim.fade_out);
-			settiglayout_food.startAnimation(anim);
-			settiglayout_food.setVisibility(View.INVISIBLE);
-			menu_invite_food.setVisibility(View.VISIBLE);
-			menu_invite_out_food.setVisibility(View.INVISIBLE);
-			Log.e("TAG","Clicked");
-			Intent i = new Intent(UploadFile.this,InviteUser.class);
-			startActivity(i);
-		}
-	
-			if(v==menu_invite_food){
-			actionmenu();
-			settiglayout_food.setVisibility(View.VISIBLE);
-			menu_invite_out_food.setVisibility(View.VISIBLE);
-			menu_invite_food.setVisibility(View.INVISIBLE);
-			Animation anim = AnimationUtils.loadAnimation(UploadFile.this, R.anim.fade_in);
-			settiglayout_food.startAnimation(anim);
-			
-			Log.e("TAG","Clicked");
-		}
-		if(v==menu_invite_out_food){
-			Animation anim = AnimationUtils.loadAnimation(UploadFile.this, R.anim.fade_out);
-			settiglayout_food.startAnimation(anim);
-			settiglayout_food.setVisibility(View.INVISIBLE);
-			menu_invite_food.setVisibility(View.VISIBLE);
-			menu_invite_out_food.setVisibility(View.INVISIBLE);
-			Log.e("TAG","Clicked");
-		}
-		
 	}
-	 public static Bitmap getBitmapFromURL(String src) {
+	public static Bitmap getBitmapFromURL(String src) {
 	     try {
 	         URL url = new URL(src);
 	         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -289,7 +183,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		final CharSequence[] items = { "Take Photo", "Choose from Library",
 				"Cancel" };
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this.getParent());
+		AlertDialog.Builder builder = new AlertDialog.Builder(UploadFile.this);
 		builder.setTitle("Add Photo!");
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
@@ -297,12 +191,12 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 				if (items[item].equals("Take Photo")) {
 					Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
-				    getParent().startActivityForResult(camera, CAMERA_PIC_REQUEST);  
+				    startActivityForResult(camera, CAMERA_PIC_REQUEST);
 					
 				} else if (items[item].equals("Choose from Library")) {
 					Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
 					photoPickerIntent.setType("image/*");
-					getParent().startActivityForResult(photoPickerIntent, 1);
+					startActivityForResult(photoPickerIntent, 1);
 				
 				} else if (items[item].equals("Cancel")) {
 					dialog.dismiss();
@@ -311,8 +205,200 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		});
 		builder.show();
 	}
-	
-	 public static int uploadFile(String sourceFileUri,String upLoadServerUri) {
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("TAG","On  ac result is called");
+        if (requestCode==1)
+        {
+            if (resultCode == RESULT_OK)
+            {
+
+                Uri chosenImageUri = data.getData();
+                try
+                {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize=4;
+                    mBitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(chosenImageUri),null,options);
+                    options.inPurgeable = true;
+                    System.runFinalization();
+                    Runtime.getRuntime().gc();
+                    System.gc();
+
+                    String chosenstring=chosenImageUri+"";
+                    Log.e("TAG","choosen String : " + chosenstring);
+                    if(chosenstring.contains("content://"))
+                    {
+                        path=getRealPathFromURI(chosenImageUri);
+                    }
+                    else if (chosenstring.contains("file:///"))
+                    {
+                        String[] splitval=chosenstring.split("//");
+                        path=splitval[1];
+                    }
+                    ga.setFileuri(path);
+                    System.gc();
+                    b1=getResizedBitmap(mBitmap,300,300);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    b1.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    //img_display.setImageBitmap(b1);
+                    ga.setImg(b1);
+                    byteArray = stream.toByteArray();
+                    Base64str = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                    Log.e("TAG","FROM FILE : "  + Base64str);
+									/* if(mBitmap!=null){
+									    	mBitmap.recycle();
+									    	mBitmap=null;
+										}*/
+
+                }
+                catch (FileNotFoundException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        if (requestCode==CAMERA_PIC_REQUEST)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                Log.e("TAG","Path is : " + path);
+                Bundle extras = data.getExtras();
+                mBitmap=(Bitmap) extras.get("data");
+
+                System.gc();
+                b1=getResizedBitmap(mBitmap,300,300);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                b1.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArray = stream.toByteArray();
+                Base64str = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                Log.e("TAG","Camera FILE : "  + Base64str);
+                ga.setImg(b1);
+                Uri chosenImageUri = data.getData();
+                getRealPathFromURI(chosenImageUri);
+							 	/*
+
+			    		 		ga.setFileuri(getRealPathFromURI(chosenImageUri));
+			    		 		String chosenstring=chosenImageUri+"";
+			    		 		if(chosenstring.contains("content://"))
+							 	{
+							 		path=getRealPathFromURI(chosenImageUri);
+				        	 	}
+							 	else if (chosenstring.contains("file:///"))
+							 	{
+							 		String[] splitval=chosenstring.split("//");
+							 		path=splitval[1];
+							 	}      */
+							    /*if(mBitmap!=null){
+							    	mBitmap.recycle();
+							    	mBitmap=null;
+								}  */
+							 /*	process_dialog = new ProgressDialog(this.getParent());
+								process_dialog.setMessage("Please Wait....");
+							    process_dialog.show();
+							    new AddPhotoTask().execute();*/
+
+            }
+        }
+
+    }
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
+    {
+
+
+
+
+
+        int width = bm.getWidth();
+
+        int height = bm.getHeight();
+
+
+        float srcWidth = bm.getWidth();
+        float srcHeight = bm.getHeight();
+
+
+
+        if((srcWidth>=newWidth || srcHeight>=newHeight)==false)
+        {
+            return bm;
+        }
+
+
+        float resizeWidth = srcWidth;
+        float resizeHeight = srcHeight;
+
+        float aspect = resizeWidth / resizeHeight;
+
+        if (resizeWidth > newWidth)
+        {
+            resizeWidth = newWidth;
+            resizeHeight= (newWidth * srcHeight)/srcWidth;
+
+            //  resizeHeight = resizeWidth / aspect;
+        }
+        if (resizeHeight > newHeight)
+        {
+            //  aspect = resizeWidth / resizeHeight;
+            resizeHeight = newHeight;
+
+            resizeWidth=(newHeight * srcWidth)/srcHeight;
+
+            // resizeWidth = resizeHeight * aspect;
+        }
+
+        Matrix matrix = new Matrix();
+
+// resize the bit map
+
+        matrix.postScale(resizeWidth / width, resizeHeight / height);
+
+// recreate the new Bitmap
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return resizedBitmap;
+
+
+    }
+    public String getRealPathFromURI(Uri contentUri)
+    {
+        Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
+        if(cursor != null && cursor.moveToFirst())
+        {
+            do {
+                Uri uri = Uri.parse(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
+                ga.setFileuri(uri.toString());
+            }while(cursor.moveToNext());
+            cursor.close();
+        }
+        return null;
+    }
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        String temp=null;
+        try{
+            System.gc();
+            temp=Base64.encodeToString(b, Base64.DEFAULT);
+        }catch(Exception e){
+            e.printStackTrace();
+        }catch(OutOfMemoryError e){
+            baos=new  ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+            b=baos.toByteArray();
+            temp=Base64.encodeToString(b, Base64.DEFAULT);
+            Log.e("EWN", "Out of memory error catched");
+        }
+        return temp;
+    }
+
+	 public int uploadFile(String sourceFileUri,String upLoadServerUri) {
          
          
          final String fileName = sourceFileUri;
@@ -360,7 +446,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
                   conn.setRequestProperty("ENCTYPE", "multipart/form-data");
                   conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                   conn.setRequestProperty("file", fileName);
-                  conn.setRequestProperty("user", appPrefs.getUserid());    
+                  conn.setRequestProperty("user", user.getId().toString());
                   conn.setRequestProperty("description", file_desc.getText().toString());
                   dos = new DataOutputStream(conn.getOutputStream());
          
@@ -439,7 +525,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 			{
 				
 				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-				dialog = new ProgressDialog(UploadFile.this.getParent());
+				dialog = new ProgressDialog(UploadFile.this);
 				dialog.setMessage("Please Wait....");
 				dialog.show();
 				Log.i("onPreExecute", "onPreExecute");
@@ -489,26 +575,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 				
 				
 			
-	public byte[] BitMapToString(Bitmap bitmap){
-	       ByteArrayOutputStream baos=new  ByteArrayOutputStream();
-	       bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-	       byte [] b=baos.toByteArray();
-	      /* String temp=null;
-	       try{
-	       System.gc();
-	       temp=Base64.encodeToString(b, Base64.DEFAULT);
-	       }catch(Exception e){
-	           e.printStackTrace();
-	       }catch(OutOfMemoryError e){  
-	           baos=new  ByteArrayOutputStream();
-	           bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
-	           b=baos.toByteArray();
-	           temp=Base64.encodeToString(b, Base64.DEFAULT);
-	           Log.e("EWN", "Out of memory error catched");
-	       }*/
-	       return b;
-	 }
-	
+
 	  @Override
 	    public void onBackPressed() 
 	        {

@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Window;
 
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.activities.UploadFile;
 
 public class TabGroupFiles extends TabGroupActivity {
 	private static final int CAMERA_PIC_REQUEST = 1337;

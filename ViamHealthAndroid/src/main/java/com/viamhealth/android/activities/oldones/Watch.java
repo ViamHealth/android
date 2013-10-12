@@ -1,10 +1,15 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.activities.AddMedication;
+import com.viamhealth.android.activities.AddTest;
+import com.viamhealth.android.activities.BaseActivity;
+import com.viamhealth.android.activities.DeleteMedication;
+import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
 import com.viamhealth.android.R;
@@ -16,7 +21,6 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.adapters.TestDataAdapter1;
-import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.model.MedicalData;
 
 import android.app.ProgressDialog;
@@ -32,7 +36,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -742,7 +745,7 @@ public class Watch extends BaseActivity implements OnClickListener{
 			startActivity(AddMedication);
 		}
 		if(v==add_test_reminder){
-			Intent AddTest = new Intent(Watch.this,AddTest.class);
+			Intent AddTest = new Intent(Watch.this, com.viamhealth.android.activities.AddTest.class);
 			startActivity(AddTest);
 		}
 		if(v==txt_test){

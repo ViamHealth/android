@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Window;
 
 import com.viamhealth.android.activities.Home;
-import com.viamhealth.android.activities.TabGroupActivity;
 
 public class TabGroupHome extends TabGroupActivity
 {

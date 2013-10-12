@@ -1,4 +1,4 @@
-package com.viamhealth.android.activities;
+package com.viamhealth.android.activities.oldones;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,24 +7,24 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.activities.BaseActivity;
+import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+
 import com.viamhealth.android.dao.db.DataBaseAdapter;
+
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -35,33 +35,40 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
+
+
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-public class AddGlucoseValue extends BaseActivity implements OnClickListener {
+public class AddWeightValue extends BaseActivity implements OnClickListener {
 	private static ProgressDialog dialog;
 	
 	Display display;
 	int height,width;
 	int w10,h10,w5,h5,h1,w220,w15,w20,h40,w25,h20;
-	
+	   
  
 	LinearLayout header_layout,newval_main_layout,newval_mid_layout,newval_bottom_layout,newval_txt_layout,newval_btn_layout,
 				menu_invite_out_newval,setting_layout,menu_invite_newval,back_layout,btn_time_picker,btn_date_picker,mid_layout,
@@ -70,9 +77,6 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 	ImageView newval_icon,back,person_icon;
 	TextView lbl_newval_date,lbl_newval_time,heding_name_newval,
 			lbl_invite_user_goal,lblback,goal_name,goal_desc,lbl_add_val,lbl_add_val_unit,lbl_invite_user_food,heding_name_food;
-	TextView lbl_random,lbl_random_number,lbl_fasting,lbl_fasting_number,lbl_add_goal,btn_goal_cancle,btn_goal_add;
-	SeekBar seekbar_random,seekbar_fasting;
-	
 	TextView btnSave,btnCancle;
 	EditText txt_goal_weight;
 	Spinner ddl_weight_measure;
@@ -93,16 +97,15 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		
-		setContentView(R.layout.add_glucose_value);
+		setContentView(R.layout.add_weight_value);
 		
-		appPrefs = new ViamHealthPrefs(AddGlucoseValue.this);
+		appPrefs = new ViamHealthPrefs(AddWeightValue.this);
 		ga=((Global_Application)getApplicationContext());
-		obj=new functionClass(AddGlucoseValue.this);
-		dbObj=new DataBaseAdapter(AddGlucoseValue.this);
+		obj=new functionClass(AddWeightValue.this);
+		dbObj=new DataBaseAdapter(AddWeightValue.this);
 		
 		
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
@@ -126,7 +129,7 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 		
 		//casting control and manage padding and call onclick method
 		/*back=(ImageView)findViewById(R.id.back);
-    	back.setOnClickListener(AddGlucoseValue.this);
+    	back.setOnClickListener(AddWeightValue.this);
 		
     	lbl_invite_user_food=(TextView)findViewById(R.id.lbl_invite_user_food);
     	lbl_invite_user_food.setTypeface(tf);
@@ -152,21 +155,22 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
   		person_icon = (ImageView)findViewById(R.id.person_icon);
         person_icon.getLayoutParams().width = w20;
         person_icon.getLayoutParams().height = h20;
-        options = new DisplayImageOptions.Builder()
-     		.build();
-     		
-     		imageLoader.displayImage(appPrefs.getProfilepic(), person_icon, options, new SimpleImageLoadingListener() {
-     			@Override
-     			public void onLoadingComplete(Bitmap loadedImage) {
-     				Animation anim = AnimationUtils.loadAnimation(AddGlucoseValue.this, R.anim.fade_in);
-     				person_icon.setAnimation(anim);
-     				anim.start();
-     				
-     				
-     			}
-     		});
-     		
+        
 
+        options = new DisplayImageOptions.Builder()
+ 		.build();
+ 		
+ 		imageLoader.displayImage(appPrefs.getProfilepic(), person_icon, options, new SimpleImageLoadingListener() {
+ 			@Override
+ 			public void onLoadingComplete(Bitmap loadedImage) {
+ 				Animation anim = AnimationUtils.loadAnimation(AddWeightValue.this, R.anim.fade_in);
+ 				person_icon.setAnimation(anim);
+ 				anim.start();
+ 				
+ 				
+ 			}
+ 		});
+ 		
 
 		
 		header_layout=(LinearLayout)findViewById(R.id.header_layout);
@@ -181,14 +185,14 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 		btnCancle.setOnClickListener(this);
 		
 		newval_main_layout = (LinearLayout)findViewById(R.id.newval_main_layout);
-		newval_main_layout.setPadding(w10, h10, w10, h10);
+		newval_main_layout.setPadding(w10, h10, w10, 0);
 		
 		newval_mid_layout = (LinearLayout)findViewById(R.id.newval_mid_layout);
-		newval_mid_layout.setPadding(w10, 0, w10, 0);
+		newval_mid_layout.setPadding(w10, 0, w10, h10);
 	
 		/*newval_btn_layout = (LinearLayout)findViewById(R.id.newval_btn_layout);
-		newval_btn_layout.setPadding(w10, h10, w10, h10);*/
-		
+		newval_btn_layout.setPadding(w10, h10, w10, h10);
+		*/
 		btn_time_picker = (LinearLayout)findViewById(R.id.btn_time_picker);
 		btn_time_picker.setPadding(w5, 0, w5, 0);
 		btn_time_picker.setOnClickListener(this);
@@ -200,105 +204,60 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 		/*newval_icon = (ImageView)findViewById(R.id.newval_icon);
 		newval_icon.setPadding(w5, h5, w5, h5);
 		
-	
-		  */
+	*/
+		  
 		lbl_newval_date = (TextView)findViewById(R.id.lbl_newval_date);
 		lbl_newval_date.setTypeface(tf);
 		
 		lbl_newval_time = (TextView)findViewById(R.id.lbl_newval_time);
 		lbl_newval_time.setTypeface(tf);
 		
-	
+		/*goal_name=(TextView)findViewById(R.id.goal_name);
+		goal_name.setTypeface(tf,Typeface.BOLD);*/
 		
 		newval_submid_layout = (LinearLayout)findViewById(R.id.newval_submid_layout);
-		newval_submid_layout.setPadding(w10, h10, w10, 0);
+		newval_submid_layout.setPadding(0, h10, 0, 0);
 		
-		lbl_random = (TextView)findViewById(R.id.lbl_random);
-		lbl_random.setTypeface(tf);
-		lbl_random.setPadding(w10, h10, w10, h10);
+		txt_goal_weight = (EditText)findViewById(R.id.txt_goal_weight);
+		txt_goal_weight.setTypeface(tf);
 		
-		lbl_random_number = (TextView)findViewById(R.id.lbl_random_number);
-		lbl_random_number.setTypeface(digittf);
-		lbl_random_number.setPadding(w5, 0, 0, 0);
+		weigth_measure_layout= (LinearLayout)findViewById(R.id.weigth_measure_layout);
 		
-		lbl_fasting = (TextView)findViewById(R.id.lbl_fasting);
-		lbl_fasting.setTypeface(tf);
-		lbl_fasting.setPadding(w10, h10, w10, h10);
+		ArrayList<String> lst = new ArrayList<String>();
+		lst.add("METRIC");
+		lst.add("STANDARD");
 		
-		lbl_fasting_number = (TextView)findViewById(R.id.lbl_fasting_number);
-		lbl_fasting_number.setTypeface(digittf);
-		//lbl_ldl_number.setPadding(w5, 0, 0, 0);
-		
-	
-		
-		seekbar_random=(SeekBar)findViewById(R.id.seekbar_random);
-		seekbar_random.setPadding(w15, 0, w15, 0);
-		//seekbar_bar_systolic.getLayoutParams().width=w220;
-		seekbar_random.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			
+	    ddl_weight_measure = new Spinner(AddWeightValue.this);
+	    ddl_weight_measure.setOnItemSelectedListener(new OnItemSelectedListener() {
+
 			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
+			public void onItemSelected(AdapterView<?> parent, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 				
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				if(seekBar.getProgress()==200){
-					lbl_random_number.setText("200");
-					lbl_random_number.setTextColor(Color.RED);
-				}else{
-					lbl_random_number.setTextColor(Color.BLACK);
-					lbl_random_number.setText((seekBar.getProgress()+70)+"");
-				}
 			}
 		});
-		
-		seekbar_fasting=(SeekBar)findViewById(R.id.seekbar_fasting);
-		seekbar_fasting.setPadding(w15, 0, w15, 0);
-		//seekbar_bar_diastolic.getLayoutParams().width=w220;
-		seekbar_fasting.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				// TODO Auto-generated method stub
-				if(seekBar.getProgress()==200){
-					lbl_fasting_number.setText("200");
-					lbl_fasting_number.setTextColor(Color.RED);
-				}else{
-					lbl_fasting_number.setTextColor(Color.BLACK);
-					lbl_fasting_number.setText((seekBar.getProgress()+70)+"");
-				}
-			}
-		});
+	    
+		weigth_measure_layout.addView(ddl_weight_measure);
+		ddl_weight_measure.setBackgroundResource(R.drawable.spinner_bg);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddWeightValue.this,android.R.layout.simple_spinner_item, lst);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		ddl_weight_measure.setAdapter(adapter);
+
 		
     	//actionmenu();
 	
 
 		pYear = dateAndTime.get(Calendar.YEAR);
 	    pMonth = dateAndTime.get(Calendar.MONTH);
-	    pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);	
+	    pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);	    
 	    String s=(pMonth + 1)+"-"+pDay+"-"+pYear;
 	    SimpleDateFormat curFormater = new SimpleDateFormat("MM-dd-yyyy"); 
         Date dateObj=null;
@@ -316,6 +275,11 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 	   SimpleDateFormat postFormater = new SimpleDateFormat("yyyy-MM-dd"); 
 	   String newDateStr = postFormater.format(dateObj);
 	   lbl_newval_date.setText(newDateStr);
+	   
+	   
+	   if(ga.isWeightupdate()){
+		   // get already added record
+	   }
 	 }
 	 public static Bitmap getBitmapFromURL(String src) {
 	     try {
@@ -363,7 +327,7 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 							((ImageView)view.findViewById(R.id.imgIcon)).setVisibility(View.INVISIBLE);
 						}
 				}
-		    		Animation anim = AnimationUtils.loadAnimation(AddGlucoseValue.this, R.anim.fade_out);
+		    		Animation anim = AnimationUtils.loadAnimation(AddWeightValue.this, R.anim.fade_out);
 					settiglayout_food.startAnimation(anim);
 					settiglayout_food.setVisibility(View.INVISIBLE);
 					menu_invite_food.setVisibility(View.VISIBLE);
@@ -385,7 +349,7 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==back){
-			Intent i=new Intent(AddGlucoseValue.this, Home.class);
+			Intent i=new Intent(AddWeightValue.this, Home.class);
 			startActivity(i);
 			finish();
 		}
@@ -393,36 +357,37 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 			finish();
 		}
 		if(v==btnSave){
+			if(othervalidation()){
 				if(isInternetOn()){
 					 CallAddReadingTask task = new CallAddReadingTask();
-					 task.applicationContext =AddGlucoseValue.this;
+					 task.applicationContext =AddWeightValue.this;
 					 task.execute();
 				}else{
-					Toast.makeText(AddGlucoseValue.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+					Toast.makeText(AddWeightValue.this,"Network is not available....",Toast.LENGTH_SHORT).show();
 				}
-			
+			}
 		}
 			
 		//}
 		if(v==lbl_invite_user_food){
 			Log.e("TAG","Selected value is " + "invite user is clicked");
-			Animation anim = AnimationUtils.loadAnimation(AddGlucoseValue.this, R.anim.fade_out);
+			Animation anim = AnimationUtils.loadAnimation(AddWeightValue.this, R.anim.fade_out);
 			settiglayout_food.startAnimation(anim);
 			settiglayout_food.setVisibility(View.INVISIBLE);
 			menu_invite_food.setVisibility(View.VISIBLE);
 			menu_invite_out_food.setVisibility(View.INVISIBLE);
 			Log.e("TAG","Clicked");
-			Intent i = new Intent(AddGlucoseValue.this,InviteUser.class);
+			Intent i = new Intent(AddWeightValue.this,InviteUser.class);
 			startActivity(i);
 		}
 		if(v==btn_date_picker){
 			//appPrefs.setDateAdded("0");
-			new DatePickerDialog(AddGlucoseValue.this, d,pYear,
+			new DatePickerDialog(AddWeightValue.this, d,pYear,
                     pMonth,
                     pDay).show();
          }
 		if(v==btn_time_picker){
-			 new TimePickerDialog(AddGlucoseValue.this, t,
+			 new TimePickerDialog(AddWeightValue.this, t,
                      dateAndTime.get(Calendar.HOUR_OF_DAY),
                      dateAndTime.get(Calendar.MINUTE),
                      true).show();
@@ -433,13 +398,13 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 		settiglayout_food.setVisibility(View.VISIBLE);
 		menu_invite_out_food.setVisibility(View.VISIBLE);
 		menu_invite_food.setVisibility(View.INVISIBLE);
-		Animation anim = AnimationUtils.loadAnimation(AddGlucoseValue.this, R.anim.fade_in);
+		Animation anim = AnimationUtils.loadAnimation(AddWeightValue.this, R.anim.fade_in);
 		settiglayout_food.startAnimation(anim);
 		
 		Log.e("TAG","Clicked");
 	}
 	if(v==menu_invite_out_food){
-		Animation anim = AnimationUtils.loadAnimation(AddGlucoseValue.this, R.anim.fade_out);
+		Animation anim = AnimationUtils.loadAnimation(AddWeightValue.this, R.anim.fade_out);
 		settiglayout_food.startAnimation(anim);
 		settiglayout_food.setVisibility(View.INVISIBLE);
 		menu_invite_food.setVisibility(View.VISIBLE);
@@ -450,6 +415,14 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 		}
 	
 	
+	public boolean othervalidation(){
+		boolean valid=true;
+		if(txt_goal_weight.getText().length()==0){
+			txt_goal_weight.setError("Enter weight value");
+			valid=false;
+		}
+		return valid;
+	}
 	
 	DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
 	    public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -503,7 +476,7 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 			{
 				
 				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-				dialog = new ProgressDialog(AddGlucoseValue.this);
+				dialog = new ProgressDialog(AddWeightValue.this);
 				dialog.setCanceledOnTouchOutside(false);
 				dialog.setMessage("Please Wait....");
 				dialog.show();
@@ -512,7 +485,7 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 			}       
 			
 			protected void onPostExecute(String result)
-			{
+			{     
 				
 				Log.i("onPostExecute", "onPostExecute");
 				if(result.toString().equals("0")){
@@ -533,10 +506,9 @@ public class AddGlucoseValue extends BaseActivity implements OnClickListener {
 				// TODO Auto-generated method stub
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				
-				return obj.addGlucoseReading(lbl_random_number.getText().toString(), 
-											 lbl_fasting_number.getText().toString(), 
-											 lbl_newval_date.getText().toString(), ga.getGlucoseid());
-											
+				return obj.addWeightReading(txt_goal_weight.getText().toString(), 
+										    ddl_weight_measure.getSelectedItem().toString(), 
+										    lbl_newval_date.getText().toString(), ga.getWeightid().toString());
 			}
 			   
 		}     

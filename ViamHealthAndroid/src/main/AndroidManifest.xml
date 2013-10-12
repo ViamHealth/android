@@ -74,79 +74,79 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupGoal"
+            android:name=".activities.oldones.TabGroupGoal"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupProfile"
+            android:name=".activities.oldones.TabGroupProfile"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupFiles"
+            android:name=".activities.oldones.TabGroupFiles"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupDiet"
+            android:name=".activities.oldones.TabGroupDiet"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupReminder"
+            android:name=".activities.oldones.TabGroupReminder"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupHome"
+            android:name=".activities.oldones.TabGroupHome"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
-            android:name="com.viamhealth.android.activities.TabGroupSettings"
+            android:name=".activities.oldones.TabGroupSettings"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
-        <activity android:name="com.viamhealth.android.activities.TabGroupJournal" >
+        <activity android:name=".activities.oldones.TabGroupJournal" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.GoalActivity" >
+        <activity android:name=".activities.oldones.GoalActivity" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.InviteUser"
+            android:name=".activities.oldones.InviteUser"
             android:theme="@style/FullHeightDialog"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.MainActivity"
+            android:name=".activities.oldones.MainActivity"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddWeightGoal"
+            android:name=".activities.oldones.AddWeightGoal"
             android:screenOrientation="portrait"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddWeightValue"
+            android:name=".activities.oldones.AddWeightValue"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.Profile" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.File" >
+        <activity android:name=".activities.oldones.File" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddProfile"
+            android:name=".activities.oldones.AddProfile"
             android:theme="@style/FullHeightDialog"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.FoodDiary" >
+        <activity android:name=".activities.oldones.FoodDiary" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddBreakfast" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.Reminder" >
+        <activity android:name=".activities.oldones.Reminder" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.Settings"
+            android:name=".activities.oldones.Settings"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
@@ -174,36 +174,36 @@
         <activity android:name="com.viamhealth.android.activities.FoodDetail" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.Watch"
+            android:name=".activities.oldones.Watch"
             android:label="@string/title_activity_watch" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddGlucoseGoal"
+            android:name=".activities.oldones.AddGlucoseGoal"
             android:screenOrientation="portrait"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddCholesterolGoal"
+            android:name=".activities.oldones.AddCholesterolGoal"
             android:screenOrientation="portrait"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddBPGoal"
+            android:name=".activities.oldones.AddBPGoal"
             android:screenOrientation="portrait"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddCholesterolValue"
+            android:name=".activities.oldones.AddCholesterolValue"
             android:label="@string/title_activity_add_cholesterol_value"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddGlucoseValue"
+            android:name=".activities.oldones.AddGlucoseValue"
             android:label="@string/title_activity_add_glucose_value"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddBPValue"
+            android:name=".activities.oldones.AddBPValue"
             android:label="@string/title_activity_add_bpvalue"
             android:theme="@style/FullHeightDialog" >
         </activity>

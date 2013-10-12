@@ -29,6 +29,9 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.activities.oldones.AddWeightGoal;
+import com.viamhealth.android.activities.oldones.InviteUser;
+import com.viamhealth.android.activities.oldones.TabGroupActivity;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -293,7 +296,7 @@ public class Profile extends Activity implements OnClickListener {
 		
 		if(v==btn_add_profile){
 			appPrefs.setBtnprofile_hide("1");
-			Intent AddProfile = new Intent(getParent(), com.viamhealth.android.activities.AddProfile.class);
+			Intent AddProfile = new Intent(getParent(), com.viamhealth.android.activities.oldones.AddProfile.class);
 			TabGroupActivity parentoption = (TabGroupActivity)getParent();
 			parentoption.startChildActivity("AddProfile",AddProfile);
 		}

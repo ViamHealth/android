@@ -1,10 +1,7 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,9 +15,6 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,15 +23,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddMedication;
 import com.viamhealth.android.activities.AddTest;
 import com.viamhealth.android.activities.DeleteMedication;
-import com.viamhealth.android.activities.Home;
-import com.viamhealth.android.activities.InviteUser;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.adapters.SeparatedListAdapter;
