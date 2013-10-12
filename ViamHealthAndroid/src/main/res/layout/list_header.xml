@@ -5,6 +5,5 @@
     android:layout_height="wrap_content"
     android:paddingTop="2dip"
     android:paddingBottom="2dip"
-    android:paddingLeft="50dip"
-    android:background="@drawable/fading_bg_row"
+    android:paddingLeft="5dip"
     style="?android:attr/listSeparatorTextViewStyle" />  
