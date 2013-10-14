@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:id="@+id/main_list_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:orientation="horizontal"
+
+            android:layout_gravity="center_vertical"
+            >
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:text=""
+                android:gravity="left"
+                android:paddingLeft="5dp"
+                android:id="@+id/foodname"
+                android:textColor="#666666"/>
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:text=""
+                android:gravity="left"
+                android:paddingLeft="5dp"
+                android:id="@+id/time"
+                android:textColor="#666666"/>
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:text=""
+                android:gravity="left"
+                android:paddingLeft="5dp"
+                android:id="@+id/calory"
+                android:textColor="#666666"/>
+            <ImageView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:id="@+id/delete"
+                android:src="@drawable/delete_icon"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -19,6 +19,7 @@ public class SeparatedListAdapter extends BaseAdapter {
     public final Map<String,Adapter> sections = new LinkedHashMap<String,Adapter>();
     public final ArrayAdapter<String> headers;
     public final static int TYPE_SECTION_HEADER = 0;
+    public static int listHeight=0;
 
     public SeparatedListAdapter(Context context) {
         headers = new ArrayAdapter<String>(context, R.layout.list_header);
@@ -88,6 +89,18 @@ public class SeparatedListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         int sectionnum = 0;
+        View row=convertView;
+        if(row!=null)
+        {
+            row.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                public void onLayoutChange(View v, int left, int top, int right,
+                                           int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom)
+                {
+                      listHeight=listHeight+bottom-top;
+                }
+            });
+        }
+
         for(Object section : this.sections.keySet()) {
             Adapter adapter = sections.get(section);
             int size = adapter.getCount() + 1;

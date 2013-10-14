@@ -65,4 +65,72 @@
         <item>30</item>
         <item>31</item>
     </string-array>
+
+    <string-array name="time_type">
+    <item>Minutes</item>
+    <item>Hours</item>
+    </string-array>
+
+    <string-array name="exercise_list">
+    <item>Choose Exercise</item>
+    <item>Aerobic Dance (Casual)</item>
+    <item>Aerobic Dance (Moderate)</item>
+    <item>Aerobic Dance (Intense)</item>
+        <item>Basketball (Full court)</item>
+        <item>Basketball (Half court)</item>
+        <item>Calisthenics</item>
+        <item>Cycling (5.5 mph, 9 kmph)</item>
+        <item>Cycling (10 mph, 16 kmph)</item>
+        <item>Cycling (13 mph, 21 kmph)</item>
+        <item>Cycling (Racing)</item>
+        <item>Dancing (Casual)</item>
+        <item>Dancing (Moderate)</item>
+        <item>Dancing (Extreme)</item>
+        <item>Field Sports (Competitive)</item>
+        <item>Frisbie</item>
+        <item>Golf (Carry Clubs)</item>
+        <item>Golf (with Cart)</item>
+        <item>Jump Rope (Fast)</item>
+        <item>Jump Rope (Slow)</item>
+        <item>Lying</item>
+        <item>Martial Arts</item>
+        <item>Racquetball</item>
+        <item>Rollerblading (Casual)</item>
+        <item>Rollerblading (Fast)</item>
+        <item>Rowing Machine (Extreme)</item>
+        <item>Rowing Machine (Moderate)</item>
+        <item>Running (4 mph, 6.5 kmph)</item>
+        <item>Running (5 mph, 8 kmph)</item>
+        <item>Running (6 mph, 9.7 kmph)</item>
+        <item>Running (7 mph, 11.3 kmph)</item>
+        <item>Running (8 mph, 13 kmph)</item>
+        <item>Running (10 mph, 16 kmph)</item>
+        <item>Running (12 mph, 19.3 kmph)</item>
+        <item>Sitting (Office work)</item>
+        <item>Sitting (Quietly)</item>
+        <item>Softball</item>
+        <item>Stair Step (6". 15.2 cm)</item>
+        <item>Stair Step (8". 20.3 cm)</item>
+        <item>Stair Step (10". 25.4 cm)</item>
+        <item>Stair Step (12". 30.5 cm)</item>
+        <item>Standing (Office work)</item>
+        <item>Standing (Quietly)</item>
+        <item>Swimming (Casual)</item>
+        <item>Swimming (Vigorous)</item>
+        <item>Tennis (Doubles)</item>
+        <item>Tennis (Singles)</item>
+        <item>Volleyball (Casual)</item>
+        <item>Volleyball (Vigorous)</item>
+        <item>Walking (2 mph, 3.2 kmph)</item>
+        <item>Walking (2.5 mph, 4 kmph)</item>
+        <item>Walking (3 mph, 4.8 kmph)</item>
+        <item>Walking (3.5 mph, 5.6 kmph)</item>
+        <item>Walking (4 mph, 6.5 kmph)</item>
+        <item>Walking (4.5 mph, 7.2 kmph)</item>
+        <item>Weight Training (Intense)</item>
+        <item>Weight Training (Normal)</item>
+        <item>Yardwork (Heavy)</item>
+        <item>Yardwork (Regular)</item>
+    </string-array>
+
 </resources>

@@ -26,11 +26,11 @@ public class Global_Application extends Application
 	public int inviteuser_flg=0;
 	DataBaseAdapter dbAdapter;
 	public static String foodType,nextfood,prevfood;
-	public static String nextbrekfast,nextlunch,nextsnacks,nextdinner,nextfile,nextmedical,nextmedication,watchupdate,update="0";
+	public static String nextbrekfast,nextlunch,nextsnacks,nextdinner,nextExercise,nextfile,nextmedical,nextmedication,watchupdate,update="0";
 	int foodPos;
 	ArrayList<GoalData> lstResult = new ArrayList<GoalData>();
 	ArrayList<FoodData> lstFood = new ArrayList<FoodData>();
-	public static String selectedfoodid;
+	public static String selectedfoodid,selectedexerciseid;
 	public static int totalcal=0;
 	public String path;
 	public String fileuri=null;
@@ -273,6 +273,15 @@ public class Global_Application extends Application
 	public static void setNextdinner(String nextdinner) {
 		Global_Application.nextdinner = nextdinner;
 	}
+
+    public static String getNextexercise() {
+        return nextExercise;
+    }
+
+    public static void setNextExercise(String nextExercise) {
+        Global_Application.nextExercise = nextExercise;
+    }
+
 
 	public static String getNextbrekfast() {
 		return nextbrekfast;

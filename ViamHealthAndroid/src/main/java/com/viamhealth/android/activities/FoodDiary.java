@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.adapters.BreakfastAdapter;
 import com.viamhealth.android.adapters.DinnerAdapter;
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.adapters.ExerciseAdapter;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
 import com.viamhealth.android.R;
@@ -24,6 +25,7 @@ import com.viamhealth.android.adapters.SnacksAdapter;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.restclient.functionClass;
 
+import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
 
 import android.net.ConnectivityManager;
@@ -68,11 +70,11 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 	int w15,w20,w10,w50,w5,h40,h10,h5,w2,h2,w110,h200,h20;
 	
 	TextView lblback,lbl_invite_user_food,heding_name_food,lbl_food_date,lbl_food_time,lblbrk,lbltotalbrkcal,lbllunch,
-			 lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblitem1,lblitem2,lblitem3,lblitem4;
+			 lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lbltime,lblitem1,lblitem2,lblitem3,lblitem4;
 	LinearLayout settiglayout_food,menu_invite_out_food,menu_invite_food,back_food_layout,food_main_layout,food_mid_layout,
 				 btn_food_time_picker,btn_food_date_picker,food_header,layout1,layout2,layout3,layout4,breakfast,lunch,snacks,dinner;
-	ImageView img_date,img_time,food_icon,addDinner,addSnacks,addLunch,addBreakfast,back,person_icon;
-	RefreshableListView lstViewLunch,lstViewSnacks,lstViewDinner;
+	ImageView img_date,img_time,food_icon,addDinner,addSnacks,addLunch,addBreakfast,addExercise,back,person_icon;
+	RefreshableListView lstViewLunch,lstViewSnacks,lstViewDinner,lstViewExercise;
 	RefreshableListView lstViewBreakfast;
 	String nexturl,frm;
 	Typeface tf;
@@ -85,6 +87,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 	ArrayList<CategoryFood> lstResultLunch = new ArrayList<CategoryFood>();
 	ArrayList<CategoryFood> lstResultSnacks = new ArrayList<CategoryFood>();
 	ArrayList<CategoryFood> lstResultDinner = new ArrayList<CategoryFood>();
+    ArrayList<CategoryExercise> lstResultExercise = new ArrayList<CategoryExercise>();
 	
 	 DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
      Calendar dateAndTime=Calendar.getInstance();
@@ -309,6 +312,34 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 	            return true;
 			}
 		});
+
+        lstViewExercise = (RefreshableListView)findViewById(R.id.lstViewExercise);
+        lstViewExercise.getLayoutParams().height = h200;
+        lstViewExercise.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
+
+                // Handle ListView touch events.
+                v.onTouchEvent(event);
+                return true;
+            }
+        });
+
+
         
         
         lblbrk = (TextView)findViewById(R.id.lblbrk);
@@ -319,6 +350,9 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
         lblsnakcal = (TextView)findViewById(R.id.lblsnakcal);
         lbldinner = (TextView)findViewById(R.id.lbldinner);
         lbldinnercal = (TextView)findViewById(R.id.lbldinnercal);
+
+        lblExercise = (TextView)findViewById(R.id.lblexercise);
+        lblexercisecal=(TextView)findViewById(R.id.lblexercisecal);
         
         addBreakfast = (ImageView)findViewById(R.id.addBreakfast);
         addBreakfast.setOnClickListener(FoodDiary.this);
@@ -331,8 +365,10 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
         
         addDinner = (ImageView)findViewById(R.id.addDinner);
         addDinner.setOnClickListener(FoodDiary.this);
-        
-    	
+
+        addExercise=(ImageView)findViewById(R.id.addExercise);
+        addExercise.setOnClickListener(FoodDiary.this);
+
 		food_main_layout = (LinearLayout)findViewById(R.id.food_main_layout);
 		food_main_layout.setPadding(w10, h10, w10, h10);
 	
@@ -440,6 +476,29 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 				}
 			}
 		   });
+
+
+        lstViewExercise.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+                if(!ga.getNextexercise().toString().equals("null")){                     //MJ
+                    nexturl = ga.getNextexercise();
+                    frm="e";
+                    if(isInternetOn()){
+                        CallExerciseListTask task = new CallExerciseListTask();
+                        task.applicationContext =FoodDiary.this.getParent();
+                        task.execute();
+                    }else{
+                        Toast.makeText(FoodDiary.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+
+
 	   lstViewBreakfast.setOnItemClickListener(new OnItemClickListener() {
 
 		@Override
@@ -656,6 +715,65 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 			
 		}
 	});
+
+
+
+        lstViewBreakfast.setOnItemClickListener(new OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+                ImageView view = (ImageView)v.findViewById(R.id.delete);
+                view.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View arg0) {
+                        // TODO Auto-generated method stub
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                FoodDiary.this.getParent());
+
+                        // set title
+                        alertDialogBuilder.setTitle("Confirmation");
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("Are you sure you want to delete this exercise?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        dialog.cancel();
+                                        if(isInternetOn()){
+                                            CallDeleteTask task = new CallDeleteTask();
+                                            task.applicationContext =FoodDiary.this.getParent();
+                                            task.execute();
+                                        }else{
+                                            Toast.makeText(FoodDiary.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                });
+
+            }
+        });
+
+
 	
 	}
 	 public static Bitmap getBitmapFromURL(String src) {
@@ -873,6 +991,14 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 			TabGroupActivity parentoption = (TabGroupActivity)getParent();
 			parentoption.startChildActivity("Addfood",Addfood);
 		}
+        if(v==addExercise){
+            ga.setFoodType("Exercise");
+            Intent AddExercise = new Intent(getParent(),AddExercise.class);
+            startActivity(AddExercise);
+
+        }
+
+
 			
 	}
 	DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
@@ -967,8 +1093,78 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 					return null;
 				}
 				   
-			}     
-			// async class for calling webservice and get responce message
+			}
+
+
+
+    public class CallExerciseListTask extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog1 = new ProgressDialog(getParent());
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.setMessage("Please Wait....");
+            dialog1.show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+            Log.i("onPostExecute", "onPostExecute");
+            //dialog1.dismiss();
+            Log.e("TAG","lst size : " + lstResultExercise.size());
+
+            if(lstResultExercise.size()>0){
+                lblExercise.setText("Breakfast ("+lstResultExercise.size()+")" );
+                lblexercisecal.setText(Global_Application.totalcal+"");
+                ExerciseAdapter adapter = new ExerciseAdapter(FoodDiary.this,R.layout.exercise_list, lstResultExercise);
+                lstViewExercise.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                lstViewExercise.onRefreshComplete();
+                if(isInternetOn()){
+                    CallExerciseListTask task = new CallExerciseListTask();
+                    task.applicationContext =FoodDiary.this.getParent();
+                    task.execute();
+                }else{
+                    Toast.makeText(FoodDiary.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            }else{
+
+                if(isInternetOn()){
+                    CallExerciseListTask task = new CallExerciseListTask();
+                    task.applicationContext =FoodDiary.this.getParent();
+                    task.execute();
+                }else{
+                    Toast.makeText(FoodDiary.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            Global_Application.totalcal=0;
+            //lstResultExercise = obj.ExerciseListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST");   //MJ
+            return null;
+        }
+
+    }
+
+
+
+
+
+    // async class for calling webservice and get responce message
 						public class CallLunchListTask extends AsyncTask <String, Void,String>
 						{
 							protected Context applicationContext;
@@ -1135,8 +1331,14 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								return null;
 							}
 							   
-						} 
-			// async class for calling webservice and get responce message
+						}
+
+
+
+
+
+
+    // async class for calling webservice and get responce message
 						public class CallBrkPullToRefreshTask extends AsyncTask <String, Void,String>
 						{
 							protected Context applicationContext;
@@ -1194,6 +1396,16 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 										adapter.notifyDataSetChanged();
 										lstViewDinner.onRefreshComplete();
 									}
+
+                                    if(lstResultDinner.size()>0 && frm.equals("e")){
+                                        lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
+                                        lblexercisecal.setText(Global_Application.totalcal+"");
+                                        ExerciseAdapter adapter = new ExerciseAdapter(FoodDiary.this,R.layout.exercise_list, lstResultExercise);
+                                        lstViewExercise.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
+                                        lstViewExercise.onRefreshComplete();
+                                    }
+
 									 
 							}  
 					      
@@ -1271,8 +1483,55 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 				return obj.DeleteFood(Global_Application.selectedfoodid);
 			}
 			   
-		} 
-		// async class for calling webservice and get responce message
+		}
+
+
+    public class CallDeleteExercise extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog1 = new ProgressDialog(getParent());
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.setMessage("Please Wait....");
+            dialog1.show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+            dialog1.dismiss();
+            Log.i("onPostExecute", "onPostExecute");
+            if(isInternetOn()){
+                CallListTask task = new CallListTask();
+                task.applicationContext =FoodDiary.this.getParent();
+                task.execute();
+            }else{
+                Toast.makeText(FoodDiary.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+             String result="";
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            //return obj.DeleteExercise(Global_Application.selectedexerciseid);
+            return result;
+        }
+
+    }
+
+
+
+    // async class for calling webservice and get responce message
 		public class CalluserMeTask extends AsyncTask <String, Void,String>
 		{
 			protected Context applicationContext;

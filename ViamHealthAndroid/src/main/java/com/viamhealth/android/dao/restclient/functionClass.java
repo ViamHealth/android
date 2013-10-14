@@ -1480,7 +1480,7 @@ public class functionClass {
                             "null",
                             "null",
                             "null",
-                            "null",
+                             c.getString("repeat_mode").toString(),
                             "null",
                             "null",
                             "null",c.getString("start_date").toString(),c.getString("end_date").toString()));

@@ -134,6 +134,8 @@
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddBreakfast" >
         </activity>
+        <activity android:name="com.viamhealth.android.activities.AddExercise" >
+        </activity>
         <activity android:name="com.viamhealth.android.activities.Reminder" >
         </activity>
         <activity

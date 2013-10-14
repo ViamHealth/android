@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="right"
+    android:gravity="right"
     android:padding="1dip" >
 
- <LinearLayout android:layout_height="fill_parent"
+ <LinearLayout android:layout_height="wrap_content"
      android:layout_width="fill_parent"
+     android:layout_gravity="right"
+     android:gravity="right"
      android:orientation="vertical">
      
-       <LinearLayout android:layout_height="fill_parent"
+       <LinearLayout android:layout_height="wrap_content"
 			                android:layout_width="fill_parent"
-			                 android:orientation="vertical"
+			                android:orientation="vertical"
+                            android:layout_gravity="right"
+                            android:gravity="right"
 			                android:background="@drawable/r2">
 			                  <LinearLayout android:layout_height="wrap_content"
 			                     android:layout_width="fill_parent"
@@ -21,7 +27,9 @@
 			                         android:padding="5dp"
 			                         android:id="@+id/todayDate"
 			                         android:textColor="#000000"/>
-			                 </LinearLayout> 
+			                 </LinearLayout>
+
+
 			                  <com.viamhealth.android.ui.RefreshableListView
 								    android:layout_width="fill_parent"
 								    android:cacheColorHint="#00000000"
@@ -31,10 +39,10 @@
 								    android:dividerHeight="1dp"
 								    android:headerDividersEnabled="false"
 							        android:footerDividersEnabled="false"
-							        android:layout_height="fill_parent"
+							        android:layout_height="wrap_content"
 							        android:padding="1dp"
 							        android:listSelector="@drawable/list_item_selector"
-								    android:id="@+id/lstReminderMedicine1" /> 
+								    android:id="@+id/lstReminderMedicine1" />
 			            </LinearLayout>
  </LinearLayout>
 

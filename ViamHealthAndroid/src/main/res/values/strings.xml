@@ -83,6 +83,8 @@
     <string name="ptr_last_updated">Updated: %1$s</string>
     <string name="reminder_type_prompt">Type</string>
     <string name="duration_type_prompt">Duration</string>
+    <string name="exercise_type_prompt">Exercise</string>
+    <string name="enter_time">Time</string>
     <string name="title_activity_delete_medication">Delete Medication</string>
 
 
