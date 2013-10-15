@@ -19,7 +19,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ExpandableListAdapter;
 
-import com.viamhealth.android.activities.TabGroupActivity;
+import com.viamhealth.android.activities.oldones.TabGroupActivity;
 
 public class FoodExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
 	public Context context;

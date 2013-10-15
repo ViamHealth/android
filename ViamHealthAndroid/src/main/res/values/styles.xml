@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="app_theme" parent="android:Theme.NoTitleBar">
-		<item name="android:windowBackground">@drawable/app_background</item>
-	</style>
 
-	
-	<style name="FullHeightDialog" parent="android:style/Theme.Dialog">
-    <item name="android:windowNoTitle">true</item>
-    <item name="android:windowBackground">@null</item> 
-    <item name="android:windowFrame">@null</item>
+    <style name="app_theme" parent="android:Theme.NoTitleBar">
+        <item name="android:windowBackground">@drawable/app_background</item>
     </style>
-    
-<!-- 	<style name="dialog_custom" parent="@android:style/Widget.DatePicker">
+
+    <style name="FullHeightDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowFrame">@null</item>
+    </style>
+
+    <!--
+     	<style name="dialog_custom" parent="@android:style/Widget.DatePicker">
        		 <item name="android:windowNoTitle">true</item>
     		<item name="android:windowBackground">@null</item> 
    			 <item name="android:windowFrame">@null</item>
-    </style>  -->
-</resources> 
+    </style>
+    -->
+    <style name="LoginFormContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+</resources>

@@ -12,7 +12,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-import com.viamhealth.android.dao.restclient.functionClass;
+import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.MedicalData;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

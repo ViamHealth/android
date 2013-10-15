@@ -2,85 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/fading_bg_row">
-
-    <LinearLayout
+    android:orientation="horizontal" 
+    android:background="#ffffff">
+    
+    <LinearLayout 
         android:id="@+id/main_list_layout"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:padding="5dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        >
-
-
+        android:gravity="center_vertical"
+        android:orientation="horizontal">   
+        
+      
 
         <TextView android:id="@+id/txt_name"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="#000000"
-            android:text="Abc taken"
-            android:textSize="14sp"
-            android:padding="5dp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/row2_layout"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:padding="5dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/row2_layout"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:padding="5dp"
-            android:gravity="left"
-            android:orientation="vertical">
-            <TextView android:id="@+id/txt_morning"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:gravity="left"
+                android:textColor="#000000"
+                android:text="Abc taken"
+                android:textSize="14sp"
+                android:padding="5dp"
+                />
+             <TextView android:id="@+id/txt_morning"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:gravity="center"
                 android:padding="5dp"
                 android:textColor="#000000"
                 android:text="1"
                 android:textSize="14sp"
                 android:background="#DD0808"
                 />
-
-            <TextView android:id="@+id/txt_mor"
+               <TextView android:id="@+id/txt1"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                android:text="Morning"
                 />
-
-
-        </LinearLayout>
-        <TextView android:id="@+id/txt1"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            />
-
-
-
-
-
-        <LinearLayout
-            android:id="@+id/row2_layout"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:padding="5dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView android:id="@+id/txt_noon"
+             <TextView android:id="@+id/txt_noon"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
@@ -90,55 +49,24 @@
                 android:gravity="center"
                 android:textSize="14sp"
                 />
-            <TextView android:id="@+id/txt_noon"
+              <TextView android:id="@+id/txt2"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                android:text="Noon"
                 />
-        </LinearLayout>
-        <TextView android:id="@+id/txt2"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:textColor="#000000"
-            android:textSize="14sp"
-            />
-
-
-
-
-
-        <LinearLayout
-            android:id="@+id/row2_layout"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:padding="5dp"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-            <TextView android:id="@+id/txt_night"
+             <TextView android:id="@+id/txt_night"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
                 android:text="3"
                 android:padding="5dp"
                 android:background="#DD0808"
-                android:gravity="right"
+                android:gravity="center"
                 android:textSize="14sp"
                 />
-            <TextView android:id="@+id/txt_night"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="#000000"
-                android:textSize="14sp"
-                android:text="Night"
-                />
-
+           
         </LinearLayout>
-
-
-    </LinearLayout>
-
-
-
+     
+   
 </LinearLayout>

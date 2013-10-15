@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#EFEFEF">
+    android:background="#37AA4F">
 	<ScrollView android:layout_height="fill_parent"
 	    android:layout_width="fill_parent"
 	     android:splitMotionEvents="false"
@@ -17,5 +17,4 @@
 	        
 	    </LinearLayout>
 	</ScrollView>
-   
 </LinearLayout>

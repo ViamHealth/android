@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="ReverseTheme" parent="android:Theme.Holo">
+
+    <item name="android:editTextBackground">@drawable/edit_text_holo_dark</item>
+
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewReverseTheme</item>
+
+    <item name="android:listChoiceIndicatorMultiple">@drawable/btn_check_holo_dark</item>
+
+    <item name="android:listChoiceIndicatorSingle">@drawable/btn_radio_holo_dark</item>
+
+    <item name="android:buttonStyle">@style/ButtonReverseTheme</item>
+
+    <item name="android:imageButtonStyle">@style/ImageButtonReverseTheme</item>
+
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerReverseTheme</item>
+
+    <item name="android:tabWidgetStyle">@style/TabWidgetReverseTheme</item>
+
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarReverseTheme</item>
+
+    <item name="android:seekBarStyle">@style/SeekBarReverseTheme</item>
+
+    <item name="android:ratingBarStyle">@style/RatingBarReverseTheme</item>
+
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigReverseTheme</item>
+
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallReverseTheme</item>
+
+    <item name="android:buttonStyleToggle">@style/ToggleReverseTheme</item>
+
+    <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_holo_dark</item>
+
+    <item name="android:activatedBackgroundIndicator">@drawable/activated_background_holo_dark</item>
+
+    <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb_holo</item>
+
+  </style>
+
+</resources>

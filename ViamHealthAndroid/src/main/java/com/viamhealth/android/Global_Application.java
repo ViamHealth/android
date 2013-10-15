@@ -3,6 +3,7 @@ package com.viamhealth.android;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -10,10 +11,11 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
-import com.viamhealth.android.model.FamilyData;
 import com.viamhealth.android.model.FoodData;
 import com.viamhealth.android.model.GoalData;
+
 import android.app.Application;
 import android.graphics.Bitmap;
 
@@ -37,8 +39,11 @@ public class Global_Application extends Application
 	public String addvalType;
 	public String weightid,cholesterolid,glucoseid,bpid;
 	public boolean weightupdate, cholesterolupdate,glucoseupdate,bpupdate;
-	public static ArrayList<FamilyData> lstfamilyglobal = new ArrayList<FamilyData>();
+	public static List<User> lstfamilyglobal;
 	public boolean calcelflg;
+
+    private User loggedInUser;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -63,10 +68,18 @@ public class Global_Application extends Application
 		// method.
 	
 	}
-	
-	
-	
-	public boolean isCalcelflg() {
+
+
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
+        this.loggedInUser.setLoggedInUser(true);
+    }
+
+    public boolean isCalcelflg() {
 		return calcelflg;
 	}
 
@@ -126,11 +139,11 @@ public class Global_Application extends Application
 
 
 
-	public ArrayList<FamilyData> getLstfamilyglobal() {
+	public List<User> getLstfamilyglobal() {
 		return lstfamilyglobal;
 	}
 
-	public void setLstfamilyglobal(ArrayList<FamilyData> lstfamilyglobal) {
+	public void setLstfamilyglobal(List<User> lstfamilyglobal) {
 		this.lstfamilyglobal = lstfamilyglobal;
 	}
 

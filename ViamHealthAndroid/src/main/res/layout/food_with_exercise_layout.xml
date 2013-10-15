@@ -1,0 +1,695 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".FoodDiary"
+    android:orientation="vertical"
+    android:background="#EFEFEF" >
+    <FrameLayout
+        android:id="@+id/main_layout"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent">
+        <LinearLayout
+            android:id="@+id/actionbarlayot"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:orientation="vertical">
+            <!-- Action Bar Start -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:background="@drawable/top_bar"
+                android:layout_width="fill_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_height="wrap_content">
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:gravity="center_vertical|center_horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:src="@drawable/back"
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="5dp"
+                            android:id="@+id/back"
+                            android:layout_height="wrap_content"/>
+
+
+
+                        <TextView
+                            android:id="@+id/heding_name_food"
+                            android:textSize="22sp"
+                            android:gravity="center_vertical|center"
+                            android:text="Sharat Khurana"
+                            android:textColor="#ffffff"
+                            android:textStyle="bold"
+                            android:layout_width="fill_parent"
+                            android:layout_weight="1"
+                            android:layout_height="fill_parent"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:id="@+id/person_icon"
+                                android:src="@drawable/person_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="fill_parent"/>
+                        </LinearLayout>
+
+                        <RelativeLayout android:layout_height="wrap_content"
+                            android:layout_width="wrap_content">
+                            <LinearLayout
+                                android:id="@+id/menu_invite_food"
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageButton
+
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/menu_icon" />
+
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/menu_invite_out_food"
+                                android:visibility="invisible"
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/menu_icon" />
+
+                            </LinearLayout>
+                        </RelativeLayout>
+
+
+
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/food_main_layout"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:id="@+id/food_header"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+                    >
+
+                    <TextView android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Food Diary"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:textSize="16sp"/>
+                    <LinearLayout android:layout_height="fill_parent"
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:gravity="right|center_vertical">
+                        <LinearLayout
+                            android:id="@+id/btn_food_time_picker"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView android:id="@+id/lbl_food_time"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="10:45AM"
+                                android:textColor="#000000"
+                                android:textSize="12sp"/>
+                            <ImageView
+                                android:id="@+id/img_time"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:src="@drawable/picker_bg"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/btn_food_date_picker"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView android:id="@+id/lbl_food_date"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="20 March 2013"
+                                android:textColor="#000000"
+                                android:textSize="12sp"
+                                />
+                            <ImageView
+                                android:id="@+id/img_date"
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:src="@drawable/picker_bg"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents="false"
+                    android:fadingEdgeLength="0dp"
+                    android:layout_gravity="center_horizontal">
+                    <LinearLayout android:layout_height="fill_parent"
+                        android:layout_width="fill_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="10dp">
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:id="@+id/exercise"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <!--  <ImageView android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:padding="5dp"
+                                     android:src="@drawable/food_icon"/> -->
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Breakfast(0)"
+                                    android:textSize="16sp"
+                                    android:id="@+id/lblbrk"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:textColor="#ffffff"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="0"
+                                    android:gravity="center"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbltotalbrkcal"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff"/>
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/addicon"
+                                    android:id="@+id/addBreakfast"
+                                    android:padding="5dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#dcf2e4"
+                                android:padding="5dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/food_icon"
+                                    android:visibility="invisible"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Items"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"
+                                    android:id="@+id/lblitem1"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Servings"
+                                    android:layout_weight="1"
+                                    android:paddingRight="5dp"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Calories"
+                                    android:gravity="center"
+                                    android:paddingRight="10dp"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:paddingTop="5dp"
+                                android:orientation="vertical"
+                                android:id="@+id/layout1">
+                                <!-- <ListView
+                                     android:layout_width="fill_parent"
+                                     android:cacheColorHint="#00000000"
+                                     android:divider="#000000"
+                                     android:visibility="gone"
+                                     android:dividerHeight="1dp"
+                                     android:headerDividersEnabled="false"
+                                     android:footerDividersEnabled="false"
+                                     android:layout_height="200dp"
+                                     android:id="@+id/lstViewBreakfast" /> -->
+                                <com.viamhealth.android.ui.RefreshableListView
+                                    android:layout_width="fill_parent"
+                                    android:cacheColorHint="#00000000"
+                                    android:layout_weight="1"
+                                    android:divider="#000000"
+                                    android:dividerHeight="1dp"
+                                    android:visibility="gone"
+                                    android:headerDividersEnabled="false"
+                                    android:footerDividersEnabled="false"
+                                    android:layout_height="wrap_content"
+                                    android:listSelector="@drawable/list_item_selector"
+                                    android:id="@+id/lstViewBreakfast" />
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:id="@+id/lunch"
+                                android:baselineAligned="false">
+                                <!-- <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:padding="5dp"
+                                    android:src="@drawable/food_icon"/> -->
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Lunch(0)"
+                                    android:id="@+id/lbllunch"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:paddingLeft="5dp"
+                                    android:textColor="#ffffff"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="0"
+                                    android:gravity="center"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbllunchcal"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff"/>
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/addicon"
+                                    android:id="@+id/addLunch"
+                                    android:padding="5dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#DCF2E4"
+                                android:gravity="center_vertical"
+                                android:padding="5dp"
+                                android:orientation="horizontal">
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/food_icon"
+                                    android:visibility="invisible"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Items"
+                                    android:id="@+id/lblitem2"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Servings"
+                                    android:paddingRight="5dp"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Calories"
+                                    android:gravity="center"
+                                    android:layout_weight="1"
+                                    android:paddingRight="10dp"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:paddingTop="5dp"
+                                android:orientation="vertical"
+                                android:id="@+id/layout2">
+                                <com.viamhealth.android.ui.RefreshableListView
+                                    android:layout_width="fill_parent"
+                                    android:cacheColorHint="#00000000"
+                                    android:layout_weight="1"
+                                    android:divider="#000000"
+                                    android:dividerHeight="1dp"
+                                    android:visibility="gone"
+                                    android:headerDividersEnabled="false"
+                                    android:footerDividersEnabled="false"
+                                    android:layout_height="wrap_content"
+                                    android:listSelector="@drawable/list_item_selector"
+                                    android:id="@+id/lstViewLunch" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:gravity="center_vertical"
+                                android:id="@+id/snacks"
+                                android:orientation="horizontal">
+                                <!-- <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:padding="5dp"
+                                    android:src="@drawable/food_icon"/> -->
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Snacks(0)"
+                                    android:textSize="16sp"
+                                    android:paddingLeft="5dp"
+                                    android:id="@+id/lblsnack"
+                                    android:textStyle="bold"
+                                    android:textColor="#ffffff"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="0"
+                                    android:gravity="center"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lblsnakcal"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff"/>
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/addicon"
+                                    android:id="@+id/addSnacks"
+                                    android:padding="5dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#DCF2E4"
+                                android:gravity="center_vertical"
+                                android:padding="5dp"
+                                android:orientation="horizontal">
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/food_icon"
+
+                                    android:visibility="invisible"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Items"
+                                    android:id="@+id/lblitem3"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Servings"
+                                    android:paddingRight="5dp"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Calories"
+                                    android:gravity="center"
+                                    android:paddingRight="10dp"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:paddingTop="5dp"
+                                android:id="@+id/layout3">
+                                <com.viamhealth.android.ui.RefreshableListView
+                                    android:layout_width="fill_parent"
+                                    android:cacheColorHint="#00000000"
+                                    android:layout_weight="1"
+                                    android:divider="#000000"
+                                    android:dividerHeight="1dp"
+                                    android:visibility="gone"
+                                    android:headerDividersEnabled="false"
+                                    android:footerDividersEnabled="false"
+                                    android:layout_height="wrap_content"
+                                    android:listSelector="@drawable/list_item_selector"
+                                    android:id="@+id/lstViewSnakes" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:gravity="center_vertical"
+                                android:id="@+id/dinner"
+                                android:orientation="horizontal">
+                                <!-- <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:padding="5dp"
+                                    android:src="@drawable/food_icon"/> -->
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Dinner(0)"
+                                    android:textSize="16sp"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbldinner"
+                                    android:textColor="#ffffff"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="0"
+                                    android:gravity="center"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbldinnercal"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff"/>
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/addicon"
+                                    android:id="@+id/addDinner"
+                                    android:padding="5dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#DCF2E4"
+                                android:padding="5dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/food_icon"
+                                    android:visibility="invisible"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Items"
+                                    android:id="@+id/lblitem4"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Servings"
+                                    android:paddingRight="5dp"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Calories"
+                                    android:paddingRight="10dp"
+                                    android:gravity="center"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:paddingTop="5dp"
+                                android:id="@+id/layout4">
+                                <com.viamhealth.android.ui.RefreshableListView
+                                    android:layout_width="fill_parent"
+                                    android:cacheColorHint="#00000000"
+                                    android:layout_weight="1"
+                                    android:divider="#000000"
+                                    android:dividerHeight="1dp"
+                                    android:visibility="gone"
+                                    android:headerDividersEnabled="false"
+                                    android:footerDividersEnabled="false"
+                                    android:layout_height="wrap_content"
+                                    android:listSelector="@drawable/list_item_selector"
+                                    android:id="@+id/lstViewDinner" />
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:id="@+id/exercise"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <!--  <ImageView android:layout_height="wrap_content"
+                                     android:layout_width="wrap_content"
+                                     android:padding="5dp"
+                                     android:src="@drawable/food_icon"/> -->
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Exercise(0)"
+                                    android:textSize="16sp"
+                                    android:id="@+id/lblbrk"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:textColor="#ffffff"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="0"
+                                    android:gravity="center"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbltotalbrkcal"
+                                    android:layout_weight="1"
+                                    android:textColor="#ffffff"/>
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/addicon"
+                                    android:id="@+id/addBreakfast"
+                                    android:padding="5dp"/>
+                            </LinearLayout>
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#dcf2e4"
+                                android:padding="5dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+                                <ImageView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:src="@drawable/food_icon"
+                                    android:visibility="invisible"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Items"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"
+                                    android:id="@+id/lblitem1"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Servings"
+                                    android:layout_weight="1"
+                                    android:paddingRight="5dp"
+                                    android:textColor="#666666"/>
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="wrap_content"
+                                    android:text="Calories"
+                                    android:gravity="center"
+                                    android:paddingRight="10dp"
+                                    android:layout_weight="1"
+                                    android:textColor="#666666"/>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:paddingTop="5dp"
+                                android:orientation="vertical"
+                                android:id="@+id/layout1">
+                                <!-- <ListView
+                                     android:layout_width="fill_parent"
+                                     android:cacheColorHint="#00000000"
+                                     android:divider="#000000"
+                                     android:visibility="gone"
+                                     android:dividerHeight="1dp"
+                                     android:headerDividersEnabled="false"
+                                     android:footerDividersEnabled="false"
+                                     android:layout_height="200dp"
+                                     android:id="@+id/lstViewBreakfast" /> -->
+                                <com.viamhealth.android.ui.RefreshableListView
+                                    android:layout_width="fill_parent"
+                                    android:cacheColorHint="#00000000"
+                                    android:layout_weight="1"
+                                    android:divider="#000000"
+                                    android:dividerHeight="1dp"
+                                    android:visibility="gone"
+                                    android:headerDividersEnabled="false"
+                                    android:footerDividersEnabled="false"
+                                    android:layout_height="wrap_content"
+                                    android:listSelector="@drawable/list_item_selector"
+                                    android:id="@+id/lstViewBreakfast" />
+
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+                <!--   <LinearLayout android:layout_height="0dp"
+                      android:layout_weight="1"
+                      android:layout_width="wrap_content"
+                      android:orientation="vertical">
+                      <LinearLayout android:layout_height="fill_parent"
+                          android:layout_width="fill_parent"
+                          android:orientation="vertical">
+                                <ExpandableListView
+                                      android:id="@+id/expandableListView1"
+                                      android:layout_width="fill_parent"
+                                      android:layout_height="fill_parent"
+                                      android:cacheColorHint="#000000"
+                                      android:padding="2dp"
+
+                                      android:divider="#10EDEDED"
+                                      android:dividerHeight="2px"
+
+                                     >
+                               </ExpandableListView>
+                      </LinearLayout>
+                  </LinearLayout>
+                    -->
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/settiglayout_food"
+            android:gravity="right"
+            android:visibility="invisible"
+            android:layout_gravity="right">
+
+            <ListView
+                android:id="@+id/listView1"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:background="#efefef"
+                android:cacheColorHint="#00000000"
+                android:divider="#00000000"
+                android:dividerHeight="0dip"/>
+
+
+            <TextView
+                android:text="+ Add Profile"
+                android:id="@+id/lbl_invite_user_food"
+                android:layout_width="210dp"
+                android:layout_height="wrap_content"
+                android:textSize="21sp"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:textColor="#4bddfe"
+                android:background="@drawable/listinvite" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+</LinearLayout>

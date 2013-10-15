@@ -34,7 +34,7 @@ public class ViamHealthPrefs {
 	public String bornon = "bornon";
 	public String profilepic = "profilepic";
 	//public String dateAdded = "dateAdded";
-	
+
 	public ViamHealthPrefs(Context context) {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();
