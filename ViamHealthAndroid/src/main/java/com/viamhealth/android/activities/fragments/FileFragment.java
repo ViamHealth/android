@@ -1,21 +1,30 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.app.Activity;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +43,11 @@ import com.viamhealth.android.model.FileData;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 /**
@@ -59,6 +73,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     RefreshableListView listfile;
     ImageView back,person_icon;
     Typeface tf;
+    Bitmap mBitmap;
 
     ViamHealthPrefs appPrefs;
     functionClass obj;
@@ -68,6 +83,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     String selecteduserid="0";
     ArrayList<FileData> lstResult = new ArrayList<FileData>();
     private DisplayImageOptions options;
+    private static final int CAMERA_PIC_REQUEST = 1337;
 
 
     @Override
@@ -198,14 +214,82 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
+                    startActivityForResult(camera, CAMERA_PIC_REQUEST);
+
+                } else if (items[item].equals("Choose from Library")) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, 1);
+
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("TAG","On  ac result is called");
+        Uri chosenUri = data.getData();
+        Toast.makeText(getActivity(),chosenUri.toString() + "request code and resultCode " + requestCode + "" +resultCode,Toast.LENGTH_LONG).show();
+        if (requestCode==1)
+        {
+            if (resultCode == -1)
+            {
+                //Uri chosenUri = data.getData();
+                try
+                {
+                    File file = new File(chosenUri.toString());
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    byte[] buffer = new byte[4096];
+                    String pathString=chosenUri+"";
+                    Toast.makeText(getActivity(),pathString,Toast.LENGTH_LONG).show();
+                }
+                catch (FileNotFoundException e)
+                {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        if (requestCode==CAMERA_PIC_REQUEST)
+        {
+            //if (resultCode == RESULT_OK)
+            //{
+
+
+            //}
+        }
+
+    }
+
+
     @Override
     public void onClick(View v) {
         if(v==lbl_upload){
             // reditect uplod file screen
-            //selectImage();
-            Intent displayImage = new Intent(getActivity(),UploadFile.class);
-            displayImage.putExtra("user", user);
-            startActivityForResult(displayImage, 1);
+            selectImage();
+            //Intent displayImage = new Intent(getActivity(),UploadFile.class);
+            //displayImage.putExtra("user", user);
+            //startActivityForResult(displayImage, 1);
         }
         if(v==lbl_delete){
             boolean val=false;

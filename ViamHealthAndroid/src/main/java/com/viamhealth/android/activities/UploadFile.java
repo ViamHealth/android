@@ -197,7 +197,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 					Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
 					//photoPickerIntent.setType("image/*");
                     //photoPickerIntent.setType("*/*");
-                    photoPickerIntent.setType("files/*");
+                    photoPickerIntent.setType("*/*");
+                    //photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
 					startActivityForResult(photoPickerIntent, 1);
 				
 				} else if (items[item].equals("Cancel")) {

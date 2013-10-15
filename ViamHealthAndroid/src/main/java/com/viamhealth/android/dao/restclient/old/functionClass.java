@@ -279,6 +279,30 @@ public class functionClass {
 					return responseString;
 				}
 	// function for add food
+
+    public String uploadFile(String description,String file){
+        String responce="1";
+        String baseurlString = Global_Application.url+"healthfiles/";
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddParam("description",description);
+        client.AddParam("file", file);
+
+        try
+        {
+            client.Execute(RequestMethod.POST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        responseString = client.getResponse();
+        Log.e("TAG","Response : " + responseString);
+        return responce;
+    }
+
+
+
 		public String AddFood(String id,String mealtype,String food_quantity_multiplier){
 			String responce="1";
 			String baseurlString = Global_Application.url+"diet-tracker/";   
