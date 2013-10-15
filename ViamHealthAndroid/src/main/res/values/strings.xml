@@ -132,6 +132,27 @@
     <string name="tab_label_journal">Journal</string>
     <string name="tab_label_reminder">Reminders</string>
     <string name="tab_label_file">Files</string>
-    <string name="title_activity_delete_medication">Delete Medication</string><string name="addgoal">+ Add Goal</string><string name="title_add_goal">Add Goal</string><string name="goal_settings">Goal Settings</string><string name="present_values">Present Data (if you know)</string><string name="fbs">Fasting Blood Sugar</string><string name="rbs">Random Blood Sugar</string><string name="present_fbs">present fasting blood sugar (empty stomach)</string><string name="present_rbs">present random blood sugar (2 hrs after food)</string><string name="target_fbs">target fasting blood sugar</string><string name="target_rbs">target random blood sugar</string><string name="present_systolic">present systolic pressure (80 in 80-120)</string><string name="present_diastolic">present diastolic pressure (120 in 80-120)</string><string name="target_systolic">target systolic pressure (80 in 80-120)</string><string name="target_diastolic">target diastolic pressure (120 in 80-120)</string><string name="present_hdl">present hdl</string><string name="present_ldl">present ldl</string><string name="present_tryglecerides">present tryglecerides</string><string name="total_cholesterol">total cholesterol is</string><string name="target_hdl">target hdl</string><string name="target_ldl">target ldl</string><string name="target_tryglecerides">target tryglecerides</string><string name="file_title">description of the file</string>
+    <string name="addgoal">+ Add Goal</string>
+    <string name="title_add_goal">Add Goal</string>
+    <string name="goal_settings">Goal Settings</string>
+    <string name="present_values">Present Data (if you know)</string>
+    <string name="fbs">Fasting Blood Sugar</string>
+    <string name="rbs">Random Blood Sugar</string>
+    <string name="present_fbs">present fasting blood sugar (empty stomach)</string>
+    <string name="present_rbs">present random blood sugar (2 hrs after food)</string>
+    <string name="target_fbs">target fasting blood sugar</string>
+    <string name="target_rbs">target random blood sugar</string>
+    <string name="present_systolic">present systolic pressure (80 in 80-120)</string>
+    <string name="present_diastolic">present diastolic pressure (120 in 80-120)</string>
+    <string name="target_systolic">target systolic pressure (80 in 80-120)</string>
+    <string name="target_diastolic">target diastolic pressure (120 in 80-120)</string>
+    <string name="present_hdl">present hdl</string>
+    <string name="present_ldl">present ldl</string
+    ><string name="present_tryglecerides">present tryglecerides</string>
+    <string name="total_cholesterol">total cholesterol is</string>
+    <string name="target_hdl">target hdl</string>
+    <string name="target_ldl">target ldl</string>
+    <string name="target_tryglecerides">target tryglecerides</string>
+    <string name="file_title">description of the file</string>
 
 </resources>

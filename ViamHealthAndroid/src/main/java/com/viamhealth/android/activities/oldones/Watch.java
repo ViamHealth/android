@@ -15,6 +15,7 @@ import com.viamhealth.android.activities.AddTest;
 import com.viamhealth.android.activities.BaseActivity;
 import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Home;
+import com.viamhealth.android.activities.OnSwipeTouchListener;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
 import com.viamhealth.android.R;
@@ -64,6 +65,7 @@ import com.viamhealth.android.ui.RefreshableListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
@@ -666,7 +668,7 @@ public class Watch extends BaseActivity implements OnClickListener{
                     main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
-                            Toast.makeText(Watch.this,"Start anim",Toast.LENGTH_LONG).show();
+                            Toast.makeText(Watch.this, "Start anim", Toast.LENGTH_LONG).show();
                         }
 
 

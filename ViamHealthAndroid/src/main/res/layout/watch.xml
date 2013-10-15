@@ -640,10 +640,7 @@
                                 android:paddingRight="10dp"
                                 android:dividerHeight="1dp"
                                 android:headerDividersEnabled="false"
-                                android:footerDividersEnabled="false"
-                                android:layout_height="200dp"
-                                android:listSelector="@drawable/list_item_selector"
-                                android:id="@+id/lstReminderMedicine" />
+                                android:footerDividersEnabled="false"/>
 
 			            </LinearLayout>
 			             <LinearLayout android:layout_height="wrap_content"
@@ -687,6 +684,7 @@
 			            
 			       
 			         </LinearLayout>
+                </LinearLayout>
 			         </ScrollView>
 		 			<!-- Medicine section layout end -->
 		         
@@ -881,6 +879,7 @@
     	 
     	
 	  </LinearLayout>
-
+        </LinearLayout>
+    </LinearLayout>
     </FrameLayout>
 </LinearLayout>

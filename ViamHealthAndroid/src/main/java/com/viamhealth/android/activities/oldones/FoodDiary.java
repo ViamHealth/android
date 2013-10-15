@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 
 import com.viamhealth.android.activities.AddBreakfast;
+import com.viamhealth.android.activities.AddExercise;
 import com.viamhealth.android.activities.BaseActivity;
 import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.adapters.BreakfastAdapter;
@@ -996,8 +997,8 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 		}
         if(v==addExercise){
             ga.setFoodType("Exercise");
-            Intent AddExercise = new Intent(getParent(),AddExercise.class);
-            startActivity(AddExercise);
+            Intent addExercise = new Intent(getParent(), AddExercise.class);
+            startActivity(addExercise);
 
         }
 
