@@ -73,6 +73,8 @@
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
     <orderEntry type="library" exported="" name="achartengine-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.7.0" level="project" />
+    <orderEntry type="module" module-name="facebook" exported="" />
+    <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
   </component>
 </module>
 
