@@ -27,7 +27,7 @@
                 >
                 <ImageView android:layout_height="fill_parent"
                     android:layout_width="wrap_content"
-                    android:src="@drawable/file_icon"
+                    android:src="@drawable/ic_action_collections_collection"
                     android:gravity="center_vertical"
                     />
                 <TextView
@@ -182,7 +182,6 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:id="@+id/lbl_upload"
-                        android:background="@drawable/valuebg_toggle"
                         android:text="Upload"
                         android:textStyle="bold"
                         android:gravity="center"

@@ -124,23 +124,23 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         });
 
         lbl_upload = (TextView)view.findViewById(R.id.lbl_upload);
-        lbl_upload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.file_upload, 0, 0, 0);
+        lbl_upload.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_upload, 0, 0, 0);
         lbl_upload.setPadding(w8, h9, w8, h9);
         lbl_upload.setOnClickListener(this);
         lbl_upload.setTypeface(tf);
 
         lbl_share = (TextView)view.findViewById(R.id.lbl_share);
-        lbl_share.setCompoundDrawablesWithIntrinsicBounds(R.drawable.file_share, 0, 0, 0);
+        lbl_share.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_social_share, 0, 0, 0);
         lbl_share.setPadding(w8, h9, w8, h9);
 
         lbl_delete = (TextView)view.findViewById(R.id.lbl_delete);
-        lbl_delete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.file_delete, 0, 0, 0);
+        lbl_delete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_content_discard, 0, 0, 0);
         lbl_delete.setPadding(w8, h9, w8, h9);
         lbl_delete.setOnClickListener(this);
         lbl_delete.setTypeface(tf);
 
         lbl_download = (TextView)view.findViewById(R.id.lbl_download);
-        lbl_download.setCompoundDrawablesWithIntrinsicBounds(R.drawable.file_download, 0, 0, 0);
+        lbl_download.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_download, 0, 0, 0);
         lbl_download.setPadding(w8, h9, w8, h9);
         lbl_download.setOnClickListener(this);
         lbl_download.setTypeface(tf);

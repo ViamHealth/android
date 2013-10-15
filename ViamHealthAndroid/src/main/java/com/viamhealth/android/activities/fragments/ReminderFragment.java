@@ -285,11 +285,6 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             Log.i("onPostExecute", "onPostExecute");
             ArrayList<String> lst = new ArrayList<String>();
-            lst.add("1-sep-2013");
-            lst.add("2-sep-2013");
-            lst.add("3-sep-2013");
-            lst.add("4-sep-2013");
-            lst.add("5-sep-2013");
             int i=0,j=0,k=0;
             listData.clear();
             otherData.clear();
@@ -306,10 +301,10 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                     k++;
                 }
             }
-            mPager1.setAdapter(new ImagePagerAdapter(lst));
-            //RetrieveOtherData task1= new RetrieveOtherData();
-            //task1.applicationContext=getActivity();
-            //task1.execute();
+            //mPager1.setAdapter(new ImagePagerAdapter(lst));
+            RetrieveOtherData task1= new RetrieveOtherData();
+            task1.applicationContext=getActivity();
+            task1.execute();
 
 
 /*
@@ -345,39 +340,6 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             allData = obj.getReminderInfo(user.getId().toString(), "2");
-            return null;
-        }
-
-    }
-
-    public class RetrieveMedicalDataById extends AsyncTask <String, Void,String>
-    {
-        protected Context applicationContext;
-
-        @Override
-        protected void onPreExecute()
-        {
-
-            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            // dialog1 = new ProgressDialog(getActivity());
-            //dialog1.setMessage("Please Wait....");
-            //dialog1.show();
-            //Log.i("onPreExecute", "onPreExecute");
-
-        }
-
-        protected void onPostExecute(String result)
-        {
-            edit_med.putExtra("start_date",med_edit.getStart_date());
-            startActivity(edit_med);
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
-            Log.i("doInBackground--Object", "doInBackground--Object");
-            med_edit = obj.getMedicationByID(med_id);
             return null;
         }
 
@@ -420,9 +382,6 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             lst.add(fmt.format(cal.getTime()));
 
             mPager1.setAdapter(new ImagePagerAdapter(lst));
-            RetrieveMedicalDataById task2=new RetrieveMedicalDataById();
-            task2.applicationContext=getActivity();
-            task2.execute();
 
 /*
             MedicalDataAdapter adapter = new MedicalDataAdapter(getActivity(),R.layout.row_medical_list, listData);
@@ -740,7 +699,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        synchronized public Object instantiateItem(View view, final int position)
+        synchronized public Object instantiateItem(View localView, final int position)
         {
             View imageLayout = inflater.inflate(R.layout.item_pager_medicine, null);
             TextView todayDate=(TextView)imageLayout.findViewById(R.id.todayDate);
@@ -855,12 +814,12 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             adapter3.addSection("Medication",adapter);
             adapter3.addSection("Rest All",adapter1);
 
-            ViewPager v1=(ViewPager)view;
+            ViewPager v1=(ViewPager)localView;
 
-            ((ViewPager) view).setOffscreenPageLimit(3);
+            ((ViewPager) localView).setOffscreenPageLimit(3);
             v1.setPageMargin(60);
 
-            ((ViewPager) view).addView(imageLayout, 0);
+            ((ViewPager) localView).addView(imageLayout, 0);
 
             lstReminderMedicine1.setAdapter(adapter3);
             int len;
