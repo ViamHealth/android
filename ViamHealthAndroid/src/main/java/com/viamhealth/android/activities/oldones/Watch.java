@@ -288,11 +288,6 @@ public class Watch extends BaseActivity implements OnClickListener{
         task.applicationContext=Watch.this;
         task.execute();
 
-
-
-
-
-
     }
 
 
