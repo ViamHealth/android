@@ -2,14 +2,19 @@ package com.viamhealth.android.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.viamhealth.android.Global_Application;
@@ -24,10 +29,16 @@ import com.viamhealth.android.manager.TabManager;
 /**
  * Created by naren on 07/10/13.
  */
-public class TabActivity extends FragmentActivity {
+public class TabActivity extends FragmentActivity implements View.OnClickListener {
 
     TabHost mTabHost;
     TabManager mTabManager;
+
+    Animation animationMoveIn, animationMoveOut;
+    FrameLayout tabContent, tabHeader;
+    TabWidget tabs;
+
+    boolean headerIsVisible = true;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +48,7 @@ public class TabActivity extends FragmentActivity {
 
         mTabHost = (TabHost)findViewById(R.id.tabHost);
         mTabHost.setup();
+        mTabHost.setOnClickListener(this);
         mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
 
         Global_Application ga=((Global_Application)getApplicationContext());
@@ -60,6 +72,20 @@ public class TabActivity extends FragmentActivity {
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
                 FileFragment.class, bundle);
+
+
+        animationMoveIn = new TranslateAnimation(0, 0, -29, 29);
+        animationMoveIn.setDuration(2000);
+        animationMoveIn.setRepeatCount(0);
+
+        animationMoveOut = new TranslateAnimation(0, 0, 29, -29);
+        animationMoveOut.setDuration(2000);
+        animationMoveOut.setRepeatCount(0);
+
+        tabContent = (FrameLayout) findViewById(R.id.realtabcontent);
+        tabHeader = (FrameLayout) findViewById(R.id.tabHeader);
+        tabs = (TabWidget) findViewById(android.R.id.tabs);
+
     }
 
     protected View getTabIndicator(int labelId, int drawableId) {
@@ -79,4 +105,35 @@ public class TabActivity extends FragmentActivity {
         return true;
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if(mTabManager.getCurrentSelectedTab().equals("goals")){
+            if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+                tabHeader.setAlpha(0.4f);
+                tabContent.setPadding(0,0,0,0);
+                tabs.setVisibility(View.GONE);
+                tabHeader.setAnimation(animationMoveOut);
+                return;
+            }
+        }
+
+        tabHeader.setAlpha(1);
+        tabContent.setPadding(0, 58, 0, 0);
+        tabs.setVisibility(View.VISIBLE);
+        //tabHeader.setAnimation(animationMoveOut);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(mTabManager.getCurrentSelectedTab().equals("goals")){
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                if(headerIsVisible)
+                    tabHeader.setAnimation(animationMoveOut);
+                else
+                    tabHeader.setAnimation(animationMoveIn);
+            }
+        }
+    }
 }

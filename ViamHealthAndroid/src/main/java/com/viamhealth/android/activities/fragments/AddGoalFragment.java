@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.viamhealth.android.manager.AddGoalFragmentManager;
+import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
 
 /**
  * Created by naren on 10/10/13.
@@ -22,24 +24,7 @@ public abstract class AddGoalFragment extends Fragment {
         mManager = fragmentManager;
     }
 
-    public abstract void onSave();
-
-    protected final boolean isInternetOn() {
-        ConnectivityManager connec = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-                || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-            return true;
-        }
-
-        else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-                || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-            return false;
-        }
-
-        return false;
-    }
+    public abstract Goal getGoal();
+    public abstract GoalReadings getGoalReadings();
 
 }

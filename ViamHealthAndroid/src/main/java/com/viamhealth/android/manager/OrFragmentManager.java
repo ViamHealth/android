@@ -51,7 +51,7 @@ public abstract class OrFragmentManager extends BaseFragmentManager implements A
         mMap.put(key, info);
     }
 
-    protected void changeFragment(Enum key){
+    public void changeFragment(Enum key){
         FragmentInfo newFragment = mMap.get(key);
         if (mLastShownFragment != newFragment) {
             FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();

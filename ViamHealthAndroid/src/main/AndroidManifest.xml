@@ -238,7 +238,8 @@
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
-            android:theme="@style/GreenTheme" >
+            android:theme="@style/GreenTheme"
+            android:configChanges="orientation|screenSize">
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddGoalActivity"

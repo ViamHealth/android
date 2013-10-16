@@ -12,7 +12,7 @@ import org.json.JSONObject;
 /**
  * Created by naren on 03/10/13.
  */
-public class BaseEP {
+public abstract class BaseEP {
     protected Context context;
     protected Global_Application ga;
     protected ViamHealthPrefs appPrefs;

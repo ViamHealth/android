@@ -2,120 +2,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+
 
     <script type='text/javascript'>//<![CDATA[
-$(window).load(function(){
+
+var target_date = Date.UTC(2013,10,30);
+var data = [{
+                x: Date.UTC(2013, 09, 16),
+                y: 83
+            },
+            {
+                x: Date.UTC(2013, 09, 18),
+                y: 81
+            },
+            {
+                x: Date.UTC(2013, 09, 21),
+                y: 79
+            },                   
+            {
+                x: Date.UTC(2013, 09, 27),
+                y: 75
+            },                   
+            {
+                x: Date.UTC(2013, 09, 30),
+                y: 74
+            },
+            {
+                x: Date.UTC(2013, 10, 3),
+                y: 74
+            }            
+            ];
+var healthy_range = { from: 52, to: 70 };
+var target_weight = 60;
 $(function () {
     $('#container').highcharts({
         chart: {
 
         },
         title: {
-            text: "Blood Pressure Goal"
+            text: "Weight Goal"
         },
         legend: {
-            enabled: true
+            enabled: false
         },
-        xAxis: {
+        xAxis: {        
             tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
-            }
+            },
+            max: target_date,
+            plotLines: [{
+                value: target_date,
+                width: 4,
+                color: '#37AA4F',
+                label: {
+                    text: 'Target Date',
+                    textAlign: 'top',
+                    align: 'top',
+                    x: -15,
+                    y: 0
+                },
+                dashStyle: "LongDashDotDot",                
+                zIndex: 2
+            }]            
         },
         yAxis : {
             title: {
-                text: "Pressure in mmHg"
+                text: "Weight in Kgs"
             },
             plotBands: [{ // mark the weekend
                 color: '#c4dffb',
-                from: 90,
-                to: 120,
+                from: healthy_range.from,
+                to: healthy_range.to,
                 label: {
-                    text: "Healthy Systolic Pressure",
+                    text: "Healthy Range",
                     verticalAlign: 'bottom',
                     align: 'center',
                     textAlign: 'center',
                     y: -10
                 },
                 zIndex: 1
-            },
-{ // mark the weekend
-                color: '#f8cdc2',
-                from: 60,
-                to: 80,
-                label: {
-                    text: "Healthy Diastolic Pressure",
-                    verticalAlign: 'bottom',
-                    align: 'center',
-                    textAlign: 'center',
-                    y: -10
-                },
-                zIndex: 1
-            }                       ],
+            }],
             plotLines: [{
-                value: 80,
-                width: 2,
-                color: '#FF0000',
+                value: target_weight,
+                width: 4,
+                color: '#37aa4f',
                 label: {
-                    text: 'Diastolic Goal',
-                    textAlign: 'right',
-                    align: 'right',
-                    verticalAlign: 'bottom',
-                    x: -5
+                    text: 'Target Weight',
+                    textAlign: 'left',
+                    align: 'left',
+                    y: -10,
+                    x: 0
                 },
-                dashStyle: "LongDashDotDot",
+                dashStyle: "LongDashDotDot",                
                 zIndex: 2
-            },
-{
-                value: 120,
-                width: 2,
-                color: '#FF0000',
-                label: {
-                    text: 'Systolic Goal',
-                    textAlign: 'right',
-                    align: 'right',
-                    verticalAlign: 'bottom',
-                    x: -5
-                },
-                dashStyle: "LongDashDotDot",
-                zIndex: 2
-            }                       ],
+            }],
             type: 'linear',
-            min: 40
+            min: 20
         },
         series: [{
-            name: "Systolic Pressure",
-            color: "#4474a2",
-            data: [135, 138, 129, 132, 125],
-            pointStart: Date.UTC(2010, 0, 1),
-            pointInterval: 24 * 3600 * 1000 * 7
-        },
-        {
-            name: "Diastolic Pressure",
-            color: "#cd5837",
-            data: [93, 91, 86, 84, 82],
-            pointStart: Date.UTC(2010, 0, 1),
-            pointInterval: 24 * 3600 * 1000 * 7,
-
+            data: data
         }]
     });
 });
-});//]]>
+//]]>  
 
 </script>
 
 
-
 </head>
 <body>
-  <script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
 
 <div id="container" style="height: 400px"></div>
-  
+
 </body>
 
 
 </html>
+

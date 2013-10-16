@@ -65,4 +65,22 @@
         <item>30</item>
         <item>31</item>
     </string-array>
+
+    <string-array name="accordion_profile_sections">
+        <item>General</item>
+        <item>Blood Pressure</item>
+        <item>Diabetes</item>
+        <item>Cholesterol</item>
+        <item>Some more...</item>
+    </string-array>
+
+    <integer-array name="accordion_profile_visibility">
+        <item>1</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+    </integer-array>
+
 </resources>
+

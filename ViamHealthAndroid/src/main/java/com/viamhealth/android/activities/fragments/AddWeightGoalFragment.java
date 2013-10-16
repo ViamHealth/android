@@ -15,11 +15,16 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.GoalsEP;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
+import com.viamhealth.android.dao.rest.endpoints.WeightGoalEP;
+import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoal;
+import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by naren on 10/10/13.
@@ -29,11 +34,13 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
     EditText pHeight, pWeight, tWeight, targetDate;
     User user = null;
 
-    boolean needHeightInput = false;
+    boolean needHeightInput = false, isGoalConfigured = false;
     UserEP userEndPoint;
-    GoalsEP goalsEndPoint;
+    WeightGoalEP goalsEndPoint;
+    WeightGoal goal;
 
     ProgressDialog dialog;
+    SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         View view = inflater.inflate(R.layout.fragment_add_weight_goal, container, false);
 
         user = getArguments().getParcelable("user");
+        goal = getArguments().getParcelable("goal");
+
         dialog = new ProgressDialog(getActivity());
 
         targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
@@ -54,14 +63,23 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         if(user==null)
             return null;
 
-        if(user.getBmiProfile().getHeight()==0)
-            needHeightInput = true;
-        else{
+        if(goal!=null){
+            isGoalConfigured = true;
+            tWeight.setText(goal.getWeight().toString());
+            targetDate.setText(formater.format(goal.getTargetDate()));
             pHeight.setText(user.getBmiProfile().getHeight());
-            pHeight.setOnFocusChangeListener(this);
-            pWeight.setText(user.getBmiProfile().getWeight().toString());
-            pWeight.setOnFocusChangeListener(this);
-            tWeight.setText((getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())).toString());
+            pWeight.setVisibility(View.GONE);
+            pHeight.setEnabled(false);
+        } else {//if goal is not yet configured
+            if(user.getBmiProfile().getHeight()==0)
+                needHeightInput = true;
+            else{
+                pHeight.setText(user.getBmiProfile().getHeight().toString());
+                pHeight.setEnabled(false);
+                pWeight.setText(user.getBmiProfile().getWeight().toString());
+                pWeight.setEnabled(false);
+                tWeight.setText((getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())).toString());
+            }
         }
 
         return view;
@@ -86,67 +104,32 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         return idealWeight;
     }
 
-    @Override
-    public void onSave() {
-        if(needHeightInput){
-            user.getBmiProfile().setHeight(Integer.parseInt(pHeight.getText().toString()));
-            user.getBmiProfile().setWeight(Double.parseDouble(pWeight.getText().toString()));
-        }
-
-        WeightGoal goal = new WeightGoal();
-        goal.setWeight(Double.parseDouble(tWeight.getText().toString()));
-        try{
-            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
-        } catch(ParseException e){
-            e.printStackTrace();
-        }
-        updateUserBMIProfile(goal);
-    }
-
     private boolean validation() {
         return true;
     }
 
-    private void updateUserBMIProfile(WeightGoal goal) {
-        if(validation()){
-            if(isInternetOn()){
-                userEndPoint=new UserEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
-                goalsEndPoint = new GoalsEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
-                UserBMISaveTask task = new UserBMISaveTask();
-                task.activity = getActivity();
-                task.execute(goal);
-            }
+    @Override
+    public Goal getGoal() {
+        WeightGoal goal = new WeightGoal();
+        goal.setWeight(Double.parseDouble(tWeight.getText().toString()));
+        try{
+            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+        } catch(ParseException e){
+            e.printStackTrace();
         }
+        return goal;
     }
 
-    public class UserBMISaveTask extends AsyncTask<WeightGoal, Integer, Integer> {
-
-        protected FragmentActivity activity;
-
-        @Override
-        protected Integer doInBackground(WeightGoal... params) {
-            int count = params.length;
-            long totalSize = 0;
-            user.setBmiProfile(userEndPoint.updateBMIProfile(user.getId(), user.getBmiProfile()));
-            for (int i = 0; i < count; i++) {
-                WeightGoal goal = params[i];
-                goal = goalsEndPoint.createWeightGoalForUser(user.getId(), goal);
-            }
-            return 1;
+    @Override
+    public GoalReadings getGoalReadings() {
+        if(needHeightInput) {
+            WeightGoalReadings readings = new WeightGoalReadings();
+            readings.setHeight(Integer.parseInt(pHeight.getText().toString()));
+            readings.setWeight(Double.parseDouble(pWeight.getText().toString()));
+            readings.setReadingDate(new Date());
+            return readings;
         }
 
-        @Override
-        protected void onPreExecute() {
-            dialog.setMessage("updating the system...");
-            dialog.show();
-            Log.i("onPreExecute", "onPreExecute");
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            dialog.dismiss();
-            activity.finish();
-        }
+        return null;
     }
 }

@@ -16,24 +16,29 @@
             android:layout_height="0dp"
             android:layout_weight="0" />
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:layout_gravity="center">
 
-            <FrameLayout android:id="@+id/tabHeader"
-                android:layout_width="match_parent"
-                android:layout_height="58dp">
-            </FrameLayout>
-
-            <FrameLayout android:id="@+android:id/realtabcontent"
+            <FrameLayout android:id="@+id/realtabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:focusable="false"
-                android:layout_below="@+id/tabHeader">
+                android:layout_below="@+id/tabHeader"
+                android:background="#ffffff"
+                android:clickable="false"
+                android:paddingTop="58dp">
             </FrameLayout>
-        </RelativeLayout>
+
+            <FrameLayout android:id="@+id/tabHeader"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:background="#37AA4F">
+            </FrameLayout>
+
+        </FrameLayout>
 
         <TabWidget
             android:id="@android:id/tabs"

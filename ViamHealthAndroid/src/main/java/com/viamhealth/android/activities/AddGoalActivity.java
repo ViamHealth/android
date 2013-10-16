@@ -1,10 +1,19 @@
 package com.viamhealth.android.activities;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -23,14 +32,25 @@ import com.viamhealth.android.adapters.MedicalConditionsAdapter;
 import com.viamhealth.android.manager.AddGoalFragmentManager;
 import com.viamhealth.android.manager.OrFragmentManager;
 import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddGoalActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     Button btnSave;
     TextView btnCancel;
+
+    AddGoalFragmentManager fm;
+    ProgressDialog progressDialog;
+
+    Map<MedicalConditions, Goal> goalsConfiguredMap = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +63,26 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", intent.getParcelableExtra("user"));
+        goalsConfiguredMap = (HashMap<MedicalConditions, Goal>) intent.getSerializableExtra("goals");
 
-        final AddGoalFragmentManager fm = new AddGoalFragmentManager(this, R.id.add_goal_data_layout);
+        fm = new AddGoalFragmentManager(this, R.id.add_goal_data_layout);
         fm.addFragment(MedicalConditions.Diabetes, AddDiabetesGoalFragment.class, bundle);
         fm.addFragment(MedicalConditions.Obese, AddWeightGoalFragment.class, bundle);
         fm.addFragment(MedicalConditions.BloodPressure, AddBPGoalFragment.class, bundle);
         fm.addFragment(MedicalConditions.Cholesterol, AddCholesterolGoalFragment.class, bundle);
 
-        Spinner mcSelector = (Spinner) findViewById(R.id.add_goal_type_selector);
-        ArrayAdapter<MedicalConditions> adapter = new ArrayAdapter<MedicalConditions>(this, android.R.layout.select_dialog_item, MedicalConditions.values());
-        mcSelector.setAdapter(adapter);
-        mcSelector.setOnItemSelectedListener(fm);
-
         btnSave = (Button) findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fm.OnSave();
+                Goal goal = fm.getGoal();
+                GoalReadings goalReading = fm.getGoalReadings();
+                Intent intent = new Intent();
+                intent.putExtra("goal", goal);
+                intent.putExtra("goalReading", goalReading);
+                intent.putExtra("type", fm.getType());
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -71,12 +94,54 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
             }
         });
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddGoalActivity.this);
+        builder.setTitle("Set Goals for...");
+        String[] mcs = getMedicalConditions();
+        final String[] items = Arrays.copyOf(mcs, mcs.length);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals(getString(MedicalConditions.Diabetes.key()))) {
+                    fm.changeFragment(MedicalConditions.Diabetes);
+                } else if (items[item].equals(getString(MedicalConditions.Cholesterol.key()))) {
+                    fm.changeFragment(MedicalConditions.Cholesterol);
+                } else if (items[item].equals(getString(MedicalConditions.BloodPressure.key()))) {
+                    fm.changeFragment(MedicalConditions.BloodPressure);
+                } else if (items[item].equals(getString(MedicalConditions.Obese.key()))) {
+                    fm.changeFragment(MedicalConditions.Obese);
+                } else {
+                    Intent intent = new Intent();
+                    setResult(RESULT_CANCELED, intent);
+                    finish();
+                }
+            }
+        });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                finish();
+            }
+        });
+        builder.show();
+    }
+
+    private String[] getMedicalConditions() {
+        MedicalConditions[] mcs = MedicalConditions.values();
+        String[] items = new String[mcs.length];
+        for (int i=0; i<mcs.length; i++){
+            items[i] = getString(mcs[i].key());
+        }
+
+        return items;
     }
 
     @Override
     public void onClick(View v) {
         if(v==btnCancel){
-
+            Intent intent = new Intent();
+            setResult(RESULT_CANCELED, intent);
+            finish();
         }
     }
 
@@ -86,5 +151,8 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         getMenuInflater().inflate(R.menu.add_goal, menu);
         return true;
     }
-    
+
+    public Goal getConfiguredGoal(MedicalConditions condition) {
+        return goalsConfiguredMap.get(condition);
+    }
 }

@@ -12,6 +12,9 @@ import android.widget.SeekBar;
 import com.viamhealth.android.activities.fragments.AddGoalFragment;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
 import com.viamhealth.android.listeners.OnFragmentEditTextListener;
+import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
 
 /**
  * Created by naren on 10/10/13.
@@ -41,15 +44,23 @@ public class AddGoalFragmentManager extends OrFragmentManager implements EditTex
         }
     }
 
-    public void OnSave() {
-        AddGoalFragment fragment = (AddGoalFragment) this.mLastShownFragment.fragment;
-        fragment.onSave();
-    }
-
     @Override
     protected void initFragment(Fragment fragment) {
         AddGoalFragment addGoalFragment = (AddGoalFragment) fragment;
         addGoalFragment.setEditTextFocusChangeListener(this);
     }
 
+    public Goal getGoal() {
+        AddGoalFragment fragment = (AddGoalFragment) this.mLastShownFragment.fragment;
+        return fragment.getGoal();
+    }
+
+    public GoalReadings getGoalReadings() {
+        AddGoalFragment fragment = (AddGoalFragment) this.mLastShownFragment.fragment;
+        return fragment.getGoalReadings();
+    }
+
+    public MedicalConditions getType() {
+        return (MedicalConditions) this.mLastShownFragment.key;
+    }
 }
