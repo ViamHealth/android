@@ -36,6 +36,7 @@ public class Global_Application extends Application
 	public static int totalcal=0;
 	public String path;
 	public String fileuri=null;
+    public byte fileByte[]=null;
 	public String addvalType;
 	public String weightid,cholesterolid,glucoseid,bpid;
 	public boolean weightupdate, cholesterolupdate,glucoseupdate,bpupdate;
@@ -238,6 +239,17 @@ public class Global_Application extends Application
 	public void setFileuri(String fileuri) {
 		this.fileuri = fileuri;
 	}
+
+
+    public byte[] getFileByte() {
+        return fileByte;
+    }
+
+    public void setFileByte(byte [] fileByte) {
+        this.fileByte = fileByte;
+    }
+
+
 
 	public String getPath() {
 		return path;

@@ -59,6 +59,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 public class UploadFile extends BaseActivity implements OnClickListener{
 	Display display;
@@ -150,13 +151,16 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		// TODO Auto-generated method stub
 		if(v==btn_upload){
 			Log.e("TAG","uri is : " + ga.getFileuri());
-			if(ga.getFileuri()!=null){
-				dialog = new ProgressDialog(UploadFile.this);
-				dialog.setCanceledOnTouchOutside(false);
-				dialog.setMessage("Please Wait....");
-				dialog.show();
-				uploadFile(ga.getFileuri().toString(), "http://api.viamhealth.com/healthfiles/");
-			}
+			//if(ga.getFileuri()!=null){
+				//dialog = new ProgressDialog(UploadFile.this);
+				//dialog.setCanceledOnTouchOutside(false);
+				//dialog.setMessage("Please Wait....");
+				//dialog.show();
+                Toast.makeText(getApplicationContext()," before calling uploadfile",Toast.LENGTH_LONG).show();
+                UploadFiletoServer task1=new UploadFiletoServer();
+                task1.execute();
+				//uploadDatatoServer(ga.getFileByte(),ga.getFileuri(), "http://api.viamhealth.com/healthfiles/");
+			//}
 		}
 		if(v==btn_cancle){
 			finish();
@@ -165,6 +169,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		    selectImage();
 		}
 	}
+
+
 	public static Bitmap getBitmapFromURL(String src) {
 	     try {
 	         URL url = new URL(src);
@@ -381,6 +387,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
         }
         return null;
     }
+
+
     public String BitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos=new  ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
@@ -401,6 +409,103 @@ public class UploadFile extends BaseActivity implements OnClickListener{
         return temp;
     }
 
+    public byte[] BitMapToByteArray(Bitmap bitmap)
+    {
+        ByteArrayOutputStream baos=new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        byte [] b=baos.toByteArray();
+        return b;
+    }
+
+
+    public int uploadDatatoServer(byte []file,String sourceFileUri,String upLoadServerUri)
+    {
+
+        String fileName=sourceFileUri;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+
+        try {
+
+            // open a URL connection to the Servlet
+            URL url = new URL(upLoadServerUri);
+
+            // Open a HTTP  connection to  the URL
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // Allow Inputs
+            conn.setDoOutput(true); // Allow Outputs
+            conn.setUseCaches(false); // Don't use a Cached Copy
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization","Token "+appPrefs.getToken().toString());
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("file", fileName);
+            //conn.setRequestProperty("user", user.getId().toString());
+            conn.setRequestProperty("description", "description");
+            dos = new DataOutputStream(conn.getOutputStream());
+            Log.e("upload MJ","before Uploading file to server");
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=file;filename="+ fileName + "" + lineEnd);
+            bufferSize=dos.size();
+
+            dos.writeBytes(lineEnd);
+
+            dos.write(file,0,bufferSize);
+
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+            // Responses from the server (code and message)
+            Log.e("upload MJ","before Uploading file to server");
+            serverResponseCode = conn.getResponseCode();
+            String serverResponseMessage = conn.getResponseMessage();
+            Log.e("upload MJ","after Uploading file to server");
+
+            Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+            dialog.dismiss();
+            if(serverResponseCode == 200){
+                Log.i("uploadFile", "HTTP Response is : "
+                        + serverResponseMessage + ": " + "uploaded");
+
+            }
+
+            //close the streams //
+            dos.flush();
+            dos.close();
+
+        } catch (MalformedURLException ex) {
+
+            ex.printStackTrace();
+
+
+
+            Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+        } catch (Exception e) {
+
+            dialog.dismiss();
+            e.printStackTrace();
+
+
+            Log.e("Upload file to server Exception", "Exception : "
+                    + e.getMessage(), e);
+        }
+
+        return serverResponseCode;
+
+
+
+    }
+
+
+
 	 public int uploadFile(String sourceFileUri,String upLoadServerUri) {
          
          
@@ -415,7 +520,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
          byte[] buffer;
          int maxBufferSize = 1 * 1024 * 1024;
          File sourceFile = new File(sourceFileUri);
-             
+
          if (!sourceFile.isFile()) {
               
               dialog.dismiss();
@@ -429,7 +534,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
            
          }
          else
-         {   
+         {
+
               try {
                    
                     // open a URL connection to the Servlet
@@ -518,6 +624,45 @@ public class UploadFile extends BaseActivity implements OnClickListener{
               
           } // End else block
         }
+
+
+    public class UploadFiletoServer extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog = new ProgressDialog(UploadFile.this);
+            dialog.setMessage("Please Wait....");
+            dialog.show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+            Log.i("onPostExecute", "onPostExecute");
+            //generateView();
+            dialog.dismiss();
+            Toast.makeText(getApplicationContext()," after uploading",Toast.LENGTH_LONG).show();
+			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
+				startActivity(intent);*/
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            uploadDatatoServer(ga.getFileByte(),ga.getFileuri(),"http://api.viamhealth.com/healthfiles/");
+            return null;
+        }
+
+    }
+
+
 		// async class for calling webservice and get responce message
 		public class CalluserMeTask extends AsyncTask <String, Void,String>
 		{
@@ -554,7 +699,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 				return null;
 			}
 			   
-		}     
+		}
+
 	
 				// function for check internet is available or not
 				public final boolean isInternetOn() {

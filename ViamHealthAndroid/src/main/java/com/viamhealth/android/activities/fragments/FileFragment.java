@@ -6,8 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -44,10 +46,16 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -73,7 +81,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     RefreshableListView listfile;
     ImageView back,person_icon;
     Typeface tf;
-    Bitmap mBitmap;
+
 
     ViamHealthPrefs appPrefs;
     functionClass obj;
@@ -84,6 +92,10 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     ArrayList<FileData> lstResult = new ArrayList<FileData>();
     private DisplayImageOptions options;
     private static final int CAMERA_PIC_REQUEST = 1337;
+    Bitmap mBitmap,b1;
+    byte[] byteArray;
+    String Base64str=null;
+    static int serverResponseCode = 0;
 
 
     @Override
@@ -230,7 +242,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    photoPickerIntent.setType("image/*");
+                    photoPickerIntent.setType("*/*");
                     startActivityForResult(photoPickerIntent, 1);
 
                 } else if (items[item].equals("Cancel")) {
@@ -241,25 +253,233 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         builder.show();
     }
 
+    /*
+    public String getRealPathFromURI(Uri contentUri)
+    {
+        Cursor cursor = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
+        if(cursor != null && cursor.moveToFirst())
+        {
+            do {
+                Uri uri = Uri.parse(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
+                ga.setFileuri(uri.toString());
+            }while(cursor.moveToNext());
+            cursor.close();
+        }
+        return null;
+    }
+
+*/
+
+    private String getRealPathFromURI(Uri contentURI) {
+        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
+    {
+
+
+
+
+
+        int width = bm.getWidth();
+
+        int height = bm.getHeight();
+
+
+        float srcWidth = bm.getWidth();
+        float srcHeight = bm.getHeight();
+
+
+
+        if((srcWidth>=newWidth || srcHeight>=newHeight)==false)
+        {
+            return bm;
+        }
+
+
+        float resizeWidth = srcWidth;
+        float resizeHeight = srcHeight;
+
+        float aspect = resizeWidth / resizeHeight;
+
+        if (resizeWidth > newWidth)
+        {
+            resizeWidth = newWidth;
+            resizeHeight= (newWidth * srcHeight)/srcWidth;
+
+            //  resizeHeight = resizeWidth / aspect;
+        }
+        if (resizeHeight > newHeight)
+        {
+            //  aspect = resizeWidth / resizeHeight;
+            resizeHeight = newHeight;
+
+            resizeWidth=(newHeight * srcWidth)/srcHeight;
+
+            // resizeWidth = resizeHeight * aspect;
+        }
+
+        Matrix matrix = new Matrix();
+
+// resize the bit map
+
+        matrix.postScale(resizeWidth / width, resizeHeight / height);
+
+// recreate the new Bitmap
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+        return resizedBitmap;
+
+
+    }
+
+
+    public int uploadDatatoServer(byte []file,String sourceFileUri,String upLoadServerUri)
+    {
+
+        String fileName=sourceFileUri;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null;
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+
+        try {
+
+            // open a URL connection to the Servlet
+            URL url = new URL(upLoadServerUri);
+
+            // Open a HTTP  connection to  the URL
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // Allow Inputs
+            conn.setDoOutput(true); // Allow Outputs
+            conn.setUseCaches(false); // Don't use a Cached Copy
+
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization","Token "+appPrefs.getToken().toString());
+            conn.setRequestProperty("Connection", "Keep-Alive");
+            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("file", fileName);
+            conn.setRequestProperty("user", user.getId().toString());
+            conn.setRequestProperty("description", "description");
+            dos = new DataOutputStream(conn.getOutputStream());
+
+            dos.writeBytes(twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=file;filename="+ fileName + "" + lineEnd);
+
+            dos.writeBytes(lineEnd);
+
+            dos.write(file,0, 1 * 1024 * 1024);
+
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+            // Responses from the server (code and message)
+            serverResponseCode = conn.getResponseCode();
+            String serverResponseMessage = conn.getResponseMessage();
+
+            Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+            dialog.dismiss();
+            if(serverResponseCode == 200){
+                Log.i("uploadFile", "HTTP Response is : "
+                        + serverResponseMessage + ": " + "uploaded");
+
+            }
+
+            //close the streams //
+            dos.flush();
+            dos.close();
+
+        } catch (MalformedURLException ex) {
+
+            ex.printStackTrace();
+
+
+
+            Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+        } catch (Exception e) {
+
+            dialog.dismiss();
+            e.printStackTrace();
+
+
+            Log.e("Upload file to server Exception", "Exception : "
+                    + e.getMessage(), e);
+        }
+
+        return serverResponseCode;
+
+
+
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("TAG","On  ac result is called");
-        Uri chosenUri = data.getData();
-        Toast.makeText(getActivity(),chosenUri.toString() + "request code and resultCode " + requestCode + "" +resultCode,Toast.LENGTH_LONG).show();
+        String path="";
+
         if (requestCode==1)
         {
             if (resultCode == -1)
             {
-                //Uri chosenUri = data.getData();
+
+                Uri chosenImageUri = data.getData();
                 try
                 {
-                    File file = new File(chosenUri.toString());
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    byte[] buffer = new byte[4096];
-                    String pathString=chosenUri+"";
-                    Toast.makeText(getActivity(),pathString,Toast.LENGTH_LONG).show();
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inSampleSize=4;
+                    mBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(chosenImageUri),null,options);
+                    options.inPurgeable = true;
+                    System.runFinalization();
+                    Runtime.getRuntime().gc();
+                    System.gc();
+
+                    String chosenstring=chosenImageUri+"";
+                    Log.e("TAG","choosen String : " + chosenstring);
+                    if(chosenstring.contains("content://"))
+                    {
+                        String[] splitval=chosenstring.split("//");
+                        path=splitval[1];
+                    }
+                    else if (chosenstring.contains("file:///"))
+                    {
+                        String[] splitval=chosenstring.split("//");
+                        path=splitval[1];
+                    }
+                    ga.setFileuri(path);
+                    b1=getResizedBitmap(mBitmap,300,300);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    b1.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    //img_display.setImageBitmap(b1);
+                    ga.setImg(b1);
+                    byteArray = stream.toByteArray();
+                    ga.setFileByte(byteArray);
+                    Intent myintent= new Intent(getActivity(),UploadFile.class);
+                    startActivity(myintent);
+
+                   // uploadDatatoServer(byteArray,chosenImageUri.toString(),"http://api.viamhealth.com/healthfiles/");
+                    Base64str = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                    Log.e("TAG","FROM FILE : "  + Base64str);
+									/* if(mBitmap!=null){
+									    	mBitmap.recycle();
+									    	mBitmap=null;
+										}*/
+
                 }
                 catch (FileNotFoundException e)
                 {
@@ -272,14 +492,56 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
         if (requestCode==CAMERA_PIC_REQUEST)
         {
-            //if (resultCode == RESULT_OK)
-            //{
+            if (resultCode == -1)
+            {
+                //Log.e("TAG","Path is : " + path);
+                Bundle extras = data.getExtras();
+                mBitmap=(Bitmap)extras.get("data");
 
+                System.gc();
+                ga.setFileuri("fileuri");
+                b1=getResizedBitmap(mBitmap,300,300);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                b1.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArray = stream.toByteArray();
+                ga.setFileByte(byteArray);
+                Intent myintent= new Intent(getActivity(),UploadFile.class);
+                startActivity(myintent);
 
-            //}
+                Base64str = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                Log.e("TAG","Camera FILE : "  + Base64str);
+                ga.setImg(b1);
+                Uri chosenImageUri = data.getData();
+                getRealPathFromURI(chosenImageUri);
+							 	/*
+
+			    		 		ga.setFileuri(getRealPathFromURI(chosenImageUri));
+			    		 		String chosenstring=chosenImageUri+"";
+			    		 		if(chosenstring.contains("content://"))
+							 	{
+							 		path=getRealPathFromURI(chosenImageUri);
+				        	 	}
+							 	else if (chosenstring.contains("file:///"))
+							 	{
+							 		String[] splitval=chosenstring.split("//");
+							 		path=splitval[1];
+							 	}      */
+							    /*if(mBitmap!=null){
+							    	mBitmap.recycle();
+							    	mBitmap=null;
+								}  */
+							 /*	process_dialog = new ProgressDialog(this.getParent());
+								process_dialog.setMessage("Please Wait....");
+							    process_dialog.show();
+							    new AddPhotoTask().execute();*/
+
+            }
         }
-
     }
+
+
+
+
 
 
     @Override
