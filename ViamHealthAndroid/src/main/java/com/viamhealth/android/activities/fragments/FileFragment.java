@@ -3,6 +3,7 @@ package com.viamhealth.android.activities.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.app.Activity;
+import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -51,6 +53,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -132,6 +135,13 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         h3=(int)((height*0.63)/100);
         h20=(int)((height*4.17)/100);
 
+        if(isInternetOn()){
+            CallFileSearchTask task = new CallFileSearchTask();
+            task.activity =getActivity();
+            task.execute();
+        }else{
+            Toast.makeText(getActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+        }
 
         edt_search=(EditText)view.findViewById(R.id.edt_search);
         edt_search.setTypeface(tf);
@@ -156,6 +166,8 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         lbl_upload.setPadding(w8, h9, w8, h9);
         lbl_upload.setOnClickListener(this);
         lbl_upload.setTypeface(tf);
+
+        goal_count=(TextView)view.findViewById(R.id.goal_count);
 
         lbl_share = (TextView)view.findViewById(R.id.lbl_share);
         lbl_share.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_social_share, 0, 0, 0);
@@ -443,12 +455,23 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inSampleSize=4;
+                    InputStream fi=getActivity().getContentResolver().openInputStream(chosenImageUri);
+
+                    //File file=new File(chosenImageUri.toString());
+                    //FileInputStream input = new FileInputStream(file);
+
+                    byte[] buf=new byte[1024];
                     mBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(chosenImageUri),null,options);
                     options.inPurgeable = true;
                     System.runFinalization();
                     Runtime.getRuntime().gc();
                     System.gc();
 
+                    ContentResolver cR = getActivity().getContentResolver();
+                    MimeTypeMap mime = MimeTypeMap.getSingleton();
+                    String type = mime.getExtensionFromMimeType(cR.getType(chosenImageUri));
+                    String contentType=cR.getType(chosenImageUri);
+                    Toast.makeText(getActivity(),"Mime type=,Content type="+type + " "+contentType,Toast.LENGTH_LONG).show();
                     String chosenstring=chosenImageUri+"";
                     Log.e("TAG","choosen String : " + chosenstring);
                     if(chosenstring.contains("content://"))
@@ -462,19 +485,38 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                         path=splitval[1];
                     }
                     ga.setFileuri(path);
-                    b1=getResizedBitmap(mBitmap,300,300);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    b1.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    //img_display.setImageBitmap(b1);
-                    ga.setImg(b1);
+                    if(type.equalsIgnoreCase("jpeg") || type.equalsIgnoreCase("png") )
+                    {
+                        b1=getResizedBitmap(mBitmap,300,300);
+                        b1.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        //img_display.setImageBitmap(b1);
+                        ga.setImg(b1);
+
+
+                    }
+                    else
+                    {
+                        try {
+                            for (int readNum; (readNum = fi.read(buf)) != -1;) {
+                                stream.write(buf, 0, readNum); //no doubt here is 0
+                            }
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }
+
                     byteArray = stream.toByteArray();
+
                     ga.setFileByte(byteArray);
+
                     Intent myintent= new Intent(getActivity(),UploadFile.class);
                     startActivity(myintent);
 
-                   // uploadDatatoServer(byteArray,chosenImageUri.toString(),"http://api.viamhealth.com/healthfiles/");
-                    Base64str = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-                    Log.e("TAG","FROM FILE : "  + Base64str);
+                    stream.flush();
+                    //Base64str = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                    //Log.e("TAG","FROM FILE : "  + Base64str);
 									/* if(mBitmap!=null){
 									    	mBitmap.recycle();
 									    	mBitmap=null;
@@ -484,6 +526,8 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 catch (FileNotFoundException e)
                 {
                     // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -582,6 +626,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             for(int i=0;i<lstResult.size();i++){
                 if(lstResult.get(i).isChecked()){
                     url=lstResult.get(i).getDownload_url() + "," + url;
+                    Toast.makeText(getActivity(), "Download URL.."+url, Toast.LENGTH_SHORT).show();
                     val=true;
                 }
             }
@@ -670,6 +715,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             if(lstResult.size()>0){
                 goal_count.setText("("+lstResult.size()+")");
                 FileDataAdapter adapter = new FileDataAdapter(getActivity(),R.layout.filelist, lstResult);
+                Toast.makeText(getActivity(), "number of files == ..." + lstResult.size(),Toast.LENGTH_SHORT).show();
                 listfile.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listfile.onRefreshComplete();

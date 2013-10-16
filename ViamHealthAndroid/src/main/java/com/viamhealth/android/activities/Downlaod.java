@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -58,11 +59,14 @@ public class Downlaod extends Activity {
 public void startdownload(){
 //	Bundle bundle = getIntent().getExtras();
 	Log.e("TAG","Download uri : " + ga.getDownload());
-	List<String> lst = Arrays.asList(ga.getDownload().split("\\s*,\\s*"));
+	//List<String> lst = Arrays.asList(ga.getDownload().split("\\s*,\\s*"));
+    List<String> lst = Arrays.asList(ga.getDownload().split(","));
 	for(int i=0;i<lst.size();i++){
 	   Log.e("TAG","url is : " + lst.get(i).toString());
 	   downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
-	   Uri Download_Uri = Uri.parse("http://api.viamhealth.com/healthfiles/download/69/");
+	   //Uri Download_Uri = Uri.parse("http://api.viamhealth.com/healthfiles/download/69/");
+       Uri Download_Uri = Uri.parse(lst.get(i).toString());
+       Toast.makeText(getApplicationContext(), "Download Uri = "+Download_Uri.toString(), Toast.LENGTH_SHORT).show();
 	   DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
 	    
 	   //Restrict the types of networks over which this download may proceed.

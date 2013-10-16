@@ -446,9 +446,11 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             conn.setRequestProperty("Authorization","Token "+appPrefs.getToken().toString());
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            //conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            conn.setRequestProperty("Content-Type", "docx;boundary=" + boundary);
             conn.setRequestProperty("file", fileName);
             //conn.setRequestProperty("user", user.getId().toString());
+            conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
             conn.setRequestProperty("description", "description");
             dos = new DataOutputStream(conn.getOutputStream());
             Log.e("upload MJ","before Uploading file to server");
@@ -464,12 +466,14 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
             // Responses from the server (code and message)
+            Log.e("upload MJ","user id="+ga.getLoggedInUser().getId().toString());
             Log.e("upload MJ","before Uploading file to server");
             serverResponseCode = conn.getResponseCode();
             String serverResponseMessage = conn.getResponseMessage();
             Log.e("upload MJ","after Uploading file to server");
 
-            Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseCode);
+            Log.i("uploadFile", "HTTP Response code is : "+ serverResponseMessage + ": " + serverResponseCode);
+            Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseMessage);
             dialog.dismiss();
             if(serverResponseCode == 200){
                 Log.i("uploadFile", "HTTP Response is : "
