@@ -106,13 +106,9 @@
     <string name="title_activity_new_home">NewHome</string>
     <string name="reminder_type_prompt">Type</string>
     <string name="duration_type_prompt">Duration</string>
-<<<<<<< HEAD
     <string name="exercise_type_prompt">Exercise</string>
     <string name="enter_time">Time</string>
     <string name="title_activity_delete_medication">Delete Medication</string>
-
-=======
->>>>>>> master
     <string name="title_activity_fbfamily_list">Add Family Member</string>
     <string name="login">Login</string>
     <string name="password">#password</string>
@@ -137,10 +133,6 @@
     <string name="tab_label_journal">Journal</string>
     <string name="tab_label_reminder">Reminders</string>
     <string name="tab_label_file">Files</string>
-<<<<<<< HEAD
-=======
-    <string name="title_activity_delete_medication">Delete Medication</string>
->>>>>>> master
     <string name="addgoal">+ Add Goal</string>
     <string name="title_add_goal">Add Goal</string>
     <string name="goal_settings">Goal Settings</string>
