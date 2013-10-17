@@ -340,7 +340,7 @@
                             <LinearLayout android:layout_height="fill_parent"
                                 android:layout_width="fill_parent"
                                 android:layout_gravity="right"
-                                android:gravity="right">
+                                android:gravity="right">Add
 
                                 <android.support.v4.view.ViewPager
                                     android:id="@+id/pager1"

@@ -617,11 +617,14 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         if(v==add_medicine){
             Intent AddMedication = new Intent(getActivity(),AddMedication.class);
             AddMedication.putExtra("user_id",user.getId().toString());
+            AddMedication.putExtra("iseditMed",user.getId().toString());
             startActivity(AddMedication);
         }
         if(v==add_test){
-            Intent AddTest = new Intent(getActivity(),AddTest.class);
-            startActivity(AddTest);
+            Intent AddMedication = new Intent(getActivity(),AddMedication.class);
+            AddMedication.putExtra("user_id",user.getId().toString());
+            AddMedication.putExtra("iseditOthers",user.getId().toString());
+            startActivity(AddMedication);
         }
     }
 

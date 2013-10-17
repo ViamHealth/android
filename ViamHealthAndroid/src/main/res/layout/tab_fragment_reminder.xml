@@ -518,6 +518,7 @@
                                         android:paddingLeft="10dp"
                                         android:paddingRight="10dp"
                                         android:dividerHeight="1dp"
+                                        android:background="@drawable/btn_save_toggle"
                                         android:headerDividersEnabled="false"
                                         android:footerDividersEnabled="false"/>
 
@@ -526,21 +527,6 @@
                                     android:layout_width="fill_parent"
                                     android:orientation="vertical"
                                     android:paddingTop="10dp">
-                                    <LinearLayout android:layout_height="wrap_content"
-                                        android:layout_width="fill_parent"
-                                        android:orientation="vertical">
-                                        <Button  android:id="@+id/add_medicine"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:text="Add Reminder"
-                                            android:gravity="center_vertical|center"
-                                            android:textColor="#ffffff"
-                                            android:textSize="18sp"
-                                            android:paddingLeft="10dp"
-                                            android:paddingRight="10dp"
-                                            android:background="@drawable/btn_save_toggle"
-                                            android:textStyle="bold" />
-                                    </LinearLayout>
                                 </LinearLayout>
                                 <LinearLayout android:layout_height="wrap_content"
                                     android:layout_width="fill_parent"
