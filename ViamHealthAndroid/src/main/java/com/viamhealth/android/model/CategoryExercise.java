@@ -7,7 +7,7 @@ public class CategoryExercise {
 
     String id,name,time,calories;
 
-    public CategoryExercise(String name, String time,
+    public CategoryExercise(String id,String name, String time,
                         String calories) {
         super();
         this.id = id;

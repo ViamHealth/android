@@ -136,13 +136,8 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         h3=(int)((height*0.63)/100);
         h20=(int)((height*4.17)/100);
 
-        if(isInternetOn()){
-            CallFileSearchTask task = new CallFileSearchTask();
-            task.activity =getActivity();
-            task.execute();
-        }else{
-            Toast.makeText(getActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
-        }
+
+
 
         edt_search=(EditText)view.findViewById(R.id.edt_search);
         edt_search.setTypeface(tf);
@@ -231,6 +226,19 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 //            return null;
 //        }
 //    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(isInternetOn()){
+            CallFileSearchTask task = new CallFileSearchTask();
+            task.activity =getActivity();
+            task.execute();
+        }else{
+            Toast.makeText(getActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void ScreenDimension()
     {

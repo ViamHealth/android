@@ -314,12 +314,6 @@
                                         android:paddingTop="15dp">
 
 
-                                        <TextView  android:layout_height="wrap_content"
-                                            android:layout_width="0dp"
-                                            android:layout_weight="1"
-                                            android:text="Every"
-                                            android:paddingRight="5dp"
-                                            android:textColor="#000000"/>
 
                                         <EditText
                                             android:id="@+id/txt_duration_val"

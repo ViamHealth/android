@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.model.BPData;
+import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
 import com.viamhealth.android.model.CholesterolData;
 import com.viamhealth.android.model.FileData;
@@ -192,11 +193,53 @@ public class functionClass {
 				}
 			return lstResult;
 		}
-		
+
+
+        public ArrayList<CategoryExercise> getExercise(String user)
+        {
+            ArrayList<CategoryExercise>	lstData = new ArrayList<CategoryExercise>();
+            String baseurlString = Global_Application.url+"user-physical-activity/?user="+user;
+            Log.e("TAG","url is : " + baseurlString);
+
+            RestClient client = new RestClient(baseurlString);
+            client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+            try
+            {
+                client.Execute(RequestMethod.GET);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            responseString = client.getResponse();
+            Log.e("TAG","Response string " + responseString);
+
+            try {
+                jObject = new JSONObject(responseString);
+                Log.e("TAG","res : " + responseString);
+
+                jarray = jObject.getJSONArray("results");
+                for (int i = 0; i < jarray.length(); i++) {
+                    JSONObject c = jarray.getJSONObject(i);
+                    lstData.add(new CategoryExercise(c.getString("id"),c.getJSONObject("physical_activity").getString("label"),c.getString("time_spent"),c.getString("calories_spent")));
+                }
+                Log.e("TAG","Data is " + appPrefs.getMenuList().toString());
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return lstData;
+
+        }
+
+
 		public ArrayList<CategoryFood> FoodListing(String baseurlString){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
 			RestClient client = new RestClient(baseurlString);   
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+            Log.e("TAG","baseurlString : " + baseurlString);
 		  
 			try
 			{
@@ -260,6 +303,9 @@ public class functionClass {
 				
 			return lstResult;
 		}
+
+
+
 		//delete food
 				public String DeleteFood(String id){
 					String baseurlString = Global_Application.url+"diet-tracker/"+id+"/";   
@@ -996,7 +1042,32 @@ public class functionClass {
 						}
 					return lstData;
 				}
-				
+
+                public void addExercise(String weight,String time_spent,String physical_activity_id,String calories_spent,String user)
+                {
+                      ArrayList<CategoryExercise> lst= new ArrayList<CategoryExercise>();
+                      String baseurlString = Global_Application.url+"user-physical-activity/?user="+user;
+                      Log.e("TAG","url is : " + baseurlString);
+                      RestClient client = new RestClient(baseurlString);
+                      client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+                      client.AddParam("weight", weight);
+                      client.AddParam("time_spent",time_spent);
+                      client.AddParam("physical_activity",physical_activity_id);
+                      client.AddParam("user_calories_spent", calories_spent);
+                      try
+                      {
+                        client.Execute(RequestMethod.POST);
+                      }
+                      catch (Exception e) {
+                        e.printStackTrace();
+                      }
+
+                      responseString = client.getResponse();
+                      Log.e("TAG","Response string " + responseString);
+
+                }
+
+
 				// function for add medicates data
 				public ArrayList<MedicalData> getMedical(){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();

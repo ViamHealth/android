@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:background="#D9D9D9">
 
     <LinearLayout
@@ -27,20 +27,21 @@
 
     <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:id="@+id/newval_main_layout"
-        android:background="@drawable/inviteuser_header"
         android:gravity="center_vertical"
         >
 
     <Spinner
-        android:id="@+id/interval_type"
-        android:layout_width="wrap_content"
+        android:id="@+id/exercise_type"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:background="#000000"
         android:gravity="right"
         android:entries="@array/exercise_list"
-        android:prompt="@string/exercise_type_prompt" />
+        android:prompt="@string/exercise_type_prompt"
+       />
 
     </LinearLayout>
 
@@ -48,13 +49,12 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:id="@+id/newval_main_layout"
-        android:background="@drawable/inviteuser_header"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         >
 
         <EditText
-            android:id="@+id/txt_name"
+            android:id="@+id/txt_time"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:hint="Enter Time"
@@ -63,16 +63,21 @@
             android:gravity="center_vertical"
             android:background="@drawable/edt_bg"
             android:singleLine="true"
-            android:padding="5dp"/>
+            android:padding="5dp"
+            android:inputType="number"/>
 
         <Spinner
-            android:id="@+id/interval_type"
+            android:id="@+id/time_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
+            android:background="#000000"
+            android:inputType="number"
+            android:textColor="#000000"
             android:entries="@array/time_type"
-            android:prompt="@string/enter_time" />
+            android:prompt="@string/enter_time"
+            android:textColorHint="#000000"/>
 
 
     </LinearLayout>
@@ -82,16 +87,16 @@
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:id="@+id/newval_main_layout"
-        android:background="@drawable/inviteuser_header"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         >
 
         <EditText
-            android:id="@+id/txt_name"
+            android:id="@+id/txt_calories"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:hint="Calories"
+            android:inputType="number"
             android:textSize="15sp"
             android:textColor="#000000"
             android:gravity="center_vertical"
@@ -105,6 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Calculate"
+            android:visibility="gone"
             android:gravity="center"
             android:entries="@array/time_type"
             android:prompt="@string/enter_time" />
@@ -117,15 +123,15 @@
 
 
         <TextView
-            android:id="@+id/btnCancle"
+            android:id="@+id/btnCancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/inviteuser_btn_toggle"
             android:gravity="center"
             android:text="Cancel"
+            android:textColor="#000000"
             android:textSize="17sp"
             android:layout_weight="1"
-            android:textColor="#cdcdcd"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/btnSave"
@@ -133,7 +139,7 @@
             android:layout_width="fill_parent"
             android:text="Add"
             android:layout_weight="1"
-            android:textColor="#cdcdcd"
+            android:textColor="#000000"
             android:background="@drawable/inviteuser_btn_toggle"
             android:textStyle="bold"
             android:textSize="17sp"
