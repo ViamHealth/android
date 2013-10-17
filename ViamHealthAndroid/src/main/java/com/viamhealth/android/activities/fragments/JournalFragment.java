@@ -35,6 +35,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddBreakfast;
+import com.viamhealth.android.activities.AddExercise;
 import com.viamhealth.android.adapters.BreakfastAdapter;
 import com.viamhealth.android.adapters.DinnerAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
@@ -66,7 +67,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
             lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblitem1,lblitem2,lblitem3,lblitem4;
     LinearLayout settiglayout_food,back_food_layout,food_main_layout,food_mid_layout,
             btn_food_time_picker,btn_food_date_picker,food_header,layout1,layout2,layout3,layout4,breakfast,lunch,snacks,dinner;
-    ImageView img_date,img_time,food_icon,addDinner,addSnacks,addLunch,addBreakfast;
+    ImageView img_date,img_time,food_icon,addDinner,addExercise,addSnacks,addLunch,addBreakfast;
     RefreshableListView lstViewLunch,lstViewSnacks,lstViewDinner;
     RefreshableListView lstViewBreakfast;
     String nexturl,frm;
@@ -285,6 +286,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
 
         addDinner = (ImageView)view.findViewById(R.id.addDinner);
         addDinner.setOnClickListener(this);
+
+        addExercise = (ImageView)view.findViewById(R.id.addExercise);
+        addExercise.setOnClickListener(this);
+
+
 
 
         food_main_layout = (LinearLayout)view.findViewById(R.id.food_main_layout);
@@ -748,6 +754,15 @@ public class JournalFragment extends Fragment implements View.OnClickListener{
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             startActivity(addfood);
+        }
+
+        if(v==addExercise){
+            ga.setFoodType("Exercise");
+            Intent addExercise = new Intent(getActivity(), AddExercise.class);
+            User user = getArguments().getParcelable("user");
+            addExercise.putExtra("user", user);
+            startActivity(addExercise);
+
         }
 
     }

@@ -446,8 +446,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             conn.setRequestProperty("Authorization","Token "+appPrefs.getToken().toString());
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            //conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("Content-Type", "docx;boundary=" + boundary);
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            //conn.setRequestProperty("Content-Type", "docx;boundary=" + boundary);
             conn.setRequestProperty("file", fileName);
             //conn.setRequestProperty("user", user.getId().toString());
             conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
@@ -470,6 +470,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             Log.e("upload MJ","before Uploading file to server");
             serverResponseCode = conn.getResponseCode();
             String serverResponseMessage = conn.getResponseMessage();
+
             Log.e("upload MJ","after Uploading file to server");
 
             Log.i("uploadFile", "HTTP Response code is : "+ serverResponseMessage + ": " + serverResponseCode);

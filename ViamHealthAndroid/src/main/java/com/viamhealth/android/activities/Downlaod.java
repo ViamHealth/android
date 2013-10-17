@@ -17,13 +17,16 @@ import android.widget.Toast;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
+import com.viamhealth.android.ViamHealthPrefs;
 
 public class Downlaod extends Activity {
 	public Button btndownload,btncancle;
 	private DownloadManager downloadManager;
 	private long downloadReference;
 	Global_Application ga;
-	
+    ViamHealthPrefs appPrefs;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,6 +34,7 @@ public class Downlaod extends Activity {
 		setContentView(R.layout.downlaod);
 		
 		ga=((Global_Application)getApplicationContext());
+        appPrefs=new ViamHealthPrefs(getApplicationContext());
 		
 		setview();
 	}
@@ -67,8 +71,12 @@ public void startdownload(){
 	   //Uri Download_Uri = Uri.parse("http://api.viamhealth.com/healthfiles/download/69/");
        Uri Download_Uri = Uri.parse(lst.get(i).toString());
        Toast.makeText(getApplicationContext(), "Download Uri = "+Download_Uri.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Toast = "+appPrefs.getToken().toString(), Toast.LENGTH_SHORT).show();
+
 	   DownloadManager.Request request = new DownloadManager.Request(Download_Uri);
-	    
+       request.addRequestHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+        Log.e("TAG","Authorization token is: " + appPrefs.getToken().toString());
 	   //Restrict the types of networks over which this download may proceed.
 	   request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
 	   //Set whether this download may proceed over a roaming connection.
@@ -80,6 +88,8 @@ public void startdownload(){
 	   //Set the local destination for the downloaded file to a path within the application's external files directory
 	   request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"logo" + i + ".png");
 	   //Enqueue a new download and same the referenceId
+
+        request.setNotificationVisibility(1);
 	   downloadReference = downloadManager.enqueue(request);
 	}
 	}

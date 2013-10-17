@@ -932,6 +932,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
+                    Log.e("TAG","response string delete  : " + baseurlString);
 					
 					return "0";
 				}

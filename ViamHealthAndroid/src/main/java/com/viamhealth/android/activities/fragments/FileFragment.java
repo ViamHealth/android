@@ -89,7 +89,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     ViamHealthPrefs appPrefs;
     functionClass obj;
     Activity myactivity;
-    String delid;
+    String delid,shareid;
     Global_Application ga;
     String selecteduserid="0";
     ArrayList<FileData> lstResult = new ArrayList<FileData>();
@@ -99,6 +99,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     byte[] byteArray;
     String Base64str=null;
     static int serverResponseCode = 0;
+    Uri shareUri=null;
 
 
     @Override
@@ -172,6 +173,8 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         lbl_share = (TextView)view.findViewById(R.id.lbl_share);
         lbl_share.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_social_share, 0, 0, 0);
         lbl_share.setPadding(w8, h9, w8, h9);
+        lbl_share.setOnClickListener(this);
+        lbl_share.setTypeface(tf);
 
         lbl_delete = (TextView)view.findViewById(R.id.lbl_delete);
         lbl_delete.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_content_discard, 0, 0, 0);
@@ -451,6 +454,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             {
 
                 Uri chosenImageUri = data.getData();
+                shareUri=chosenImageUri;
                 try
                 {
                     BitmapFactory.Options options = new BitmapFactory.Options();
@@ -460,7 +464,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     //File file=new File(chosenImageUri.toString());
                     //FileInputStream input = new FileInputStream(file);
 
-                    byte[] buf=new byte[1024];
+                    byte[] buf=new byte[100000];
                     mBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(chosenImageUri),null,options);
                     options.inPurgeable = true;
                     System.runFinalization();
@@ -474,6 +478,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(),"Mime type=,Content type="+type + " "+contentType,Toast.LENGTH_LONG).show();
                     String chosenstring=chosenImageUri+"";
                     Log.e("TAG","choosen String : " + chosenstring);
+                    int count=0;
                     if(chosenstring.contains("content://"))
                     {
                         String[] splitval=chosenstring.split("//");
@@ -499,7 +504,8 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     {
                         try {
                             for (int readNum; (readNum = fi.read(buf)) != -1;) {
-                                stream.write(buf, 0, readNum); //no doubt here is 0
+                                count+=readNum;
+                                stream.write(buf, 0, readNum); //no doubt here is
                             }
                         } catch (IOException ex) {
                             ex.printStackTrace();
@@ -508,7 +514,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     }
 
                     byteArray = stream.toByteArray();
-
+                    Toast.makeText(getActivity(),"read count="+count,Toast.LENGTH_LONG).show();
                     ga.setFileByte(byteArray);
 
                     Intent myintent= new Intent(getActivity(),UploadFile.class);
@@ -633,13 +639,36 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
             if(val==true){
                 Log.e("TAG",url.toString().substring(0, url.length()-5) + " urls");
+                String url1=(url.toString().substring(0, url.length()-5)).replace("/download/","/");
+
                 ga.setDownload(url.toString().substring(0, url.length()-5));
+                Toast.makeText(getActivity(),"Url for download is "+url.toString().substring(0, url.length()-5),Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getActivity(),Downlaod.class);
                 startActivity(i);
             }else{
                 Toast.makeText(getActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
             }
         }
+        if(v==lbl_share)
+        {
+            boolean val=false;
+            for(int i=0;i<lstResult.size();i++){
+                if(lstResult.get(i).isChecked()){
+                    shareid=lstResult.get(i).getDownload_url() ;//+ "," + shareid;
+                    val=true;
+                }
+            }
+            if(val==true)
+            {
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("*/*");
+
+                //sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "This is the text that will be shared.");
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, shareid);
+                startActivity(Intent.createChooser(sharingIntent,"Share using"));
+            }
+        }
+
     }
 
 
