@@ -18,7 +18,7 @@ public class BMIProfile implements Parcelable {
     int bmr;
 
     public boolean isEmpty() {
-        if(height==0 && weight==0)
+        if(height==0)
             return true;
 
         else

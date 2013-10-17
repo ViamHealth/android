@@ -1,6 +1,7 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,5 +49,10 @@ public class TabHeaderFragment extends Fragment {
 
 
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

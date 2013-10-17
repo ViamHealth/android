@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -27,7 +29,9 @@ import com.facebook.widget.ProfilePictureView;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.activities.fragments.DatePickerFragment;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
+import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
@@ -41,7 +45,8 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class NewProfile extends BaseFragmentActivity implements View.OnClickListener, FBLoginFragment.OnSessionStateChangeListener {
+public class NewProfile extends BaseFragmentActivity implements View.OnClickListener,
+        FBLoginFragment.OnSessionStateChangeListener, EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
 
@@ -52,7 +57,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     String selecteduserid;
 
-    EditText firstName, lastName, dob, location, organization, mobileNumber, email;
+    EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
     ImageView profile_image;
     Button btnSave, btnCancel;
     ImageButton imgMale, imgFemale;
@@ -155,11 +160,15 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         firstName = (EditText) findViewById(R.id.profile_first_name);
         lastName = (EditText) findViewById(R.id.profile_last_name);
         dob = (EditText) findViewById(R.id.profile_dob);
+        dob.setOnFocusChangeListener(this);
         location = (EditText) findViewById(R.id.profile_location);
         organization = (EditText) findViewById(R.id.profile_organization);
         mobileNumber = (EditText) findViewById(R.id.profile_phone);
         bloodGroup = (Spinner) findViewById(R.id.profile_blood_group);
         email = (EditText) findViewById(R.id.profile_email);
+
+        height = (EditText) findViewById(R.id.input_height);
+        weight = (EditText) findViewById(R.id.input_weight);
 
         profile.setBloodGroup(BloodGroup.O_Positive);
 
@@ -435,6 +444,16 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         user.setProfile(profile);
 
+
+        /* Get the BMI related data*/
+        BMIProfile bmi = new BMIProfile();
+        bmi.setHeight(Integer.parseInt(height.getText().toString()));
+        bmi.setWeight(Double.parseDouble(weight.getText().toString()));
+
+        user.setBmiProfile(bmi);
+
+        /* TODO set BP, Diabetes and Cholesterol profiles too */
+
         return user;
     }
 
@@ -469,10 +488,38 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             isValid=false;
         }
 
+        if(dob.getText().length()==0){
+            dob.setError(getString(R.string.profile_dob_not_present));
+            isValid = false;
+        }
+
+        if(height.getText().length()==0){
+            height.setError(getString(R.string.profile_height_not_present));
+            isValid = false;
+        }
+
+        if(weight.getText().length()==0){
+            weight.setError(getString(R.string.profile_weight_not_present));
+            isValid = false;
+        }
 
         return isValid;
 
     }
 
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        EditText text = (EditText) v;
+        int inputType = text.getInputType();
+        if(hasFocus){//when focused in
+            if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
+                DialogFragment newFragment = new DatePickerFragment(text);
+                newFragment.show(this.getSupportFragmentManager(), "datePicker");
+            }
+        }else{//when focused out
+
+        }
+    }
 
 }

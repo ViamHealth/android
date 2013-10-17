@@ -11,6 +11,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
 
 /**
  * Created by naren on 10/10/13.
@@ -119,7 +121,12 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
     }
 
     @Override
-    public void onSave() {
+    public Goal getGoal() {
+        return null;
+    }
 
+    @Override
+    public GoalReadings getGoalReadings() {
+        return null;
     }
 }

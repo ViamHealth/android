@@ -143,6 +143,11 @@ public class UserEP extends BaseEP {
         return users;
     }
 
+    public User getCompleteUserProfile(Long userId){
+        User user = getUserProfile(userId);
+        user.setBmiProfile(getUserBMIProfile(userId));
+        return user;
+    }
     // function for get family member list
     public User getUserProfile(Long userId) {
         String	responsetxt="1";
@@ -393,6 +398,8 @@ public class UserEP extends BaseEP {
 
         //Update profile data
         updateProfile(updatedUser.getId(), user.getProfile());
+
+        updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
 
         user.setId(updatedUser.getId());
 

@@ -1,6 +1,14 @@
 package com.viamhealth.android.model.goals;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.viamhealth.android.model.BaseModel;
+import com.viamhealth.android.utils.JsonGraphDataBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,18 +17,30 @@ import java.util.List;
 /**
  * Created by naren on 11/10/13.
  */
-public class Goal extends BaseModel {
+public abstract class Goal extends BaseModel implements Parcelable, JsonGraphDataBuilder.JsonOutput {
 
-    Long userId;
+    long userId;
     Date targetDate;
-    List<GoalReadings> readings;
+    //List<GoalReadings> readings;
+    protected HealthyRange healthyRange;
+
+    public HealthyRange getHealthyRange() {
+        return healthyRange;
+    }
+
+    public void setHealthyRange(HealthyRange healthyRange) {
+        this.healthyRange = healthyRange;
+    }
 
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+        if(userId != null)
+            this.userId = userId;
+        else
+            this.userId = 0L;
     }
 
     public Date getTargetDate() {
@@ -31,25 +51,47 @@ public class Goal extends BaseModel {
         this.targetDate = targetDate;
     }
 
-    public List<GoalReadings> getReadings() {
-        return readings;
-    }
-
-    public void setReadings(List<GoalReadings> readings) {
-        this.readings = readings;
-    }
-
     @Override
     public String toString() {
         return "Goal{" +
                 "userId=" + userId +
                 ", targetDate=" + targetDate +
-                ", readings=" + readings +
                 "} " + super.toString();
     }
 
     public Goal() {
         super();
-        readings = new ArrayList<GoalReadings>();
+    }
+
+    public Goal(Parcel in) {
+        super(in);
+        this.userId = in.readLong();
+        this.targetDate = new Date(in.readLong());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeLong(this.userId);
+        dest.writeLong(this.targetDate==null?0:this.targetDate.getTime());
+    }
+
+    public JSONObject parentJSON() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("targetDate", targetDate.getTime());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+    public abstract class HealthyRange implements JsonGraphDataBuilder.JsonOutput {
+
     }
 }

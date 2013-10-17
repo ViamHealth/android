@@ -6,9 +6,9 @@ import android.content.Context;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
+import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoal;
-import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 
 import org.json.JSONArray;
@@ -19,23 +19,31 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by naren on 11/10/13.
  */
-public class GoalsEP extends BaseEP {
+public abstract class GoalsEP extends BaseEP {
+
+    protected SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 
     public GoalsEP(Context context, Application app) {
         super(context, app);
     }
 
-    public WeightGoal getWeightGoalsForUser(Long userId) {
-        String baseurlString = Global_Application.url+"weight-goals/";
+    private RestClient getRestClient(String url, Long userId) {
+        String baseurlString = Global_Application.url+ url + "/?user=" + userId;
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 
-        client.AddParam("user", userId);
+        return client;
+    }
+
+    public Goal getGoalsForUser(Long userId) {
+
+        RestClient client = getRestClient(getGoalURL(), userId);
 
         try {
             client.Execute(RequestMethod.GET);
@@ -45,21 +53,41 @@ public class GoalsEP extends BaseEP {
 
         String responseString = client.getResponse();
 
-        return processWeightGoalResponse(responseString);
+        return processGoalResponse(responseString);
 
     }
 
-    public WeightGoal createWeightGoalForUser(Long userId, WeightGoal goal) {
-        String baseurlString = Global_Application.url+"weight-goals/";
+    public List<GoalReadings> getGoalReadings(Long userId) {
+        RestClient client = getRestClient(getReadingsURL(), userId);
 
-        RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        try {
+            client.Execute(RequestMethod.GET);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        client.AddParam("user", userId);
-        client.AddParam("weight", goal.getWeight());
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-        client.AddParam("target_date", formater.format(goal.getTargetDate()));
-        client.AddParam("weight_measure", "METRIC");
+        String responseString = client.getResponse();
+        return processGoalReadings(responseString);
+
+    }
+
+    abstract protected String getReadingsURL();
+    abstract protected String getGoalURL();
+    abstract protected Goal newGoal();
+    abstract protected GoalReadings newGoalReading();
+    abstract protected Goal.HealthyRange newHealthyRange(Goal goal);
+    abstract protected void addParams(final RestClient client, final GoalReadings readings);
+    abstract protected void addParams(final RestClient client, final Goal goal);
+    abstract protected void processParams(final Goal.HealthyRange range, final JSONObject jsonHRange) throws JSONException;
+    abstract protected void processParams(final GoalReadings reading, final JSONObject jsonReading) throws JSONException;
+    abstract protected void processParams(final Goal goal, final JSONObject jsonGoal) throws JSONException;
+
+    public GoalReadings createGoalReadings(Long userId, GoalReadings readings) {
+
+        RestClient client = getRestClient(getReadingsURL(), userId);
+        client.AddParam("reading_date", formater.format(readings.getReadingDate()));
+
+        addParams(client, readings);
 
         try {
             client.Execute(RequestMethod.POST);
@@ -68,50 +96,124 @@ public class GoalsEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        return processGoalReading(responseString);
+    }
 
-        return processWeightGoalResponse(responseString);
+    public Goal createGoalForUser(Long userId, Goal goal) {
+
+        RestClient client = getRestClient(getGoalURL(), userId);
+        client.AddParam("target_date", formater.format(goal.getTargetDate()));
+
+        addParams(client, goal);
+
+        try {
+            client.Execute(RequestMethod.POST);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        return processGoalResponse(responseString);
 
     }
 
-    private List<GoalReadings> processWeightGoalReadings(JSONArray jsonReadings){
-        List<GoalReadings> readings = new ArrayList<GoalReadings>();
-        try{
-            for(int i=0; i<jsonReadings.length(); i++){
-                WeightGoalReadings reading = new WeightGoalReadings();
-                JSONObject jsonReading = jsonReadings.getJSONObject(i);
-                reading.setWeight(jsonReading.getDouble("weight"));
-                reading.setComments(jsonReading.getString("comment"));
-                reading.setGoalId(jsonReading.getLong("user_weight_goal"));
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-                reading.setReadingDate(formater.parse(jsonReading.getString("reading_date")));
-                reading.setId(jsonReading.getLong("id"));
-                readings.add(reading);
-            }
+    private List<GoalReadings> processGoalReadings(String jsonResponse) {
+        try {
+            JSONObject response = new JSONObject(jsonResponse);
+            JSONArray results = response.getJSONArray("results");
+            return processGoalReadings(results);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private GoalReadings processGoalReading(String jsonResponse) {
+        try {
+            JSONObject response = new JSONObject(jsonResponse);
+            return processGoalReading(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private GoalReadings processGoalReading(JSONObject jsonReading) {
+        GoalReadings reading = newGoalReading();
+
+        try {
+            //JSONObject jsonReading = jsonReadings.getJSONObject(i);
+            reading.setComments(jsonReading.getString("comment"));
+            reading.setReadingDate(formater.parse(jsonReading.getString("reading_date")));
+
+            processParams(reading, jsonReading);
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return reading;
+    }
+
+    private List<GoalReadings> processGoalReadings(JSONArray jsonReadings){
+        List<GoalReadings> readings = new ArrayList<GoalReadings>();
+        try{
+            for(int i=0; i<jsonReadings.length(); i++){
+                readings.add(processGoalReading(jsonReadings.getJSONObject(i)));
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return readings;
     }
 
-    private WeightGoal processWeightGoalResponse(String jsonResponse){
-        WeightGoal goal = new WeightGoal();
+    private Goal processGoalResponse(JSONObject jsonGoal){
+        Goal goal = newGoal();
         try{
-            JSONArray results = new JSONArray(jsonResponse);
-            JSONObject jsonGoal = results.getJSONObject(0);
             goal.setId(jsonGoal.getLong("id"));
             goal.setUserId(jsonGoal.getLong("user"));
-            goal.setWeight(jsonGoal.getDouble("weight"));
-            SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
             goal.setTargetDate(formater.parse(jsonGoal.getString("target_date")));
-            goal.setReadings(processWeightGoalReadings(jsonGoal.getJSONArray("readings")));
+            goal.setHealthyRange(processGoalHealthyRange(goal, jsonGoal.getJSONObject("healthy_range")));
+            processParams(goal, jsonGoal);
+
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return goal;
+    }
+
+    private Goal.HealthyRange processGoalHealthyRange(Goal goal, JSONObject jsonHealthy) {
+        Goal.HealthyRange hRange = newHealthyRange(goal);
+
+        try {
+            processParams(hRange, jsonHealthy);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return hRange;
+    }
+
+    private Goal processGoalResponse(String jsonResponse){
+        Goal goal = null;
+        try{
+            JSONObject response = new JSONObject(jsonResponse);
+            if(response.getInt("count")>0){
+                JSONArray results = response.getJSONArray("results");
+                JSONObject jsonGoal = results.getJSONObject(0);
+                goal = processGoalResponse(jsonGoal);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return goal;
     }
 }

@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
 
 /**
  * Created by naren on 10/10/13.
@@ -25,7 +27,12 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
     }
 
     @Override
-    public void onSave() {
+    public Goal getGoal() {
+        return null;
+    }
 
+    @Override
+    public GoalReadings getGoalReadings() {
+        return null;
     }
 }
