@@ -3,6 +3,10 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
 /**
  * Created by naren on 11/10/13.
  */
@@ -66,5 +70,17 @@ public class WeightGoalReadings extends GoalReadings implements Parcelable {
             return new WeightGoalReadings[size];
         }
     };
-    
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject object = parentJSON();
+
+        try {
+            object.put("y", weight);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
 }

@@ -28,7 +28,7 @@ public class WeightGoalEP extends GoalsEP {
 
     @Override
     protected String getGoalURL() {
-        return "weight-goal";
+        return "weight-goals";
     }
 
     @Override
@@ -43,12 +43,12 @@ public class WeightGoalEP extends GoalsEP {
 
     @Override
     protected void addParams(final RestClient client, final GoalReadings readings) {
-        client.AddParam("weight", ((WeightGoalReadings)readings).getWeight());
+        client.AddParam("weight", ((WeightGoalReadings)readings).getWeight().intValue());
     }
 
     @Override
     protected void addParams(final RestClient client, final Goal goal) {
-        client.AddParam("weight", ((WeightGoal)goal).getWeight());
+        client.AddParam("weight", ((WeightGoal)goal).getWeight().intValue());
     }
 
     @Override
@@ -59,5 +59,17 @@ public class WeightGoalEP extends GoalsEP {
     @Override
     protected void processParams(final Goal goal, final JSONObject jsonGoal) throws JSONException {
         ((WeightGoal)goal).setWeight(jsonGoal.getDouble("weight"));
+    }
+
+    @Override
+    protected Goal.HealthyRange newHealthyRange(Goal goal) {
+        return ((WeightGoal)goal).new HealthyRange();
+    }
+
+    @Override
+    protected void processParams(final Goal.HealthyRange range, final JSONObject jsonHRange) throws JSONException {
+        JSONObject hWeightRange = jsonHRange.getJSONObject("weight");
+        ((WeightGoal.HealthyRange) range).setMaxWeight(hWeightRange.getDouble("max"));
+        ((WeightGoal.HealthyRange) range).setMinWeight(hWeightRange.getDouble("min"));
     }
 }

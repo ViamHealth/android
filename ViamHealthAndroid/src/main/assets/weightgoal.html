@@ -7,35 +7,10 @@
 
 
     <script type='text/javascript'>//<![CDATA[
-
-var target_date = Date.UTC(2013,10,30);
-var data = [{
-                x: Date.UTC(2013, 09, 16),
-                y: 83
-            },
-            {
-                x: Date.UTC(2013, 09, 18),
-                y: 81
-            },
-            {
-                x: Date.UTC(2013, 09, 21),
-                y: 79
-            },                   
-            {
-                x: Date.UTC(2013, 09, 27),
-                y: 75
-            },                   
-            {
-                x: Date.UTC(2013, 09, 30),
-                y: 74
-            },
-            {
-                x: Date.UTC(2013, 10, 3),
-                y: 74
-            }            
-            ];
-var healthy_range = { from: 52, to: 70 };
-var target_weight = 60;
+var str = goals.getDataForGraph(1);
+console.log(str);
+var android = JSON.parse(str);
+console.log(android);
 $(function () {
     $('#container').highcharts({
         chart: {
@@ -53,10 +28,10 @@ $(function () {
             title: {
                 text: "Timeline"
             },
-            max: target_date,
+            max: android.goal.targetDate,
             plotLines: [{
-                value: target_date,
-                width: 4,
+                value: android.goal.targetDate,
+                width: 2,
                 color: '#37AA4F',
                 label: {
                     text: 'Target Date',
@@ -65,7 +40,7 @@ $(function () {
                     x: -15,
                     y: 0
                 },
-                dashStyle: "LongDashDotDot",                
+                dashStyle: "ShortDash",
                 zIndex: 2
             }]            
         },
@@ -75,8 +50,8 @@ $(function () {
             },
             plotBands: [{ // mark the weekend
                 color: '#c4dffb',
-                from: healthy_range.from,
-                to: healthy_range.to,
+                from: android.goal.healthyRange.from,
+                to: android.goal.healthyRange.to,
                 label: {
                     text: "Healthy Range",
                     verticalAlign: 'bottom',
@@ -87,8 +62,8 @@ $(function () {
                 zIndex: 1
             }],
             plotLines: [{
-                value: target_weight,
-                width: 4,
+                value: android.goal.targetWeight,
+                width: 2,
                 color: '#37aa4f',
                 label: {
                     text: 'Target Weight',
@@ -97,14 +72,14 @@ $(function () {
                     y: -10,
                     x: 0
                 },
-                dashStyle: "LongDashDotDot",                
+                dashStyle: "ShortDash",
                 zIndex: 2
             }],
             type: 'linear',
             min: 20
         },
         series: [{
-            data: data
+            data: android.readings
         }]
     });
 });

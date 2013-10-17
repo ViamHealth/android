@@ -37,7 +37,7 @@
             android:textColor="#2F9ACE" />
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
@@ -52,6 +52,17 @@
             android:id="@+id/webView"
             android:layout_gravity="center"
             android:background="#efefef" />
-    </LinearLayout>
+
+        <ImageButton
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_weight"
+            android:id="@+id/addvalue"
+            android:layout_gravity="right|top"
+            android:background="#37AA4F"
+            android:src="@drawable/ic_content_new"
+            android:focusableInTouchMode="false" />
+    </FrameLayout>
 
 </LinearLayout>

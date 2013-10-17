@@ -75,8 +75,10 @@ public abstract class GoalsEP extends BaseEP {
     abstract protected String getGoalURL();
     abstract protected Goal newGoal();
     abstract protected GoalReadings newGoalReading();
+    abstract protected Goal.HealthyRange newHealthyRange(Goal goal);
     abstract protected void addParams(final RestClient client, final GoalReadings readings);
     abstract protected void addParams(final RestClient client, final Goal goal);
+    abstract protected void processParams(final Goal.HealthyRange range, final JSONObject jsonHRange) throws JSONException;
     abstract protected void processParams(final GoalReadings reading, final JSONObject jsonReading) throws JSONException;
     abstract protected void processParams(final Goal goal, final JSONObject jsonGoal) throws JSONException;
 
@@ -170,15 +172,13 @@ public abstract class GoalsEP extends BaseEP {
         return readings;
     }
 
-    private Goal processGoalResponse(String jsonResponse){
-        Goal goal = new Goal();
+    private Goal processGoalResponse(JSONObject jsonGoal){
+        Goal goal = newGoal();
         try{
-            JSONArray results = new JSONArray(jsonResponse);
-            JSONObject jsonGoal = results.getJSONObject(0);
             goal.setId(jsonGoal.getLong("id"));
             goal.setUserId(jsonGoal.getLong("user"));
             goal.setTargetDate(formater.parse(jsonGoal.getString("target_date")));
-
+            goal.setHealthyRange(processGoalHealthyRange(goal, jsonGoal.getJSONObject("healthy_range")));
             processParams(goal, jsonGoal);
 
         } catch (JSONException e) {
@@ -186,6 +186,34 @@ public abstract class GoalsEP extends BaseEP {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return goal;
+    }
+
+    private Goal.HealthyRange processGoalHealthyRange(Goal goal, JSONObject jsonHealthy) {
+        Goal.HealthyRange hRange = newHealthyRange(goal);
+
+        try {
+            processParams(hRange, jsonHealthy);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return hRange;
+    }
+
+    private Goal processGoalResponse(String jsonResponse){
+        Goal goal = null;
+        try{
+            JSONObject response = new JSONObject(jsonResponse);
+            if(response.getInt("count")>0){
+                JSONArray results = response.getJSONArray("results");
+                JSONObject jsonGoal = results.getJSONObject(0);
+                goal = processGoalResponse(jsonGoal);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return goal;
     }
 }

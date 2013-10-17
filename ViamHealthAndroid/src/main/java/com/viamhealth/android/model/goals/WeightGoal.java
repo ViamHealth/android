@@ -3,6 +3,10 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+
 /**
  * Created by naren on 11/10/13.
  */
@@ -56,5 +60,54 @@ public class WeightGoal extends Goal implements Parcelable {
             return new WeightGoal[size];
         }
     };
-    
+
+    @Override
+    public JSONObject toJSON() {
+        JSONObject object = parentJSON();
+
+        try {
+            object.put("targetWeight", weight);
+            object.put("healthyRange", healthyRange.toJSON());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return object;
+    }
+
+
+    public class HealthyRange extends Goal.HealthyRange {
+        private double maxWeight;
+        private double minWeight;
+
+        public double getMaxWeight() {
+            return maxWeight;
+        }
+
+        public void setMaxWeight(double maxWeight) {
+            this.maxWeight = maxWeight;
+        }
+
+        public double getMinWeight() {
+            return minWeight;
+        }
+
+        public void setMinWeight(double minWeight) {
+            this.minWeight = minWeight;
+        }
+
+        @Override
+        public JSONObject toJSON() {
+            JSONObject healthyRangeJSON = new JSONObject();
+
+            try {
+                healthyRangeJSON.put("from", minWeight);
+                healthyRangeJSON.put("to", maxWeight);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return healthyRangeJSON;
+        }
+    }
 }

@@ -4,6 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.BaseModel;
+import com.viamhealth.android.utils.JsonGraphDataBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,11 +17,20 @@ import java.util.List;
 /**
  * Created by naren on 11/10/13.
  */
-public class Goal extends BaseModel implements Parcelable {
+public abstract class Goal extends BaseModel implements Parcelable, JsonGraphDataBuilder.JsonOutput {
 
     long userId;
     Date targetDate;
     //List<GoalReadings> readings;
+    protected HealthyRange healthyRange;
+
+    public HealthyRange getHealthyRange() {
+        return healthyRange;
+    }
+
+    public void setHealthyRange(HealthyRange healthyRange) {
+        this.healthyRange = healthyRange;
+    }
 
     public Long getUserId() {
         return userId;
@@ -67,15 +81,17 @@ public class Goal extends BaseModel implements Parcelable {
         dest.writeLong(this.targetDate==null?0:this.targetDate.getTime());
     }
 
-    public static final Parcelable.Creator<Goal> CREATOR
-            = new Parcelable.Creator<Goal>() {
-        public Goal createFromParcel(Parcel in) {
-            return new Goal(in);
+    public JSONObject parentJSON() {
+        JSONObject object = new JSONObject();
+        try {
+            object.put("targetDate", targetDate.getTime());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return object;
+    }
 
-        public Goal[] newArray(int size) {
-            return new Goal[size];
-        }
-    };
+    public abstract class HealthyRange implements JsonGraphDataBuilder.JsonOutput {
 
+    }
 }

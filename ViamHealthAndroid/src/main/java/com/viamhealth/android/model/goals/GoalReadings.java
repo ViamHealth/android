@@ -4,13 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.BaseModel;
+import com.viamhealth.android.utils.JsonGraphDataBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.Date;
 
 /**
  * Created by naren on 11/10/13.
  */
-public class GoalReadings extends BaseModel {
+public abstract class GoalReadings extends BaseModel implements Parcelable, JsonGraphDataBuilder.JsonOutput {
     long goalId;
     Date readingDate;
     String comments;
@@ -75,15 +80,15 @@ public class GoalReadings extends BaseModel {
         dest.writeString(this.comments);
     }
 
-    public static final Parcelable.Creator<GoalReadings> CREATOR
-            = new Parcelable.Creator<GoalReadings>() {
-        public GoalReadings createFromParcel(Parcel in) {
-            return new GoalReadings(in);
-        }
+    public JSONObject parentJSON() {
+        JSONObject object = new JSONObject();
+        try {
 
-        public GoalReadings[] newArray(int size) {
-            return new GoalReadings[size];
+            object.put("x", readingDate.getTime());
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-    };
+        return object;
+    }
 
 }
