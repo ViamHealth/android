@@ -63,10 +63,10 @@ public class DeleteMedication extends BaseActivity {
         {
 
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(DeleteMedication.this);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setMessage("Please Wait....");
-            dialog.show();
+            //dialog = new ProgressDialog(DeleteMedication.this);
+            //dialog.setCanceledOnTouchOutside(false);
+           // dialog.setMessage("Please Wait....");
+            //dialog.show();
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -76,7 +76,7 @@ public class DeleteMedication extends BaseActivity {
 
             Log.i("onPostExecute", "onPostExecute");
             //generateView();
-            dialog.dismiss();
+            //dialog.dismiss();
 			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 				startActivity(intent);*/
         }

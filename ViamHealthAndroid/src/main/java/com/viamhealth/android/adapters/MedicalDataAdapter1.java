@@ -63,16 +63,16 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 	            holder = new FileDataHolder();
 	            
 	            holder.txt_name = (TextView)row.findViewById(R.id.txt_name);
-	            holder.txt_name.getLayoutParams().width = w150;
+	            //holder.txt_name.getLayoutParams().width = w150;
 
 	            holder.txt_morning = (TextView)row.findViewById(R.id.txt_morning);
-	            holder.txt_morning.getLayoutParams().width = w30;
+	            //holder.txt_morning.getLayoutParams().width = w30;
 	            
 	            holder.txt_noon = (TextView)row.findViewById(R.id.txt_noon);
-	            holder.txt_noon.getLayoutParams().width = w30;
+	            //holder.txt_noon.getLayoutParams().width = w30;
 	            
 	            holder.txt_night = (TextView)row.findViewById(R.id.txt_night);
-	            holder.txt_night.getLayoutParams().width = w30;
+	            //holder.txt_night.getLayoutParams().width = w30;
 	            
 	            holder.txt1 = (TextView)row.findViewById(R.id.txt1);
 	           // holder.txt1.setPadding(w10, 0, 0, 0);

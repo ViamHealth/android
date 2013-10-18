@@ -383,6 +383,8 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             mPager1.setAdapter(new ImagePagerAdapter(lst));
 
+
+
 /*
             MedicalDataAdapter adapter = new MedicalDataAdapter(getActivity(),R.layout.row_medical_list, listData);
            // lstReminderMedicine.setAdapter(adapter);
@@ -415,7 +417,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            otherData = obj.getReminderInfo(user.getId().toString(),"OTHER");
+            otherData = obj.getReminderInfo(user.getId().toString(),"1");
             return null;
         }
 
@@ -562,41 +564,66 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             lstReminderTest.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    final ImageView img1=(ImageView)v.findViewById(R.id.img1);
-                    final ImageView img2=(ImageView)v.findViewById(R.id.img2);
+                    main_list_edit=(LinearLayout)v.findViewById(R.id.main_list_edit);
+                    main_list_delete=(LinearLayout)v.findViewById(R.id.main_list_delete);
+                    main_list=(LinearLayout)v.findViewById(R.id.main_list);
+
                     final int pos=position;
 
-
-
-
                     final TextView name=(TextView)v.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)v.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)v.findViewById(R.id.txt_night);
 
-                    img1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Toast.makeText(getApplicationContext(),"values =" +txt_morn.getText().toString()+ " " + txt_after.getText().toString(),Toast.LENGTH_LONG).show();
+                    main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
 
+                        public void onSwipeRight() {
+                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
+                            original_width_edit=main_list_edit.getWidth();
+                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
+                            main_list_edit.setMinimumHeight(main_list.getHeight());
                             edit_med=new Intent(getActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditOthers",true);
                             edit_med.putExtra("user_id",user.getId().toString());
-                            med_id=otherData.get(pos).getId();
+                            med_id=listData.get(pos).getId();
                             edit_med.putExtra("id",med_id);
                             edit_med.putExtra("start_date",listData.get(pos).getStart_date());
                             edit_med.putExtra("name",name.getText().toString());
                             startActivity(edit_med);
 
-
                         }
                     });
 
-                    img2.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                    main_list_delete.setOnTouchListener(new OnSwipeTouchListener(){
+
+                        public void onSwipeLeft()
+                        {
+                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
+                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
                             Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
-                            edit_med1.putExtra("id",otherData.get(pos).getId());
+                            edit_med1.putExtra("id",listData.get(pos).getId());
                             startActivity(edit_med1);
+                        }
+                    });
+
+                    main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            Toast.makeText(getActivity(), "Start anim", Toast.LENGTH_LONG).show();
+                        }
+
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            Toast.makeText(getActivity(),"end anim",Toast.LENGTH_LONG).show();
+                        }
+
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+                            Toast.makeText(getActivity(),"repeat anim",Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -617,13 +644,13 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         if(v==add_medicine){
             Intent AddMedication = new Intent(getActivity(),AddMedication.class);
             AddMedication.putExtra("user_id",user.getId().toString());
-            AddMedication.putExtra("iseditMed",user.getId().toString());
+            AddMedication.putExtra("isMedReminders",true);
             startActivity(AddMedication);
         }
         if(v==add_test){
             Intent AddMedication = new Intent(getActivity(),AddMedication.class);
             AddMedication.putExtra("user_id",user.getId().toString());
-            AddMedication.putExtra("iseditOthers",user.getId().toString());
+            AddMedication.putExtra("isOthersReminders",true);
             startActivity(AddMedication);
         }
     }
@@ -795,19 +822,48 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
 
-
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
             MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1,listData);
             lstReminderMedicine.setAdapter(adapter4);
+
+            int total_height_medicine_tab=0,len=0;
+
+            for (i = 0, len = adapter4.getCount(); i < len; i++) {
+                View listItem = adapter4.getView(i, null, lstReminderMedicine1);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine1.getDividerHeight();//item height
+                total_height_medicine_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l3= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
+            lstReminderMedicine.setLayoutParams(l3);
+            total_height_medicine_tab=0;
+
 
 
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter5 = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
 
+            int total_height_test_tab=0;
+
+            for (i = 0, len = adapter5.getCount(); i < len; i++) {
+                View listItem = adapter5.getView(i, null, lstReminderTest);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine1.getDividerHeight();//item height
+                total_height_medicine_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
+            lstReminderTest.setLayoutParams(l4);
+            total_height_test_tab=0;
+
+
             //selected_otherData2=selected_otherData1;
             TestDataAdapter adapter1 = new TestDataAdapter(getActivity(),R.layout.row_test_list, selected_other_data.get(position));
+
+
 
 
 
@@ -825,7 +881,8 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             ((ViewPager) localView).addView(imageLayout, 0);
 
             lstReminderMedicine1.setAdapter(adapter3);
-            int len;
+
+
             int totalheight1=totalHeight;
             totalHeight=0;
             for (i = 0, len = adapter3.getCount(); i < len; i++) {
@@ -834,6 +891,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                 int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine1.getDividerHeight();//item height
                 totalHeight += list_child_item_height; //
             }
+
             if(totalheight1>totalHeight)
             {
                 totalHeight=totalheight1;

@@ -40,6 +40,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -63,7 +64,8 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 	EditText txt_name,txt_detail,txt_morning,txt_afternoon,txt_evening,txt_night,txt_time,txt_min,txt_hour,txt_day,txt_week,txt_day_interval,txt_interval_val,txt_interval_type,txt_duration_val,txt_duration_type;
 	Spinner ddl_repeate_mode;
     Spinner reminder_type,interval_type,duration_type;
-	TextView btnSave,btnCancle,heading;
+	Button btnSave,btnCancle;
+    TextView heading;
 	TextView lbl_invite_user_food,heding_Addfood_name;
 	ImageView back,person_icon;
 	ImageView imgMorningMinus,imgMorningPlus,imgNoonMinus,imgNoonPlus,imgNightMinus,imgNightPlus;
@@ -133,17 +135,17 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 		newval_btn_layout = (LinearLayout)findViewById(R.id.newval_btn_layout);
 		
 		
-		newval_mid_layout = (LinearLayout)findViewById(R.id.newval_mid_layout);
-		newval_mid_layout.setPadding(w10, h10, w10, h10);
+		//newval_mid_layout = (LinearLayout)findViewById(R.id.newval_mid_layout);
+		//newval_mid_layout.setPadding(w10, h10, w10, h10);
 		
 		
 		mid_layout = (LinearLayout)findViewById(R.id.mid_layout);
 		//mid_layout.setPadding(w10, 0, w10,0);
 		
-		btnSave = (TextView)findViewById(R.id.btnSave);
+		btnSave = (Button)findViewById(R.id.btnSave);
 		btnSave.setOnClickListener(AddMedication.this);
 		
-		btnCancle = (TextView)findViewById(R.id.btnCancle);
+		btnCancle = (Button)findViewById(R.id.btnCancle);
 		btnCancle.setOnClickListener(AddMedication.this);
 		
 		//ddl_repeate_mode_layout = (LinearLayout)findViewById(R.id.ddl_repeate_mode_layout);
@@ -185,6 +187,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
         if(int_edit.getBooleanExtra("iseditMed",false)==true)
         {
             reminder_type.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(),"start_month oncreate()="+start_month,Toast.LENGTH_LONG).show();
             ga.setUpdate("1");
             txt_name.setText((int_edit.getStringExtra("name")).toString());
             morningval.setText((int_edit.getStringExtra("morning")));
@@ -209,7 +212,25 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
             morning_layout.setVisibility(View.GONE);
             noon_layout.setVisibility(View.GONE);
             night_layout.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(),"pos 1",Toast.LENGTH_LONG).show();
         }
+
+        else if(int_edit.getBooleanExtra("isMedReminders",false)==true)
+        {
+            reminder_type.setVisibility(View.GONE);
+            isMedicine=true;
+        }
+        else if(int_edit.getBooleanExtra("isOthersReminders",false)==true)
+        {
+            isMedicine=false;
+            reminder_type.setVisibility(View.GONE);
+            morning_layout.setVisibility(View.GONE);
+            noon_layout.setVisibility(View.GONE);
+            night_layout.setVisibility(View.GONE);
+            Toast.makeText(getApplicationContext(),"pos 2",Toast.LENGTH_LONG).show();
+        }
+
+
 		/*	txt_detail = (EditText)findViewById(R.id.txt_detail);
 		txt_detail.setTypeface(tf);
 		
@@ -374,10 +395,20 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                noon_layout.setVisibility(View.GONE);
                night_layout.setVisibility(View.GONE);
                isMedicine=false;
+               Toast.makeText(getApplicationContext(),"pos 3   value of pos=" +pos
+                       ,Toast.LENGTH_LONG).show();
             }
             else
             {
-                isMedicine=true;
+                if(int_edit.getBooleanExtra("isOthersReminders",false)==true)
+                {
+                    isMedicine=false;
+                }
+                else
+                {
+                    isMedicine=true;
+                }
+
                 morning_layout.setVisibility(View.VISIBLE);
                 noon_layout.setVisibility(View.VISIBLE);
                 night_layout.setVisibility(View.VISIBLE);

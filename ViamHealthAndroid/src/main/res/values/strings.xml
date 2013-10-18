@@ -47,10 +47,10 @@
         <item>Rest all</item>
     </string-array>
     <string-array name="duration_type">
-        <item>Day</item>
-        <item>Week</item>
-        <item>Month</item>
-        <item>Year</item>
+        <item>Days</item>
+        <item>Weeks</item>
+        <item>Months</item>
+        <item>Years</item>
     </string-array>
 
     <string name="title_activity_add_breakfast">AddBreakfast</string>

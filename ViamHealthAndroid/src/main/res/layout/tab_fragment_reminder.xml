@@ -115,6 +115,10 @@
                     </LinearLayout>
 
 
+
+
+
+
                     <!--    For Reminder section layout-->
                     <LinearLayout android:layout_height="fill_parent"
                         android:layout_weight="1"
@@ -333,6 +337,12 @@
                     </LinearLayout>
                     <!-- Reminder section layout end -->
 
+
+
+
+
+
+
                     <!-- Medicine section layout end -->
                     <LinearLayout android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -372,6 +382,9 @@
                                 android:paddingRight="10dp"
                                 android:layout_weight="1"
                                 /> -->
+                            <ScrollView android:layout_height="fill_parent"
+                                android:layout_width="fill_parent"
+                                android:orientation="vertical">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:orientation="vertical"
@@ -408,7 +421,7 @@
                                     android:background="@drawable/btn_save_toggle"
                                     android:textStyle="bold" />
                             </LinearLayout>
-
+                     </ScrollView>
 
 
                             <!--
@@ -456,6 +469,11 @@
                         </LinearLayout>
                     </LinearLayout>
                     <!-- Medicine section layout end -->
+
+
+
+
+
 
                     <!-- Test section layout end -->
                     <ScrollView android:layout_height="0dp"

@@ -7,11 +7,11 @@
     android:background="#D9D9D9">
     <FrameLayout
         android:id="@+id/main_layout"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent">
         <LinearLayout
             android:id="@+id/actionbarlayot"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_width="fill_parent"
             android:orientation="vertical">
             <!-- Action Bar Start -->
@@ -26,6 +26,7 @@
                 android:layout_width="wrap_content"
                 android:id="@+id/newval_main_layout"
                 android:background="@drawable/inviteuser_header"
+
                 android:gravity="center_vertical"
                 >
 
@@ -49,20 +50,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/inviteuser_bg"
+                android:padding="20dp"
                 >
-                <ScrollView
-                    android:layout_width="fill_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:splitMotionEvents="false"
-                    android:fadingEdgeLength="0dp"
-                    android:layout_gravity="center_horizontal">
-                    <LinearLayout android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:id="@+id/newval_mid_layout"
-                        android:layout_width="fill_parent"
-                        android:orientation="vertical">
-
 
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
@@ -260,259 +249,138 @@
                                     </LinearLayout>
 
 
-
-
-
-
-
-                                    <LinearLayout android:layout_height="wrap_content"
-                                        android:layout_width="fill_parent"
-                                        android:orientation="horizontal"
-                                        android:paddingTop="15dp">
-
-
-                                        <TextView  android:layout_height="wrap_content"
-                                            android:layout_width="0dp"
-                                            android:layout_weight="1"
-                                            android:text="Every"
-                                            android:paddingRight="5dp"
-                                            android:textColor="#000000"/>
-
-                                        <EditText
-                                            android:id="@+id/txt_interval_val"
+                                        <!-- 2 columns -->
+                                        <LinearLayout
+                                            android:id="@+id/tableRow1"
+                                            android:layout_width="fill_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_width="0dp"
-                                            android:layout_weight="1"
-                                            android:textSize="15sp"
-                                            android:textColor="#000000"
-                                            android:gravity="center"
-                                            android:inputType="number"
-                                            android:defaultValue="1"/>
+                                            android:padding="5dip" >
 
-                                        <Spinner
-                                            android:id="@+id/interval_type"
-                                            android:layout_width="wrap_content"
+                                            <TextView  android:layout_height="wrap_content"
+                                                android:layout_width="0dp"
+                                                android:text="Every"
+                                                android:layout_gravity="center"
+                                                android:layout_weight="2"
+                                                android:paddingRight="5dp"
+                                                android:textColor="#000000"/>
+
+                                            <EditText
+                                                android:id="@+id/txt_interval_val"
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="0dp"
+                                                android:layout_weight="3"
+                                                android:textSize="15sp"
+                                                android:textColor="#000000"
+                                                android:gravity="center"
+                                                android:inputType="number"
+                                                android:defaultValue="1"/>
+
+                                            <Spinner
+                                                android:id="@+id/interval_type"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="4"
+                                                android:gravity="right"
+                                                android:entries="@array/duration_type"
+                                                android:prompt="@string/duration_type_prompt" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/tableRow1"
+                                            android:layout_width="fill_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:gravity="right"
-                                            android:entries="@array/duration_type"
-                                            android:prompt="@string/duration_type_prompt" />
+                                            android:padding="5dip" >
 
-                                    </LinearLayout>
+                                            <TextView  android:layout_height="wrap_content"
+                                                android:layout_width="0dp"
+                                                android:text="For"
+                                                android:layout_weight="2"
+                                                android:paddingRight="5dp"
+                                                android:textColor="#000000"/>
 
-                                    <TextView  android:layout_height="wrap_content"
-                                        android:layout_width="wrap_content"
-                                        android:layout_weight="2"
-                                        android:text="For"
-                                        android:paddingRight="5dp"
-                                        android:layout_gravity="center"
-                                        android:textColor="#000000"/>
+                                            <EditText
+                                                android:id="@+id/txt_duration_val"
+                                                android:layout_height="wrap_content"
+                                                android:layout_width="0dp"
+                                                android:layout_weight="3"
+                                                android:textSize="15sp"
+                                                android:inputType="number"
+                                                android:textColor="#000000"
+                                                android:gravity="center"
+                                                android:defaultValue="1"/>
 
-                                    <LinearLayout android:layout_height="wrap_content"
-                                        android:layout_width="fill_parent"
-                                        android:orientation="horizontal"
-                                        android:paddingTop="15dp">
-
-
-
-                                        <EditText
-                                            android:id="@+id/txt_duration_val"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="0dp"
-                                            android:layout_weight="1"
-                                            android:textSize="15sp"
-                                            android:inputType="number"
-                                            android:textColor="#000000"
-                                            android:gravity="center"
-                                            android:defaultValue="1"/>
-
-                                        <Spinner
-                                            android:id="@+id/duration_type"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:gravity="right"
-                                            android:entries="@array/duration_type"
-                                            android:prompt="@string/duration_type_prompt" />
-
-                                    </LinearLayout>
+                                            <Spinner
+                                                android:id="@+id/duration_type"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="4"
+                                                android:gravity="right"
+                                                android:entries="@array/duration_type"
+                                                android:prompt="@string/duration_type_prompt" />
 
 
-                                    <LinearLayout android:layout_height="wrap_content"
+                                        </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+                                    <LinearLayout android:layout_height="fill_parent"
                                         android:layout_width="fill_parent"
                                         android:orientation="horizontal"
                                         android:paddingTop="5dp">
                                         <EditText
                                             android:id="@+id/txt_night"
-                                            android:layout_height="wrap_content"
+                                            android:layout_height="fill_parent"
                                             android:layout_width="fill_parent"
                                             android:hint="Comment"
                                             android:textSize="15sp"
                                             android:textColor="#000000"
                                             android:gravity="center_vertical"
-                                            android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
+                                            android:layout_gravity="bottom"
+                                            android:background="@drawable/edt_bg"/>
+                                    </LinearLayout>
+                                    <LinearLayout android:id="@+id/newval_btn_layout"
+                                        android:layout_height="fill_parent"
+                                        android:layout_width="fill_parent"
+                                        android:orientation="horizontal">
+
+
+                                        <Button
+                                            android:id="@+id/btnCancle"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="fill_parent"
+                                            android:gravity="center"
+                                            android:text="Cancel"
+                                            android:layout_weight="1"
+                                            android:textSize="17sp"
+                                            android:textStyle="bold" />
+                                        <Button
+                                            android:id="@+id/btnSave"
+                                            android:layout_height="fill_parent"
+                                            android:layout_width="wrap_content"
+                                            android:text="Add"
+                                            android:layout_weight="1"
+                                            android:textStyle="bold"
+                                            android:textSize="17sp"
+                                            android:gravity="center"/>
                                     </LinearLayout>
 
 
-
-                                    <!--
-                                         <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-                                     android:gravity="center_horizontal">
-                                  <EditText
-                                           android:id="@+id/txt_time"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"
-                                           android:hint="Enter Time Stamp"
-                                           android:textSize="15sp"
-                                           android:textColor="#000000"
-                                           android:gravity="center_vertical"
-                                           android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
-                                  </LinearLayout>
-                                   <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:id="@+id/ddl_repeate_mode_layout"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-
-                                     android:gravity="center_horizontal">
-
-                                  </LinearLayout>
-                                    <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-                                     android:gravity="center_horizontal">
-                                    <EditText
-                                           android:id="@+id/txt_min"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"
-                                           android:hint="Repeat Minute"
-                                           android:textSize="15sp"
-                                           android:visibility="gone"
-                                           android:inputType="number"
-                                           android:textColor="#000000"
-                                           android:gravity="center_vertical"
-                                           android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
-                                  </LinearLayout>
-                                 <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-                                     android:gravity="center_horizontal">
-                                    <EditText
-                                           android:id="@+id/txt_hour"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"
-                                           android:hint="Repeat Hour"
-                                           android:textSize="15sp"
-                                           android:visibility="gone"
-                                            android:inputType="number"
-                                            android:textColor="#000000"
-                                           android:gravity="center_vertical"
-                                           android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
-                                  </LinearLayout>
-
-                                 <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-                                     android:textColor="#000000"
-                                     android:gravity="center_horizontal">
-                                      <EditText
-                                           android:id="@+id/txt_day"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"
-                                           android:hint="Repeat Day"
-                                           android:visibility="gone"
-                                            android:inputType="number"
-                                           android:textSize="15sp"
-                                           android:textColor="#000000"
-                                           android:gravity="center_vertical"
-                                           android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
-                                  </LinearLayout>
-                                  <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-                                     android:gravity="center_horizontal">
-                                      <EditText
-                                           android:id="@+id/txt_week"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"
-                                           android:hint="Repeat Week Day"
-                                           android:textSize="15sp"
-                                           android:textColor="#000000"
-                                           android:visibility="gone"
-                                            android:inputType="number"
-                                           android:gravity="center_vertical"
-                                           android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
-                                  </LinearLayout>
-                                  <LinearLayout android:layout_height="wrap_content"
-                                     android:layout_width="fill_parent"
-                                     android:orientation="horizontal"
-                                     android:paddingTop="5dp"
-                                     android:gravity="center_horizontal">
-                                      <EditText
-                                           android:id="@+id/txt_day_interval"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="wrap_content"
-                                           android:hint="Repeat Day Interval"
-                                           android:textSize="15sp"
-                                           android:visibility="gone"
-                                           android:textColor="#000000"
-                                            android:inputType="number"
-                                           android:gravity="center_vertical"
-                                           android:background="@drawable/edt_bg"
-                                            android:padding="5dp"/>
-                                  </LinearLayout>
--->
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
-
-
-                    </LinearLayout>
-                </ScrollView>
             </LinearLayout>
             <!-- value layout end -->
 
             <!--Button layout start  -->
-            <LinearLayout android:id="@+id/newval_btn_layout"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:orientation="horizontal">
 
-
-                <TextView
-                    android:id="@+id/btnCancle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/inviteuser_btn_toggle"
-                    android:gravity="center"
-                    android:text="Cancel"
-                    android:textSize="17sp"
-                    android:textColor="#cdcdcd"
-                    android:textStyle="bold" />
-                <TextView
-                    android:id="@+id/btnSave"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Add"
-                    android:textColor="#cdcdcd"
-                    android:background="@drawable/inviteuser_btn_toggle"
-                    android:textStyle="bold"
-                    android:textSize="17sp"
-                    android:gravity="center"/>
-            </LinearLayout>
             <!--Button layout end  -->
 
         </LinearLayout>
