@@ -1274,6 +1274,70 @@ public class functionClass {
 
                 }
 
+
+    public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype)
+    {
+        ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
+        //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
+        String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type="+remindertype;
+
+        Log.e("TAG","url is : " + baseurlString);
+
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+        try
+        {
+            client.Execute(RequestMethod.GET);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        responseString = client.getResponse();
+        Log.e("TAG","Response string " + responseString);
+
+        try {
+            jObject = new JSONObject(responseString);
+            Log.e("TAG","res : " + responseString);
+            Log.e("TAG",jObject.getString("next"));
+            jarray = jObject.getJSONArray("results");
+            for (int i = 0; i < jarray.length(); i++)
+            {
+                JSONObject c = jarray.getJSONObject(i);
+                lstData.add(new MedicationData(c.getString("id").toString(),
+                        "id",
+                        c.getString("name").toString(),
+                        c.getString("type").toString(),
+                        "null",//c.getString("detail").toString()
+                        c.getString("morning_count").toString(),
+                        c.getString("afternoon_count").toString(),
+                        c.getString("evening_count").toString(),
+                        c.getString("night_count").toString(),
+                        c.getString("user").toString(),
+                        "null",
+                        "null",
+                        "null",
+                        c.getString("repeat_mode").toString(),
+                        "null",
+                        "null",
+                        "null",c.getString("start_date").toString(),c.getString("end_date").toString(),false,false,false,false,false));
+
+            }
+            Log.e("TAG","lstdata count is " + lstData.size());
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+        return lstData;
+
+    }
+
+
+    /*
                 public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype,String reading_date)
                 {
                     ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
@@ -1333,7 +1397,7 @@ public class functionClass {
                     return lstData;
 
                 }
-
+*/
 				// function for add medicates data
 				public ArrayList<MedicalData> getMedication(){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();

@@ -360,7 +360,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            allData = obj.getReminderInfo(user.getId().toString(), "2",);
+            allData = obj.getReminderInfo(user.getId().toString(), "2");
             return null;
         }
 
@@ -908,7 +908,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             ((ViewPager) localView).addView(imageLayout, 0);
 
             lstReminderMedicine1.setAdapter(adapter3);
-
+/*
             lstReminderMedicine1.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
@@ -951,7 +951,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             });
 
-
+*/
 
             int totalheight1=totalHeight;
             totalHeight=0;
@@ -967,17 +967,17 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                 totalHeight=totalheight1;
             }
 
-            if(rem1.getStatus()==AsyncTask.Status.PENDING)
-            {
-                rem1.execute();
-            }
+          //  if(rem1.getStatus()==AsyncTask.Status.PENDING)
+           // {
+             //   rem1.execute();
+           // }
 
-            if(rem1.getStatus() == AsyncTask.Status.FINISHED)
-            {
-               rem1=null;
-               rem1=new StoreReminders();
-               rem1.execute();
-            }
+          //  if(rem1.getStatus() == AsyncTask.Status.FINISHED)
+          //  {
+            //   rem1=null;
+              // rem1=new StoreReminders();
+            //   rem1.execute();
+         //   }
 
             LinearLayout.LayoutParams l2= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,totalHeight+70);
             mPager1.setLayoutParams(l2);
