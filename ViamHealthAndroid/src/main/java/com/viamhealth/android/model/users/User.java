@@ -60,12 +60,6 @@ public class User extends BaseModel implements Parcelable {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-        if(name==null || name.isEmpty())
-            name = firstName;
-        else if(this.lastName==null || this.lastName.isEmpty())
-            name = firstName;
-        else
-            name = firstName + " " + name;
     }
 
     public String getLastName() {
@@ -74,12 +68,6 @@ public class User extends BaseModel implements Parcelable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-        if(name==null || name.isEmpty())
-            name = lastName;
-        else if(this.firstName==null || this.firstName.isEmpty())
-            name = lastName;
-        else
-            name = name + " " + lastName;
     }
 
     public String getName() {

@@ -16,6 +16,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.GoalsEP;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.rest.endpoints.WeightGoalEP;
+import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoal;
@@ -25,6 +26,8 @@ import com.viamhealth.android.model.users.User;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by naren on 10/10/13.
@@ -49,7 +52,9 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         View view = inflater.inflate(R.layout.fragment_add_weight_goal, container, false);
 
         user = getArguments().getParcelable("user");
-        goal = getArguments().getParcelable("goal");
+        Bundle bundle = getArguments().getBundle("goals");
+        if(!bundle.isEmpty())
+            goal = (WeightGoal) bundle.getParcelable(MedicalConditions.Obese.name());
 
         dialog = new ProgressDialog(getActivity());
 
@@ -71,9 +76,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
             pWeight.setVisibility(View.GONE);
             pHeight.setEnabled(false);
         } else {//if goal is not yet configured
-            if(user.getBmiProfile().getHeight()==0)
-                needHeightInput = true;
-            else{
+            if(user.getBmiProfile().getHeight()>0){
                 pHeight.setText(user.getBmiProfile().getHeight().toString());
                 pHeight.setEnabled(false);
                 pWeight.setText(user.getBmiProfile().getWeight().toString());
@@ -98,7 +101,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
     }
 
     private Double getIdealTargetWeight(Integer height, Double weight) {
-        double heightInM = height/100;
+        double heightInM = height.doubleValue()/100;
         double idealBMI = 22.5;
         double idealWeight = idealBMI * heightInM * heightInM;
         return idealWeight;
@@ -122,7 +125,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
     @Override
     public GoalReadings getGoalReadings() {
-        if(needHeightInput) {
+        if(!isGoalConfigured) {
             WeightGoalReadings readings = new WeightGoalReadings();
             readings.setHeight(Integer.parseInt(pHeight.getText().toString()));
             readings.setWeight(Double.parseDouble(pWeight.getText().toString()));

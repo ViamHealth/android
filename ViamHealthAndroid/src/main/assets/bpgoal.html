@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+
+
+    <script type='text/javascript'>//<![CDATA[
+var str = goals.getData();
+console.log(str);
+var android = JSON.parse(str);
+/*var android = {
+        "seriesB": [
+        {
+        "y": 83,
+        "x": 1382293800000
+        },
+        {
+        "y": 95,
+        "x": 1382380200000
+        }
+        ],
+        "seriesA": [
+        {
+        "y": 135,
+        "x": 1382293800000
+        },
+        {
+        "y": 150,
+        "x": 1382380200000
+        }
+        ],
+        "goal": {
+        "targetDP": 80,
+        "targetSP": 120,
+        "healthyRange": {
+        "sp": {
+        "to": 0,
+        "from": 0
+        },
+        "dp": {
+        "to": 0,
+        "from": 0
+        },
+        "pr": {
+        "to": 0,
+        "from": 0
+        }
+        },
+        "targetPR": 72,
+        "targetDate": 1384972200000
+        }
+        };*/
+console.log(android);
+$(function () {
+    $('#container').highcharts({
+        chart: {
+            type: "spline"
+        },
+        title: {
+            text: "Blood Pressure Goal"
+        },
+        legend: {
+            enabled: false
+        },
+        xAxis: {
+            tickInterval: 24 * 3600 * 1000 * 7, // one week
+            type: 'datetime',
+            title: {
+                text: "Timeline"
+            },
+            max: android.goal.targetDate,
+            plotLines: [{
+                value: android.goal.targetDate,
+                width: 2,
+                color: '#37AA4F',
+                label: {
+                    text: 'Target Date',
+                    textAlign: 'top',
+                    align: 'top',
+                    x: -15,
+                    y: 0
+                },
+                dashStyle: "ShortDash",
+                zIndex: 2
+            }]
+
+        },
+        yAxis : {
+            title: {
+                text: "Weight in Kgs"
+            },
+            plotBands: [{ // mark the weekend
+                color: '#c4dffb',
+                from: android.goal.healthyRange.sp.to,
+                to: android.goal.healthyRange.sp.from,
+                label: {
+                    text: "Healthy Systolic Pressure",
+                    verticalAlign: 'bottom',
+                    align: 'center',
+                    textAlign: 'center',
+                    y: -10
+                },
+                zIndex: 1
+            },
+{ // mark the weekend
+                color: '#f8cdc2',
+                from: android.goal.healthyRange.dp.to,
+                to: android.goal.healthyRange.dp.from,
+                label: {
+                    text: "Healthy Diastolic Pressure",
+                    verticalAlign: 'bottom',
+                    align: 'center',
+                    textAlign: 'center',
+                    y: -10
+                },
+                zIndex: 1
+            }                       ],
+            plotLines: [{
+                value: android.goal.targetDP,
+                width: 2,
+                color: '#FF0000',
+                label: {
+                    text: 'Diastolic Goal',
+                    textAlign: 'right',
+                    align: 'right',
+                    verticalAlign: 'bottom',
+                    x: -5
+                },
+                dashStyle: "ShortDash",
+                zIndex: 2
+            },
+{
+                value: android.goal.targetSP,
+                width: 2,
+                color: '#FF0000',
+                label: {
+                    text: 'Systolic Goal',
+                    textAlign: 'right',
+                    align: 'right',
+                    verticalAlign: 'bottom',
+                    x: -5
+                },
+                dashStyle: "ShortDash",
+                zIndex: 2
+            }                       ],
+            type: 'linear',
+            min: 20
+        },
+        series: [{
+            name: "Systolic Pressure",
+            color: "#4474a2",
+            data: android.seriesA
+        },
+        {
+            name: "Diastolic Pressure",
+            color: "#cd5837",
+            data: android.seriesB
+        }]
+    });
+});
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<div id="container" style="height: 400px"></div>
+
+</body>
+
+
+</html>
+

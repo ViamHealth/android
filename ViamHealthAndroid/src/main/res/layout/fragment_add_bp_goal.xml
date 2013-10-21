@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:id="@+id/section_present">
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,6 +40,20 @@
         <EditText
             android:id="@+id/add_goal_present_dp"
             android:hint="@string/present_diastolic"
+            android:inputType="numberSigned"
+            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:gravity="center_vertical|center_horizontal"
+            android:singleLine="true"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            style="@style/EditTextGreenTheme" />
+
+        <EditText
+            android:id="@+id/add_goal_present_pr"
+            android:hint="@string/present_pulse_rate"
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
@@ -84,6 +99,21 @@
         <EditText
             android:id="@+id/add_goal_target_dp"
             android:hint="@string/target_diastolic"
+            android:inputType="numberSigned"
+            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:textSize="18sp"
+            android:gravity="center_vertical|center_horizontal"
+            android:singleLine="true"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            style="@style/EditTextGreenTheme"
+            android:textIsSelectable="false" />
+
+        <EditText
+            android:id="@+id/add_goal_target_pr"
+            android:hint="@string/target_pulse_rate"
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"

@@ -17,12 +17,12 @@ $(function () {
             type: "spline"
         },
         title: {
-            text: "Weight Goal"
+            text: "Blood Sugar Goal"
         },
         legend: {
             enabled: false
         },
-        xAxis: {        
+        xAxis: {
             tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
@@ -42,48 +42,84 @@ $(function () {
                 },
                 dashStyle: "ShortDash",
                 zIndex: 2
-            }]            
+            }]
+
         },
         yAxis : {
             title: {
-                text: "Weight in Kgs"
+                text: ""
             },
             plotBands: [{ // mark the weekend
                 color: '#c4dffb',
-                from: android.goal.healthyRange.from,
-                to: android.goal.healthyRange.to,
+                from: android.goal.healthyRange.fbs.to,
+                to: android.goal.healthyRange.fbs.from,
                 label: {
-                    text: "Healthy Range",
+                    text: "Healthy FBS",
                     verticalAlign: 'bottom',
                     align: 'center',
                     textAlign: 'center',
                     y: -10
                 },
                 zIndex: 1
-            }],
-            plotLines: [{
-                value: android.goal.targetWeight,
-                width: 2,
-                color: '#37aa4f',
+            },
+{ // mark the weekend
+                color: '#f8cdc2',
+                from: android.goal.healthyRange.rbs.to,
+                to: android.goal.healthyRange.rbs.from,
                 label: {
-                    text: 'Target Weight',
-                    textAlign: 'left',
-                    align: 'left',
-                    y: -10,
-                    x: 0
+                    text: "Healthy RBS",
+                    verticalAlign: 'bottom',
+                    align: 'center',
+                    textAlign: 'center',
+                    y: -10
+                },
+                zIndex: 1
+            }                       ],
+            plotLines: [{
+                value: android.goal.targetFBS,
+                width: 2,
+                color: '#FF0000',
+                label: {
+                    text: 'Fasting Blood Sugar Goal',
+                    textAlign: 'right',
+                    align: 'right',
+                    verticalAlign: 'bottom',
+                    x: -5
                 },
                 dashStyle: "ShortDash",
                 zIndex: 2
-            }],
+            },
+{
+                value: android.goal.targetRBS,
+                width: 2,
+                color: '#FF0000',
+                label: {
+                    text: 'Random Blood Sugar Goal',
+                    textAlign: 'right',
+                    align: 'right',
+                    verticalAlign: 'bottom',
+                    x: -5
+                },
+                dashStyle: "ShortDash",
+                zIndex: 2
+            }                       ],
             type: 'linear',
             min: 20
         },
         series: [{
+            name: "Fasting Blood Sugar",
+            color: "#4474a2",
             data: android.seriesA
+        },
+        {
+            name: "Random Blood Sugar",
+            color: "#cd5837",
+            data: android.seriesB
         }]
     });
 });
-//]]>  
+//]]>
+
 
 </script>
 

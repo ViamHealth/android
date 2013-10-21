@@ -226,4 +226,21 @@ public class RestClient {
 		}
 			return sb.toString();
 	}
+
+    @Override
+    public String toString() {
+        return "RestClient{" +
+                "authentication=" + authentication +
+                ", headers=" + headers +
+                ", jsonBody='" + jsonBody + '\'' +
+                ", message='" + message + '\'' +
+                ", params=" + params +
+                ", response='" + response + '\'' +
+                ", responseCode=" + responseCode +
+                ", url='" + url + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", context=" + context +
+                "} " + super.toString();
+    }
 }

@@ -69,7 +69,7 @@
             <EditText
                 android:id="@+id/add_goal_target_weight"
                 android:hint="target weight in kgs"
-                android:inputType="numberSigned"
+                android:inputType="numberDecimal|numberSigned"
                 android:layout_height="48dp"
                 android:layout_width="match_parent"
                 android:textSize="18sp"
@@ -78,7 +78,8 @@
                 android:padding="5dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                style="@style/EditTextGreenTheme" />
+                style="@style/EditTextGreenTheme"
+                android:numeric="signed|decimal" />
 
             <EditText
                 android:id="@+id/add_goal_target_date"

@@ -25,22 +25,26 @@ public class JsonGraphDataBuilder {
     }
 
     public JsonGraphDataBuilder write(String key, JsonOutput item) {
+
         try {
-            object.put(key, item.toJSON());
+            object.put(key, item.toJSON(null));
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return this;
     }
 
-    public JsonGraphDataBuilder write(String key, List readings) {
+    public JsonGraphDataBuilder write(String key, List readings, JsonOutput.GraphSeries series) {
 
         JSONArray array = new JSONArray();
+
+        if(readings==null)
+            return this;
 
         for(int i=0; i<readings.size(); i++) {
             try {
                 JsonOutput item = (JsonOutput) readings.get(i);
-                array.put(i, item.toJSON());
+                array.put(i, item.toJSON(series));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -65,7 +69,10 @@ public class JsonGraphDataBuilder {
     }
 
     public interface JsonOutput {
-        public JSONObject toJSON();
+        public enum GraphSeries { A, B, C, D};
+
+        public JSONObject toJSON(GraphSeries series);
     }
+
 
 }

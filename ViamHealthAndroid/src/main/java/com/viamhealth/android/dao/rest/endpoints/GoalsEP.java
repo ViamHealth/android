@@ -2,6 +2,7 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.dao.restclient.core.RestClient;
@@ -25,6 +26,7 @@ import java.util.Map;
  * Created by naren on 11/10/13.
  */
 public abstract class GoalsEP extends BaseEP {
+    protected static final String TAG = "GOALSEP";
 
     protected SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -52,6 +54,7 @@ public abstract class GoalsEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
 
         return processGoalResponse(responseString);
 
@@ -67,6 +70,7 @@ public abstract class GoalsEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         return processGoalReadings(responseString);
 
     }
@@ -96,6 +100,7 @@ public abstract class GoalsEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         return processGoalReading(responseString);
     }
 
@@ -113,6 +118,7 @@ public abstract class GoalsEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         return processGoalResponse(responseString);
 
     }
