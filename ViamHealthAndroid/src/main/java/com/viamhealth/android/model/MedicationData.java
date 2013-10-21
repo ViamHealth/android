@@ -2,6 +2,7 @@ package com.viamhealth.android.model;
 
 public class MedicationData {
 	String id,name,type,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval,start_date,end_date;
+    String morning_check,noon_check,evening_check,night_check;
 
 	boolean checked=false;
 	
@@ -14,7 +15,7 @@ public class MedicationData {
 			String morning_count, String afternoon_count, String evening_count,
 			String night_count, String user, String start_timestamp,
 			String repeat_hour, String repeat_day, String repeat_mode,
-			String repeat_min, String repeat_weekday, String repeat_day_interval,String start_date,String end_date) {
+			String repeat_min, String repeat_weekday, String repeat_day_interval,String start_date,String end_date,String morning_check,String noon_check,String evening_check,String night_check) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,6 +35,10 @@ public class MedicationData {
 		this.repeat_day_interval = repeat_day_interval;
         this.start_date=start_date;
         this.end_date=end_date;
+        this.morning_check=morning_check;
+        this.noon_check=noon_check;
+        this.evening_check=evening_check;
+        this.night_check=night_check;
 	}
 
 	public boolean isChecked() {
@@ -81,6 +86,50 @@ public class MedicationData {
 	public String getMorning_count() {
 		return morning_count;
 	}
+
+    public void setMorning_check(String morning_check)
+    {
+        this.morning_check=morning_check;
+    }
+
+
+    public String getMorning_check()
+    {
+       return morning_check;
+    }
+
+    public void setNoon_check(String noon_check)
+    {
+        this.noon_check=noon_check;
+    }
+
+
+    public String getNoon_check()
+    {
+        return noon_check;
+    }
+
+    public void setEvening_check(String evening_check)
+    {
+        this.evening_check=evening_check;
+    }
+
+    public String getEvening_check()
+    {
+        return evening_check;
+    }
+
+    public void setNight_check(String night_check)
+    {
+        this.night_check=night_check;
+    }
+
+
+    public String getNight_check()
+    {
+        return night_check;
+    }
+
 
 	public void setMorning_count(String morning_count) {
 		this.morning_count = morning_count;

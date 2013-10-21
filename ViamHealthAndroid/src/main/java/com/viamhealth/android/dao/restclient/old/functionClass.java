@@ -1246,14 +1246,19 @@ public class functionClass {
 					return lstData;
 				}
 
-                public void storeReminderReading(String reminder_id)
+                public void storeReminderReading(String reminder_id,String morning_check,String evening_check,String afternoon_check,String night_check,String complete_check)
                 {
                     ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
                     String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id;
                     Log.e("TAG","url is : " + baseurlString);
 
                     RestClient client = new RestClient(baseurlString);
-                    //client.AddParam();
+                    client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+                    client.AddParam("morning_check", morning_check);//MJ
+                    client.AddParam("afternoon_check", afternoon_check);//MJ
+                    client.AddParam("evening_check",evening_check);
+                    client.AddParam("night_check", night_check);
+                    client.AddParam("complete_check",complete_check);
 
                     try
                     {
@@ -1316,7 +1321,7 @@ public class functionClass {
                              c.getString("repeat_mode").toString(),
                             "null",
                             "null",
-                            "null",c.getString("start_date").toString(),c.getString("end_date").toString()));
+                            "null",c.getString("start_date").toString(),c.getString("end_date").toString(),"0","0","0","0"));
 
                         }
                         Log.e("TAG","lstdata count is " + lstData.size());

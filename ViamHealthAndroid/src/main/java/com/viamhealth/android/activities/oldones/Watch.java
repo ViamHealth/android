@@ -266,6 +266,10 @@ public class Watch extends BaseActivity implements OnClickListener{
     {
         super.onPause();
         //setContentView(R.layout.watch);
+        //Store reminder checks
+        StoreReminderChecks chk1=new StoreReminderChecks();
+        chk1.execute();
+
 
     }
     @Override
@@ -289,6 +293,39 @@ public class Watch extends BaseActivity implements OnClickListener{
         task.execute();
 
     }
+
+
+    public class StoreReminderChecks extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+
+
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+
+            return null;
+        }
+
+    }
+
+
 
 
     public class StoreReminders extends AsyncTask <String, Void,String>
@@ -1343,6 +1380,49 @@ public class Watch extends BaseActivity implements OnClickListener{
 
                 MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(Watch.this.getParent(),R.layout.row_medical_list1,listData);
                 lstReminderMedicine.setAdapter(adapter4);
+
+
+
+                lstReminderMedicine.setOnItemClickListener(new OnItemClickListener(){
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        main_list_edit=(LinearLayout)v.findViewById(R.id.main_list_edit);
+                        main_list_delete=(LinearLayout)v.findViewById(R.id.main_list_delete);
+                        main_list=(LinearLayout)v.findViewById(R.id.main_list);
+
+                        final int pos=position;
+
+                        final TextView name=(TextView)v.findViewById(R.id.txt_name);
+                        final TextView txt_morn=(TextView)v.findViewById(R.id.txt_morning);
+                        final TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
+                        final TextView txt_night=(TextView)v.findViewById(R.id.txt_night);
+
+                        main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
+
+                            public void onSwipeRight() {
+                                main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
+                                original_width_edit=main_list_edit.getWidth();
+                                main_list_edit.setMinimumWidth((main_list.getWidth())/3);
+                                main_list_edit.setMinimumHeight(main_list.getHeight());
+                                edit_med=new Intent(Watch.this,AddMedication.class);
+                                edit_pos=pos;
+                                edit_med.putExtra("iseditMed",true);
+                                edit_med.putExtra("user_id",user_id);
+                                med_id=listData.get(pos).getId();
+                                edit_med.putExtra("id",med_id);
+                                edit_med.putExtra("start_date",listData.get(pos).getStart_date());
+                                edit_med.putExtra("name",name.getText().toString());
+                                edit_med.putExtra("morning",txt_morn.getText().toString());
+                                edit_med.putExtra("noon",txt_noon.getText().toString());
+                                edit_med.putExtra("night",txt_night.getText().toString());
+                                startActivity(edit_med);
+
+                            }
+                        });
+
+                    }
+                });
+
 
 
                 RefreshableListView lstReminderTest=(RefreshableListView)findViewById(R.id.lstRemTest);

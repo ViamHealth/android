@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -72,6 +74,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
     int w15,w20,w5,h40,h20,w10,h10,w150,w30;
     ProgressDialog dialog;
     ProgressDialog dialog1;
+    ColorDrawable draw1,draw2;
 
     TextView mSelected,lbl_add,lbl_delete,txt_test,txt_medication,txt_reminder,txt_name,txt_time,txt_mode;;
     ImageView back,person_icon;
@@ -100,6 +103,8 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
     ArrayList<MedicationData>	allData = new ArrayList<MedicationData>();
     ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
 
+    ArrayList<ArrayList<ReminderReadings>>	remindercheckData = new ArrayList<ArrayList<ReminderReadings>>();
+
     ArrayList<ArrayList<MedicationData>> selected_list_data=new ArrayList<ArrayList<MedicationData>>();
 
     ArrayList<ArrayList<MedicationData>> selected_other_data=new ArrayList<ArrayList<MedicationData>>();
@@ -112,6 +117,8 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
     int edit_pos=0;
     int totalHeight = 0;
     ArrayList<ReminderReadings> rem_read=null;
+    int current_pos;
+    StoreReminders rem1=null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -191,10 +198,19 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         txt2.setPadding(w10, 0, 0, 0);
         int i=0;
 
+        rem1=new StoreReminders();
         for(i=0;i<5;i++)
         {
             selected_list_data.add(new ArrayList<MedicationData>());
         }
+
+
+
+        for(i=0;i<5;i++)
+        {
+            remindercheckData.add(new ArrayList<ReminderReadings>());
+        }
+
 
         for(i=0;i<5;i++)
         {
@@ -257,7 +273,12 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
-            allData = obj.getReminderInfo(user.getId().toString(), "MEDICATION");
+            int i=0;
+            for(i=0;i<selected_list_data.get(current_pos).size();i++)
+            {
+                obj.storeReminderReading(selected_list_data.get(current_pos).get(i).getId(),selected_list_data.get(current_pos).get(i).getMorning_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check());
+            }
+
             return null;
         }
 
@@ -734,6 +755,8 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             View imageLayout = inflater.inflate(R.layout.item_pager_medicine, null);
             TextView todayDate=(TextView)imageLayout.findViewById(R.id.todayDate);
 
+            current_pos=position;
+
             RefreshableListView lstReminderMedicine1=(RefreshableListView)imageLayout.findViewById(R.id.lstReminderMedicine1);
 
             todayDate.setText(lstData.get(position));
@@ -860,8 +883,12 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             total_height_test_tab=0;
 
 
+
+
             //selected_otherData2=selected_otherData1;
             TestDataAdapter adapter1 = new TestDataAdapter(getActivity(),R.layout.row_test_list, selected_other_data.get(position));
+
+
 
 
 
@@ -882,6 +909,49 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             lstReminderMedicine1.setAdapter(adapter3);
 
+            lstReminderMedicine1.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
+                    TextView txt_morning=(TextView)v.findViewById(R.id.txt_morning);
+                    TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
+                    TextView txt_evening=(TextView)v.findViewById(R.id.txt_night);
+
+
+                    draw1 = (ColorDrawable)txt_morning.getBackground();
+
+
+                    if(draw1.getColor()== Color.GREEN)
+                    {
+                        selected_list_data.get(position).get(pos).setMorning_check("1");
+                    }
+
+
+                    draw1 = (ColorDrawable)txt_noon.getBackground();
+
+
+                    if(draw1.getColor()== Color.GREEN)
+                    {
+                        selected_list_data.get(position).get(pos).setNoon_check("1");
+                    }
+
+
+
+                    draw1 = (ColorDrawable)txt_evening.getBackground();
+
+
+                    if(draw1.getColor()== Color.GREEN)
+                    {
+                        selected_list_data.get(position).get(pos).setEvening_check("1");
+                    }
+
+
+
+                }
+
+
+            });
+
+
 
             int totalheight1=totalHeight;
             totalHeight=0;
@@ -896,6 +966,8 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             {
                 totalHeight=totalheight1;
             }
+
+            rem1.execute();
 
             LinearLayout.LayoutParams l2= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,totalHeight+70);
             mPager1.setLayoutParams(l2);
