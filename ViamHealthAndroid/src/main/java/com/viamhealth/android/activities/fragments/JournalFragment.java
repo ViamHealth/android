@@ -59,7 +59,7 @@ import java.util.HashMap;
 /**
  * Created by naren on 07/10/13.
  */
-public class JournalFragment extends Fragment implements View.OnClickListener{
+public class JournalFragment extends Fragment implements View.OnClickListener {
 
     Display display;
     int height,width;

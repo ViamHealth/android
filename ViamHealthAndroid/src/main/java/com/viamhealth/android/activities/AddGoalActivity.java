@@ -50,8 +50,6 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
     AddGoalFragmentManager fm;
     ProgressDialog progressDialog;
 
-    Map<MedicalConditions, Goal> goalsConfiguredMap = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +61,7 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", intent.getParcelableExtra("user"));
-        goalsConfiguredMap = (HashMap<MedicalConditions, Goal>) intent.getSerializableExtra("goals");
+        bundle.putBundle("goals", intent.getBundleExtra("goals"));
 
         fm = new AddGoalFragmentManager(this, R.id.add_goal_data_layout);
         fm.addFragment(MedicalConditions.Diabetes, AddDiabetesGoalFragment.class, bundle);
@@ -152,7 +150,4 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         return true;
     }
 
-    public Goal getConfiguredGoal(MedicalConditions condition) {
-        return goalsConfiguredMap.get(condition);
-    }
 }

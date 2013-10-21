@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="@style/EditTextReverseTheme"
+    android:background="#37aa4f">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center">
+
+        <Switch
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/input_sugar_type"
+            android:background="@drawable/switch_track_holo_light"
+            android:textOff="@string/random"
+            android:textOn="@string/fasting" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:inputType="numberSigned"
+            android:ems="10"
+            android:id="@+id/input_sugar"
+            style="@style/EditTextGreenTheme"
+            android:hint="@string/diabetes_reading"
+            android:gravity="center_vertical|center_horizontal" />
+    </LinearLayout>
+</LinearLayout>

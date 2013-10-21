@@ -1,132 +1,106 @@
 package com.viamhealth.android.activities.fragments;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.DiabetesGoal;
+import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.goals.WeightGoal;
+import com.viamhealth.android.model.goals.WeightGoalReadings;
+import com.viamhealth.android.model.users.User;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by naren on 10/10/13.
  */
 public class AddDiabetesGoalFragment extends AddGoalFragment {
 
+    User user;
+    boolean isGoalConfigured;
+
+    DiabetesGoal goal;
+
     View view = null;
+    EditText targetDate, pFBS, pRBS, tFBS, tRBS;
+    ProgressDialog dialog;
+
+    SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add_diabetes_goal, container, false);
 
-        EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);
-        date.setOnFocusChangeListener(mManager);
+        user = getArguments().getParcelable("user");
+        Bundle bundle = getArguments().getBundle("goals");
+        if(!bundle.isEmpty())
+            goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
 
-        SeekBar pfbs = (SeekBar) view.findViewById(R.id.seekBar_present_fbs);
-        pfbs.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        dialog = new ProgressDialog(getActivity());
 
-            }
+        targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
+        targetDate.setOnFocusChangeListener(mManager);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+        pFBS = (EditText) view.findViewById(R.id.add_goal_present_fbs);
+        pRBS = (EditText) view.findViewById(R.id.add_goal_present_rbs);
+        tFBS = (EditText) view.findViewById(R.id.add_goal_target_fbs);
+        tRBS = (EditText) view.findViewById(R.id.add_goal_target_rbs);
 
-            }
+        if(user==null)
+            return null;
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                setValueInTextView(R.id.txt_add_present_fbs, seekBar.getProgress());
-            }
-        });
-        pfbs.setMax(300);
-        pfbs.setProgress(100);
-        setValueInTextView(R.id.txt_add_present_fbs, 100);
-
-        SeekBar prbs = (SeekBar) view.findViewById(R.id.seekBar_present_rbs);
-        prbs.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                setValueInTextView(R.id.txt_add_present_rbs, seekBar.getProgress());
-            }
-        });
-        prbs.setMax(300);
-        prbs.setProgress(140);
-        setValueInTextView(R.id.txt_add_present_rbs, 140);
-
-        SeekBar tfbs = (SeekBar) view.findViewById(R.id.seekBar_target_fbs);
-        tfbs.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                setValueInTextView(R.id.txt_add_target_fbs, seekBar.getProgress());
-            }
-        });
-        tfbs.setMax(300);
-        tfbs.setProgress(100);
-        setValueInTextView(R.id.txt_add_target_fbs, 100);
-
-        SeekBar trbs = (SeekBar) view.findViewById(R.id.seekBar_target_rbs);
-        trbs.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                setValueInTextView(R.id.txt_add_target_rbs, seekBar.getProgress());
-            }
-        });
-        trbs.setMax(300);
-        trbs.setProgress(140);
-        setValueInTextView(R.id.txt_add_target_rbs, 140);
+        if(goal!=null){
+            isGoalConfigured = true;
+            tRBS.setText(goal.getRbs());
+            tFBS.setText(goal.getFbs());
+            targetDate.setText(formater.format(goal.getTargetDate()));
+            ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+        }
 
         return view;
     }
 
-    private void setValueInTextView(int resId, Integer value) {
-        TextView txt = (TextView) view.findViewById(resId);
-        txt.setText(value.toString());
+    private boolean validation() {
+        return true;
     }
 
     @Override
     public Goal getGoal() {
-        return null;
+        DiabetesGoal goal = new DiabetesGoal();
+        goal.setFbs(Integer.parseInt(tFBS.getText().toString()));
+        goal.setRbs(Integer.parseInt(tRBS.getText().toString()));
+        try{
+            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+        } catch(ParseException e){
+            e.printStackTrace();
+        }
+        return goal;
     }
 
     @Override
     public GoalReadings getGoalReadings() {
+        if(!isGoalConfigured) {
+            DiabetesGoalReading readings = new DiabetesGoalReading();
+            readings.setRbs(Integer.parseInt(pRBS.getText().toString()));
+            readings.setFbs(Integer.parseInt(pFBS.getText().toString()));
+            readings.setReadingDate(new Date());
+            return readings;
+        }
         return null;
     }
 }

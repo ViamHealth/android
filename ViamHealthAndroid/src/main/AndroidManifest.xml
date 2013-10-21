@@ -245,11 +245,10 @@
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddGoalActivity"
-            android:label="@string/title_activity_add_goal"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity
-            android:name=".activities.AddWeight"
+            android:name="com.viamhealth.android.activities.AddGoalValue"
             android:theme="@style/FullHeightDialog" >
         </activity>
     </application>

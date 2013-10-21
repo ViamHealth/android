@@ -11,22 +11,25 @@ import java.util.Map;
  * Created by naren on 10/10/13.
  */
 public enum MedicalConditions implements OrFragmentManager.FragmentSpinnerElement {
-    Obese(1, R.string.medical_conidtion_obese),
-    BloodPressure(2, R.string.medical_conidtion_bp),
-    Diabetes(3, R.string.medical_conidtion_diabetes),
-    Cholesterol(4, R.string.medical_conidtion_cholesterol);
+    Obese(1, R.string.medical_conidtion_obese, "weightgoal.html"),
+    BloodPressure(2, R.string.medical_conidtion_bp, "bpgoal.html"),
+    Diabetes(3, R.string.medical_conidtion_diabetes, "sugargoal.html"),
+    Cholesterol(4, R.string.medical_conidtion_cholesterol, "cholesterol.html");
 
     private final int value;
     private final int key;
+    private final String assetName;
 
-    MedicalConditions(int value, int key){
+    MedicalConditions(int value, int key, String assetName){
         this.value = value;
         this.key = key;
+        this.assetName = assetName;
     }
 
 
     public int value() {return value;}
     public int key() {return key;}
+    public String assetName() {return assetName;}
 
     // Lookup table
     private static final Map<Integer, MedicalConditions> valuelookup = new HashMap<Integer, MedicalConditions>();

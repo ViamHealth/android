@@ -72,7 +72,7 @@ public class WeightGoalReadings extends GoalReadings implements Parcelable {
     };
 
     @Override
-    public JSONObject toJSON() {
+    public JSONObject toJSON(GraphSeries series) {
         JSONObject object = parentJSON();
 
         try {

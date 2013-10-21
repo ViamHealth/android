@@ -16,6 +16,7 @@ import java.util.Date;
  * Created by naren on 11/10/13.
  */
 public abstract class GoalReadings extends BaseModel implements Parcelable, JsonGraphDataBuilder.JsonOutput {
+
     long goalId;
     Date readingDate;
     String comments;

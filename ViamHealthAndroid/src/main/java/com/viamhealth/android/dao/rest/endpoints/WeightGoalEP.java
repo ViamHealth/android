@@ -43,12 +43,12 @@ public class WeightGoalEP extends GoalsEP {
 
     @Override
     protected void addParams(final RestClient client, final GoalReadings readings) {
-        client.AddParam("weight", ((WeightGoalReadings)readings).getWeight().intValue());
+        client.AddParam("weight", ((WeightGoalReadings)readings).getWeight());
     }
 
     @Override
     protected void addParams(final RestClient client, final Goal goal) {
-        client.AddParam("weight", ((WeightGoal)goal).getWeight().intValue());
+        client.AddParam("weight", ((WeightGoal)goal).getWeight());
     }
 
     @Override

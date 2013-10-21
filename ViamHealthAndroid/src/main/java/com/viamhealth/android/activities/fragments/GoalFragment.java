@@ -6,7 +6,10 @@ import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.JsonWriter;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +25,7 @@ import android.widget.Toast;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.AddGoalActivity;
-import com.viamhealth.android.activities.AddWeight;
+import com.viamhealth.android.activities.AddGoalValue;
 import com.viamhealth.android.dao.rest.endpoints.GoalsEPHelper;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.model.enums.MedicalConditions;
@@ -32,36 +35,38 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.JsonGraphDataBuilder;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONStringer;
-
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by naren on 07/10/13.
  */
 public class GoalFragment extends Fragment implements View.OnClickListener {
 
-    View view;
     Map<MedicalConditions, List<GoalReadings>> goalReadingsMap = new HashMap<MedicalConditions, List<GoalReadings>>();
-    Map<MedicalConditions, Goal> goalsConfiguredMap = new HashMap<MedicalConditions, Goal>();
+    Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
+    Map<MedicalConditions, List<JsonGraphDataBuilder.JsonOutput.GraphSeries>> supportedSeries = new HashMap<MedicalConditions, List<JsonGraphDataBuilder.JsonOutput.GraphSeries>>();
+    Map<Integer, GraphFragment> graphFragments = new HashMap<Integer, GraphFragment>();
+    Map<MedicalConditions, OnGoalDataChangeListener> listenersSubscribed = new HashMap<MedicalConditions, OnGoalDataChangeListener>();
 
     GoalsEPHelper goalHelper = null;
     UserEP userEP = null;
     User selectedUser = null;
 
+    View view;
     ProgressDialog dialog;
+    ViewPager mPager;
+    WebViewFragmentPagerAdapter mPagerAdapter;
+    //WebView webView;
+    //ImageButton addValue;
 
-    WebView webView;
-    ImageButton addValue;
-
-    protected final int ACTION_CONFIGURE_GOAL = 100;
-    protected final int ACTION_ADD_GOAL_VALUE = 200;
+    final int ACTION_CONFIGURE_GOAL = 100;
+    final int ACTION_ADD_GOAL_VALUE = 200;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,28 +74,6 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
         selectedUser = getArguments().getParcelable("user");
 
-        webView = (WebView) view.findViewById(R.id.webView);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.addJavascriptInterface(this, "goals");
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.i("GraphWebView", consoleMessage.message());
-                return super.onConsoleMessage(consoleMessage);
-            }
-        });
-        webView.loadUrl("file:///android_asset/weightgoal.html");
-
-
-        addValue = (ImageButton) view.findViewById(R.id.addvalue);
-        addValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), AddWeight.class);
-                startActivityForResult(i, ACTION_ADD_GOAL_VALUE);
-            }
-        });
         goalHelper = new GoalsEPHelper(getActivity(), (Global_Application)getActivity().getApplicationContext());
         userEP = new UserEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
 
@@ -103,6 +86,9 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         } else {
             Toast.makeText(getActivity(), "Internet is not on..", Toast.LENGTH_LONG);
         }
+
+        /** build the supported series map **/
+
         return view;
     }
 
@@ -115,16 +101,22 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
      * @param index
      * @return
      */
-    public String getDataForGraph(int index) {
+    public String getDataForGraph(MedicalConditions mc) {
 
-        MedicalConditions mc = MedicalConditions.constructEnumByValue(index);
         List<GoalReadings> readings = goalReadingsMap.get(mc);
         Goal goal = goalsConfiguredMap.get(mc);
 
         JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
         builder.write("goal", goal)
-               .write("readings", readings);
+               .write("seriesA", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
 
+        if(mc!=MedicalConditions.Obese)
+            builder.write("seriesB", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.B);
+
+        if(mc==MedicalConditions.Cholesterol){
+            builder.write("seriesC", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
+            builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
+        }
         return builder.toString();
 
     }
@@ -145,9 +137,20 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         Intent i = new Intent(getActivity(), AddGoalActivity.class);
         i.putExtra("user", selectedUser);
-        HashMap map = (HashMap) goalsConfiguredMap;
-        i.putExtra("goals", map);
+        i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
         startActivityForResult(i, ACTION_CONFIGURE_GOAL);
+    }
+
+    private Bundle getBundleFromMap(Map<MedicalConditions, Goal> map) {
+        if(map==null)
+            return new Bundle();
+
+        Set<MedicalConditions> keySet = map.keySet();
+        Bundle bundle = new Bundle();
+        for(MedicalConditions key: keySet) {
+            bundle.putParcelable(key.name(), map.get(key));
+        }
+        return bundle;
     }
 
     @Override
@@ -156,7 +159,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
             if(requestCode==ACTION_CONFIGURE_GOAL){
                 //save the goal and goalReadings
                 Goal goal = data.getParcelableExtra("goal");
-                GoalReadings readings = data.getParcelableExtra("reading");
+                GoalReadings readings = data.getParcelableExtra("goalReading§");
                 MedicalConditions selectedCondition = (MedicalConditions)data.getSerializableExtra("type");
                 if(goal!=null){
                     if(Checker.isInternetOn(getActivity())) {
@@ -186,6 +189,61 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    public void setOnGoalDataChangeListener(MedicalConditions mc, OnGoalDataChangeListener listener) {
+        listenersSubscribed.put(mc, listener);
+    }
+
+    public void onGoalDataChanged(MedicalConditions mc){
+        OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
+
+        if(listener != null)
+            listener.onChange(getDataForGraph(mc));
+        else
+            mPagerAdapter.notifyDataSetChanged();
+    }
+
+    public interface OnGoalDataChangeListener {
+        public void onChange(String json);
+    }
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class WebViewFragmentPagerAdapter extends FragmentPagerAdapter {
+
+
+        public WebViewFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            GraphFragment fragment = graphFragments.get(position);
+            if(fragment == null) {
+                Bundle args = new Bundle();
+                final MedicalConditions mc = (MedicalConditions)goalsConfiguredMap.keySet().toArray()[position];
+                args.putSerializable("type", mc);
+                args.putString("json", getDataForGraph(mc));
+                fragment = (GraphFragment)Fragment.instantiate(getActivity(), GraphFragment.class.getName(), args);
+                setOnGoalDataChangeListener(mc, fragment);
+                fragment.setOnClickAddValueListener(new GraphFragment.OnClickAddValueListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent i = new Intent(getActivity(), AddGoalValue.class);
+                        i.putExtra("type", mc);
+                        startActivityForResult(i, ACTION_ADD_GOAL_VALUE);
+                    }
+                });
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return goalsConfiguredMap.keySet().size();
+        }
+    }
+
     public class SaveGoalReading extends AsyncTask<GoalReadings, Void, Void> {
 
         MedicalConditions type;
@@ -199,7 +257,6 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                 rds.add(goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId()));
             }
             goalReadingsMap.put(type, rds);
-            webView.loadUrl( "javascript:window.location.reload( true )" );
             return null;
         }
 
@@ -211,7 +268,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            webView.loadUrl( "javascript:window.location.reload( true )" );
+            onGoalDataChanged(type);
             dialog.dismiss();
         }
     }
@@ -243,7 +300,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                 task.type = type;
                 task.execute(reading);
             }
-            webView.loadUrl( "javascript:window.location.reload( true )" );
+            onGoalDataChanged(type);
         }
     }
 
@@ -266,10 +323,16 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            webView.loadUrl( "javascript:window.location.reload( true )" );
+
+            mPager = (ViewPager) view.findViewById(R.id.pager);
+            mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+
             TextView btnAddGoal = (TextView) view.findViewById(R.id.btn_add_goal);
             btnAddGoal.setOnClickListener(GoalFragment.this);
             dialog.dismiss();
         }
     }
+
+
 }

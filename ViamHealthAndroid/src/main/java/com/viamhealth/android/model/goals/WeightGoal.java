@@ -62,12 +62,12 @@ public class WeightGoal extends Goal implements Parcelable {
     };
 
     @Override
-    public JSONObject toJSON() {
+    public JSONObject toJSON(GraphSeries series) {
         JSONObject object = parentJSON();
 
         try {
             object.put("targetWeight", weight);
-            object.put("healthyRange", healthyRange.toJSON());
+            object.put("healthyRange", healthyRange.toJSON(null));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -97,7 +97,7 @@ public class WeightGoal extends Goal implements Parcelable {
         }
 
         @Override
-        public JSONObject toJSON() {
+        public JSONObject toJSON(GraphSeries series) {
             JSONObject healthyRangeJSON = new JSONObject();
 
             try {
