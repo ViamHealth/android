@@ -424,7 +424,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             public void onRefresh() {
                 // TODO Auto-generated method stub
 
-                    frm="d";
+                    frm="e";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getActivity();
@@ -1239,7 +1239,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 adapter.notifyDataSetChanged();
                 lstViewDinner.onRefreshComplete();
             }
-/*
+
             if(lstResultExercise.size()>0 && frm.equals("e")){
                 int total_calories=0;
                 int i=0;
@@ -1255,7 +1255,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
           }
-          */
+
 
         }
 

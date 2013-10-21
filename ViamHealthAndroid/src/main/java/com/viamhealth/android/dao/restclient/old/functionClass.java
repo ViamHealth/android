@@ -1246,23 +1246,24 @@ public class functionClass {
 					return lstData;
 				}
 
-                public void storeReminderReading(String reminder_id,String morning_check,String evening_check,String afternoon_check,String night_check,String complete_check)
+                public void storeReminderReading(String reminder_id,String morning_check,String evening_check,String afternoon_check,String night_check,String complete_check,String user_id)
                 {
                     ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-                    String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id;
+                    String baseurlString = Global_Application.url+"reminderreadings/"+"?user="+user_id+"&"+"type=2"+"&reading_date=2013-10-21";
+                    //String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id + "/?user="+user_id;
                     Log.e("TAG","url is : " + baseurlString);
 
                     RestClient client = new RestClient(baseurlString);
                     client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-                    client.AddParam("morning_check", morning_check);//MJ
-                    client.AddParam("afternoon_check", afternoon_check);//MJ
-                    client.AddParam("evening_check",evening_check);
-                    client.AddParam("night_check", night_check);
-                    client.AddParam("complete_check",complete_check);
+                    //client.AddParam("morning_check", morning_check);//MJ
+                    //client.AddParam("afternoon_check", afternoon_check);//MJ
+                    //client.AddParam("evening_check",evening_check);
+                    //client.AddParam("night_check", night_check);
+                    //client.AddParam("complete_check",complete_check);
 
                     try
                     {
-                        client.Execute(RequestMethod.PUT);
+                        client.Execute(RequestMethod.GET);
                     }
                     catch (Exception e) {
                         e.printStackTrace();
@@ -1271,16 +1272,13 @@ public class functionClass {
                     responseString = client.getResponse();
                     Log.e("TAG","Response string " + responseString);
 
-
-
-
                 }
 
-                public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype)
+                public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype,String reading_date)
                 {
                     ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
                     //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
-                    String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type="+remindertype;
+                    String baseurlString = Global_Application.url+"reminderreadings/?user="+user_id+"&"+"type="+remindertype+"&reading_date=2013-10-21";
 
                     Log.e("TAG","url is : " + baseurlString);
 
@@ -1306,23 +1304,23 @@ public class functionClass {
                         for (int i = 0; i < jarray.length(); i++)
                         {
                             JSONObject c = jarray.getJSONObject(i);
-                            lstData.add(new MedicationData(c.getString("id").toString(),
-                            c.getString("name").toString(),
-                            c.getString("type").toString(),
+                            lstData.add(new MedicationData(c.getJSONObject("reminder").getString("id").toString(),
+                            c.getJSONObject("reminder").getString("id").toString(),
+                            c.getJSONObject("reminder").getString("name").toString(),
+                            c.getJSONObject("reminder").getString("type").toString(),
                             "null",//c.getString("detail").toString()
-                            c.getString("morning_count").toString(),
-                            c.getString("afternoon_count").toString(),
-                            c.getString("evening_count").toString(),
-                            c.getString("night_count").toString(),
+                            c.getJSONObject("reminder").getString("morning_count").toString(),
+                            c.getJSONObject("reminder").getString("afternoon_count").toString(),
+                            c.getJSONObject("reminder").getString("evening_count").toString(),
+                            c.getJSONObject("reminder").getString("night_count").toString(),
                             c.getString("user").toString(),
                             "null",
                             "null",
                             "null",
-                             c.getString("repeat_mode").toString(),
+                             c.getJSONObject("reminder").getString("repeat_mode").toString(),
                             "null",
                             "null",
-                            "null",c.getString("start_date").toString(),c.getString("end_date").toString(),"0","0","0","0"));
-
+                            "null",c.getJSONObject("reminder").getString("start_date").toString(),c.getJSONObject("reminder").getString("end_date").toString(),Boolean.parseBoolean("morning_check"),Boolean.parseBoolean("noon_check"),Boolean.parseBoolean("evening_check"),Boolean.parseBoolean("night_check"),Boolean.parseBoolean("complete_check")));
                         }
                         Log.e("TAG","lstdata count is " + lstData.size());
 

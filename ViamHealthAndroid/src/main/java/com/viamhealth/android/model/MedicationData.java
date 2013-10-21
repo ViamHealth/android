@@ -1,8 +1,8 @@
 package com.viamhealth.android.model;
 
 public class MedicationData {
-	String id,name,type,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval,start_date,end_date;
-    String morning_check,noon_check,evening_check,night_check;
+	String id,reminder_medication_id,name,type,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval,start_date,end_date;
+    Boolean morning_check,noon_check,evening_check,night_check,complete_check;
 
 	boolean checked=false;
 	
@@ -11,11 +11,11 @@ public class MedicationData {
 		super();
 	}
 
-	public MedicationData(String id, String name,String type,String details,
+	public MedicationData(String id,String reminder_medication_id, String name,String type,String details,
 			String morning_count, String afternoon_count, String evening_count,
 			String night_count, String user, String start_timestamp,
 			String repeat_hour, String repeat_day, String repeat_mode,
-			String repeat_min, String repeat_weekday, String repeat_day_interval,String start_date,String end_date,String morning_check,String noon_check,String evening_check,String night_check) {
+			String repeat_min, String repeat_weekday, String repeat_day_interval,String start_date,String end_date,Boolean morning_check,Boolean noon_check,Boolean evening_check,Boolean night_check,Boolean complete_check) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -39,6 +39,8 @@ public class MedicationData {
         this.noon_check=noon_check;
         this.evening_check=evening_check;
         this.night_check=night_check;
+        this.complete_check=complete_check;
+        this.reminder_medication_id=reminder_medication_id;
 	}
 
 	public boolean isChecked() {
@@ -65,6 +67,17 @@ public class MedicationData {
 		this.name = name;
 	}
 
+    public void setReminderMedId(String reminder_medication_id)
+    {
+        this.reminder_medication_id=reminder_medication_id;
+    }
+
+    public String getReminderMedicationId()
+    {
+        return reminder_medication_id;
+    }
+
+
 	public String getDetails() {
 		return details;
 	}
@@ -87,45 +100,45 @@ public class MedicationData {
 		return morning_count;
 	}
 
-    public void setMorning_check(String morning_check)
+    public void setMorning_check(Boolean morning_check)
     {
         this.morning_check=morning_check;
     }
 
 
-    public String getMorning_check()
+    public Boolean getMorning_check()
     {
        return morning_check;
     }
 
-    public void setNoon_check(String noon_check)
+    public void setNoon_check(Boolean noon_check)
     {
         this.noon_check=noon_check;
     }
 
 
-    public String getNoon_check()
+    public Boolean getNoon_check()
     {
         return noon_check;
     }
 
-    public void setEvening_check(String evening_check)
+    public void setEvening_check(Boolean evening_check)
     {
         this.evening_check=evening_check;
     }
 
-    public String getEvening_check()
+    public Boolean getEvening_check()
     {
         return evening_check;
     }
 
-    public void setNight_check(String night_check)
+    public void setNight_check(Boolean night_check)
     {
         this.night_check=night_check;
     }
 
 
-    public String getNight_check()
+    public Boolean getNight_check()
     {
         return night_check;
     }
