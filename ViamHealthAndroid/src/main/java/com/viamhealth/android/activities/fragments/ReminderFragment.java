@@ -276,7 +276,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             int i=0;
             for(i=0;i<selected_list_data.get(current_pos).size();i++)
             {
-                obj.storeReminderReading(selected_list_data.get(current_pos).get(i).getId(),selected_list_data.get(current_pos).get(i).getMorning_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check());
+                //obj.storeReminderReading(selected_list_data.get(current_pos).get(i).getId(),selected_list_data.get(current_pos).get(i).getMorning_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),selected_list_data.get(current_pos).get(i).getNoon_check(),user.getId().toString());
             }
 
             return null;
@@ -908,7 +908,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             ((ViewPager) localView).addView(imageLayout, 0);
 
             lstReminderMedicine1.setAdapter(adapter3);
-
+/*
             lstReminderMedicine1.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
@@ -922,7 +922,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                     if(draw1.getColor()== Color.GREEN)
                     {
-                        selected_list_data.get(position).get(pos).setMorning_check("1");
+                        selected_list_data.get(position).get(pos).setMorning_check(true);
                     }
 
 
@@ -931,7 +931,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                     if(draw1.getColor()== Color.GREEN)
                     {
-                        selected_list_data.get(position).get(pos).setNoon_check("1");
+                        selected_list_data.get(position).get(pos).setNoon_check(true);
                     }
 
 
@@ -941,7 +941,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                     if(draw1.getColor()== Color.GREEN)
                     {
-                        selected_list_data.get(position).get(pos).setEvening_check("1");
+                        selected_list_data.get(position).get(pos).setEvening_check(true);
                     }
 
 
@@ -951,7 +951,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             });
 
-
+*/
 
             int totalheight1=totalHeight;
             totalHeight=0;
@@ -967,7 +967,17 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                 totalHeight=totalheight1;
             }
 
-            rem1.execute();
+          //  if(rem1.getStatus()==AsyncTask.Status.PENDING)
+           // {
+             //   rem1.execute();
+           // }
+
+          //  if(rem1.getStatus() == AsyncTask.Status.FINISHED)
+          //  {
+            //   rem1=null;
+              // rem1=new StoreReminders();
+            //   rem1.execute();
+         //   }
 
             LinearLayout.LayoutParams l2= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,totalHeight+70);
             mPager1.setLayoutParams(l2);

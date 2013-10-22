@@ -39,6 +39,8 @@ import com.viamhealth.android.activities.AddExercise;
 import com.viamhealth.android.adapters.BreakfastAdapter;
 import com.viamhealth.android.adapters.DinnerAdapter;
 import com.viamhealth.android.adapters.ExerciseAdapter;
+import com.viamhealth.android.adapters.JournalExerciseAdapter;
+import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
 import com.viamhealth.android.dao.restclient.old.functionClass;
@@ -72,6 +74,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     ImageView img_date,img_time,food_icon,addDinner,addExercise,addSnacks,addLunch,addBreakfast;
     RefreshableListView lstViewLunch,lstViewSnacks,lstViewDinner,lstViewExercise;
     RefreshableListView lstViewBreakfast;
+    ImageView img_breakfast,img_lunch,img_dinner,img_snacks,img_exercise;
     String nexturl,frm;
     Typeface tf;
     ProgressDialog dialog1;
@@ -166,6 +169,12 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         exercise = (LinearLayout)view.findViewById(R.id.exercise);
         exercise.setOnClickListener(this);
+
+        img_breakfast=(ImageView)view.findViewById(R.id.img_breakfast);
+        img_lunch=(ImageView)view.findViewById(R.id.img_lunch);
+        img_snacks=(ImageView)view.findViewById(R.id.img_snacks);
+        img_dinner=(ImageView)view.findViewById(R.id.img_dinner);
+        img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
 
         lstViewBreakfast = (RefreshableListView)view.findViewById(R.id.lstViewBreakfast);
         lstViewBreakfast.getLayoutParams().height = h200;
@@ -424,7 +433,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             public void onRefresh() {
                 // TODO Auto-generated method stub
 
-                    frm="d";
+                    frm="e";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getActivity();
@@ -709,6 +718,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewSnacks.setVisibility(View.GONE);
                 lstViewDinner.setVisibility(View.GONE);
                 lstViewExercise.setVisibility(View.GONE);
+                img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
             }else{
                 bolbrk=true;
                 if(lstResultBreakfast.size()>0){
@@ -717,6 +727,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     lstViewSnacks.setVisibility(View.GONE);
                     lstViewDinner.setVisibility(View.GONE);
                     lstViewExercise.setVisibility(View.GONE);
+                    img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
                 }
             }
         }
@@ -728,6 +739,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewSnacks.setVisibility(View.GONE);
                 lstViewDinner.setVisibility(View.GONE);
                 lstViewExercise.setVisibility(View.GONE);
+                img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
             }else{
                 bollunch=true;
                 if(lstResultLunch.size()>0){
@@ -736,6 +748,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     lstViewSnacks.setVisibility(View.GONE);
                     lstViewDinner.setVisibility(View.GONE);
                     lstViewExercise.setVisibility(View.GONE);
+                    img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
                 }
             }
         }
@@ -747,6 +760,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewSnacks.setVisibility(View.GONE);
                 lstViewDinner.setVisibility(View.GONE);
                 lstViewExercise.setVisibility(View.GONE);
+                img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
             }else{
                 bolsnaks=true;
                 if(lstResultSnacks.size()>0){
@@ -755,6 +769,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     lstViewSnacks.setVisibility(View.VISIBLE);
                     lstViewDinner.setVisibility(View.GONE);
                     lstViewExercise.setVisibility(View.GONE);
+                    img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
                 }
             }
         }
@@ -767,6 +782,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewSnacks.setVisibility(View.GONE);
                 lstViewDinner.setVisibility(View.GONE);
                 lstViewExercise.setVisibility(View.GONE);
+                img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
             }else{
                 boldiner=true;
                 if(lstResultDinner.size()>0){
@@ -775,6 +791,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     lstViewSnacks.setVisibility(View.GONE);
                     lstViewDinner.setVisibility(View.VISIBLE);
                     lstViewExercise.setVisibility(View.GONE);
+                    img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
                 }
             }
         }
@@ -788,6 +805,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewSnacks.setVisibility(View.GONE);
                 lstViewDinner.setVisibility(View.GONE);
                 lstViewExercise.setVisibility(View.GONE);
+                img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
 
             }else{
                 bolexercise=true;
@@ -797,6 +815,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     lstViewSnacks.setVisibility(View.GONE);
                     lstViewDinner.setVisibility(View.GONE);
                     lstViewExercise.setVisibility(View.VISIBLE);
+                    img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
                 }
             }
         }
@@ -922,7 +941,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultExercise.size()>0){
                 lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
                 lblexercisecal.setText(String.valueOf(total_calories));
-                ExerciseAdapter adapter = new ExerciseAdapter(getActivity(),R.layout.exercise_list, lstResultExercise);
+                //ExerciseAdapter adapter = new ExerciseAdapter(getActivity(),R.layout.exercise_list, lstResultExercise);
+                JournalExerciseAdapter adapter = new JournalExerciseAdapter(getActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
                 lstViewExercise.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
@@ -970,7 +990,9 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultBreakfast.size()>0){
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
-                BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
+                //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
+                //JournalFoodAdapter adapter=
                 lstViewBreakfast.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
@@ -1031,7 +1053,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultLunch.size()>0){
                 lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
                 lbllunchcal.setText(Global_Application.totalcal+"");
-                LunchAdapter adapter = new LunchAdapter(getActivity(),R.layout.lunch_food_list, lstResultLunch);
+                //LunchAdapter adapter = new LunchAdapter(getActivity(),R.layout.lunch_food_list, lstResultLunch);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultLunch);
                 lstViewLunch.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewLunch.onRefreshComplete();
@@ -1091,7 +1114,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultSnacks.size()>0){
                 lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
                 lblsnakcal.setText(Global_Application.totalcal+"");
-                SnacksAdapter adapter = new SnacksAdapter(getActivity(),R.layout.snacks_food_list, lstResultSnacks);
+                //SnacksAdapter adapter = new SnacksAdapter(getActivity(),R.layout.snacks_food_list, lstResultSnacks);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultSnacks);
                 lstViewSnacks.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewSnacks.onRefreshComplete();
@@ -1152,7 +1176,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultDinner.size()>0){
                 lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
                 lbldinnercal.setText(Global_Application.totalcal+"");
-                DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
+                //DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultDinner);
                 lstViewDinner.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewDinner.onRefreshComplete();
@@ -1205,10 +1230,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultBreakfast.size());
+            /*
             if(lstResultBreakfast.size()>0 && frm.equals("b")){
+
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")");
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
-                BreakfastAdapter adapter = new BreakfastAdapter(activity,R.layout.breakfast_food_list, lstResultBreakfast);
+                //BreakfastAdapter adapter = new BreakfastAdapter(activity,R.layout.breakfast_food_list, lstResultBreakfast);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
                 lstViewBreakfast.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
@@ -1217,7 +1245,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultLunch.size()>0 && frm.equals("l")){
                 lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")");
                 lbllunchcal.setText(Global_Application.totalcal+"");
-                LunchAdapter adapter = new LunchAdapter(activity,R.layout.lunch_food_list, lstResultLunch);
+                //LunchAdapter adapter = new LunchAdapter(activity,R.layout.lunch_food_list, lstResultLunch);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultLunch);
                 lstViewLunch.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewLunch.onRefreshComplete();
@@ -1226,7 +1255,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultSnacks.size()>0 && frm.equals("l")){
                 lblsnack.setText("Breakfast ("+lstResultSnacks.get(0).getCount()+")" );
                 lblsnakcal.setText(Global_Application.totalcal+"");
-                SnacksAdapter adapter = new SnacksAdapter(activity,R.layout.snacks_food_list, lstResultSnacks);
+                //SnacksAdapter adapter = new SnacksAdapter(activity,R.layout.snacks_food_list, lstResultSnacks);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultSnacks);
                 lstViewSnacks.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewSnacks.onRefreshComplete();
@@ -1234,12 +1264,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             if(lstResultDinner.size()>0 && frm.equals("d")){
                 lbldinner.setText("Breakfast ("+lstResultDinner.get(0).getCount()+")" );
                 lbldinnercal.setText(Global_Application.totalcal+"");
-                DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
+                //DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultDinner);
                 lstViewDinner.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewDinner.onRefreshComplete();
             }
-/*
+
             if(lstResultExercise.size()>0 && frm.equals("e")){
                 int total_calories=0;
                 int i=0;
@@ -1250,12 +1281,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 }
                 lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
                 lblexercisecal.setText(String.valueOf(total_calories));
-                ExerciseAdapter adapter = new ExerciseAdapter(activity,R.layout.exercise_list, lstResultExercise);
+                //ExerciseAdapter adapter = new ExerciseAdapter(activity,R.layout.exercise_list, lstResultExercise);
+                JournalExerciseAdapter adapter = new JournalExerciseAdapter(getActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
                 lstViewExercise.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
           }
-          */
+              */
 
         }
 
