@@ -81,7 +81,16 @@ public class GraphFragment extends Fragment implements GoalFragment.OnGoalDataCh
         webView.loadUrl( "javascript:window.location.reload( true )" );
     }
 
-    public String getData() {        return this.json;
+    @Override
+    public void onAdd(String jsonReading) {
+        Log.i(TAG, jsonReading);
+        String url = "javascript:addPoint('" + jsonReading + "')";
+        Log.i(TAG, url);
+        webView.loadUrl(url);
+    }
+
+    public String getData() {
+        return this.json;
     }
 
     public void setOnClickAddValueListener(OnClickAddValueListener listener) {

@@ -12,6 +12,9 @@ import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.users.User;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +22,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +79,25 @@ public abstract class GoalsEP extends BaseEP {
 
     }
 
+    public GoalReadings getGoalReadings(Long userId, Date readingdate) {
+        RestClient client = getRestClient(getReadingsURL() + "/" + formater.format(readingdate), userId);
+
+        try {
+            client.Execute(RequestMethod.GET);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(client.getResponseCode() == HttpStatus.SC_NOT_FOUND){
+            return null;
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+        return processGoalReading(responseString);
+
+    }
+
     abstract protected String getReadingsURL();
     abstract protected String getGoalURL();
     abstract protected Goal newGoal();
@@ -85,6 +108,25 @@ public abstract class GoalsEP extends BaseEP {
     abstract protected void processParams(final Goal.HealthyRange range, final JSONObject jsonHRange) throws JSONException;
     abstract protected void processParams(final GoalReadings reading, final JSONObject jsonReading) throws JSONException;
     abstract protected void processParams(final Goal goal, final JSONObject jsonGoal) throws JSONException;
+
+    public GoalReadings updateGoalReadings(Long userId, GoalReadings readings) {
+        RestClient client = getRestClient(getReadingsURL() + "/" + formater.format(readings.getReadingDate()), userId);
+
+        client.AddParam("reading_date", formater.format(readings.getReadingDate()));
+
+        addParams(client, readings);
+
+        try {
+            client.Execute(RequestMethod.PUT);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+        return processGoalReading(responseString);
+
+    }
 
     public GoalReadings createGoalReadings(Long userId, GoalReadings readings) {
 
@@ -99,9 +141,15 @@ public abstract class GoalsEP extends BaseEP {
             e.printStackTrace();
         }
 
-        String responseString = client.getResponse();
+        //this is a hack for time being
+        if(client.getResponseCode()== HttpStatus.SC_CREATED)
+            return readings;
+
+        return null;
+
+        /*String responseString = client.getResponse();
         Log.i(TAG, client.toString());
-        return processGoalReading(responseString);
+        return processGoalReading(responseString);*/
     }
 
     public Goal createGoalForUser(Long userId, Goal goal) {
@@ -147,9 +195,10 @@ public abstract class GoalsEP extends BaseEP {
     }
 
     private GoalReadings processGoalReading(JSONObject jsonReading) {
-        GoalReadings reading = newGoalReading();
+        GoalReadings reading = null;
 
         try {
+            reading = newGoalReading();
             //JSONObject jsonReading = jsonReadings.getJSONObject(i);
             reading.setComments(jsonReading.getString("comment"));
             reading.setReadingDate(formater.parse(jsonReading.getString("reading_date")));
@@ -169,7 +218,9 @@ public abstract class GoalsEP extends BaseEP {
         List<GoalReadings> readings = new ArrayList<GoalReadings>();
         try{
             for(int i=0; i<jsonReadings.length(); i++){
-                readings.add(processGoalReading(jsonReadings.getJSONObject(i)));
+                GoalReadings reading = processGoalReading(jsonReadings.getJSONObject(i));
+                if(reading!=null)
+                readings.add(reading);
             }
         } catch (JSONException e) {
             e.printStackTrace();

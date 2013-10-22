@@ -5,12 +5,22 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 
+    <script type="text/javascript">
+        function addPoint(data) {
+            data = JSON.parse(data);
+            var chart = $('#container').highcharts();
+            var seriesA = chart.get("seriesA");
+            var seriesB = chart.get("seriesB");
+            seriesA.addPoint(data.seriesA);
+            seriesB.addPoint(data.seriesB);
+        }
+    </script>
 
     <script type='text/javascript'>//<![CDATA[
-var str = goals.getData();
-console.log(str);
-var android = JSON.parse(str);
-/*var android = {
+//var str = goals.getData();
+//console.log(str);
+//var android = JSON.parse(str);
+var android = {
         "seriesB": [
         {
         "y": 83,
@@ -51,7 +61,7 @@ var android = JSON.parse(str);
         "targetPR": 72,
         "targetDate": 1384972200000
         }
-        };*/
+        };
 console.log(android);
 $(function () {
     $('#container').highcharts({
@@ -89,12 +99,12 @@ $(function () {
         },
         yAxis : {
             title: {
-                text: "Weight in Kgs"
+                text: ""
             },
             plotBands: [{ // mark the weekend
                 color: '#c4dffb',
-                from: android.goal.healthyRange.sp.to,
-                to: android.goal.healthyRange.sp.from,
+                from: android.goal.healthyRange.sp.from,
+                to: android.goal.healthyRange.sp.to,
                 label: {
                     text: "Healthy Systolic Pressure",
                     verticalAlign: 'bottom',
@@ -106,8 +116,8 @@ $(function () {
             },
 { // mark the weekend
                 color: '#f8cdc2',
-                from: android.goal.healthyRange.dp.to,
-                to: android.goal.healthyRange.dp.from,
+                from: android.goal.healthyRange.dp.from,
+                to: android.goal.healthyRange.dp.to,
                 label: {
                     text: "Healthy Diastolic Pressure",
                     verticalAlign: 'bottom',
@@ -149,11 +159,13 @@ $(function () {
             min: 20
         },
         series: [{
+            id: "seriesA",
             name: "Systolic Pressure",
             color: "#4474a2",
             data: android.seriesA
         },
         {
+            id: "seriesB",
             name: "Diastolic Pressure",
             color: "#cd5837",
             data: android.seriesB
@@ -169,7 +181,7 @@ $(function () {
 <body>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 
-<div id="container" style="height: 400px"></div>
+<div id="container" ></div>
 
 </body>
 

@@ -74,9 +74,9 @@ public class DiabetesGoalReading extends GoalReadings {
         JSONObject object = parentJSON();
 
         try {
-            if(series == GraphSeries.A)
+            if(series == GraphSeries.A && fbs>0)
                 object.put("y", this.fbs);
-            else
+            else if(series == GraphSeries.B && rbs>0)
                 object.put("y", this.rbs);
         } catch (JSONException e) {
             e.printStackTrace();

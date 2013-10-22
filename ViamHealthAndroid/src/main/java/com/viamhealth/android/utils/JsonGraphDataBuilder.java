@@ -24,10 +24,10 @@ public class JsonGraphDataBuilder {
 
     }
 
-    public JsonGraphDataBuilder write(String key, JsonOutput item) {
+    public JsonGraphDataBuilder write(String key, JsonOutput item, JsonOutput.GraphSeries series) {
 
         try {
-            object.put(key, item.toJSON(null));
+            object.put(key, item.toJSON(series));
         } catch (JSONException e) {
             e.printStackTrace();
         }

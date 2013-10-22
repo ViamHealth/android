@@ -40,6 +40,8 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
 
     boolean headerIsVisible = true;
 
+    private static final float HEADER_TOP_MARGIN_DP = 58.0f;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -112,15 +114,28 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
         if(mTabManager.getCurrentSelectedTab().equals("goals")){
             if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
                 tabHeader.setAlpha(0.4f);
-                tabContent.setPadding(0,0,0,0);
+
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
+                params.setMargins(0,0,0,0);
+                tabContent.setLayoutParams(params);
+
                 tabs.setVisibility(View.GONE);
                 tabHeader.setAnimation(animationMoveOut);
                 return;
             }
+
         }
 
         tabHeader.setAlpha(1);
-        tabContent.setPadding(0, 58, 0, 0);
+
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
+        // Get the screen's density scale
+        final float scale = getResources().getDisplayMetrics().density;
+        // Convert the dps to pixels, based on density scale
+        int margin = (int) (HEADER_TOP_MARGIN_DP * scale + 0.5f);
+        params.setMargins(0, margin, 0, 0);
+        tabContent.setLayoutParams(params);
+
         tabs.setVisibility(View.VISIBLE);
         //tabHeader.setAnimation(animationMoveOut);
     }
@@ -129,10 +144,14 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
     public void onClick(View v) {
         if(mTabManager.getCurrentSelectedTab().equals("goals")){
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                if(headerIsVisible)
+                if(headerIsVisible){
                     tabHeader.setAnimation(animationMoveOut);
-                else
+                    headerIsVisible = false;
+                }
+                else{
                     tabHeader.setAnimation(animationMoveIn);
+                    headerIsVisible = true;
+                }
             }
         }
     }

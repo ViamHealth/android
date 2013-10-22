@@ -107,7 +107,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         Goal goal = goalsConfiguredMap.get(mc);
 
         JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
-        builder.write("goal", goal)
+        builder.write("goal", goal, null)
                .write("seriesA", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
 
         if(mc!=MedicalConditions.Obese)
@@ -193,17 +193,45 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         listenersSubscribed.put(mc, listener);
     }
 
-    public void onGoalDataChanged(MedicalConditions mc){
+    private String getReadingJSON(MedicalConditions mc, GoalReadings newReadings) {
+        JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
+        builder.write("seriesA", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
+
+        if(mc!=MedicalConditions.Obese)
+            builder.write("seriesB", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.B);
+
+        if(mc==MedicalConditions.Cholesterol){
+            builder.write("seriesC", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
+            builder.write("seriesD", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
+        }
+        return builder.toString();
+    }
+
+    private void onGoalReadingAdded(MedicalConditions mc, GoalReadings newReading) {
         OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
 
-        if(listener != null)
+        if(listener != null){
+            listener.onAdd(getReadingJSON(mc, newReading));
+        }
+        else
+            mPagerAdapter.notifyDataSetChanged();
+
+    }
+
+    private void onGoalDataChanged(MedicalConditions mc){
+        OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
+
+        if(listener != null){
             listener.onChange(getDataForGraph(mc));
+        }
         else
             mPagerAdapter.notifyDataSetChanged();
     }
 
     public interface OnGoalDataChangeListener {
         public void onChange(String json);
+        public void onAdd(String json);
+        //public void onUpdate(String json);
     }
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
@@ -244,20 +272,23 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public class SaveGoalReading extends AsyncTask<GoalReadings, Void, Void> {
+    public class SaveGoalReading extends AsyncTask<GoalReadings, Void, GoalReadings> {
 
         MedicalConditions type;
 
         @Override
-        protected Void doInBackground(GoalReadings... readings) {
+        protected GoalReadings doInBackground(GoalReadings... readings) {
             List<GoalReadings> rds = goalReadingsMap.get(type);
+            GoalReadings reading = null;
             if(rds==null)
                 rds = new ArrayList<GoalReadings>();
             for(int i=0; i<readings.length; i++){
-                rds.add(goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId()));
+                reading = goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId());
+                rds.add(reading);
             }
             goalReadingsMap.put(type, rds);
-            return null;
+
+            return reading;
         }
 
         @Override
@@ -267,7 +298,9 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(GoalReadings reading) {
+            //TODO need to fix this - onGoalReadingAdded(type, reading);
+            //for temporary fix
             onGoalDataChanged(type);
             dialog.dismiss();
         }

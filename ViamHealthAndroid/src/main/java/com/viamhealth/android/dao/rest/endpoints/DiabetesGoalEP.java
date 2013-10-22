@@ -49,8 +49,14 @@ public class DiabetesGoalEP extends GoalsEP{
 
     @Override
     protected void addParams(RestClient client, GoalReadings readings) {
-        client.AddParam("fasting", ((DiabetesGoalReading)readings).getFbs());
-        client.AddParam("random", ((DiabetesGoalReading)readings).getRbs());
+        int fasting = ((DiabetesGoalReading)readings).getFbs();
+        int random = ((DiabetesGoalReading)readings).getRbs();
+
+        if(fasting>0)
+            client.AddParam("fasting", fasting);
+
+        if(random>0)
+            client.AddParam("random", random);
     }
 
     @Override

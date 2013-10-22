@@ -51,34 +51,6 @@
                 android:foregroundGravity="center_vertical|center_horizontal" />
 
 
-            <RelativeLayout android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="5dp">
-                <LinearLayout
-                    android:id="@+id/menu_invite_food"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/menu_icon" />
-
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/menu_invite_out_food"
-                    android:visibility="invisible"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/menu_icon" />
-
-                </LinearLayout>
-            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

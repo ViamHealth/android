@@ -83,7 +83,13 @@ public class GoalsEPHelper extends BaseEP {
 
     public GoalReadings saveGoalReadings(MedicalConditions mc, GoalReadings reading, Long userId) {
         GoalsEP ep = getEndPoint(mc);
-        return ep.createGoalReadings(userId, reading);
+        GoalReadings tmp = ep.getGoalReadings(userId, reading.getReadingDate());
+        if(tmp==null)
+            reading = ep.createGoalReadings(userId, reading);
+        else
+            reading = ep.updateGoalReadings(userId, reading);
+
+        return reading;
     }
 
     private GoalsEP getEndPoint(MedicalConditions mc) {
