@@ -41,7 +41,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	Display display;
 	int width,height;
 	
-	LinearLayout main_layout;
+	LinearLayout main_layout, bottom_layout;
 	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
 	List<FrameLayout> frames = new ArrayList<FrameLayout>();
 	
@@ -85,6 +85,16 @@ public class Home extends BaseActivity implements OnClickListener{
 
         //for generate square
         main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        main_layout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Animation slide_out = AnimationUtils.
+                bottom_layout.setAnimation(slide_out);
+                bottom_layout.setVisibility(View.GONE);
+            }
+        });
+        bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
+        bottom_layout.setVisibility(View.GONE);
 
         lstFamily = new ArrayList<User>();
 
@@ -115,7 +125,7 @@ public class Home extends BaseActivity implements OnClickListener{
     private void generateTile(int position, boolean shouldCreateAddNewProfileTile) throws ImproperArgumentsPassedException {
         LinearLayout horizontalLinearLayout;
         int horizontalPosition = position/2;
-        if(position%2==0){
+        if(position%2==0 && main_layout.getChildCount()<=horizontalPosition){
             horizontalLinearLayout = new LinearLayout(Home.this);
             horizontalLinearLayout.setTag("HLL"+horizontalPosition);
             main_layout.addView(horizontalLinearLayout);
@@ -306,6 +316,15 @@ public class Home extends BaseActivity implements OnClickListener{
                 try{
                     generateTile(lstFamily.size()-1, false);
                     generateTile(lstFamily.size(), true);
+
+                    /* Set the name in the bottom_layer and slide-it-up */
+                    TextView name = (TextView) bottom_layout.findViewById(R.id.txtViewName);
+                    name.setText(user.getName());
+                    Animation slideUpIn = AnimationUtils.loadAnimation(Home.this, R.anim.slide_up);
+                    bottom_layout.startAnimation(slideUpIn);
+                    slideUpIn.
+                    bottom_layout.setVisibility(View.VISIBLE);
+
                 } catch (ImproperArgumentsPassedException ime) {
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }

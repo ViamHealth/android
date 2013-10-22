@@ -3,18 +3,62 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#37AA4F">
-	<ScrollView android:layout_height="fill_parent"
-	    android:layout_width="fill_parent"
-	     android:splitMotionEvents="false"
-         android:fadingEdgeLength="0dp">
-	    <LinearLayout
-	        android:id="@+id/main_layout"
-	        android:layout_height="fill_parent"
-	        android:layout_width="fill_parent"
-	        android:padding="5dp"
-	        android:gravity="center"
-	        android:orientation="vertical">
-	        
-	    </LinearLayout>
-	</ScrollView>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ScrollView android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+             android:splitMotionEvents="false"
+android:fadingEdgeLength="0dp">
+            <LinearLayout
+                android:id="@+id/main_layout"
+                android:layout_height="fill_parent"
+                android:layout_width="fill_parent"
+                android:padding="5dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="#55000000"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:id="@+id/bottom_layout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Large Text"
+                android:id="@+id/txtViewName"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/set_goal"
+                android:id="@+id/btnSetGoal"
+                android:layout_gravity="left|center_vertical"
+                style="@style/ButtonReverseTheme"
+                android:layout_marginTop="20dp" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/upload_files"
+                android:id="@+id/button2"
+                android:layout_gravity="center"
+                style="@style/ButtonReverseTheme"
+                android:layout_marginBottom="30dp" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

@@ -161,6 +161,6 @@
     <string name="add_weight">Add</string>
     <string name="title_activity_add_goal_value">Add Value</string>
     <string name="title_activity_add_weight">Add Weight</string>
-    <string name="weight_add">Weight</string><string name="random">random</string><string name="fasting">fasting</string><string name="diabetes_reading">diabetes reading</string><string name="present_pulse_rate">pulse rate</string><string name="target_pulse_rate">target pulse rate</string><string name="sp_add">Systolic Pressure</string><string name="dp_add">Diastolic Pressure</string><string name="pr_add">Pulse Rate</string><string name="hdl_value">HDL</string><string name="ldl_value">LDL</string><string name="tg_value">Triglycerides</string>
+    <string name="weight_add">Weight</string><string name="random">random</string><string name="fasting">fasting</string><string name="diabetes_reading">diabetes reading</string><string name="present_pulse_rate">pulse rate</string><string name="target_pulse_rate">target pulse rate</string><string name="sp_add">Systolic Pressure</string><string name="dp_add">Diastolic Pressure</string><string name="pr_add">Pulse Rate</string><string name="hdl_value">HDL</string><string name="ldl_value">LDL</string><string name="tg_value">Triglycerides</string><string name="set_goal">set a new goal</string><string name="upload_files">upload medical files</string>
 
 </resources>

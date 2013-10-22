@@ -60,8 +60,11 @@ public abstract class GoalsEP extends BaseEP {
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
 
-        return processGoalResponse(responseString);
+        Goal goal = null;
+        if(client.getResponseCode()==HttpStatus.SC_OK)
+            goal = processGoalResponse(responseString);
 
+        return goal;
     }
 
     public List<GoalReadings> getGoalReadings(Long userId) {
@@ -75,8 +78,12 @@ public abstract class GoalsEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
-        return processGoalReadings(responseString);
 
+        List<GoalReadings> readings = null;
+        if(client.getResponseCode()==HttpStatus.SC_OK)
+            readings = processGoalReadings(responseString);
+
+        return readings;
     }
 
     public GoalReadings getGoalReadings(Long userId, Date readingdate) {
@@ -94,7 +101,12 @@ public abstract class GoalsEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
-        return processGoalReading(responseString);
+
+        GoalReadings reading = null;
+        if(client.getResponseCode()==HttpStatus.SC_OK)
+            reading = processGoalReading(responseString);
+
+        return reading;
 
     }
 
