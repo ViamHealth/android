@@ -29,7 +29,7 @@
                 android:layout_below="@+id/tabHeader"
                 android:background="#ffffff"
                 android:clickable="false"
-                android:paddingTop="58dp">
+                android:layout_marginTop="58dp">
             </FrameLayout>
 
             <FrameLayout android:id="@+id/tabHeader"

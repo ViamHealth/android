@@ -23,5 +23,6 @@
         android:layout_gravity="right|top"
         android:background="#37AA4F"
         android:src="@drawable/ic_content_new"
-        android:focusableInTouchMode="false" />
+        android:focusableInTouchMode="false"
+        android:layout_marginTop="10dp" />
 </FrameLayout>

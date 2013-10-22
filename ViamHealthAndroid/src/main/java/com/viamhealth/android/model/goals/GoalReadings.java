@@ -84,7 +84,6 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
     public JSONObject parentJSON() {
         JSONObject object = new JSONObject();
         try {
-
             object.put("x", readingDate.getTime());
         } catch (JSONException e) {
             e.printStackTrace();

@@ -5,25 +5,128 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 
+    <script type="text/javascript">
+        function addPoint(data) {
+            data = JSON.parse(data);
+            var chart = $('#container').highcharts();
+            var seriesA = chart.get("seriesA");
+            var seriesB = chart.get("seriesB");
+            var seriesC = chart.get("seriesC");
+            seriesA.addPoint(data.seriesA);
+            seriesB.addPoint(data.seriesB);
+            seriesC.addPoint(data.seriesC);
+        }
+    </script>
+
 
     <script type='text/javascript'>//<![CDATA[
 var str = goals.getData();
 console.log(str);
 var android = JSON.parse(str);
 console.log(android);
+/*var android = { "seriesA": [
+        {
+        "y": 50,
+        "x": 1382293800000
+        },
+        {
+        "y": 45,
+        "x": 1382955119000
+        },
+        {
+        "y": 48,
+        "x": 1384769519000
+        }
+],
+        "seriesB": [
+        {
+        "y": 120,
+        "x": 1382293800000
+        },
+        {
+        "y": 140,
+        "x": 1382955119000
+        },
+        {
+        "y": 150,
+        "x": 1384769519000
+        }
+
+
+        ],
+        "goal": {
+        "targetHDL": 65,
+        "healthyRange": {
+        "total": {
+        "to": 0,
+        "from": 0
+        },
+        "tg": {
+        "to": 100,
+        "from": 0
+        },
+        "hdl": {
+        "tp": 70,
+        "from": 50
+        },
+        "ldl": {
+        "to": 100,
+        "from": 0
+        }
+        },
+        "targetTotal": 0,
+        "targetLDL": 100,
+        "targetTri": 100,
+        "targetDate": 1384972200000
+        },
+        "seriesC": [
+        {
+        "y": 200,
+        "x": 1382293800000
+        },
+        {
+        "y": 220,
+        "x": 1382955119000
+        },
+        {
+        "y": 150,
+        "x": 1384769519000
+        }
+
+        ],
+        "seriesD": [
+        {
+        "y": 210,
+        "x": 1382293800000
+        },
+        {
+        "y": 229,
+        "x": 1382955119000
+        },
+        {
+        "y": 228,
+        "x": 1384769519000
+        }
+
+        ]
+
+        };*/
 $(function () {
-    $('#container').highcharts({
-        chart: {
-            type: "spline"
-        },
-        title: {
-            text: "Cholesterol Goal"
-        },
-        legend: {
-            enabled: false
-        },
-        xAxis: {
-            tickInterval: 24 * 3600 * 1000 * 7, // one week
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Cholesterol'
+            },
+            colors: [
+                '#37AA4F',
+                '#38BB5F',
+                '#39CC6F',
+                '#000000'
+            ],
+            xAxis: {
+            //tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
@@ -44,113 +147,50 @@ $(function () {
                 zIndex: 2
             }]
 
-        },
-        yAxis : {
-            title: {
-                text: ""
             },
-            plotBands: [{ // mark the weekend
-                color: '#c4dffb',
-                from: android.goal.healthyRange.hdl.from,
-                to: android.goal.healthyRange.hdl.to,
-                label: {
-                    text: "Healthy HDL",
-                    verticalAlign: 'bottom',
-                    align: 'center',
-                    textAlign: 'center',
-                    y: -10
-                },
-                zIndex: 1
+            yAxis: {
+                min: 0,
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+
             },
-{ // mark the weekend
-                color: '#f8cdc2',
-                from: android.goal.healthyRange.ldl.from,
-                to: android.goal.healthyRange.ldl.to,
-                label: {
-                    text: "Healthy LDL",
-                    verticalAlign: 'bottom',
-                    align: 'center',
-                    textAlign: 'center',
-                    y: -10
-                },
-                zIndex: 1
+            legend: {
+                enabled: false
             },
-{ // mark the weekend
-                color: '#f8cdc2',
-                from: android.goal.healthyRange.tg.from,
-                to: android.goal.healthyRange.tg.to,
-                label: {
-                    text: "Healthy Triglycerides",
-                    verticalAlign: 'bottom',
-                    align: 'center',
-                    textAlign: 'center',
-                    y: -10
-                },
-                zIndex: 1
-            }                            ],
-            plotLines: [{
-                value: android.goal.targetHDL,
-                width: 2,
-                color: '#FF0000',
-                label: {
-                    text: 'HDL',
-                    textAlign: 'right',
-                    align: 'right',
-                    verticalAlign: 'bottom',
-                    x: -5
-                },
-                dashStyle: "ShortDash",
-                zIndex: 2
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ new Date(this.x) +'</b><br/>'+
+                        this.series.name +': '+ this.y +'<br/>'+
+                        'Total: '+ this.point.stackTotal;
+                }
             },
-{
-                value: android.goal.targetLDL,
-                width: 2,
-                color: '#FF0000',
-                label: {
-                    text: 'LDL',
-                    textAlign: 'right',
-                    align: 'right',
-                    verticalAlign: 'bottom',
-                    x: -5
-                },
-                dashStyle: "ShortDash",
-                zIndex: 2
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true,
+                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                    }
+                }
             },
-{
-                value: android.goal.targetTG,
-                width: 2,
-                color: '#FF0000',
-                label: {
-                    text: 'Triglycerides',
-                    textAlign: 'left',
-                    align: 'left',
-                    verticalAlign: 'bottom',
-                    x: -5
-                },
-                dashStyle: "ShortDash",
-                zIndex: 3
-            }                       ],
-            type: 'linear',
-            min: 20
-        },
-        series: [{
-            name: "HDL",
-            color: "#4474a2",
-            data: android.seriesA
-        },
-        {
-            name: "LDL",
-            color: "#cd5837",
-            data: android.seriesB
-        },
-        {
-            name: "Triglycerides",
-            color: "#cd5837",
-            data: android.seriesC
-        }]
+            series: [{
+                name: 'HDL',
+                data: android.seriesA
+            }, {
+                name: 'LDL',
+                data: android.seriesB
+            }, {
+                name: 'Triglycerides',
+                data: android.seriesC
+            }]
+        });
     });
-});
-//]]>  
+//]]>
 
 </script>
 
@@ -159,7 +199,7 @@ $(function () {
 <body>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 
-<div id="container" style="height: 400px"></div>
+<div id="container"></div>
 
 </body>
 

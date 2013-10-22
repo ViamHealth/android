@@ -5,6 +5,17 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
 
+    <script type="text/javascript">
+        function addPoint(data) {
+            console.log(data);
+            data = JSON.parse(data);
+            console.log(data);
+            var chart = $('#container').highcharts();
+            var seriesA = chart.get("seriesA");
+            seriesA.addPoint(data.seriesA);
+        }
+    </script>
+
 
     <script type='text/javascript'>//<![CDATA[
 var str = goals.getData();
@@ -79,6 +90,7 @@ $(function () {
             min: 20
         },
         series: [{
+            id: "seriesA",
             data: android.seriesA
         }]
     });
@@ -92,7 +104,7 @@ $(function () {
 <body>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 
-<div id="container" style="height: 400px"></div>
+<div id="container" ></div>
 
 </body>
 
