@@ -101,8 +101,6 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
             fragment.uploadImage();
         } else if(action == Actions.SetGoal){
             mTabHost.setCurrentTabByTag("goals");
-            GoalFragment fragment = (GoalFragment) mTabManager.getCurrentSelectedTabFragment();
-            fragment.addNewGoal();
         }
 
 

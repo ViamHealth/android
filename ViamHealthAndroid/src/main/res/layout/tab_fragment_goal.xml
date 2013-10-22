@@ -2,23 +2,47 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/initial_layout">
 
-        <Button
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="72dp"
-            android:text="@string/set_goal"
-            android:id="@+id/btnAddGoal"
-            android:layout_gravity="center"
-            android:textSize="30dp"
-            style="@style/ButtonGreenTheme"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/label_create_healthy_goal_trailer"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textColor="#37aa4f"
+                android:singleLine="false"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginBottom="20dp"
+                android:shadowColor="#ffffff" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="72dp"
+                android:text="@string/set_goal"
+                android:id="@+id/btnAddGoal"
+                android:layout_gravity="center"
+                android:textSize="30dp"
+                style="@style/ButtonGreenTheme"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:textColor="#ffffff" />
+        </LinearLayout>
+
     </FrameLayout>
 
     <LinearLayout

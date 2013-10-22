@@ -100,6 +100,10 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         initial_layout = (FrameLayout) view.findViewById(R.id.initial_layout);
         initial_layout.setVisibility(View.GONE);
 
+        mPager = (ViewPager) final_layout.findViewById(R.id.pager);
+        mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+
         if(action == TabActivity.Actions.SetGoal){
             addNewGoal();
             action = null;
@@ -250,6 +254,9 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onGoalDataChanged(MedicalConditions mc){
+        if(mc==null)
+            mPagerAdapter.notifyDataSetChanged();
+
         OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
 
         if(listener != null){
@@ -395,9 +402,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            mPager = (ViewPager) final_layout.findViewById(R.id.pager);
-            mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
-            mPager.setAdapter(mPagerAdapter);
+            onGoalDataChanged(null);
 
             TextView btnAddGoal = (TextView) final_layout.findViewById(R.id.btn_add_goal);
             btnAddGoal.setOnClickListener(GoalFragment.this);
