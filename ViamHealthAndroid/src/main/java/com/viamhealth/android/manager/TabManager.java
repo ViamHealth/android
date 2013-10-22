@@ -136,4 +136,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
         return mLastTab.tag;
     }
 
+    public Fragment getCurrentSelectedTabFragment() {
+        return mLastTab.fragment;
+    }
+
 }

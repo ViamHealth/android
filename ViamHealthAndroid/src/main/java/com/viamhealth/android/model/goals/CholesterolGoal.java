@@ -50,6 +50,16 @@ public class CholesterolGoal extends Goal {
         this.total = total;
     }
 
+    @Override
+    public Goal.HealthyRange getHealthyRange() {
+        return this.healthyRange;
+    }
+
+    @Override
+    public void setHealthyRange(Goal.HealthyRange healthyRange) {
+        this.healthyRange = (HealthyRange) healthyRange;
+    }
+
     public CholesterolGoal() {
     }
 

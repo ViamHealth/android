@@ -12,7 +12,7 @@ public class SlidableLinearLayout extends LinearLayout {
 
     OnSlideEventListener listener;
     float historicX = Float.NaN, historicY = Float.NaN;
-    static final TRIGGER_DELTA = 50;
+    static final int TRIGGER_DELTA = 50;
 
     public void setOnSwipeEventListener(OnSlideEventListener listener) {
         this.listener = listener;
@@ -51,7 +51,7 @@ public class SlidableLinearLayout extends LinearLayout {
                     return super.onTouchEvent(e);
             }
         }
-        return super.onTouchEvent(event);
+        return super.onTouchEvent(e);
     }
 
     public enum Direction { RIGHT, LEFT; }

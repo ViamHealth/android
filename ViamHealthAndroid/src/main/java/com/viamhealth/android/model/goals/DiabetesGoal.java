@@ -30,6 +30,16 @@ public class DiabetesGoal extends Goal {
         this.rbs = rbs;
     }
 
+    @Override
+    public Goal.HealthyRange getHealthyRange() {
+        return this.healthyRange;
+    }
+
+    @Override
+    public void setHealthyRange(Goal.HealthyRange healthyRange) {
+        this.healthyRange = (HealthyRange) healthyRange;
+    }
+
     public DiabetesGoal() {
         super();
     }

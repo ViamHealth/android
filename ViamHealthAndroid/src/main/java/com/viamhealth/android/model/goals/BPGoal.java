@@ -53,6 +53,16 @@ public class BPGoal extends Goal {
     }
 
     @Override
+    public Goal.HealthyRange getHealthyRange() {
+        return this.healthyRange;
+    }
+
+    @Override
+    public void setHealthyRange(Goal.HealthyRange healthyRange) {
+        this.healthyRange = (HealthyRange) healthyRange;
+    }
+
+    @Override
     public JSONObject toJSON(GraphSeries series) {
         JSONObject object = parentJSON();
 

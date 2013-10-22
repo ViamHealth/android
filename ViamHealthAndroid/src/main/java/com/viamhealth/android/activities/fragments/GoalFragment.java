@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.AddGoalActivity;
 import com.viamhealth.android.activities.AddGoalValue;
+import com.viamhealth.android.activities.TabActivity;
 import com.viamhealth.android.dao.rest.endpoints.GoalsEPHelper;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.model.enums.MedicalConditions;
@@ -62,17 +65,28 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
     ProgressDialog dialog;
     ViewPager mPager;
     WebViewFragmentPagerAdapter mPagerAdapter;
+
+    FrameLayout initial_layout;
+    LinearLayout final_layout;
+
     //WebView webView;
     //ImageButton addValue;
 
     final int ACTION_CONFIGURE_GOAL = 100;
     final int ACTION_ADD_GOAL_VALUE = 200;
 
+    TabActivity.Actions action = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        action = (TabActivity.Actions) getArguments().getSerializable("action");
+        selectedUser = getArguments().getParcelable("user");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_goal, container, false);
-
-        selectedUser = getArguments().getParcelable("user");
 
         goalHelper = new GoalsEPHelper(getActivity(), (Global_Application)getActivity().getApplicationContext());
         userEP = new UserEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
@@ -80,11 +94,22 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         dialog = new ProgressDialog(getActivity());
         dialog.setCanceledOnTouchOutside(false);
 
-        if(Checker.isInternetOn(getActivity())){
-            GetALLGoals task = new GetALLGoals();
-            task.execute();
-        } else {
-            Toast.makeText(getActivity(), "Internet is not on..", Toast.LENGTH_LONG);
+        final_layout = (LinearLayout) view.findViewById(R.id.final_layout);
+        final_layout.setVisibility(View.GONE);
+
+        initial_layout = (FrameLayout) view.findViewById(R.id.initial_layout);
+        initial_layout.setVisibility(View.GONE);
+
+        if(action == TabActivity.Actions.SetGoal){
+            addNewGoal();
+            action = null;
+        }else{
+            if(Checker.isInternetOn(getActivity())){
+                GetALLGoals task = new GetALLGoals();
+                task.execute();
+            } else {
+                Toast.makeText(getActivity(), "Internet is not on..", Toast.LENGTH_LONG);
+            }
         }
 
         /** build the supported series map **/
@@ -133,12 +158,18 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @Override
-    public void onClick(View v) {
+    public void addNewGoal() {
         Intent i = new Intent(getActivity(), AddGoalActivity.class);
         i.putExtra("user", selectedUser);
         i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
         startActivityForResult(i, ACTION_CONFIGURE_GOAL);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_add_goal || v.getId() == R.id.btnAddGoal){
+            addNewGoal();
+        }
     }
 
     private Bundle getBundleFromMap(Map<MedicalConditions, Goal> map) {
@@ -159,7 +190,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
             if(requestCode==ACTION_CONFIGURE_GOAL){
                 //save the goal and goalReadings
                 Goal goal = data.getParcelableExtra("goal");
-                GoalReadings readings = data.getParcelableExtra("goalReading§");
+                GoalReadings readings = data.getParcelableExtra("reading");
                 MedicalConditions selectedCondition = (MedicalConditions)data.getSerializableExtra("type");
                 if(goal!=null){
                     if(Checker.isInternetOn(getActivity())) {
@@ -238,7 +269,6 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
      * sequence.
      */
     private class WebViewFragmentPagerAdapter extends FragmentPagerAdapter {
-
 
         public WebViewFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -333,6 +363,14 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                 task.type = type;
                 task.execute(reading);
             }
+            if(goalsConfiguredMap==null || goalsConfiguredMap.isEmpty() || goalsConfiguredMap.values().isEmpty()) {
+                final_layout.setVisibility(View.GONE);
+                initial_layout.setVisibility(View.VISIBLE);
+            }else{
+                initial_layout.setVisibility(View.GONE);
+                final_layout.setVisibility(View.VISIBLE);
+            }
+
             onGoalDataChanged(type);
         }
     }
@@ -357,12 +395,24 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            mPager = (ViewPager) view.findViewById(R.id.pager);
+            mPager = (ViewPager) final_layout.findViewById(R.id.pager);
             mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
             mPager.setAdapter(mPagerAdapter);
 
-            TextView btnAddGoal = (TextView) view.findViewById(R.id.btn_add_goal);
+            TextView btnAddGoal = (TextView) final_layout.findViewById(R.id.btn_add_goal);
             btnAddGoal.setOnClickListener(GoalFragment.this);
+
+            Button btnAddG = (Button) initial_layout.findViewById(R.id.btnAddGoal);
+            btnAddG.setOnClickListener(GoalFragment.this);
+
+            if(goalsConfiguredMap==null || goalsConfiguredMap.isEmpty() || goalsConfiguredMap.values().isEmpty()) {
+                final_layout.setVisibility(View.GONE);
+                initial_layout.setVisibility(View.VISIBLE);
+            }else{
+                initial_layout.setVisibility(View.GONE);
+                final_layout.setVisibility(View.VISIBLE);
+            }
+
             dialog.dismiss();
         }
     }
