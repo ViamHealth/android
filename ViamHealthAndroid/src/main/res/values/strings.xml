@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">ViamHealth</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_settings">Logout</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_home_option">Home_option</string>
     <string name="title_activity_auto_option">Auto_option</string>
@@ -150,17 +150,35 @@
     <string name="present_hdl">present hdl</string>
     <string name="present_ldl">present ldl</string>
     <string name="present_tryglecerides">present tryglecerides</string>
-
     <string name="total_cholesterol">total cholesterol is</string>
     <string name="target_hdl">target hdl</string>
     <string name="target_ldl">target ldl</string>
     <string name="target_tryglecerides">target tryglecerides</string>
     <string name="file_title">description of the file</string>
-    <string name="profile_height">how long are you (in cms)?</string>
-    <string name="profile_weight">how heavy are you (in kgs)?</string>
+    <string name="profile_height">how tall are you?</string>
+    <string name="profile_weight">how much do you weigh?</string>
     <string name="add_weight">Add</string>
     <string name="title_activity_add_goal_value">Add Value</string>
     <string name="title_activity_add_weight">Add Weight</string>
-    <string name="weight_add">Weight</string><string name="random">random</string><string name="fasting">fasting</string><string name="diabetes_reading">diabetes reading</string><string name="present_pulse_rate">pulse rate</string><string name="target_pulse_rate">target pulse rate</string><string name="sp_add">Systolic Pressure</string><string name="dp_add">Diastolic Pressure</string><string name="pr_add">Pulse Rate</string><string name="hdl_value">HDL</string><string name="ldl_value">LDL</string><string name="tg_value">Triglycerides</string>
+    <string name="weight_add">Weight</string>
+    <string name="random">random</string>
+    <string name="fasting">fasting</string>
+    <string name="diabetes_reading">diabetes reading</string>
+    <string name="present_pulse_rate">pulse rate</string>
+    <string name="target_pulse_rate">target pulse rate</string>
+    <string name="sp_add">Systolic Pressure</string>
+    <string name="dp_add">Diastolic Pressure</string>
+    <string name="pr_add">Pulse Rate</string>
+    <string name="hdl_value">HDL</string>
+    <string name="ldl_value">LDL</string>
+    <string name="tg_value">Triglycerides</string>
+    <string name="set_goal">set a new goal</string>
+    <string name="upload_files">upload medical files</string>
+    <string name="title_activity_central">Central Activity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="add_another_profile">add another profile</string><string name="label_create_healthy_goal_trailer">time to create some
+                healthy goals....</string>
 
 </resources>

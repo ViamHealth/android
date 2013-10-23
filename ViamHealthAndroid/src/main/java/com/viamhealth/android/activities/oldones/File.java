@@ -326,7 +326,7 @@ public class File extends BaseActivity implements OnClickListener{
 		
 		if(v==lbl_upload){
 			// reditect uplod file screen
-			//selectImage();
+			//uploadImage();
 			Intent DisplayImage = new Intent(getParent(),UploadFile.class);
 			TabGroupActivity parentoption = (TabGroupActivity)getParent();
 			parentoption.startChildActivity("DisplayImage",DisplayImage);

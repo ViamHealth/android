@@ -131,7 +131,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		
 		Log.e("TAG","parent " + UploadFile.this);
 		if(ga.getImg()==null){
-	//	selectImage();
+	//	uploadImage();
 		}else{
 			img_display.setImageBitmap(ga.getImg());
 		}

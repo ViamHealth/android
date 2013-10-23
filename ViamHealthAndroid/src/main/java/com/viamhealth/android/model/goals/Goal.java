@@ -24,13 +24,8 @@ public abstract class Goal extends BaseModel implements Parcelable, JsonGraphDat
     //List<GoalReadings> readings;
     protected HealthyRange healthyRange;
 
-    public HealthyRange getHealthyRange() {
-        return healthyRange;
-    }
-
-    public void setHealthyRange(HealthyRange healthyRange) {
-        this.healthyRange = healthyRange;
-    }
+    public abstract HealthyRange getHealthyRange();
+    public abstract void setHealthyRange(HealthyRange healthyRange);
 
     public Long getUserId() {
         return userId;

@@ -16,7 +16,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -27,7 +26,6 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.Activity;
 import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,13 +47,9 @@ import com.viamhealth.android.ui.RefreshableListView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -249,7 +243,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    private void selectImage() {
+    public void uploadImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
 
@@ -606,7 +600,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v==lbl_upload){
             // reditect uplod file screen
-            selectImage();
+            uploadImage();
             //Intent displayImage = new Intent(getActivity(),UploadFile.class);
             //displayImage.putExtra("user", user);
             //startActivityForResult(displayImage, 1);

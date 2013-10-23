@@ -28,9 +28,11 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,7 +43,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	Display display;
 	int width,height;
 	
-	LinearLayout main_layout;
+	LinearLayout main_layout, bottom_layout, core_layout;
 	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
 	List<FrameLayout> frames = new ArrayList<FrameLayout>();
 	
@@ -65,6 +67,19 @@ public class Home extends BaseActivity implements OnClickListener{
 		
 		setContentView(R.layout.home);
 
+        appPrefs = new ViamHealthPrefs(Home.this);
+        ga=((Global_Application)getApplicationContext());
+        userEndPoint = new UserEP(this, ga);
+
+        if(getIntent().getBooleanExtra("logout", false))
+        {
+            Intent i = new Intent(Home.this,Login.class);
+            appPrefs.setToken(null);
+            startActivity(i);
+            finish();
+            return;
+        }
+
         // for get screen diamention
         ScreenDimension();
 
@@ -79,12 +94,43 @@ public class Home extends BaseActivity implements OnClickListener{
         h5=(int)((height*1.042)/100);
         h30=(int)((height*6.25)/100);
 
-        appPrefs = new ViamHealthPrefs(Home.this);
-        ga=((Global_Application)getApplicationContext());
-        userEndPoint = new UserEP(this, ga);
+
+        bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
+        core_layout = (LinearLayout) findViewById(R.id.core_layout);
 
         //for generate square
         main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        main_layout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideBottomLayout();
+            }
+        });
+
+        hideBottomLayout();
+
+        Button btnSetGoal = (Button) bottom_layout.findViewById(R.id.btnSetGoal);
+        btnSetGoal.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, TabActivity.class);
+                intent.putExtra("user", user);
+                intent.putExtra("action", TabActivity.Actions.SetGoal);
+                startActivity(intent);
+            }
+        });
+
+        Button btnUploadFiles = (Button) bottom_layout.findViewById(R.id.btnUploadFiles);
+        btnUploadFiles.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Home.this, TabActivity.class);
+                intent.putExtra("user", user);
+                intent.putExtra("action", TabActivity.Actions.UploadFiles);
+                startActivity(intent);
+            }
+        });
+
 
         lstFamily = new ArrayList<User>();
 
@@ -115,7 +161,7 @@ public class Home extends BaseActivity implements OnClickListener{
     private void generateTile(int position, boolean shouldCreateAddNewProfileTile) throws ImproperArgumentsPassedException {
         LinearLayout horizontalLinearLayout;
         int horizontalPosition = position/2;
-        if(position%2==0){
+        if(position%2==0 && main_layout.getChildCount()<=horizontalPosition){
             horizontalLinearLayout = new LinearLayout(Home.this);
             horizontalLinearLayout.setTag("HLL"+horizontalPosition);
             main_layout.addView(horizontalLinearLayout);
@@ -225,8 +271,8 @@ public class Home extends BaseActivity implements OnClickListener{
         }
         try{
             //do not create a tile if there is only one profile and which is not yet created
-            if(lstFamily.size()==1 && !lstFamily.get(0).isProfileCreated())
-                return;
+            /*if(lstFamily.size()==1 && !lstFamily.get(0).isProfileCreated())
+                return;*/
             generateTile(lstFamily.size(), true);
         } catch (ImproperArgumentsPassedException ime) {
             Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
@@ -236,6 +282,8 @@ public class Home extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
+
+        hideBottomLayout();
 
         Log.e("TAG","id is : " + v.getId());
         int index = v.getId();
@@ -275,18 +323,38 @@ public class Home extends BaseActivity implements OnClickListener{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
         if(resultCode==RESULT_OK){
-            user = (User) data.getParcelableExtra("user");
-            if(isInternetOn()){
-                CallAddProfileTask task = new CallAddProfileTask();
-                task.applicationContext = Home.this;
-                task.execute();
+            if(requestCode < 100) {
+                user = (User) data.getParcelableExtra("user");
+                if(isInternetOn()){
+                    CallAddProfileTask task = new CallAddProfileTask();
+                    task.applicationContext = Home.this;
+                    task.execute();
 
-            }else{
+                }else{
+
+                }
+            }else{//it is from tabactivity
 
             }
         }
     }
 
+    private void showBottomLayout() {
+        /*Animation slideUpIn = AnimationUtils.loadAnimation(Home.this, R.anim.slide_up);
+        bottom_layout.startAnimation(slideUpIn);*/
+        bottom_layout.setVisibility(View.VISIBLE);
+        int blHeight = bottom_layout.getHeight();
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) core_layout.getLayoutParams();
+        params.height = height - blHeight;
+        core_layout.setLayoutParams(params);
+    }
+
+    private void hideBottomLayout() {
+        bottom_layout.setVisibility(View.GONE);
+        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) core_layout.getLayoutParams();
+        params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        core_layout.setLayoutParams(params);
+    }
     // async class for calling webservice and get responce message
     public class CallAddProfileTask extends AsyncTask<String, Void, String>
     {
@@ -306,6 +374,12 @@ public class Home extends BaseActivity implements OnClickListener{
                 try{
                     generateTile(lstFamily.size()-1, false);
                     generateTile(lstFamily.size(), true);
+
+                    /* Set the name in the bottom_layer and slide-it-up */
+                    TextView name = (TextView) bottom_layout.findViewById(R.id.txtViewName);
+                    name.setText(user.getName());
+
+                    showBottomLayout();
                 } catch (ImproperArgumentsPassedException ime) {
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }

@@ -1,5 +1,6 @@
 package com.viamhealth.android.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -55,8 +57,13 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
 
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
+
+        Actions action = (Actions) intent.getSerializableExtra("action");
+
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", intent.getParcelableExtra("user"));
+        bundle.putSerializable("action", action);
+        //TODO use Action Bar to create the Header
 
         /* Create the Tab Header */
         mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
@@ -88,6 +95,16 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
         tabHeader = (FrameLayout) findViewById(R.id.tabHeader);
         tabs = (TabWidget) findViewById(android.R.id.tabs);
 
+        if(action == Actions.UploadFiles){
+            mTabHost.setCurrentTabByTag("files");
+            FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
+            fragment.uploadImage();
+        } else if(action == Actions.SetGoal){
+            mTabHost.setCurrentTabByTag("goals");
+        }
+
+
+
     }
 
     protected View getTabIndicator(int labelId, int drawableId) {
@@ -105,6 +122,17 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tab_group_settings, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.menu_settings){
+            Intent returnIntent = new Intent(TabActivity.this, Home.class);
+            returnIntent.putExtra("logout", true);
+            returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(returnIntent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -155,4 +183,6 @@ public class TabActivity extends FragmentActivity implements View.OnClickListene
             }
         }
     }
+
+    public enum Actions { UploadFiles, SetGoal; }
 }

@@ -7,14 +7,10 @@ import android.util.Log;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
-import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.users.User;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by naren on 11/10/13.
@@ -60,8 +55,11 @@ public abstract class GoalsEP extends BaseEP {
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
 
-        return processGoalResponse(responseString);
+        Goal goal = null;
+        if(client.getResponseCode()==HttpStatus.SC_OK)
+            goal = processGoalsResponse(responseString);
 
+        return goal;
     }
 
     public List<GoalReadings> getGoalReadings(Long userId) {
@@ -75,8 +73,12 @@ public abstract class GoalsEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
-        return processGoalReadings(responseString);
 
+        List<GoalReadings> readings = null;
+        if(client.getResponseCode()==HttpStatus.SC_OK)
+            readings = processGoalReadings(responseString);
+
+        return readings;
     }
 
     public GoalReadings getGoalReadings(Long userId, Date readingdate) {
@@ -94,7 +96,12 @@ public abstract class GoalsEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
-        return processGoalReading(responseString);
+
+        GoalReadings reading = null;
+        if(client.getResponseCode()==HttpStatus.SC_OK)
+            reading = processGoalReading(responseString);
+
+        return reading;
 
     }
 
@@ -165,9 +172,14 @@ public abstract class GoalsEP extends BaseEP {
             e.printStackTrace();
         }
 
-        String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
-        return processGoalResponse(responseString);
+        Goal returnGoal = null;
+        if(client.getResponseCode()==HttpStatus.SC_CREATED) {
+            String responseString = client.getResponse();
+            Log.i(TAG, client.toString());
+            returnGoal = processGoalResponse(responseString);
+        }
+
+        return returnGoal;
 
     }
 
@@ -259,6 +271,18 @@ public abstract class GoalsEP extends BaseEP {
     }
 
     private Goal processGoalResponse(String jsonResponse){
+        Goal goal = null;
+        try{
+            JSONObject jsonGoal = new JSONObject(jsonResponse);
+            goal = processGoalResponse(jsonGoal);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return goal;
+    }
+
+    private Goal processGoalsResponse(String jsonResponse){
         Goal goal = null;
         try{
             JSONObject response = new JSONObject(jsonResponse);

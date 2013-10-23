@@ -29,6 +29,16 @@ public class WeightGoal extends Goal implements Parcelable {
     }
 
     @Override
+    public Goal.HealthyRange getHealthyRange() {
+        return this.healthyRange;
+    }
+
+    @Override
+    public void setHealthyRange(Goal.HealthyRange healthyRange) {
+        this.healthyRange = (HealthyRange) healthyRange;
+    }
+
+    @Override
     public String toString() {
         return "WeightGoal{" +
                 "weight=" + weight +

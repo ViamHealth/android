@@ -53,7 +53,7 @@ public class Login extends BaseActivity implements OnClickListener
 		 
 		appPrefs = new ViamHealthPrefs(Login.this);
 		Log.e("TAG","Token is " + appPrefs.getToken());
-		if(!appPrefs.getToken().toString().equals("null") || appPrefs.getToken().toString() ==null){
+		if(!appPrefs.getToken().equals("null") && !appPrefs.getToken().isEmpty()){
 			Intent i=new Intent(Login.this, Home.class);
 			startActivity(i);
 		}else{

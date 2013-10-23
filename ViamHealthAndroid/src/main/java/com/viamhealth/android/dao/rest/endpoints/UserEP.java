@@ -36,6 +36,10 @@ public class UserEP extends BaseEP {
         return responsetxt;
     }
 
+    public void logout() {
+
+    }
+
     // function for call signup service
     public String SignUp(String username,String password) {
         String	responsetxt="1";

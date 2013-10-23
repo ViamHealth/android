@@ -77,7 +77,7 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
                 GoalReadings goalReading = fm.getGoalReadings();
                 Intent intent = new Intent();
                 intent.putExtra("goal", goal);
-                intent.putExtra("goalReading", goalReading);
+                intent.putExtra("reading", goalReading);
                 intent.putExtra("type", fm.getType());
                 setResult(RESULT_OK, intent);
                 finish();

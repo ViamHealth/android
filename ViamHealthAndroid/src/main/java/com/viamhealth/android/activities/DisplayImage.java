@@ -75,7 +75,7 @@ public class DisplayImage extends Activity implements OnClickListener{
 		
 		Log.e("TAG","parent " + this.getParent());
 		if(ga.getImg()==null){
-	//	selectImage();
+	//	uploadImage();
 		}else{
 			img_display.setImageBitmap(ga.getImg());
 		}
