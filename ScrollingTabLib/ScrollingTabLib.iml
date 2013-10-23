@@ -68,11 +68,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
-<<<<<<< HEAD:ScrollingTabLib/ScrollingTabLib.iml
     <orderEntry type="jdk" jdkName="Android API 18 Platform" jdkType="Android SDK" />
-=======
-    <orderEntry type="jdk" jdkName="Android API 17 Platform" jdkType="Android SDK" />
->>>>>>> journal_changes_2:facebook/facebook.iml
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
   </component>

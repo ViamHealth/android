@@ -100,6 +100,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 	String selecteduserid="0";
 	public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
 	Global_Application ga;
+    String sub_url="diet-tracker/";
 	
 	private DisplayImageOptions options;
 	
@@ -1486,7 +1487,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 				
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
                 //User user = getArguments().getParcelable("user");
-				return obj.DeleteFood(Global_Application.selectedfoodid,"user_id");
+				return obj.DeleteFood(sub_url,Global_Application.selectedfoodid,"user_id");
 			}
 			   
 		}

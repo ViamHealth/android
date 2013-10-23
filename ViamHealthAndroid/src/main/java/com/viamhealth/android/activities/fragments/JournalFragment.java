@@ -78,6 +78,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     String nexturl,frm;
     Typeface tf;
     ProgressDialog dialog1;
+    String sub_url="diet-tracker/";
     boolean bolbrk,bollunch,bolsnaks,boldiner=false,bolexercise=false;
 
     ViamHealthPrefs appPrefs;
@@ -381,6 +382,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     nexturl = ga.getNextbrekfast();
                     frm="b";
                     if(isInternetOn()){
+                        Toast.makeText(getActivity(), "recalling CallBrkPullToRefreshTask", Toast.LENGTH_SHORT).show();
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getActivity();
                         task.execute();
@@ -399,6 +401,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     nexturl = ga.getNextlunch();
                     frm="l";
                     if(isInternetOn()){
+                        Toast.makeText(getActivity(), "recalling CallBrkPullToRefreshTask", Toast.LENGTH_SHORT).show();
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getActivity();
                         task.execute();
@@ -474,6 +477,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
                 ga.setSelectedfoodid(lstResultBreakfast.get(arg2).getId());
+                //Toast.makeText(getActivity(),"user id="+lstResultBreakfast.get(arg2).getId(),Toast.LENGTH_LONG ).show();
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -495,6 +499,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         // current activity
                                         dialog.cancel();
                                         if(isInternetOn()){
+                                            sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
                                             task.activity =getActivity();
                                             task.execute();
@@ -530,6 +535,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                ga.setSelectedfoodid(lstResultLunch.get(arg2).getId());
+
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -551,6 +558,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         // current activity
                                         dialog.cancel();
                                         if(isInternetOn()){
+                                            sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
                                             task.activity =getActivity();
                                             task.execute();
@@ -584,6 +592,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                ga.setSelectedfoodid(lstResultSnacks.get(arg2).getId());
+
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -605,6 +615,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         // current activity
                                         dialog.cancel();
                                         if(isInternetOn()){
+                                            sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
                                             task.activity =getActivity();
                                             task.execute();
@@ -638,6 +649,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                ga.setSelectedfoodid(lstResultDinner.get(arg2).getId());
+
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -659,6 +672,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         // current activity
                                         dialog.cancel();
                                         if(isInternetOn()){
+                                            sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
                                             task.activity =getActivity();
                                             task.execute();
@@ -685,6 +699,67 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+
+
+        lstViewExercise.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                ga.setSelectedfoodid(lstResultExercise.get(arg2).getId());
+
+                view.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View arg0) {
+                        // TODO Auto-generated method stub
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                getActivity());
+
+                        // set title
+                        alertDialogBuilder.setTitle("Confirmation");
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("Are you sure you want to delete this food?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        dialog.cancel();
+                                        if(isInternetOn()){
+                                            sub_url="user-physical-activity/";
+                                            CallDeleteTask task = new CallDeleteTask();
+                                            task.activity =getActivity();
+                                            task.execute();
+                                        }else{
+                                            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                });
+
+            }
+        });
+
+
     }
 
     public static Bitmap getBitmapFromURL(String src) {
@@ -950,6 +1025,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
             }
+            else
+            {
+                lblbrk.setText("Exercise (0)");
+                lblexercisecal.setText("0");
+                lstViewExercise.setVisibility(View.GONE);
+                img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+            }
 
         }
         @Override
@@ -991,6 +1073,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.e("TAG","lst size : " + lstResultBreakfast.size());
 
             if(lstResultBreakfast.size()>0){
+                Toast.makeText(getActivity(),"lstResultBreakfast.get(0).getCount() ="+lstResultBreakfast.get(0).getCount(),Toast.LENGTH_LONG).show();
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
                 //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
@@ -1007,6 +1090,17 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
+
+                lblbrk.setText("Breakfast (0)");
+                lbltotalbrkcal.setText(Global_Application.totalcal+"");
+                lstViewBreakfast.setVisibility(View.GONE);
+                img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
+                //JournalFoodAdapter adapter=
+                lstViewBreakfast.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+                lstViewBreakfast.onRefreshComplete();
 
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
@@ -1069,6 +1163,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
+                lbllunch.setText("Lunch (0)");
+                lbllunchcal.setText(Global_Application.totalcal+"");
+                lstViewLunch.setVisibility(View.GONE);
+                img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
                 if(isInternetOn()){
                     CallSnaksListTask task = new CallSnaksListTask();
                     task.activity =getActivity();
@@ -1130,6 +1228,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
+                lblsnack.setText("Snacks (0)");
+                lblsnakcal.setText(Global_Application.totalcal+"");
+                lstViewSnacks.setVisibility(View.GONE);
+                img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+
                 if(isInternetOn()){
                     CallDinnerListTask task = new CallDinnerListTask();
                     task.activity =getActivity();
@@ -1193,6 +1296,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 }
 
             }else{
+                lbldinner.setText("Dinner (0)");
+                lbldinnercal.setText(Global_Application.totalcal+"");
+                lstViewDinner.setVisibility(View.GONE);
+                img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
                 dialog1.dismiss();
             }
 
@@ -1233,6 +1340,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultBreakfast.size());
+
             /*
             if(lstResultBreakfast.size()>0 && frm.equals("b")){
 
@@ -1290,7 +1398,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
           }
-              */
+          */
 
         }
 
@@ -1299,6 +1407,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            /*
             if(frm.equals("b")){
                 lstResultBreakfast.addAll(obj.FoodListing(nexturl));
             }else if(frm.equals("l")){
@@ -1310,6 +1419,14 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             }
 
 
+            if(isInternetOn()){
+                CallListTask task = new CallListTask();
+                task.activity = getActivity();
+                task.execute();
+            }else{
+                Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+*/
             return null;
         }
 
@@ -1366,8 +1483,9 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("doInBackground--Object", "doInBackground--Object");
 
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            //Toast.makeText(getActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
             User user = getArguments().getParcelable("user");
-            return obj.DeleteFood(Global_Application.selectedfoodid,user.getId().toString());
+            return obj.DeleteFood(sub_url,Global_Application.selectedfoodid,user.getId().toString());
         }
 
     }
@@ -1388,6 +1506,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             dialog1.setMessage("Please Wait....");
             dialog1.show();
             Log.i("onPreExecute", "onPreExecute");
+            Log.i("onPreExecute", "before calling delete task");
 
         }
 
@@ -1395,13 +1514,14 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
             dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(isInternetOn()){
-                CallListTask task = new CallListTask();
-                task.activity = activity;
-                task.execute();
-            }else{
-                Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
-            }
+            //if(isInternetOn()){
+          //      CallListTask task = new CallListTask();
+           //     task.activity = activity;
+           //     task.execute();
+           // }else{
+            //    Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+          //  }
+            onResume();
 
         }
 
@@ -1409,10 +1529,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
-
-            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             User user = getArguments().getParcelable("user");
-            return obj.DeleteFood(Global_Application.selectedfoodid,user.getId().toString());
+            return obj.DeleteFood(sub_url,Global_Application.selectedfoodid,user.getId().toString());
         }
 
     }

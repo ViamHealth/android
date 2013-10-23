@@ -307,8 +307,8 @@ public class functionClass {
 
 
 		//delete food
-				public String DeleteFood(String id,String user){
-					String baseurlString = Global_Application.url+"diet-tracker/"+id+"/?user="+user;
+				public String DeleteFood(String sub_url,String id,String user){
+					String baseurlString = Global_Application.url+sub_url+id+"/?user="+user;
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                     Log.e("TAG","Delete Food : " + baseurlString);

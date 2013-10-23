@@ -307,8 +307,11 @@ public class UserEP extends BaseEP {
         User user = null;
 
         try{
-            JSONObject jsonUser = new JSONObject(userResponse);
-            user = processUserResponse(jsonUser);
+            if(userResponse!=null)
+            {
+                JSONObject jsonUser = new JSONObject(userResponse);
+                user = processUserResponse(jsonUser);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -401,11 +404,20 @@ public class UserEP extends BaseEP {
         User updatedUser = updateUser(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername());
 
         //Update profile data
-        updateProfile(updatedUser.getId(), user.getProfile());
+        if(updatedUser!=null && user!=null)
+        {
+            updateProfile(updatedUser.getId(), user.getProfile());
+        }
 
-        updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
+        if(updatedUser!=null && user!=null)
+        {
+          updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
+        }
 
-        user.setId(updatedUser.getId());
+        if(updatedUser!=null && user!=null)
+        {
+          user.setId(updatedUser.getId());
+        }
 
         return user;
     }

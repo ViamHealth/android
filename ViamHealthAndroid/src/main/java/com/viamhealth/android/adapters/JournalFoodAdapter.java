@@ -54,20 +54,20 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
         w160=(int)((width*50)/100);
         w30=(int)((width*9.37)/100);
 
+        holder = new FileDataHolder();
+
 
         if(row == null)
         {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
 
-            holder = new FileDataHolder();
 
 
             holder.foodname = (TextView)row.findViewById(R.id.foodname);
-            //holder.foodname.getLayoutParams().width=w160;
-
             holder.calory = (TextView)row.findViewById(R.id.cal_value);
             holder.surning = (TextView)row.findViewById(R.id.serving_val);
+
             // holder.surning.getLayoutParams().width = w30;
 /*
             holder.delete = (ImageView)row.findViewById(R.id.delete);
@@ -95,11 +95,16 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
         }
         Log.e("TAG",position+"");
 
+        Log.e("TAG","value of holder ="+holder);
+
         CategoryFood data = lstdata.get(position);
 
         holder.foodname.setText(data.getName().toString());
+
         holder.calory.setText(data.getCalories().toString());
+
         holder.surning.setText(data.getQuantity().toString());
+
        // holder.delete.setTag(data.getId().toString());
         return row;
     }
