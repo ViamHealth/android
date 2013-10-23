@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/newval_main_layout"
+        android:background="@drawable/inviteuser_header"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <TextView  android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:text="Servings"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/heading"
+            android:textColor="#32B5E5"/>
+        <EditText
+            android:id="@+id/txt_name"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:hint="Servings"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:textColor="#000000"
+            android:gravity="center_vertical"
+            android:background="@drawable/edt_bg"
+            android:singleLine="true"
+            android:padding="5dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/newval_main_layout_2"
+        android:background="@drawable/inviteuser_header"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            android:id="@+id/btnCancel"
+            android:background="@drawable/inviteuser_header" />
+
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Edit"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:id="@+id/btnEdit"
+        android:background="@drawable/inviteuser_header" />
+    </LinearLayout>
+
+
+    </LinearLayout>

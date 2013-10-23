@@ -80,6 +80,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     ProgressDialog dialog1;
     String sub_url="diet-tracker/";
     boolean bolbrk,bollunch,bolsnaks,boldiner=false,bolexercise=false;
+    int breakfast_height=0,lunch_height=0,snacks_height=0,dinner_height=0,exercise_height=0;
 
     ViamHealthPrefs appPrefs;
     functionClass obj;
@@ -178,7 +179,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
 
         lstViewBreakfast = (RefreshableListView)view.findViewById(R.id.lstViewBreakfast);
-        lstViewBreakfast.getLayoutParams().height = h200;
+        lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
         lstViewBreakfast.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -204,7 +205,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         });
 
         lstViewLunch = (RefreshableListView)view.findViewById(R.id.lstViewLunch);
-        lstViewLunch.getLayoutParams().height = h200;
+        //lstViewLunch.getLayoutParams().height = h200;
+        lstViewLunch.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
         lstViewLunch.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -230,7 +232,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         });
 
         lstViewSnacks = (RefreshableListView)view.findViewById(R.id.lstViewSnakes);
-        lstViewSnacks.getLayoutParams().height = h200;
+        //lstViewSnacks.getLayoutParams().height = h200;
+        lstViewSnacks.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
         lstViewSnacks.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -256,7 +259,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         });
 
         lstViewDinner = (RefreshableListView)view.findViewById(R.id.lstViewDinner);
-        lstViewDinner.getLayoutParams().height = h200;
+        //lstViewDinner.getLayoutParams().height = h200;
+        lstViewDinner.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
         lstViewDinner.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -282,7 +286,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         });
 
         lstViewExercise = (RefreshableListView)view.findViewById(R.id.lstViewExercise);
-        lstViewExercise.getLayoutParams().height = h200;
+        //lstViewExercise.getLayoutParams().height = h200;
+        lstViewExercise.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
         lstViewExercise.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -583,6 +588,14 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                view1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
             }
         });
         lstViewSnacks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -1022,12 +1035,24 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 //ExerciseAdapter adapter = new ExerciseAdapter(getActivity(),R.layout.exercise_list, lstResultExercise);
                 JournalExerciseAdapter adapter = new JournalExerciseAdapter(getActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
                 lstViewExercise.setAdapter(adapter);
+
+                int len=0;
+                for (i = 0, len = adapter.getCount(); i < len; i++) {
+                    View listItem = adapter.getView(i, null, lstViewExercise);
+                    listItem.measure(0, 0);
+                    int list_child_item_height = listItem.getMeasuredHeight()+lstViewExercise.getDividerHeight();//item height
+                    exercise_height += list_child_item_height; //
+                }
+
+                lstViewExercise.getLayoutParams().height=exercise_height;
+                exercise_height=0;
+
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
             }
             else
             {
-                lblbrk.setText("Exercise (0)");
+                lblExercise.setText("Exercise (0)");
                 lblexercisecal.setText("0");
                 lstViewExercise.setVisibility(View.GONE);
                 img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
@@ -1079,7 +1104,19 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
                 //JournalFoodAdapter adapter=
+
                 lstViewBreakfast.setAdapter(adapter);
+                int i=0,len=0;
+                for (i = 0, len = adapter.getCount(); i < len; i++) {
+                    View listItem = adapter.getView(i, null, lstViewBreakfast);
+                    listItem.measure(0, 0);
+                    int list_child_item_height = listItem.getMeasuredHeight()+lstViewBreakfast.getDividerHeight();//item height
+                    breakfast_height += list_child_item_height; //
+                }
+
+                lstViewBreakfast.getLayoutParams().height=breakfast_height;
+                breakfast_height=0;
+
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
                 if(isInternetOn()){
@@ -1101,7 +1138,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewBreakfast.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
-
+            }
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
                     task.activity =getActivity();
@@ -1109,7 +1146,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 }else{
                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
-            }
+
 
         }
 
@@ -1153,6 +1190,18 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 //LunchAdapter adapter = new LunchAdapter(getActivity(),R.layout.lunch_food_list, lstResultLunch);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultLunch);
                 lstViewLunch.setAdapter(adapter);
+                int i=0,len=0;
+                for (i = 0, len = adapter.getCount(); i < len; i++) {
+                    View listItem = adapter.getView(i, null, lstViewLunch);
+                    listItem.measure(0, 0);
+                    int list_child_item_height = listItem.getMeasuredHeight()+lstViewLunch.getDividerHeight();//item height
+                    lunch_height += list_child_item_height; //
+                }
+
+                lstViewLunch.getLayoutParams().height=lunch_height;
+                lunch_height=0;
+
+
                 adapter.notifyDataSetChanged();
                 lstViewLunch.onRefreshComplete();
                 if(isInternetOn()){
@@ -1167,6 +1216,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lbllunchcal.setText(Global_Application.totalcal+"");
                 lstViewLunch.setVisibility(View.GONE);
                 img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+            }
                 if(isInternetOn()){
                     CallSnaksListTask task = new CallSnaksListTask();
                     task.activity =getActivity();
@@ -1174,7 +1224,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 }else{
                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
-            }
+
 
         }
 
@@ -1218,6 +1268,17 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 //SnacksAdapter adapter = new SnacksAdapter(getActivity(),R.layout.snacks_food_list, lstResultSnacks);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultSnacks);
                 lstViewSnacks.setAdapter(adapter);
+                int i=0,len=0;
+                for (i = 0, len = adapter.getCount(); i < len; i++) {
+                    View listItem = adapter.getView(i, null, lstViewSnacks);
+                    listItem.measure(0, 0);
+                    int list_child_item_height = listItem.getMeasuredHeight()+lstViewSnacks.getDividerHeight();//item height
+                    snacks_height += list_child_item_height; //
+                }
+
+                lstViewSnacks.getLayoutParams().height=snacks_height;
+                snacks_height=0;
+
                 adapter.notifyDataSetChanged();
                 lstViewSnacks.onRefreshComplete();
                 if(isInternetOn()){
@@ -1232,7 +1293,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblsnakcal.setText(Global_Application.totalcal+"");
                 lstViewSnacks.setVisibility(View.GONE);
                 img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-
+            }
                 if(isInternetOn()){
                     CallDinnerListTask task = new CallDinnerListTask();
                     task.activity =getActivity();
@@ -1240,7 +1301,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 }else{
                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
-            }
+
 
         }
 
@@ -1285,15 +1346,21 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 //DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultDinner);
                 lstViewDinner.setAdapter(adapter);
+                lstViewDinner.setAdapter(adapter);
+                int i=0,len=0;
+                for (i = 0, len = adapter.getCount(); i < len; i++) {
+                    View listItem = adapter.getView(i, null, lstViewDinner);
+                    listItem.measure(0, 0);
+                    int list_child_item_height = listItem.getMeasuredHeight()+lstViewDinner.getDividerHeight();//item height
+                    dinner_height += list_child_item_height; //
+                }
+
+                lstViewDinner.getLayoutParams().height=dinner_height;
+                dinner_height=0;
+
                 adapter.notifyDataSetChanged();
                 lstViewDinner.onRefreshComplete();
-                if(isInternetOn()){
-                    CallExerciseListTask task = new CallExerciseListTask();
-                    task.activity =getActivity();
-                    task.execute();
-                }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                }
+
 
             }else{
                 lbldinner.setText("Dinner (0)");
@@ -1301,6 +1368,14 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewDinner.setVisibility(View.GONE);
                 img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
                 dialog1.dismiss();
+            }
+
+            if(isInternetOn()){
+                CallExerciseListTask task = new CallExerciseListTask();
+                task.activity =getActivity();
+                task.execute();
+            }else{
+                Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
 
         }
