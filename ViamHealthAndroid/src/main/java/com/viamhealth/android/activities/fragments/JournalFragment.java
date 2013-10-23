@@ -472,7 +472,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> arg0, View v, int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
-                ImageView view = (ImageView)v.findViewById(R.id.delete);
+                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                ga.setSelectedfoodid(lstResultBreakfast.get(arg2).getId());
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -520,13 +521,15 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+
+
         lstViewLunch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
-                ImageView view = (ImageView)v.findViewById(R.id.delete);
+                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -580,7 +583,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> arg0, View v, int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
-                ImageView view = (ImageView)v.findViewById(R.id.delete);
+                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -634,7 +637,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> arg0, View v, int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
-                ImageView view = (ImageView)v.findViewById(R.id.delete);
+                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -1325,6 +1328,52 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     }
 
     // async class for calling webservice and get responce message
+
+    public class CallEditTask extends AsyncTask <String, Void,String>
+    {
+        protected FragmentActivity activity;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+            dialog1 = new ProgressDialog(activity);
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.setMessage("Please Wait....");
+            dialog1.show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+            dialog1.dismiss();
+            Log.i("onPostExecute", "onPostExecute");
+            if(isInternetOn()){
+                CallListTask task = new CallListTask();
+                task.activity = activity;
+                task.execute();
+            }else{
+                Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            User user = getArguments().getParcelable("user");
+            return obj.DeleteFood(Global_Application.selectedfoodid,user.getId().toString());
+        }
+
+    }
+
+
+
     public class CallDeleteTask extends AsyncTask <String, Void,String>
     {
         protected FragmentActivity activity;
@@ -1362,7 +1411,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("doInBackground--Object", "doInBackground--Object");
 
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            return obj.DeleteFood(Global_Application.selectedfoodid);
+            User user = getArguments().getParcelable("user");
+            return obj.DeleteFood(Global_Application.selectedfoodid,user.getId().toString());
         }
 
     }

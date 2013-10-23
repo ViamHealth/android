@@ -61,6 +61,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 
 import android.widget.TextView;
@@ -1484,7 +1485,8 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-				return obj.DeleteFood(Global_Application.selectedfoodid);
+                //User user = getArguments().getParcelable("user");
+				return obj.DeleteFood(Global_Application.selectedfoodid,"user_id");
 			}
 			   
 		}

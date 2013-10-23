@@ -307,10 +307,11 @@ public class functionClass {
 
 
 		//delete food
-				public String DeleteFood(String id){
-					String baseurlString = Global_Application.url+"diet-tracker/"+id+"/";   
+				public String DeleteFood(String id,String user){
+					String baseurlString = Global_Application.url+"diet-tracker/"+id+"/?user="+user;
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+                    Log.e("TAG","Delete Food : " + baseurlString);
 				  
 					try
 					{
@@ -321,6 +322,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
+                    Log.e("TAG","Delete Food Response : " + responseString);
 					
 					return responseString;
 				}
