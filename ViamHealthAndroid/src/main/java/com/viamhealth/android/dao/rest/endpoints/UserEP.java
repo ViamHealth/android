@@ -404,20 +404,10 @@ public class UserEP extends BaseEP {
         User updatedUser = updateUser(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername());
 
         //Update profile data
-        if(updatedUser!=null && user!=null)
-        {
-            updateProfile(updatedUser.getId(), user.getProfile());
-        }
+        updateProfile(updatedUser.getId(), user.getProfile());
+        updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
+        user.setId(updatedUser.getId());
 
-        if(updatedUser!=null && user!=null)
-        {
-          updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
-        }
-
-        if(updatedUser!=null && user!=null)
-        {
-          user.setId(updatedUser.getId());
-        }
 
         return user;
     }
