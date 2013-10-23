@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -387,7 +388,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     nexturl = ga.getNextbrekfast();
                     frm="b";
                     if(isInternetOn()){
-                        Toast.makeText(getActivity(), "recalling CallBrkPullToRefreshTask", Toast.LENGTH_SHORT).show();
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getActivity();
                         task.execute();
@@ -406,7 +406,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     nexturl = ga.getNextlunch();
                     frm="l";
                     if(isInternetOn()){
-                        Toast.makeText(getActivity(), "recalling CallBrkPullToRefreshTask", Toast.LENGTH_SHORT).show();
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getActivity();
                         task.execute();
@@ -477,7 +476,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         lstViewBreakfast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+            public void onItemClick(AdapterView<?> arg0, View v,final int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
@@ -529,6 +528,41 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
+                view1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        final EditText input = new EditText(getActivity());
+                        alert.setMessage("Enter Number of Servings");
+                        alert.setView(input);
+                        Global_Application.food_item=lstResultBreakfast.get(arg2).getId();
+                        Global_Application.food_quantity=input.getText().toString().trim();
+                        Global_Application.meal_type="BREAKFAST";
+                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(isInternetOn()){
+                                    CallEditTask task = new CallEditTask();
+                                    task.activity =getActivity();
+                                    task.execute();
+                                }else{
+                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+
+                    }
+                });
+
+
             }
         });
 
@@ -536,7 +570,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         lstViewLunch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+            public void onItemClick(AdapterView<?> arg0, View v,final int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
@@ -588,20 +622,49 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
-                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
                 view1.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        final EditText input = new EditText(getActivity());
+                        alert.setMessage("Enter Number of Servings");
+                        alert.setView(input);
+                        Global_Application.food_item=lstResultLunch.get(arg2).getId();
+                        Global_Application.food_quantity=input.getText().toString().trim();
+                        Global_Application.meal_type="LUNCH";
+                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(isInternetOn()){
+                                    CallEditTask task = new CallEditTask();
+                                    task.activity =getActivity();
+                                    task.execute();
+                                }else{
+                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
 
                     }
                 });
             }
         });
+
+
+
+
         lstViewSnacks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+            public void onItemClick(AdapterView<?> arg0, View v, final int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
@@ -653,12 +716,52 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
+                view1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        final EditText input = new EditText(getActivity());
+                        alert.setMessage("Enter Number of Servings");
+                        alert.setView(input);
+                        Global_Application.food_item=lstResultSnacks.get(arg2).getId();
+                        Global_Application.food_quantity=input.getText().toString().trim();
+                        Global_Application.meal_type="SNACKS";
+                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(isInternetOn()){
+                                    CallEditTask task = new CallEditTask();
+                                    task.activity =getActivity();
+                                    task.execute();
+                                }else{
+                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+
+                    }
+                });
+
+
             }
         });
+
+
+
+
+
         lstViewDinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+            public void onItemClick(AdapterView<?> arg0, View v,final int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
@@ -710,6 +813,43 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     }
                 });
 
+
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
+                view1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        final EditText input = new EditText(getActivity());
+                        alert.setMessage("Enter Number of Servings");
+                        alert.setView(input);
+                        Global_Application.food_item=lstResultDinner.get(arg2).getId();
+                        Global_Application.food_quantity=input.getText().toString().trim();
+                        Global_Application.meal_type="DINNER";
+                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(isInternetOn()){
+                                    CallEditTask task = new CallEditTask();
+                                    task.activity =getActivity();
+                                    task.execute();
+                                }else{
+                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+
+                    }
+                });
+
+
+
             }
         });
 
@@ -717,7 +857,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         lstViewExercise.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int arg2,
+            public void onItemClick(AdapterView<?> arg0, View v, final int arg2,
                                     long arg3) {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
@@ -768,6 +908,54 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                         alertDialog.show();
                     }
                 });
+
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
+                view1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        //final EditText calories = new EditText(getActivity());
+                        //final EditText time_spent = new EditText(getActivity());
+                        //LinearLayout l1= new LinearLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LayoutInflater li = getActivity().getLayoutInflater();// LayoutInflater.from(getBaseContext());
+                        View view = li.inflate(R.layout.edit_exercise, null);
+
+                        alert.setMessage("Enter Calories and Time");
+                        alert.setView(view);
+
+
+                        //Global_Application.weight=lstResultExercise.get(arg2
+                          //      ,Global_Application.user_calories,Global_Application.time_spent
+                        final EditText txt_calorie,txt_time;
+                        Global_Application.selectedexerciseid=lstResultExercise.get(arg2).getId();
+                        Global_Application.exercise_value=lstResultExercise.get(arg2).getValue();
+                        txt_calorie=(EditText)view.findViewById(R.id.txt_calorie);
+                        txt_time=(EditText)view.findViewById(R.id.txt_time);
+                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(isInternetOn()){
+                                    Global_Application.user_calories=txt_calorie.getText().toString();
+                                    Global_Application.time_spent=txt_time.getText().toString();
+                                    CallEditExercise task = new CallEditExercise();
+                                    task.activity =getActivity();
+                                    task.execute();
+                                }else{
+                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+
+                    }
+                });
+
 
             }
         });
@@ -1007,10 +1195,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog1 = new ProgressDialog(activity);
-            dialog1.setCanceledOnTouchOutside(false);
-            dialog1.setMessage("Please Wait....");
-            dialog1.show();
+
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -1019,7 +1204,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
 
             Log.i("onPostExecute", "onPostExecute");
-            dialog1.dismiss();
+            if(dialog1!=null)
+            {
+                dialog1.dismiss();
+            }
+
             Log.e("TAG", "lst size : " + lstResultExercise.size());
             int total_calories=0;
             int i=0;
@@ -1082,10 +1271,12 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+
             dialog1 = new ProgressDialog(activity);
             dialog1.setCanceledOnTouchOutside(false);
             dialog1.setMessage("Please Wait....");
             dialog1.show();
+
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -1098,7 +1289,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.e("TAG","lst size : " + lstResultBreakfast.size());
 
             if(lstResultBreakfast.size()>0){
-                Toast.makeText(getActivity(),"lstResultBreakfast.get(0).getCount() ="+lstResultBreakfast.get(0).getCount(),Toast.LENGTH_LONG).show();
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
                 //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
@@ -1260,7 +1450,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
 
             Log.i("onPostExecute", "onPostExecute");
-            dialog1.dismiss();
+            //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultSnacks.size());
             if(lstResultSnacks.size()>0){
                 lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
@@ -1338,7 +1528,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
 
             Log.i("onPostExecute", "onPostExecute");
-            dialog1.dismiss();
+            //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultDinner.size());
             if(lstResultDinner.size()>0){
                 lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
@@ -1560,10 +1750,67 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             //Toast.makeText(getActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
             User user = getArguments().getParcelable("user");
-            return obj.DeleteFood(sub_url,Global_Application.selectedfoodid,user.getId().toString());
+            return obj.EditFood(Global_Application.selectedfoodid,Global_Application.food_item,Global_Application.food_quantity,Global_Application.meal_type,user.getId().toString());
         }
 
     }
+
+
+    public class CallEditExercise extends AsyncTask <String, Void,String>
+    {
+        protected FragmentActivity activity;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+            dialog1 = new ProgressDialog(activity);
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.setMessage("Please Wait....");
+            dialog1.show();
+            Toast.makeText(getActivity(),"Global_Application.exercise_value="+Global_Application.exercise_value,Toast.LENGTH_LONG).show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+            dialog1.dismiss();
+            Log.i("onPostExecute", "onPostExecute");
+            if(isInternetOn()){
+                CallListTask task = new CallListTask();
+                task.activity = activity;
+                task.execute();
+            }else{
+                Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            //Toast.makeText(getActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
+            User user = getArguments().getParcelable("user");
+            if(user.getBmiProfile().getWeight()==null)
+            {
+                Global_Application.weight="0";
+            }
+            else
+            {
+                Global_Application.weight=user.getBmiProfile().getWeight().toString();
+            }
+
+            return obj.EditExercise(Global_Application.selectedexerciseid,Global_Application.weight,Global_Application.user_calories,Global_Application.time_spent,user.getId().toString(),Global_Application.exercise_value);
+        }
+
+    }
+
+
 
 
 

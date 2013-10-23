@@ -5,15 +5,16 @@ package com.viamhealth.android.model;
  */
 public class CategoryExercise {
 
-    String id,name,time,calories;
+    String id,name,time,calories,value;
 
     public CategoryExercise(String id,String name, String time,
-                        String calories) {
+                        String calories,String value) {
         super();
         this.id = id;
         this.name = name;
         this.time = time;
         this.calories = calories;
+        this.value=value;
     }
 
     public String getId() {
@@ -47,5 +48,16 @@ public class CategoryExercise {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public void setValue(String value)
+    {
+        this.value=value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+
 
 }

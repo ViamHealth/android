@@ -20,7 +20,7 @@ import android.app.Application;
 import android.graphics.Bitmap;
 
 
-public class Global_Application extends Application 
+public class Global_Application extends Application
 {
 	public Bitmap img;
 	public String download;
@@ -32,7 +32,7 @@ public class Global_Application extends Application
 	int foodPos;
 	ArrayList<GoalData> lstResult = new ArrayList<GoalData>();
 	ArrayList<FoodData> lstFood = new ArrayList<FoodData>();
-	public static String selectedfoodid,selectedexerciseid;
+	public static String selectedfoodid,selectedexerciseid,food_item,food_quantity,meal_type,weight,user_calories,time_spent,exercise_value;
 	public static int totalcal=0;
 	public String path;
 	public String fileuri=null;

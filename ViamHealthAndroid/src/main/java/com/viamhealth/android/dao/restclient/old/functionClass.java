@@ -222,7 +222,7 @@ public class functionClass {
                 jarray = jObject.getJSONArray("results");
                 for (int i = 0; i < jarray.length(); i++) {
                     JSONObject c = jarray.getJSONObject(i);
-                    lstData.add(new CategoryExercise(c.getString("id"),c.getJSONObject("physical_activity").getString("label"),c.getString("time_spent"),c.getString("calories_spent")));
+                    lstData.add(new CategoryExercise(c.getString("id"),c.getJSONObject("physical_activity").getString("label"),c.getString("time_spent"),c.getString("calories_spent"),c.getJSONObject("physical_activity").getString("id")));
                 }
                 Log.e("TAG","Data is " + appPrefs.getMenuList().toString());
             } catch (JSONException e) {
@@ -250,6 +250,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
+            Log.e("TAG","Food Listing responseString : " + responseString);
 			
 				try {
 				 jObject = new JSONObject(responseString);
@@ -305,6 +306,58 @@ public class functionClass {
 		}
 
 
+    public String EditFood(String id,String food_item,String food_quantities,String meal_type,String user){
+        String baseurlString = Global_Application.url+"diet-tracker/"+id+"/?user="+user;
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        Log.e("TAG","Edit Food : " + baseurlString);
+        client.AddParam("food_item", food_item);
+        client.AddParam("meal_type", meal_type);
+        client.AddParam("food_quantity_multiplier", food_quantities);
+
+
+        try
+        {
+            client.Execute(RequestMethod.PUT);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        responseString = client.getResponse();
+        Log.e("TAG","Edit Food Response : " + responseString);
+
+        return responseString;
+    }
+
+
+    public String EditExercise(String id,String weight,String user_calories,String time_spent,String user,String value){
+        String baseurlString = Global_Application.url+"user-physical-activity/"+id+"/?user="+user;
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        Log.e("TAG","Edit Exercise : " + baseurlString);
+        client.AddParam("weight", weight);
+        client.AddParam("time_spent", time_spent);
+        client.AddParam("physical_activity", value);
+        client.AddParam("user_calories_spent", user_calories);
+
+        try
+        {
+            client.Execute(RequestMethod.PUT);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        responseString = client.getResponse();
+        Log.e("TAG","Edit Exercise Response : " + responseString);
+
+        return responseString;
+    }
+
+
+
+
 
 		//delete food
 				public String DeleteFood(String sub_url,String id,String user){
@@ -352,35 +405,38 @@ public class functionClass {
 
 
 		public String AddFood(String id,String mealtype,String food_quantity_multiplier){
-			String responce="1";
-			String baseurlString = Global_Application.url+"diet-tracker/";   
-			RestClient client = new RestClient(baseurlString);   
-			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-			client.AddParam("food_item", id);
-			client.AddParam("meal_type", mealtype);
-			client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
-			try
-			{
-				client.Execute(RequestMethod.POST);
-			} 
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+        String responce="1";
+        String baseurlString = Global_Application.url+"diet-tracker/";
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddParam("food_item", id);
+        client.AddParam("meal_type", mealtype);
+        client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
+        try
+        {
+            client.Execute(RequestMethod.POST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
-			responseString = client.getResponse();
-			Log.e("TAG","Responce : " + responseString);
-				try {
-				 jObject = new JSONObject(responseString);
-				 if(responseString.length()>0){
-					 responce="0";
-				 }
-					 Log.e("TAG","Data is " + appPrefs.getMenuList().toString());
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			return responce;
-		}
+        responseString = client.getResponse();
+        Log.e("TAG","Responce : " + responseString);
+        try {
+            jObject = new JSONObject(responseString);
+            if(responseString.length()>0){
+                responce="0";
+            }
+            Log.e("TAG","Data is " + appPrefs.getMenuList().toString());
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return responce;
+    }
+
+
+
 
 	// function for get goal data
 	public WeightData getWeightGoal(){
