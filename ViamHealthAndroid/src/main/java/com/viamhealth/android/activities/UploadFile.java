@@ -22,6 +22,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
+import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 import com.viamhealth.android.model.FileData;
@@ -156,7 +157,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 				//dialog.setCanceledOnTouchOutside(false);
 				//dialog.setMessage("Please Wait....");
 				//dialog.show();
-                Toast.makeText(getApplicationContext()," before calling uploadfile",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext()," before calling uploadfile",Toast.LENGTH_LONG).show();
                 UploadFiletoServer task1=new UploadFiletoServer();
                 task1.execute();
 				//uploadDatatoServer(ga.getFileByte(),ga.getFileuri(), "http://api.viamhealth.com/healthfiles/");
@@ -418,7 +419,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
     }
 
 
-    public int uploadDatatoServer(byte []file,String sourceFileUri,String upLoadServerUri)
+    public int uploadDatatoServer(String sourceFileUri,String upLoadServerUri)
     {
 
         String fileName=sourceFileUri;
@@ -449,9 +450,19 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             //conn.setRequestProperty("Content-Type", "docx;boundary=" + boundary);
             conn.setRequestProperty("file", fileName);
-            //conn.setRequestProperty("user", user.getId().toString());
-            conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
-            conn.setRequestProperty("description", "description");
+            conn.setRequestProperty("user", user.getId().toString());
+            //conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
+            if(file_desc.getText()!=null)
+            {
+                conn.setRequestProperty("description", file_desc.getText().toString());
+            }
+            else
+            {
+                conn.setRequestProperty("description", "");
+            }
+
+            //RestClient r1= new RestClient(upLoadServerUri);
+
             dos = new DataOutputStream(conn.getOutputStream());
             Log.e("upload MJ","before Uploading file to server");
             dos.writeBytes(twoHyphens + boundary + lineEnd);
@@ -460,7 +471,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 
             dos.writeBytes(lineEnd);
 
-            dos.write(file,0,bufferSize);
+            dos.write(ga.getFileByte(),0,bufferSize);
 
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
@@ -653,7 +664,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             Log.i("onPostExecute", "onPostExecute");
             //generateView();
             dialog.dismiss();
-            Toast.makeText(getApplicationContext()," after uploading",Toast.LENGTH_LONG).show();
+            //.makeText(getApplicationContext()," after uploading",Toast.LENGTH_LONG).show();
+            finish();
 			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 				startActivity(intent);*/
         }
@@ -661,7 +673,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
-            uploadDatatoServer(ga.getFileByte(),ga.getFileuri(),"http://api.viamhealth.com/healthfiles/");
+            uploadDatatoServer(ga.getFileuri(),"http://api.viamhealth.com/healthfiles/");
             return null;
         }
 

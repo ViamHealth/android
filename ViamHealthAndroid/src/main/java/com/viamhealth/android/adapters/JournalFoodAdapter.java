@@ -101,9 +101,11 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
 
         holder.foodname.setText(data.getName().toString());
 
-        holder.calory.setText(data.getCalories().toString());
+        float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
 
-        holder.surning.setText(data.getQuantity().toString());
+        holder.calory.setText(String.valueOf(calories));
+
+        holder.surning.setText(data.getMultiplier().toString());
 
        // holder.delete.setTag(data.getId().toString());
         return row;

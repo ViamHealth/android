@@ -1,13 +1,14 @@
 package com.viamhealth.android.model;
 
 public class CategoryFood {
-	String id,name,calories,multiplier,quantity,count;
+	String id,name,calories,multiplier,quantity,count,food_item;
 
-	public CategoryFood(String id, String name, String calories,
+	public CategoryFood(String id,String food_item, String name, String calories,
 			String multiplier,String quantity,String count) {
 		super();
 		this.id = id;
 		this.name = name;
+        this.food_item=food_item;
 		this.calories = calories;
 		this.multiplier = multiplier;
 		this.quantity=quantity;
@@ -25,6 +26,11 @@ public class CategoryFood {
 	public String getName() {
 		return name;
 	}
+
+    public String getFoodItem()
+    {
+        return food_item;
+    }
 
 	public void setName(String name) {
 		this.name = name;

@@ -269,6 +269,7 @@ public class functionClass {
 					 for (int i = 0; i < jarray.length(); i++) {
 						 JSONObject c = jarray.getJSONObject(i);
 						 Log.e("TAG","Multiplier : " + c.getString("food_quantity_multiplier"));
+                         float multiplier=Float.valueOf(c.getString("food_quantity_multiplier"));
 						 String baseurlString1 = Global_Application.url+"food-items/"+c.getString("food_item")+"/";  
 						 Log.e("TAG","inner url : " + baseurlString1);
 							RestClient client1 = new RestClient(baseurlString1);   
@@ -288,8 +289,8 @@ public class functionClass {
 								JSONObject jObject1 = new JSONObject(responseString1);
 								 Log.e("TAG","res : " + responseString1);
 								 Log.e("TAG","Calories : "  + jObject1.getString("calories"));
-								 Global_Application.totalcal+=jObject1.getInt("calories");
-										 lstResult.add(new CategoryFood(c.getString("id"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count")));
+								 Global_Application.totalcal+=jObject1.getDouble("calories")*multiplier;
+										 lstResult.add(new CategoryFood(c.getString("id"),c.getString("food_item"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count")));
 								
 								}catch (JSONException e) {
 									// TODO Auto-generated catch block

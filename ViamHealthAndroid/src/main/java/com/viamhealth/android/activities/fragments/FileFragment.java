@@ -47,6 +47,7 @@ import com.viamhealth.android.ui.RefreshableListView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,6 +55,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+
+
 
 /**
  * Created by naren on 08/10/13.
@@ -465,24 +468,27 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
                     //File file=new File(chosenImageUri.toString());
                     //FileInputStream input = new FileInputStream(file);
+                    FileInputStream input=(FileInputStream)fi;
 
-                    byte[] buf=new byte[100000];
+                    byte[] buf=new byte[4096];
                     mBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(chosenImageUri),null,options);
                     options.inPurgeable = true;
                     System.runFinalization();
                     Runtime.getRuntime().gc();
                     System.gc();
+                    String type="";
 
-                    ContentResolver cR = getActivity().getContentResolver();
-                    MimeTypeMap mime = MimeTypeMap.getSingleton();
-                    String type = mime.getExtensionFromMimeType(cR.getType(chosenImageUri));
-                    String contentType=cR.getType(chosenImageUri);
-                    Toast.makeText(getActivity(),"Mime type=,Content type="+type + " "+contentType,Toast.LENGTH_LONG).show();
+
                     String chosenstring=chosenImageUri+"";
                     Log.e("TAG","choosen String : " + chosenstring);
                     int count=0;
                     if(chosenstring.contains("content://"))
                     {
+                        ContentResolver cR = getActivity().getContentResolver();
+                        MimeTypeMap mime = MimeTypeMap.getSingleton();
+                        type = mime.getExtensionFromMimeType(cR.getType(chosenImageUri));
+                        String contentType=cR.getType(chosenImageUri);
+                        Toast.makeText(getActivity(),"Mime type=,Content type="+type + " "+contentType,Toast.LENGTH_LONG).show();
                         String[] splitval=chosenstring.split("//");
                         path=splitval[1];
                     }
@@ -499,13 +505,11 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                         b1.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         //img_display.setImageBitmap(b1);
                         ga.setImg(b1);
-
-
                     }
                     else
                     {
                         try {
-                            for (int readNum; (readNum = fi.read(buf)) != -1;) {
+                            for (int readNum; (readNum = input.read(buf)) != -1;) {
                                 count+=readNum;
                                 stream.write(buf, 0, readNum); //no doubt here is
                             }

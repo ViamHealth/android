@@ -323,6 +323,24 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                 }
             }
             //mPager1.setAdapter(new ImagePagerAdapter(lst));
+            RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
+            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
+            lstReminderMedicine.setAdapter(adapter4);
+
+            int total_height_medicine_tab=0,len=0;
+
+            for (i = 0, len = adapter4.getCount(); i < len; i++) {
+                View listItem = adapter4.getView(i, null, lstReminderMedicine);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine.getDividerHeight();//item height
+                total_height_medicine_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l3= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
+            lstReminderMedicine.setLayoutParams(l3);
+            total_height_medicine_tab=0;
+
+
             RetrieveOtherData task1= new RetrieveOtherData();
             task1.applicationContext=getActivity();
             task1.execute();
@@ -402,6 +420,26 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             cal.add(Calendar.DAY_OF_YEAR,1);
             lst.add(fmt.format(cal.getTime()));
 
+
+
+
+            RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
+            TestDataAdapter1 adapter = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
+            lstReminderTest.setAdapter(adapter);
+
+            int total_height_test_tab=0,i,len;
+
+            for (i = 0, len = adapter.getCount(); i < len; i++) {
+                View listItem = adapter.getView(i, null, lstReminderTest);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderTest.getDividerHeight();//item height
+                total_height_test_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
+            lstReminderTest.setLayoutParams(l4);
+            total_height_test_tab=0;
+
             mPager1.setAdapter(new ImagePagerAdapter(lst));
 
 
@@ -476,11 +514,38 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             TestDataAdapter1 adapter5 = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
 
+            int total_height_test_tab=0,i,len;
+
+            for (i = 0, len = adapter5.getCount(); i < len; i++) {
+                View listItem = adapter5.getView(i, null, lstReminderTest);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderTest.getDividerHeight();//item height
+                total_height_test_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
+            lstReminderTest.setLayoutParams(l4);
+            total_height_test_tab=0;
 
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
             MedicalDataAdapter1 adapter = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter);
+
+            int total_height_medicine_tab=0;
+
+            for (i = 0, len = adapter.getCount(); i < len; i++) {
+                View listItem = adapter.getView(i, null, lstReminderMedicine);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine.getDividerHeight();//item height
+                total_height_medicine_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l3= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
+            lstReminderMedicine.setLayoutParams(l3);
+            total_height_medicine_tab=0;
+
+
 
             lstReminderMedicine.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
@@ -496,13 +561,13 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                     final TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
                     final TextView txt_night=(TextView)v.findViewById(R.id.txt_night);
 
-                    main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
-
-                        public void onSwipeRight() {
-                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
-                            original_width_edit=main_list_edit.getWidth();
-                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
-                            main_list_edit.setMinimumHeight(main_list.getHeight());
+                    main_list_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
+                            //original_width_edit=main_list_edit.getWidth();
+                            //main_list_edit.setMinimumWidth((main_list.getWidth())/3);
+                            //main_list_edit.setMinimumHeight(main_list.getHeight());
                             edit_med=new Intent(getActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditMed",true);
@@ -515,16 +580,42 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                             edit_med.putExtra("noon",txt_noon.getText().toString());
                             edit_med.putExtra("night",txt_night.getText().toString());
                             startActivity(edit_med);
-
                         }
                     });
 
-                    main_list_delete.setOnTouchListener(new OnSwipeTouchListener(){
+                    /*
+                    main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onSwipeLeft()
+                        public void onTouch()
                         {
-                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
-                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
+                            edit_med=new Intent(getActivity(),AddMedication.class);
+                            edit_pos=pos;
+                            edit_med.putExtra("iseditMed",true);
+                            edit_med.putExtra("user_id",user.getId().toString());
+                            med_id=listData.get(pos).getId();
+                            edit_med.putExtra("id",med_id);
+                            edit_med.putExtra("start_date",listData.get(pos).getStart_date());
+                            edit_med.putExtra("name",name.getText().toString());
+                            edit_med.putExtra("morning",txt_morn.getText().toString());
+                            edit_med.putExtra("noon",txt_noon.getText().toString());
+                            edit_med.putExtra("night",txt_night.getText().toString());
+                            startActivity(edit_med);
+                        }
+
+                        public void onSwipeRight() {
+                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
+                            original_width_edit=main_list_edit.getWidth();
+                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
+                            main_list_edit.setMinimumHeight(main_list.getHeight());
+                        }
+                    });
+*/
+
+                    main_list_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
+                            //main_list_delete.setMinimumWidth((main_list.getWidth())/3);
                             Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
                             edit_med1.putExtra("id",listData.get(pos).getId());
@@ -532,6 +623,25 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                         }
                     });
 
+                    /*
+                    main_list_delete.setOnTouchListener(new OnSwipeTouchListener(){
+
+                        public void onTouch()
+                        {
+                            Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
+                            edit_med1.putExtra("user_id",user.getId().toString());
+                            edit_med1.putExtra("id",listData.get(pos).getId());
+                            startActivity(edit_med1);
+                        }
+
+                        public void onSwipeLeft()
+                        {
+                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
+                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
+
+                        }
+                    });
+*/
                     main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -577,10 +687,38 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter4);
 
+            int total_height_medicine_tab=0,i,len;
+
+            for (i = 0, len = adapter4.getCount(); i < len; i++) {
+                View listItem = adapter4.getView(i, null, lstReminderMedicine);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine.getDividerHeight();//item height
+                total_height_medicine_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l3= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
+            lstReminderMedicine.setLayoutParams(l3);
+            total_height_medicine_tab=0;
+
+
+
 
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter);
+
+            int total_height_test_tab=0;
+
+            for (i = 0, len = adapter.getCount(); i < len; i++) {
+                View listItem = adapter.getView(i, null, lstReminderTest);
+                listItem.measure(0, 0);
+                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderTest.getDividerHeight();//item height
+                total_height_test_tab += list_child_item_height; //
+            }
+
+            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
+            lstReminderTest.setLayoutParams(l4);
+            total_height_test_tab=0;
 
             lstReminderTest.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
@@ -596,13 +734,30 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                     final TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
                     final TextView txt_night=(TextView)v.findViewById(R.id.txt_night);
 
+                    main_list_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
+                            //original_width_edit=main_list_edit.getWidth();
+                           // main_list_edit.setMinimumWidth((main_list.getWidth())/3);
+                            //main_list_edit.setMinimumHeight(main_list.getHeight());
+                            edit_med=new Intent(getActivity(),AddMedication.class);
+                            edit_pos=pos;
+                            edit_med.putExtra("iseditOthers",true);
+                            edit_med.putExtra("user_id",user.getId().toString());
+                            med_id=otherData.get(pos).getId();
+                            edit_med.putExtra("id",med_id);
+                            edit_med.putExtra("start_date",otherData.get(pos).getStart_date());
+                            edit_med.putExtra("name",name.getText().toString());
+                            startActivity(edit_med);
+                        }
+                    });
+
+                    /*
                     main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onSwipeRight() {
-                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
-                            original_width_edit=main_list_edit.getWidth();
-                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
-                            main_list_edit.setMinimumHeight(main_list.getHeight());
+                        public void onTouch()
+                        {
                             edit_med=new Intent(getActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditOthers",true);
@@ -612,23 +767,51 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                             edit_med.putExtra("start_date",listData.get(pos).getStart_date());
                             edit_med.putExtra("name",name.getText().toString());
                             startActivity(edit_med);
+                        }
+
+                        public void onSwipeRight() {
+
+                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
+                            original_width_edit=main_list_edit.getWidth();
+                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
+                            main_list_edit.setMinimumHeight(main_list.getHeight());
+
 
                         }
                     });
+*/
 
+                    main_list_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                           // main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
+                           // main_list_delete.setMinimumWidth((main_list.getWidth())/3);
+                            Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
+                            edit_med1.putExtra("user_id",user.getId().toString());
+                            edit_med1.putExtra("id",otherData.get(pos).getId());
+                            startActivity(edit_med1);
+                        }
+                    });
+
+                    /*
                     main_list_delete.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onSwipeLeft()
+                        public void onTouch()
                         {
-                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
-                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
                             Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
                             edit_med1.putExtra("id",listData.get(pos).getId());
                             startActivity(edit_med1);
                         }
-                    });
 
+                        public void onSwipeLeft()
+                        {
+                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
+                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
+
+                        }
+                    });
+*/
                     main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -875,10 +1058,10 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                 View listItem = adapter5.getView(i, null, lstReminderTest);
                 listItem.measure(0, 0);
                 int list_child_item_height = listItem.getMeasuredHeight()+lstReminderMedicine1.getDividerHeight();//item height
-                total_height_medicine_tab += list_child_item_height; //
+                total_height_test_tab += list_child_item_height; //
             }
 
-            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
+            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
             lstReminderTest.setLayoutParams(l4);
             total_height_test_tab=0;
 

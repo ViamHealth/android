@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -537,12 +538,12 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                         final EditText input = new EditText(getActivity());
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
-                        Global_Application.food_item=lstResultBreakfast.get(arg2).getId();
-                        Global_Application.food_quantity=input.getText().toString().trim();
+                        Global_Application.food_item=lstResultBreakfast.get(arg2).getFoodItem();
                         Global_Application.meal_type="BREAKFAST";
                         alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 if(isInternetOn()){
+                                    Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
                                     task.activity =getActivity();
                                     task.execute();
@@ -629,6 +630,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View v) {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         final EditText input = new EditText(getActivity());
+                        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
                         Global_Application.food_item=lstResultLunch.get(arg2).getId();
@@ -824,14 +826,17 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
                         Global_Application.food_item=lstResultDinner.get(arg2).getId();
-                        Global_Application.food_quantity=input.getText().toString().trim();
                         Global_Application.meal_type="DINNER";
                         alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 if(isInternetOn()){
-                                    CallEditTask task = new CallEditTask();
-                                    task.activity =getActivity();
-                                    task.execute();
+                                    if(input.getText()!=null)
+                                    {
+                                        Global_Application.food_quantity=input.getText().toString().trim();
+                                        CallEditTask task = new CallEditTask();
+                                        task.activity =getActivity();
+                                        task.execute();
+                                    }
                                 }else{
                                     Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                 }
@@ -935,8 +940,24 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                         alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 if(isInternetOn()){
-                                    Global_Application.user_calories=txt_calorie.getText().toString();
-                                    Global_Application.time_spent=txt_time.getText().toString();
+                                    if(txt_calorie.getText()!=null)
+                                    {
+                                        Global_Application.user_calories=txt_calorie.getText().toString();
+                                    }
+                                    else
+                                    {
+                                        Global_Application.user_calories=lstResultExercise.get(arg2).getCalories();
+                                    }
+
+                                    if(txt_time.getText()!=null)
+                                    {
+                                        Global_Application.time_spent=txt_time.getText().toString();
+                                    }
+                                    else
+                                    {
+                                        Global_Application.time_spent=lstResultExercise.get(arg2).getTime();
+                                    }
+
                                     CallEditExercise task = new CallEditExercise();
                                     task.activity =getActivity();
                                     task.execute();
@@ -1253,7 +1274,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            Global_Application.totalcal=0;
             User user = getArguments().getParcelable("user");
             lstResultExercise = obj.getExercise(user.getId().toString());
             return null;

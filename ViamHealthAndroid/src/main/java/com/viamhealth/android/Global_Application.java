@@ -33,7 +33,7 @@ public class Global_Application extends Application
 	ArrayList<GoalData> lstResult = new ArrayList<GoalData>();
 	ArrayList<FoodData> lstFood = new ArrayList<FoodData>();
 	public static String selectedfoodid,selectedexerciseid,food_item,food_quantity,meal_type,weight,user_calories,time_spent,exercise_value;
-	public static int totalcal=0;
+	public static double totalcal=0;
 	public String path;
 	public String fileuri=null;
     public byte fileByte[]=null;
