@@ -450,8 +450,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             //conn.setRequestProperty("Content-Type", "docx;boundary=" + boundary);
             conn.setRequestProperty("file", fileName);
-            conn.setRequestProperty("user", user.getId().toString());
-            //conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
+            //conn.setRequestProperty("user", user.getId().toString());
+            conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
             if(file_desc.getText()!=null)
             {
                 conn.setRequestProperty("description", file_desc.getText().toString());

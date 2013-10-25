@@ -25,6 +25,7 @@ public class Downlaod extends Activity {
 	private long downloadReference;
 	Global_Application ga;
     ViamHealthPrefs appPrefs;
+    String user_id;
 
 
 	@Override
@@ -35,7 +36,8 @@ public class Downlaod extends Activity {
 		
 		ga=((Global_Application)getApplicationContext());
         appPrefs=new ViamHealthPrefs(getApplicationContext());
-		
+		user_id=getIntent().getStringExtra("user_id");
+        Toast.makeText(getApplicationContext(),"user_id after receiving "+user_id,Toast.LENGTH_LONG).show();
 		setview();
 	}
 
@@ -58,7 +60,7 @@ public class Downlaod extends Activity {
 				// TODO Auto-generated method stub
 				finish();  
 			}
-		});    
+		});
 	}       
 public void startdownload(){
 //	Bundle bundle = getIntent().getExtras();
@@ -66,10 +68,10 @@ public void startdownload(){
 	//List<String> lst = Arrays.asList(ga.getDownload().split("\\s*,\\s*"));
     List<String> lst = Arrays.asList(ga.getDownload().split(","));
 	for(int i=0;i<lst.size();i++){
-	   Log.e("TAG","url is : " + lst.get(i).toString());
+	   Log.e("TAG","url is : " + lst.get(i).toString()+"/?user="+user_id);
 	   downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
 	   //Uri Download_Uri = Uri.parse("http://api.viamhealth.com/healthfiles/download/69/");
-       Uri Download_Uri = Uri.parse(lst.get(i).toString());
+       Uri Download_Uri = Uri.parse(lst.get(i).toString()+"/?user="+user_id);
        Toast.makeText(getApplicationContext(), "Download Uri = "+Download_Uri.toString(), Toast.LENGTH_SHORT).show();
         Toast.makeText(getApplicationContext(), "Toast = "+appPrefs.getToken().toString(), Toast.LENGTH_SHORT).show();
 

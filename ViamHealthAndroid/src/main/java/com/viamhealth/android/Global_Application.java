@@ -36,6 +36,7 @@ public class Global_Application extends Application
 	public static double totalcal=0;
 	public String path;
 	public String fileuri=null;
+    public String currentUser=null;
     public byte fileByte[]=null;
 	public String addvalType;
 	public String weightid,cholesterolid,glucoseid,bpid;

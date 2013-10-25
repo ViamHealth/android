@@ -17,6 +17,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.viamhealth.android.model.ObjectA;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
@@ -392,7 +395,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             conn.setRequestProperty("file", fileName);
-            conn.setRequestProperty("user", user.getId().toString());
+            conn.setRequestProperty("user", ga.getLoggedInUser().getId().toString());
             conn.setRequestProperty("description", "description");
             dos = new DataOutputStream(conn.getOutputStream());
 
@@ -520,6 +523,18 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     }
 
                     byteArray = stream.toByteArray();
+
+                    Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                    sharingIntent.setType("*/*");
+
+
+
+                    //sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "This is the text that will be shared.");
+                    ObjectA obj=new ObjectA();
+                    obj.setByteValue(byteArray);
+                    sharingIntent.putExtra(Intent.EXTRA_STREAM, obj);
+                    startActivity(Intent.createChooser(sharingIntent, "Share using"));
+
                     Toast.makeText(getActivity(),"read count="+count,Toast.LENGTH_LONG).show();
                     ga.setFileByte(byteArray);
 
@@ -648,8 +663,10 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 String url1=(url.toString().substring(0, url.length()-5)).replace("/download/","/");
 
                 ga.setDownload(url.toString().substring(0, url.length()-5));
-                Toast.makeText(getActivity(),"Url for download is "+url.toString().substring(0, url.length()-5),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(),"user_id "+ga.getLoggedInUser().getId().toString(),Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getActivity(),Downlaod.class);
+                //ga.currentUser=user.getId();
+                i.putExtra("user_id",ga.getLoggedInUser().getId().toString());
                 startActivity(i);
             }else{
                 Toast.makeText(getActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();

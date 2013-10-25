@@ -54,7 +54,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	ArrayList<String> msgArray = new ArrayList<String>();
 	List<User> lstFamily = null;
 	ProgressDialog dialog;
-	
+
 	UserEP userEndPoint;
 	User user;
     private DisplayImageOptions options;
