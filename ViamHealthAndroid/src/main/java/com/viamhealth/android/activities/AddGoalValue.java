@@ -1,7 +1,9 @@
 package com.viamhealth.android.activities;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.AddBPValue;
@@ -27,8 +30,10 @@ import com.viamhealth.android.activities.oldones.AddCholesterolGoal;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
+import com.viamhealth.android.utils.UIUtility;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class AddGoalValue extends BaseFragmentActivity {
@@ -38,6 +43,8 @@ public class AddGoalValue extends BaseFragmentActivity {
 
     AddValueBaseFragment fragment;
     MedicalConditions type;
+
+    boolean shouldUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,15 +86,7 @@ public class AddGoalValue extends BaseFragmentActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isValid()){
-                    Intent intent = new Intent();
-                    GoalReadings reading = fragment.getReadings();
-                    reading.setReadingDate(cal.getTime());
-                    intent.putExtra("reading", reading);
-                    intent.putExtra("type", type);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
+                confirm();
             }
         });
 
@@ -102,14 +101,18 @@ public class AddGoalValue extends BaseFragmentActivity {
 
         Intent intent = getIntent();
         type = (MedicalConditions) intent.getSerializableExtra("type");
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArray("readings", intent.getParcelableArrayExtra("readings"));
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        fragment = (AddValueBaseFragment) getFragment(type);
+        fragment = (AddValueBaseFragment) getFragment(type, bundle);
         ft.add(R.id.container, fragment);
         ft.commit();
         getSupportFragmentManager().executePendingTransactions();
     }
 
-    private Fragment getFragment(MedicalConditions mc) {
+    private Fragment getFragment(MedicalConditions mc, Bundle bundle) {
         Class fragmentClass = null;
         switch(mc){
             case Obese: fragmentClass = AddWeightValue.class; break;
@@ -117,11 +120,53 @@ public class AddGoalValue extends BaseFragmentActivity {
             case Diabetes: fragmentClass = AddDiabetesValue.class; break;
             case Cholesterol: fragmentClass = AddCholesterolValue.class; break;
         }
-        return Fragment.instantiate(this, fragmentClass.getName(), null);
+        return Fragment.instantiate(this, fragmentClass.getName(), bundle);
+    }
+
+    private void save() {
+        if(isValid()){
+            Intent intent = new Intent();
+            GoalReadings reading = fragment.getReadings(cal.getTime());
+            reading.setReadingDate(cal.getTime());
+            reading.setIsToUpdate(shouldUpdate);
+            intent.putExtra("reading", reading);
+            intent.putExtra("type", type);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
+    private void confirm() {
+
+        Calendar dayCal = UIUtility.getDate(cal);
+
+        if(fragment.doesExist(dayCal.getTime())){
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddGoalValue.this);
+            builder.setTitle("Are you sure?");
+            builder.setMessage("value for the date exists, change it?")
+                    .setCancelable(false)
+                    .setPositiveButton("Sure..", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            shouldUpdate = true;
+                            save();
+                        }
+                    })
+                    .setNegativeButton("Nope..", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            shouldUpdate = false;
+                            save();
+                        }
+                    });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        }
     }
 
     private boolean isValid() {
-
         return true;
     }
 
@@ -134,8 +179,8 @@ public class AddGoalValue extends BaseFragmentActivity {
 
     private void setTime() {
         time.setText(new StringBuilder()
-                .append(cal.get(Calendar.HOUR)).append(":")
-                .append(cal.get(Calendar.MINUTE)).append(":")
+                .append(cal.getDisplayName(Calendar.HOUR, Calendar.LONG, Locale.US)).append(":")
+                .append(cal.getDisplayName(Calendar.MINUTE, Calendar.LONG, Locale.US)).append(":")
                 .append(cal.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US)));
     }
 
@@ -153,7 +198,13 @@ public class AddGoalValue extends BaseFragmentActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
             cal.set(year, monthOfYear, dayOfMonth);
-            setDate();
+
+            Calendar dayCal = UIUtility.getDate(cal);
+
+            if(fragment.doesExist(dayCal.getTime()))
+                Toast.makeText(AddGoalValue.this, "value exists for this date..", Toast.LENGTH_SHORT).show();
+            else
+                setDate();
         }
     };
 }

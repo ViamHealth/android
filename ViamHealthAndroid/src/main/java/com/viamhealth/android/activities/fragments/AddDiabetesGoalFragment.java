@@ -66,11 +66,15 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
         if(goal!=null){
             isGoalConfigured = true;
-            tRBS.setText(goal.getRbs());
-            tFBS.setText(goal.getFbs());
+            tRBS.setText(String.valueOf(goal.getRbs()));
+            tFBS.setText(String.valueOf(goal.getFbs()));
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+        } else {
+            tRBS.setText(String.valueOf(140));
+            tFBS.setText(String.valueOf(100));
         }
+
 
         return view;
     }

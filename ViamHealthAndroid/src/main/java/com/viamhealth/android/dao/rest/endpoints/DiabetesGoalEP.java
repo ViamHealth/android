@@ -86,4 +86,9 @@ public class DiabetesGoalEP extends GoalsEP{
         ((DiabetesGoal)goal).setFbs(jsonGoal.getInt("fasting"));
         ((DiabetesGoal)goal).setRbs(jsonGoal.getInt("random"));
     }
+
+    @Override
+    public boolean updateReading(GoalReadings reading) {
+        return ((DiabetesGoalReading) reading).isToUpdate();
+    }
 }

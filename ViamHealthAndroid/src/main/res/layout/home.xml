@@ -11,6 +11,29 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
+            android:layout_height="280dp"
+            android:id="@+id/core_layout">
+
+            <ScrollView android:layout_height="match_parent"
+                android:layout_width="fill_parent"
+                android:splitMotionEvents="false"
+                android:fadingEdgeLength="0dp">
+                <LinearLayout
+                    android:id="@+id/main_layout"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:baselineAligned="false">
+
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
             android:background="#77000000"
@@ -54,26 +77,5 @@
                 android:layout_marginBottom="30dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/core_layout">
-
-            <ScrollView android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
-                 android:splitMotionEvents="false"
-    android:fadingEdgeLength="0dp">
-                <LinearLayout
-                    android:id="@+id/main_layout"
-                    android:layout_height="fill_parent"
-                    android:layout_width="fill_parent"
-                    android:padding="5dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                </LinearLayout>
-            </ScrollView>
-        </LinearLayout>
     </FrameLayout>
 </LinearLayout>

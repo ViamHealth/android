@@ -72,4 +72,9 @@ public class WeightGoalEP extends GoalsEP {
         ((WeightGoal.HealthyRange) range).setMaxWeight(hWeightRange.getDouble("max"));
         ((WeightGoal.HealthyRange) range).setMinWeight(hWeightRange.getDouble("min"));
     }
+
+    @Override
+    public boolean updateReading(GoalReadings reading) {
+        return false;
+    }
 }
