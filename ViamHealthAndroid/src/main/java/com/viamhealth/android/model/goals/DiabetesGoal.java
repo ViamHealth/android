@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by naren on 18/10/13.
  */
@@ -13,6 +16,18 @@ public class DiabetesGoal extends Goal {
 
     private int fbs;
     private int rbs;
+
+    @Override
+    public List<GoalReadings> getReadings() {
+        return readings;
+    }
+
+    @Override
+    public void setReadings(List<GoalReadings> readings) {
+        for(GoalReadings reading : readings){
+            this.readings.add((DiabetesGoalReading) reading);
+        }
+    }
 
     public int getFbs() {
         return fbs;
@@ -58,6 +73,7 @@ public class DiabetesGoal extends Goal {
         super(in);
         fbs = in.readInt();
         rbs = in.readInt();
+        readings = in.readArrayList(null);
     }
 
     @Override
@@ -65,6 +81,8 @@ public class DiabetesGoal extends Goal {
         super.writeToParcel(dest, flags);
         dest.writeInt(fbs);
         dest.writeInt(rbs);
+        DiabetesGoalReading[] readArr = new DiabetesGoalReading[this.readings.size()];
+        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
     }
 
     @Override

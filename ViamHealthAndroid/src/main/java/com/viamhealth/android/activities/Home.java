@@ -12,6 +12,7 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.utils.UIUtility;
 
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -345,7 +346,7 @@ public class Home extends BaseActivity implements OnClickListener{
         bottom_layout.setVisibility(View.VISIBLE);
         int blHeight = bottom_layout.getHeight();
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) core_layout.getLayoutParams();
-        params.height = height - blHeight;
+        params.height = height - blHeight - UIUtility.dpToPx(Home.this, 20);
         core_layout.setLayoutParams(params);
     }
 

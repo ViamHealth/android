@@ -94,4 +94,9 @@ public class BPGoalEP extends GoalsEP {
         ((BPGoal) goal).setDiastolicPressure(jsonGoal.getInt("diastolic_pressure"));
         ((BPGoal) goal).setPulseRate(jsonGoal.getInt("pulse_rate"));
     }
+
+    @Override
+    public boolean updateReading(GoalReadings reading) {
+        return false;
+    }
 }

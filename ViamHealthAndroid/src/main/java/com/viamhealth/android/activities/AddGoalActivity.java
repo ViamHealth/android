@@ -59,9 +59,12 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         setContentView(R.layout.activity_add_goal);
 
         Intent intent = getIntent();
+        Bundle goalsConfigured = intent.getBundleExtra("goals");
+
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", intent.getParcelableExtra("user"));
-        bundle.putBundle("goals", intent.getBundleExtra("goals"));
+        bundle.putBundle("goals", goalsConfigured);
+
 
         fm = new AddGoalFragmentManager(this, R.id.add_goal_data_layout);
         fm.addFragment(MedicalConditions.Diabetes, AddDiabetesGoalFragment.class, bundle);
@@ -94,7 +97,7 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AddGoalActivity.this);
         builder.setTitle("Set Goals for...");
-        String[] mcs = getMedicalConditions();
+        String[] mcs = getMedicalConditions(goalsConfigured);
         final String[] items = Arrays.copyOf(mcs, mcs.length);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -124,10 +127,12 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         builder.show();
     }
 
-    private String[] getMedicalConditions() {
+    private String[] getMedicalConditions(Bundle goalsConfigued) {
         MedicalConditions[] mcs = MedicalConditions.values();
         String[] items = new String[mcs.length];
         for (int i=0; i<mcs.length; i++){
+            if(goalsConfigued.containsKey(mcs[i].name()))
+                continue;
             items[i] = getString(mcs[i].key());
         }
 

@@ -179,6 +179,6 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="add_another_profile">add another profile</string><string name="label_create_healthy_goal_trailer">time to create some
-                healthy goals....</string>
+                healthy goals....</string><string name="random_sugar">random sugar value</string><string name="fasting_sugar">fasting sugar value</string>
 
 </resources>

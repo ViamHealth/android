@@ -1,17 +1,30 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 
+import com.facebook.internal.Utility;
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.goals.BPGoalReading;
 import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
+import com.viamhealth.android.utils.UIUtility;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by naren on 18/10/13.
@@ -19,41 +32,108 @@ import com.viamhealth.android.model.goals.WeightGoalReadings;
 public class AddDiabetesValue extends AddValueBaseFragment {
 
     View view;
-    EditText sugar;
-    Switch type;
+    EditText fasting, random;
+    CheckBox cbfasting, cbrandom;
 
-    boolean isFasting;
+    boolean isFasting, isRandom, isUpdate = false;
 
+    Map<Date, DiabetesGoalReading> readingsMap = null;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        List<Parcelable> readings = Arrays.asList(getArguments().getParcelableArray("readings"));
+        if(readings!=null){
+            int count = readings.size();
+            readingsMap = new HashMap<Date, DiabetesGoalReading>(count);
+            for(int i=0; i<count; i++){
+                DiabetesGoalReading reading = (DiabetesGoalReading) readings.get(i);
+                readingsMap.put(reading.getReadingDate(), reading);
+            }
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_diabetes_value, container, false);
 
-        sugar = (EditText) view.findViewById(R.id.input_sugar);
-        type = (Switch) view.findViewById(R.id.input_sugar_type);
-        type.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        fasting = (EditText) view.findViewById(R.id.input_fasting);
+        fasting.setVisibility(View.GONE);
+        random = (EditText) view.findViewById(R.id.input_random);
+        random.setVisibility(View.GONE);
+
+        cbfasting = (CheckBox) view.findViewById(R.id.cbFasting);
+        cbrandom = (CheckBox) view.findViewById(R.id.cbRandom);
+
+        cbfasting.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    isFasting = true;
-                }else{
-                    isFasting = false;
-                }
+                isFasting = isChecked;
+                if(isFasting) fasting.setVisibility(View.VISIBLE);
+                else fasting.setVisibility(View.GONE);
             }
         });
-        type.setChecked(true);
+        cbrandom.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isRandom = isChecked;
+                if(isRandom) random.setVisibility(View.VISIBLE);
+                else random.setVisibility(View.GONE);
+            }
+        });
 
         return view;
     }
 
     @Override
-    public GoalReadings getReadings() {
+    public GoalReadings getReadings(Date date) {
         DiabetesGoalReading reading = new DiabetesGoalReading();
+        DiabetesGoalReading origReading = null;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal = UIUtility.getDate(cal);
+
+        if(readingsMap!=null)
+            origReading = readingsMap.get(cal.getTime());
 
         if(isFasting)
-            reading.setFbs(Integer.parseInt(sugar.getText().toString()));
-        else
-            reading.setRbs(Integer.parseInt(sugar.getText().toString()));
+            reading.setFbs(Integer.parseInt(fasting.getText().toString()));
+        if(isRandom)
+            reading.setRbs(Integer.parseInt(random.getText().toString()));
+
+        if(origReading!=null){
+            if(reading.getFbs()==0) reading.setFbs(origReading.getFbs());
+            if(reading.getRbs()==0) reading.setRbs(origReading.getRbs());
+        }
+
+        reading.setIsToUpdate(isUpdate);
+
         return reading;
+    }
+
+    @Override
+    public boolean doesExist(Date date) {
+        if(!readingsMap.containsKey(date))
+            return false;
+
+        DiabetesGoalReading reading = readingsMap.get(date);
+
+        if(reading.getRbs()>0 && reading.getFbs()>0){
+            //isUpdate = false;
+            return true;
+        }
+
+//        if(reading.getRbs()==0 && reading.getFbs()==0)
+//            isUpdate = false;
+//
+//        if(reading.getRbs()==0 || reading.getFbs()==0)
+//            isUpdate = true;
+
+        return false;
     }
 }

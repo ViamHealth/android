@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -51,7 +52,7 @@ import java.util.Set;
  */
 public class GoalFragment extends Fragment implements View.OnClickListener {
 
-    Map<MedicalConditions, List<GoalReadings>> goalReadingsMap = new HashMap<MedicalConditions, List<GoalReadings>>();
+    //Map<MedicalConditions, List<GoalReadings>> goalReadingsMap = new HashMap<MedicalConditions, List<GoalReadings>>();
     Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
     Map<MedicalConditions, List<JsonGraphDataBuilder.JsonOutput.GraphSeries>> supportedSeries = new HashMap<MedicalConditions, List<JsonGraphDataBuilder.JsonOutput.GraphSeries>>();
     Map<Integer, GraphFragment> graphFragments = new HashMap<Integer, GraphFragment>();
@@ -132,7 +133,10 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
      */
     public String getDataForGraph(MedicalConditions mc) {
 
-        List<GoalReadings> readings = goalReadingsMap.get(mc);
+        if(!goalsConfiguredMap.containsKey(mc))
+            return null;
+
+        List<GoalReadings> readings = goalsConfiguredMap.get(mc).getReadings();
         Goal goal = goalsConfiguredMap.get(mc);
 
         JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
@@ -296,6 +300,10 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View view) {
                         Intent i = new Intent(getActivity(), AddGoalValue.class);
                         i.putExtra("type", mc);
+                        List<GoalReadings> grs = goalsConfiguredMap.get(mc).getReadings();
+                        Parcelable[] readings = new Parcelable[grs.size()];
+                        readings = grs.toArray(readings);
+                        i.putExtra("readings", readings);
                         startActivityForResult(i, ACTION_ADD_GOAL_VALUE);
                     }
                 });
@@ -315,16 +323,20 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected GoalReadings doInBackground(GoalReadings... readings) {
-            List<GoalReadings> rds = goalReadingsMap.get(type);
+            Goal goal = goalsConfiguredMap.get(type);
+            List<GoalReadings> rds = goal.getReadings();
             GoalReadings reading = null;
             if(rds==null)
                 rds = new ArrayList<GoalReadings>();
             for(int i=0; i<readings.length; i++){
                 reading = goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId());
+                if(readings[i].isToUpdate()){
+                    rds.remove(i);
+                }
                 rds.add(reading);
             }
-            goalReadingsMap.put(type, rds);
-
+            goal.setReadings(rds);
+            goalsConfiguredMap.put(type, goal);
             return reading;
         }
 
@@ -387,7 +399,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         @Override
         protected Void doInBackground(Void... params) {
             goalsConfiguredMap = goalHelper.getAllGoalsConfigured(selectedUser.getId());
-            goalReadingsMap = goalHelper.getAllGoalReadings(selectedUser.getId());
+            //goalReadingsMap = goalHelper.getAllGoalReadings(selectedUser.getId());
             if(selectedUser.getBmiProfile().isEmpty())
                 selectedUser.setBmiProfile(userEP.getUserBMIProfile(selectedUser.getId()));
             return null;

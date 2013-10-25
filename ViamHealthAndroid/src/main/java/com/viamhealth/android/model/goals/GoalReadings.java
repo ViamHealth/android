@@ -21,6 +21,16 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
     Date readingDate;
     String comments;
 
+    private Boolean isToUpdate = false;
+
+    public boolean isToUpdate() {
+        return isToUpdate;
+    }
+
+    public void setIsToUpdate(boolean doUpdate) {
+        this.isToUpdate = doUpdate;
+    }
+
     public Long getGoalId() {
         return goalId;
     }
@@ -66,6 +76,7 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
         this.goalId = in.readLong();
         this.readingDate = new Date(in.readLong());
         this.comments = in.readString();
+        this.isToUpdate = (Boolean) in.readValue(null);
     }
 
     @Override
@@ -79,6 +90,7 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
         dest.writeLong(this.goalId);
         dest.writeLong(this.readingDate==null?0:this.readingDate.getTime());
         dest.writeString(this.comments);
+        dest.writeValue(isToUpdate);
     }
 
     public JSONObject parentJSON() {

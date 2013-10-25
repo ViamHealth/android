@@ -9,31 +9,53 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="48dp"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
-        <Switch
-            android:layout_width="fill_parent"
+        <CheckBox
+            android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:id="@+id/input_sugar_type"
-            android:background="@drawable/switch_track_holo_light"
-            android:textOff="@string/random"
-            android:textOn="@string/fasting" />
+            android:text="@string/fasting"
+            android:id="@+id/cbFasting"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp" />
+
+        <CheckBox
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:text="@string/random"
+            android:id="@+id/cbRandom"
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
             android:inputType="numberSigned"
             android:ems="10"
-            android:id="@+id/input_sugar"
+            android:id="@+id/input_fasting"
             style="@style/EditTextGreenTheme"
-            android:hint="@string/diabetes_reading"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:hint="@string/fasting_sugar" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:inputType="numberSigned"
+            style="@style/EditTextGreenTheme"
+            android:ems="10"
+            android:id="@+id/input_random"
+            android:gravity="center_vertical|center_horizontal"
+            android:hint="@string/random_sugar"
+            android:layout_marginTop="10dp" />
     </LinearLayout>
+
 </LinearLayout>
