@@ -105,6 +105,7 @@ public abstract class GoalsEP extends BaseEP {
 
     }
 
+    abstract public boolean updateReading(final GoalReadings reading);
     abstract protected String getReadingsURL();
     abstract protected String getGoalURL();
     abstract protected Goal newGoal();
@@ -129,6 +130,9 @@ public abstract class GoalsEP extends BaseEP {
             e.printStackTrace();
         }
 
+        if(client.getResponseCode() != HttpStatus.SC_OK)
+            return null;
+
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
         return processGoalReading(responseString);
@@ -136,7 +140,6 @@ public abstract class GoalsEP extends BaseEP {
     }
 
     public GoalReadings createGoalReadings(Long userId, GoalReadings readings) {
-
         RestClient client = getRestClient(getReadingsURL(), userId);
         client.AddParam("reading_date", formater.format(readings.getReadingDate()));
 
@@ -148,15 +151,12 @@ public abstract class GoalsEP extends BaseEP {
             e.printStackTrace();
         }
 
-        //this is a hack for time being
-        if(client.getResponseCode()== HttpStatus.SC_CREATED)
-            return readings;
+        if(client.getResponseCode() != HttpStatus.SC_CREATED)
+            return null;
 
-        return null;
-
-        /*String responseString = client.getResponse();
+        String responseString = client.getResponse();
         Log.i(TAG, client.toString());
-        return processGoalReading(responseString);*/
+        return processGoalReading(responseString);
     }
 
     public Goal createGoalForUser(Long userId, Goal goal) {
@@ -241,7 +241,7 @@ public abstract class GoalsEP extends BaseEP {
         return readings;
     }
 
-    private Goal processGoalResponse(JSONObject jsonGoal){
+    public Goal processGoalResponse(JSONObject jsonGoal){
         Goal goal = newGoal();
         try{
             goal.setId(jsonGoal.getLong("id"));
@@ -249,7 +249,7 @@ public abstract class GoalsEP extends BaseEP {
             goal.setTargetDate(formater.parse(jsonGoal.getString("target_date")));
             goal.setHealthyRange(processGoalHealthyRange(goal, jsonGoal.getJSONObject("healthy_range")));
             processParams(goal, jsonGoal);
-
+            goal.setReadings(processGoalReadings(jsonGoal.getJSONArray("readings")));
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -270,7 +270,7 @@ public abstract class GoalsEP extends BaseEP {
         return hRange;
     }
 
-    private Goal processGoalResponse(String jsonResponse){
+    public Goal processGoalResponse(String jsonResponse){
         Goal goal = null;
         try{
             JSONObject jsonGoal = new JSONObject(jsonResponse);

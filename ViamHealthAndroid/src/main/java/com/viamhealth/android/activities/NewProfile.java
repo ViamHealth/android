@@ -364,8 +364,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         lastName.setText(user.getLastName());
 
         if(user.getProfile()!=null) {
-            SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-            dob.setText(formater.format(user.getProfile().getDob()));
+            if(user.getProfile().getDob()!=null) {
+                SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+                dob.setText(formater.format(user.getProfile().getDob()));
+            }
 
             updateGender(user.getProfile().getGender());
 

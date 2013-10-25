@@ -87,5 +87,10 @@ public class CholesterolGoalEP extends GoalsEP {
         ((CholesterolGoal) goal).setHdl(jsonGoal.getInt("hdl"));
         ((CholesterolGoal) goal).setLdl(jsonGoal.getInt("ldl"));
         ((CholesterolGoal) goal).setTriglycerides(jsonGoal.getInt("triglycerides"));
-    }    
+    }
+
+    @Override
+    public boolean updateReading(GoalReadings reading) {
+        return false;
+    }
 }

@@ -39,7 +39,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
         user = getArguments().getParcelable("user");
         Bundle bundle = getArguments().getBundle("goals");
         if(!bundle.isEmpty())
-            goal = (BPGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
+            goal = (BPGoal) bundle.getParcelable(MedicalConditions.BloodPressure.name());
 
         dialog = new ProgressDialog(getActivity());
 

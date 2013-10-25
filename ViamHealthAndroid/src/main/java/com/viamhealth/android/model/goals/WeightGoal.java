@@ -7,11 +7,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by naren on 11/10/13.
  */
 public class WeightGoal extends Goal implements Parcelable {
     double weight;
+    //List<WeightGoalReadings> readings = new ArrayList<WeightGoalReadings>();
+
+    @Override
+    public List<GoalReadings> getReadings() {
+        return readings;
+    }
+
+    @Override
+    public void setReadings(List<GoalReadings> readings) {
+        for(GoalReadings reading : readings){
+            this.readings.add((WeightGoalReadings) reading);
+        }
+    }
 
     public WeightGoal() {
         super();
@@ -48,6 +64,7 @@ public class WeightGoal extends Goal implements Parcelable {
     public WeightGoal(Parcel in) {
         super(in);
         this.weight = in.readDouble();
+        this.readings = in.readArrayList(null);
     }
 
     @Override
@@ -59,6 +76,8 @@ public class WeightGoal extends Goal implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeDouble(this.weight);
+        WeightGoalReadings[] readArr = new WeightGoalReadings[this.readings.size()];
+        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
     }
 
     public static final Parcelable.Creator<WeightGoal> CREATOR = new Parcelable.Creator<WeightGoal>() {

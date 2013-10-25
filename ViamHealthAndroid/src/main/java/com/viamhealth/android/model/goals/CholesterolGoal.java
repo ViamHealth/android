@@ -8,6 +8,9 @@ import com.viamhealth.android.utils.JsonGraphDataBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by naren on 20/10/13.
  */
@@ -17,6 +20,18 @@ public class CholesterolGoal extends Goal {
     int ldl;
     int triglycerides;
     int total;
+
+    @Override
+    public List<GoalReadings> getReadings() {
+        return readings;
+    }
+
+    @Override
+    public void setReadings(List<GoalReadings> readings) {
+        for(GoalReadings reading : readings){
+            this.readings.add((CholesterolGoalReading) reading);
+        }
+    }
 
     public int getHdl() {
         return hdl;
@@ -69,6 +84,7 @@ public class CholesterolGoal extends Goal {
         ldl = in.readInt();
         triglycerides = in.readInt();
         total = in.readInt();
+        readings = in.readArrayList(null);
     }
 
     @Override
@@ -78,6 +94,8 @@ public class CholesterolGoal extends Goal {
         dest.writeInt(ldl);
         dest.writeInt(triglycerides);
         dest.writeInt(total);
+        CholesterolGoalReading[] readArr = new CholesterolGoalReading[this.readings.size()];
+        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
     }
 
     @Override
