@@ -98,9 +98,13 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
 <<<<<<< HEAD
+<<<<<<< HEAD
     double target_ideal_calories=0;
 
 
+=======
+    //double target_ideal_calories=1500;
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
 =======
     //double target_ideal_calories=1500;
 >>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
@@ -1311,7 +1315,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
 =======
 >>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
         double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
