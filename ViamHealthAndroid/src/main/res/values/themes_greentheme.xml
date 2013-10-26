@@ -41,6 +41,18 @@
 
     <item name="android:spinnerItemStyle">@style/SpinnerItemGreenTheme</item>
 
+  <item name="android:actionBarItemBackground">@drawable/selectable_background_greentheme</item>
+  <item name="android:popupMenuStyle">@style/PopupMenu.Greentheme</item>
+  <item name="android:dropDownListViewStyle">@style/DropDownListView.Greentheme</item>
+  <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Greentheme</item>
+  <item name="android:actionDropDownStyle">@style/DropDownNav.Greentheme</item>
+  <item name="android:actionBarStyle">@style/ActionBar.Solid.Greentheme</item>
+  <item name="android:actionModeBackground">@drawable/cab_background_top_greentheme</item>
+  <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_greentheme</item>
+  <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Greentheme</item>
+
+
+
   </style>
 
 </resources>

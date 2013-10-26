@@ -13,4 +13,5 @@
     <color name="header_border_shadow">#ffffff</color>
     <color name="section_color">#f0f0f0</color>
 
+    <color name="pressed_greentheme">#CC37AA4F</color>
 </resources>

@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -63,7 +64,7 @@ import java.util.HashMap;
 /**
  * Created by naren on 07/10/13.
  */
-public class JournalFragment extends Fragment implements View.OnClickListener {
+public class JournalFragment extends SherlockFragment implements View.OnClickListener {
 
     Display display;
     int height,width;

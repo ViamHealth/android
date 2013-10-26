@@ -53,6 +53,14 @@ public class ProfilePictureView extends FrameLayout {
     }
 
     /**
+     * Callback interface that will be called when the profilePicture is loaded
+     */
+    public interface OnImageLoadedListener {
+
+        void onLoad(Bitmap image);
+    }
+
+   /**
      * Tag used when logging calls are made by ProfilePictureView
      */
     public static final String TAG = ProfilePictureView.class.getSimpleName();
@@ -110,6 +118,7 @@ public class ProfilePictureView extends FrameLayout {
     private int presetSizeType = CUSTOM;
     private ImageRequest lastRequest;
     private OnErrorListener onErrorListener;
+    private OnImageLoadedListener onImageLoadedListener;
     private Bitmap customizedDefaultProfilePicture = null;
 
     /**
@@ -416,10 +425,17 @@ public class ProfilePictureView extends FrameLayout {
 	}
     }
 
+    public void setOnImageLoadedListener(OnImageLoadedListener listener){
+        onImageLoadedListener = listener;
+    }
+
     private void setImageBitmap(Bitmap imageBitmap) {
         if (image != null && imageBitmap != null) {
             imageContents = imageBitmap; // Hold for save-restore cycles
             image.setImageBitmap(imageBitmap);
+            if(onImageLoadedListener!=null){
+                onImageLoadedListener.onLoad(imageBitmap);
+            }
         }
     }
 

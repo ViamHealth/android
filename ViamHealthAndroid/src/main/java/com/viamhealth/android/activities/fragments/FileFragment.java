@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -61,7 +62,7 @@ import java.util.ArrayList;
 /**
  * Created by naren on 08/10/13.
  */
-public class FileFragment extends Fragment implements View.OnClickListener {
+public class FileFragment extends SherlockFragment implements View.OnClickListener {
 
     User user;
 

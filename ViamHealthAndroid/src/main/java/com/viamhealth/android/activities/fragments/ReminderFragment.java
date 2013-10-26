@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
@@ -63,7 +64,7 @@ import java.util.Date;
 /**
  * Created by naren on 08/10/13.
  */
-public class ReminderFragment extends Fragment implements View.OnClickListener {
+public class ReminderFragment extends SherlockFragment implements View.OnClickListener {
 
     private User user;
     private View view;
