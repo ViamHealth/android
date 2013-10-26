@@ -84,7 +84,17 @@ public class CholesterolGoal extends Goal {
         ldl = in.readInt();
         triglycerides = in.readInt();
         total = in.readInt();
-        readings = in.readArrayList(null);
+        int readingsCount = in.readInt();
+        CholesterolGoalReading[] readArr = new CholesterolGoalReading[readingsCount];
+        if(readingsCount>0){
+            in.readTypedArray(readArr, CholesterolGoalReading.CREATOR);
+            this.readings = new ArrayList<GoalReadings>(readingsCount);
+            for(int i=0; i<readingsCount; i++){
+                this.readings.add(readArr[i]);
+            }
+        }else{
+            this.readings = new ArrayList<GoalReadings>();
+        }
     }
 
     @Override
@@ -94,8 +104,10 @@ public class CholesterolGoal extends Goal {
         dest.writeInt(ldl);
         dest.writeInt(triglycerides);
         dest.writeInt(total);
-        CholesterolGoalReading[] readArr = new CholesterolGoalReading[this.readings.size()];
-        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
+        int readingsCount = this.readings==null?0:this.readings.size();
+        CholesterolGoalReading[] readArr = new CholesterolGoalReading[readingsCount];
+        dest.writeInt(readingsCount);
+        dest.writeTypedArray(this.readings.toArray(readArr), flags);
     }
 
     @Override

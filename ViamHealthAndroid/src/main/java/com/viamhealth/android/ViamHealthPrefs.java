@@ -47,7 +47,7 @@ public class ViamHealthPrefs {
     }
 
     public void setTargetCaloriesPerDay(int targetCaloriesPerDay) {
-        this.prefsEditor.putInt("targetCalories", targetCaloriesPerDay);
+        this.prefsEditor.putInt("targetCalories", targetCaloriesPerDay).commit();
     }
 
     public String getSheight() {

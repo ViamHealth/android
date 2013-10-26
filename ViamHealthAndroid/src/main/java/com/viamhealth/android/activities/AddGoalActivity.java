@@ -130,13 +130,14 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
     private String[] getMedicalConditions(Bundle goalsConfigued) {
         MedicalConditions[] mcs = MedicalConditions.values();
         String[] items = new String[mcs.length];
+        int actualSize = 0;
         for (int i=0; i<mcs.length; i++){
             if(goalsConfigued.containsKey(mcs[i].name()))
                 continue;
-            items[i] = getString(mcs[i].key());
+            items[actualSize++] = getString(mcs[i].key());
         }
 
-        return items;
+        return Arrays.copyOf(items, actualSize);
     }
 
     @Override

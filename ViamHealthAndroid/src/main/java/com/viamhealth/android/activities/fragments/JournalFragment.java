@@ -97,7 +97,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
-    double target_ideal_calories=1500;
+    //double target_ideal_calories=1500;
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
@@ -1304,8 +1304,9 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     {
         Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
 
-        lbltotcal.setText("Total Ideal Calories"+" "+Global_Application.total_ideal_calories+" Calories");
-        lblidealcal.setText("Target Ideal Calories"+" "+target_ideal_calories+" Calories");
+        double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
+        lbltotcal.setText("Total Calories Consumed"+" "+Global_Application.total_ideal_calories+" Calories");
+        lblidealcal.setText("Total Target Calories"+" "+target_ideal_calories+" Calories");
 
         if(Global_Application.total_ideal_calories > target_ideal_calories)
         {
@@ -1319,7 +1320,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             lblcaldiff.setText("You are under the daily Limit by "+(target_ideal_calories-Global_Application.total_ideal_calories));
             lblcaldiff.setTextColor(Color.WHITE);
             lblcalmsg.setText("Good Job! You are On track :)");
-            lblcalmsg.setTextColor(Color.GREEN);
+            lblcalmsg.setTextColor(0xFF37AA4F);
         }
 
         Global_Application.total_ideal_calories=0;
