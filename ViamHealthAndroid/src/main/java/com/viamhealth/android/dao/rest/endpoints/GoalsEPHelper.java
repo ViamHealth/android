@@ -110,8 +110,9 @@ public class GoalsEPHelper extends BaseEP {
         Map<MedicalConditions, Goal> map = new LinkedHashMap<MedicalConditions, Goal>();
 
         WeightGoal weightGoal = (WeightGoal)weight.getGoalsForUser(userId);
-        if(weightGoal != null)
+        if(weightGoal != null){
             map.put(MedicalConditions.Obese, weightGoal);
+        }
 
         DiabetesGoal dGoal = (DiabetesGoal) sugar.getGoalsForUser(userId);
         if(dGoal != null)

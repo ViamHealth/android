@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
+import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddGoalActivity;
 import com.viamhealth.android.activities.AddGoalValue;
 import com.viamhealth.android.activities.TabActivity;
@@ -35,11 +36,17 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.goals.WeightGoal;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.utils.BMRCalculator;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.JsonGraphDataBuilder;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -70,6 +77,8 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
     FrameLayout initial_layout;
     LinearLayout final_layout;
 
+    ViamHealthPrefs appPrefs;
+
     //WebView webView;
     //ImageButton addValue;
 
@@ -91,6 +100,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
         goalHelper = new GoalsEPHelper(getActivity(), (Global_Application)getActivity().getApplicationContext());
         userEP = new UserEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
+        appPrefs = new ViamHealthPrefs(getActivity());
 
         dialog = new ProgressDialog(getActivity());
         dialog.setCanceledOnTouchOutside(false);
@@ -317,6 +327,18 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void updateTargetCalories(User user, WeightGoal goal) {
+        if(user==null || goal==null)
+            return;
+
+        int calories = BMRCalculator.getCaloriesToBeReducedPerDay(goal);
+        int totalCalories = BMRCalculator.calculateBMR(user.getBmiProfile().getWeight(), user.getBmiProfile().getHeight(),
+                user.getProfile().getAge(), user.getProfile().getGender());
+
+        int targetCaloriesPerDay = totalCalories - calories;
+        appPrefs.setTargetCaloriesPerDay(targetCaloriesPerDay);
+    }
+
     public class SaveGoalReading extends AsyncTask<GoalReadings, Void, GoalReadings> {
 
         MedicalConditions type;
@@ -365,6 +387,8 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
             for(int i=0; i<goals.length; i++){
                 goalsConfiguredMap.put(type, goalHelper.createGoal(type, goals[i], selectedUser.getId()));
             }
+            if(type==MedicalConditions.Obese)
+                updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
             return null;
         }
 
@@ -400,6 +424,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         protected Void doInBackground(Void... params) {
             goalsConfiguredMap = goalHelper.getAllGoalsConfigured(selectedUser.getId());
             //goalReadingsMap = goalHelper.getAllGoalReadings(selectedUser.getId());
+            updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
             if(selectedUser.getBmiProfile().isEmpty())
                 selectedUser.setBmiProfile(userEP.getUserBMIProfile(selectedUser.getId()));
             return null;

@@ -4,29 +4,30 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 /**
  * Created by naren on 22/10/13.
  */
-public class SlidableLinearLayout extends LinearLayout {
+public class SlidableListView extends RefreshableListView {
 
     OnSlideEventListener listener;
     float historicX = Float.NaN, historicY = Float.NaN;
     static final int TRIGGER_DELTA = 50;
 
-    public void setOnSwipeEventListener(OnSlideEventListener listener) {
+    public void setOnSlideEventListener(OnSlideEventListener listener) {
         this.listener = listener;
     }
 
-    public SlidableLinearLayout(Context context) {
+    public SlidableListView(Context context) {
         super(context);
     }
 
-    public SlidableLinearLayout(Context context, AttributeSet attrs) {
+    public SlidableListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SlidableLinearLayout(Context context, AttributeSet attrs, int defStyle) {
+    public SlidableListView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -51,7 +52,7 @@ public class SlidableLinearLayout extends LinearLayout {
                     return super.onTouchEvent(e);
             }
         }
-        return super.onTouchEvent(e);
+        return true;//super.onTouchEvent(e);
     }
 
     public enum Direction { RIGHT, LEFT; }

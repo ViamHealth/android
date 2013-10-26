@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.enums.BMIClassifier;
+import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.LifeStyle;
 
 /**
@@ -58,11 +59,11 @@ public class BMIProfile implements Parcelable {
         this.bmiClassifier = bmiClassifier;
     }
 
-    public Integer getBmr() {
+    public int getBmr() {
         return bmr;
     }
 
-    public void setBmr(Integer bmr) {
+    public void setBmr(int bmr) {
         this.bmr = bmr;
     }
 

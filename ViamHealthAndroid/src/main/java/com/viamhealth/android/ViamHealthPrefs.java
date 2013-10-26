@@ -35,13 +35,22 @@ public class ViamHealthPrefs {
 	public String profilepic = "profilepic";
 	//public String dateAdded = "dateAdded";
 
+    public int targetCaloriesPerDay;
+
 	public ViamHealthPrefs(Context context) {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();
 	}
 
-	
-	public String getSheight() {
+    public int getTargetCaloriesPerDay() {
+        return appSharedPrefs.getInt("targetCalories", 0);
+    }
+
+    public void setTargetCaloriesPerDay(int targetCaloriesPerDay) {
+        this.prefsEditor.putInt("targetCalories", targetCaloriesPerDay);
+    }
+
+    public String getSheight() {
 		return appSharedPrefs.getString(sheight, "0");
 	}
 

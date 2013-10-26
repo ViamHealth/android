@@ -7,6 +7,7 @@ import com.facebook.model.GraphLocation;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -24,6 +25,15 @@ public class Profile implements Parcelable{
 
     private String fbProfileId;
     private String fbUsername;
+
+    public int getAge() {
+        Calendar nowCal = Calendar.getInstance();
+        Calendar dobCal = Calendar.getInstance();
+        dobCal.setTime(dob);
+
+        return nowCal.get(Calendar.YEAR) - dobCal.get(Calendar.YEAR);
+        //Long diff = now.getTime() - dob.getTime();
+    }
 
     public String getFbUsername() {
         return fbUsername;
