@@ -67,8 +67,20 @@ public class WeightGoal extends Goal implements Parcelable {
     public WeightGoal(Parcel in) {
         super(in);
         this.weight = in.readDouble();
+
         //this.readings = in.readArr();
 
+        int readingsCount = in.readInt();
+        WeightGoalReadings[] readArr = new WeightGoalReadings[readingsCount];
+        if(readingsCount>0){
+            in.readTypedArray(readArr, WeightGoalReadings.CREATOR);
+            this.readings = new ArrayList<GoalReadings>(readingsCount);
+            for(int i=0; i<readingsCount; i++){
+                 this.readings.add(readArr[i]);
+            }
+        }else{
+            this.readings = new ArrayList<GoalReadings>();
+        }
     }
 
     @Override

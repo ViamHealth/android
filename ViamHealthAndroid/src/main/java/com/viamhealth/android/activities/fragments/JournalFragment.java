@@ -99,6 +99,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     int pYear,pMonth,pDay;
     double target_ideal_calories=0;
 
+
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
