@@ -35,6 +35,7 @@ public class Global_Application extends Application
 	public static String selectedfoodid,selectedexerciseid,food_item,food_quantity,meal_type,weight,user_calories,time_spent,exercise_value;
 	public static double totalcal=0;
 	public String path;
+    public static double total_ideal_calories=0;
 	public String fileuri=null;
     public String currentUser=null;
     public byte fileByte[]=null;

@@ -165,6 +165,10 @@
                                     android:layout_weight="1"
                                     android:textColor="#666666"/>
                             </LinearLayout>
+                            <ScrollView
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="vertical">
                             <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
@@ -191,12 +195,15 @@
                                     android:headerDividersEnabled="false"
                                     android:footerDividersEnabled="false"
                                     android:layout_height="wrap_content"
+                                    android:fastScrollEnabled="true"
                                     android:listSelector="@drawable/list_item_selector"
                                     android:id="@+id/lstViewBreakfast" />
 
 
                             </LinearLayout>
+                            </ScrollView>
                         </LinearLayout>
+
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical">
@@ -426,7 +433,7 @@
                                 android:visibility="gone">
 
                                 <ImageView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:src="@drawable/food_icon"
                                     android:visibility="invisible"/>
                                 <TextView android:layout_height="wrap_content"
@@ -559,6 +566,117 @@
                                     android:id="@+id/lstViewExercise" />
                             </LinearLayout>
                         </LinearLayout>
+
+
+
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:gravity="center_vertical"
+                                android:id="@+id/total_ideal_calories"
+                                android:orientation="horizontal">
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:text="Total Ideal Calories"
+                                    android:textSize="16sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbl_total_calories"
+                                    android:textColor="#ffffff"/>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:background="#37AA4F"
+                                android:gravity="center_vertical"
+                                android:id="@+id/target_ideal_calories"
+                                android:orientation="horizontal">
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="0dp"
+                                    android:text="Target Ideal Calories"
+                                    android:textSize="16sp"
+                                    android:layout_weight="4"
+                                    android:gravity="center"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbl_ideal_calories"
+                                    android:textColor="#ffffff"/>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical"
+                            android:layout_marginTop="10dp">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:gravity="center_vertical"
+                                android:id="@+id/target_ideal_calories"
+                                android:orientation="vertical"
+                                android:background="#37AA4F">
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="fill_parent"
+                                    android:text="You are under the daily Limit by"
+                                    android:textSize="16sp"
+                                    android:gravity="center"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:textColor="#ffffff"
+                                    android:id="@+id/lbl_cal_diff"/>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical"
+                            android:layout_marginTop="15dp">
+                            <LinearLayout android:layout_height="wrap_content"
+                                android:layout_width="fill_parent"
+                                android:gravity="center_vertical"
+                                android:id="@+id/target_ideal_calories"
+                                android:orientation="vertical">
+                                <TextView android:layout_height="wrap_content"
+                                    android:layout_width="fill_parent"
+                                    android:text=""
+                                    android:textSize="18sp"
+                                    android:gravity="center"
+                                    android:paddingLeft="5dp"
+                                    android:textStyle="bold"
+                                    android:id="@+id/lbl_calorie_message"
+                                    android:textColor="#37AA4F"/>
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+
+
+
 
 
                     </LinearLayout>

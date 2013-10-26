@@ -9,6 +9,7 @@ import android.os.Parcelable;
  /** * Standard basic constructor for non-parcel * object creation */
 public class ObjectA implements Parcelable {
     public byte[] bytearray;
+    public byte[] readByteArray;
     /** * Standard basic constructor for non-parcel * object creation */
     public ObjectA() { ; };
     /** * * Constructor to use when re-constructing object * from a parcel
@@ -29,12 +30,16 @@ public class ObjectA implements Parcelable {
     @Override public int describeContents() { return 0; }
 
     @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(bytearray.length);
         dest.writeByteArray(bytearray);
     }
 
     private void readFromParcel(Parcel in) {
         // We just need to read back each // field in the order that it was // written to the parcel
-        in.readByteArray(bytearray);
+        readByteArray=new byte[in.readInt()];
+        in.readByteArray(readByteArray);
+
+        //in.readByteArray(readByteArray,ObjectA.class.getClassLoader());
     }
 
     public  final Parcelable.Creator CREATOR =

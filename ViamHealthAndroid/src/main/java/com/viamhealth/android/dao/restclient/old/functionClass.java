@@ -290,6 +290,7 @@ public class functionClass {
 								 Log.e("TAG","res : " + responseString1);
 								 Log.e("TAG","Calories : "  + jObject1.getString("calories"));
 								 Global_Application.totalcal+=jObject1.getDouble("calories")*multiplier;
+                                 Log.e("TAG","total_calories : " + Global_Application.totalcal);
 										 lstResult.add(new CategoryFood(c.getString("id"),c.getString("food_item"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count")));
 								
 								}catch (JSONException e) {

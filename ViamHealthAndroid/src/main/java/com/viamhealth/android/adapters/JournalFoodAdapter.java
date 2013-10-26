@@ -99,14 +99,13 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
 
         CategoryFood data = lstdata.get(position);
 
-        holder.foodname.setText(data.getName().toString());
-
-        float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
-
-        holder.calory.setText(String.valueOf(calories));
-
-        holder.surning.setText(data.getMultiplier().toString());
-
+        if(holder!=null)
+        {
+            holder.foodname.setText(data.getName().toString());
+            float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
+            holder.calory.setText(String.valueOf(calories));
+            holder.surning.setText(data.getMultiplier().toString());
+        }
        // holder.delete.setTag(data.getId().toString());
         return row;
     }
