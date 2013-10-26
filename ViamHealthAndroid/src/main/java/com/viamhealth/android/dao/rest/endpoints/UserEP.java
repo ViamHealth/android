@@ -144,6 +144,10 @@ public class UserEP extends BaseEP {
 
         String responseString = client.getResponse();
         List<User> users = processUsersResponse(responseString);
+        int usersCount = users==null?0:users.size();
+        for(int i=0; i<usersCount; i++){
+            users.get(i).setBmiProfile(getUserBMIProfile(users.get(i).getId()));
+        }
         return users;
     }
 

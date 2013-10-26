@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ public class WeightGoal extends Goal implements Parcelable {
 
     @Override
     public void setReadings(List<GoalReadings> readings) {
+        this.readings.clear();
         for(GoalReadings reading : readings){
             this.readings.add((WeightGoalReadings) reading);
         }
@@ -66,6 +68,7 @@ public class WeightGoal extends Goal implements Parcelable {
         super(in);
         this.weight = in.readDouble();
         //this.readings = in.readArr();
+
     }
 
     @Override
@@ -77,8 +80,10 @@ public class WeightGoal extends Goal implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeDouble(this.weight);
-        WeightGoalReadings[] readArr = new WeightGoalReadings[this.readings.size()];
-        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
+        int readingsCount = this.readings==null?0:this.readings.size();
+        WeightGoalReadings[] readArr = new WeightGoalReadings[readingsCount];
+        dest.writeInt(readingsCount);
+        dest.writeTypedArray(this.readings.toArray(readArr), flags);
     }
 
     public static final Parcelable.Creator<WeightGoal> CREATOR = new Parcelable.Creator<WeightGoal>() {
