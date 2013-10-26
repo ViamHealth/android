@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -220,11 +221,17 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 				ga.setLstFood(lstResult);
 				ga.setFoodPos(position);
                 Toast.makeText(getApplicationContext(),"onItemClick position "+position,Toast.LENGTH_LONG);
-				Intent foodDetail = new Intent(AddBreakfast.this, FoodDetail.class);
+				//Intent foodDetail = new Intent(AddBreakfast.this, FoodDetail.class);
 				//TabGroupActivity parentoption = (TabGroupActivity)AddBreakfast.this;
 				//parentoption.startChildActivity("foodDetail",foodDetail);
-                foodDetail.putExtra("user", user);
-                startActivityForResult(foodDetail, 1);
+                //foodDetail.putExtra("user", user);
+                //startActivityForResult(foodDetail, 1);
+                CallAddFoodTask tsk1= new CallAddFoodTask();
+                tsk1.execute();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("user", user);
+                setResult(RESULT_OK, returnIntent);
+                finish();
 			}
 		});
 		listfood.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
@@ -250,6 +257,49 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 				
 			
 	}
+
+
+    public class CallAddFoodTask extends AsyncTask <String, Void,String>
+    {
+        protected FragmentActivity activity;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog1 = new ProgressDialog(AddBreakfast.this);
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.setMessage("Please Wait....");
+            dialog1.show();
+            Toast.makeText(getApplicationContext(),"Food Detail position before async task"+ga.getFoodPos(),Toast.LENGTH_LONG);
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+            Log.i("onPostExecute", "onPostExecute");
+            dialog1.dismiss();
+            //listfood.removeAllViews();
+
+            if(result.equals("0")){
+                Toast.makeText(AddBreakfast.this, "Food added successfully...",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+
+            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1");
+        }
+
+    }
 
 
     @Override

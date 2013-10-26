@@ -78,7 +78,7 @@ public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
             holder.delete = (ImageView)row.findViewById(R.id.delete);
 
 
-            row.setTag(holder);
+            //row.setTag(holder);
         }
         else
         {
@@ -86,9 +86,12 @@ public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
         }
         Log.e("TAG",position+"");
         CategoryExercise data = lstdata.get(position);
-        holder.exercisename.setText(data.getName().toString());
-        holder.calory.setText(data.getCalories().toString());
-        holder.time.setText(data.getTime().toString());
+        if(holder!=null)
+        {
+            holder.exercisename.setText(data.getName().toString());
+            holder.calory.setText(data.getCalories().toString());
+            holder.time.setText(data.getTime().toString());
+        }
         //holder.delete.setTag(data.getId().toString());
         return row;
     }

@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -70,7 +71,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     int w15,w20,w10,w50,w5,h40,h10,h5,w2,h2,w110,h200,h20;
 
     TextView lblback,lbl_food_date,lbl_food_time,lblbrk,lbltotalbrkcal,lbllunch,
-            lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lblitem1,lblitem2,lblitem3,lblitem4;
+            lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lblitem1,lblitem2,lblitem3,lblitem4,lbltotcal,lblidealcal,lblcaldiff,lblcalmsg;
     LinearLayout settiglayout_food,back_food_layout,food_main_layout,food_mid_layout,
             btn_food_time_picker,btn_food_date_picker,food_header,layout1,layout2,layout3,layout4,breakfast,lunch,snacks,dinner,exercise;
     ImageView img_date,img_time,food_icon,addDinner,addExercise,addSnacks,addLunch,addBreakfast;
@@ -79,6 +80,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     ImageView img_breakfast,img_lunch,img_dinner,img_snacks,img_exercise;
     String nexturl,frm;
     Typeface tf;
+    Double breakfast_cal=0.0,lunch_cal=0.0,snacks_cal=0.0,dinner_cal=0.0,exercise_cal=0.0;
     ProgressDialog dialog1;
     String sub_url="diet-tracker/";
     boolean bolbrk,bollunch,bolsnaks,boldiner=false,bolexercise=false;
@@ -95,6 +97,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
+    double target_ideal_calories=1500;
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
@@ -105,7 +108,9 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_journal, container, false);
         fromOldCode();
+
         return view;
+
     }
 
     private void fromOldCode() {
@@ -158,6 +163,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         lblitem4 = (TextView)view.findViewById(R.id.lblitem4);
         lblitem4.getLayoutParams().width=w110;
+
+        lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
+        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
+        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
+        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
 
         breakfast = (LinearLayout)view.findViewById(R.id.breakfast);
         breakfast.setOnClickListener(this);
@@ -380,6 +390,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         pMonth = dateAndTime.get(Calendar.MONTH);
         pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
         updateDisplay();
+        /*
         lstViewBreakfast.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
 
             @Override
@@ -474,6 +485,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+        */
         lstViewBreakfast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -536,6 +548,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View v) {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         final EditText input = new EditText(getActivity());
+                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
                         Global_Application.food_item=lstResultBreakfast.get(arg2).getFoodItem();
@@ -630,15 +643,15 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View v) {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         final EditText input = new EditText(getActivity());
-                        input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
                         Global_Application.food_item=lstResultLunch.get(arg2).getId();
-                        Global_Application.food_quantity=input.getText().toString().trim();
                         Global_Application.meal_type="LUNCH";
                         alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 if(isInternetOn()){
+                                    Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
                                     task.activity =getActivity();
                                     task.execute();
@@ -725,14 +738,15 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View v) {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         final EditText input = new EditText(getActivity());
+                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
                         Global_Application.food_item=lstResultSnacks.get(arg2).getId();
-                        Global_Application.food_quantity=input.getText().toString().trim();
                         Global_Application.meal_type="SNACKS";
                         alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 if(isInternetOn()){
+                                    Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
                                     task.activity =getActivity();
                                     task.execute();
@@ -823,6 +837,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View v) {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                         final EditText input = new EditText(getActivity());
+                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
                         Global_Application.food_item=lstResultDinner.get(arg2).getId();
@@ -1231,17 +1246,18 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             }
 
             Log.e("TAG", "lst size : " + lstResultExercise.size());
-            int total_calories=0;
+            double total_calories=0.0;
             int i=0;
 
             for(i=0;i<lstResultExercise.size();i++)
             {
-                total_calories+=Integer.parseInt(lstResultExercise.get(i).getCalories());
+                total_calories+=Double.parseDouble(lstResultExercise.get(i).getCalories());
             }
 
             if(lstResultExercise.size()>0){
                 lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
                 lblexercisecal.setText(String.valueOf(total_calories));
+                exercise_cal=total_calories;
                 //ExerciseAdapter adapter = new ExerciseAdapter(getActivity(),R.layout.exercise_list, lstResultExercise);
                 JournalExerciseAdapter adapter = new JournalExerciseAdapter(getActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
                 lstViewExercise.setAdapter(adapter);
@@ -1268,6 +1284,9 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
             }
 
+
+            fillTrackingDetails();
+
         }
         @Override
         protected String doInBackground(String... params) {
@@ -1280,6 +1299,32 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         }
 
     }
+
+    void fillTrackingDetails()
+    {
+        Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
+
+        lbltotcal.setText("Total Ideal Calories"+" "+Global_Application.total_ideal_calories+" Calories");
+        lblidealcal.setText("Target Ideal Calories"+" "+target_ideal_calories+" Calories");
+
+        if(Global_Application.total_ideal_calories > target_ideal_calories)
+        {
+            lblcaldiff.setText("You crossed the calorie limit by "+(Global_Application.total_ideal_calories-target_ideal_calories));
+            lblcaldiff.setTextColor(Color.RED);
+            lblcalmsg.setText("You need to improve your Calorie Consumption");
+            lblcalmsg.setTextColor(Color.RED);
+        }
+        else
+        {
+            lblcaldiff.setText("You are under the daily Limit by "+(target_ideal_calories-Global_Application.total_ideal_calories));
+            lblcaldiff.setTextColor(Color.WHITE);
+            lblcalmsg.setText("Good Job! You are On track :)");
+            lblcalmsg.setTextColor(Color.GREEN);
+        }
+
+        Global_Application.total_ideal_calories=0;
+    }
+
 
     // async class for calling webservice and get responce message
     public class CallListTask extends AsyncTask <String, Void,String>
@@ -1308,9 +1353,18 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultBreakfast.size());
 
+            Double total_calories=0.0;
+            breakfast_cal=0.0;
+
+            for(int i=0;i<lstResultBreakfast.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultBreakfast.get(i).getCalories())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+            }
+
             if(lstResultBreakfast.size()>0){
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
-                lbltotalbrkcal.setText(Global_Application.totalcal+"");
+                lbltotalbrkcal.setText(total_calories+"");
+                breakfast_cal=total_calories;
                 //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
                 //JournalFoodAdapter adapter=
@@ -1394,13 +1448,22 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultLunch.size());
+            Double total_calories=0.0;
+            int i=0;
+            lunch_cal=0.0;
+            for(i=0;i<lstResultLunch.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultLunch.get(i).getCalories())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+            }
+
             if(lstResultLunch.size()>0){
                 lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
-                lbllunchcal.setText(Global_Application.totalcal+"");
+                lbllunchcal.setText(total_calories+"");
+                lunch_cal=total_calories;
                 //LunchAdapter adapter = new LunchAdapter(getActivity(),R.layout.lunch_food_list, lstResultLunch);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultLunch);
                 lstViewLunch.setAdapter(adapter);
-                int i=0,len=0;
+                int len=0;
                 for (i = 0, len = adapter.getCount(); i < len; i++) {
                     View listItem = adapter.getView(i, null, lstViewLunch);
                     listItem.measure(0, 0);
@@ -1472,13 +1535,23 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultSnacks.size());
+
+            Double total_calories=0.0;
+            int i=0;
+            snacks_cal=0.0;
+            for(i=0;i<lstResultSnacks.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultSnacks.get(i).getCalories())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+            }
+
             if(lstResultSnacks.size()>0){
                 lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
-                lblsnakcal.setText(Global_Application.totalcal+"");
+                lblsnakcal.setText(total_calories+"");
+                snacks_cal=total_calories;
                 //SnacksAdapter adapter = new SnacksAdapter(getActivity(),R.layout.snacks_food_list, lstResultSnacks);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultSnacks);
                 lstViewSnacks.setAdapter(adapter);
-                int i=0,len=0;
+                int len=0;
                 for (i = 0, len = adapter.getCount(); i < len; i++) {
                     View listItem = adapter.getView(i, null, lstViewSnacks);
                     listItem.measure(0, 0);
@@ -1550,14 +1623,26 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultDinner.size());
+
+            Double total_calories=0.0;
+            int i=0;
+            dinner_cal=0.0;
+            for(i=0;i<lstResultDinner.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultDinner.get(i).getCalories())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+            }
+
+
             if(lstResultDinner.size()>0){
                 lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
-                lbldinnercal.setText(Global_Application.totalcal+"");
+                lbldinnercal.setText(total_calories+"");
+                dinner_cal=total_calories;
+
                 //DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultDinner);
                 lstViewDinner.setAdapter(adapter);
                 lstViewDinner.setAdapter(adapter);
-                int i=0,len=0;
+                int len=0;
                 for (i = 0, len = adapter.getCount(); i < len; i++) {
                     View listItem = adapter.getView(i, null, lstViewDinner);
                     listItem.measure(0, 0);
@@ -1720,6 +1805,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+        Global_Application.total_ideal_calories=0;
         if(isInternetOn()){
             CallListTask task = new CallListTask();
             task.activity = getActivity();
@@ -1727,6 +1813,18 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         }else{
             Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
         }
+
+        bolbrk=false;
+        bollunch=false;
+        boldiner=false;
+        bolsnaks=false;
+        bolexercise=false;
+        lstViewBreakfast.setVisibility(View.GONE);
+        lstViewLunch.setVisibility(View.GONE);
+        lstViewSnacks.setVisibility(View.GONE);
+        lstViewDinner.setVisibility(View.GONE);
+        lstViewExercise.setVisibility(View.GONE);
+
     }
 
     // async class for calling webservice and get responce message
@@ -1759,7 +1857,6 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             }else{
                 Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
             }
-
         }
 
         @Override
@@ -1843,10 +1940,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            dialog1 = new ProgressDialog(activity);
-            dialog1.setCanceledOnTouchOutside(false);
-            dialog1.setMessage("Please Wait....");
-            dialog1.show();
+            //dialog1 = new ProgressDialog(activity);
+            //dialog1.setCanceledOnTouchOutside(false);
+            //dialog1.setMessage("Please Wait....");
+            //dialog1.show();
             Log.i("onPreExecute", "onPreExecute");
             Log.i("onPreExecute", "before calling delete task");
 
@@ -1854,16 +1951,16 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         protected void onPostExecute(String result)
         {
-            dialog1.dismiss();
+           // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            //if(isInternetOn()){
-          //      CallListTask task = new CallListTask();
-           //     task.activity = activity;
-           //     task.execute();
-           // }else{
-            //    Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
-          //  }
-            onResume();
+            if(isInternetOn()){
+                CallListTask task = new CallListTask();
+                task.activity = activity;
+                task.execute();
+            }else{
+                Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+            //onResume();
 
         }
 

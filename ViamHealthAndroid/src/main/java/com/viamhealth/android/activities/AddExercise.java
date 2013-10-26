@@ -2,12 +2,14 @@ package com.viamhealth.android.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,6 +51,25 @@ public class AddExercise extends Activity{
         calories_val=(EditText)findViewById(R.id.txt_calories);
         physical_activity_type=(Spinner)findViewById(R.id.exercise_type);
         physical_activity_type.setOnItemSelectedListener(new CustomOnExerciseSelectedListener());
+
+        //ArrayAdapter<String> yourAdapter=new ArrayAdapter<String>(this, R.layout.custom_spinner_item, R.array.duration_type);
+
+
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.time_type, R.layout.custom_spinner_item); //change the last argument here to your xml above.
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        time_check.setAdapter(typeAdapter);
+
+
+        ArrayAdapter<CharSequence> exerciseAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.exercise_list, R.layout.custom_spinner_item); //change the last argument here to your xml above.
+        //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        physical_activity_type.setAdapter(exerciseAdapter);
+
+
+        //TextView tv=(TextView)time_check.getSelectedView();
+        //tv.setTextColor(Color.BLACK);
+
         time_check.setOnItemSelectedListener(new CustomOnTimeSelectedListener());
 
 
