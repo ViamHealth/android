@@ -331,11 +331,12 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         if(user==null || goal==null)
             return;
 
-        int calories = BMRCalculator.getCaloriesToBeReducedPerDay(goal);
+        int calories = BMRCalculator.getCaloriesToBeReducedPerDay(user.getBmiProfile().getWeight()-goal.getWeight(), goal.getTargetDate());
         int totalCalories = BMRCalculator.calculateBMR(user.getBmiProfile().getWeight(), user.getBmiProfile().getHeight(),
                 user.getProfile().getAge(), user.getProfile().getGender());
 
         int targetCaloriesPerDay = totalCalories - calories;
+        Toast.makeText(getActivity(), "Calories Per Day - " + targetCaloriesPerDay, Toast.LENGTH_LONG).show();
         appPrefs.setTargetCaloriesPerDay(targetCaloriesPerDay);
     }
 

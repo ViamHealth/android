@@ -7,6 +7,7 @@ import com.viamhealth.android.model.users.User;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -28,27 +29,40 @@ public class BMRCalculator {
         if(user==null || goal==null)
             return null;
 
+        int idealCaloriesPerDay = user.getProfile().getGender()==Gender.Male?1500:1200;
 
+        int totalCalories = calculateBMR(user.getBmiProfile().getWeight(), user.getBmiProfile().getHeight(),
+                user.getProfile().getAge(), user.getProfile().getGender());
+
+
+        int targetCaloriesPerDay = totalCalories - idealCaloriesPerDay;
+
+        int daysRequired = getDaysToReachTargetWeight(goal.getWeight() - user.getBmiProfile().getWeight(), targetCaloriesPerDay);
+
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.DATE, daysRequired);
+
+        return now.getTime();
     }
 
-    public static int getCaloriesToBeReducedPerDay(WeightGoal goal) {
+    public static int getDaysToReachTargetWeight(double weightToReduce, int maxCaloriesReduciblePerDay) {
+        int caloriesPerKg = 7000;
+        Double daysToReachTarget = weightToReduce * caloriesPerKg / maxCaloriesReduciblePerDay;
+        return daysToReachTarget.intValue();
+    }
 
-        DateTime targetDate = new DateTime(goal.getTargetDate().getTime());
+    public static int getCaloriesToBeReducedPerDay(double weightToReduce, Date targetDate) {
+
+        DateTime targetDateTime = new DateTime(targetDate.getTime());
         DateTime now = new DateTime();
-        Days noOfDays = Days.daysBetween(now, targetDate);
+        Days noOfDays = Days.daysBetween(now, targetDateTime);
         int daysToReachTarget = noOfDays.getDays();
-        int weightToReduceInKgs = goal.getWeight()
 
         int caloriesPerKg = 7000;
 
-        int totalCaloriesToBeReducedPerDay = weightToReduceInKgs * caloriesPerKg / daysToReachTarget;
+        Double totalCaloriesToBeReducedPerDay = weightToReduce * caloriesPerKg / daysToReachTarget;
 
-        return totalCaloriesToBeReducedPerDay;
-
-    }
-
-    private void updateTargetCalories(User user, WeightGoal goal) {
+        return totalCaloriesToBeReducedPerDay.intValue();
 
     }
-
 }
