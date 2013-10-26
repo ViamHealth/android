@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class WeightGoal extends Goal implements Parcelable {
     double weight;
+
     //List<WeightGoalReadings> readings = new ArrayList<WeightGoalReadings>();
 
     @Override
@@ -64,7 +65,7 @@ public class WeightGoal extends Goal implements Parcelable {
     public WeightGoal(Parcel in) {
         super(in);
         this.weight = in.readDouble();
-        this.readings = in.readArr;
+        //this.readings = in.readArr();
     }
 
     @Override

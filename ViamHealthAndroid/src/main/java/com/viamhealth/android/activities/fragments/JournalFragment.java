@@ -97,7 +97,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
-    double target_ideal_calories=1500;
+    double target_ideal_calories=0;
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
@@ -1306,6 +1306,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         lbltotcal.setText("Total Ideal Calories"+" "+Global_Application.total_ideal_calories+" Calories");
         lblidealcal.setText("Target Ideal Calories"+" "+target_ideal_calories+" Calories");
+        target_ideal_calories=appPrefs.getTargetCaloriesPerDay();
 
         if(Global_Application.total_ideal_calories > target_ideal_calories)
         {
