@@ -39,11 +39,13 @@ public class GraphFragment extends Fragment implements GoalFragment.OnGoalDataCh
     String json = "";
     OnClickAddValueListener listener;
 
+    MedicalConditions type;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_graph, container, false);
 
-        MedicalConditions type = (MedicalConditions) getArguments().getSerializable("type");
+        type = (MedicalConditions) getArguments().getSerializable("type");
         json = getArguments().getString("json");
 
         webView = (WebView) view.findViewById(R.id.webView);
@@ -71,6 +73,10 @@ public class GraphFragment extends Fragment implements GoalFragment.OnGoalDataCh
         });
 
         return view;
+    }
+
+    public MedicalConditions getType() {
+        return type;
     }
 
     @Override

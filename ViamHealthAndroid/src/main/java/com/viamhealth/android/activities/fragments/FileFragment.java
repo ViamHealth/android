@@ -34,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.model.ObjectA;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -64,7 +66,7 @@ import java.util.ArrayList;
 /**
  * Created by naren on 08/10/13.
  */
-public class FileFragment extends Fragment implements View.OnClickListener {
+public class FileFragment extends SherlockFragment implements View.OnClickListener {
 
     User user;
 
@@ -108,10 +110,10 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
         user = getArguments().getParcelable("user");
 
-        appPrefs = new ViamHealthPrefs(getActivity());
-        obj=new functionClass(getActivity());
-        ga=((Global_Application)getActivity().getApplicationContext());
-        tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Condensed.ttf");
+        appPrefs = new ViamHealthPrefs(getSherlockActivity());
+        obj=new functionClass(getSherlockActivity());
+        ga=((Global_Application)getSherlockActivity().getApplicationContext());
+        tf = Typeface.createFromAsset(getSherlockActivity().getAssets(), "Roboto-Condensed.ttf");
 
         // get screen height and width
         ScreenDimension();
@@ -149,10 +151,10 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 // TODO Auto-generated method stub
                 if(isInternetOn()){
                     CallFileSearchTask task = new CallFileSearchTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -200,10 +202,10 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 
                     if(isInternetOn()){
                         CallFileNevigationTask task = new CallFileNevigationTask();
-                        task.activity =getActivity();
+                        task.activity =getSherlockActivity();
                         task.execute();
                     }else{
-                        Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -233,16 +235,16 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         if(isInternetOn()){
             CallFileSearchTask task = new CallFileSearchTask();
-            task.activity =getActivity();
+            task.activity =getSherlockActivity();
             task.execute();
         }else{
-            Toast.makeText(getActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void ScreenDimension()
     {
-        display = getActivity().getWindowManager().getDefaultDisplay();
+        display = getSherlockActivity().getWindowManager().getDefaultDisplay();
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
         height = display.getHeight();
@@ -253,7 +255,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -279,7 +281,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     /*
     public String getRealPathFromURI(Uri contentUri)
     {
-        Cursor cursor = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
+        Cursor cursor = getSherlockActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
         if(cursor != null && cursor.moveToFirst())
         {
             do {
@@ -294,7 +296,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
 */
 
     private String getRealPathFromURI(Uri contentURI) {
-        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
+        Cursor cursor = getSherlockActivity().getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) { // Source is Dropbox or other similar local file path
             return contentURI.getPath();
         } else {
@@ -467,14 +469,14 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inSampleSize=4;
-                    InputStream fi=getActivity().getContentResolver().openInputStream(chosenImageUri);
+                    InputStream fi=getSherlockActivity().getContentResolver().openInputStream(chosenImageUri);
 
                     //File file=new File(chosenImageUri.toString());
                     //FileInputStream input = new FileInputStream(file);
                     FileInputStream input=(FileInputStream)fi;
 
                     byte[] buf=new byte[4096];
-                    mBitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(chosenImageUri),null,options);
+                    mBitmap = BitmapFactory.decodeStream(getSherlockActivity().getContentResolver().openInputStream(chosenImageUri),null,options);
                     options.inPurgeable = true;
                     System.runFinalization();
                     Runtime.getRuntime().gc();
@@ -487,11 +489,11 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     int count=0;
                     if(chosenstring.contains("content://"))
                     {
-                        ContentResolver cR = getActivity().getContentResolver();
+                        ContentResolver cR = getSherlockActivity().getContentResolver();
                         MimeTypeMap mime = MimeTypeMap.getSingleton();
                         type = mime.getExtensionFromMimeType(cR.getType(chosenImageUri));
                         String contentType=cR.getType(chosenImageUri);
-                        Toast.makeText(getActivity(),"Mime type=,Content type="+type + " "+contentType,Toast.LENGTH_LONG).show();
+                        Toast.makeText(getSherlockActivity(),"Mime type=,Content type="+type + " "+contentType,Toast.LENGTH_LONG).show();
                         String[] splitval=chosenstring.split("//");
                         path=splitval[1];
                     }
@@ -535,10 +537,10 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                     sharingIntent.putExtra(Intent.EXTRA_STREAM, obj);
                     startActivity(Intent.createChooser(sharingIntent, "Share using"));
 
-                    Toast.makeText(getActivity(),"read count="+count,Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSherlockActivity(),"read count="+count,Toast.LENGTH_LONG).show();
                     ga.setFileByte(byteArray);
 
-                    Intent myintent= new Intent(getActivity(),UploadFile.class);
+                    Intent myintent= new Intent(getSherlockActivity(),UploadFile.class);
                     startActivity(myintent);
 
                     stream.flush();
@@ -576,7 +578,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 b1.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byteArray = stream.toByteArray();
                 ga.setFileByte(byteArray);
-                Intent myintent= new Intent(getActivity(),UploadFile.class);
+                Intent myintent= new Intent(getSherlockActivity(),UploadFile.class);
                 startActivity(myintent);
 
                 Base64str = Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -620,7 +622,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         if(v==lbl_upload){
             // reditect uplod file screen
             uploadImage();
-            //Intent displayImage = new Intent(getActivity(),UploadFile.class);
+            //Intent displayImage = new Intent(getSherlockActivity(),UploadFile.class);
             //displayImage.putExtra("user", user);
             //startActivityForResult(displayImage, 1);
         }
@@ -637,14 +639,14 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 Log.e("TAG", delid.toString().substring(0, delid.length() - 5) + " th cb is checked");
                 if(isInternetOn()){
                     DeleteFileTask task = new DeleteFileTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                     //appPrefs.setReloadgraph("0");
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
-                Toast.makeText(getActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
             }
         }
         if(v==lbl_download){
@@ -653,7 +655,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             for(int i=0;i<lstResult.size();i++){
                 if(lstResult.get(i).isChecked()){
                     url=lstResult.get(i).getDownload_url() + "," + url;
-                    Toast.makeText(getActivity(), "Download URL.."+url, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(), "Download URL.."+url, Toast.LENGTH_SHORT).show();
                     val=true;
                 }
             }
@@ -663,13 +665,13 @@ public class FileFragment extends Fragment implements View.OnClickListener {
                 String url1=(url.toString().substring(0, url.length()-5)).replace("/download/","/");
 
                 ga.setDownload(url.toString().substring(0, url.length()-5));
-                Toast.makeText(getActivity(),"user_id "+ga.getLoggedInUser().getId().toString(),Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getActivity(),Downlaod.class);
+                Toast.makeText(getSherlockActivity(),"user_id "+ga.getLoggedInUser().getId().toString(),Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getSherlockActivity(),Downlaod.class);
                 //ga.currentUser=user.getId();
                 i.putExtra("user_id",ga.getLoggedInUser().getId().toString());
                 startActivity(i);
             }else{
-                Toast.makeText(getActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
             }
         }
         if(v==lbl_share)
@@ -706,7 +708,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getSherlockActivity());
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -721,13 +723,13 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             dialog.dismiss();
             if(lstResult.size()>0){
                 goal_count.setText("("+lstResult.size()+")");
-                FileDataAdapter adapter = new FileDataAdapter(getActivity(),R.layout.filelist, lstResult);
+                FileDataAdapter adapter = new FileDataAdapter(getSherlockActivity(),R.layout.filelist, lstResult);
                 //TODO avoid creating objects every time
                 listfile.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listfile.onRefreshComplete();
             }else{
-                Toast.makeText(getActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -751,7 +753,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getSherlockActivity());
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -766,13 +768,13 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             dialog.dismiss();
             if(lstResult.size()>0){
                 goal_count.setText("("+lstResult.size()+")");
-                FileDataAdapter adapter = new FileDataAdapter(getActivity(),R.layout.filelist, lstResult);
-                Toast.makeText(getActivity(), "number of files == ..." + lstResult.size(),Toast.LENGTH_SHORT).show();
+                FileDataAdapter adapter = new FileDataAdapter(getSherlockActivity(),R.layout.filelist, lstResult);
+                Toast.makeText(getSherlockActivity(), "number of files == ..." + lstResult.size(),Toast.LENGTH_SHORT).show();
                 listfile.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listfile.onRefreshComplete();
             }else{
-                Toast.makeText(getActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -796,7 +798,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getSherlockActivity());
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -812,12 +814,12 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             Log.e("TAG","File list size : " + lstResult.size());
             if(lstResult.size()>0){
                 goal_count.setText("("+lstResult.size()+")");
-                FileDataAdapter adapter = new FileDataAdapter(getActivity(),R.layout.filelist, lstResult);
+                FileDataAdapter adapter = new FileDataAdapter(getSherlockActivity(),R.layout.filelist, lstResult);
                 listfile.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listfile.onRefreshComplete();
             }else{
-                Toast.makeText(getActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -841,7 +843,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getSherlockActivity());
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -856,11 +858,11 @@ public class FileFragment extends Fragment implements View.OnClickListener {
             dialog.dismiss();
             if(isInternetOn()){
                 CallFileTask task = new CallFileTask();
-                task.activity =getActivity();
+                task.activity =getSherlockActivity();
                 task.execute();
                 appPrefs.setReloadgraph("0");
             }else{
-                Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -886,7 +888,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getSherlockActivity());
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -916,7 +918,7 @@ public class FileFragment extends Fragment implements View.OnClickListener {
     // function for check internet is available or not
     public final boolean isInternetOn() {
 
-        ConnectivityManager connec = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
                 || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)

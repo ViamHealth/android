@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -64,7 +65,7 @@ import java.util.HashMap;
 /**
  * Created by naren on 07/10/13.
  */
-public class JournalFragment extends Fragment implements View.OnClickListener {
+public class JournalFragment extends SherlockFragment implements View.OnClickListener {
 
     Display display;
     int height,width;
@@ -115,11 +116,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
     private void fromOldCode() {
 
-        appPrefs = new ViamHealthPrefs(getActivity());
-        obj=new functionClass(getActivity());
-        ga=((Global_Application)getActivity().getApplicationContext());
+        appPrefs = new ViamHealthPrefs(getSherlockActivity());
+        obj=new functionClass(getSherlockActivity());
+        ga=((Global_Application)getSherlockActivity().getApplicationContext());
 
-        tf = Typeface.createFromAsset(getActivity().getAssets(), "Roboto-Condensed.ttf");
+        tf = Typeface.createFromAsset(getSherlockActivity().getAssets(), "Roboto-Condensed.ttf");
         //for get screen height width
         ScreenDimension();
 
@@ -401,10 +402,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     frm="b";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getActivity();
+                        task.activity =getSherlockActivity();
                         task.execute();
                     }else{
-                        Toast.makeText(getActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -419,10 +420,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     frm="l";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getActivity();
+                        task.activity =getSherlockActivity();
                         task.execute();
                     }else{
-                        Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -437,10 +438,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     frm="s";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getActivity();
+                        task.activity =getSherlockActivity();
                         task.execute();
                     }else{
-                        Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -455,10 +456,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     frm="e";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getActivity();
+                        task.activity =getSherlockActivity();
                         task.execute();
                     }else{
-                        Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                     }
 
             }
@@ -477,10 +478,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     frm="d";
                     if(isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getActivity();
+                        task.activity =getSherlockActivity();
                         task.execute();
                     }else{
-                        Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -494,14 +495,14 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 // TODO Auto-generated method stub
                 LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
                 ga.setSelectedfoodid(lstResultBreakfast.get(arg2).getId());
-                //Toast.makeText(getActivity(),"user id="+lstResultBreakfast.get(arg2).getId(),Toast.LENGTH_LONG ).show();
+                //Toast.makeText(getSherlockActivity(),"user id="+lstResultBreakfast.get(arg2).getId(),Toast.LENGTH_LONG ).show();
                 view.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View arg0) {
                         // TODO Auto-generated method stub
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                getActivity());
+                                getSherlockActivity());
 
                         // set title
                         alertDialogBuilder.setTitle("Confirmation");
@@ -518,10 +519,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         if(isInternetOn()){
                                             sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
-                                            task.activity =getActivity();
+                                            task.activity =getSherlockActivity();
                                             task.execute();
                                         }else{
-                                            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -546,8 +547,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        final EditText input = new EditText(getActivity());
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        final EditText input = new EditText(getSherlockActivity());
                         input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
@@ -558,10 +559,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                 if(isInternetOn()){
                                     Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
-                                    task.activity =getActivity();
+                                    task.activity =getSherlockActivity();
                                     task.execute();
                                 }else{
-                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -596,7 +597,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View arg0) {
                         // TODO Auto-generated method stub
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                getActivity());
+                                getSherlockActivity());
 
                         // set title
                         alertDialogBuilder.setTitle("Confirmation");
@@ -613,10 +614,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         if(isInternetOn()){
                                             sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
-                                            task.activity =getActivity();
+                                            task.activity =getSherlockActivity();
                                             task.execute();
                                         }else{
-                                            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -641,8 +642,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        final EditText input = new EditText(getActivity());
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        final EditText input = new EditText(getSherlockActivity());
                         input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
@@ -653,10 +654,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                 if(isInternetOn()){
                                     Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
-                                    task.activity =getActivity();
+                                    task.activity =getSherlockActivity();
                                     task.execute();
                                 }else{
-                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -691,7 +692,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View arg0) {
                         // TODO Auto-generated method stub
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                getActivity());
+                                getSherlockActivity());
 
                         // set title
                         alertDialogBuilder.setTitle("Confirmation");
@@ -708,10 +709,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         if(isInternetOn()){
                                             sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
-                                            task.activity =getActivity();
+                                            task.activity =getSherlockActivity();
                                             task.execute();
                                         }else{
-                                            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -736,8 +737,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        final EditText input = new EditText(getActivity());
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        final EditText input = new EditText(getSherlockActivity());
                         input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
@@ -748,10 +749,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                 if(isInternetOn()){
                                     Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
-                                    task.activity =getActivity();
+                                    task.activity =getSherlockActivity();
                                     task.execute();
                                 }else{
-                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -789,7 +790,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View arg0) {
                         // TODO Auto-generated method stub
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                getActivity());
+                                getSherlockActivity());
 
                         // set title
                         alertDialogBuilder.setTitle("Confirmation");
@@ -806,10 +807,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         if(isInternetOn()){
                                             sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
-                                            task.activity =getActivity();
+                                            task.activity =getSherlockActivity();
                                             task.execute();
                                         }else{
-                                            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -835,8 +836,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        final EditText input = new EditText(getActivity());
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        final EditText input = new EditText(getSherlockActivity());
                         input.setInputType(InputType.TYPE_CLASS_NUMBER);
                         alert.setMessage("Enter Number of Servings");
                         alert.setView(input);
@@ -849,11 +850,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                     {
                                         Global_Application.food_quantity=input.getText().toString().trim();
                                         CallEditTask task = new CallEditTask();
-                                        task.activity =getActivity();
+                                        task.activity =getSherlockActivity();
                                         task.execute();
                                     }
                                 }else{
-                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -889,7 +890,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                     public void onClick(View arg0) {
                         // TODO Auto-generated method stub
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                getActivity());
+                                getSherlockActivity());
 
                         // set title
                         alertDialogBuilder.setTitle("Confirmation");
@@ -906,10 +907,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                         if(isInternetOn()){
                                             sub_url="user-physical-activity/";
                                             CallDeleteTask task = new CallDeleteTask();
-                                            task.activity =getActivity();
+                                            task.activity =getSherlockActivity();
                                             task.execute();
                                         }else{
-                                            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 })
@@ -934,11 +935,11 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(View v) {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        //final EditText calories = new EditText(getActivity());
-                        //final EditText time_spent = new EditText(getActivity());
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        //final EditText calories = new EditText(getSherlockActivity());
+                        //final EditText time_spent = new EditText(getSherlockActivity());
                         //LinearLayout l1= new LinearLayout(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
-                        LayoutInflater li = getActivity().getLayoutInflater();// LayoutInflater.from(getBaseContext());
+                        LayoutInflater li = getSherlockActivity().getLayoutInflater();// LayoutInflater.from(getBaseContext());
                         View view = li.inflate(R.layout.edit_exercise, null);
 
                         alert.setMessage("Enter Calories and Time");
@@ -974,10 +975,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                                     }
 
                                     CallEditExercise task = new CallEditExercise();
-                                    task.activity =getActivity();
+                                    task.activity =getSherlockActivity();
                                     task.execute();
                                 }else{
-                                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -1016,7 +1017,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
     public void ScreenDimension()
     {
-        display = getActivity().getWindowManager().getDefaultDisplay();
+        display = getSherlockActivity().getWindowManager().getDefaultDisplay();
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
         height = display.getHeight();
@@ -1137,15 +1138,15 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
 
         if(v==back_food_layout){
-            getActivity().finish();
+            getSherlockActivity().finish();
         }
         if(v==btn_food_date_picker){
-            new DatePickerDialog(getActivity(), d,pYear,
+            new DatePickerDialog(getSherlockActivity(), d,pYear,
                     pMonth,
                     pDay).show();
         }
         if(v==btn_food_time_picker){
-            new TimePickerDialog(getActivity(), t,
+            new TimePickerDialog(getSherlockActivity(), t,
                     dateAndTime.get(Calendar.HOUR_OF_DAY),
                     dateAndTime.get(Calendar.MINUTE),
                     true).show();
@@ -1153,28 +1154,28 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         if(v==addBreakfast){
             ga.setFoodType("Breakfast");
-            Intent addfood = new Intent(getActivity(),AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             startActivity(addfood);
         }
         if(v==addLunch){
             ga.setFoodType("Lunch");
-            Intent addfood = new Intent(getActivity(),AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             startActivity(addfood);
         }
         if(v==addSnacks){
             ga.setFoodType("Snacks");
-            Intent addfood = new Intent(getActivity(),AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             startActivity(addfood);
         }
         if(v==addDinner){
             ga.setFoodType("Dinner");
-            Intent addfood = new Intent(getActivity(),AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             startActivity(addfood);
@@ -1182,7 +1183,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
         if(v==addExercise){
             ga.setFoodType("Exercise");
-            Intent addExercise = new Intent(getActivity(), AddExercise.class);
+            Intent addExercise = new Intent(getSherlockActivity(), AddExercise.class);
             User user = getArguments().getParcelable("user");
             addExercise.putExtra("user", user);
             startActivity(addExercise);
@@ -1258,8 +1259,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
                 lblexercisecal.setText(String.valueOf(total_calories));
                 exercise_cal=total_calories;
-                //ExerciseAdapter adapter = new ExerciseAdapter(getActivity(),R.layout.exercise_list, lstResultExercise);
-                JournalExerciseAdapter adapter = new JournalExerciseAdapter(getActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
+                //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
+                JournalExerciseAdapter adapter = new JournalExerciseAdapter(getSherlockActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
                 lstViewExercise.setAdapter(adapter);
 
                 int len=0;
@@ -1366,8 +1367,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
                 lbltotalbrkcal.setText(total_calories+"");
                 breakfast_cal=total_calories;
-                //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
+                //BreakfastAdapter adapter = new BreakfastAdapter(getSherlockActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultBreakfast);
                 //JournalFoodAdapter adapter=
 
                 lstViewBreakfast.setAdapter(adapter);
@@ -1386,10 +1387,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewBreakfast.onRefreshComplete();
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
 
@@ -1397,8 +1398,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
                 lstViewBreakfast.setVisibility(View.GONE);
                 img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                //BreakfastAdapter adapter = new BreakfastAdapter(getActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
+                //BreakfastAdapter adapter = new BreakfastAdapter(getSherlockActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultBreakfast);
                 //JournalFoodAdapter adapter=
                 lstViewBreakfast.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
@@ -1406,10 +1407,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             }
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -1461,8 +1462,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
                 lbllunchcal.setText(total_calories+"");
                 lunch_cal=total_calories;
-                //LunchAdapter adapter = new LunchAdapter(getActivity(),R.layout.lunch_food_list, lstResultLunch);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultLunch);
+                //LunchAdapter adapter = new LunchAdapter(getSherlockActivity(),R.layout.lunch_food_list, lstResultLunch);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultLunch);
                 lstViewLunch.setAdapter(adapter);
                 int len=0;
                 for (i = 0, len = adapter.getCount(); i < len; i++) {
@@ -1480,10 +1481,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewLunch.onRefreshComplete();
                 if(isInternetOn()){
                     CallSnaksListTask task = new CallSnaksListTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
                 lbllunch.setText("Lunch (0)");
@@ -1493,10 +1494,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             }
                 if(isInternetOn()){
                     CallSnaksListTask task = new CallSnaksListTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -1549,8 +1550,8 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
                 lblsnakcal.setText(total_calories+"");
                 snacks_cal=total_calories;
-                //SnacksAdapter adapter = new SnacksAdapter(getActivity(),R.layout.snacks_food_list, lstResultSnacks);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultSnacks);
+                //SnacksAdapter adapter = new SnacksAdapter(getSherlockActivity(),R.layout.snacks_food_list, lstResultSnacks);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultSnacks);
                 lstViewSnacks.setAdapter(adapter);
                 int len=0;
                 for (i = 0, len = adapter.getCount(); i < len; i++) {
@@ -1567,10 +1568,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lstViewSnacks.onRefreshComplete();
                 if(isInternetOn()){
                     CallDinnerListTask task = new CallDinnerListTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
                 lblsnack.setText("Snacks (0)");
@@ -1580,10 +1581,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             }
                 if(isInternetOn()){
                     CallDinnerListTask task = new CallDinnerListTask();
-                    task.activity =getActivity();
+                    task.activity =getSherlockActivity();
                     task.execute();
                 }else{
-                    Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -1640,7 +1641,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 dinner_cal=total_calories;
 
                 //DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultDinner);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultDinner);
                 lstViewDinner.setAdapter(adapter);
                 lstViewDinner.setAdapter(adapter);
                 int len=0;
@@ -1668,10 +1669,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
             if(isInternetOn()){
                 CallExerciseListTask task = new CallExerciseListTask();
-                task.activity =getActivity();
+                task.activity =getSherlockActivity();
                 task.execute();
             }else{
-                Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -1718,7 +1719,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")");
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
                 //BreakfastAdapter adapter = new BreakfastAdapter(activity,R.layout.breakfast_food_list, lstResultBreakfast);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultBreakfast);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultBreakfast);
                 lstViewBreakfast.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
@@ -1728,7 +1729,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")");
                 lbllunchcal.setText(Global_Application.totalcal+"");
                 //LunchAdapter adapter = new LunchAdapter(activity,R.layout.lunch_food_list, lstResultLunch);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultLunch);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultLunch);
                 lstViewLunch.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewLunch.onRefreshComplete();
@@ -1738,7 +1739,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblsnack.setText("Breakfast ("+lstResultSnacks.get(0).getCount()+")" );
                 lblsnakcal.setText(Global_Application.totalcal+"");
                 //SnacksAdapter adapter = new SnacksAdapter(activity,R.layout.snacks_food_list, lstResultSnacks);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultSnacks);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultSnacks);
                 lstViewSnacks.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewSnacks.onRefreshComplete();
@@ -1747,7 +1748,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lbldinner.setText("Breakfast ("+lstResultDinner.get(0).getCount()+")" );
                 lbldinnercal.setText(Global_Application.totalcal+"");
                 //DinnerAdapter adapter = new DinnerAdapter(activity,R.layout.dinner_food_list, lstResultDinner);
-                JournalFoodAdapter adapter = new JournalFoodAdapter(getActivity(),R.layout.row_journal_list, lstResultDinner);
+                JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultDinner);
                 lstViewDinner.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewDinner.onRefreshComplete();
@@ -1764,7 +1765,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
                 lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
                 lblexercisecal.setText(String.valueOf(total_calories));
                 //ExerciseAdapter adapter = new ExerciseAdapter(activity,R.layout.exercise_list, lstResultExercise);
-                JournalExerciseAdapter adapter = new JournalExerciseAdapter(getActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
+                JournalExerciseAdapter adapter = new JournalExerciseAdapter(getSherlockActivity(),R.layout.row_journal_list_exercise, lstResultExercise);
                 lstViewExercise.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewExercise.onRefreshComplete();
@@ -1792,10 +1793,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
 
             if(isInternetOn()){
                 CallListTask task = new CallListTask();
-                task.activity = getActivity();
+                task.activity = getSherlockActivity();
                 task.execute();
             }else{
-                Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
 */
             return null;
@@ -1809,10 +1810,10 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
         Global_Application.total_ideal_calories=0;
         if(isInternetOn()){
             CallListTask task = new CallListTask();
-            task.activity = getActivity();
+            task.activity = getSherlockActivity();
             task.execute();
         }else{
-            Toast.makeText(getActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
         }
 
         bolbrk=false;
@@ -1866,7 +1867,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("doInBackground--Object", "doInBackground--Object");
 
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            //Toast.makeText(getActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
+            //Toast.makeText(getSherlockActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
             User user = getArguments().getParcelable("user");
             return obj.EditFood(Global_Application.selectedfoodid,Global_Application.food_item,Global_Application.food_quantity,Global_Application.meal_type,user.getId().toString());
         }
@@ -1887,7 +1888,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             dialog1.setCanceledOnTouchOutside(false);
             dialog1.setMessage("Please Wait....");
             dialog1.show();
-            Toast.makeText(getActivity(),"Global_Application.exercise_value="+Global_Application.exercise_value,Toast.LENGTH_LONG).show();
+            Toast.makeText(getSherlockActivity(),"Global_Application.exercise_value="+Global_Application.exercise_value,Toast.LENGTH_LONG).show();
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -1912,7 +1913,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
             Log.i("doInBackground--Object", "doInBackground--Object");
 
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            //Toast.makeText(getActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
+            //Toast.makeText(getSherlockActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
             User user = getArguments().getParcelable("user");
             if(user.getBmiProfile().getWeight()==null)
             {
@@ -2015,7 +2016,7 @@ public class JournalFragment extends Fragment implements View.OnClickListener {
     // function for check internet is available or not
     public final boolean isInternetOn() {
 
-        ConnectivityManager connec = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
                 || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
