@@ -336,7 +336,6 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                 user.getProfile().getAge(), user.getProfile().getGender());
 
         int targetCaloriesPerDay = totalCalories - calories;
-        Toast.makeText(getActivity(), "Calories Per Day - " + targetCaloriesPerDay, Toast.LENGTH_LONG).show();
         appPrefs.setTargetCaloriesPerDay(targetCaloriesPerDay);
     }
 
@@ -439,6 +438,8 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+
+            Toast.makeText(getActivity(), "Calories Per Day - " + appPrefs.getTargetCaloriesPerDay(), Toast.LENGTH_LONG).show();
 
             onGoalDataChanged(null);
 
