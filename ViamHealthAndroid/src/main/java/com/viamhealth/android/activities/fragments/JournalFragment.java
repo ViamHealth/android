@@ -98,7 +98,21 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    double target_ideal_calories=0;
+
+
+=======
     //double target_ideal_calories=1500;
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
+=======
+    //double target_ideal_calories=1500;
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
+=======
+    //double target_ideal_calories=1500;
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
@@ -1305,6 +1319,16 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     {
         Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
+=======
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
+=======
+>>>>>>> f2b4951d1989691d5b80875beac8e81665b29f25
         double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
         lbltotcal.setText("Total Calories Consumed"+" "+Global_Application.total_ideal_calories+" Calories");
         lblidealcal.setText("Total Target Calories"+" "+target_ideal_calories+" Calories");
