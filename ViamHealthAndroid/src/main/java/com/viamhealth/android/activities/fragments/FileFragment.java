@@ -28,10 +28,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -47,6 +49,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -79,6 +82,8 @@ public class FileFragment extends SherlockFragment {
     private User selectedUser;
     private Set<OnNewFileUploadedListener> onNewFileUploadedListener = new HashSet<OnNewFileUploadedListener>();
 
+    private ActionBar actionBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_file_new, container, false);
@@ -97,6 +102,8 @@ public class FileFragment extends SherlockFragment {
         fm.commit();
 
         addOnNewFileUploadedListener(fragment);
+
+        actionBar = getSherlockActivity().getSupportActionBar();
 
         setHasOptionsMenu(true);
 
@@ -144,7 +151,7 @@ public class FileFragment extends SherlockFragment {
                 Uri uri = data.getData();
                 String filePath = data.getData().getPath();
                 String fileName = UIUtility.getFileName(getSherlockActivity(), uri);
-                File file = new File(URI.create(filePath));
+                File file = new File(getRealPathFromURI(uri));
                 Toast.makeText(getSherlockActivity(), "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
                 byte[] byteArray = new byte[0];
                 try {
@@ -227,7 +234,7 @@ public class FileFragment extends SherlockFragment {
             return contentURI.getPath();
         } else {
             cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
             return cursor.getString(idx);
         }
     }
@@ -322,7 +329,7 @@ public class FileFragment extends SherlockFragment {
         protected void onPostExecute(String result)
         {
             Log.i("onPostExecute", "onPostExecute");
-            dialog.dismiss();
+
             final String fileExtension = this.fileName.lastIndexOf(".")>-1 ?
                         this.fileName.substring(this.fileName.lastIndexOf(".")+1) : null;
             String mimeType = fileExtension==null ? null :
@@ -331,6 +338,10 @@ public class FileFragment extends SherlockFragment {
                                                 null, downloadUrl, mimeType);
 
             onFileUploadedToServer(fileData);
+
+            dialog.dismiss();
+            int totalProgress = (Window.PROGRESS_END - Window.PROGRESS_START) / 100;
+            //getSherlockActivity().setSupportProgress(totalProgress);
         }
 
         @Override
@@ -348,9 +359,11 @@ public class FileFragment extends SherlockFragment {
             String lineEnd = "\r\n";
             String twoHyphens = "--";
             String boundary = "*****";
-            int bytesRead, bytesAvailable, bufferSize, bytesWritten;
+            int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
             int maxBufferSize = 1 * 1024;
+            int multiplier = (Window.PROGRESS_END - Window.PROGRESS_START) / 100;
+            multiplier = multiplier / (4000 + 4000 + byteArray.length);
 
             try {
 
@@ -366,16 +379,14 @@ public class FileFragment extends SherlockFragment {
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Authorization", "Token " + appPrefs.getToken().toString());
                 conn.setRequestProperty("Connection", "Keep-Alive");
-                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                //conn.setRequestProperty("ENCTYPE", "multipart/form-data");
                 conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                Integer contentLength = byteArray.length;
-                conn.setRequestProperty("Content-length", contentLength.toString());
 
                 conn.setRequestProperty("file", this.fileName);
-
+                //getSherlockActivity().setSupportProgress(50*multiplier);
                 dos = new DataOutputStream(conn.getOutputStream());
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=file;filename="+ this.fileName + "" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\""+ this.fileName + "\"" + lineEnd);
                 // send multipart form data necesssary after file data...
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
@@ -383,61 +394,75 @@ public class FileFragment extends SherlockFragment {
                 int lengthBeforeContent = dos.size();
                 int lengthofContent = this.byteArray.length;
 
-                bytesWritten = 0;
-                //bytesAvailable = Math.min(maxBufferSize, byteArray.length);
-                bufferSize = Math.min(byteArray.length, maxBufferSize);
-                buffer = Arrays.copyOfRange(byteArray, 0, bufferSize);
+                ByteArrayInputStream bis = new ByteArrayInputStream(byteArray);
 
+                bytesAvailable = bis.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                buffer = new byte[bufferSize];
 
+                //getSherlockActivity().setSupportProgress(4000*multiplier);
+                int progress = 4000;
                 try {
                     while (bufferSize > 0) {
                         try {
                             dos.write(buffer, 0, bufferSize);
-                            bytesWritten += bufferSize;
-                            //outputStream.write(buffer, 0, bufferSize);
+                            progress = 4000 + dos.size();
+                            //getSherlockActivity().setSupportProgress(progress*multiplier);
                         } catch (OutOfMemoryError e) {
                             e.printStackTrace();
+                            Log.e("TAG", "Upload file to server error: " + e.getMessage(), e);
                             return -1;
                         }
-                        bytesAvailable = byteArray.length - bytesWritten;
+                        bytesAvailable = bis.available();
                         bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                        buffer = Arrays.copyOfRange(byteArray, bytesWritten-1, bufferSize);
+                        bytesRead = bis.read(buffer, 0, bufferSize);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Log.e("TAG", "Upload file to server error: " + e.getMessage(), e);
                     return -1;
                 }
-
-
 
                 int lengthAfterContent = dos.size();
 
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
+                //getSherlockActivity().setSupportProgress(progress*multiplier);
+
                 int serverResponseCode = conn.getResponseCode();
                 String serverResponseMessage = conn.getResponseMessage();
+                progress += 2000;
+                //getSherlockActivity().setSupportProgress(progress*multiplier);
+                dos.flush();
 
                 Log.i("TAG", "Upload file to server info: \n Before - " + lengthBeforeContent + "\n Actual - " + lengthofContent + "\n After - " + lengthAfterContent);
-                dialog.dismiss();
+                //dialog.dismiss();
                 if(serverResponseCode == HttpStatus.SC_CREATED){
                     Log.i("TAG", "HTTP Response is : "
                             + serverResponseMessage + ": " + "uploaded");
 
-                    JSONObject object = new JSONObject(serverResponseMessage);
+                    InputStream is = conn.getInputStream();
+                    int ch;
+                    StringBuffer b = new StringBuffer();
+                    while( ( ch = is.read() ) != -1 ){
+                        b.append( (char)ch );
+                    }
+                    progress+=1000;
+                    //getSherlockActivity().setSupportProgress(progress*multiplier);
+                    String responseString = b.toString();
+                    Log.i("TAG", "File Upload response string - " + responseString);
+
+                    JSONObject object = new JSONObject(responseString);
                     this.fileId = object.getInt("id");
                     this.downloadUrl = object.getString("download_url");
                 }
-
-
-                dos.flush();
                 dos.close();
-
             } catch (MalformedURLException ex) {
                 ex.printStackTrace();
                 Log.e("TAG", "Upload file to server error: " + ex.getMessage(), ex);
             } catch (Exception e) {
-                dialog.dismiss();
+                //dialog.dismiss();
                 e.printStackTrace();
                 Log.e("TAG", "Upload file to server Exception : "
                         + e.getMessage(), e);

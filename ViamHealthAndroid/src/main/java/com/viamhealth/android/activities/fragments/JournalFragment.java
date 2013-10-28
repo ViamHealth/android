@@ -98,17 +98,9 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
-<<<<<<< HEAD
-
-    double target_ideal_calories=0;
+    private double target_ideal_calories=0;
 
 
-
-=======
-    double target_ideal_calories=0;
-
-
->>>>>>> fa840deb673c858278aa3353ef91b02e8fbd076a
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
@@ -1314,10 +1306,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     void fillTrackingDetails()
     {
         Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
-<<<<<<< HEAD
-
-=======
->>>>>>> fa840deb673c858278aa3353ef91b02e8fbd076a
         double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
         lbltotcal.setText("Total Calories Consumed"+" "+Global_Application.total_ideal_calories+" Calories");
         lblidealcal.setText("Total Target Calories"+" "+target_ideal_calories+" Calories");
