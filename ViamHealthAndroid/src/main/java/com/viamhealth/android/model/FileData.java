@@ -1,20 +1,33 @@
 package com.viamhealth.android.model;
 
+import android.net.Uri;
+
 public class FileData {
-	String id,user,name,description,download_url;
+	String id,user,name,description,download_url, mimeType;
 	boolean checked=false;
 
 
 	public FileData(String id, String user, String name, String description,
-			String download_url) {
+			String download_url, String mimeType) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.name = name;
 		this.description = description;
 		this.download_url = download_url;
-	
+        this.mimeType = mimeType;
 	}
+
+    public Uri getUri() {
+        try {
+            return Uri.parse(this.download_url)
+                    .buildUpon().appendQueryParameter("user", this.user)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 	public boolean isChecked() {
 		return checked;
@@ -64,6 +77,11 @@ public class FileData {
 		this.download_url = download_url;
 	}
 
-	
-	
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
 }

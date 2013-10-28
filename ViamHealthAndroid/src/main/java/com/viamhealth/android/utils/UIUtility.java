@@ -1,8 +1,13 @@
 package com.viamhealth.android.utils;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 
 /**
@@ -21,5 +26,44 @@ public class UIUtility {
         dayCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), 0, 0, 0);
         dayCal.set(Calendar.MILLISECOND, 0);
         return dayCal;
+    }
+
+    public static void CopyStream(InputStream is, OutputStream os)
+    {
+        final int buffer_size=1024;
+        try
+        {
+            byte[] bytes=new byte[buffer_size];
+            for(;;)
+            {
+                int count=is.read(bytes, 0, buffer_size);
+                if(count==-1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        }
+        catch(Exception ex){}
+    }
+
+    public static String getFileName(Context context, Uri uri){
+        String fileName = null;
+
+        String scheme = uri.getScheme();
+        if(scheme==null)
+            return null;
+
+        if (scheme.equals("file")) {
+            fileName = uri.getLastPathSegment();
+        }
+        else if (scheme.equals("content")) {
+            String[] proj = {MediaStore.Files.FileColumns.TITLE };
+            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor != null && cursor.getCount() != 0) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE);
+                cursor.moveToFirst();
+                fileName = cursor.getString(columnIndex);
+            }
+        }
+        return fileName;
     }
 }

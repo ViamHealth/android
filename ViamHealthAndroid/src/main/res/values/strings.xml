@@ -22,6 +22,7 @@
     <string name="medical_conidtion_bp">Blood Pressure</string>
     <string name="medical_conidtion_diabetes">Diabetes</string>
     <string name="medical_conidtion_cholesterol">Cholesterol</string>
+    <string name="selected">selected</string>
 
     <string-array name="goal_name_array">
         <item>Blood Glucose</item>

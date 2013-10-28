@@ -14,4 +14,8 @@
     <color name="section_color">#f0f0f0</color>
 
     <color name="pressed_greentheme">#CC37AA4F</color>
+
+    <color name="holo_light_background">#ffffffff</color>
+    <color name="holo_light_selected">#ff37aa4f</color>
+
 </resources>

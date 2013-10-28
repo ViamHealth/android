@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal" 
-    android:background="#ffffff">
-    
-    <LinearLayout 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main_list_layout"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:orientation="horizontal">
-        <CheckBox 
-            android:id="@+id/chk_select"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:button="@drawable/btn_check_holo_light"/>
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:minHeight="48dp"
+    android:background="#ffffff">
+
         <ImageView   
             android:id="@+id/img_icon"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:src="@drawable/img_icon_file"/>
+            android:src="@drawable/img_icon_file"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp" />
 
         <LinearLayout
             android:id="@+id/desc_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center">
 
             <TextView android:id="@+id/img_name"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:textColor="#000000"
                 android:text="Blood Report.jpg"
-                android:textSize="14sp"
+                android:textSize="15sp"
                 />
              <TextView android:id="@+id/img_desc"
                 android:layout_height="wrap_content"
@@ -42,30 +41,5 @@
                 android:textSize="10sp"
                 />
         </LinearLayout>
-       <!--  <LinearLayout 
-            android:id="@+id/end_layout"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:orientation="horizontal">
-         <TextView android:id="@+id/img_lbl"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textColor="#000000"
-                android:text="Cholesterol"
-                android:textSize="10sp"
-                android:gravity="right"
-                android:textStyle="bold"
-                />
-         <TextView android:id="@+id/img_date"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:textColor="#000000"
-                android:text="jan 2,2013"
-                android:textSize="10sp"
-                android:gravity="right"
-                android:textStyle="bold"
-                />
-         </LinearLayout> -->
     </LinearLayout>
 
-</LinearLayout>

@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
@@ -30,8 +28,6 @@ import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
 import com.viamhealth.android.activities.fragments.ReminderFragment;
-import com.viamhealth.android.activities.fragments.TabHeaderFragment;
-import com.viamhealth.android.adapters.UsersMenuAdapter;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 
@@ -125,6 +121,7 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
                 ReminderFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
+                //FileFragment.class, bundle);
                 FileFragment.class, bundle);
 
 
@@ -142,7 +139,7 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
         if(action == Actions.UploadFiles){
             mTabHost.setCurrentTabByTag("files");
-            FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
+            com.viamhealth.android.activities.oldones.fragments.FileFragment fragment = (com.viamhealth.android.activities.oldones.fragments.FileFragment) mTabManager.getCurrentSelectedTabFragment();
             fragment.uploadImage();
         } else if(action == Actions.SetGoal){
             mTabHost.setCurrentTabByTag("goals");
@@ -153,6 +150,9 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         //mSelected.setText("Selected: " + mLocations[itemPosition]);
         User usr = users.get(itemPosition);
+        if(usr.getId().equals(user.getId()))
+            return false;
+
         Toast.makeText(TabActivity.this, "Selected User " + usr.getName(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(TabActivity.this, TabActivity.class);
         intent.putExtra("user", usr);
@@ -186,11 +186,13 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(returnIntent);
+            return false;
         }else{
-            finish();
+           //finish();
+            return false;
         }
 
-        return super.onOptionsItemSelected(item);
+        //return super.onOptionsItemSelected(item);
     }
 
     @Override

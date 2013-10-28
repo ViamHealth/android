@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.facebook.HttpMethod;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
@@ -52,6 +53,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,7 +71,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 	
 	private static final int CAMERA_PIC_REQUEST = 1337;
 	Bitmap mBitmap,b1;
-	byte[] byteArray;
+
 	String Base64str=null; 
 	String path;
 	String selecteduserid="0";
@@ -86,8 +88,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 	Button btn_upload;
     TextView btn_cancle;
 	static int serverResponseCode = 0;
-	String upLoadServerUri = null;  
-	String filename=null;
+	String upLoadServerUri = null;
 	static EditText file_desc;
 	public static ViamHealthPrefs appPrefs;
 	LinearLayout addphoto;
@@ -95,7 +96,9 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 	Typeface tf;
 	private DisplayImageOptions options;
 
-    User user;
+    private User user;
+    private byte[] byteArray;
+    private String filename=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +110,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		ScreenDimension();
 
         user = (User) getIntent().getParcelableExtra("user");
+        byteArray = getIntent().getByteArrayExtra("content");
+        filename = getIntent().getStringExtra("filename");
 
 		tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
 		w15=(int)((width*4.68)/100);
@@ -131,37 +136,29 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 		file_desc = (EditText)findViewById(R.id.file_desc);
 		
 		Log.e("TAG","parent " + UploadFile.this);
-		if(ga.getImg()==null){
-	//	uploadImage();
-		}else{
-			img_display.setImageBitmap(ga.getImg());
+        String fileExtension = filename.lastIndexOf(".")>-1?filename.substring(filename.lastIndexOf(".")):null;
+        String mimeType = fileExtension==null?null:MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+        Bitmap imgBitmap = mimeType.contains("image")?BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length):null;
+		if(imgBitmap!=null){
+            img_display.setImageBitmap(imgBitmap);
 		}
 
 	}
-	public void ScreenDimension()
-	{
+
+	public void ScreenDimension() {
 		display = getWindowManager().getDefaultDisplay(); 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		width = display.getWidth();
 		height = display.getHeight();
-
 	}  
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==btn_upload){
-			Log.e("TAG","uri is : " + ga.getFileuri());
-			//if(ga.getFileuri()!=null){
-				//dialog = new ProgressDialog(UploadFile.this);
-				//dialog.setCanceledOnTouchOutside(false);
-				//dialog.setMessage("Please Wait....");
-				//dialog.show();
-                //Toast.makeText(getApplicationContext()," before calling uploadfile",Toast.LENGTH_LONG).show();
-                UploadFiletoServer task1=new UploadFiletoServer();
-                task1.execute();
-				//uploadDatatoServer(ga.getFileByte(),ga.getFileuri(), "http://api.viamhealth.com/healthfiles/");
-			//}
+			//Log.e("TAG","uri is : " + ga.getFileuri());
+            UploadFiletoServer task1=new UploadFiletoServer();
+            task1.execute();
 		}
 		if(v==btn_cancle){
 			finish();
@@ -191,7 +188,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 				"Cancel" };
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(UploadFile.this);
-		builder.setTitle("Add Photo!");
+		builder.setTitle("Upload file...");
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
@@ -248,13 +245,14 @@ public class UploadFile extends BaseActivity implements OnClickListener{
                         String[] splitval=chosenstring.split("//");
                         path=splitval[1];
                     }
-                    ga.setFileuri(path);
+                    //ga.setFileuri(path);
+                    filename = path;
                     System.gc();
                     b1=getResizedBitmap(mBitmap,300,300);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     b1.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     //img_display.setImageBitmap(b1);
-                    ga.setImg(b1);
+                    //ga.setImg(b1);
                     byteArray = stream.toByteArray();
                     Base64str = Base64.encodeToString(byteArray, Base64.NO_WRAP);
                     Log.e("TAG","FROM FILE : "  + Base64str);
@@ -288,93 +286,45 @@ public class UploadFile extends BaseActivity implements OnClickListener{
                 byteArray = stream.toByteArray();
                 Base64str = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 Log.e("TAG","Camera FILE : "  + Base64str);
-                ga.setImg(b1);
+                //ga.setImg(b1);
+                byteArray = stream.toByteArray();
                 Uri chosenImageUri = data.getData();
                 getRealPathFromURI(chosenImageUri);
-							 	/*
-
-			    		 		ga.setFileuri(getRealPathFromURI(chosenImageUri));
-			    		 		String chosenstring=chosenImageUri+"";
-			    		 		if(chosenstring.contains("content://"))
-							 	{
-							 		path=getRealPathFromURI(chosenImageUri);
-				        	 	}
-							 	else if (chosenstring.contains("file:///"))
-							 	{
-							 		String[] splitval=chosenstring.split("//");
-							 		path=splitval[1];
-							 	}      */
-							    /*if(mBitmap!=null){
-							    	mBitmap.recycle();
-							    	mBitmap=null;
-								}  */
-							 /*	process_dialog = new ProgressDialog(this.getParent());
-								process_dialog.setMessage("Please Wait....");
-							    process_dialog.show();
-							    new AddPhotoTask().execute();*/
-
             }
         }
 
     }
     public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth)
     {
-
-
-
-
-
         int width = bm.getWidth();
-
         int height = bm.getHeight();
-
-
         float srcWidth = bm.getWidth();
         float srcHeight = bm.getHeight();
 
-
-
-        if((srcWidth>=newWidth || srcHeight>=newHeight)==false)
-        {
+        if((srcWidth>=newWidth || srcHeight>=newHeight)==false){
             return bm;
         }
 
-
         float resizeWidth = srcWidth;
         float resizeHeight = srcHeight;
-
         float aspect = resizeWidth / resizeHeight;
 
-        if (resizeWidth > newWidth)
-        {
+        if (resizeWidth > newWidth){
             resizeWidth = newWidth;
             resizeHeight= (newWidth * srcHeight)/srcWidth;
-
-            //  resizeHeight = resizeWidth / aspect;
         }
-        if (resizeHeight > newHeight)
-        {
-            //  aspect = resizeWidth / resizeHeight;
+
+        if (resizeHeight > newHeight){
             resizeHeight = newHeight;
-
             resizeWidth=(newHeight * srcWidth)/srcHeight;
-
-            // resizeWidth = resizeHeight * aspect;
         }
 
         Matrix matrix = new Matrix();
-
-// resize the bit map
-
         matrix.postScale(resizeWidth / width, resizeHeight / height);
-
-// recreate the new Bitmap
-
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
         return resizedBitmap;
-
-
     }
+
     public String getRealPathFromURI(Uri contentUri)
     {
         Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[]{MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_ADDED, MediaStore.Images.ImageColumns.ORIENTATION}, MediaStore.Images.Media.DATE_ADDED, null, "date_added ASC");
@@ -382,7 +332,8 @@ public class UploadFile extends BaseActivity implements OnClickListener{
         {
             do {
                 Uri uri = Uri.parse(cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA)));
-                ga.setFileuri(uri.toString());
+                //ga.setFileuri(uri.toString());
+                filename = uri.toString();
             }while(cursor.moveToNext());
             cursor.close();
         }
@@ -419,10 +370,10 @@ public class UploadFile extends BaseActivity implements OnClickListener{
     }
 
 
-    public int uploadDatatoServer(String sourceFileUri,String upLoadServerUri)
+    public int uploadDatatoServer(String upLoadServerUri)
     {
 
-        String fileName=sourceFileUri;
+        //String fileName=sourceFileUri;
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
         String lineEnd = "\r\n";
@@ -444,20 +395,17 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             conn.setUseCaches(false); // Don't use a Cached Copy
 
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization","Token "+appPrefs.getToken().toString());
+            conn.setRequestProperty("Authorization", "Token " + appPrefs.getToken().toString());
             conn.setRequestProperty("Connection", "Keep-Alive");
             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
             //conn.setRequestProperty("Content-Type", "docx;boundary=" + boundary);
-            conn.setRequestProperty("file", fileName);
+            conn.setRequestProperty("file", filename);
             //conn.setRequestProperty("user", user.getId().toString());
-            conn.setRequestProperty("user",ga.getLoggedInUser().getId().toString());
-            if(file_desc.getText()!=null)
-            {
+            conn.setRequestProperty("user",user.getId().toString());
+            if(file_desc.getText()!=null){
                 conn.setRequestProperty("description", file_desc.getText().toString());
-            }
-            else
-            {
+            }else{
                 conn.setRequestProperty("description", "");
             }
 
@@ -466,29 +414,22 @@ public class UploadFile extends BaseActivity implements OnClickListener{
             dos = new DataOutputStream(conn.getOutputStream());
             Log.e("upload MJ","before Uploading file to server");
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=file;filename="+ fileName + "" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=file;filename="+ filename + "" + lineEnd);
             bufferSize=dos.size();
 
             dos.writeBytes(lineEnd);
 
-            dos.write(ga.getFileByte(),0,bufferSize);
+            dos.write(byteArray,0,bufferSize);
 
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
-            // Responses from the server (code and message)
-            Log.e("upload MJ","user id="+ga.getLoggedInUser().getId().toString());
-            Log.e("upload MJ","before Uploading file to server");
             serverResponseCode = conn.getResponseCode();
             String serverResponseMessage = conn.getResponseMessage();
 
-            Log.e("upload MJ","after Uploading file to server");
-
-            Log.i("uploadFile", "HTTP Response code is : "+ serverResponseMessage + ": " + serverResponseCode);
-            Log.i("uploadFile", "HTTP Response is : "+ serverResponseMessage + ": " + serverResponseMessage);
             dialog.dismiss();
             if(serverResponseCode == 200){
-                Log.i("uploadFile", "HTTP Response is : "
+                Log.i("TAG", "HTTP Response is : "
                         + serverResponseMessage + ": " + "uploaded");
 
             }
@@ -503,14 +444,14 @@ public class UploadFile extends BaseActivity implements OnClickListener{
 
 
 
-            Log.e("Upload file to server", "error: " + ex.getMessage(), ex);
+            Log.e("TAG", "Upload file to server error: " + ex.getMessage(), ex);
         } catch (Exception e) {
 
             dialog.dismiss();
             e.printStackTrace();
 
 
-            Log.e("Upload file to server Exception", "Exception : "
+            Log.e("TAG", "Upload file to server Exception : "
                     + e.getMessage(), e);
         }
 
@@ -673,7 +614,7 @@ public class UploadFile extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
-            uploadDatatoServer(ga.getFileuri(),"http://api.viamhealth.com/healthfiles/");
+            uploadDatatoServer("http://api.viamhealth.com/healthfiles/?user=" + user.getId().toString());
             return null;
         }
 
