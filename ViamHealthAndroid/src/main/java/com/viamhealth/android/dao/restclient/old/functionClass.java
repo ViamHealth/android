@@ -1659,7 +1659,7 @@ public class functionClass {
 				public ArrayList<MedicalData> UpdateMedication(String id,String user_id,String type,String name,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
-														    String repeat_weekday,String repeat_day_interval){
+														    String repeat_weekday,String repeat_day_interval,String start_date,String end_date){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"reminders/"+id+"/"+"?type="+type;  //?user="+user_id;
 					Log.e("TAG","url is : " + baseurlString);
@@ -1684,6 +1684,8 @@ public class functionClass {
 					client.AddParam("repeat_min", repeat_min.toString());
 					client.AddParam("repeat_weekday", repeat_weekday.toString());
 					client.AddParam("repeat_day_interval", repeat_day_interval.toString());
+                    client.AddParam("start_date",start_date);
+                    client.AddParam("end_date",end_date);
 					
 					try
 					{
