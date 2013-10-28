@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -116,6 +117,8 @@ public class Home extends BaseActivity implements OnClickListener{
             public void onClick(View v) {
                 Intent intent = new Intent(Home.this, TabActivity.class);
                 intent.putExtra("user", user);
+                Parcelable[] users = new Parcelable[lstFamily.size()];
+                intent.putExtra("users", lstFamily.toArray(users));
                 intent.putExtra("action", TabActivity.Actions.SetGoal);
                 startActivity(intent);
             }
@@ -127,6 +130,8 @@ public class Home extends BaseActivity implements OnClickListener{
             public void onClick(View v) {
                 Intent intent = new Intent(Home.this, TabActivity.class);
                 intent.putExtra("user", user);
+                Parcelable[] users = new Parcelable[lstFamily.size()];
+                intent.putExtra("users", lstFamily.toArray(users));
                 intent.putExtra("action", TabActivity.Actions.UploadFiles);
                 startActivity(intent);
             }
@@ -314,6 +319,8 @@ public class Home extends BaseActivity implements OnClickListener{
 
             Intent intent = new Intent(Home.this, TabActivity.class);
             intent.putExtra("user", selectedUser);
+            Parcelable[] users = new Parcelable[lstFamily.size()];
+            intent.putExtra("users", lstFamily.toArray(users));
             startActivity(intent);
 
         }

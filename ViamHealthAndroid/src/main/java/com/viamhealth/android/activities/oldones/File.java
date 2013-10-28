@@ -447,7 +447,7 @@ public class File extends BaseActivity implements OnClickListener{
 					// TODO Auto-generated method stub
 					Log.i("doInBackground--Object", "doInBackground--Object");
 					lstResult.clear();
-					lstResult=obj.getFile(Global_Application.url+"healthfiles/?user="+appPrefs.getUserid());
+					//lstResult=obj.getFile(Global_Application.url+"healthfiles/?user="+appPrefs.getUserid());
 					return null;
 				}
 				   
@@ -490,7 +490,7 @@ public class File extends BaseActivity implements OnClickListener{
 							protected String doInBackground(String... params) {
 								// TODO Auto-generated method stub
 								Log.i("doInBackground--Object", "doInBackground--Object");
-								lstResult=obj.getFile(Global_Application.url+"healthfiles/?search="+edt_search.getText().toString());
+								//lstResult=obj.getFile(Global_Application.url+"healthfiles/?search="+edt_search.getText().toString());
 								return null;
 							}
 							   
@@ -535,7 +535,7 @@ public class File extends BaseActivity implements OnClickListener{
 							protected String doInBackground(String... params) {
 								// TODO Auto-generated method stub
 								Log.i("doInBackground--Object", "doInBackground--Object");
-								lstResult.addAll(obj.getFile(ga.getNextfile()));
+								//lstResult.addAll(obj.getFile(ga.getNextfile()));
 								
 								return null;
 							}

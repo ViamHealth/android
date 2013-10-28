@@ -981,7 +981,10 @@ public class functionClass {
 					return "0";
 				}
 		// function for get file data
-				public ArrayList<FileData> getFile(String baseurlString){
+				public ArrayList<FileData> getFile(Long userId, String searchString){
+                    String baseurlString = Global_Application.url + "healthfiles/?user=" + userId;
+                    if(searchString!=null && !searchString.isEmpty())
+                        baseurlString += "&search=" + searchString;
 					ArrayList<FileData>	lstData = new ArrayList<FileData>();
 					Log.e("TAG","url is : " + baseurlString);
 					
@@ -1009,9 +1012,11 @@ public class functionClass {
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
 										 
-				                      lstData.add(new FileData(c.getString("id").toString(), c.getString("user").toString(), c.getString("name").toString(), c.getString("description").toString(), c.getString("download_url")));
+				                      lstData.add(new FileData(c.getString("id").toString(), c.getString("user"),
+                                              c.getString("name"), c.getString("description"),
+                                              c.getString("download_url"), c.getString("mime_type")));
 				  				 }
-				              
+
 							 Log.e("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {

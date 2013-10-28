@@ -28,15 +28,14 @@
                 android:focusable="false"
                 android:layout_below="@+id/tabHeader"
                 android:background="#ffffff"
-                android:clickable="false"
-                android:layout_marginTop="58dp">
+                android:clickable="false">
             </FrameLayout>
 
-            <FrameLayout android:id="@+id/tabHeader"
+            <!--<FrameLayout android:id="@+id/tabHeader"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:background="#37AA4F">
-            </FrameLayout>
+            </FrameLayout>-->
 
         </FrameLayout>
 

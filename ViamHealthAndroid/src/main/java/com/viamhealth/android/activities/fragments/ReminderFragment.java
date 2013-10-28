@@ -30,6 +30,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
@@ -63,7 +64,7 @@ import java.util.Date;
 /**
  * Created by naren on 08/10/13.
  */
-public class ReminderFragment extends Fragment implements View.OnClickListener {
+public class ReminderFragment extends SherlockFragment implements View.OnClickListener {
 
     private User user;
     private View view;
@@ -126,11 +127,11 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         this.savedInstanceState = savedInstanceState;
         user=getArguments().getParcelable("user");
 
-        appPrefs = new ViamHealthPrefs(getActivity());
-        obj=new functionClass(getActivity());
-        ga=((Global_Application)getActivity().getApplicationContext());
+        appPrefs = new ViamHealthPrefs(getSherlockActivity());
+        obj=new functionClass(getSherlockActivity());
+        ga=((Global_Application)getSherlockActivity().getApplicationContext());
 
-        tf = Typeface.createFromAsset(getActivity().getAssets(),"Roboto-Condensed.ttf");
+        tf = Typeface.createFromAsset(getSherlockActivity().getAssets(),"Roboto-Condensed.ttf");
         // get screen height and width
         ScreenDimension();
 
@@ -244,7 +245,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         }
 
         RetrieveMedicalData task=new RetrieveMedicalData();
-        task.applicationContext=getActivity();
+        task.applicationContext=getSherlockActivity();
         task.execute();
 
     }
@@ -294,7 +295,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            // dialog1 = new ProgressDialog(getActivity());
+            // dialog1 = new ProgressDialog(getSherlockActivity());
             //dialog1.setMessage("Please Wait....");
             //dialog1.show();
             //Log.i("onPreExecute", "onPreExecute");
@@ -324,7 +325,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             }
             //mPager1.setAdapter(new ImagePagerAdapter(lst));
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
-            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
+            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter4);
 
             int total_height_medicine_tab=0,len=0;
@@ -342,21 +343,21 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
             RetrieveOtherData task1= new RetrieveOtherData();
-            task1.applicationContext=getActivity();
+            task1.applicationContext=getSherlockActivity();
             task1.execute();
 
 
 /*
-            MedicalDataAdapter adapter = new MedicalDataAdapter(getActivity(),R.layout.row_medical_list, listData);
+            MedicalDataAdapter adapter = new MedicalDataAdapter(getSherlockActivity(),R.layout.row_medical_list, listData);
            // lstReminderMedicine.setAdapter(adapter);
 
             ArrayList<String> lsttest = new ArrayList<String>();
             lsttest.add("Blood Test");
             lsttest.add("Xyz");
-            TestDataAdapter adapter1 = new TestDataAdapter(getActivity(),R.layout.row_test_list, lsttest);
+            TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, lsttest);
             //lstReminderMedicine.setAdapter(adapter1);
 
-            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getActivity());
+            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
             adapter3.addSection("Medication",adapter);
             adapter3.addSection("Rest All",adapter1);
             //lstReminderMedicine.setAdapter(adapter3);
@@ -367,7 +368,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             //if(lstData.size()>0){
             //finish();
             //  }else{
-            //Toast.makeText(getActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getSherlockActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
             // finish();
             // }
 
@@ -393,7 +394,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         {
 
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            // dialog1 = new ProgressDialog(getActivity());
+            // dialog1 = new ProgressDialog(getSherlockActivity());
             //dialog1.setMessage("Please Wait....");
             //dialog1.show();
             //Log.i("onPreExecute", "onPreExecute");
@@ -424,7 +425,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
-            TestDataAdapter1 adapter = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
+            TestDataAdapter1 adapter = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter);
 
             int total_height_test_tab=0,i,len;
@@ -445,16 +446,16 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
 /*
-            MedicalDataAdapter adapter = new MedicalDataAdapter(getActivity(),R.layout.row_medical_list, listData);
+            MedicalDataAdapter adapter = new MedicalDataAdapter(getSherlockActivity(),R.layout.row_medical_list, listData);
            // lstReminderMedicine.setAdapter(adapter);
 
             ArrayList<String> lsttest = new ArrayList<String>();
             lsttest.add("Blood Test");
             lsttest.add("Xyz");
-            TestDataAdapter adapter1 = new TestDataAdapter(getActivity(),R.layout.row_test_list, lsttest);
+            TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, lsttest);
             //lstReminderMedicine.setAdapter(adapter1);
 
-            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getActivity());
+            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
             adapter3.addSection("Medication",adapter);
             adapter3.addSection("Rest All",adapter1);
             //lstReminderMedicine.setAdapter(adapter3);
@@ -465,7 +466,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             //if(lstData.size()>0){
             //finish();
             //  }else{
-            //Toast.makeText(getActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getSherlockActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
             // finish();
             // }
 
@@ -485,7 +486,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
     public void ScreenDimension()
     {
-        display = getActivity().getWindowManager().getDefaultDisplay();
+        display = getSherlockActivity().getWindowManager().getDefaultDisplay();
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
         height = display.getHeight();
@@ -511,7 +512,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
-            TestDataAdapter1 adapter5 = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
+            TestDataAdapter1 adapter5 = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
 
             int total_height_test_tab=0,i,len;
@@ -529,7 +530,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
-            MedicalDataAdapter1 adapter = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
+            MedicalDataAdapter1 adapter = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter);
 
             int total_height_medicine_tab=0;
@@ -568,7 +569,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                             //original_width_edit=main_list_edit.getWidth();
                             //main_list_edit.setMinimumWidth((main_list.getWidth())/3);
                             //main_list_edit.setMinimumHeight(main_list.getHeight());
-                            edit_med=new Intent(getActivity(),AddMedication.class);
+                            edit_med=new Intent(getSherlockActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditMed",true);
                             edit_med.putExtra("user_id",user.getId().toString());
@@ -588,7 +589,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                         public void onTouch()
                         {
-                            edit_med=new Intent(getActivity(),AddMedication.class);
+                            edit_med=new Intent(getSherlockActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditMed",true);
                             edit_med.putExtra("user_id",user.getId().toString());
@@ -616,7 +617,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                         public void onClick(View v) {
                             //main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
                             //main_list_delete.setMinimumWidth((main_list.getWidth())/3);
-                            Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
+                            Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
                             edit_med1.putExtra("id",listData.get(pos).getId());
                             startActivity(edit_med1);
@@ -628,7 +629,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                         public void onTouch()
                         {
-                            Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
+                            Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
                             edit_med1.putExtra("id",listData.get(pos).getId());
                             startActivity(edit_med1);
@@ -645,19 +646,19 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                     main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
-                            Toast.makeText(getActivity(), "Start anim", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getSherlockActivity(), "Start anim", Toast.LENGTH_LONG).show();
                         }
 
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            Toast.makeText(getActivity(),"end anim",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getSherlockActivity(),"end anim",Toast.LENGTH_LONG).show();
                         }
 
 
                         @Override
                         public void onAnimationRepeat(Animation animation) {
-                            Toast.makeText(getActivity(),"repeat anim",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getSherlockActivity(),"repeat anim",Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -666,12 +667,12 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
         }
         if(v==add_medicine_reminder){
-            Intent AddMedication = new Intent(getActivity(),AddMedication.class);
+            Intent AddMedication = new Intent(getSherlockActivity(),AddMedication.class);
             AddMedication.putExtra("user_id",user.getId().toString());
             startActivity(AddMedication);
         }
         if(v==add_test_reminder){
-            Intent AddTest = new Intent(getActivity(), com.viamhealth.android.activities.AddTest.class);
+            Intent AddTest = new Intent(getSherlockActivity(), com.viamhealth.android.activities.AddTest.class);
             startActivity(AddTest);
         }
         if(v==txt_test){
@@ -684,7 +685,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             test_scrl.setVisibility(View.VISIBLE);
 
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
-            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1, listData);
+            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter4);
 
             int total_height_medicine_tab=0,i,len;
@@ -704,7 +705,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
-            TestDataAdapter1 adapter = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
+            TestDataAdapter1 adapter = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter);
 
             int total_height_test_tab=0;
@@ -741,7 +742,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                             //original_width_edit=main_list_edit.getWidth();
                            // main_list_edit.setMinimumWidth((main_list.getWidth())/3);
                             //main_list_edit.setMinimumHeight(main_list.getHeight());
-                            edit_med=new Intent(getActivity(),AddMedication.class);
+                            edit_med=new Intent(getSherlockActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditOthers",true);
                             edit_med.putExtra("user_id",user.getId().toString());
@@ -758,7 +759,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                         public void onTouch()
                         {
-                            edit_med=new Intent(getActivity(),AddMedication.class);
+                            edit_med=new Intent(getSherlockActivity(),AddMedication.class);
                             edit_pos=pos;
                             edit_med.putExtra("iseditOthers",true);
                             edit_med.putExtra("user_id",user.getId().toString());
@@ -786,7 +787,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                         public void onClick(View v) {
                            // main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
                            // main_list_delete.setMinimumWidth((main_list.getWidth())/3);
-                            Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
+                            Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
                             edit_med1.putExtra("id",otherData.get(pos).getId());
                             startActivity(edit_med1);
@@ -798,7 +799,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
                         public void onTouch()
                         {
-                            Intent edit_med1=new Intent(getActivity(),DeleteMedication.class);
+                            Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                             edit_med1.putExtra("user_id",user.getId().toString());
                             edit_med1.putExtra("id",listData.get(pos).getId());
                             startActivity(edit_med1);
@@ -815,19 +816,19 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
                     main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
-                            Toast.makeText(getActivity(), "Start anim", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getSherlockActivity(), "Start anim", Toast.LENGTH_LONG).show();
                         }
 
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
-                            Toast.makeText(getActivity(),"end anim",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getSherlockActivity(),"end anim",Toast.LENGTH_LONG).show();
                         }
 
 
                         @Override
                         public void onAnimationRepeat(Animation animation) {
-                            Toast.makeText(getActivity(),"repeat anim",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getSherlockActivity(),"repeat anim",Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -846,13 +847,13 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
         }
         if(v==add_medicine){
-            Intent AddMedication = new Intent(getActivity(),AddMedication.class);
+            Intent AddMedication = new Intent(getSherlockActivity(),AddMedication.class);
             AddMedication.putExtra("user_id",user.getId().toString());
             AddMedication.putExtra("isMedReminders",true);
             startActivity(AddMedication);
         }
         if(v==add_test){
-            Intent AddMedication = new Intent(getActivity(),AddMedication.class);
+            Intent AddMedication = new Intent(getSherlockActivity(),AddMedication.class);
             AddMedication.putExtra("user_id",user.getId().toString());
             AddMedication.putExtra("isOthersReminders",true);
             startActivity(AddMedication);
@@ -865,7 +866,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         public void onPageSelected(int position)
         {
             //Log.e("TAG","position is : " + position);
-            //Toast.makeText(getActivity(),"selected postion is " + position, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getSherlockActivity(),"selected postion is " + position, Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -878,7 +879,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         protected void onPreExecute()
         {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getSherlockActivity());
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
@@ -900,7 +901,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
-            UserEP userEP = new UserEP(getActivity(), ga);
+            UserEP userEP = new UserEP(getSherlockActivity(), ga);
             userEP.getUserProfile(ga.getLoggedInUser().getId());
             return null;
         }
@@ -1024,13 +1025,13 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
             }
 
 
-            MedicalDataAdapter adapter = new MedicalDataAdapter(getActivity(),R.layout.row_medical_list, selected_list_data.get(position));
+            MedicalDataAdapter adapter = new MedicalDataAdapter(getSherlockActivity(),R.layout.row_medical_list, selected_list_data.get(position));
 
 
 
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
-            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getActivity(),R.layout.row_medical_list1,listData);
+            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1,listData);
             lstReminderMedicine.setAdapter(adapter4);
 
             int total_height_medicine_tab=0,len=0;
@@ -1049,7 +1050,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
-            TestDataAdapter1 adapter5 = new TestDataAdapter1(getActivity(),R.layout.row_medical_list1, otherData);
+            TestDataAdapter1 adapter5 = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
 
             int total_height_test_tab=0;
@@ -1069,7 +1070,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
 
             //selected_otherData2=selected_otherData1;
-            TestDataAdapter adapter1 = new TestDataAdapter(getActivity(),R.layout.row_test_list, selected_other_data.get(position));
+            TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, selected_other_data.get(position));
 
 
 
@@ -1079,7 +1080,7 @@ public class ReminderFragment extends Fragment implements View.OnClickListener {
 
             //lstReminderMedicine.setAdapter(adapter1);
 
-            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getActivity());
+            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
             adapter3.addSection("Medication",adapter);
             adapter3.addSection("Rest All",adapter1);
 

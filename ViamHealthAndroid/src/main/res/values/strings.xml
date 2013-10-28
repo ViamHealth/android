@@ -18,10 +18,11 @@
     <string name="title_activity_add_profile">AddProfile</string>
     <string name="title_activity_file">File</string>
     <string name="title_activity_food_diary">FoodDiary</string>
-    <string name="medical_conidtion_obese">Obesity</string>
+    <string name="medical_conidtion_obese">Weight</string>
     <string name="medical_conidtion_bp">Blood Pressure</string>
     <string name="medical_conidtion_diabetes">Diabetes</string>
     <string name="medical_conidtion_cholesterol">Cholesterol</string>
+    <string name="selected">selected</string>
 
     <string-array name="goal_name_array">
         <item>Blood Glucose</item>
@@ -111,6 +112,7 @@
     <string name="title_activity_delete_medication">Delete Medication</string>
     <string name="title_activity_fbfamily_list">Add Family Member</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="password">#password</string>
     <string name="username">\@email</string>
     <string name="resgiter">Register</string>

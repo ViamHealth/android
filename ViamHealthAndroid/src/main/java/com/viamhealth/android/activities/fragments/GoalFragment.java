@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -57,7 +59,7 @@ import java.util.Set;
 /**
  * Created by naren on 07/10/13.
  */
-public class GoalFragment extends Fragment implements View.OnClickListener {
+public class GoalFragment extends SherlockFragment implements View.OnClickListener {
 
     //Map<MedicalConditions, List<GoalReadings>> goalReadingsMap = new HashMap<MedicalConditions, List<GoalReadings>>();
     Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
@@ -79,6 +81,8 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
     ViamHealthPrefs appPrefs;
 
+    ActionBar actionBar;
+
     //WebView webView;
     //ImageButton addValue;
 
@@ -98,11 +102,13 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_goal, container, false);
 
-        goalHelper = new GoalsEPHelper(getActivity(), (Global_Application)getActivity().getApplicationContext());
-        userEP = new UserEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
-        appPrefs = new ViamHealthPrefs(getActivity());
+        goalHelper = new GoalsEPHelper(getSherlockActivity(), (Global_Application)getSherlockActivity().getApplicationContext());
+        userEP = new UserEP(getSherlockActivity(), (Global_Application)getSherlockActivity().getApplicationContext());
+        appPrefs = new ViamHealthPrefs(getSherlockActivity());
 
-        dialog = new ProgressDialog(getActivity());
+        actionBar = getSherlockActivity().getSupportActionBar();
+
+        dialog = new ProgressDialog(getSherlockActivity());
         dialog.setCanceledOnTouchOutside(false);
 
         final_layout = (LinearLayout) view.findViewById(R.id.final_layout);
@@ -114,16 +120,34 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         mPager = (ViewPager) final_layout.findViewById(R.id.pager);
         mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                GraphFragment fragment = graphFragments.get(i);
+                MedicalConditions mc = fragment.getType();
+                actionBar.setSubtitle(mc.key());
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         if(action == TabActivity.Actions.SetGoal){
             addNewGoal();
             action = null;
         }else{
-            if(Checker.isInternetOn(getActivity())){
+            if(Checker.isInternetOn(getSherlockActivity())){
                 GetALLGoals task = new GetALLGoals();
                 task.execute();
             } else {
-                Toast.makeText(getActivity(), "Internet is not on..", Toast.LENGTH_LONG);
+                Toast.makeText(getSherlockActivity(), "Internet is not on..", Toast.LENGTH_LONG);
             }
         }
 
@@ -177,7 +201,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
 
     public void addNewGoal() {
-        Intent i = new Intent(getActivity(), AddGoalActivity.class);
+        Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
         i.putExtra("user", selectedUser);
         i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
         startActivityForResult(i, ACTION_CONFIGURE_GOAL);
@@ -204,20 +228,20 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==getActivity().RESULT_OK) {
+        if(resultCode==getSherlockActivity().RESULT_OK) {
             if(requestCode==ACTION_CONFIGURE_GOAL){
                 //save the goal and goalReadings
                 Goal goal = data.getParcelableExtra("goal");
                 GoalReadings readings = data.getParcelableExtra("reading");
                 MedicalConditions selectedCondition = (MedicalConditions)data.getSerializableExtra("type");
                 if(goal!=null){
-                    if(Checker.isInternetOn(getActivity())) {
+                    if(Checker.isInternetOn(getSherlockActivity())) {
                         CreateGoal task = new CreateGoal();
                         task.type = selectedCondition;
                         task.reading = readings;
                         task.execute(goal);
                     } else {
-                        Toast.makeText(getActivity(), "Internet is not on..", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getSherlockActivity(), "Internet is not on..", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -226,12 +250,12 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                 GoalReadings reading = data.getParcelableExtra("reading");
                 MedicalConditions selectedCondition = (MedicalConditions) data.getSerializableExtra("type");
                 if(reading!=null){
-                    if(Checker.isInternetOn(getActivity())) {
+                    if(Checker.isInternetOn(getSherlockActivity())) {
                         SaveGoalReading task = new SaveGoalReading();
                         task.type = selectedCondition;
                         task.execute(reading);
                     }else{
-                        Toast.makeText(getActivity(), "Internet is not on..", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getSherlockActivity(), "Internet is not on..", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -295,6 +319,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
             super(fm);
         }
 
+
         @Override
         public Fragment getItem(int position) {
             GraphFragment fragment = graphFragments.get(position);
@@ -308,7 +333,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
                 fragment.setOnClickAddValueListener(new GraphFragment.OnClickAddValueListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent i = new Intent(getActivity(), AddGoalValue.class);
+                        Intent i = new Intent(getSherlockActivity(), AddGoalValue.class);
                         i.putExtra("type", mc);
                         List<GoalReadings> grs = goalsConfiguredMap.get(mc).getReadings();
                         Parcelable[] readings = new Parcelable[grs.size()];
@@ -439,7 +464,7 @@ public class GoalFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            Toast.makeText(getActivity(), "Calories Per Day - " + appPrefs.getTargetCaloriesPerDay(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getSherlockActivity(), "Calories Per Day - " + appPrefs.getTargetCaloriesPerDay(), Toast.LENGTH_LONG).show();
 
             onGoalDataChanged(null);
 
