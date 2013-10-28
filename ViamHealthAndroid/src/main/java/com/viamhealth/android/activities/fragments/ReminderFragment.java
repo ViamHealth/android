@@ -1,15 +1,20 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,8 +28,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -33,6 +40,10 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.Global_Application;
@@ -51,17 +62,20 @@ import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.adapters.TestDataAdapter1;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
+import com.viamhealth.android.model.FileData;
 import com.viamhealth.android.model.MedicalData;
 import com.viamhealth.android.model.MedicationData;
 import com.viamhealth.android.model.ReminderReadings;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
+import com.viamhealth.android.utils.Checker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by naren on 08/10/13.
@@ -79,18 +93,24 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     ProgressDialog dialog1;
     ColorDrawable draw1,draw2;
 
+    private ActionMode actionMode;
     TextView mSelected,lbl_add,lbl_delete,txt_test,txt_medication,txt_reminder,txt_name,txt_time,txt_mode;;
     ImageView back,person_icon;
     Button add_medicine,add_test,add_medicine_reminder,add_test_reminder;
     TextView lbl_invite_user_food,heding_Addfood_name;
     LinearLayout menu_invite_addfood,menu_invite_out_addfood,settiglayout_food,search_layout,watch_below_layout,lst_data;
-    RefreshableListView lstReminderMedicine,lstReminderTest,lstdata;
+    RefreshableListView lstReminderMedicine,lstdata;
+    //Framelayout lstReminderTest;
     ScrollView test_scrl;
     LinearLayout medicine_scrl,reminder_scrl;
     TextView lbl_name,lbl_morning,txt1,lbl_noon,txt2,lbl_night;
     LinearLayout main_list_edit,main_list_delete,main_list;
 
+    String selected_reminder_name,selected_morning_val,selected_noon_val,selected_night_val;
+    int selected_position;
+
     ViewPager mPager,mPager1;
+    MedicalDataAdapter1 adapter,adapter4;
 
     ArrayList<MedicalData> lstResult = new ArrayList<MedicalData>();
     int selection=0,original_width_edit,original_width_delete;
@@ -122,6 +142,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     ArrayList<ReminderReadings> rem_read=null;
     int current_pos;
     StoreReminders rem1=null;
+    User selected_user;
 
     ActionBar actionBar;
 
@@ -223,11 +244,15 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             selected_other_data.add(new ArrayList<MedicationData>());
         }
 
-        lstReminderTest = (RefreshableListView)view.findViewById(R.id.lstReminderTest);
 
         mPager1 = (ViewPager)view.findViewById(R.id.pager1);
 
         mPager1.setOnPageChangeListener(new MyPageChangeListener());
+
+
+        selected_user = getArguments().getParcelable("user");
+
+
 
         return view;
     }
@@ -266,6 +291,22 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         RetrieveMedicalData task=new RetrieveMedicalData();
         task.applicationContext=getSherlockActivity();
         task.execute();
+
+        Bundle args = new Bundle();
+        args.putParcelable("user", selected_user);
+        FragmentTransaction fm = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+        MedicineListFragment fragment = (MedicineListFragment)SherlockFragment.instantiate(getSherlockActivity(), MedicineListFragment.class.getName(), args);
+        fm.add(R.id.lstReminderMedicine, fragment, "Medicine-list");
+
+        FragmentTransaction fm_others = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+        OthersListFragment fragment1 = (OthersListFragment) SherlockFragment.instantiate(getSherlockActivity(), OthersListFragment.class.getName(), args);
+        fm_others.add(R.id.lstRemTest, fragment1, "Others-list");
+
+        fm.commit();
+        fm_others.commit();
+
+        setHasOptionsMenu(true);
+
 
     }
 
@@ -342,10 +383,43 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                     k++;
                 }
             }
+            ga.listData=listData;
+            ga.otherData=otherData;
             //mPager1.setAdapter(new ImagePagerAdapter(lst));
+
+            /*
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
-            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
+            adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter4);
+
+            lstReminderMedicine.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (actionMode != null) {
+                        // if already in action mode - do nothing
+                        return false;
+                    }
+
+                    final TextView name=(TextView)arg1.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)arg1.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)arg1.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)arg1.findViewById(R.id.txt_night);
+
+                    selected_reminder_name=name.getText().toString();
+                    selected_morning_val=txt_morn.getText().toString();
+                    selected_noon_val=txt_noon.getText().toString();
+                    selected_night_val=txt_night.getText().toString();
+                    selected_position=arg2;
+
+                    // set checked selected item and enter multi selection mode
+
+                    adapter4.setChecked(arg2, true);
+                    getSherlockActivity().startActionMode(new ActionModeCallbackMedicine());
+                    actionMode.invalidate();
+                    return true;
+                }
+            });
+
 
             int total_height_medicine_tab=0,len=0;
 
@@ -359,6 +433,8 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             LinearLayout.LayoutParams l3= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_medicine_tab+40);
             lstReminderMedicine.setLayoutParams(l3);
             total_height_medicine_tab=0;
+            */
+
 
 
             RetrieveOtherData task1= new RetrieveOtherData();
@@ -366,30 +442,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             task1.execute();
 
 
-/*
-            MedicalDataAdapter adapter = new MedicalDataAdapter(getSherlockActivity(),R.layout.row_medical_list, listData);
-           // lstReminderMedicine.setAdapter(adapter);
-
-            ArrayList<String> lsttest = new ArrayList<String>();
-            lsttest.add("Blood Test");
-            lsttest.add("Xyz");
-            TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, lsttest);
-            //lstReminderMedicine.setAdapter(adapter1);
-
-            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
-            adapter3.addSection("Medication",adapter);
-            adapter3.addSection("Rest All",adapter1);
-            //lstReminderMedicine.setAdapter(adapter3);
-*/
-            //dialog1.dismiss();
-            //listfood.removeAllViews();
-            //Log.e("TAG","size : " + lstData.size());
-            //if(lstData.size()>0){
-            //finish();
-            //  }else{
-            //Toast.makeText(getSherlockActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
-            // finish();
-            // }
 
         }
 
@@ -442,7 +494,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
 
 
 
-
+/*
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter);
@@ -459,35 +511,9 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
             lstReminderTest.setLayoutParams(l4);
             total_height_test_tab=0;
-
+*/
             mPager1.setAdapter(new ImagePagerAdapter(lst));
 
-
-
-/*
-            MedicalDataAdapter adapter = new MedicalDataAdapter(getSherlockActivity(),R.layout.row_medical_list, listData);
-           // lstReminderMedicine.setAdapter(adapter);
-
-            ArrayList<String> lsttest = new ArrayList<String>();
-            lsttest.add("Blood Test");
-            lsttest.add("Xyz");
-            TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, lsttest);
-            //lstReminderMedicine.setAdapter(adapter1);
-
-            SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
-            adapter3.addSection("Medication",adapter);
-            adapter3.addSection("Rest All",adapter1);
-            //lstReminderMedicine.setAdapter(adapter3);
-*/
-            //dialog1.dismiss();
-            //listfood.removeAllViews();
-            //Log.e("TAG","size : " + lstData.size());
-            //if(lstData.size()>0){
-            //finish();
-            //  }else{
-            //Toast.makeText(getSherlockActivity(), "Try again lalter...",Toast.LENGTH_SHORT).show();
-            // finish();
-            // }
 
         }
 
@@ -514,6 +540,211 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     }
 
 
+
+
+    public final class ActionModeCallbackTest implements ActionMode.Callback
+    {
+
+        // " selected" string resource to update ActionBar text
+        private String selected = getActivity().getString(R.string.selected);
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu)
+        {
+            adapter.enterMultiMode();
+            // save global action mode
+            actionMode = mode;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu)
+        {
+            // remove previous items
+            menu.clear();
+            final int checked = adapter.getCheckedItemCount();
+            // update title with number of checked items
+            mode.setTitle(checked + " " +this.selected);
+            switch (checked) {
+                case 0:
+                    // if nothing checked - exit action mode
+                    mode.finish();
+                    return true;
+                case 1:
+                    // all items - rename + delete
+                    getSherlockActivity().getSupportMenuInflater().inflate(
+                            R.menu.action_menu_medicine, menu);
+                    return true;
+                default:
+                    getSherlockActivity().getSupportMenuInflater().inflate(
+                            R.menu.action_menu_medicine, menu);
+                    return true;
+            }
+        }
+
+        private void download(String strUrl, String fileName, String extension){
+
+        }
+
+
+
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            switch (item.getItemId()) {
+                case R.id.action_mode_edit:
+                    if(adapter.getCheckedItemCount()>0){
+
+
+                    }else{
+                        Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Toast.makeText(getActivity(), "Download", Toast.LENGTH_LONG).show();
+                    return true;
+
+                case R.id.action_mode_delete:
+                    if(adapter.getCheckedItemCount()>0){
+
+
+                    }else{
+                        Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+                    return true;
+
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode)
+        {
+            adapter.exitMultiMode();
+            // don't forget to remove it, because we are assuming that if it's not null we are in ActionMode
+            actionMode = null;
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+    public final class ActionModeCallbackMedicine implements ActionMode.Callback
+    {
+
+        // " selected" string resource to update ActionBar text
+        private String selected = getActivity().getString(R.string.selected);
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu)
+        {
+            adapter.enterMultiMode();
+            // save global action mode
+            actionMode = mode;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu)
+        {
+            // remove previous items
+            menu.clear();
+            final int checked = adapter.getCheckedItemCount();
+            // update title with number of checked items
+            mode.setTitle(checked + " " +this.selected);
+            switch (checked) {
+                case 0:
+                    // if nothing checked - exit action mode
+                    mode.finish();
+                    return true;
+                case 1:
+                    // all items - rename + delete
+                    getSherlockActivity().getSupportMenuInflater().inflate(
+                            R.menu.action_menu_medicine, menu);
+                    return true;
+                default:
+                    getSherlockActivity().getSupportMenuInflater().inflate(
+                            R.menu.action_menu_medicine, menu);
+                    return true;
+            }
+        }
+
+        private void download(String strUrl, String fileName, String extension){
+
+        }
+
+
+
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+            switch (item.getItemId()) {
+                case R.id.action_mode_edit:
+                    if(adapter.getCheckedItemCount()>0){
+
+                        edit_med=new Intent(getSherlockActivity(),AddMedication.class);
+                        edit_pos=selected_position;
+                        edit_med.putExtra("iseditMed",true);
+                        edit_med.putExtra("user_id",user.getId().toString());
+                        med_id=listData.get(selected_position).getId();
+                        edit_med.putExtra("id",med_id);
+                        edit_med.putExtra("start_date",listData.get(selected_position).getStart_date());
+                        edit_med.putExtra("name",selected_reminder_name);
+                        edit_med.putExtra("morning",selected_morning_val);
+                        edit_med.putExtra("noon",selected_noon_val);
+                        edit_med.putExtra("night",selected_night_val);
+                        startActivity(edit_med);
+
+                    }else{
+                        Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Toast.makeText(getActivity(), "Download", Toast.LENGTH_LONG).show();
+                    return true;
+
+                case R.id.action_mode_delete:
+                    if(adapter.getCheckedItemCount()>0){
+
+
+                    }else{
+                        Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+                    return true;
+
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode)
+        {
+            adapter.exitMultiMode();
+            // don't forget to remove it, because we are assuming that if it's not null we are in ActionMode
+            actionMode = null;
+        }
+
+    }
+
+
+
+
+
+
     @Override
     public void onClick(View v) {
         // TODO Auto-generated method stub
@@ -529,7 +760,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
 
 
 
-
+/*
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter5 = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
@@ -547,10 +778,55 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             lstReminderTest.setLayoutParams(l4);
             total_height_test_tab=0;
 
+            lstReminderTest.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (actionMode != null) {
+                        // if already in action mode - do nothing
+                        return false;
+                    }
+                    // set checked selected item and enter multi selection mode
+                    adapter.setChecked(arg2, true);
+                    getSherlockActivity().startActionMode(new ActionModeCallbackTest());
+                    actionMode.invalidate();
+                    return true;
+                }
+            });
+
+*/
+
+            /* //MJ:comment
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
-            MedicalDataAdapter1 adapter = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
+            adapter = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter);
+            lstReminderMedicine.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (actionMode != null) {
+                        // if already in action mode - do nothing
+                        return false;
+                    }
+
+                    final TextView name=(TextView)arg1.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)arg1.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)arg1.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)arg1.findViewById(R.id.txt_night);
+
+                    selected_reminder_name=name.getText().toString();
+                    selected_morning_val=txt_morn.getText().toString();
+                    selected_noon_val=txt_noon.getText().toString();
+                    selected_night_val=txt_night.getText().toString();
+                    selected_position=arg2;
+
+                    // set checked selected item and enter multi selection mode
+
+                    adapter.setChecked(arg2, true);
+                    getSherlockActivity().startActionMode(new ActionModeCallbackMedicine());
+                    actionMode.invalidate();
+                    return true;
+                }
+            });
 
             int total_height_medicine_tab=0;
 
@@ -566,7 +842,37 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             total_height_medicine_tab=0;
 
 
+            lstReminderMedicine.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (actionMode != null) {
+                        // if already in action mode - do nothing
+                        return false;
+                    }
 
+                    final TextView name=(TextView)arg1.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)arg1.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)arg1.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)arg1.findViewById(R.id.txt_night);
+
+                    selected_reminder_name=name.getText().toString();
+                    selected_morning_val=txt_morn.getText().toString();
+                    selected_noon_val=txt_noon.getText().toString();
+                    selected_night_val=txt_night.getText().toString();
+                    selected_position=arg2;
+
+                    // set checked selected item and enter multi selection mode
+
+                    adapter4.setChecked(arg2, true);
+                    getSherlockActivity().startActionMode(new ActionModeCallbackMedicine());
+                    actionMode.invalidate();
+                    return true;
+                }
+            });
+
+            */
+
+/*
             lstReminderMedicine.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -603,33 +909,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                         }
                     });
 
-                    /*
-                    main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onTouch()
-                        {
-                            edit_med=new Intent(getSherlockActivity(),AddMedication.class);
-                            edit_pos=pos;
-                            edit_med.putExtra("iseditMed",true);
-                            edit_med.putExtra("user_id",user.getId().toString());
-                            med_id=listData.get(pos).getId();
-                            edit_med.putExtra("id",med_id);
-                            edit_med.putExtra("start_date",listData.get(pos).getStart_date());
-                            edit_med.putExtra("name",name.getText().toString());
-                            edit_med.putExtra("morning",txt_morn.getText().toString());
-                            edit_med.putExtra("noon",txt_noon.getText().toString());
-                            edit_med.putExtra("night",txt_night.getText().toString());
-                            startActivity(edit_med);
-                        }
-
-                        public void onSwipeRight() {
-                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
-                            original_width_edit=main_list_edit.getWidth();
-                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
-                            main_list_edit.setMinimumHeight(main_list.getHeight());
-                        }
-                    });
-*/
 
                     main_list_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -643,26 +923,8 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                         }
                     });
 
-                    /*
-                    main_list_delete.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onTouch()
-                        {
-                            Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
-                            edit_med1.putExtra("user_id",user.getId().toString());
-                            edit_med1.putExtra("id",listData.get(pos).getId());
-                            startActivity(edit_med1);
-                        }
-
-                        public void onSwipeLeft()
-                        {
-                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
-                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
-
-                        }
-                    });
-*/
-                    main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
+         main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
                             Toast.makeText(getSherlockActivity(), "Start anim", Toast.LENGTH_LONG).show();
@@ -682,7 +944,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                     });
 
                 }
-            });
+            }); */
 
         }
         if(v==add_medicine_reminder){
@@ -702,12 +964,14 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             reminder_scrl.setVisibility(View.GONE);
             medicine_scrl.setVisibility(View.GONE);
             test_scrl.setVisibility(View.VISIBLE);
+            int total_height_medicine_tab=0,i,len;
 
+            /* //MJ:comment
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
-            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
+            adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, listData);
             lstReminderMedicine.setAdapter(adapter4);
 
-            int total_height_medicine_tab=0,i,len;
+
 
             for (i = 0, len = adapter4.getCount(); i < len; i++) {
                 View listItem = adapter4.getView(i, null, lstReminderMedicine);
@@ -720,9 +984,39 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             lstReminderMedicine.setLayoutParams(l3);
             total_height_medicine_tab=0;
 
+            lstReminderMedicine.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (actionMode != null) {
+                        // if already in action mode - do nothing
+                        return false;
+                    }
+
+                    final TextView name=(TextView)arg1.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)arg1.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)arg1.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)arg1.findViewById(R.id.txt_night);
+
+                    selected_reminder_name=name.getText().toString();
+                    selected_morning_val=txt_morn.getText().toString();
+                    selected_noon_val=txt_noon.getText().toString();
+                    selected_night_val=txt_night.getText().toString();
+                    selected_position=arg2;
+
+                    // set checked selected item and enter multi selection mode
+
+                    adapter4.setChecked(arg2, true);
+                    getSherlockActivity().startActionMode(new ActionModeCallbackMedicine());
+                    actionMode.invalidate();
+                    return true;
+                }
+            });
 
 
+          */
 
+
+/*
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter);
@@ -773,33 +1067,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                         }
                     });
 
-                    /*
-                    main_list_edit.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onTouch()
-                        {
-                            edit_med=new Intent(getSherlockActivity(),AddMedication.class);
-                            edit_pos=pos;
-                            edit_med.putExtra("iseditOthers",true);
-                            edit_med.putExtra("user_id",user.getId().toString());
-                            med_id=listData.get(pos).getId();
-                            edit_med.putExtra("id",med_id);
-                            edit_med.putExtra("start_date",listData.get(pos).getStart_date());
-                            edit_med.putExtra("name",name.getText().toString());
-                            startActivity(edit_med);
-                        }
-
-                        public void onSwipeRight() {
-
-                            main_list_edit.animate().translationX((main_list.getWidth())/2).withLayer();
-                            original_width_edit=main_list_edit.getWidth();
-                            main_list_edit.setMinimumWidth((main_list.getWidth())/3);
-                            main_list_edit.setMinimumHeight(main_list.getHeight());
-
-
-                        }
-                    });
-*/
 
                     main_list_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -813,25 +1081,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                         }
                     });
 
-                    /*
-                    main_list_delete.setOnTouchListener(new OnSwipeTouchListener(){
 
-                        public void onTouch()
-                        {
-                            Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
-                            edit_med1.putExtra("user_id",user.getId().toString());
-                            edit_med1.putExtra("id",listData.get(pos).getId());
-                            startActivity(edit_med1);
-                        }
-
-                        public void onSwipeLeft()
-                        {
-                            main_list_delete.animate().translationX(-(main_list.getWidth())/2).withLayer();
-                            main_list_delete.setMinimumWidth((main_list.getWidth())/3);
-
-                        }
-                    });
-*/
                     main_list_edit.setLayoutAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -854,7 +1104,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                 }
             });
 
-
+*/
         }
         if(v==txt_reminder){
             txt_test.setBackgroundResource(R.drawable.tabnormal);
@@ -1046,14 +1296,15 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
 
             MedicalDataAdapter adapter = new MedicalDataAdapter(getSherlockActivity(),R.layout.row_medical_list, selected_list_data.get(position));
 
+            int total_height_medicine_tab=0,len=0;
 
-
+/*
             RefreshableListView lstReminderMedicine=(RefreshableListView)view.findViewById(R.id.lstReminderMedicine);
 
-            MedicalDataAdapter1 adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1,listData);
+            adapter4 = new MedicalDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1,listData);
             lstReminderMedicine.setAdapter(adapter4);
 
-            int total_height_medicine_tab=0,len=0;
+
 
             for (i = 0, len = adapter4.getCount(); i < len; i++) {
                 View listItem = adapter4.getView(i, null, lstReminderMedicine1);
@@ -1066,8 +1317,36 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             lstReminderMedicine.setLayoutParams(l3);
             total_height_medicine_tab=0;
 
+            lstReminderMedicine.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                    if (actionMode != null) {
+                        // if already in action mode - do nothing
+                        return false;
+                    }
 
+                    final TextView name=(TextView)arg1.findViewById(R.id.txt_name);
+                    final TextView txt_morn=(TextView)arg1.findViewById(R.id.txt_morning);
+                    final TextView txt_noon=(TextView)arg1.findViewById(R.id.txt_noon);
+                    final TextView txt_night=(TextView)arg1.findViewById(R.id.txt_night);
 
+                    selected_reminder_name=name.getText().toString();
+                    selected_morning_val=txt_morn.getText().toString();
+                    selected_noon_val=txt_noon.getText().toString();
+                    selected_night_val=txt_night.getText().toString();
+                    selected_position=arg2;
+
+                    // set checked selected item and enter multi selection mode
+
+                    adapter4.setChecked(arg2, true);
+                    getSherlockActivity().startActionMode(new ActionModeCallbackMedicine());
+                    actionMode.invalidate();
+                    return true;
+                }
+            });
+
+*/
+/*
             RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
             TestDataAdapter1 adapter5 = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
             lstReminderTest.setAdapter(adapter5);
@@ -1081,23 +1360,12 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                 total_height_test_tab += list_child_item_height; //
             }
 
+
             LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
             lstReminderTest.setLayoutParams(l4);
-            total_height_test_tab=0;
 
-
-
-
-            //selected_otherData2=selected_otherData1;
+*/
             TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, selected_other_data.get(position));
-
-
-
-
-
-
-
-            //lstReminderMedicine.setAdapter(adapter1);
 
             SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
             adapter3.addSection("Medication",adapter);
@@ -1111,51 +1379,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             ((ViewPager) localView).addView(imageLayout, 0);
 
             lstReminderMedicine1.setAdapter(adapter3);
-/*
-            lstReminderMedicine1.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int pos, long id) {
-                    TextView txt_morning=(TextView)v.findViewById(R.id.txt_morning);
-                    TextView txt_noon=(TextView)v.findViewById(R.id.txt_noon);
-                    TextView txt_evening=(TextView)v.findViewById(R.id.txt_night);
-
-
-                    draw1 = (ColorDrawable)txt_morning.getBackground();
-
-
-                    if(draw1.getColor()== Color.GREEN)
-                    {
-                        selected_list_data.get(position).get(pos).setMorning_check(true);
-                    }
-
-
-                    draw1 = (ColorDrawable)txt_noon.getBackground();
-
-
-                    if(draw1.getColor()== Color.GREEN)
-                    {
-                        selected_list_data.get(position).get(pos).setNoon_check(true);
-                    }
-
-
-
-                    draw1 = (ColorDrawable)txt_evening.getBackground();
-
-
-                    if(draw1.getColor()== Color.GREEN)
-                    {
-                        selected_list_data.get(position).get(pos).setEvening_check(true);
-                    }
-
-
-
-                }
-
-
-            });
-
-*/
-
             int totalheight1=totalHeight;
             totalHeight=0;
             for (i = 0, len = adapter3.getCount(); i < len; i++) {
@@ -1189,6 +1412,8 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         }
 
 
+
+
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
@@ -1211,6 +1436,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         {
             return 0.8f;
         }
+
 
     }
 

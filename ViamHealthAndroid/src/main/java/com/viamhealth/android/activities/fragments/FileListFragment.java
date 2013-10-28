@@ -314,27 +314,6 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(files.get(i).getMimeType());
                 download(downloaUri.toString(), files.get(i).getName(), extension);
-
-                //Toast.makeText(getApplicationContext(), "Download Uri = "+downloaUri.toString(), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(), "Toast = "+appPrefs.getToken().toString(), Toast.LENGTH_SHORT).show();
-
-//                DownloadManager.Request request = new DownloadManager.Request(downloaUri);
-//
-//
-//                //Restrict the types of networks over which this download may proceed.
-//                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-//                //Set whether this download may proceed over a roaming connection.
-//                request.setAllowedOverRoaming(false);
-//                //Set the title of this download, to be displayed in notifications (if enabled).
-//                request.setTitle(files.get(i).getName());
-//                //Set a description of this download, to be displayed in notifications (if enabled)
-//                request.setDescription("Downloading....");
-//                //Set the local destination for the downloaded file to a path within the application's external files directory
-//                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"logo" + i + "." + extension);
-//                //Enqueue a new download and same the referenceId
-//
-//                request.setNotificationVisibility(1);
-//                downloadManager.enqueue(request);
             }
         }
 

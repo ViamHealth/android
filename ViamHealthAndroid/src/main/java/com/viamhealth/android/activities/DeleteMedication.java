@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.R;
+import com.viamhealth.android.activities.fragments.MedicineListFragment;
+import com.viamhealth.android.activities.fragments.OthersListFragment;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
 /**
@@ -40,7 +44,7 @@ public class DeleteMedication extends BaseActivity {
                 DeleteReminder d1= new DeleteReminder();
                 d1.applicationContext=DeleteMedication.this;
                 d1.execute();
-                finish();
+
             }
         });
 
@@ -75,6 +79,8 @@ public class DeleteMedication extends BaseActivity {
         {
 
             Log.i("onPostExecute", "onPostExecute");
+
+            finish();
             //generateView();
             //dialog.dismiss();
 			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);

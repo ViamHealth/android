@@ -99,8 +99,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
     private double target_ideal_calories=0;
-
-
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;

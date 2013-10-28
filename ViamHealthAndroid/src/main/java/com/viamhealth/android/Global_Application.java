@@ -11,6 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
+import com.viamhealth.android.model.MedicationData;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
 import com.viamhealth.android.model.FoodData;
@@ -44,6 +45,9 @@ public class Global_Application extends Application
 	public boolean weightupdate, cholesterolupdate,glucoseupdate,bpupdate;
 	public static List<User> lstfamilyglobal;
 	public boolean calcelflg;
+
+    public static ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
+    public static ArrayList<MedicationData> otherData = new ArrayList<MedicationData>();
 
     private User loggedInUser;
 
