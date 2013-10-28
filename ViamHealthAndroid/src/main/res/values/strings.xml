@@ -53,7 +53,8 @@
         <item>Months</item>
         <item>Years</item>
     </string-array>
-
+    <string name="tab_label_medicines">Medicines</string>
+    <string name="tab_label_others">Others</string>
     <string name="title_activity_add_breakfast">AddBreakfast</string>
     <string name="title_activity_tab_group_reminder">TabGroupReminder</string>
     <string name="title_activity_reminder">Reminder</string>
@@ -181,6 +182,6 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="add_another_profile">add another profile</string><string name="label_create_healthy_goal_trailer">time to create some
-                healthy goals....</string><string name="random_sugar">random sugar value</string><string name="fasting_sugar">fasting sugar value</string>
+                healthy goals....</string><string name="random_sugar">random sugar value</string><string name="fasting_sugar">fasting sugar value</string><string name="medicine_separator">-</string><string name="file_name">file name</string>
 
 </resources>

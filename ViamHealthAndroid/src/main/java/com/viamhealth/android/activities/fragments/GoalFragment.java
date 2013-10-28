@@ -128,9 +128,9 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
 
             @Override
             public void onPageSelected(int i) {
-                GraphFragment fragment = graphFragments.get(i);
-                MedicalConditions mc = fragment.getType();
-                actionBar.setSubtitle(mc.key());
+                //GraphFragment fragment = graphFragments.get(i);
+                //MedicalConditions mc = fragment.getType();
+                //actionBar.setSubtitle(mc.key());
             }
 
             @Override
@@ -382,7 +382,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
                 }
                 rds.add(reading);
             }
-            goal.setReadings(rds);
+            //goal.setReadings(rds);
             goalsConfiguredMap.put(type, goal);
             return reading;
         }

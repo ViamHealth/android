@@ -12,7 +12,8 @@
         android:id="@+id/action_mode_share"
         android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_social_share_dark"
-        android:title="Share"/>
+        android:title="Share"
+        android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider"/>
 
     <item
         android:id="@+id/action_mode_delete"

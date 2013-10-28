@@ -17,10 +17,10 @@
     </script>
 
     <script type='text/javascript'>//<![CDATA[
-//var str = goals.getData();
-//console.log(str);
-//var android = JSON.parse(str);
-var android = {
+var str = goals.getData();
+console.log(str);
+var android = JSON.parse(str);
+/*var android = {
         "seriesB": [
         {
         "y": 83,
@@ -61,7 +61,7 @@ var android = {
         "targetPR": 72,
         "targetDate": 1384972200000
         }
-        };
+        };*/
 console.log(android);
 $(function () {
     $('#container').highcharts({
@@ -75,7 +75,6 @@ $(function () {
             enabled: false
         },
         xAxis: {
-            tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
