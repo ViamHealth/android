@@ -21,6 +21,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
     private final TabHost mTabHost;
     private final int mContainerId;
     private int mHeaderContainerId;
+    private boolean mShouldExecuteTransaction;
     private TabInfo mTabHeader;
     private boolean isHeaderAdded = false;
     private final Map<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
@@ -57,11 +58,12 @@ public class TabManager implements TabHost.OnTabChangeListener {
         }
     }
 
-    public TabManager(FragmentActivity activity, TabHost tabHost, int containerId) {
+    public TabManager(FragmentActivity activity, TabHost tabHost, int containerId, boolean shouldExecuteTransaction) {
         mActivity = activity;
         mTabHost = tabHost;
         mContainerId = containerId;
         mTabHost.setOnTabChangedListener(this);
+        mShouldExecuteTransaction = shouldExecuteTransaction;
     }
 
     public void addHeader(int headerContainerId, Class clss, Bundle args) {
@@ -128,7 +130,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
             }
             mLastTab = newTab;
             ft.commit();
-            mActivity.getSupportFragmentManager().executePendingTransactions();
+            if(mShouldExecuteTransaction)
+                mActivity.getSupportFragmentManager().executePendingTransactions();
         }
     }
 

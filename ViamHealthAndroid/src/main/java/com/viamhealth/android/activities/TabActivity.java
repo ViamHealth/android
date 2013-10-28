@@ -27,6 +27,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
+import com.viamhealth.android.activities.fragments.NewReminders;
 import com.viamhealth.android.activities.fragments.ReminderFragment;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
@@ -63,7 +64,7 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
         mTabHost = (TabHost)findViewById(R.id.tabHost);
         mTabHost.setup();
         mTabHost.setOnClickListener(this);
-        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
+        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent, true);
 
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
@@ -119,6 +120,7 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                 ReminderFragment.class, bundle);
+                //NewReminders.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
                 //FileFragment.class, bundle);
@@ -201,31 +203,13 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
         if(mTabManager.getCurrentSelectedTab().equals("goals")){
             if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-                //tabHeader.setAlpha(0.4f);
-
-                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
-                params.setMargins(0,0,0,0);
-                tabContent.setLayoutParams(params);
-
                 tabs.setVisibility(View.GONE);
-                //tabHeader.setAnimation(animationMoveOut);
                 return;
             }
 
         }
 
-        //tabHeader.setAlpha(1);
-
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        int margin = (int) (HEADER_TOP_MARGIN_DP * scale + 0.5f);
-        params.setMargins(0, margin, 0, 0);
-        tabContent.setLayoutParams(params);
-
         tabs.setVisibility(View.VISIBLE);
-        //tabHeader.setAnimation(animationMoveOut);
     }
 
     @Override

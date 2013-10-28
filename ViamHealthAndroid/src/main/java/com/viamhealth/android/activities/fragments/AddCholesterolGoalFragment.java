@@ -37,7 +37,7 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
         user = getArguments().getParcelable("user");
         Bundle bundle = getArguments().getBundle("goals");
         if(!bundle.isEmpty())
-            goal = (CholesterolGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
+            goal = (CholesterolGoal) bundle.getParcelable(MedicalConditions.Cholesterol.name());
 
         dialog = new ProgressDialog(getActivity());
 

@@ -38,6 +38,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
@@ -79,7 +80,7 @@ import java.util.Set;
 /**
  * Created by naren on 08/10/13.
  */
-public class ReminderFragment extends SherlockFragment implements View.OnClickListener {
+public class ReminderFragment extends SherlockFragment implements View.OnClickListener, ActionBar.TabListener {
 
     private User user;
     private View view;
@@ -143,8 +144,10 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     StoreReminders rem1=null;
     User selected_user;
 
+    ActionBar actionBar;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         view = inflater.inflate(R.layout.tab_fragment_reminder, container, false);
         this.savedInstanceState = savedInstanceState;
         user=getArguments().getParcelable("user");
@@ -154,6 +157,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         ga=((Global_Application)getSherlockActivity().getApplicationContext());
 
         tf = Typeface.createFromAsset(getSherlockActivity().getAssets(),"Roboto-Condensed.ttf");
+
         // get screen height and width
         ScreenDimension();
 
@@ -253,6 +257,20 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         return view;
     }
 
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+
+    }
 
     @Override
     public void onResume() {

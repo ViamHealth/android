@@ -24,6 +24,7 @@ public class DiabetesGoal extends Goal {
 
     @Override
     public void setReadings(List<GoalReadings> readings) {
+        this.readings.clear();
         for(GoalReadings reading : readings){
             this.readings.add((DiabetesGoalReading) reading);
         }

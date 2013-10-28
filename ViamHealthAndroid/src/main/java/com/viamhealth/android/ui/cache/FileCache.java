@@ -17,9 +17,9 @@ public class FileCache {
             cacheDir.mkdirs();
     }
 
-    public File getFile(String url){
-        String filename=String.valueOf(url.hashCode());
-        File f = new File(cacheDir, filename);
+    public File getFile(String url, String extension){
+        String filename = String.valueOf(url.hashCode());
+        File f = new File(cacheDir, filename.concat(".").concat(extension));
         return f;
 
     }

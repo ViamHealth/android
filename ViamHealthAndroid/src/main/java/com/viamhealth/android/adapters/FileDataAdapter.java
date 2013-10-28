@@ -51,88 +51,28 @@ public class FileDataAdapter extends MultiSelectionAdapter<FileData> {
 	        FileDataHolder holder = null;
 	        tf = Typeface.createFromAsset(context.getAssets(),"Aparajita.ttf");
 	        
-	        if(row == null)
-	        {
+	        if(row == null){
 	            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
 	            row = inflater.inflate(layoutResourceId, parent, false);
-	            
 	            holder = new FileDataHolder();
 	            holder.main_list_layout=(LinearLayout)row.findViewById(R.id.main_list_layout);
-
 	            holder.img_icon=(ImageView)row.findViewById(R.id.img_icon);
-
 	            holder.desc_layout=(LinearLayout)row.findViewById(R.id.desc_layout);
-
-	           /* holder.end_layout=(LinearLayout)row.findViewById(R.id.end_layout);
-	            holder.end_layout.setPadding(w5, h5, w5, h5);*/
-	            
 	            holder.img_name = (TextView)row.findViewById(R.id.img_name);
 	            holder.img_desc = (TextView)row.findViewById(R.id.img_desc);
-	          /*  holder.img_lbl = (TextView)row.findViewById(R.id.img_lbl);
-	            holder.img_lbl.getLayoutParams().width=w45;
-	            
-	            holder.img_date = (TextView)row.findViewById(R.id.img_date);
-	            holder.img_date.setPadding(w5,0 ,0, 0);*/
-	            
-	           /* holder.chk_select = (CheckBox)row.findViewById(R.id.chk_select);
-	            holder.chk_select.setOnClickListener(new View.OnClickListener() {
-					
-					@Override  
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						final CheckBox cb = (CheckBox) v;
-						 FileData data = (FileData)cb.getTag();
-						 if(data.getDownload_url().length()>0){
-							 data.setChecked(cb.isChecked());
-						 }else{
-								AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-						 
-									// set title
-									alertDialogBuilder.setTitle("Not available");
-						 
-									// set dialog message
-									alertDialogBuilder
-										.setMessage("No Download url available...")
-										.setCancelable(false)
-									
-										.setNegativeButton("No",new DialogInterface.OnClickListener() {
-											public void onClick(DialogInterface dialog,int id) {
-												// if this button is clicked, just close
-												// the dialog box and do nothing
-												cb.setChecked(false);
-												dialog.cancel();
-											}
-										});
-						 
-										// create alert dialog
-										AlertDialog alertDialog = alertDialogBuilder.create();
-						 
-										// show it
-										alertDialog.show();
-						 }
-					}
-				});*/
 	            row.setTag(holder);
-	        } 
-	        else
-	        {  
+	        } else {
 	            holder = (FileDataHolder)row.getTag();
 	        }
 	        
 	        FileData data = lstdata.get(position);
 	        holder.img_name.setText(data.getName().toString());
-	        holder.img_desc.setText(data.getDescription().toString());
-	       // holder.img_lbl.setText(data.getImg_lbl().toString());
-	       // holder.img_date.setText(data.getImg_date().toString());
-	        //holder.chk_select.setTag(data);
-	        //holder.chk_select.setChecked(data.isChecked());
 	        return row;
 	    }
 	    
 	    static class FileDataHolder
 	    {
 	        TextView img_name,img_desc,img_lbl,img_date;
-	        //CheckBox chk_select;
 	        LinearLayout main_list_layout,desc_layout,end_layout;
 	        ImageView img_icon;
 	    }

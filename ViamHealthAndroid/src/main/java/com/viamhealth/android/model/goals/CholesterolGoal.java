@@ -28,6 +28,7 @@ public class CholesterolGoal extends Goal {
 
     @Override
     public void setReadings(List<GoalReadings> readings) {
+        this.readings.clear();
         for(GoalReadings reading : readings){
             this.readings.add((CholesterolGoalReading) reading);
         }
