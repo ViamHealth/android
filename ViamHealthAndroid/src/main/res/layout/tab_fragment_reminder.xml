@@ -270,12 +270,6 @@
                     </LinearLayout>
                     <!-- Reminder section layout end -->
 
-
-
-
-
-
-
                     <!-- Medicine section layout end -->
                     <LinearLayout android:layout_height="wrap_content"
                         android:layout_weight="1"

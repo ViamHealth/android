@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:context=".AddWeightValue"
+    android:background="@color/app_green"
     android:orientation="vertical">
     <FrameLayout
         android:id="@+id/main_layout"
@@ -22,10 +23,8 @@
 
             <LinearLayout
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:id="@+id/newval_main_layout"
-                android:background="@drawable/inviteuser_header"
-
                 android:gravity="center_vertical"
                 >
 
@@ -44,11 +43,11 @@
             <!-- value layout start -->
             <LinearLayout
                 android:id="@+id/newval_main_layout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/inviteuser_bg"
-                android:padding="20dp"
+                android:background="@android:color/white"
+                android:layout_margin="20dp"
                 >
 
                         <LinearLayout android:layout_height="wrap_content"
@@ -74,7 +73,6 @@
                                         android:hint="Enter Name"
                                         android:textSize="15sp"
                                         android:gravity="center_vertical"
-                                        android:background="@drawable/edt_bg"
                                         android:singleLine="true"
                                         android:padding="5dp"/>
                                     <!-- <LinearLayout android:layout_height="wrap_content"
@@ -329,12 +327,12 @@
                                             android:hint="Comment"
                                             android:textSize="15sp"
                                             android:gravity="center_vertical"
-                                            android:layout_gravity="bottom"
-                                            android:background="@drawable/edt_bg"/>
+                                            android:layout_gravity="bottom"/>
                                     </LinearLayout>
                                     <LinearLayout android:id="@+id/newval_btn_layout"
                                         android:layout_height="fill_parent"
                                         android:layout_width="fill_parent"
+                                        android:background="@color/app_green"
                                         android:orientation="horizontal">
 
 

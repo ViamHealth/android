@@ -86,4 +86,45 @@
         <item name="android:spinnerItemStyle">@style/SpinnerItemReverseTheme</item>
     </style>
 
+    <style name="SemiFullHeightDialog" parent="android:style/Theme.Holo.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:editTextStyle">@style/EditTextGreenTheme</item>
+
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGreenTheme</item>
+
+        <item name="android:checkboxStyle">@style/CheckBoxGreenTheme</item>
+
+        <item name="android:radioButtonStyle">@style/RadioButtonGreenTheme</item>
+
+        <item name="android:buttonStyle">@style/ButtonReverseTheme</item>
+
+        <item name="android:imageButtonStyle">@style/ImageButtonReverseTheme</item>
+
+        <item name="android:spinnerStyle">@style/SpinnerGreenTheme</item>
+
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerGreenTheme.DropDown</item>
+
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGreenTheme</item>
+
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarGreenTheme</item>
+
+        <item name="android:seekBarStyle">@style/SeekBarGreenTheme</item>
+
+        <item name="android:ratingBarStyle">@style/RatingBarGreenTheme</item>
+
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreenTheme</item>
+
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreenTheme</item>
+
+        <item name="android:buttonStyleToggle">@style/ToggleGreenTheme</item>
+
+        <item name="android:listViewStyle">@style/ListViewGreenTheme</item>
+
+        <item name="android:listViewWhiteStyle">@style/ListViewGreenTheme.White</item>
+
+        <item name="android:spinnerItemStyle">@style/SpinnerItemGreenTheme</item>
+    </style>
+
 </resources>

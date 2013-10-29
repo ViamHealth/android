@@ -412,13 +412,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             ga.listData=listData;
             ga.otherData=otherData;
 
-            if(listData.size()==0 && otherData.size()==0){
-                getActivity().findViewById(R.id.initial_layout).setVisibility(View.VISIBLE);
-                getActivity().findViewById(R.id.main_layout).setVisibility(View.GONE);
-            }else{
-                getActivity().findViewById(R.id.initial_layout).setVisibility(View.GONE);
-                getActivity().findViewById(R.id.main_layout).setVisibility(View.VISIBLE);
-            }
             //mPager1.setAdapter(new ImagePagerAdapter(lst));
 
             /*
@@ -526,6 +519,13 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             cal.add(Calendar.DAY_OF_YEAR,1);
             lst.add(fmt.format(cal.getTime()));
 
+            if(listData.size()==0 && otherData.size()==0){
+                getActivity().findViewById(R.id.initial_layout).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.main_layout).setVisibility(View.GONE);
+            }else{
+                getActivity().findViewById(R.id.initial_layout).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.main_layout).setVisibility(View.VISIBLE);
+            }
 
 
 /*
