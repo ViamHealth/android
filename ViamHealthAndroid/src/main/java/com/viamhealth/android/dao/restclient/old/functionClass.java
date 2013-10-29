@@ -997,7 +997,7 @@ public class functionClass {
 				}
 		// function for get file data
 				public ArrayList<FileData> getFile(Long userId, String searchString){
-                    String baseurlString = Global_Application.url + "healthfiles/?user=" + userId;
+                    String baseurlString = Global_Application.url + "healthfiles/?page_size=100&user=" + userId;
                     if(searchString!=null && !searchString.isEmpty())
                         baseurlString += "&search=" + searchString;
 					ArrayList<FileData>	lstData = new ArrayList<FileData>();
@@ -1015,6 +1015,9 @@ public class functionClass {
 						e.printStackTrace();
 					}
 
+                    if(client.getResponseCode()>400){
+                        return null;
+                    }
 					responseString = client.getResponse();
 					Log.e("TAG","Response string " + responseString);
 					

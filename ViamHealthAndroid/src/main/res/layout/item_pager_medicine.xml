@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_gravity="right"
     android:gravity="right"
-    android:padding="1dip" >
+    android:padding="1dip"
+    android:background="#ffffff">
 
  <LinearLayout android:layout_height="wrap_content"
      android:layout_width="fill_parent"

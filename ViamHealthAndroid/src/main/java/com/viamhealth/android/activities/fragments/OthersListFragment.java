@@ -87,7 +87,8 @@ public class OthersListFragment extends SherlockListFragment
     String selected_reminder_name;
     int selected_position;
     private static final int LIBRARY_FILE_VIEW = 1000;
-    MedicalDataAdapter1 adapter4;
+
+    private int DELETE_REMINDERS = 250;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -203,7 +204,7 @@ public class OthersListFragment extends SherlockListFragment
                     Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                     edit_med1.putExtra("user_id",user.getId().toString());
                     edit_med1.putExtra("id",otherData.get(selected_position).getId());
-                    startActivity(edit_med1);
+                    startActivityForResult(edit_med1, DELETE_REMINDERS);
                     return true;
 
 
@@ -222,6 +223,29 @@ public class OthersListFragment extends SherlockListFragment
 
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==DELETE_REMINDERS){
+            if(resultCode==getSherlockActivity().RESULT_OK){
+                String id = data.getStringExtra("id");
+                if(id!=null && !id.isEmpty()){
+                    int count = listData.size();
+                    MedicationData md = null;
+                    for(int i=0; i<count; i++){
+                        md = listData.get(i);
+                        if(md.getId().equals(id)){
+                            break;
+                        }
+                    }
+                    if(md!=null){
+                        listData.remove(md);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
 
 
     private void initListView()

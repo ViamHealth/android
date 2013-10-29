@@ -83,7 +83,8 @@ public class MedicineListFragment extends SherlockListFragment
     String selected_reminder_name,selected_morning_val,selected_noon_val,selected_night_val;
     int selected_position;
     private static final int LIBRARY_FILE_VIEW = 1000;
-    MedicalDataAdapter1 adapter4;
+
+    private int DELETE_MEDICINES = 250;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -204,7 +205,8 @@ public class MedicineListFragment extends SherlockListFragment
                     Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                     edit_med1.putExtra("user_id",user.getId().toString());
                     edit_med1.putExtra("id",listData.get(selected_position).getId());
-                    startActivityForResult(edit_med1,2);
+                    startActivityForResult(edit_med1, DELETE_MEDICINES);
+
                     return true;
 
 
@@ -227,28 +229,29 @@ public class MedicineListFragment extends SherlockListFragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==2){
+        if(requestCode==DELETE_MEDICINES){
             if(resultCode==getSherlockActivity().RESULT_OK){
                 String id = data.getStringExtra("id");
-
+                if(id!=null && !id.isEmpty()){
                     int count = listData.size();
-                    MedicationData md;int i;
-                    for(i=0; i<count; i++){
+                    MedicationData md = null;
+                    for(int i=0; i<count; i++){
                         md = listData.get(i);
-                        if(md.getId().equalsIgnoreCase(id)){
+                        if(md.getId().equals(id)){
                             break;
                         }
                     }
-                    listData.remove(i);
-
+                    if(md!=null){
+                        listData.remove(md);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
             }
         }
     }
 
-
     private void initListView()
     {
-
         //goal_count.setText("("+files.size()+")");
         this.adapter = new MedicalDataAdapter1(getSherlockActivity(), R.layout.row_medical_list1,listData);
         this.list.setAdapter(adapter);
