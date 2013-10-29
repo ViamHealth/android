@@ -79,8 +79,11 @@ public class DeleteMedication extends BaseActivity {
         {
 
             Log.i("onPostExecute", "onPostExecute");
-
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("id", reminderid);
+            setResult(RESULT_OK, returnIntent);
             finish();
+
             //generateView();
             //dialog.dismiss();
 			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);

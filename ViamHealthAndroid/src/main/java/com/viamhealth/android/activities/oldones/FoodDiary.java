@@ -1095,7 +1095,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 					Log.i("doInBackground--Object", "doInBackground--Object");
 					//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 					Global_Application.totalcal=0;
-					lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST");
+					lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST","date");
 					return null;
 				}
 				   
@@ -1225,7 +1225,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								Global_Application.totalcal=0;
-								lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH");
+								lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH","date");
 								return null;
 							}
 							   
@@ -1285,7 +1285,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								Global_Application.totalcal=0;
-								lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS");
+								lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS","date");
 								return null;
 							}
 							   
@@ -1333,7 +1333,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								Global_Application.totalcal=0;
-								lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER");
+								lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER","date");
 								return null;
 							}
 							   
@@ -1421,13 +1421,13 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								if(frm.equals("b")){
-									lstResultBreakfast.addAll(obj.FoodListing(nexturl));
+									//lstResultBreakfast.addAll(obj.FoodListing(nexturl));
 								}else if(frm.equals("l")){
-									lstResultLunch.addAll(obj.FoodListing(nexturl));
+									//lstResultLunch.addAll(obj.FoodListing(nexturl));
 								}else if(frm.equals("s")){
-									lstResultSnacks.addAll(obj.FoodListing(nexturl));
+									//lstResultSnacks.addAll(obj.FoodListing(nexturl));
 								}else if(frm.equals("d")){
-									lstResultDinner.addAll(obj.FoodListing(nexturl));
+									//lstResultDinner.addAll(obj.FoodListing(nexturl));
 								}
 								
 								

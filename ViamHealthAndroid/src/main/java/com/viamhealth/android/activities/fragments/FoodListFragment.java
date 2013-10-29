@@ -58,7 +58,7 @@ import java.util.Set;
 /**
  * Created by naren on 27/10/13.
  */
-public class MedicineListFragment extends SherlockListFragment
+public class FoodListFragment extends SherlockListFragment
 {
 
     private MultiSelectionAdapter adapter;
@@ -204,7 +204,7 @@ public class MedicineListFragment extends SherlockListFragment
                     Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
                     edit_med1.putExtra("user_id",user.getId().toString());
                     edit_med1.putExtra("id",listData.get(selected_position).getId());
-                    startActivityForResult(edit_med1,2);
+                    startActivity(edit_med1);
                     return true;
 
 
@@ -224,26 +224,6 @@ public class MedicineListFragment extends SherlockListFragment
 
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==2){
-            if(resultCode==getSherlockActivity().RESULT_OK){
-                String id = data.getStringExtra("id");
-
-                    int count = listData.size();
-                    MedicationData md;int i;
-                    for(i=0; i<count; i++){
-                        md = listData.get(i);
-                        if(md.getId().equalsIgnoreCase(id)){
-                            break;
-                        }
-                    }
-                    listData.remove(i);
-
-            }
-        }
-    }
 
 
     private void initListView()

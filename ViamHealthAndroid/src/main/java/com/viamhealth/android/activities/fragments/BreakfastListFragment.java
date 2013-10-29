@@ -6,17 +6,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,6 +37,7 @@ import com.viamhealth.android.activities.AddMedication;
 import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Downlaod;
 import com.viamhealth.android.adapters.FileDataAdapter;
+import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.adapters.MultiSelectionAdapter;
 import com.viamhealth.android.dao.restclient.old.functionClass;
@@ -58,7 +63,7 @@ import java.util.Set;
 /**
  * Created by naren on 27/10/13.
  */
-public class MedicineListFragment extends SherlockListFragment
+public class BreakfastListFragment extends SherlockListFragment
 {
 
     private MultiSelectionAdapter adapter;
@@ -72,6 +77,7 @@ public class MedicineListFragment extends SherlockListFragment
     Intent edit_med=null;
     int edit_pos=0;
     String med_id;
+    ProgressDialog dialog1;
 
     // if ActoinMode is null - assume we are in normal mode
     private ActionMode actionMode;
@@ -98,14 +104,8 @@ public class MedicineListFragment extends SherlockListFragment
 
         this.list = (ListView) v.findViewById(android.R.id.list);
 
-        if(Checker.isInternetOn(getSherlockActivity())){
-            RetrieveMedicalData task = new RetrieveMedicalData();
-            //task.activity = getSherlockActivity();
-            task.execute();
-        }else{
-            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-        }
 
+        initListView();
         return v;
     }
 
@@ -126,7 +126,7 @@ public class MedicineListFragment extends SherlockListFragment
     }
 
 
-    public final class ActionModeCallbackMedicine implements ActionMode.Callback
+    public final class ActionModeCallbackBreakfast implements ActionMode.Callback
     {
 
         // " selected" string resource to update ActionBar text
@@ -171,6 +171,111 @@ public class MedicineListFragment extends SherlockListFragment
         }
 
 
+        public final boolean isInternetOn() {
+
+            ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
+                    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
+                    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
+                    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
+                return true;
+            }
+
+            else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
+                    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
+                return false;
+            }
+
+            return false;
+        }
+
+        public class CallDeleteTask extends AsyncTask <String, Void,String>
+        {
+            protected FragmentActivity activity;
+
+            @Override
+            protected void onPreExecute()
+            {
+
+                //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+                //dialog1 = new ProgressDialog(activity);
+                //dialog1.setCanceledOnTouchOutside(false);
+                //dialog1.setMessage("Please Wait....");
+                //dialog1.show();
+                Log.i("onPreExecute", "onPreExecute");
+                Log.i("onPreExecute", "before calling delete task");
+
+            }
+
+            protected void onPostExecute(String result)
+            {
+                // dialog1.dismiss();
+                Log.i("onPostExecute", "onPostExecute");
+                if(isInternetOn()){
+                    //CallListTask task = new CallListTask();
+                    //task.activity = activity;
+                    //task.execute();
+                }else{
+                    Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+                //onResume();
+
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                // TODO Auto-generated method stub
+                Log.i("doInBackground--Object", "doInBackground--Object");
+                User user = getArguments().getParcelable("user");
+                return obj.DeleteFood("diet-tracker/",Global_Application.selectedfoodid,user.getId().toString());
+            }
+
+        }
+
+
+        public class CallEditTask extends AsyncTask <String, Void,String>
+        {
+            protected FragmentActivity activity;
+
+            @Override
+            protected void onPreExecute()
+            {
+
+                //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+                dialog1 = new ProgressDialog(activity);
+                dialog1.setCanceledOnTouchOutside(false);
+                dialog1.setMessage("Please Wait....");
+                dialog1.show();
+                Log.i("onPreExecute", "onPreExecute");
+
+            }
+
+            protected void onPostExecute(String result)
+            {
+                dialog1.dismiss();
+                Log.i("onPostExecute", "onPostExecute");
+                if(isInternetOn()){
+                    //CallListTask task = new CallListTask();
+                    //task.activity = activity;
+                    //task.execute();
+                }else{
+                    Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                // TODO Auto-generated method stub
+                Log.i("doInBackground--Object", "doInBackground--Object");
+
+                //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+                //Toast.makeText(getSherlockActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
+                User user = getArguments().getParcelable("user");
+                return obj.EditFood(Global_Application.selectedfoodid,Global_Application.food_item,Global_Application.food_quantity,Global_Application.meal_type,user.getId().toString());
+            }
+
+        }
 
 
         @Override
@@ -178,33 +283,82 @@ public class MedicineListFragment extends SherlockListFragment
 
             switch (item.getItemId()) {
                 case R.id.action_mode_edit:
-                    if(adapter.getCheckedItemCount()>0){
 
-                        edit_med=new Intent(getSherlockActivity(),AddMedication.class);
-                        edit_pos=selected_position;
-                        edit_med.putExtra("iseditMed",true);
-                        edit_med.putExtra("user_id",user.getId().toString());
-                        med_id=listData.get(selected_position).getId();
-                        edit_med.putExtra("id",med_id);
-                        edit_med.putExtra("start_date",listData.get(selected_position).getStart_date());
-                        edit_med.putExtra("name",selected_reminder_name);
-                        edit_med.putExtra("morning",selected_morning_val);
-                        edit_med.putExtra("noon",selected_noon_val);
-                        edit_med.putExtra("night",selected_night_val);
-                        startActivity(edit_med);
 
-                    }else{
-                        Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
-                    }
 
+
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                    final EditText input = new EditText(getSherlockActivity());
+                    input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    alert.setMessage("Enter Number of Servings");
+                    alert.setView(input);
+                    Global_Application.food_item=ga.lstResultBreakfast.get(selected_position).getFoodItem();
+                    Global_Application.meal_type="BREAKFAST";
+                    alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if(isInternetOn()){
+                                Global_Application.food_quantity=input.getText().toString().trim();
+                                CallEditTask task = new CallEditTask();
+                                task.activity =getSherlockActivity();
+                                task.execute();
+                            }else{
+                                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.show();
                     Toast.makeText(getActivity(), "Download", Toast.LENGTH_LONG).show();
                     return true;
 
+
+
+
+
+
                 case R.id.action_mode_delete:
-                    Intent edit_med1=new Intent(getSherlockActivity(),DeleteMedication.class);
-                    edit_med1.putExtra("user_id",user.getId().toString());
-                    edit_med1.putExtra("id",listData.get(selected_position).getId());
-                    startActivityForResult(edit_med1,2);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            getSherlockActivity());
+
+                    // set title
+                    alertDialogBuilder.setTitle("Confirmation");
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("Are you sure you want to delete this food?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    dialog.cancel();
+                                    if(isInternetOn()){
+                                        CallDeleteTask task = new CallDeleteTask();
+                                        task.activity =getSherlockActivity();
+                                        task.execute();
+                                    }else{
+                                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            })
+                            .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // show it
+                    alertDialog.show();
                     return true;
 
 
@@ -225,32 +379,12 @@ public class MedicineListFragment extends SherlockListFragment
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==2){
-            if(resultCode==getSherlockActivity().RESULT_OK){
-                String id = data.getStringExtra("id");
-
-                    int count = listData.size();
-                    MedicationData md;int i;
-                    for(i=0; i<count; i++){
-                        md = listData.get(i);
-                        if(md.getId().equalsIgnoreCase(id)){
-                            break;
-                        }
-                    }
-                    listData.remove(i);
-
-            }
-        }
-    }
-
 
     private void initListView()
     {
 
         //goal_count.setText("("+files.size()+")");
-        this.adapter = new MedicalDataAdapter1(getSherlockActivity(), R.layout.row_medical_list1,listData);
+        this.adapter = new JournalFoodAdapter(getSherlockActivity(), R.layout.breakfast_food_list,ga.lstResultBreakfast);
         this.list.setAdapter(adapter);
         int total_height_medicine_tab=0,len=0,i;
 
@@ -274,19 +408,10 @@ public class MedicineListFragment extends SherlockListFragment
                     // if already in action mode - do nothing
                     return false;
                 }
-                // set checked selected item and enter multi selection mode
-                final TextView name=(TextView)arg1.findViewById(R.id.txt_name);
-                final TextView txt_morn=(TextView)arg1.findViewById(R.id.txt_morning);
-                final TextView txt_noon=(TextView)arg1.findViewById(R.id.txt_noon);
-                final TextView txt_night=(TextView)arg1.findViewById(R.id.txt_night);
 
-                selected_reminder_name=name.getText().toString();
-                selected_morning_val=txt_morn.getText().toString();
-                selected_noon_val=txt_noon.getText().toString();
-                selected_night_val=txt_night.getText().toString();
                 selected_position=arg2;
                 adapter.setChecked(arg2, true);
-                getSherlockActivity().startActionMode(new ActionModeCallbackMedicine());
+                getSherlockActivity().startActionMode(new ActionModeCallbackBreakfast());
                 actionMode.invalidate();
                 return true;
             }

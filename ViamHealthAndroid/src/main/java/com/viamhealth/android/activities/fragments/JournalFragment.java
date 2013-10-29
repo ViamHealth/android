@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -98,6 +99,9 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
+    Bundle args = new Bundle();
+    User selected_user;
+    String selected_date;
 
     double target_ideal_calories=0;
 
@@ -122,6 +126,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
         obj=new functionClass(getSherlockActivity());
         ga=((Global_Application)getSherlockActivity().getApplicationContext());
+        selected_user=getArguments().getParcelable("user");
+        args.putParcelable("user", selected_user);
 
         tf = Typeface.createFromAsset(getSherlockActivity().getAssets(), "Roboto-Condensed.ttf");
         //for get screen height width
@@ -380,6 +386,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         lbl_food_date.setPadding(w5, 0, 0, 0);
         lbl_food_date.setTypeface(tf);
 
+
+
         lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
         lbl_food_time.setTypeface(tf);
 
@@ -394,6 +402,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         pMonth = dateAndTime.get(Calendar.MONTH);
         pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
         updateDisplay();
+        selected_date=""+pYear+"-"+pMonth+"-"+pDay;
         /*
         lstViewBreakfast.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
 
@@ -490,6 +499,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             }
         });
         */
+
+
+
+
         lstViewBreakfast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -1201,6 +1214,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             pDay=dayOfMonth;
             pYear=year;
             updateDisplay();
+            selected_date=""+pYear+"-"+pMonth+"-"+pDay;
+
+
+
         }
     };
     private void updateDisplay() {
@@ -1371,9 +1388,15 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                 breakfast_cal=total_calories;
                 //BreakfastAdapter adapter = new BreakfastAdapter(getSherlockActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
                 JournalFoodAdapter adapter = new JournalFoodAdapter(getSherlockActivity(),R.layout.row_journal_list, lstResultBreakfast);
-                //JournalFoodAdapter adapter=
 
                 lstViewBreakfast.setAdapter(adapter);
+/*
+                ga.lstResultBreakfast=lstResultBreakfast;
+                FragmentTransaction fm = getSherlockActivity().getSupportFragmentManager().beginTransaction();
+                BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
+                fm.add(R.id.lstViewBreakfast, fragment, "Breakfast");
+*/
+
                 int i=0,len=0;
                 for (i = 0, len = adapter.getCount(); i < len; i++) {
                     View listItem = adapter.getView(i, null, lstViewBreakfast);
@@ -1387,6 +1410,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
+
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
                     task.activity =getSherlockActivity();
@@ -1424,7 +1448,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST");
+            lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",selected_date);
             return null;
         }
 
@@ -1511,7 +1535,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH");
+            lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH",selected_date);
             return null;
         }
 
@@ -1598,7 +1622,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS");
+            lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",selected_date);
             return null;
         }
 
@@ -1685,7 +1709,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER");
+            lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER",selected_date);
             return null;
         }
 
@@ -1811,7 +1835,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         super.onResume();
         Global_Application.total_ideal_calories=0;
         if(isInternetOn()){
-            CallListTask task = new CallListTask();
+           CallListTask task = new CallListTask();
             task.activity = getSherlockActivity();
             task.execute();
         }else{

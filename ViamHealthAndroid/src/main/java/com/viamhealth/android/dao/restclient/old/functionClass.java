@@ -1,6 +1,8 @@
 package com.viamhealth.android.dao.restclient.old;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -235,11 +237,12 @@ public class functionClass {
         }
 
 
-		public ArrayList<CategoryFood> FoodListing(String baseurlString){
+		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
 			RestClient client = new RestClient(baseurlString);   
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
             Log.e("TAG","baseurlString : " + baseurlString);
+            //client.AddParam("diet_date",date);
 		  
 			try
 			{
@@ -316,6 +319,9 @@ public class functionClass {
         client.AddParam("food_item", food_item);
         client.AddParam("meal_type", meal_type);
         client.AddParam("food_quantity_multiplier", food_quantities);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        client.AddParam("diet_date",sdf.format(date));
 
 
         try
@@ -367,6 +373,9 @@ public class functionClass {
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                     Log.e("TAG","Delete Food : " + baseurlString);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = new Date();
+                    client.AddParam("diet_date",sdf.format(date));
 				  
 					try
 					{
@@ -414,6 +423,12 @@ public class functionClass {
         client.AddParam("food_item", id);
         client.AddParam("meal_type", mealtype);
         client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        client.AddParam("diet_date",sdf.format(date));
+
+        Log.e("TAG","url for add food : " + baseurlString);
+
         try
         {
             client.Execute(RequestMethod.POST);
@@ -423,7 +438,7 @@ public class functionClass {
         }
 
         responseString = client.getResponse();
-        Log.e("TAG","Responce : " + responseString);
+        Log.e("TAG","Responce for add food : " + responseString);
         try {
             jObject = new JSONObject(responseString);
             if(responseString.length()>0){

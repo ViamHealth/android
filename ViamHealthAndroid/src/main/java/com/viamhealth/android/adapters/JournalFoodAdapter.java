@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
+public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
     Context context;
     int layoutResourceId;
     ArrayList<CategoryFood> lstdata = new ArrayList<CategoryFood>();
@@ -32,7 +32,7 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
 
 
     public JournalFoodAdapter(Context context, int layoutResourceId, ArrayList<CategoryFood> lstdata) {
-        super(context, layoutResourceId, lstdata);
+        super(context, lstdata);
         // TODO Auto-generated constructor stub
 
         this.layoutResourceId = layoutResourceId;
@@ -40,7 +40,7 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
         this.lstdata = lstdata;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getItemView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         FileDataHolder holder = null;
         appPrefs=new ViamHealthPrefs(context);
