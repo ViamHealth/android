@@ -96,7 +96,7 @@ public class MedicalDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						TextView txt = (TextView)v.findViewById(R.id.txt_morning);
-						txt.setBackgroundColor(Color.GREEN);
+						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
 	            
@@ -106,7 +106,7 @@ public class MedicalDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						TextView txt = (TextView)v.findViewById(R.id.txt_noon);
-						txt.setBackgroundColor(Color.GREEN);
+						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
 	            holder.txt_night.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +115,7 @@ public class MedicalDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						TextView txt = (TextView)v.findViewById(R.id.txt_night);
-						txt.setBackgroundColor(Color.GREEN);
+						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
                 String get_start_date,get_end_date;
