@@ -92,7 +92,8 @@ public class Global_Application extends Application
 
     public void setLoggedInUser(User loggedInUser) {
         this.loggedInUser = loggedInUser;
-        this.loggedInUser.setLoggedInUser(true);
+        if(this.loggedInUser!=null)
+            this.loggedInUser.setLoggedInUser(true);
     }
 
     public boolean isCalcelflg() {

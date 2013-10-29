@@ -145,6 +145,8 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
                 }else{
                     mapSelectedUris.remove(data.getId());
                     updateShareActionProvider();
+                    if(mapSelectedUris.size()==0)
+                        actionMode.finish();
                 }
             }
         });
@@ -171,13 +173,33 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
             {
-                if (actionMode == null) {
-                    getSherlockActivity().startActionMode(new ActionModeCallback());
-                    // if action mode, toggle checked state of item
-                }
 
-                adapter.toggleChecked(position);
-                actionMode.invalidate();
+                if (actionMode != null) {
+                    actionMode.invalidate();
+                    // if action mode, toggle checked state of item
+                    adapter.toggleChecked(position);
+                }else{
+                    FileData data = files.get(position);
+                    FileLoader loader = new FileLoader(getSherlockActivity());
+                    String fileName = data.getName();
+                    final String fileExtension = UIUtility.getFileExtension(fileName);
+                    //need to pass even the fileName to store the file with that name
+                    loader.LoadFile(data.getDownload_url(), fileName, new FileLoader.OnFileLoadedListener() {
+                        @Override
+                        public void OnFileLoaded(File file) {
+                            MimeTypeMap myMime = MimeTypeMap.getSingleton();
+                            Intent newIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                            String mimeType = myMime.getMimeTypeFromExtension(fileExtension);
+                            newIntent.setDataAndType(Uri.fromFile(file), mimeType);
+                            newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
+                            try {
+                                getSherlockActivity().startActivity(newIntent);
+                            } catch (android.content.ActivityNotFoundException e) {
+                                Toast.makeText(getSherlockActivity(), "No handler for this type of file.", 4000).show();
+                            }
+                        }
+                    });
+                }
 
             }
         });
