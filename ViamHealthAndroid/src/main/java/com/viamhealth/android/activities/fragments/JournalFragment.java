@@ -100,12 +100,12 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     Calendar dateAndTime=Calendar.getInstance();
     int pYear,pMonth,pDay;
 
+
     Bundle args = new Bundle();
     User selected_user;
     String selected_date;
 
     double target_ideal_calories=0;
-
 
 
     String selecteduserid="0";
