@@ -3,8 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     tools:context=".AddWeightValue"
-    android:orientation="vertical"
-    android:background="#D9D9D9">
+    android:orientation="vertical">
     <FrameLayout
         android:id="@+id/main_layout"
         android:layout_height="wrap_content"
@@ -35,8 +34,7 @@
                     android:text="Add Reminder"
                     android:paddingLeft="5dp"
                     android:textSize="20sp"
-                    android:id="@+id/heading"
-                    android:textColor="#32B5E5"/>
+                    android:id="@+id/heading"/>
 
 
 
@@ -75,7 +73,6 @@
                                         android:layout_width="fill_parent"
                                         android:hint="Enter Name"
                                         android:textSize="15sp"
-                                        android:textColor="#000000"
                                         android:gravity="center_vertical"
                                         android:background="@drawable/edt_bg"
                                         android:singleLine="true"
@@ -121,15 +118,13 @@
                                             android:layout_width="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Morning"
-                                            android:paddingRight="30dp"
-                                            android:textColor="#000000"/>
+                                            android:paddingRight="30dp"/>
                                         <TextView android:id="@+id/morningval"
                                             android:layout_height="wrap_content"
                                             android:layout_width="wrap_content"
                                             android:text="0"
                                             android:padding="5dp"
                                             android:textStyle="bold"
-                                            android:textColor="#626b82"
                                             android:textSize="15dp"
                                             android:gravity="right|center_vertical"/>
                                         <RelativeLayout android:id="@+id/plimg1"
@@ -174,15 +169,13 @@
                                             android:layout_width="wrap_content"
                                             android:layout_weight="1"
                                             android:text="After Noon"
-                                            android:paddingRight="30dp"
-                                            android:textColor="#000000"/>
+                                            android:paddingRight="30dp"/>
                                         <TextView android:id="@+id/noonval"
                                             android:layout_height="wrap_content"
                                             android:layout_width="wrap_content"
                                             android:text="0"
                                             android:padding="5dp"
                                             android:textStyle="bold"
-                                            android:textColor="#626b82"
                                             android:textSize="15dp"
                                             android:gravity="right|center_vertical"/>
                                         <RelativeLayout android:id="@+id/plimg1"
@@ -216,15 +209,13 @@
                                             android:layout_width="wrap_content"
                                             android:layout_weight="1"
                                             android:text="Night"
-                                            android:paddingRight="30dp"
-                                            android:textColor="#000000"/>
+                                            android:paddingRight="30dp"/>
                                         <TextView android:id="@+id/nightval"
                                             android:layout_height="wrap_content"
                                             android:layout_width="wrap_content"
                                             android:text="0"
                                             android:padding="5dp"
                                             android:textStyle="bold"
-                                            android:textColor="#626b82"
                                             android:textSize="15dp"
                                             android:gravity="right|center_vertical"/>
                                         <RelativeLayout android:id="@+id/plimg1"
@@ -261,8 +252,7 @@
                                                 android:text="Every"
                                                 android:layout_gravity="center"
                                                 android:layout_weight="2"
-                                                android:paddingRight="5dp"
-                                                android:textColor="#000000"/>
+                                                android:paddingRight="5dp"/>
 
                                             <EditText
                                                 android:id="@+id/txt_interval_val"
@@ -270,7 +260,6 @@
                                                 android:layout_width="0dp"
                                                 android:layout_weight="3"
                                                 android:textSize="15sp"
-                                                android:textColor="#000000"
                                                 android:gravity="center"
                                                 android:inputType="number"
                                                 android:defaultValue="1"/>
@@ -295,8 +284,7 @@
                                                 android:layout_width="0dp"
                                                 android:text="For"
                                                 android:layout_weight="2"
-                                                android:paddingRight="5dp"
-                                                android:textColor="#000000"/>
+                                                android:paddingRight="5dp"/>
 
                                             <EditText
                                                 android:id="@+id/txt_duration_val"
@@ -305,7 +293,6 @@
                                                 android:layout_weight="3"
                                                 android:textSize="15sp"
                                                 android:inputType="number"
-                                                android:textColor="#000000"
                                                 android:gravity="center"
                                                 android:defaultValue="1"/>
 
@@ -341,7 +328,6 @@
                                             android:layout_width="fill_parent"
                                             android:hint="Comment"
                                             android:textSize="15sp"
-                                            android:textColor="#000000"
                                             android:gravity="center_vertical"
                                             android:layout_gravity="bottom"
                                             android:background="@drawable/edt_bg"/>

@@ -188,5 +188,8 @@
     <string name="fasting_sugar">fasting sugar value</string>
     <string name="medicine_separator">-</string>
     <string name="file_name">file name</string>
+    <string name="reminder_initial_string">Alarms! Great way of reminding!!\n\n
+        you can set reminders on any kind of medications, lab tests, doctor visits, meals, activities, etc...\n\n</string>
+    <string name="set_medi_reminders">set reminders for medicines</string><string name="set_others_reminders">set reminders for rest everything</string>
 
 </resources>

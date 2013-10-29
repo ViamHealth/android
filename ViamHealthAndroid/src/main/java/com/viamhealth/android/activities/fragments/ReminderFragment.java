@@ -80,7 +80,7 @@ import java.util.Set;
 /**
  * Created by naren on 08/10/13.
  */
-public class ReminderFragment extends SherlockFragment implements View.OnClickListener, ActionBar.TabListener {
+public class ReminderFragment extends SherlockFragment implements View.OnClickListener {
 
     private User user;
     private View view;
@@ -103,7 +103,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     //Framelayout lstReminderTest;
     ScrollView test_scrl;
     LinearLayout medicine_scrl,reminder_scrl;
-    TextView lbl_name,lbl_morning,txt1,lbl_noon,txt2,lbl_night;
     LinearLayout main_list_edit,main_list_delete,main_list;
 
     String selected_reminder_name,selected_morning_val,selected_noon_val,selected_night_val;
@@ -179,6 +178,29 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         reminder_scrl.setVisibility(View.VISIBLE);
 
 
+        FrameLayout initialLayout = (FrameLayout) view.findViewById(R.id.initial_layout);
+        Button addMedicine = (Button) initialLayout.findViewById(R.id.add_medi_rem);
+        Button addOthers = (Button) initialLayout.findViewById(R.id.add_test_rem);
+
+        addMedicine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addMedication = new Intent(getSherlockActivity(),AddMedication.class);
+                addMedication.putExtra("user_id",user.getId().toString());
+                startActivity(addMedication);
+            }
+        });
+
+        addOthers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addMedication = new Intent(getSherlockActivity(),AddMedication.class);
+                addMedication.putExtra("user_id",user.getId().toString());
+                addMedication.putExtra("isOthersReminders",true);
+                startActivity(addMedication);
+            }
+        });
+
         txt_reminder = (TextView)view.findViewById(R.id.txt_reminder);
         txt_reminder.setOnClickListener(this);
         txt_reminder.setBackgroundResource(R.drawable.tabpressed);
@@ -198,6 +220,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         add_test.setOnClickListener(this);
 
         add_medicine_reminder = (Button)view.findViewById(R.id.add_medicine_reminder);
+        add_medicine_reminder.setVisibility(View.GONE);
         //add_medicine.setTypeface(tf);
         add_medicine_reminder.setOnClickListener(this);
 
@@ -206,7 +229,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         add_test_reminder.setOnClickListener(this);
 
         // for list heading
-        lbl_name = (TextView)view.findViewById(R.id.lbl_name);
+        /*lbl_name = (TextView)view.findViewById(R.id.lbl_name);
         lbl_name.getLayoutParams().width = w150;
 
         lbl_morning = (TextView)view.findViewById(R.id.lbl_morning);
@@ -222,7 +245,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         txt1.setPadding(w5, 0, 0, 0);
 
         txt2 = (TextView)view.findViewById(R.id.txt2);
-        txt2.setPadding(w10, 0, 0, 0);
+        txt2.setPadding(w10, 0, 0, 0);*/
         int i=0;
 
         rem1=new StoreReminders();
@@ -258,18 +281,21 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New")
+                .setIcon(R.drawable.ic_content_new)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.drawable.ic_content_new){
+            Intent AddMedication = new Intent(getSherlockActivity(),AddMedication.class);
+            AddMedication.putExtra("user_id",user.getId().toString());
+            startActivity(AddMedication);
+            return false;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -385,6 +411,14 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             }
             ga.listData=listData;
             ga.otherData=otherData;
+
+            if(listData.size()==0 && otherData.size()==0){
+                getActivity().findViewById(R.id.initial_layout).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.main_layout).setVisibility(View.GONE);
+            }else{
+                getActivity().findViewById(R.id.initial_layout).setVisibility(View.GONE);
+                getActivity().findViewById(R.id.main_layout).setVisibility(View.VISIBLE);
+            }
             //mPager1.setAdapter(new ImagePagerAdapter(lst));
 
             /*
@@ -946,11 +980,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                 }
             }); */
 
-        }
-        if(v==add_medicine_reminder){
-            Intent AddMedication = new Intent(getSherlockActivity(),AddMedication.class);
-            AddMedication.putExtra("user_id",user.getId().toString());
-            startActivity(AddMedication);
         }
         if(v==add_test_reminder){
             Intent AddTest = new Intent(getSherlockActivity(), com.viamhealth.android.activities.AddTest.class);
