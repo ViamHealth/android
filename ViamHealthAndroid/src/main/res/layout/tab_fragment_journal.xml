@@ -185,7 +185,15 @@
                                      android:headerDividersEnabled="false"
                                      android:footerDividersEnabled="false"
                                      android:layout_height="200dp"
-                                     android:id="@+id/lstViewBreakfast" /> -->
+                                     android:id="@+id/lstViewBreakfast" />
+                                     <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstViewBreakfast"/>
+                                    -->
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -199,6 +207,9 @@
                                     android:fastScrollEnabled="true"
                                     android:listSelector="@drawable/list_item_selector"
                                     android:id="@+id/lstViewBreakfast" />
+
+
+
 
 
                             </LinearLayout>

@@ -98,7 +98,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
-    int pYear,pMonth,pDay;
+    int pYear,pMonth,pDay,monthval;
 
 
     Bundle args = new Bundle();
@@ -403,8 +403,9 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         pYear = dateAndTime.get(Calendar.YEAR);
         pMonth = dateAndTime.get(Calendar.MONTH);
         pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
+        monthval=pMonth+1;
         updateDisplay();
-        selected_date=""+pYear+"-"+pMonth+"-"+pDay;
+        selected_date=""+pYear+"-"+monthval+"-"+pDay;
         /*
         lstViewBreakfast.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
 
@@ -1215,9 +1216,16 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             pMonth=monthOfYear;
             pDay=dayOfMonth;
             pYear=year;
+            monthval=pMonth+1;
             updateDisplay();
-            selected_date=""+pYear+"-"+pMonth+"-"+pDay;
-
+            selected_date=""+pYear+"-"+monthval+"-"+pDay;
+            if(isInternetOn()){
+                CallListTask task = new CallListTask();
+                task.activity = getSherlockActivity();
+                task.execute();
+            }else{
+                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
 
 
         }
@@ -1256,6 +1264,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
 
             Log.i("onPreExecute", "onPreExecute");
+            dialog1.dismiss();
 
         }
 
@@ -1359,6 +1368,11 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+            if(dialog1!=null)
+            {
+                dialog1.dismiss();
+                dialog1=null;
+            }
 
             dialog1 = new ProgressDialog(activity);
             dialog1.setCanceledOnTouchOutside(false);
@@ -1432,6 +1446,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                 lstViewBreakfast.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 lstViewBreakfast.onRefreshComplete();
+                Toast.makeText(getSherlockActivity(),"Selected Date="+selected_date,Toast.LENGTH_SHORT).show();
             }
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
@@ -1450,6 +1465,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
+
             lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",selected_date);
             return null;
         }

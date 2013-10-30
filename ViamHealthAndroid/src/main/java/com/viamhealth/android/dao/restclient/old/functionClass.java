@@ -239,7 +239,8 @@ public class functionClass {
 
 		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
-			RestClient client = new RestClient(baseurlString);   
+            baseurlString+="&diet_date="+date;
+			RestClient client = new RestClient(baseurlString);
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
             Log.e("TAG","baseurlString : " + baseurlString);
             //client.AddParam("diet_date",date);

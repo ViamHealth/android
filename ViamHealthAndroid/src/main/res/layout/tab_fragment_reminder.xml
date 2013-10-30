@@ -264,7 +264,7 @@
                                 android:paddingRight="10dp"
                                 android:background="@drawable/btn_save_toggle"
                                 android:textStyle="bold"
-                                android:visibility="gone"/>
+                                android:visibility="visible"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -356,7 +356,7 @@
                                     android:paddingRight="10dp"
                                     android:background="@drawable/btn_save_toggle"
                                     android:textStyle="bold"
-                                    android:visibility="gone"/>
+                                    android:visibility="visible"/>
                             </LinearLayout>
                      </ScrollView>
 
@@ -494,7 +494,7 @@
                                         android:background="@drawable/btn_save_toggle"
                                         android:headerDividersEnabled="false"
                                         android:footerDividersEnabled="false"
-                                        android:visibility="gone"/>
+                                        android:visibility="visible"/>
 
                                 </LinearLayout>
                                 <LinearLayout android:layout_height="wrap_content"
