@@ -1095,7 +1095,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 					Log.i("doInBackground--Object", "doInBackground--Object");
 					//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 					Global_Application.totalcal=0;
-					lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST","date");
+					lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST","date","dummy_id");
 					return null;
 				}
 				   
@@ -1225,7 +1225,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								Global_Application.totalcal=0;
-								lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH","date");
+								lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH","date","dummy_id");
 								return null;
 							}
 							   
@@ -1285,7 +1285,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								Global_Application.totalcal=0;
-								lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS","date");
+								lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS","date","dummy_id");
 								return null;
 							}
 							   
@@ -1333,7 +1333,7 @@ public class FoodDiary extends BaseActivity implements OnClickListener {
 								Log.i("doInBackground--Object", "doInBackground--Object");
 								//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 								Global_Application.totalcal=0;
-								lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER","date");
+								lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER","date","dummy_id");
 								return null;
 							}
 							   

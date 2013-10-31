@@ -237,12 +237,12 @@ public class functionClass {
         }
 
 
-		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date){
+		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date,String user){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
-            baseurlString+="&diet_date="+date;
+            baseurlString+="&user="+user+"&diet_date="+date;
 			RestClient client = new RestClient(baseurlString);
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-            Log.e("TAG","baseurlString : " + baseurlString);
+            Log.e("TAG","baseurlString food listing: " + baseurlString);
             //client.AddParam("diet_date",date);
 		  
 			try
@@ -416,9 +416,9 @@ public class functionClass {
 
 
 
-		public String AddFood(String id,String mealtype,String food_quantity_multiplier){
+		public String AddFood(String id,String mealtype,String food_quantity_multiplier,String userid){
         String responce="1";
-        String baseurlString = Global_Application.url+"diet-tracker/";
+        String baseurlString = Global_Application.url+"diet-tracker/"+"?user="+userid;
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
         client.AddParam("food_item", id);

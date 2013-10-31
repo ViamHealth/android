@@ -82,7 +82,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		
+
 		setContentView(R.layout.add_breakfast);
 		
 		appPrefs = new ViamHealthPrefs(AddBreakfast.this);
@@ -310,7 +310,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 
-            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1");
+            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString());
         }
 
     }

@@ -93,6 +93,8 @@ public class BreakfastListFragment extends SherlockListFragment
     private static final int LIBRARY_FILE_VIEW = 1000;
     MedicalDataAdapter1 adapter4;
 
+    String food_id;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -188,7 +190,8 @@ public class BreakfastListFragment extends SherlockListFragment
                     alert.setView(input);
                     Global_Application.food_item=ga.lstResultBreakfast.get(selected_position).getFoodItem();
                     Global_Application.meal_type="BREAKFAST";
-                    ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
+                    //ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
+                    food_id=ga.lstResultBreakfast.get(selected_position).getId();
                     alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             if(isInternetOn()){
@@ -222,6 +225,7 @@ public class BreakfastListFragment extends SherlockListFragment
 
                     // set title
                     ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
+                    food_id=ga.lstResultBreakfast.get(selected_position).getId();
                     alertDialogBuilder.setTitle("Confirmation");
 
                     // set dialog message
@@ -313,7 +317,7 @@ public class BreakfastListFragment extends SherlockListFragment
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             User user = getArguments().getParcelable("user");
-            return obj.DeleteFood("diet-tracker/",Global_Application.selectedfoodid,user.getId().toString());
+            return obj.DeleteFood("diet-tracker/",food_id,user.getId().toString());
         }
 
     }
@@ -360,7 +364,7 @@ public class BreakfastListFragment extends SherlockListFragment
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             //Toast.makeText(getSherlockActivity(),"user id="+Global_Application.selectedfoodid,Toast.LENGTH_LONG ).show();
             User user = getArguments().getParcelable("user");
-            return obj.EditFood(Global_Application.selectedfoodid,Global_Application.food_item,Global_Application.food_quantity,Global_Application.meal_type,user.getId().toString());
+            return obj.EditFood(food_id,Global_Application.food_item,Global_Application.food_quantity,Global_Application.meal_type,user.getId().toString());
         }
 
     }
@@ -413,7 +417,7 @@ public class BreakfastListFragment extends SherlockListFragment
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
 
-            ga.lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date);
+            ga.lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
             return null;
         }
 
