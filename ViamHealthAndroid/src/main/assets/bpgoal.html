@@ -69,7 +69,7 @@ $(function () {
             type: "spline"
         },
         title: {
-            text: "Blood Pressure Goal"
+            text: "Blood Pressure"
         },
         legend: {
             enabled: false
@@ -140,7 +140,7 @@ $(function () {
                 dashStyle: "ShortDash",
                 zIndex: 2
             },
-{
+            {
                 value: android.goal.targetSP,
                 width: 2,
                 color: '#FF0000',
@@ -156,6 +156,19 @@ $(function () {
             }                       ],
             type: 'linear',
             min: 20
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function() {
+                            //alert ('Category: '+ this.x +', value: '+ this.y);
+                            goals.onItemClick(this.x);
+                        }
+                    }
+                }
+            }
         },
         series: [{
             id: "seriesA",
@@ -178,10 +191,8 @@ $(function () {
 
 </head>
 <body>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-
-<div id="container" ></div>
-
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <div id="container"></div>
 </body>
 
 

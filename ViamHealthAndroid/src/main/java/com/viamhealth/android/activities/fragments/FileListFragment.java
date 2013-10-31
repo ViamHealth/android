@@ -131,7 +131,7 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
             public void onItemToggled(Object item, boolean isChecked) {
                 final FileData data = (FileData) item;
                 if(isChecked){
-                    FileLoader loader = new FileLoader(getSherlockActivity());
+                    FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
                     String fileName = data.getName();
                     final String fileExtension = UIUtility.getFileExtension(fileName);
                     //need to pass even the fileName to store the file with that name
@@ -180,7 +180,7 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
                     adapter.toggleChecked(position);
                 }else{
                     FileData data = files.get(position);
-                    FileLoader loader = new FileLoader(getSherlockActivity());
+                    FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
                     String fileName = data.getName();
                     final String fileExtension = UIUtility.getFileExtension(fileName);
                     //need to pass even the fileName to store the file with that name
@@ -418,6 +418,20 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
             actionMode = null;
         }
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        if(actionMode!=null)
+            actionMode.finish();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        if(actionMode!=null)
+            actionMode.finish();
+        super.onDetach();
     }
 
     // async class for calling webservice and get responce message

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Login"
+    android:background="#37aa4f">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_margin="20dp">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:id="@+id/reminder_header"
+            android:layout_margin="20dp"
+            style="@style/EditTextGreenTheme" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/startDate"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            style="@style/EditTextGreenTheme" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp"
+            android:id="@+id/medicine_layout">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/morning"
+                    android:id="@+id/textView"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:ems="10"
+                    android:id="@+id/etMorning"
+                    android:text="09:00 AM"
+                    android:clickable="false"
+                    style="@style/EditTextGreenTheme"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/numberPicker"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/noon"
+                    android:id="@+id/textView"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:ems="10"
+                    android:id="@+id/etNoon"
+                    android:text="03:00 PM"
+                    android:clickable="false"
+                    style="@style/EditTextGreenTheme"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/noonPicker"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/night"
+                    android:id="@+id/textView"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:ems="10"
+                    android:id="@+id/etNight"
+                    android:text="09:00 PM"
+                    android:clickable="false"
+                    style="@style/EditTextGreenTheme"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nightPicker"
+                    android:layout_gravity="center" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:id="@+id/repeat_layout"
+            android:visibility="gone">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/imageButton"
+                android:layout_gravity="center_vertical|right"
+                android:src="@drawable/ic_action_brand_logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/repeat"
+                android:id="@+id/textView2" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"></LinearLayout>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:id="@+id/etComment"
+            android:layout_margin="20dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:text="@string/save"
+            android:id="@+id/btnSave"
+            android:layout_gravity="center_horizontal"
+            style="@style/ButtonReverseTheme" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:text="@string/cancel"
+            android:id="@+id/btnCancel"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
+</LinearLayout>

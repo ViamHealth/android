@@ -147,6 +147,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+
         view = inflater.inflate(R.layout.tab_fragment_reminder, container, false);
         this.savedInstanceState = savedInstanceState;
         user=getArguments().getParcelable("user");
@@ -156,20 +157,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         ga=((Global_Application)getSherlockActivity().getApplicationContext());
 
         tf = Typeface.createFromAsset(getSherlockActivity().getAssets(),"Roboto-Condensed.ttf");
-
-        // get screen height and width
-        ScreenDimension();
-
-        w15=(int)((width*4.68)/100);
-        w20=(int)((width*6.25)/100);
-        w5=(int)((width*1.56)/100);
-        w10=(int)((width*3.13)/100);
-        w150=(int)((width*37.5)/100);
-        w30=(int)((width*9.37)/100);
-
-        h40=(int)((height*8.33)/100);
-        h20=(int)((height*4.17)/100);
-        h10=(int)((height*2.09)/100);
 
         reminder_scrl = (LinearLayout)view.findViewById(R.id.reminder_scrl);
         medicine_scrl = (LinearLayout)view.findViewById(R.id.medicine_scrl);
@@ -275,45 +262,6 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
 
         selected_user = getArguments().getParcelable("user");
 
-
-
-        return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New")
-                .setIcon(R.drawable.ic_content_new)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.ic_content_new){
-            Intent AddMedication = new Intent(getSherlockActivity(),AddMedication.class);
-            AddMedication.putExtra("user_id",user.getId().toString());
-            startActivity(AddMedication);
-            return false;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume() {
-
-        super.onResume();
-
-        if(main_list_edit!=null)
-        {
-            main_list_edit.animate().translationX(0).withLayer();
-            main_list_edit.setMinimumWidth(original_width_edit);
-        }
-        if(main_list_delete!=null)
-        {
-            main_list_delete.animate().translationX(0).withLayer();
-            main_list_delete.setMinimumWidth(original_width_delete);
-        }
-
         RetrieveMedicalData task=new RetrieveMedicalData();
         task.applicationContext=getSherlockActivity();
         task.execute();
@@ -334,6 +282,42 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
         setHasOptionsMenu(true);
 
 
+        return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New")
+                .setIcon(R.drawable.ic_content_new)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.drawable.ic_content_new){
+            Intent addMedication = new Intent(getSherlockActivity(),AddMedication.class);
+            addMedication.putExtra("user_id",user.getId().toString());
+            startActivity(addMedication);
+            return false;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        if(main_list_edit!=null)
+        {
+            main_list_edit.animate().translationX(0).withLayer();
+            main_list_edit.setMinimumWidth(original_width_edit);
+        }
+        if(main_list_delete!=null)
+        {
+            main_list_delete.animate().translationX(0).withLayer();
+            main_list_delete.setMinimumWidth(original_width_delete);
+        }
     }
 
     public class StoreReminders extends AsyncTask <String, Void,String>

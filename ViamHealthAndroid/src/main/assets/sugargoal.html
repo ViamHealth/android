@@ -28,7 +28,7 @@ $(function () {
             type: "spline"
         },
         title: {
-            text: "Blood Sugar Goal"
+            text: "Blood Sugar"
         },
         legend: {
             enabled: false
@@ -115,6 +115,19 @@ $(function () {
             }                       ],
             type: 'linear',
             min: 20
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function() {
+                            //alert ('Category: '+ this.x +', value: '+ this.y);
+                            goals.onItemClick(this.x);
+                        }
+                    }
+                }
+            }
         },
         series: [{
             id: "seriesA",
