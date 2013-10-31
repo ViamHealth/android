@@ -185,18 +185,21 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retVal = super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.menu_logout){
             Intent returnIntent = new Intent(TabActivity.this, Home.class);
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(returnIntent);
             return false;
-        }else{
-           //finish();
+        }
+
+        if(item.getItemId() == android.R.id.home) {
+            finish();
             return false;
         }
 
-        //return super.onOptionsItemSelected(item);
+        return retVal;
     }
 
     @Override

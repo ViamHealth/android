@@ -226,8 +226,6 @@ public class FileFragment extends SherlockFragment {
         uploadFile(fileName, byteArray);
     }
 
-
-
     private String getRealPathFromURI(Uri contentURI) {
         Cursor cursor = getSherlockActivity().getContentResolver().query(contentURI, null, null, null, null);
         if (cursor == null) { // Source is Dropbox or other similar local file path
@@ -237,38 +235,6 @@ public class FileFragment extends SherlockFragment {
             int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
             return cursor.getString(idx);
         }
-    }
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float srcWidth = bm.getWidth();
-        float srcHeight = bm.getHeight();
-
-        if((srcWidth>=newWidth || srcHeight>=newHeight)==false) {
-            return bm;
-        }
-
-        float resizeWidth = srcWidth;
-        float resizeHeight = srcHeight;
-        float aspect = resizeWidth / resizeHeight;
-
-        if (resizeWidth > newWidth) {
-            resizeWidth = newWidth;
-            resizeHeight= (newWidth * srcHeight)/srcWidth;
-        }
-        if (resizeHeight > newHeight){
-            //  aspect = resizeWidth / resizeHeight;
-            resizeHeight = newHeight;
-            resizeWidth=(newHeight * srcWidth)/srcHeight;
-        }
-
-        Matrix matrix = new Matrix();
-        // resize the bit map
-        matrix.postScale(resizeWidth / width, resizeHeight / height);
-        // recreate the new Bitmap
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
-        return resizedBitmap;
     }
 
     @Override
@@ -472,4 +438,5 @@ public class FileFragment extends SherlockFragment {
         }
 
     }
+
 }

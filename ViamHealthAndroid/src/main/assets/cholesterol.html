@@ -177,6 +177,19 @@ $(function () {
                     }
                 }
             },
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function() {
+                                //alert ('Category: '+ this.x +', value: '+ this.y);
+                                goals.onItemClick(this.x);
+                            }
+                        }
+                    }
+                }
+            },
             series: [{
                 name: 'HDL',
                 data: android.seriesA

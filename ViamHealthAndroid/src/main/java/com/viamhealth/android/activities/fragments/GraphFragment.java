@@ -1,45 +1,51 @@
 package com.viamhealth.android.activities.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
-import com.viamhealth.android.activities.AddGoalValue;
 import com.viamhealth.android.model.enums.MedicalConditions;
 
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * Created by naren on 18/10/13.
  */
-public class GraphFragment extends Fragment implements GoalFragment.OnGoalDataChangeListener {
+public class GraphFragment extends SherlockFragment implements GoalFragment.OnGoalDataChangeListener {
 
     private static final String TAG = "GraphFragment";
+    private Date selectedDateForEdit = null;
 
     public interface OnClickAddValueListener {
-        public void onClick(View view);
+        public void onClick(MedicalConditions medicalCondition);
     }
-    
+
+    public interface OnClickAddGoalListener {
+        public void onClick();
+    }
+
     View view;
     WebView webView;
-    ImageButton addValue;
 
     String json = "";
-    OnClickAddValueListener listener;
+    OnClickAddValueListener onClickAddValueListener;
+    OnClickAddGoalListener onClickAddGoalListener;
 
     MedicalConditions type;
+    ActionMode actionMode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,19 +67,57 @@ public class GraphFragment extends Fragment implements GoalFragment.OnGoalDataCh
         });
         webView.loadUrl("file:///android_asset/" + type.assetName());
 
-
-        addValue = (ImageButton) view.findViewById(R.id.addvalue);
-        addValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(listener != null){
-                    listener.onClick(v);
-                }
-            }
-        });
+        setHasOptionsMenu(true);
 
         return view;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New Value")
+                .setIcon(R.drawable.ic_content_new)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.drawable.ic_content_new){
+            if(onClickAddValueListener != null){
+                onClickAddValueListener.onClick(type);
+            }
+            return false;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /*    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New Value")
+                .setIcon(R.drawable.ic_content_new)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        menu.add(Menu.NONE, R.drawable.ic_action_goal, 10, "New Goal")
+                .setIcon(R.drawable.ic_action_goal)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.drawable.ic_content_new){
+            if(onClickAddValueListener != null){
+                onClickAddValueListener.onClick(type);
+            }
+            return false;
+        }
+        if(item.getItemId()==R.drawable.ic_action_goal){
+            if(onClickAddGoalListener != null){
+                onClickAddGoalListener.onClick();
+            }
+            return false;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
 
     public MedicalConditions getType() {
         return type;
@@ -95,12 +139,72 @@ public class GraphFragment extends Fragment implements GoalFragment.OnGoalDataCh
         webView.loadUrl(url);
     }
 
+    @JavascriptInterface
     public String getData() {
         return this.json;
     }
 
-    public void setOnClickAddValueListener(OnClickAddValueListener listener) {
-        this.listener = listener;
+    @JavascriptInterface
+    public void onItemClick(long date) {
+        if(actionMode == null)
+            getSherlockActivity().startActionMode(new ActionModeCallback());
+        selectedDateForEdit = new Date(date);
     }
 
+    public void setOnClickAddValueListener(OnClickAddValueListener listener) {
+        this.onClickAddValueListener = listener;
+    }
+
+    public void setOnClickAddGoalListener(OnClickAddGoalListener listener) {
+        this.onClickAddGoalListener = listener;
+    }
+
+    // all our ActionMode stuff here :)
+    private final class ActionModeCallback implements ActionMode.Callback {
+
+        // " selected" string resource to update ActionBar text
+        private String selected = getActivity().getString(R.string.selected);
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, com.actionbarsherlock.view.Menu menu) {
+            actionMode = mode;
+            return true;
+        }
+
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, com.actionbarsherlock.view.Menu menu)
+        {
+            // remove previous items
+            menu.clear();
+            //final int checked = adapter.getCheckedItemCount();
+            // update title with number of checked items
+            mode.setTitle("Edit graph data");
+            getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_graph, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_mode_edit:
+                    Toast.makeText(getActivity(), "Edit graph data for the date " + selectedDateForEdit, Toast.LENGTH_LONG).show();
+                    return true;
+
+                case R.id.action_mode_delete:
+                    Toast.makeText(getActivity(), "Delete graph data for the date " + selectedDateForEdit, Toast.LENGTH_LONG).show();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            // don't forget to remove it, because we are assuming that if it's not null we are in ActionMode
+            actionMode = null;
+        }
+
+    }
 }

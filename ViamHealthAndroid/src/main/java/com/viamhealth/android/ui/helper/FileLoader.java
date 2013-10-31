@@ -39,11 +39,14 @@ public class FileLoader {
     FileCache fileCache;
     ExecutorService executorService;
     final Context mContext;
+    final String authToken;
 
-    public FileLoader(Context context){
+    public FileLoader(Context context, String token){
         mContext = context;
         fileCache=new FileCache(context);
+        authToken = token;
         executorService=Executors.newFixedThreadPool(5);
+
     }
 
     public interface OnFileLoadedListener {
@@ -54,7 +57,7 @@ public class FileLoader {
     {
         List<Byte> byteArray = memoryCache.get(url);
         File f = fileCache.getFile(url, UIUtility.getFileExtension(filename));
-        if(f!=null){
+        if(f.exists() && f.length()>0){
             listener.OnFileLoaded(f);
         } else {
             queueFile(url, UIUtility.getFileExtension(filename), listener);
@@ -82,6 +85,8 @@ public class FileLoader {
             byte[] byteArray=null;
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Token " + authToken);
             conn.setConnectTimeout(30000);
             conn.setReadTimeout(30000);
             conn.setInstanceFollowRedirects(true);

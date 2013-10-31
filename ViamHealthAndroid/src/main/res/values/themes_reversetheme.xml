@@ -45,7 +45,6 @@
 
     <style name="FullHeightDialog" parent="android:style/Theme.Holo.Dialog">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:colorBackground">@color/background_reverse_theme</item>
 
@@ -88,7 +87,7 @@
 
     <style name="SemiFullHeightDialog" parent="android:style/Theme.Holo.Dialog">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@null</item>
+        <item name="android:colorBackground">@color/background_reverse_theme</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:editTextStyle">@style/EditTextGreenTheme</item>
 

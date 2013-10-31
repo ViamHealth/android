@@ -19,7 +19,7 @@ public class UIUtility {
         if(name==null){
             throw new NullPointerException("filename passed to getExtension is null");
         }
-        String extension = name.lastIndexOf(".")>-1 ? name.substring(name.lastIndexOf(".")+1):null;
+        String extension = name.lastIndexOf(".")>-1 ? name.substring(name.lastIndexOf(".")+1).toLowerCase():null;
         return extension;
     }
 
@@ -50,7 +50,9 @@ public class UIUtility {
                 os.write(bytes, 0, count);
             }
         }
-        catch(Exception ex){}
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public static String getFileName(Context context, Uri uri){

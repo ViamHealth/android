@@ -217,7 +217,7 @@
         <activity
             android:name="com.viamhealth.android.activities.AddMedication"
             android:label="@string/title_activity_add_medication"
-            android:theme="@style/SemiFullHeightDialog" >
+            android:theme="@android:style/Theme.Dialog">
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.NewProfile"
@@ -236,7 +236,7 @@
         <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"
             android:label="@string/title_activity_add_medication"
-            android:theme="@style/FullHeightDialog" >
+            android:theme="@android:style/Theme.Dialog" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
