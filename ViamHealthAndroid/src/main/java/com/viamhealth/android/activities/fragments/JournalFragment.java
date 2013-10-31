@@ -17,7 +17,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
@@ -38,6 +37,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -142,12 +142,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
     }
 
-
-
-public static SherlockFragment getInstance()
-{
-    return JournalFragment.getInstance();
-}
+    public static SherlockFragment getInstance()
+    {
+        return JournalFragment.getInstance();
+    }
 
 
     private void fromOldCode() {
@@ -433,204 +431,6 @@ public static SherlockFragment getInstance()
         monthval=pMonth+1;
         updateDisplay();
         ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
-        /*
-        lstViewBreakfast.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // TODO Auto-generated method stub
-                if(!ga.getNextbrekfast().toString().equals("null")){
-                    nexturl = ga.getNextbrekfast();
-                    frm="b";
-                    if(isInternetOn()){
-                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getSherlockActivity();
-                        task.execute();
-                    }else{
-                        Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-        lstViewLunch.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // TODO Auto-generated method stub
-                if(!ga.getNextlunch().toString().equals("null")){
-                    nexturl = ga.getNextlunch();
-                    frm="l";
-                    if(isInternetOn()){
-                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getSherlockActivity();
-                        task.execute();
-                    }else{
-                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-        lstViewSnacks.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // TODO Auto-generated method stub
-                if(!ga.getNextsnacks().toString().equals("null")){
-                    nexturl = ga.getNextsnacks();
-                    frm="s";
-                    if(isInternetOn()){
-                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getSherlockActivity();
-                        task.execute();
-                    }else{
-                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-        lstViewExercise.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // TODO Auto-generated method stub
-
-                    frm="e";
-                    if(isInternetOn()){
-                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getSherlockActivity();
-                        task.execute();
-                    }else{
-                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                    }
-
-            }
-        });
-
-
-
-
-        lstViewDinner.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-                // TODO Auto-generated method stub
-                if(!ga.getNextdinner().toString().equals("null")){
-                    nexturl = ga.getNextdinner();
-                    frm="d";
-                    if(isInternetOn()){
-                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
-                        task.activity =getSherlockActivity();
-                        task.execute();
-                    }else{
-                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
-
-
-
-
-
-        lstViewBreakfast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View v,final int arg2,
-                                    long arg3) {
-                // TODO Auto-generated method stub
-                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
-                ga.setSelectedfoodid(lstResultBreakfast.get(arg2).getId());
-                //Toast.makeText(getSherlockActivity(),"user id="+lstResultBreakfast.get(arg2).getId(),Toast.LENGTH_LONG ).show();
-                view.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View arg0) {
-                        // TODO Auto-generated method stub
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                getSherlockActivity());
-
-                        // set title
-                        alertDialogBuilder.setTitle("Confirmation");
-
-                        // set dialog message
-                        alertDialogBuilder
-                                .setMessage("Are you sure you want to delete this food?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        dialog.cancel();
-                                        if(isInternetOn()){
-                                            sub_url="diet-tracker/";
-                                            CallDeleteTask task = new CallDeleteTask();
-                                            task.activity =getSherlockActivity();
-                                            task.execute();
-                                        }else{
-                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                })
-                                .setNegativeButton("No",new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-
-                        // show it
-                        alertDialog.show();
-                    }
-                });
-
-                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
-                view1.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
-                        final EditText input = new EditText(getSherlockActivity());
-                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                        alert.setMessage("Enter Number of Servings");
-                        alert.setView(input);
-                        Global_Application.food_item=lstResultBreakfast.get(arg2).getFoodItem();
-                        Global_Application.meal_type="BREAKFAST";
-                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                if(isInternetOn()){
-                                    Global_Application.food_quantity=input.getText().toString().trim();
-                                    CallEditTask task = new CallEditTask();
-                                    task.activity =getSherlockActivity();
-                                    task.execute();
-                                }else{
-                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.cancel();
-                            }
-                        });
-                        alert.show();
-
-                    }
-                });
-
-
-            }
-        });
-
-*/
-
-
-
 
     }
 
@@ -1517,10 +1317,6 @@ public static SherlockFragment getInstance()
         }
 
     }
-
-
-
-
 
     public class CallDeleteTask extends AsyncTask <String, Void,String>
     {

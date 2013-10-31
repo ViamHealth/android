@@ -47,6 +47,11 @@ import com.viamhealth.android.utils.UIUtility;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -317,6 +322,30 @@ public class FileFragment extends SherlockFragment {
             return null;
         }
 
+        /*public int uploadFile(String uploadServerUri) {
+            try {
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpContext localContext = new BasicHttpContext();
+                HttpPost postRequest = new HttpPost(uploadServerUri);
+                MultipartEntity reqEntity = new Multipa(HttpMulti.BROWSER_COMPATIBLE);
+
+                bm = BitmapFactory.decodeFile("/sdcard/test.jpg");
+                Bitmap bmpCompressed = Bitmap.createScaledBitmap(bm, 640, 480, true);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bmpCompressed.compress(CompressFormat.JPEG, 100, bos);
+                byte[] bytes = bos.toByteArray();
+                reqEntity.addPart("myImage", new ByteArrayBody(bytes, "temp.jpg"));
+                postRequest.setEntity(reqEntity);
+                HttpResponse response = httpClient.execute(postRequest,localContext);
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader( response.getEntity().getContent(), "UTF-8"));
+                String sResponse = reader.readLine();
+
+            } catch (Exception e) {
+                // handle exception here
+                Log.v("myApp", "Some error came up");
+            }
+        }*/
         public int uploadDatatoServer(String upLoadServerUri)
         {
             //String fileName=sourceFileUri;
@@ -324,7 +353,7 @@ public class FileFragment extends SherlockFragment {
             DataOutputStream dos = null;
             String lineEnd = "\r\n";
             String twoHyphens = "--";
-            String boundary = "*****";
+            String boundary = "----ViamHealthFileUploadBoundary";
             int bytesRead, bytesAvailable, bufferSize;
             byte[] buffer;
             int maxBufferSize = 1 * 1024;
@@ -346,13 +375,13 @@ public class FileFragment extends SherlockFragment {
                 conn.setRequestProperty("Authorization", "Token " + appPrefs.getToken().toString());
                 conn.setRequestProperty("Connection", "Keep-Alive");
                 //conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
-                conn.setRequestProperty("file", this.fileName);
+                //conn.setRequestProperty("file", this.fileName);
                 //getSherlockActivity().setSupportProgress(50*multiplier);
                 dos = new DataOutputStream(conn.getOutputStream());
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"file\";filename=\""+ this.fileName + "\"" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"file\"; filename=\""+ this.fileName + "\"" + lineEnd);
                 // send multipart form data necesssary after file data...
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
