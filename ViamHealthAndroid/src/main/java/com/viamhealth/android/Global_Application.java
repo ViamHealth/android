@@ -47,6 +47,7 @@ public class Global_Application extends Application
 	public boolean weightupdate, cholesterolupdate,glucoseupdate,bpupdate;
 	public static List<User> lstfamilyglobal;
 	public boolean calcelflg;
+    public String selected_date;
 
     public static ArrayList<CategoryFood> lstResultBreakfast = new ArrayList<CategoryFood>();
     public static ArrayList<CategoryFood> lstResultLunch = new ArrayList<CategoryFood>();
@@ -282,6 +283,14 @@ public class Global_Application extends Application
 	public void setSelectedfoodid(String selectedfoodid) {
 		this.selectedfoodid = selectedfoodid;
 	}
+
+    public String getSelectedexerciseid() {
+        return selectedexerciseid;
+    }
+
+    public void setSelectedExerciseid(String selectedexerciseid) {
+        this.selectedexerciseid = selectedexerciseid;
+    }
 
 	public static String getNextfile() {
 		return nextfile;

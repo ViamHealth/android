@@ -185,8 +185,8 @@
                                      android:headerDividersEnabled="false"
                                      android:footerDividersEnabled="false"
                                      android:layout_height="200dp"
-                                     android:id="@+id/lstViewBreakfast" /> -->
-                                <com.viamhealth.android.ui.RefreshableListView
+                                     android:id="@+id/lstViewBreakfast" />
+                                     <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
                                     android:layout_weight="1"
@@ -199,7 +199,14 @@
                                     android:fastScrollEnabled="true"
                                     android:listSelector="@drawable/list_item_selector"
                                     android:id="@+id/lstViewBreakfast" />
-
+                                      -->
+                                     <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstViewBreakfast"/>
 
                             </LinearLayout>
                             </ScrollView>
@@ -280,6 +287,7 @@
                                 android:paddingTop="5dp"
                                 android:orientation="vertical"
                                 android:id="@+id/layout2">
+                                <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -291,7 +299,16 @@
                                     android:footerDividersEnabled="false"
                                     android:layout_height="wrap_content"
                                     android:listSelector="@drawable/list_item_selector"
-                                    android:id="@+id/lstViewLunch" />
+                                    android:id="@+id/lstViewLunch" />-->
+
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstViewLunch"/>
+
 
                             </LinearLayout>
                         </LinearLayout>
@@ -370,6 +387,7 @@
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:id="@+id/layout3">
+                                <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -382,6 +400,16 @@
                                     android:layout_height="wrap_content"
                                     android:listSelector="@drawable/list_item_selector"
                                     android:id="@+id/lstViewSnakes" />
+                                    -->
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstViewSnakes"/>
+
+
                             </LinearLayout>
                         </LinearLayout>
 
@@ -461,6 +489,7 @@
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:id="@+id/layout4">
+                                <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -472,7 +501,16 @@
                                     android:footerDividersEnabled="false"
                                     android:layout_height="wrap_content"
                                     android:listSelector="@drawable/list_item_selector"
-                                    android:id="@+id/lstViewDinner" />
+                                    android:id="@+id/lstViewDinner" /> -->
+
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstViewDinner"/>
+
                             </LinearLayout>
                         </LinearLayout>
 
@@ -553,6 +591,7 @@
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:id="@+id/layout4">
+                                <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -564,7 +603,16 @@
                                     android:footerDividersEnabled="false"
                                     android:layout_height="wrap_content"
                                     android:listSelector="@drawable/list_item_selector"
-                                    android:id="@+id/lstViewExercise" />
+                                    android:id="@+id/lstViewExercise" />-->
+
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstViewExercise"/>
+
                             </LinearLayout>
                         </LinearLayout>
 

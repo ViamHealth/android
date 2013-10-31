@@ -65,7 +65,7 @@ import java.util.Set;
 /**
  * Created by naren on 27/10/13.
  */
-public class BreakfastListFragment extends SherlockListFragment
+public class SnacksListFragment extends SherlockListFragment
 {
 
     private MultiSelectionAdapter adapter;
@@ -128,7 +128,7 @@ public class BreakfastListFragment extends SherlockListFragment
     }
 
 
-    public final class ActionModeCallbackBreakfast implements ActionMode.Callback
+    public final class ActionModeCallbackSnacks implements ActionMode.Callback
     {
 
         // " selected" string resource to update ActionBar text
@@ -186,9 +186,9 @@ public class BreakfastListFragment extends SherlockListFragment
                     input.setInputType(InputType.TYPE_CLASS_NUMBER);
                     alert.setMessage("Enter Number of Servings");
                     alert.setView(input);
-                    Global_Application.food_item=ga.lstResultBreakfast.get(selected_position).getFoodItem();
-                    Global_Application.meal_type="BREAKFAST";
-                    ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
+                    Global_Application.food_item=ga.lstResultSnacks.get(selected_position).getFoodItem();
+                    Global_Application.meal_type="SNACKS";
+                    ga.setSelectedfoodid(ga.lstResultSnacks.get(selected_position).getId());
                     alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             if(isInternetOn()){
@@ -221,7 +221,7 @@ public class BreakfastListFragment extends SherlockListFragment
                             getSherlockActivity());
 
                     // set title
-                    ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
+                    ga.setSelectedfoodid(ga.lstResultSnacks.get(selected_position).getId());
                     alertDialogBuilder.setTitle("Confirmation");
 
                     // set dialog message
@@ -273,6 +273,7 @@ public class BreakfastListFragment extends SherlockListFragment
         }
 
     }
+
     public void removefragment()
     {
         getSherlockActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
@@ -301,9 +302,17 @@ public class BreakfastListFragment extends SherlockListFragment
         {
             // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-
+            if(isInternetOn())
+            {
+                CallSnacksListTask task= new CallSnacksListTask();
+                task.execute();
+            }
+            else
+            {
+                Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
             removefragment();
-            JournalFragment.taskBreakfast.execute();
+            JournalFragment.taskSnacks.execute();
             //onResume();
 
         }
@@ -341,15 +350,15 @@ public class BreakfastListFragment extends SherlockListFragment
             dialog1.dismiss();
             if(isInternetOn())
             {
-                CallBreakfastListTask task= new CallBreakfastListTask();
+                CallSnacksListTask task= new CallSnacksListTask();
                 task.execute();
             }
             else
             {
                 Toast.makeText(activity,"Network is not available....",Toast.LENGTH_SHORT).show();
             }
-            JournalFragment.taskBreakfast.execute();
 
+            JournalFragment.taskSnacks.execute();
         }
 
         @Override
@@ -384,7 +393,7 @@ public class BreakfastListFragment extends SherlockListFragment
         return false;
     }
 
-    public class CallBreakfastListTask extends AsyncTask <String, Void,String>
+    public class CallSnacksListTask extends AsyncTask <String, Void,String>
     {
         protected FragmentActivity activity;
 
@@ -401,7 +410,7 @@ public class BreakfastListFragment extends SherlockListFragment
         {
 
             Log.i("onPostExecute", "onPostExecute");
-            initListView();
+            //initListView();
 
         }
 
@@ -413,7 +422,7 @@ public class BreakfastListFragment extends SherlockListFragment
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
 
-            ga.lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date);
+            ga.lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",ga.selected_date);
             return null;
         }
 
@@ -424,9 +433,9 @@ public class BreakfastListFragment extends SherlockListFragment
     {
 
         //goal_count.setText("("+files.size()+")");
-        this.adapter = new JournalFoodAdapter(getSherlockActivity(), R.layout.row_journal_list,ga.lstResultBreakfast);
+        this.adapter = new JournalFoodAdapter(getSherlockActivity(), R.layout.row_journal_list,ga.lstResultSnacks);
         this.list.setAdapter(adapter);
-        Toast.makeText(getSherlockActivity(),"size of lstResultBreakfast="+ga.lstResultBreakfast.size(),Toast.LENGTH_LONG).show();
+        Toast.makeText(getSherlockActivity(),"size of lstResultSnacks="+ga.lstResultSnacks.size(),Toast.LENGTH_LONG).show();
         int total_height_medicine_tab=0,len=0,i;
 
         for (i = 0, len = adapter.getCount(); i < len; i++) {
@@ -452,7 +461,7 @@ public class BreakfastListFragment extends SherlockListFragment
 
                 selected_position=arg2;
                 adapter.setChecked(arg2, true);
-                getSherlockActivity().startActionMode(new ActionModeCallbackBreakfast());
+                getSherlockActivity().startActionMode(new ActionModeCallbackSnacks());
                 actionMode.invalidate();
                 return true;
             }

@@ -132,6 +132,12 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
+    public void updateArray(List<T> data)
+    {
+       this.items=data;
+       this.notifyDataSetChanged();
+    }
+
     @Override
     public int getCount()
     {

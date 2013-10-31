@@ -71,9 +71,12 @@ public class TestDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
             holder.txt_morning = (TextView)row.findViewById(R.id.txt_morning);
             //holder.txt_morning.getLayoutParams().width = w30;
 
+            holder.txt_morning_gap=(TextView)row.findViewById(R.id.txt_morning_gap);
+
             holder.txt_noon = (TextView)row.findViewById(R.id.txt_noon);
             //holder.txt_noon.getLayoutParams().width = w30;
 
+            holder.txt_noon_gap=(TextView)row.findViewById(R.id.txt_noon_gap);
             holder.txt_night = (TextView)row.findViewById(R.id.txt_night);
             //holder.txt_night.getLayoutParams().width = w30;
 
@@ -205,6 +208,8 @@ public class TestDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
         holder.txt_morning.setVisibility(View.INVISIBLE);
         holder.txt_noon.setVisibility(View.INVISIBLE);
         holder.txt_night.setVisibility(View.INVISIBLE);
+        holder.txt_morning_gap.setVisibility(View.INVISIBLE);
+        holder.txt_noon_gap.setVisibility(View.INVISIBLE);
 
         return row;
     }
@@ -213,7 +218,7 @@ public class TestDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
 
     static class FileDataHolder
     {
-        TextView txt_name,txt_morning,txt1,txt_noon,txt2,txt_night,txt_start_date,txt_duration,txt_duration_type;
+        TextView txt_name,txt_morning,txt_morning_gap,txt_noon_gap,txt1,txt_noon,txt2,txt_night,txt_start_date,txt_duration,txt_duration_type;
     }
 
 
