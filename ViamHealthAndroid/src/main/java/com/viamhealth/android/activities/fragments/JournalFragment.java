@@ -37,7 +37,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -919,6 +921,7 @@ public static SherlockFragment getInstance()
                 lblexercisecal.setText(String.valueOf(total_calories));
                 exercise_cal=total_calories;
                 //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
+                try{
                 ga.lstResultExercise=lstResultExercise;
                 android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
@@ -927,6 +930,11 @@ public static SherlockFragment getInstance()
                 fm.commit();
                 man1.executePendingTransactions();
                 setHasOptionsMenu(true);
+                }
+                catch(Exception e)
+                {
+
+                }
             }
             else
             {
@@ -1032,6 +1040,7 @@ public static SherlockFragment getInstance()
                 breakfast_cal=total_calories;
 
                 ga.lstResultBreakfast=lstResultBreakfast;
+                try{
                 android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
@@ -1042,7 +1051,11 @@ public static SherlockFragment getInstance()
 
 
                 setHasOptionsMenu(true);
+            }
+            catch(Exception e)
+            {
 
+            }
 
                 if(isInternetOn()){
                     CallLunchListTask task = new CallLunchListTask();
@@ -1056,7 +1069,14 @@ public static SherlockFragment getInstance()
                 lblbrk.setText("Breakfast (0)");
                 lbltotalbrkcal.setText(Global_Application.totalcal+"");
                 lstViewBreakfast.setVisibility(View.GONE);
-                img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                try{
+                    img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
                 //BreakfastAdapter adapter = new BreakfastAdapter(getSherlockActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
                 //JournalFoodAdapter adapter=
                 //lstViewBreakfast.setAdapter(adapter);
@@ -1125,6 +1145,7 @@ public static SherlockFragment getInstance()
                 lbllunchcal.setText(total_calories+"");
                 lunch_cal=total_calories;
                 ga.lstResultLunch=lstResultLunch;
+                try{
                 android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 LunchListFragment fragment = (LunchListFragment)SherlockFragment.instantiate(getSherlockActivity(), LunchListFragment.class.getName(), args);
@@ -1132,6 +1153,12 @@ public static SherlockFragment getInstance()
                 fm.commit();
                 man1.executePendingTransactions();
                 setHasOptionsMenu(true);
+            }
+            catch(Exception e)
+            {
+
+            }
+
                 if(isInternetOn()){
                     CallSnaksListTask task = new CallSnaksListTask();
                     task.activity =getSherlockActivity();
@@ -1143,7 +1170,14 @@ public static SherlockFragment getInstance()
                 lbllunch.setText("Lunch (0)");
                 lbllunchcal.setText(Global_Application.totalcal+"");
                 lstViewLunch.setVisibility(View.GONE);
-                img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                try{
+                    img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
             }
                 if(isInternetOn()){
                     CallSnaksListTask task = new CallSnaksListTask();
@@ -1206,6 +1240,7 @@ public static SherlockFragment getInstance()
                 lblsnakcal.setText(total_calories+"");
                 snacks_cal=total_calories;
                 ga.lstResultSnacks=lstResultSnacks;
+                try{
                 android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 SnacksListFragment fragment = (SnacksListFragment)SherlockFragment.instantiate(getSherlockActivity(), SnacksListFragment.class.getName(), args);
@@ -1215,6 +1250,11 @@ public static SherlockFragment getInstance()
 
 
                 setHasOptionsMenu(true);
+            }
+            catch(Exception e)
+            {
+
+            }
 
                 if(isInternetOn()){
                     CallDinnerListTask task = new CallDinnerListTask();
@@ -1227,7 +1267,15 @@ public static SherlockFragment getInstance()
                 lblsnack.setText("Snacks (0)");
                 lblsnakcal.setText(Global_Application.totalcal+"");
                 lstViewSnacks.setVisibility(View.GONE);
-                img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+
+                try{
+                    img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
             }
                 if(isInternetOn()){
                     CallDinnerListTask task = new CallDinnerListTask();
@@ -1293,6 +1341,7 @@ public static SherlockFragment getInstance()
                 dinner_cal=total_calories;
 
                 ga.lstResultDinner=lstResultDinner;
+                try{
                 android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 DinnerListFragment fragment = (DinnerListFragment)SherlockFragment.instantiate(getSherlockActivity(), DinnerListFragment.class.getName(), args);
@@ -1301,13 +1350,27 @@ public static SherlockFragment getInstance()
                 man1.executePendingTransactions();
 
                 setHasOptionsMenu(true);
+            }
+            catch(Exception e)
+            {
+
+            }
 
 
             }else{
                 lbldinner.setText("Dinner (0)");
                 lbldinnercal.setText(Global_Application.totalcal+"");
                 lstViewDinner.setVisibility(View.GONE);
-                img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+
+                try{
+                    img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
+
                 dialog1.dismiss();
             }
 
@@ -1605,18 +1668,22 @@ public static SherlockFragment getInstance()
     // function for check internet is available or not
     public final boolean isInternetOn() {
 
-        ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        SherlockFragmentActivity act=getSherlockActivity();
+        if(act!=null)
+        {
+            ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-                || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-            return true;
-        }
+            if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
+                    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
+                    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
+                    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
+                return true;
+            }
 
-        else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-                || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-            return false;
+            else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
+                    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
+                return false;
+            }
         }
 
         return false;
