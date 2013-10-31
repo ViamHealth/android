@@ -663,11 +663,14 @@ public static SherlockFragment getInstance()
     public void updateData()
     {
         if(isInternetOn()){
+            if(getSherlockActivity()!=null)
+            {
             CallListTask task = new CallListTask();
             task.activity = getSherlockActivity();
             task.execute();
+            }
         }else{
-            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -850,6 +853,7 @@ public static SherlockFragment getInstance()
             updateDisplay();
             ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
             if(isInternetOn()){
+
                 CallListTask task = new CallListTask();
                 task.activity = getSherlockActivity();
                 task.execute();
@@ -923,13 +927,17 @@ public static SherlockFragment getInstance()
                 //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
                 try{
                 ga.lstResultExercise=lstResultExercise;
-                android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 ExerciseListFragment fragment = (ExerciseListFragment)SherlockFragment.instantiate(getSherlockActivity(), ExerciseListFragment.class.getName(), args);
                 fm.replace(R.id.lstViewExercise, fragment, "Lunch");
                 fm.commit();
                 man1.executePendingTransactions();
                 setHasOptionsMenu(true);
+                    }
                 }
                 catch(Exception e)
                 {
@@ -1041,7 +1049,10 @@ public static SherlockFragment getInstance()
 
                 ga.lstResultBreakfast=lstResultBreakfast;
                 try{
-                android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
                 fm.replace(R.id.lstViewBreakfast, fragment, "Breakfast");
@@ -1051,6 +1062,7 @@ public static SherlockFragment getInstance()
 
 
                 setHasOptionsMenu(true);
+                    }
             }
             catch(Exception e)
             {
@@ -1058,11 +1070,14 @@ public static SherlockFragment getInstance()
             }
 
                 if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
                     CallLunchListTask task = new CallLunchListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
                 }else{
-                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
 
@@ -1085,15 +1100,21 @@ public static SherlockFragment getInstance()
                 //Toast.makeText(getSherlockActivity(),"Selected Date="+ga.selected_date,Toast.LENGTH_SHORT).show();
             }
                 if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
                     CallLunchListTask task = new CallLunchListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
                 }else{
                     Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
+            if(getSherlockActivity()!=null)
+            {
             taskBreakfast=null;
             taskBreakfast=new CallListTask();
             taskBreakfast.activity=getSherlockActivity();
+            }
 
         }
 
@@ -1104,7 +1125,8 @@ public static SherlockFragment getInstance()
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
 
-            lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date);
+            User user = getArguments().getParcelable("user");
+            lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
             return null;
         }
 
@@ -1146,13 +1168,17 @@ public static SherlockFragment getInstance()
                 lunch_cal=total_calories;
                 ga.lstResultLunch=lstResultLunch;
                 try{
-                android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 LunchListFragment fragment = (LunchListFragment)SherlockFragment.instantiate(getSherlockActivity(), LunchListFragment.class.getName(), args);
                 fm.replace(R.id.lstViewLunch, fragment, "Lunch");
                 fm.commit();
                 man1.executePendingTransactions();
                 setHasOptionsMenu(true);
+                    }
             }
             catch(Exception e)
             {
@@ -1160,11 +1186,14 @@ public static SherlockFragment getInstance()
             }
 
                 if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
                     CallSnaksListTask task = new CallSnaksListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
                 }else{
-                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
                 lbllunch.setText("Lunch (0)");
@@ -1180,16 +1209,21 @@ public static SherlockFragment getInstance()
 
             }
                 if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
                     CallSnaksListTask task = new CallSnaksListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
                 }else{
-                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
-
+            if(getSherlockActivity()!=null)
+            {
             taskLunch=null;
             taskLunch=new CallLunchListTask();
             taskLunch.activity=getSherlockActivity();
+            }
         }
 
         @Override
@@ -1198,7 +1232,8 @@ public static SherlockFragment getInstance()
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH",ga.selected_date);
+            User user = getArguments().getParcelable("user");
+            lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH",ga.selected_date,user.getId().toString());
             return null;
         }
 
@@ -1241,12 +1276,16 @@ public static SherlockFragment getInstance()
                 snacks_cal=total_calories;
                 ga.lstResultSnacks=lstResultSnacks;
                 try{
-                android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
+                SherlockFragmentActivity f1=getSherlockActivity();
+                if(f1!=null)
+                {
+                android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
                 FragmentTransaction fm = man1.beginTransaction();
                 SnacksListFragment fragment = (SnacksListFragment)SherlockFragment.instantiate(getSherlockActivity(), SnacksListFragment.class.getName(), args);
                 fm.replace(R.id.lstViewSnakes, fragment, "Lunch");
                 fm.commit();
                 man1.executePendingTransactions();
+                }
 
 
                 setHasOptionsMenu(true);
@@ -1257,11 +1296,16 @@ public static SherlockFragment getInstance()
             }
 
                 if(isInternetOn()){
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+
                     CallDinnerListTask task = new CallDinnerListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
                 }else{
-                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
             }else{
                 lblsnack.setText("Snacks (0)");
@@ -1278,15 +1322,22 @@ public static SherlockFragment getInstance()
 
             }
                 if(isInternetOn()){
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+
                     CallDinnerListTask task = new CallDinnerListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
                 }else{
-                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
+            if(getSherlockActivity()!=null)
+            {
                 taskSnacks=null;
                 taskSnacks=new CallSnaksListTask();
-            taskSnacks.activity=getSherlockActivity();
+            taskSnacks.activity=getSherlockActivity();}
 
         }
 
@@ -1296,7 +1347,8 @@ public static SherlockFragment getInstance()
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",ga.selected_date);
+            User user = getArguments().getParcelable("user");
+            lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",ga.selected_date,user.getId().toString());
             return null;
         }
 
@@ -1342,7 +1394,11 @@ public static SherlockFragment getInstance()
 
                 ga.lstResultDinner=lstResultDinner;
                 try{
-                android.support.v4.app.FragmentManager man1=getSherlockActivity().getSupportFragmentManager();
+                SherlockFragmentActivity f1=getSherlockActivity();
+                if(f1!=null)
+                {
+                   android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+
                 FragmentTransaction fm = man1.beginTransaction();
                 DinnerListFragment fragment = (DinnerListFragment)SherlockFragment.instantiate(getSherlockActivity(), DinnerListFragment.class.getName(), args);
                 fm.replace(R.id.lstViewDinner, fragment, "Lunch");
@@ -1350,6 +1406,7 @@ public static SherlockFragment getInstance()
                 man1.executePendingTransactions();
 
                 setHasOptionsMenu(true);
+                    }
             }
             catch(Exception e)
             {
@@ -1375,15 +1432,21 @@ public static SherlockFragment getInstance()
             }
 
             if(isInternetOn()){
+                if(getSherlockActivity()!=null)
+                {
                 CallExerciseListTask task = new CallExerciseListTask();
                 task.activity =getSherlockActivity();
                 task.execute();
+                }
             }else{
-                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
+            if(getSherlockActivity()!=null)
+            {
             taskDinner=null;
             taskDinner=new CallDinnerListTask();
             taskDinner.activity=getSherlockActivity();
+            }
 
         }
 
@@ -1393,7 +1456,8 @@ public static SherlockFragment getInstance()
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER",ga.selected_date);
+            User user = getArguments().getParcelable("user");
+            lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER",ga.selected_date,user.getId().toString());
             return null;
         }
 

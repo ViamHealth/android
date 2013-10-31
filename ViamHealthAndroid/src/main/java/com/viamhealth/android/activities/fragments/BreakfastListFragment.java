@@ -225,6 +225,7 @@ public class BreakfastListFragment extends SherlockListFragment
 
                     // set title
                     ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
+                    food_id=ga.lstResultBreakfast.get(selected_position).getId();
                     alertDialogBuilder.setTitle("Confirmation");
 
                     // set dialog message
@@ -416,7 +417,7 @@ public class BreakfastListFragment extends SherlockListFragment
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
 
-            ga.lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date);
+            ga.lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
             return null;
         }
 
