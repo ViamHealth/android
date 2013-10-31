@@ -103,6 +103,7 @@ public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
         {
             holder.foodname.setText(data.getName().toString());
             float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
+            Log.e("TAG","value of calories and textview calorie =" +calories+" "+holder.calory);
             holder.calory.setText(String.valueOf(calories));
             holder.surning.setText(data.getMultiplier().toString());
         }
