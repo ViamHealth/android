@@ -331,13 +331,7 @@ public class Home extends BaseActivity implements OnClickListener{
             intent.putExtra("user", selectedUser);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
-
-            selecteduserid=lstFamily.get(index).getId();
-
-            Intent intent = new Intent(Home.this,MainActivity.class);
-            intent.putExtra("user_id", selecteduserid);
             startActivity(intent);
-
         }
 
 	}
@@ -440,6 +434,7 @@ public class Home extends BaseActivity implements OnClickListener{
             dialog.setMessage("loading your family");
             dialog.show();
             Log.i("onPreExecute", "onPreExecute");
+
         }
 
         protected void onPostExecute(String result) {

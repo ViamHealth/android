@@ -36,7 +36,6 @@
                     android:textSize="20sp"
                     android:id="@+id/heading"/>
 
-
             </LinearLayout>
             <!-- date layout end -->
 

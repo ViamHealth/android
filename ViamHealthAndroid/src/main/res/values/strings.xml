@@ -118,7 +118,6 @@
     <string name="username">\@email</string>
     <string name="resgiter">Register</string>
     <string name="confirm_password">#password - confirm</string>
-
     <string name="login_user_name_not_present">need your identity to log you in</string>
     <string name="login_user_password_not_present">need your identity to log you in</string>
     <string name="login_user_name_not_email">this doesnt look like an email-id</string>
