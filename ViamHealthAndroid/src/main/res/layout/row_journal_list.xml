@@ -9,6 +9,40 @@
     android:background="#ffffff">
 
     <LinearLayout
+        android:id="@+id/main_list_edit"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_weight="4"
+        android:layout_gravity="left"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@drawable/fading_bg_row">
+
+        <ImageView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/right_drag"
+            android:id="@+id/right_drag"
+            android:paddingLeft="13dp"
+            android:visibility="visible"/>
+
+        <TextView android:id="@+id/txt_edit"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:paddingTop="12dp"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:text="EDIT"
+            android:textSize="12sp"
+            android:rotation="270"
+            />
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/main_list_layout"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -167,6 +201,36 @@
 
 
         </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/main_list_delete"
+        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:layout_weight="4"
+        android:gravity="right"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@drawable/fading_bg_row">
+
+        <ImageView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/left_drag"
+            android:id="@+id/left_drag"
+            android:visibility="visible"/>
+
+        <TextView android:id="@+id/txt_delete"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="left"
+            android:textColor="#000000"
+            android:text="DEL"
+            android:paddingTop="10dp"
+            android:textSize="12sp"
+            android:rotation="270"
+            />
 
     </LinearLayout>
 
