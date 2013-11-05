@@ -15,6 +15,14 @@ import java.util.Calendar;
  */
 public class UIUtility {
 
+    public static String getFileExtension(String name){
+        if(name==null){
+            throw new NullPointerException("filename passed to getExtension is null");
+        }
+        String extension = name.lastIndexOf(".")>-1 ? name.substring(name.lastIndexOf(".")+1).toLowerCase():null;
+        return extension;
+    }
+
     public static int dpToPx(Context context, int dp) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
@@ -42,7 +50,9 @@ public class UIUtility {
                 os.write(bytes, 0, count);
             }
         }
-        catch(Exception ex){}
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public static String getFileName(Context context, Uri uri){

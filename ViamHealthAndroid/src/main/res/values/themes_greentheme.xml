@@ -4,7 +4,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
   <style name="GreenTheme" parent="android:Theme.Light">
-
+    <item name="android:colorBackground">@color/background_green_theme</item>
     <item name="android:editTextStyle">@style/EditTextGreenTheme</item>
 
     <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGreenTheme</item>

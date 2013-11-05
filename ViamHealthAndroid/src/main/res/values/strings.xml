@@ -53,7 +53,8 @@
         <item>Months</item>
         <item>Years</item>
     </string-array>
-
+    <string name="tab_label_medicines">Medicines</string>
+    <string name="tab_label_others">Others</string>
     <string name="title_activity_add_breakfast">AddBreakfast</string>
     <string name="title_activity_tab_group_reminder">TabGroupReminder</string>
     <string name="title_activity_reminder">Reminder</string>
@@ -168,8 +169,8 @@
     <string name="diabetes_reading">diabetes reading</string>
     <string name="present_pulse_rate">pulse rate</string>
     <string name="target_pulse_rate">target pulse rate</string>
-    <string name="sp_add">Systolic Pressure</string>
-    <string name="dp_add">Diastolic Pressure</string>
+    <string name="sp_add">Systolic</string>
+    <string name="dp_add">Diastolic</string>
     <string name="pr_add">Pulse Rate</string>
     <string name="hdl_value">HDL</string>
     <string name="ldl_value">LDL</string>
@@ -180,7 +181,15 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="add_another_profile">add another profile</string><string name="label_create_healthy_goal_trailer">time to create some
-                healthy goals....</string><string name="random_sugar">random sugar value</string><string name="fasting_sugar">fasting sugar value</string>
+    <string name="add_another_profile">add another profile</string>
+    <string name="label_create_healthy_goal_trailer">time to create some
+                healthy goals....</string>
+    <string name="random_sugar">random sugar value</string>
+    <string name="fasting_sugar">fasting sugar value</string>
+    <string name="medicine_separator">-</string>
+    <string name="file_name">file name</string>
+    <string name="reminder_initial_string">Alarms! Great way of reminding!!\n\n
+        you can set reminders on any kind of medications, lab tests, doctor visits, meals, activities, etc...\n\n</string>
+    <string name="set_medi_reminders">set reminders for medicines</string><string name="set_others_reminders">set reminders for rest everything</string><string name="morning">morning</string><string name="noon">noon</string><string name="night">night</string><string name="repeat">repeat</string>
 
 </resources>

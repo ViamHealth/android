@@ -24,6 +24,7 @@ import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -36,8 +37,13 @@ import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
+import com.viamhealth.android.utils.UIUtility;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,14 +51,16 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
  * Created by naren on 27/10/13.
  */
-public class FileListFragment extends SherlockListFragment
-{
+public class FileListFragment extends SherlockListFragment implements FileFragment.OnNewFileUploadedListener {
 
     private MultiSelectionAdapter adapter;
     private ListView list;
@@ -63,9 +71,12 @@ public class FileListFragment extends SherlockListFragment
 
     // if ActoinMode is null - assume we are in normal mode
     private ActionMode actionMode;
+    private ShareActionProvider actionProvider = null;
+
     private ViamHealthPrefs appPrefs;
 
     private User selectedUser;
+    final private Map<String, Uri> mapSelectedUris = new HashMap<String, Uri>();
 
     private static final int LIBRARY_FILE_VIEW = 1000;
 
@@ -115,17 +126,43 @@ public class FileListFragment extends SherlockListFragment
         }
         //goal_count.setText("("+files.size()+")");
         this.adapter = new FileDataAdapter(getSherlockActivity(), R.layout.filelist, files);
+        adapter.setOnItemToggledListener(new MultiSelectionAdapter.OnItemToggledListener() {
+            @Override
+            public void onItemToggled(Object item, boolean isChecked) {
+                final FileData data = (FileData) item;
+                if(isChecked){
+                    FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
+                    String fileName = data.getName();
+                    final String fileExtension = UIUtility.getFileExtension(fileName);
+                    //need to pass even the fileName to store the file with that name
+                    loader.LoadFile(data.getDownload_url(), fileName, new FileLoader.OnFileLoadedListener() {
+                        @Override
+                        public void OnFileLoaded(File file) {
+                            mapSelectedUris.put(data.getId(), Uri.fromFile(file));
+                            updateShareActionProvider();
+                        }
+                    });
+                }else{
+                    mapSelectedUris.remove(data.getId());
+                    updateShareActionProvider();
+                    if(mapSelectedUris.size()==0)
+                        actionMode.finish();
+                }
+            }
+        });
+
         this.list.setAdapter(adapter);
+
         this.list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
                 if (actionMode != null) {
                     // if already in action mode - do nothing
                     return false;
                 }
                 // set checked selected item and enter multi selection mode
-                adapter.setChecked(arg2, true);
+                adapter.toggleChecked(position);
                 getSherlockActivity().startActionMode(new ActionModeCallback());
                 actionMode.invalidate();
                 return true;
@@ -136,34 +173,59 @@ public class FileListFragment extends SherlockListFragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
             {
+
                 if (actionMode != null) {
+                    actionMode.invalidate();
                     // if action mode, toggle checked state of item
                     adapter.toggleChecked(position);
-                    actionMode.invalidate();
-                } else {
-                    //open the file
-                    final ProgressDialog dialog = new ProgressDialog(getSherlockActivity());
-                    dialog.setMessage("downloading the file...");
-                    dialog.show();
-                    FileLoader loader = new FileLoader(getSherlockActivity());
-                    String fileName = files.get(position).getName();
-                    final String fileExtension = fileName.lastIndexOf(".")>-1?fileName.substring(fileName.lastIndexOf(".")):null;
+                }else{
+                    FileData data = files.get(position);
+                    FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
+                    String fileName = data.getName();
+                    final String fileExtension = UIUtility.getFileExtension(fileName);
                     //need to pass even the fileName to store the file with that name
-                    loader.LoadFile(files.get(position).getDownload_url(), new FileLoader.OnFileLoadedListener() {
+                    loader.LoadFile(data.getDownload_url(), fileName, new FileLoader.OnFileLoadedListener() {
                         @Override
                         public void OnFileLoaded(File file) {
-                            Intent filePickerIntent = new Intent(Intent.ACTION_VIEW);
-                            filePickerIntent.setType(MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension));
-                            filePickerIntent.setData(Uri.fromFile(file));
-                            startActivityForResult(filePickerIntent, LIBRARY_FILE_VIEW + position);
-                            dialog.dismiss();
+                            MimeTypeMap myMime = MimeTypeMap.getSingleton();
+                            Intent newIntent = new Intent(android.content.Intent.ACTION_VIEW);
+                            String mimeType = myMime.getMimeTypeFromExtension(fileExtension);
+                            newIntent.setDataAndType(Uri.fromFile(file), mimeType);
+                            newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
+                            try {
+                                getSherlockActivity().startActivity(newIntent);
+                            } catch (android.content.ActivityNotFoundException e) {
+                                Toast.makeText(getSherlockActivity(), "No handler for this type of file.", 4000).show();
+                            }
                         }
                     });
                 }
+
             }
         });
     }
 
+    private void updateShareActionProvider() {
+        if(actionProvider==null)
+            return;
+        ArrayList<Uri> uris = new ArrayList<Uri>(mapSelectedUris.values());
+        Intent shareIntent = null;
+        if(mapSelectedUris.size()>1){
+            shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+            shareIntent.setType("*/*");
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        }else{
+            Uri uri = uris.get(0);
+            String extension = UIUtility.getFileExtension(uri.getLastPathSegment());
+            String mimeType = MimeTypeMap.getSingleton().hasMimeType(extension) ?
+                                MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension):"*/*";
+
+            shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType(mimeType);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        }
+        actionProvider.setShareIntent(shareIntent);
+    }
 
     // all our ActionMode stuff here :)
     private final class ActionModeCallback implements ActionMode.Callback
@@ -180,6 +242,7 @@ public class FileListFragment extends SherlockListFragment
             actionMode = mode;
             return true;
         }
+
 
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu)
@@ -198,11 +261,25 @@ public class FileListFragment extends SherlockListFragment
                     // all items - rename + delete
                     getSherlockActivity().getSupportMenuInflater().inflate(
                             R.menu.action_mode_files, menu);
+                    initShareActionProvider(menu);
                     return true;
                 default:
                     getSherlockActivity().getSupportMenuInflater().inflate(
                             R.menu.action_mode_files, menu);
+                    initShareActionProvider(menu);
                     return true;
+            }
+        }
+
+        private void initShareActionProvider(Menu menu){
+            // Set file with share history to the provider and set the share intent.
+            MenuItem actionItem = menu.findItem(R.id.action_mode_share);
+            actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+            actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+            // Note that you can set/change the intent any time,
+            // say when the user has selected an image.
+            if(mapSelectedUris.size()>0){
+                updateShareActionProvider();
             }
         }
 
@@ -237,27 +314,6 @@ public class FileListFragment extends SherlockListFragment
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(files.get(i).getMimeType());
                 download(downloaUri.toString(), files.get(i).getName(), extension);
-
-                //Toast.makeText(getApplicationContext(), "Download Uri = "+downloaUri.toString(), Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(), "Toast = "+appPrefs.getToken().toString(), Toast.LENGTH_SHORT).show();
-
-//                DownloadManager.Request request = new DownloadManager.Request(downloaUri);
-//
-//
-//                //Restrict the types of networks over which this download may proceed.
-//                request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
-//                //Set whether this download may proceed over a roaming connection.
-//                request.setAllowedOverRoaming(false);
-//                //Set the title of this download, to be displayed in notifications (if enabled).
-//                request.setTitle(files.get(i).getName());
-//                //Set a description of this download, to be displayed in notifications (if enabled)
-//                request.setDescription("Downloading....");
-//                //Set the local destination for the downloaded file to a path within the application's external files directory
-//                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,"logo" + i + "." + extension);
-//                //Enqueue a new download and same the referenceId
-//
-//                request.setNotificationVisibility(1);
-//                downloadManager.enqueue(request);
             }
         }
 
@@ -364,6 +420,20 @@ public class FileListFragment extends SherlockListFragment
 
     }
 
+    @Override
+    public void onDestroyView() {
+        if(actionMode!=null)
+            actionMode.finish();
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        if(actionMode!=null)
+            actionMode.finish();
+        super.onDetach();
+    }
+
     // async class for calling webservice and get responce message
     public class CallFileNavigationTask extends AsyncTask<String, Void,String>
     {
@@ -448,5 +518,14 @@ public class FileListFragment extends SherlockListFragment
             return null;
         }
 
+    }
+
+    @Override
+    public void onNewFileUploaded(FileData fileData) {
+        files.add(0, fileData);
+        if(adapter==null){
+            initListView();
+        }
+        adapter.notifyDataSetChanged();
     }
 }

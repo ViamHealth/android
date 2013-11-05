@@ -28,13 +28,12 @@ $(function () {
             type: "spline"
         },
         title: {
-            text: "Weight Goal"
+            text: "Weight"
         },
         legend: {
             enabled: false
         },
         xAxis: {        
-            tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
@@ -56,9 +55,6 @@ $(function () {
             }]            
         },
         yAxis : {
-            title: {
-                text: "Weight in Kgs"
-            },
             plotBands: [{ // mark the weekend
                 color: '#c4dffb',
                 from: android.goal.healthyRange.from,
@@ -88,6 +84,19 @@ $(function () {
             }],
             type: 'linear',
             min: 20
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function() {
+                            //alert ('Category: '+ this.x +', value: '+ this.y);
+                            goals.onItemClick(this.x);
+                        }
+                    }
+                }
+            }
         },
         series: [{
             id: "seriesA",

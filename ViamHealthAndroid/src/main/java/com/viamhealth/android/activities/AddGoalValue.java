@@ -58,6 +58,8 @@ public class AddGoalValue extends BaseFragmentActivity {
         setDate();setTime();
 
         LinearLayout timePicker = (LinearLayout) findViewById(R.id.btn_time_picker);
+        //TODO this is for time being
+        timePicker.setVisibility(View.GONE);
         timePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,19 +152,22 @@ public class AddGoalValue extends BaseFragmentActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             shouldUpdate = true;
                             save();
+                            dialog.dismiss();
                         }
                     })
                     .setNegativeButton("Nope..", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            shouldUpdate = false;
-                            save();
+                            dialog.dismiss();
+                            //save();
                         }
                     });
 
             AlertDialog dialog = builder.create();
             dialog.show();
 
+        }else{
+            save();
         }
     }
 

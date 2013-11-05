@@ -25,9 +25,9 @@ public class WeightGoal extends Goal implements Parcelable {
     }
 
     @Override
-    public void setReadings(List<GoalReadings> readings) {
+    public void setReadings(List<GoalReadings> rds) {
         this.readings.clear();
-        for(GoalReadings reading : readings){
+        for(GoalReadings reading : rds){
             this.readings.add((WeightGoalReadings) reading);
         }
     }

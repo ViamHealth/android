@@ -17,10 +17,10 @@
     </script>
 
     <script type='text/javascript'>//<![CDATA[
-//var str = goals.getData();
-//console.log(str);
-//var android = JSON.parse(str);
-var android = {
+var str = goals.getData();
+console.log(str);
+var android = JSON.parse(str);
+/*var android = {
         "seriesB": [
         {
         "y": 83,
@@ -61,7 +61,7 @@ var android = {
         "targetPR": 72,
         "targetDate": 1384972200000
         }
-        };
+        };*/
 console.log(android);
 $(function () {
     $('#container').highcharts({
@@ -69,13 +69,12 @@ $(function () {
             type: "spline"
         },
         title: {
-            text: "Blood Pressure Goal"
+            text: "Blood Pressure"
         },
         legend: {
             enabled: false
         },
         xAxis: {
-            tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
@@ -141,7 +140,7 @@ $(function () {
                 dashStyle: "ShortDash",
                 zIndex: 2
             },
-{
+            {
                 value: android.goal.targetSP,
                 width: 2,
                 color: '#FF0000',
@@ -157,6 +156,19 @@ $(function () {
             }                       ],
             type: 'linear',
             min: 20
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function() {
+                            //alert ('Category: '+ this.x +', value: '+ this.y);
+                            goals.onItemClick(this.x);
+                        }
+                    }
+                }
+            }
         },
         series: [{
             id: "seriesA",
@@ -179,10 +191,8 @@ $(function () {
 
 </head>
 <body>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-
-<div id="container" ></div>
-
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <div id="container"></div>
 </body>
 
 

@@ -26,6 +26,7 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
 
     // multi selection mode flag
     private boolean multiMode;
+    private OnItemToggledListener onItemToggledListener;
 
     public MultiSelectionAdapter(Context context, List<T> items)
     {
@@ -37,6 +38,10 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
     public MultiSelectionAdapter(Context context)
     {
         this(context, new ArrayList<T>());
+    }
+
+    public void setOnItemToggledListener(OnItemToggledListener onItemToggledListener) {
+        this.onItemToggledListener = onItemToggledListener;
     }
 
     public void enterMultiMode()
@@ -59,6 +64,9 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
         } else {
             this.checkedItems.remove(Integer.valueOf(pos));
         }
+        if(this.onItemToggledListener!=null){
+            this.onItemToggledListener.onItemToggled(items.get(pos), checked);
+        }
         if (this.multiMode) {
             this.notifyDataSetChanged();
         }
@@ -72,10 +80,16 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
     public void toggleChecked(int pos)
     {
         final Integer v = Integer.valueOf(pos);
+        boolean checked = true;
         if (this.checkedItems.contains(v)) {
             this.checkedItems.remove(v);
+            checked = false;
         } else {
             this.checkedItems.add(v);
+            checked = true;
+        }
+        if(this.onItemToggledListener!=null){
+            this.onItemToggledListener.onItemToggled(items.get(pos), checked);
         }
         this.notifyDataSetChanged();
     }
@@ -106,11 +120,22 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
 
     public void updateData(T[] data)
     {
+        if(this.onItemToggledListener!=null){
+            for(Integer ci : this.checkedItems){
+                this.onItemToggledListener.onItemToggled(items.get(ci), false);
+            }
+        }
+        this.checkedItems.clear();
         for (int i = 0; i < data.length; i++) {
             this.items.add(data[i]);
         }
-        this.checkedItems.clear();
         this.notifyDataSetChanged();
+    }
+
+    public void updateArray(List<T> data)
+    {
+       this.items=data;
+       this.notifyDataSetChanged();
     }
 
     @Override
@@ -170,6 +195,11 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+
+    public interface OnItemToggledListener {
+        public void onItemToggled(Object item, boolean isChecked);
     }
 
 }

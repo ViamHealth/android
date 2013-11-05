@@ -438,7 +438,7 @@ public class Home extends BaseActivity implements OnClickListener{
 				if(ga.getLoggedInUser()==null){
                     userEndPoint.getLoggedInUser();
                 }
-                lstFamily.add(ga.getLoggedInUser());
+                //lstFamily.add(ga.getLoggedInUser());
                 lstFamily.addAll(userEndPoint.GetFamilyMembers());
 				return null;
 			}

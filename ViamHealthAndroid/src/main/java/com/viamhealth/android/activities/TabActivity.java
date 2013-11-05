@@ -22,11 +22,13 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
+import com.viamhealth.android.activities.fragments.NewReminders;
 import com.viamhealth.android.activities.fragments.ReminderFragment;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
@@ -57,13 +59,14 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.tab_main_activity);
 
 
         mTabHost = (TabHost)findViewById(R.id.tabHost);
         mTabHost.setup();
         mTabHost.setOnClickListener(this);
-        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
+        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent, true);
 
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
@@ -119,6 +122,7 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                 ReminderFragment.class, bundle);
+                //NewReminders.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
                 //FileFragment.class, bundle);
@@ -181,18 +185,21 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retVal = super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.menu_logout){
             Intent returnIntent = new Intent(TabActivity.this, Home.class);
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(returnIntent);
             return false;
-        }else{
-           //finish();
+        }
+
+        if(item.getItemId() == android.R.id.home) {
+            finish();
             return false;
         }
 
-        //return super.onOptionsItemSelected(item);
+        return retVal;
     }
 
     @Override
@@ -201,31 +208,13 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
         if(mTabManager.getCurrentSelectedTab().equals("goals")){
             if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-                //tabHeader.setAlpha(0.4f);
-
-                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
-                params.setMargins(0,0,0,0);
-                tabContent.setLayoutParams(params);
-
                 tabs.setVisibility(View.GONE);
-                //tabHeader.setAnimation(animationMoveOut);
                 return;
             }
 
         }
 
-        //tabHeader.setAlpha(1);
-
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        int margin = (int) (HEADER_TOP_MARGIN_DP * scale + 0.5f);
-        params.setMargins(0, margin, 0, 0);
-        tabContent.setLayoutParams(params);
-
         tabs.setVisibility(View.VISIBLE);
-        //tabHeader.setAnimation(animationMoveOut);
     }
 
     @Override

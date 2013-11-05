@@ -126,7 +126,6 @@ $(function () {
                 '#000000'
             ],
             xAxis: {
-            //tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
@@ -175,6 +174,19 @@ $(function () {
                     dataLabels: {
                         enabled: true,
                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                    }
+                }
+            },
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function() {
+                                //alert ('Category: '+ this.x +', value: '+ this.y);
+                                goals.onItemClick(this.x);
+                            }
+                        }
                     }
                 }
             },

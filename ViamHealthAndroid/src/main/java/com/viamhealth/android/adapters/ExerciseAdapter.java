@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 10/12/13.
  */
-public class ExerciseAdapter extends ArrayAdapter<CategoryExercise> {
+public class ExerciseAdapter extends MultiSelectionAdapter<CategoryExercise> {
 
     Context context;
     int layoutResourceId;
@@ -37,7 +37,7 @@ public class ExerciseAdapter extends ArrayAdapter<CategoryExercise> {
 
 
     public ExerciseAdapter(Context context, int layoutResourceId, ArrayList<CategoryExercise> lstdata) {
-        super(context, layoutResourceId, lstdata);
+        super(context, lstdata);
         // TODO Auto-generated constructor stub
 
         this.layoutResourceId = layoutResourceId;
@@ -46,7 +46,7 @@ public class ExerciseAdapter extends ArrayAdapter<CategoryExercise> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getItemView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         FileDataHolder holder = null;
         appPrefs=new ViamHealthPrefs(context);

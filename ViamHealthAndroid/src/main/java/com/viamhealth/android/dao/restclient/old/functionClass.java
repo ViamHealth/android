@@ -1,6 +1,8 @@
 package com.viamhealth.android.dao.restclient.old;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -235,11 +237,13 @@ public class functionClass {
         }
 
 
-		public ArrayList<CategoryFood> FoodListing(String baseurlString){
+		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date,String user){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
-			RestClient client = new RestClient(baseurlString);   
+            baseurlString+="&user="+user+"&diet_date="+date;
+			RestClient client = new RestClient(baseurlString);
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-            Log.e("TAG","baseurlString : " + baseurlString);
+            Log.e("TAG","baseurlString food listing: " + baseurlString);
+            //client.AddParam("diet_date",date);
 		  
 			try
 			{
@@ -316,6 +320,9 @@ public class functionClass {
         client.AddParam("food_item", food_item);
         client.AddParam("meal_type", meal_type);
         client.AddParam("food_quantity_multiplier", food_quantities);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        client.AddParam("diet_date",sdf.format(date));
 
 
         try
@@ -367,6 +374,9 @@ public class functionClass {
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                     Log.e("TAG","Delete Food : " + baseurlString);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = new Date();
+                    client.AddParam("diet_date",sdf.format(date));
 				  
 					try
 					{
@@ -406,14 +416,20 @@ public class functionClass {
 
 
 
-		public String AddFood(String id,String mealtype,String food_quantity_multiplier){
+		public String AddFood(String id,String mealtype,String food_quantity_multiplier,String userid){
         String responce="1";
-        String baseurlString = Global_Application.url+"diet-tracker/";
+        String baseurlString = Global_Application.url+"diet-tracker/"+"?user="+userid;
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
         client.AddParam("food_item", id);
         client.AddParam("meal_type", mealtype);
         client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        client.AddParam("diet_date",sdf.format(date));
+
+        Log.e("TAG","url for add food : " + baseurlString);
+
         try
         {
             client.Execute(RequestMethod.POST);
@@ -423,7 +439,7 @@ public class functionClass {
         }
 
         responseString = client.getResponse();
-        Log.e("TAG","Responce : " + responseString);
+        Log.e("TAG","Responce for add food : " + responseString);
         try {
             jObject = new JSONObject(responseString);
             if(responseString.length()>0){
@@ -982,7 +998,7 @@ public class functionClass {
 				}
 		// function for get file data
 				public ArrayList<FileData> getFile(Long userId, String searchString){
-                    String baseurlString = Global_Application.url + "healthfiles/?user=" + userId;
+                    String baseurlString = Global_Application.url + "healthfiles/?page_size=100&user=" + userId;
                     if(searchString!=null && !searchString.isEmpty())
                         baseurlString += "&search=" + searchString;
 					ArrayList<FileData>	lstData = new ArrayList<FileData>();
@@ -1000,6 +1016,9 @@ public class functionClass {
 						e.printStackTrace();
 					}
 
+                    if(client.getResponseCode()>400){
+                        return null;
+                    }
 					responseString = client.getResponse();
 					Log.e("TAG","Response string " + responseString);
 					
@@ -1659,7 +1678,7 @@ public class functionClass {
 				public ArrayList<MedicalData> UpdateMedication(String id,String user_id,String type,String name,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
-														    String repeat_weekday,String repeat_day_interval){
+														    String repeat_weekday,String repeat_day_interval,String start_date,String end_date){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"reminders/"+id+"/"+"?type="+type;  //?user="+user_id;
 					Log.e("TAG","url is : " + baseurlString);
@@ -1684,6 +1703,8 @@ public class functionClass {
 					client.AddParam("repeat_min", repeat_min.toString());
 					client.AddParam("repeat_weekday", repeat_weekday.toString());
 					client.AddParam("repeat_day_interval", repeat_day_interval.toString());
+                    client.AddParam("start_date",start_date);
+                    client.AddParam("end_date",end_date);
 					
 					try
 					{

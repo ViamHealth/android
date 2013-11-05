@@ -34,7 +34,7 @@ public abstract class GoalsEP extends BaseEP {
     }
 
     private RestClient getRestClient(String url, Long userId) {
-        String baseurlString = Global_Application.url+ url + "/?user=" + userId;
+        String baseurlString = Global_Application.url+ url + "/?user=" + userId + "&page_size=1000";
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());

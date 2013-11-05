@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".File"
-    android:background="#EFEFEF"
+    android:background="#eeeeee"
     android:orientation="vertical"
     >
 
@@ -23,11 +23,11 @@
                 android:orientation="vertical"
                 android:id="@+id/goal_list_layout"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal">
 
-                <LinearLayout android:layout_height="wrap_content"
+                <LinearLayout android:layout_height="fill_parent"
                     android:layout_width="fill_parent"
                     android:orientation="vertical">
                     <!-- Action Bar End -->
@@ -140,71 +140,9 @@
                             <ScrollView android:layout_height="fill_parent"
                                 android:layout_width="fill_parent"
                                 android:orientation="vertical">
-                                <LinearLayout android:layout_height="fill_parent"
+                                <LinearLayout android:layout_height="wrap_content"
                                     android:layout_width="fill_parent"
                                     android:orientation="vertical">
-                                    <LinearLayout android:layout_height="wrap_content"
-                                        android:layout_width="fill_parent"
-                                        android:orientation="horizontal">
-
-                                        <TextView android:id="@+id/lbl_name"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:textColor="#000000"
-                                            android:text="Abc taken"
-                                            android:textSize="14sp"
-                                            android:padding="5dp"
-                                            android:visibility="invisible"
-                                            />
-
-                                        <TextView android:id="@+id/lbl_morning"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:gravity="center"
-                                            android:padding="5dp"
-                                            android:textColor="#000000"
-                                            android:text="Morning"
-                                            android:textSize="14sp"
-                                            android:visibility="gone"
-
-                                            />
-                                        <TextView android:id="@+id/txt1"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:textColor="#000000"
-                                            android:textSize="14sp"
-                                            android:visibility="gone"
-                                            />
-                                        <TextView android:id="@+id/lbl_noon"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:textColor="#000000"
-                                            android:text="Noon"
-                                            android:padding="5dp"
-                                            android:gravity="center"
-                                            android:textSize="14sp"
-                                            android:visibility="gone"
-                                            />
-                                        <TextView android:id="@+id/txt2"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:textColor="#000000"
-                                            android:textSize="14sp"
-                                            android:visibility="gone"
-                                            />
-                                        <TextView android:id="@+id/lbl_night"
-                                            android:layout_height="wrap_content"
-                                            android:layout_width="wrap_content"
-                                            android:textColor="#000000"
-                                            android:text="Night"
-                                            android:padding="5dp"
-                                            android:gravity="center"
-                                            android:textSize="14sp"
-                                            android:visibility="gone"
-                                            />
-
-
-                                    </LinearLayout>
 
                                     <LinearLayout android:layout_height="fill_parent"
                                         android:layout_width="fill_parent"
@@ -214,10 +152,10 @@
                                         <android.support.v4.view.ViewPager
                                             android:id="@+id/pager1"
                                             android:layout_width="fill_parent"
-                                            android:layout_height="200dp"
+                                            android:layout_height="fill_parent"
                                             android:layout_gravity="right"
                                             android:gravity="right"
-                                            android:background="#dce0e0"/>
+                                            android:background="#eeeeee"/>
 
                                     </LinearLayout>
                                     <!--
@@ -244,7 +182,8 @@
                                         android:paddingLeft="10dp"
                                         android:paddingRight="10dp"
                                         android:background="@drawable/btn_save_toggle"
-                                        android:textStyle="bold" />
+                                        android:textStyle="bold"
+                                        android:visibility="gone" />
                                 </LinearLayout>
 
 
@@ -292,7 +231,7 @@
                                 android:orientation="vertical"
                                 android:background="@drawable/r2"
                                 android:visibility="gone">
-                                <com.viamhealth.android.ui.RefreshableListView
+                                <!--<com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
                                     android:divider="#000000"
@@ -304,7 +243,15 @@
                                     android:layout_height="200dp"
                                     android:listSelector="@drawable/list_item_selector"
                                     android:id="@+id/lstReminderTest"
-                                    />
+                                    />-->
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstReminderTest"/>
+
                             </LinearLayout>
                             <Button  android:id="@+id/add_test_reminder"
                                 android:layout_height="wrap_content"
@@ -317,17 +264,11 @@
                                 android:paddingRight="10dp"
                                 android:background="@drawable/btn_save_toggle"
                                 android:textStyle="bold"
-                                android:visibility="gone"/>
+                                android:visibility="visible"/>
 
                         </LinearLayout>
                     </LinearLayout>
                     <!-- Reminder section layout end -->
-
-
-
-
-
-
 
                     <!-- Medicine section layout end -->
                     <LinearLayout android:layout_height="wrap_content"
@@ -347,7 +288,8 @@
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:orientation="vertical"
-                                android:background="@drawable/r1">
+                                android:background="@drawable/r1"
+                                android:visibility="gone">
                                 <TextView
                                     android:layout_height="wrap_content"
                                     android:layout_width="wrap_content"
@@ -380,7 +322,7 @@
                                     android:layout_width="fill_parent"
                                     android:orientation="vertical"
                                     android:background="@drawable/r1">
-
+<!--
                                     <com.viamhealth.android.ui.RefreshableListView
                                         android:layout_width="fill_parent"
                                         android:cacheColorHint="#00000000"
@@ -392,7 +334,15 @@
                                         android:footerDividersEnabled="false"
                                         android:layout_height="wrap_content"
                                         android:listSelector="@drawable/list_item_selector"
-                                        android:id="@+id/lstReminderMedicine" />
+                                        android:id="@+id/lstReminderMedicine" /> -->
+                                    <FrameLayout
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="fill_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_margin="20dp"
+                                        android:background="#ffffff"
+                                        android:id="@+id/lstReminderMedicine"/>
+
                                 </LinearLayout>
 
                                 <Button  android:id="@+id/add_medicine"
@@ -405,7 +355,8 @@
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
                                     android:background="@drawable/btn_save_toggle"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:visibility="visible"/>
                             </LinearLayout>
                      </ScrollView>
 
@@ -437,6 +388,7 @@
                                 android:orientation="vertical"
                                 android:background="@drawable/r2"
                                 android:visibility="gone">
+                                <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -448,8 +400,16 @@
                                     android:footerDividersEnabled="false"
                                     android:layout_height="200dp"
                                     android:listSelector="@drawable/list_item_selector"
-                                    android:id="@+id/lstReminderTest" />
+                                    android:id="@+id/lstReminderTest" />-->
                             </LinearLayout>
+                            <FrameLayout
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_gravity="center"
+                                android:layout_margin="20dp"
+                                android:background="#ffffff"
+                                android:id="@+id/lstReminderTest"/>
+
 
 
                         </LinearLayout>
@@ -492,6 +452,7 @@
                                 android:layout_width="fill_parent"
                                 android:orientation="vertical"
                                 android:background="@drawable/r2">
+                                <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
                                     android:cacheColorHint="#00000000"
@@ -503,7 +464,15 @@
                                     android:footerDividersEnabled="false"
                                     android:layout_height="200dp"
                                     android:listSelector="@drawable/list_item_selector"
-                                    android:id="@+id/lstRemTest" />
+                                    android:id="@+id/lstRemTest" />-->
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstRemTest"/>
+
                             </LinearLayout>
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
@@ -524,7 +493,8 @@
                                         android:dividerHeight="1dp"
                                         android:background="@drawable/btn_save_toggle"
                                         android:headerDividersEnabled="false"
-                                        android:footerDividersEnabled="false"/>
+                                        android:footerDividersEnabled="false"
+                                        android:visibility="visible"/>
 
                                 </LinearLayout>
                                 <LinearLayout android:layout_height="wrap_content"
@@ -537,6 +507,7 @@
                                     android:orientation="vertical"
                                     android:background="@drawable/r2"
                                     android:visibility="gone">
+                                    <!--
                                     <com.viamhealth.android.ui.RefreshableListView
                                         android:layout_width="fill_parent"
                                         android:cacheColorHint="#00000000"
@@ -548,8 +519,16 @@
                                         android:footerDividersEnabled="false"
                                         android:layout_height="200dp"
                                         android:listSelector="@drawable/list_item_selector"
-                                        android:id="@+id/lstReminderTest" />
+                                        android:id="@+id/lstReminderTest" />-->
                                 </LinearLayout>
+
+                                <FrameLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="fill_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="20dp"
+                                    android:background="#ffffff"
+                                    android:id="@+id/lstReminderTest"/>
 
 
                             </LinearLayout>
@@ -559,112 +538,53 @@
 
                     <!-- Test section layout end -->
                     <!-- Test layout end -->
-                    <!--    	       <LinearLayout android:id="@+id/lst_data"
-                                           android:layout_height="0dp"
-                                           android:layout_weight="1"
-                                           android:orientation="vertical"
-                                           android:layout_width="fill_parent">
-                                       <LinearLayout
-                                           android:id="@+id/filename_lbl_layout"
-                                           android:layout_height="wrap_content"
-                                           android:layout_width="fill_parent"
-                                           android:gravity="center_vertical"
-                                           android:orientation="horizontal"
-                                           android:padding="5dp"
-                                           android:background="@drawable/r1">
-                                           <TextView
-                                               android:id="@+id/lbl_name"
-                                               android:layout_height="wrap_content"
-                                               android:layout_width="wrap_content"
-                                               android:text="Name"
-                                               android:gravity="center"
-                                               android:layout_weight="1"
-                                               android:textColor="#000000"
-                                               android:textSize="12sp"/>
-
-                                            <TextView
-                                               android:id="@+id/lbl_time"
-                                               android:layout_height="wrap_content"
-                                               android:layout_width="wrap_content"
-                                               android:text="Start Timestamp"
-                                               android:layout_weight="1"
-                                                android:gravity="center"
-                                               android:textColor="#000000"
-                                               android:textSize="12sp"/>
-
-                                             <TextView
-                                               android:id="@+id/lbl_mode"
-                                               android:layout_height="wrap_content"
-                                               android:layout_width="wrap_content"
-                                               android:text="Repeat Mode"
-                                               android:layout_weight="1"
-                                                android:gravity="center"
-                                               android:textColor="#000000"
-                                               android:textSize="12sp"/>
-
-                                       </LinearLayout>
-                                   <LinearLayout
-                                           android:layout_height="fill_parent"
-                                           android:layout_width="fill_parent"
-                                           android:orientation="vertical"
-                                        android:background="@drawable/profile_bg1">
-
-                                         <com.viamhealth.android.ui.RefreshableListView
-                                           android:layout_width="fill_parent"
-                                           android:cacheColorHint="#00000000"
-                                           android:layout_weight="1"
-                                           android:divider="#000000"
-                                           android:paddingLeft="10dp"
-                                           android:paddingRight="10dp"
-                                           android:dividerHeight="1dp"
-                                           android:headerDividersEnabled="false"
-                                           android:footerDividersEnabled="false"
-                                           android:layout_height="fill_parent"
-                                           android:listSelector="@drawable/list_item_selector"
-                                           android:id="@+id/lstdata" />
-                                   </LinearLayout>
-                                 </LinearLayout> -->
-                    <!-- 	<LinearLayout
-                                android:id="@+id/watch_below_layout"
-                                android:layout_height="wrap_content"
-                              android:layout_width="fill_parent"
-                              android:orientation="horizontal"
-                             >
-                                              <TextView
-                                              android:layout_height="wrap_content"
-                                              android:layout_width="wrap_content"
-                                              android:id="@+id/lbl_add"
-                                              android:background="@drawable/valuebg_toggle"
-                                              android:text="+ Add"
-                                              android:textStyle="bold"
-                                              android:padding="5dp"
-                                              android:layout_weight="1"
-                                              android:gravity="center"/>
-
-                                        <TextView android:layout_height="wrap_content"
-                                              android:layout_width="wrap_content"
-                                             android:id="@+id/lbl_delete"
-                                              android:textStyle="bold"
-                                              android:gravity="center"
-                                               android:padding="5dp"
-                                              android:layout_weight="1"
-                                              android:background="@drawable/otherbg_toggle"
-                                              android:text="Delete"/>
-                                          <TextView android:layout_height="wrap_content"
-                                              android:layout_width="wrap_content"
-                                              android:id="@+id/lbl_edit"
-                                              android:text="Edit"
-                                              android:padding="5dp"
-                                              android:layout_weight="1"
-                                              android:gravity="center"
-                                              android:background="@drawable/otherbg_toggle"
-                                              android:textStyle="bold"/>
-
-                      </LinearLayout> -->
-
-
                 </LinearLayout>
+
             </LinearLayout>
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/initial_layout"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/reminder_initial_string"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textColor="@color/app_green" />
+
+            <Button
+                android:id="@+id/add_medi_rem"
+                android:layout_width="fill_parent"
+                android:layout_height="72dp"
+                android:text="@string/set_medi_reminders"
+                android:layout_gravity="center"
+                style="@style/ButtonReverseTheme" />
+
+            <Button
+                android:id="@+id/add_test_rem"
+                android:layout_width="fill_parent"
+                android:layout_height="72dp"
+                android:text="@string/set_others_reminders"
+                android:layout_gravity="center"
+                style="@style/ButtonReverseTheme" />
+
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

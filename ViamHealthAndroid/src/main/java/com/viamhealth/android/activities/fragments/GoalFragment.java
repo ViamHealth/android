@@ -27,6 +27,9 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -128,9 +131,9 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
 
             @Override
             public void onPageSelected(int i) {
-                GraphFragment fragment = graphFragments.get(i);
-                MedicalConditions mc = fragment.getType();
-                actionBar.setSubtitle(mc.key());
+                //GraphFragment fragment = graphFragments.get(i);
+                //MedicalConditions mc = fragment.getType();
+                //actionBar.setSubtitle(mc.key());
             }
 
             @Override
@@ -151,9 +154,25 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
             }
         }
 
-        /** build the supported series map **/
+        setHasOptionsMenu(true);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        menu.add(Menu.NONE, R.drawable.ic_action_goal, 10, "New Goal")
+                .setIcon(R.drawable.ic_action_goal)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.drawable.ic_action_goal){
+            addNewGoal();
+            return false;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -191,14 +210,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-        if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            ((LinearLayout) view.findViewById(R.id.title_bar)).setVisibility(View.GONE);
-        } else {
-            ((LinearLayout) view.findViewById(R.id.title_bar)).setVisibility(View.VISIBLE);
-        }
     }
-
 
     public void addNewGoal() {
         Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
@@ -209,7 +221,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_add_goal || v.getId() == R.id.btnAddGoal){
+        if(v.getId() == R.id.btnAddGoal){
             addNewGoal();
         }
     }
@@ -332,10 +344,10 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
                 setOnGoalDataChangeListener(mc, fragment);
                 fragment.setOnClickAddValueListener(new GraphFragment.OnClickAddValueListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onClick(MedicalConditions medicalCondition) {
                         Intent i = new Intent(getSherlockActivity(), AddGoalValue.class);
-                        i.putExtra("type", mc);
-                        List<GoalReadings> grs = goalsConfiguredMap.get(mc).getReadings();
+                        i.putExtra("type", medicalCondition);
+                        List<GoalReadings> grs = goalsConfiguredMap.get(medicalCondition).getReadings();
                         Parcelable[] readings = new Parcelable[grs.size()];
                         readings = grs.toArray(readings);
                         i.putExtra("readings", readings);
@@ -382,7 +394,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
                 }
                 rds.add(reading);
             }
-            goal.setReadings(rds);
+            //goal.setReadings(rds);
             goalsConfiguredMap.put(type, goal);
             return reading;
         }
@@ -468,8 +480,8 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
 
             onGoalDataChanged(null);
 
-            TextView btnAddGoal = (TextView) final_layout.findViewById(R.id.btn_add_goal);
-            btnAddGoal.setOnClickListener(GoalFragment.this);
+            //TextView btnAddGoal = (TextView) final_layout.findViewById(R.id.btn_add_goal);
+            //btnAddGoal.setOnClickListener(GoalFragment.this);
 
             Button btnAddG = (Button) initial_layout.findViewById(R.id.btnAddGoal);
             btnAddG.setOnClickListener(GoalFragment.this);
@@ -484,6 +496,8 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
 
             dialog.dismiss();
         }
+
+
     }
 
 

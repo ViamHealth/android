@@ -56,7 +56,7 @@ public class BMRCalculator {
         DateTime targetDateTime = new DateTime(targetDate.getTime());
         DateTime now = new DateTime();
         Days noOfDays = Days.daysBetween(targetDateTime, now);
-        int daysToReachTarget = noOfDays.getDays();
+        int daysToReachTarget = Math.abs(noOfDays.getDays());
 
         int caloriesPerKg = 7000;
 

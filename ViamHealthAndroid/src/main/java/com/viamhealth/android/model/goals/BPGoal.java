@@ -27,6 +27,7 @@ public class BPGoal extends Goal {
 
     @Override
     public void setReadings(List<GoalReadings> readings) {
+        this.readings.clear();
         for(GoalReadings reading : readings){
             this.readings.add((BPGoalReading) reading);
         }

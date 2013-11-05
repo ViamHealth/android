@@ -39,38 +39,41 @@ public class FileLoader {
     FileCache fileCache;
     ExecutorService executorService;
     final Context mContext;
+    final String authToken;
 
-    public FileLoader(Context context){
+    public FileLoader(Context context, String token){
         mContext = context;
         fileCache=new FileCache(context);
+        authToken = token;
         executorService=Executors.newFixedThreadPool(5);
+
     }
 
     public interface OnFileLoadedListener {
         public void OnFileLoaded(File file);
     }
 
-    public void LoadFile(String url, OnFileLoadedListener listener)
+    public void LoadFile(String url, String filename, OnFileLoadedListener listener)
     {
         List<Byte> byteArray = memoryCache.get(url);
-        File f = fileCache.getFile(url);
-        if(f!=null){
+        File f = fileCache.getFile(url, UIUtility.getFileExtension(filename));
+        if(f.exists() && f.length()>0){
             listener.OnFileLoaded(f);
         } else {
-            queueFile(url, listener);
+            queueFile(url, UIUtility.getFileExtension(filename), listener);
             //imageView.setImageResource(loader);
         }
     }
 
-    private void queueFile(String url, OnFileLoadedListener listener)
+    private void queueFile(String url, String extension, OnFileLoadedListener listener)
     {
-        FileToLoad p=new FileToLoad(url, listener);
+        FileToLoad p=new FileToLoad(url, extension, listener);
         executorService.submit(new FilesLoader(p));
     }
 
-    private byte[] getByteArray(String url)
+    private byte[] getByteArray(String url, String extension)
     {
-        File f=fileCache.getFile(url);
+        File f=fileCache.getFile(url, extension);
 
         //from SD cache
         byte[] b = decodeFile(f);
@@ -82,6 +85,8 @@ public class FileLoader {
             byte[] byteArray=null;
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Token " + authToken);
             conn.setConnectTimeout(30000);
             conn.setReadTimeout(30000);
             conn.setInstanceFollowRedirects(true);
@@ -112,9 +117,11 @@ public class FileLoader {
     {
         public String url;
         public OnFileLoadedListener listener;
-        public FileToLoad(String u, OnFileLoadedListener l){
+        public String extension;
+        public FileToLoad(String u, String e, OnFileLoadedListener l){
             url=u;
             listener = l;
+            extension = e;
         }
     }
 
@@ -128,7 +135,7 @@ public class FileLoader {
         public void run() {
             //if(imageViewReused(photoToLoad))
             //    return;
-            byte[] ba = getByteArray(fileToLoad.url);
+            byte[] ba = getByteArray(fileToLoad.url, fileToLoad.extension);
             List<Byte> byteArr = new ArrayList<Byte>(ba.length);
             for(int i=0; i<ba.length; i++) byteArr.add(ba[i]);
             memoryCache.put(fileToLoad.url, byteArr);
@@ -153,7 +160,7 @@ public class FileLoader {
         public FileDisplayer(byte[] b, FileToLoad f){byteArray=b;fileToLoad=f;}
         public void run()
         {
-            fileToLoad.listener.OnFileLoaded(fileCache.getFile(fileToLoad.url));
+            fileToLoad.listener.OnFileLoaded(fileCache.getFile(fileToLoad.url, fileToLoad.extension));
         }
     }
 
