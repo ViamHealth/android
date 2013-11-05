@@ -50,7 +50,6 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddMedication;
-import com.viamhealth.android.activities.AddReminder;
 import com.viamhealth.android.activities.AddTest;
 import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Home;
@@ -296,7 +295,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.drawable.ic_content_new){
-            Intent addMedication = new Intent(getSherlockActivity(),AddReminder.class);
+            Intent addMedication = new Intent(getSherlockActivity(),AddMedication.class);
             addMedication.putExtra("user_id",user.getId().toString());
             startActivity(addMedication);
             return false;
@@ -448,17 +447,12 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             */
 
 
-            if(listData.size()==0 && otherData.size()==0){
-                getActivity().findViewById(R.id.initial_layout).setVisibility(View.VISIBLE);
-                getActivity().findViewById(R.id.main_layout).setVisibility(View.GONE);
-            }else{
-                getActivity().findViewById(R.id.initial_layout).setVisibility(View.GONE);
-                getActivity().findViewById(R.id.main_layout).setVisibility(View.VISIBLE);
-            }
 
             RetrieveOtherData task1= new RetrieveOtherData();
             task1.applicationContext=getSherlockActivity();
             task1.execute();
+
+
 
         }
 
@@ -1158,7 +1152,43 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
 
         }
     }
+    // async class for calling webservice and get responce message
+    public class CalluserMeTask extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
 
+        @Override
+        protected void onPreExecute()
+        {
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog = new ProgressDialog(getSherlockActivity());
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("Please Wait....");
+            dialog.show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+            Log.i("onPostExecute", "onPostExecute");
+            //generateView();
+            dialog.dismiss();
+			/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
+				startActivity(intent);*/
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            UserEP userEP = new UserEP(getSherlockActivity(), ga);
+            userEP.getUserProfile(ga.getLoggedInUser().getId());
+            return null;
+        }
+
+    }
     private class ImagePagerAdapter extends PagerAdapter {
         ArrayList<String> lstData = new ArrayList<String>();
         private LayoutInflater inflater;

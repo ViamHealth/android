@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by naren on 31/10/13.
  */
-public class FoodEP {//extends BaseEP {
+public class FoodEP extends BaseEP {
 
 /*    final Context mContext;
     final Global_Application mApplication;
@@ -34,8 +34,7 @@ public class FoodEP {//extends BaseEP {
     }
 
     private RestClient getRestClient(Long userId, FoodType type) {
-        String baseurlString = Global_Application.url+ "
-        diet-tracker" + "/?user=" + userId + "&page_size=1000";
+        String baseurlString = Global_Application.url+ "diet-tracker" + "/?user=" + userId + "&page_size=1000";
 
         if(type!=null && type!=FoodType.None){
             baseurlString += "&meal_type=" + type.key();

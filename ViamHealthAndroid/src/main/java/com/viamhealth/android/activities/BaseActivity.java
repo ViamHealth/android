@@ -8,14 +8,13 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viamhealth.android.ViamHealthPrefs;
 
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  */
-public abstract class BaseActivity extends SherlockActivity {
+public abstract class BaseActivity extends Activity {
 
     Display display;
     int height,width;

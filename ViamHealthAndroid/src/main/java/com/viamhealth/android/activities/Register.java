@@ -1,13 +1,6 @@
 package com.viamhealth.android.activities;
 
-import com.facebook.FacebookRequestError;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphObject;
 import com.viamhealth.android.Global_Application;
-import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
@@ -36,15 +29,11 @@ import android.net.NetworkInfo;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.model.users.FBUser;
-import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.Validator;
 
-import org.json.JSONObject;
 
-
-public class Register extends BaseFragmentActivity implements OnClickListener, FBLoginFragment.OnSessionStateChangeListener {
+public class Register extends BaseActivity implements OnClickListener
+{
     private static ProgressDialog dialog;
 
     Button btnRegister;
@@ -57,11 +46,6 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
     DataBaseAdapter dbAdapter;
     Typeface tf;
 
-    ViamHealthPrefs appPrefs;
-    User user;
-
-    FBLoginFragment fbLoginFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -69,20 +53,6 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.register_new);
-
-
-        if (savedInstanceState == null) {
-            // Add the fragment on initial activity setup
-            fbLoginFragment = new FBLoginFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fbLoginFragment, fbLoginFragment)
-                    .commit();
-        } else {
-            // Or set the fragment from restored state info
-            fbLoginFragment = (FBLoginFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.fbLoginFragment);
-        }
 
         appPrefs = new ViamHealthPrefs(Register.this);
 
@@ -108,41 +78,6 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
         txtbtnCancel.setOnClickListener(this);
     }
 
-    @Override
-    public void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if(state.isOpened()){
-            //SignedUP through facebook
-            String fbToken = session.getAccessToken();
-            Toast.makeText(Register.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
-            getProfileDataFromFB(session);
-        }
-    }
-
-    private void getProfileDataFromFB(Session session){
-        String api = "me";
-        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                if (graphObject != null) {
-                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                    if (jsonResponse!=null) {
-                        FBUser fbUser = FBUser.deserialize(jsonResponse);
-                        Toast.makeText(Register.this, "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
-                        user = fbUser.toUser(null);
-                        user_name.setText(user.getUsername());
-                        password.setText("m");
-                        confirm_password.setText("m");
-                        btnRegister.performClick();
-                    }
-                }
-            }
-        });
-
-        request.executeAsync();
-    }
-
     // onclick method of all clikable control
     @Override
     public void onClick(View v) {
@@ -152,12 +87,9 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
         }
         if(v==btnRegister){
             if(validation()){
-                if(Checker.isInternetOn(Register.this)){
+                if(isInternetOn()){
                     CallSignupTask task = new CallSignupTask();
                     task.applicationContext = Register.this;
-                    task.username = user_name.getText().toString();
-                    task.password = password.getText().toString();
-                    task.user = user;
                     task.execute();
                 }else{
                     Toast.makeText(Register.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
@@ -193,8 +125,6 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
     public class CallSignupTask extends AsyncTask <String, Void,String>
     {
         protected Context applicationContext;
-        protected String username, password;
-        protected User user;
 
         @Override
         protected void onPreExecute()
@@ -211,6 +141,7 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
             Log.i("After Sign-Up", result);
             if(result.equals("0")){//just registered
                 dialog.dismiss();
+                appPrefs.setUsername(user_name.getText().toString().trim());
                 Intent i = new Intent(Register.this,Home.class);
                 startActivity(i);
                 finish();
@@ -226,17 +157,33 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
 
-            String result = "1";
-            User createdUser = obj.SignUp(username, password);
-            if(createdUser!=null) {
-                result = obj.Login(username, password);
-
-                if(user!=null){
-                    user.setId(createdUser.getId());
-                    user = obj.updateUser(user);
-                }
+            String result = obj.SignUp(user_name.getText().toString(), password.getText().toString());
+            if(result.equals("0")) {
+                result = obj.Login(user_name.getText().toString(), password.getText().toString());
             }
             return result;
         }
+
     }
+
+    // function for check internet is available or not
+    public final boolean isInternetOn() {
+
+        ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
+                || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
+                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
+                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
+            return true;
+        }
+
+        else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
+                || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
+            return false;
+        }
+
+        return false;
+    }
+
 }

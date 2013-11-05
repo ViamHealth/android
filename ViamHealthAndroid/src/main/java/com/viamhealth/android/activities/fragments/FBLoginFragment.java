@@ -28,8 +28,6 @@ public class FBLoginFragment extends Fragment {
     private UiLifecycleHelper uiHelper;
     private OnSessionStateChangeListener scListener;
 
-    boolean isPaused = false;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fb_login_fragment, container, false);
@@ -75,7 +73,6 @@ public class FBLoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
-        isPaused = false;
     }
 
     @Override
@@ -88,8 +85,7 @@ public class FBLoginFragment extends Fragment {
         Session session = Session.getActiveSession();
         if (session != null &&
                 (session.isOpened() || session.isClosed()) ) {
-            //if(isPaused)
-                //onSessionStateChange(session, session.getState(), null);
+            onSessionStateChange(session, session.getState(), null);
         }
 
         uiHelper.onResume();
@@ -104,7 +100,6 @@ public class FBLoginFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        isPaused = true;
         uiHelper.onPause();
     }
 
