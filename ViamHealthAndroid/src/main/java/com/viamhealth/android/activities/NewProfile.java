@@ -60,7 +60,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
     ImageView profile_image;
     Button btnSave, btnCancel;
-    ImageButton imgMale, imgFemale;
+    ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
     Spinner bloodGroup;
 
@@ -105,15 +105,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
-        //for get screen height width
-        ScreenDimension();
-
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
-
-        Animation anim = AnimationUtils.loadAnimation(NewProfile.this, R.anim.fade_in);
-        profilePic.setAnimation(anim);
-        anim.start();
 
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
@@ -131,6 +124,14 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         imgMale = (ImageButton) findViewById(R.id.profile_img_male);
         imgFemale = (ImageButton) findViewById(R.id.profile_img_female);
+
+        imgUpload = (ImageButton) findViewById(R.id.imgBtnUpload);
+        imgUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImage();
+            }
+        });
 
         //by default set the gender as Male
         updateGender(Gender.Male);
@@ -198,13 +199,15 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             } else {
                 getDataFromFB(FBRequestType.Profile, null);
             }
+        }else{
+            imgUpload.setVisibility(View.VISIBLE);
         }
     }
 
     private void getDataFromFB(final FBRequestType type, final String profileId) {
-
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened() ) {
+            imgUpload.setVisibility(View.GONE);
             if(type==FBRequestType.Family){
                 if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
                     return;
@@ -222,6 +225,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 dialog.setMessage("we are getting "+whose+" data...");
                 dialog.show();
             }
+        }else{
+            imgUpload.setVisibility(View.VISIBLE);
         }
 //
 //        // start Facebook Login

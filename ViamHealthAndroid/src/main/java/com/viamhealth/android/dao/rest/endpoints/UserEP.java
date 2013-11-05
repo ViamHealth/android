@@ -297,7 +297,7 @@ public class UserEP extends BaseEP {
             for(int i=0; i<jsonUsers.length(); i++){
                 User user = processUserResponse(jsonUsers.getJSONObject(i));
                 User loggedInUser = getLoggedInUser();
-                if(user.getId()==loggedInUser.getId()){
+                if(user.getId().equals(loggedInUser.getId())){
                     user.setLoggedInUser(true);
                 }
                 users.add(user);
