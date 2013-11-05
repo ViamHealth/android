@@ -3,6 +3,9 @@ package com.viamhealth.android.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
@@ -60,6 +63,8 @@ public class Home extends BaseActivity implements OnClickListener{
 	UserEP userEndPoint;
 	User user;
     private DisplayImageOptions options;
+
+    boolean justRegistered = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +80,11 @@ public class Home extends BaseActivity implements OnClickListener{
 
         if(getIntent().getBooleanExtra("logout", false))
         {
-            Intent i = new Intent(Home.this,Login.class);
-            appPrefs.setToken(null);
-            startActivity(i);
-            finish();
+            logout();
             return;
         }
+
+        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
 
         // for get screen diamention
         ScreenDimension();
@@ -148,6 +152,35 @@ public class Home extends BaseActivity implements OnClickListener{
             Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
         }
 
+        if(justRegistered==true)
+            showBottomLayout();
+
+    }
+
+    private void logout() {
+        Session session = Session.getActiveSession();
+        session.closeAndClearTokenInformation();
+        Intent i = new Intent(Home.this,Login.class);
+        appPrefs.setToken(null);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.home_menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retVal = super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.menu_logout){
+            logout();
+            return false;
+        }
+
+        return retVal;
     }
 
     @Override
@@ -428,6 +461,10 @@ public class Home extends BaseActivity implements OnClickListener{
 			}        
 			 
 			protected void onPostExecute(String result) {
+                if(lstFamily.isEmpty()){
+                    logout();
+                    return;
+                }
                 generateView();
 				dialog.dismiss();
 			}

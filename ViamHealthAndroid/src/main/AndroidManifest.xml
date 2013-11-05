@@ -170,7 +170,7 @@
             android:label="@string/title_activity_home" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddReminder"
+            android:name=".activities.AddReminder"
             android:theme="@style/FullHeightDialog" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.FoodDetail" >
