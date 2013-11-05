@@ -66,7 +66,12 @@ console.log(android);
 $(function () {
     $('#container').highcharts({
         chart: {
-            type: "spline"
+            type: "spline",
+            events: {
+                    click: function(e) {
+                        goals.addValue();
+                    }
+            }
         },
         title: {
             text: "Blood Pressure"

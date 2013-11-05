@@ -160,12 +160,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
     }
 
-
-
-public static SherlockFragment getInstance()
-{
-    return JournalFragment.getInstance();
-}
+    public static SherlockFragment getInstance()
+    {
+        return JournalFragment.getInstance();
+    }
 
 
     private void fromOldCode() {
@@ -473,6 +471,7 @@ public static SherlockFragment getInstance()
         monthval=pMonth+1;
         updateDisplay();
         ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
+
         /*
         lstViewBreakfast.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
 
@@ -1702,9 +1701,8 @@ public static SherlockFragment getInstance()
 
     }
 
-
-
     private class JournalPagerAdapter extends PagerAdapter implements View.OnClickListener{
+
         ArrayList<String> lstData = new ArrayList<String>();
         private LayoutInflater inflater;
 

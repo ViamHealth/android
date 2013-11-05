@@ -10,7 +10,8 @@
     <FrameLayout
         android:id="@+id/main_layout"
         android:layout_height="fill_parent"
-        android:layout_width="fill_parent">
+        android:layout_width="fill_parent"
+        android:visibility="gone">
         <!-- Action Bar Start -->
         <LinearLayout
             android:id="@+id/actionbarlayot"

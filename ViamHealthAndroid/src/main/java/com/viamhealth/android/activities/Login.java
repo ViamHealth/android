@@ -1,6 +1,13 @@
 package com.viamhealth.android.activities;
 
+import com.facebook.FacebookRequestError;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphObject;
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
@@ -29,11 +36,16 @@ import android.net.NetworkInfo;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.users.FBUser;
+import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.utils.Checker;
+import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
+import org.json.JSONObject;
 
-public class Login extends BaseActivity implements OnClickListener
-{
+
+public class Login extends BaseFragmentActivity implements OnClickListener, FBLoginFragment.OnSessionStateChangeListener {
 	private static ProgressDialog dialog;
 	
 	Button login_btn;
@@ -43,6 +55,8 @@ public class Login extends BaseActivity implements OnClickListener
 	UserEP userEndPoint;
 
 	DataBaseAdapter dbAdapter;
+    FBLoginFragment fbLoginFragment;
+    ViamHealthPrefs appPrefs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +64,20 @@ public class Login extends BaseActivity implements OnClickListener
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		setContentView(R.layout.login_new);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		 
+
+        if (savedInstanceState == null) {
+            // Add the fragment on initial activity setup
+            fbLoginFragment = new FBLoginFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fbLoginFragment, fbLoginFragment)
+                    .commit();
+        } else {
+            // Or set the fragment from restored state info
+            fbLoginFragment = (FBLoginFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.fbLoginFragment);
+        }
+
 		appPrefs = new ViamHealthPrefs(Login.this);
 		Log.e("TAG","Token is " + appPrefs.getToken());
 		if(!appPrefs.getToken().equals("null") && !appPrefs.getToken().isEmpty()){
@@ -80,19 +107,62 @@ public class Login extends BaseActivity implements OnClickListener
 			sign_up.setOnClickListener(this);
 			sign_up.setTypeface(tf);	
 		}
-	} 
-	
-	// onclick method of all clikable control
+	}
+
+    @Override
+    public void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if(state.isOpened()){
+            //Logged in through facebook
+            String fbToken = session.getAccessToken();
+            Toast.makeText(Login.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
+            getProfileDataFromFB(session);
+        }
+    }
+
+    private void getProfileDataFromFB(final Session session){
+        String api = "me";
+        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
+            @Override
+            public void onCompleted(Response response) {
+                GraphObject graphObject = response.getGraphObject();
+                FacebookRequestError error = response.getError();
+                if (graphObject != null) {
+                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
+                    if (jsonResponse!=null) {
+                        FBUser fbUser = FBUser.deserialize(jsonResponse);
+                        Toast.makeText(Login.this, "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
+                        User user = fbUser.toUser(null);
+                        if(Checker.isInternetOn(Login.this)){
+                            CallLoginTask task = new CallLoginTask();
+                            task.applicationContext = Login.this;
+                            task.username = user.getUsername();
+                            task.password = "m";
+                            task.fbToken = session.getAccessToken();
+                            task.execute();
+                        }else{
+                            Toast.makeText(Login.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+        });
+
+        request.executeAsync();
+    }
+
+    // onclick method of all clikable control
 	@Override    
 	public void onClick(View v) 
 	{
 		// TODO Auto-generated method stub
 		if(v==login_btn){
-			if(isInternetOn()){
+			if(Checker.isInternetOn(Login.this)){
 				if(validation()){
-					 CallLoginTask task = new CallLoginTask();
-					 task.applicationContext = Login.this;
-					 task.execute();
+					CallLoginTask task = new CallLoginTask();
+					task.applicationContext = Login.this;
+                    task.username = user_name.getText().toString();
+                    task.password = user_password.getText().toString();
+					task.execute();
 				}
 			}else{
 				Toast.makeText(Login.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
@@ -128,6 +198,7 @@ public class Login extends BaseActivity implements OnClickListener
 	public class CallLoginTask extends AsyncTask <String, Void,String>
 	{
 		protected Context applicationContext;
+        protected String username, password, fbToken;
 
 		@Override
 		protected void onPreExecute() {
@@ -155,27 +226,8 @@ public class Login extends BaseActivity implements OnClickListener
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			Log.i("doInBackground--Object", "doInBackground--Object");
-			return userEndPoint.Login(user_name.getText().toString(), user_password.getText().toString());
+			return userEndPoint.Login(username, password);
 		}
 		   
 	}     
-	
-	// function for check internet is available or not
-	public final boolean isInternetOn() {
-        ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-            || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-            || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-            || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-                return true;
-        }
-
-        else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-                   || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-                return false;
-        }
-
-        return false;
-    }
-}   
+}
