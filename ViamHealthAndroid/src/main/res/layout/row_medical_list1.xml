@@ -16,6 +16,7 @@
         android:layout_weight="4"
         android:layout_gravity="left"
         android:orientation="vertical"
+        android:visibility="gone"
         android:background="@drawable/fading_bg_row">
 
         <ImageView android:layout_height="wrap_content"
@@ -190,6 +191,7 @@
         android:layout_weight="4"
         android:gravity="right"
         android:orientation="vertical"
+        android:visibility="gone"
         android:background="@drawable/fading_bg_row">
 
         <ImageView android:layout_height="wrap_content"
