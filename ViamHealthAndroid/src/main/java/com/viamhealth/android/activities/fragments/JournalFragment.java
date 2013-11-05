@@ -17,7 +17,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
 import android.util.Log;
@@ -50,7 +54,12 @@ import com.viamhealth.android.adapters.ExerciseAdapter;
 import com.viamhealth.android.adapters.JournalExerciseAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
+import com.viamhealth.android.adapters.MedicalDataAdapter;
+import com.viamhealth.android.adapters.MedicalDataAdapter1;
+import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
+import com.viamhealth.android.adapters.TestDataAdapter;
+import com.viamhealth.android.adapters.TestDataAdapter1;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
@@ -62,8 +71,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -124,10 +136,15 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     Global_Application ga;
 
     View view;
+    Bundle savedInstanceState;
+    private User user;
+    private ViewPager pager1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.tab_fragment_journal, container, false);
+        view = inflater.inflate(R.layout.layout_pager_journal, container, false);
+        this.savedInstanceState=savedInstanceState;
+        user=getArguments().getParcelable("user");
         fromOldCode();
         task1 = new CallExerciseListTask();
         taskBreakfast=new CallListTask();
@@ -159,6 +176,26 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         tf = Typeface.createFromAsset(getSherlockActivity().getAssets(), "Roboto-Condensed.ttf");
         //for get screen height width
+        ArrayList<String> lst = new ArrayList<String>();
+        Date now = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.DAY_OF_YEAR,1);
+        SimpleDateFormat fmt= new SimpleDateFormat("yyyy-MM-dd");
+        lst.add(fmt.format(cal.getTime()));
+        cal.add(Calendar.DAY_OF_YEAR,1);
+        lst.add(fmt.format(cal.getTime()));
+        cal.add(Calendar.DAY_OF_YEAR,1);
+        lst.add(fmt.format(cal.getTime()));
+        cal.add(Calendar.DAY_OF_YEAR,1);
+        lst.add(fmt.format(cal.getTime()));
+        cal.add(Calendar.DAY_OF_YEAR,1);
+        lst.add(fmt.format(cal.getTime()));
+
+
+        pager1=(ViewPager)view.findViewById(R.id.pager1);
+        pager1.setAdapter(new JournalPagerAdapt(lst));
+
         ScreenDimension();
 
         //calculate dynamic padding
@@ -176,6 +213,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         h2=(int)((height*0.38)/100);
         h200=(int)((height*41.67)/100);
         h20=(int)((height*4.17)/100);
+
+
 
 
         layout1 = (LinearLayout)view.findViewById(R.id.layout1);
@@ -432,7 +471,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         monthval=pMonth+1;
         updateDisplay();
         ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
-
     }
 
     public static Bitmap getBitmapFromURL(String src) {
@@ -859,7 +897,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                 man1.executePendingTransactions();
 
 
-
                 setHasOptionsMenu(true);
                     }
             }
@@ -867,6 +904,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             {
 
             }
+
 
                 if(isInternetOn()){
                     if(getSherlockActivity()!=null)
@@ -1440,6 +1478,70 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             }
 
             return obj.EditExercise(Global_Application.selectedexerciseid,Global_Application.weight,Global_Application.user_calories,Global_Application.time_spent,user.getId().toString(),Global_Application.exercise_value);
+        }
+
+    }
+
+    private class JournalPagerAdapt extends PagerAdapter {
+        ArrayList<String> lstData = new ArrayList<String>();
+        private LayoutInflater inflater;
+
+        JournalPagerAdapt(ArrayList<String> lstData) {
+            this.lstData = lstData;
+            inflater = getLayoutInflater(savedInstanceState);
+        }
+
+        @Override
+        public void destroyItem(View container, int position, Object object)
+        {
+            //	Toast.makeText(ImagePagerActivity.this,"hello" +position+"", Toast.LENGTH_LONG).show();
+            ((ViewPager) container).removeView((View) object);
+
+        }
+
+        @Override
+        public void finishUpdate(View container) {
+        }
+
+        @Override
+        public int getCount() {
+            return lstData.size();
+        }
+
+        @Override
+        synchronized public Object instantiateItem(View localView, final int position)
+        {
+            View imageLayout = inflater.inflate(R.layout.tab_fragment_journal, null);
+            ViewPager v1=(ViewPager)localView;
+            ((ViewPager) localView).setOffscreenPageLimit(3);
+            v1.setPageMargin(60);
+            ((ViewPager) localView).addView(imageLayout, 0);
+
+            return imageLayout;
+        }
+
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
+
+        @Override
+        public void restoreState(Parcelable state, ClassLoader loader) {
+        }
+
+        @Override
+        public Parcelable saveState() {
+            return null;
+        }
+
+        @Override
+        public void startUpdate(View container) {
+        }
+
+        public float getPageWidth(int position)
+        {
+            return 0.8f;
         }
 
     }
