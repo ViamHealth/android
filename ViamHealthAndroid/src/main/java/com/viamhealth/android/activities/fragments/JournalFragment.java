@@ -469,7 +469,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         pMonth = dateAndTime.get(Calendar.MONTH);
         pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
         monthval=pMonth+1;
-        updateDisplay();
+        //updateDisplay();
         ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
 
         /*
@@ -2018,6 +2018,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             lbl_food_date.setTypeface(tf);
 
 
+            lbl_food_date.setText(lstData.get(position));
 
             lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
             lbl_food_time.setTypeface(tf);
