@@ -40,7 +40,10 @@ import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+<<<<<<< .merge_file_a04704
 import android.widget.Button;
+=======
+>>>>>>> .merge_file_a06056
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,8 +67,12 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 	EditText txt_name,txt_detail,txt_morning,txt_afternoon,txt_evening,txt_night,txt_time,txt_min,txt_hour,txt_day,txt_week,txt_day_interval,txt_interval_val,txt_interval_type,txt_duration_val,txt_duration_type;
 	Spinner ddl_repeate_mode;
     Spinner reminder_type,interval_type,duration_type;
+<<<<<<< .merge_file_a04704
 	Button btnSave,btnCancle;
     TextView heading;
+=======
+	TextView btnSave,btnCancle,heading;
+>>>>>>> .merge_file_a06056
 	TextView lbl_invite_user_food,heding_Addfood_name;
 	ImageView back,person_icon;
 	ImageView imgMorningMinus,imgMorningPlus,imgNoonMinus,imgNoonPlus,imgNightMinus,imgNightPlus;
@@ -187,7 +194,10 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
         if(int_edit.getBooleanExtra("iseditMed",false)==true)
         {
             reminder_type.setVisibility(View.GONE);
+<<<<<<< .merge_file_a04704
             Toast.makeText(getApplicationContext(),"start_month oncreate()="+start_month,Toast.LENGTH_LONG).show();
+=======
+>>>>>>> .merge_file_a06056
             ga.setUpdate("1");
             txt_name.setText((int_edit.getStringExtra("name")).toString());
             morningval.setText((int_edit.getStringExtra("morning")));
@@ -199,7 +209,11 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
             noon_layout.setVisibility(View.VISIBLE);
             night_layout.setVisibility(View.VISIBLE);
             btnSave.setText("Edit");
+<<<<<<< .merge_file_a04704
             //Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
+=======
+            Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
+>>>>>>> .merge_file_a06056
 
         }
         else if(int_edit.getBooleanExtra("iseditOthers",false)==true)
@@ -212,6 +226,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
             morning_layout.setVisibility(View.GONE);
             noon_layout.setVisibility(View.GONE);
             night_layout.setVisibility(View.GONE);
+<<<<<<< .merge_file_a04704
             //Toast.makeText(getApplicationContext(),"pos 1",Toast.LENGTH_LONG).show();
         }
 
@@ -231,6 +246,9 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
         }
 
 
+=======
+        }
+>>>>>>> .merge_file_a06056
 		/*	txt_detail = (EditText)findViewById(R.id.txt_detail);
 		txt_detail.setTypeface(tf);
 		
@@ -395,6 +413,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                noon_layout.setVisibility(View.GONE);
                night_layout.setVisibility(View.GONE);
                isMedicine=false;
+<<<<<<< .merge_file_a04704
                Toast.makeText(getApplicationContext(),"pos 3   value of pos=" +pos
                        ,Toast.LENGTH_LONG).show();
             }
@@ -409,6 +428,12 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                     isMedicine=true;
                 }
 
+=======
+            }
+            else
+            {
+                isMedicine=true;
+>>>>>>> .merge_file_a06056
                 morning_layout.setVisibility(View.VISIBLE);
                 noon_layout.setVisibility(View.VISIBLE);
                 night_layout.setVisibility(View.VISIBLE);
@@ -781,9 +806,13 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                                                 "0",//ddl_repeate_mode.getSelectedItem().toString()
                                                 "0",// txt_min.getText().toString()
                                                 "1", //txt_week.getText().toString()
+<<<<<<< .merge_file_a04704
                                                 "0",
                                                  ""+start_year+"-"+start_month+"-"+start_day,
                                                 end_date);//txt_day_interval.getText().toString()
+=======
+                                                "0");//txt_day_interval.getText().toString()
+>>>>>>> .merge_file_a06056
 
 			    return null;
 			}

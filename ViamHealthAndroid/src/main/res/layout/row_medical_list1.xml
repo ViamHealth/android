@@ -202,9 +202,23 @@
                 android:text="Months"
                 android:textSize="12sp"
                 />
+<<<<<<< .merge_file_a09768
 
 
 
+=======
+             <ImageView android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:src="@drawable/edit"
+                 android:id="@+id/img1"
+                 android:padding="5dp"/>
+             
+             <ImageView android:layout_height="wrap_content"
+                 android:layout_width="wrap_content"
+                 android:src="@drawable/delete_icon"
+                 android:id="@+id/img2"
+                 android:padding="5dp"/>
+>>>>>>> .merge_file_a06892
         </LinearLayout>
 
     </LinearLayout>

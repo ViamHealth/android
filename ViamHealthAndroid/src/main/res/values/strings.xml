@@ -108,6 +108,7 @@
     <string name="title_activity_new_home">NewHome</string>
     <string name="reminder_type_prompt">Type</string>
     <string name="duration_type_prompt">Duration</string>
+<<<<<<< .merge_file_a05856
     <string name="exercise_type_prompt">Exercise</string>
     <string name="enter_time">Time</string>
     <string name="title_activity_delete_medication">Delete Medication</string>
@@ -118,6 +119,16 @@
     <string name="username">\@email</string>
     <string name="resgiter">Register</string>
     <string name="confirm_password">#password - confirm</string>
+=======
+<<<<<<< HEAD
+
+    <string name="title_activity_fbfamily_list">Add Family Member</string>
+    <string name="login">Login</string>
+    <string name="password">#password</string>
+    <string name="username">\@email</string>
+    <string name="resgiter">Register</string><string name="confirm_password">#password - confirm</string>
+
+>>>>>>> .merge_file_a06032
     <string name="login_user_name_not_present">need your identity to log you in</string>
     <string name="login_user_password_not_present">need your identity to log you in</string>
     <string name="login_user_name_not_email">this doesnt look like an email-id</string>
@@ -129,6 +140,7 @@
     <string name="profile_email_not_present">email is a mandatory field to create a new profile</string>
     <string name="profile_email_not_valid">is this really a email-id?</string>
     <string name="profile_first_name_not_present">first name or last name is mandatory to create a new profile</string>
+<<<<<<< .merge_file_a05856
     <string name="profile_dob_not_present">date of brth is mandatory to create a new profile</string>
     <string name="profile_height_not_present">height is mandatory to create a new profile</string>
     <string name="profile_weight_not_present">weight is mandatory to create a new profile</string>
@@ -191,5 +203,11 @@
     <string name="reminder_initial_string">Alarms! Great way of reminding!!\n\n
         you can set reminders on any kind of medications, lab tests, doctor visits, meals, activities, etc...\n\n</string>
     <string name="set_medi_reminders">set reminders for medicines</string><string name="set_others_reminders">set reminders for rest everything</string><string name="morning">morning</string><string name="noon">noon</string><string name="night">night</string><string name="repeat">repeat</string><string name="repeat_part">repeat for</string><string name="from">from</string><string name="every">every</string>
+=======
+=======
+>>>>>>> parent of 7240615... All necessary changed to the Register/Login and Home + Profile done
+
+    <string name="title_activity_delete_medication">Delete Medication</string>
+>>>>>>> .merge_file_a06032
 
 </resources>

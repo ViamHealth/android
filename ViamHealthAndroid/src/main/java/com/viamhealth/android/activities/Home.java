@@ -344,6 +344,7 @@ public class Home extends BaseActivity implements OnClickListener{
             addProfileIntent.putExtra("user", selectedUser);
             startActivityForResult(addProfileIntent, index);
         }else{
+<<<<<<< .merge_file_a07540
             //FrameLayout tr1frm=(FrameLayout) tiles.get(index).findViewWithTag("frame");
             //LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
             //TextView txt = (TextView)tr1.getChildAt(0);
@@ -354,11 +355,25 @@ public class Home extends BaseActivity implements OnClickListener{
             intent.putExtra("user", selectedUser);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
+=======
+            FrameLayout tr1frm=(FrameLayout)frm[i];
+            LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
+            TextView txt = (TextView)tr1.getChildAt(0);
+            Log.e("TAG","profile name is : " + txt.getTag());
+            appPrefs.setProfileName(txt.getTag().toString());
+            appPrefs.setGoalDisable("0");
+<<<<<<< HEAD
+            selecteduserid=lstFamily.get(index).getId();
+
+            Intent intent = new Intent(Home.this,MainActivity.class);
+            intent.putExtra("user_id", selecteduserid);
+>>>>>>> .merge_file_a05624
             startActivity(intent);
 
         }
 
 	}
+<<<<<<< .merge_file_a07540
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -372,6 +387,16 @@ public class Home extends BaseActivity implements OnClickListener{
                     task.execute();
 
                 }else{
+=======
+=======
+            selecteduserid=lstFamily.get(i).getId();
+>>>>>>> parent of 7240615... All necessary changed to the Register/Login and Home + Profile done
+
+            if(isInternetOn()){
+                CalluserMeTask task = new CalluserMeTask();
+                task.applicationContext = Home.this;
+                task.execute();
+>>>>>>> .merge_file_a05624
 
                 }
             }else{//it is from tabactivity
@@ -467,8 +492,20 @@ public class Home extends BaseActivity implements OnClickListener{
                 }
                 generateView();
 				dialog.dismiss();
+<<<<<<< .merge_file_a07540
 			}
 
+=======
+<<<<<<< HEAD
+			}
+
+=======
+				Intent intent = new Intent(Home.this,MainActivity.class);
+				startActivity(intent);
+			}  
+	   
+>>>>>>> parent of 7240615... All necessary changed to the Register/Login and Home + Profile done
+>>>>>>> .merge_file_a05624
 			@Override
 			protected String doInBackground(String... params) {
                 lstFamily.clear();
