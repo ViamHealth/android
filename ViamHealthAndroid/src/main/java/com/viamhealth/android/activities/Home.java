@@ -3,6 +3,9 @@ package com.viamhealth.android.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
@@ -12,11 +15,10 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
 
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ProgressDialog;
@@ -30,7 +32,6 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -60,6 +61,8 @@ public class Home extends BaseActivity implements OnClickListener{
 	UserEP userEndPoint;
 	User user;
     private DisplayImageOptions options;
+
+    boolean justRegistered = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +78,11 @@ public class Home extends BaseActivity implements OnClickListener{
 
         if(getIntent().getBooleanExtra("logout", false))
         {
-            Intent i = new Intent(Home.this,Login.class);
-            appPrefs.setToken(null);
-            startActivity(i);
-            finish();
+            logout();
             return;
         }
+
+        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
 
         // for get screen diamention
         ScreenDimension();
@@ -140,14 +142,43 @@ public class Home extends BaseActivity implements OnClickListener{
 
         lstFamily = new ArrayList<User>();
 
-        if(isInternetOn()){
-            CalluserMeTask task = new CalluserMeTask();
+        if(Checker.isInternetOn(Home.this)){
+            GetFamilyListTask task = new GetFamilyListTask();
             task.applicationContext = Home.this;
             task.execute();
         }else{
             Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
         }
 
+        if(justRegistered==true)
+            showBottomLayout();
+
+    }
+
+    private void logout() {
+        Session session = Session.getActiveSession();
+        session.closeAndClearTokenInformation();
+        Intent i = new Intent(Home.this,Login.class);
+        appPrefs.setToken(null);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.home_menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retVal = super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.menu_logout){
+            logout();
+            return false;
+        }
+
+        return retVal;
     }
 
     @Override
@@ -311,16 +342,15 @@ public class Home extends BaseActivity implements OnClickListener{
             addProfileIntent.putExtra("user", selectedUser);
             startActivityForResult(addProfileIntent, index);
         }else{
-            //FrameLayout tr1frm=(FrameLayout) tiles.get(index).findViewWithTag("frame");
-            //LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
-            //TextView txt = (TextView)tr1.getChildAt(0);
-            //appPrefs.setProfileName(selectedUser.getName());
-            //appPrefs.setGoalDisable("0");
-
             Intent intent = new Intent(Home.this, TabActivity.class);
             intent.putExtra("user", selectedUser);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
+
+            selecteduserid=lstFamily.get(index).getId();
+
+            Intent intent = new Intent(Home.this,MainActivity.class);
+            intent.putExtra("user_id", selecteduserid);
             startActivity(intent);
 
         }
@@ -363,6 +393,7 @@ public class Home extends BaseActivity implements OnClickListener{
         params.height = LinearLayout.LayoutParams.MATCH_PARENT;
         core_layout.setLayoutParams(params);
     }
+
     // async class for calling webservice and get responce message
     public class CallAddProfileTask extends AsyncTask<String, Void, String>
     {
@@ -412,70 +443,42 @@ public class Home extends BaseActivity implements OnClickListener{
     }
 
     // async class for calling webservice and get responce message
-		public class CalluserMeTask extends AsyncTask <String, Void,String>
-		{
-			protected Context applicationContext;
+    public class GetFamilyListTask extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
 
-			@Override
-			protected void onPreExecute() {
-				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-				dialog = new ProgressDialog(Home.this);
-				dialog.setCanceledOnTouchOutside(false);
-				dialog.setMessage("loading your family");
-				dialog.show();
-				Log.i("onPreExecute", "onPreExecute");
-				
-			}        
-			 
-			protected void onPostExecute(String result) {
-                generateView();
-				dialog.dismiss();
-			}
-
-			@Override
-			protected String doInBackground(String... params) {
-                lstFamily.clear();
-				if(ga.getLoggedInUser()==null){
-                    userEndPoint.getLoggedInUser();
-                }
-                //lstFamily.add(ga.getLoggedInUser());
-                lstFamily.addAll(userEndPoint.GetFamilyMembers());
-				return null;
-			}
-			   
-		}     
-
-	// function for check internet is available or not
-	public final boolean isInternetOn() {
-
-		  ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-		  if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-		    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-		    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-		    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-		   return true;
-		  }
-
-		  else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-		    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-		   return false;
-		  }
-
-		  return false;
-		 }
-	@Override
-    public void onBackPressed() 
-        {
-			moveTaskToBack(true);  
-			System.exit(0);
-			return;
-         
+        @Override
+        protected void onPreExecute() {
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog = new ProgressDialog(Home.this);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("loading your family");
+            dialog.show();
+            Log.i("onPreExecute", "onPreExecute");
         }
 
+        protected void onPostExecute(String result) {
+            if(lstFamily.isEmpty()){
+                logout();
+                return;
+            }
+            generateView();
+            dialog.dismiss();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            lstFamily.clear();
+            if(ga.getLoggedInUser()==null){
+                userEndPoint.getLoggedInUser();
+            }
+            lstFamily.addAll(userEndPoint.GetFamilyMembers());
+            return null;
+        }
+
+    }
 
     public class ImproperArgumentsPassedException extends Exception {
-
         public ImproperArgumentsPassedException(String detailMessage) {
             super(detailMessage);
         }

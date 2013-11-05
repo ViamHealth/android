@@ -9,40 +9,6 @@
     android:background="#ffffff">
 
     <LinearLayout
-        android:id="@+id/main_list_edit"
-        android:layout_height="fill_parent"
-        android:layout_width="wrap_content"
-        android:paddingTop="10dp"
-        android:layout_weight="4"
-        android:layout_gravity="left"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:background="@drawable/fading_bg_row">
-
-        <ImageView android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/right_drag"
-            android:id="@+id/right_drag"
-            android:paddingLeft="13dp"
-            android:visibility="visible"/>
-
-        <TextView android:id="@+id/txt_edit"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:paddingTop="12dp"
-            android:gravity="left"
-            android:textColor="#000000"
-            android:text="EDIT"
-            android:textSize="12sp"
-            android:rotation="270"
-            />
-
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/main_list_layout"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -65,11 +31,29 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:textColor="#000000"
-                android:layout_weight="2"
+                android:layout_weight="4"
                 android:text="Abc taken"
                 android:textSize="18sp"
                 android:textStyle="bold"
 
+                />
+            <TextView android:id="@+id/serving_val"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:textColor="#000000"
+                android:text="1"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/serving"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:textColor="#000000"
+                android:text="Servings"
+                android:textSize="12sp"
                 />
 
             <ImageView android:layout_height="wrap_content"
@@ -96,6 +80,17 @@
             android:orientation="horizontal">
 
 
+
+            <TextView android:id="@+id/calories"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="CA:"
+                android:textSize="12sp"
+                />
             <TextView android:id="@+id/cal_value"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
@@ -106,82 +101,72 @@
                 android:text="25"
                 android:textSize="12sp"
                 />
-            <TextView android:id="@+id/calories"
+            <TextView android:id="@+id/protein"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="left"
                 android:padding="5dp"
                 android:textColor="#000000"
-                android:text="Calories"
+                android:text="      PR:"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/protein_value"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="25"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/carbohydrates"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="      CB:"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/carbohydrates_value"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="25"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/fat"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="      F:"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/fat_value"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="5dp"
+                android:textColor="#000000"
+                android:text="25"
                 android:textSize="12sp"
                 />
 
-            <TextView android:id="@+id/txt_description1"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:padding="5dp"
-                android:textColor="#000000"
-                android:text="in"
-                android:textSize="12sp"
-                />
 
-            <TextView android:id="@+id/serving_val"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:padding="5dp"
-                android:textColor="#000000"
-                android:text="1"
-                android:textSize="12sp"
-                />
-            <TextView android:id="@+id/serving"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:padding="5dp"
-                android:textColor="#000000"
-                android:text="Servings"
-                android:textSize="12sp"
-                />
 
 
 
         </LinearLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/main_list_delete"
-        android:layout_height="fill_parent"
-        android:layout_width="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp"
-        android:layout_weight="4"
-        android:gravity="right"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:background="@drawable/fading_bg_row">
-
-        <ImageView android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:src="@drawable/left_drag"
-            android:id="@+id/left_drag"
-            android:visibility="visible"/>
-
-        <TextView android:id="@+id/txt_delete"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="left"
-            android:textColor="#000000"
-            android:text="DEL"
-            android:paddingTop="10dp"
-            android:textSize="12sp"
-            android:rotation="270"
-            />
 
     </LinearLayout>
 

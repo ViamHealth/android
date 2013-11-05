@@ -114,7 +114,12 @@ console.log(android);
 $(function () {
         $('#container').highcharts({
             chart: {
-                type: 'column'
+                type: 'column',
+                events: {
+                        click: function(e) {
+                            goals.addValue();
+                        }
+                }
             },
             title: {
                 text: 'Cholesterol'

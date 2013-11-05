@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class UserEP extends BaseEP {
 
+    private static String TAG = "UserEP";
+
     public UserEP(Context context, Application app) {
         super(context, app);
     }
@@ -41,7 +43,7 @@ public class UserEP extends BaseEP {
     }
 
     // function for call signup service
-    public String SignUp(String username,String password) {
+    public User SignUp(String username,String password) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"signup/";
         Log.e("TAG", "url is : " + baseurlString);
@@ -59,21 +61,10 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-
-        try {
-            JSONObject jObject = new JSONObject(responseString);
-            //TODO:: implement proper error handling
-            String usernameResp = jObject.getString("username");
-            if(usernameResp.equals(username)){
-                responsetxt="0";
-            }else{
-                responsetxt = usernameResp;
-            }
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return responsetxt;
+        Log.i(TAG, client.toString());
+        User user = processUserResponse(responseString);
+        user.setLoggedInUser(true);
+        return user;
     }
 
     // function for call login service
@@ -92,7 +83,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-
+        Log.i(TAG, client.toString());
         try {
             JSONObject jObject = new JSONObject(responseString);
             //TODO::implement proper error handling
@@ -107,10 +98,16 @@ public class UserEP extends BaseEP {
             e.printStackTrace();
         }
 
+        getLoggedInUser();
+
         return responsetxt;
     }
 
     public User getLoggedInUser() {
+
+        if(ga.getLoggedInUser()!=null)
+            return ga.getLoggedInUser();
+
         String baseurlString = Global_Application.url+"users/me";
 
         RestClient client = new RestClient(baseurlString);
@@ -123,7 +120,9 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
+        user.setLoggedInUser(true);
         ga.setLoggedInUser(user);
         return user;
     }
@@ -143,10 +142,15 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         List<User> users = processUsersResponse(responseString);
         int usersCount = users==null?0:users.size();
         for(int i=0; i<usersCount; i++){
-            users.get(i).setBmiProfile(getUserBMIProfile(users.get(i).getId()));
+            //TODO investigate why there was an internal server error
+            BMIProfile bmiP = getUserBMIProfile(users.get(i).getId());
+            if(bmiP==null)
+                continue;
+            users.get(i).setBmiProfile(bmiP);
         }
         return users;
     }
@@ -172,8 +176,12 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-
-        return processUserResponse(responseString);
+        Log.i(TAG, client.toString());
+        User user = processUserResponse(responseString);
+        if(user.getId() == getLoggedInUser().getId()){
+            user.setLoggedInUser(true);
+        }
+        return user;
     }
 
     public BMIProfile getUserBMIProfile(Long userId) {
@@ -190,7 +198,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-
+        Log.i(TAG, client.toString());
         return processBMIProfileResponse(responseString);
     }
 
@@ -210,6 +218,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         return processBMIProfileResponse(responseString);
     }
 
@@ -243,6 +252,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
         return processProfileResponse(responseString);
     }
 
@@ -270,7 +280,12 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        return processUserResponse(responseString);
+        Log.i(TAG, client.toString());
+        User user = processUserResponse(responseString);
+        if(user.getId() == getLoggedInUser().getId()){
+            user.setLoggedInUser(true);
+        }
+        return user;
     }
 
     private List<User> processUsersResponse(String usersResponse) {
@@ -280,7 +295,12 @@ public class UserEP extends BaseEP {
         try{
             JSONArray jsonUsers = new JSONArray(usersResponse);
             for(int i=0; i<jsonUsers.length(); i++){
-                users.add(processUserResponse(jsonUsers.getJSONObject(i)));
+                User user = processUserResponse(jsonUsers.getJSONObject(i));
+                User loggedInUser = getLoggedInUser();
+                if(user.getId().equals(loggedInUser.getId())){
+                    user.setLoggedInUser(true);
+                }
+                users.add(user);
             }
         }catch (JSONException e){
             e.printStackTrace();

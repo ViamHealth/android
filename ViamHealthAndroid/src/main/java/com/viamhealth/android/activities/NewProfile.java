@@ -60,7 +60,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
     ImageView profile_image;
     Button btnSave, btnCancel;
-    ImageButton imgMale, imgFemale;
+    ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
     Spinner bloodGroup;
 
@@ -105,15 +105,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
-        //for get screen height width
-        ScreenDimension();
-
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
-
-        Animation anim = AnimationUtils.loadAnimation(NewProfile.this, R.anim.fade_in);
-        profilePic.setAnimation(anim);
-        anim.start();
 
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
@@ -131,6 +124,14 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         imgMale = (ImageButton) findViewById(R.id.profile_img_male);
         imgFemale = (ImageButton) findViewById(R.id.profile_img_female);
+
+        imgUpload = (ImageButton) findViewById(R.id.imgBtnUpload);
+        imgUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImage();
+            }
+        });
 
         //by default set the gender as Male
         updateGender(Gender.Male);
@@ -198,13 +199,15 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             } else {
                 getDataFromFB(FBRequestType.Profile, null);
             }
+        }else{
+            imgUpload.setVisibility(View.VISIBLE);
         }
     }
 
     private void getDataFromFB(final FBRequestType type, final String profileId) {
-
         Session session = Session.getActiveSession();
         if (session != null && session.isOpened() ) {
+            imgUpload.setVisibility(View.GONE);
             if(type==FBRequestType.Family){
                 if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
                     return;
@@ -222,6 +225,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 dialog.setMessage("we are getting "+whose+" data...");
                 dialog.show();
             }
+        }else{
+            imgUpload.setVisibility(View.VISIBLE);
         }
 //
 //        // start Facebook Login
@@ -248,7 +253,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 if (graphObject != null) {
                     JSONObject jsonResponse = graphObject.getInnerJSONObject();
                     if (jsonResponse!=null) {
-                        FBUser fbUser = deserialize(jsonResponse);
+                        FBUser fbUser = FBUser.deserialize(jsonResponse);
                         updateViewFromFBData(fbUser);
                         profileDataFetched = RequestStatus.Done;
                         dialog.dismiss();
@@ -262,83 +267,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         request.executeAsync();
         //Request.executeBatchAsync(request);
-    }
-
-    private FBUser deserialize(JSONObject jsonProfile){
-        FBUser fbUser = new FBUser();
-
-        try{
-            fbUser.setProfileId(jsonProfile.getString("id"));
-        } catch (JSONException j){
-            //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setFirstName(jsonProfile.getString("first_name"));
-        } catch (JSONException j){
-            //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setLastName(jsonProfile.getString("last_name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setName(jsonProfile.getString("name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setProfileUsername(jsonProfile.getString("username"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setProfileLink(jsonProfile.getString("link"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            SimpleDateFormat formater = new SimpleDateFormat("MM/dd/yyyy");
-            fbUser.setBirthday(formater.parse(jsonProfile.getString("birthday")));
-        } catch(ParseException p){
-
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            if(jsonProfile.getJSONObject("hometown")!=null)
-                fbUser.setHometown(jsonProfile.getJSONObject("hometown").getString("name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            if(jsonProfile.getJSONObject("location")!=null)
-                fbUser.setLocation(jsonProfile.getJSONObject("location").getString("name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setGender(jsonProfile.getString("gender").toUpperCase());
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setEmail(jsonProfile.getString("email"));
-        } catch (JSONException j){
-            //jsut eat up the exception
-        }
-
-        return fbUser;
     }
 
     private void updateGender(Gender gender) {
@@ -382,23 +310,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     }
 
     private void updateViewFromFBData(FBUser fbUser){
-        //get first name and last name
-        user.setFirstName(fbUser.getFirstName());
-        user.setLastName(fbUser.getLastName());
-
-        //get DOB
-        profile.setDob(fbUser.getBirthday());
-        //get gender
-        profile.setGender(Gender.get(fbUser.getGender()));
-
-        //get the id
-        profile.setFbProfileId(fbUser.getProfileId());
-        profile.setFbUsername(fbUser.getProfileUsername());
-
-        //get the location
-        Profile.Location location = profile.new Location();
-        profile.setLocation(location);
-        location.setAddress(fbUser.getLocation());
+        user = fbUser.toUser(user);
 
         //get the email
         //user.setEmail(fbUser.getEmail());

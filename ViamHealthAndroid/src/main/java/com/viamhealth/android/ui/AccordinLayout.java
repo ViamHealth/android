@@ -58,7 +58,10 @@ public class AccordinLayout extends LinearLayout {
             if (sectionHeadersResourceId == 0) {
                 throw new IllegalArgumentException("Please set section_headers as reference to strings array.");
             }
-            sectionHeaders = getResources().getStringArray(sectionHeadersResourceId);
+
+            if(!isInEditMode()){
+                sectionHeaders = getResources().getStringArray(sectionHeadersResourceId);
+            }
 
             if (sectionVisibilityResourceId != 0) {
                 sectionVisibilities = getResources().getIntArray(sectionVisibilityResourceId);
@@ -83,6 +86,13 @@ public class AccordinLayout extends LinearLayout {
         final int childCount = getChildCount();
         children = new View[childCount];
         wrappedChildren = new View[childCount];
+
+        if(isInEditMode()){
+            sectionHeaders = new String[childCount];
+            for(int i=0; i<childCount; i++){
+                sectionHeaders[i] = "Header " + i;
+            }
+        }
 
         if (sectionHeaders.length != childCount) {
             throw new IllegalArgumentException("Section headers string array length must be equal to accordion view child count.");

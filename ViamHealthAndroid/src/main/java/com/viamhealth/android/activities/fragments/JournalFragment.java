@@ -169,10 +169,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
 
 
-public static SherlockFragment getInstance()
-{
-    return JournalFragment.getInstance();
-}
+    public static SherlockFragment getInstance()
+    {
+        return JournalFragment.getInstance();
+    }
 
 
     private void fromOldCode() {
@@ -1609,354 +1609,354 @@ public static SherlockFragment getInstance()
             return 5;
         }
 
-    @Override
-    synchronized public Object instantiateItem(final View localView, final int position)
-    {
-        View view = inflater.inflate(R.layout.tab_fragment_journal, null);
-        //TextView todayDate=(TextView)imageLayout.findViewById(R.id.todayDate);
-        ViewPager v1=(ViewPager)localView;
-        ((ViewPager) localView).setOffscreenPageLimit(2);
-        v1.setPageMargin(60);
-        ((ViewPager) localView).addView(view, 0);
+        @Override
+        synchronized public Object instantiateItem(final View localView, final int position)
+        {
+            View view = inflater.inflate(R.layout.tab_fragment_journal, null);
+            //TextView todayDate=(TextView)imageLayout.findViewById(R.id.todayDate);
+            ViewPager v1=(ViewPager)localView;
+            ((ViewPager) localView).setOffscreenPageLimit(2);
+            v1.setPageMargin(60);
+            ((ViewPager) localView).addView(view, 0);
 
 
-        layout1 = (LinearLayout)view.findViewById(R.id.layout1);
-        layout1.setPadding(0, 0, 0, h10);
+            layout1 = (LinearLayout)view.findViewById(R.id.layout1);
+            layout1.setPadding(0, 0, 0, h10);
 
-        layout2 = (LinearLayout)view.findViewById(R.id.layout2);
-        layout2.setPadding(0, 0, 0, h10);
+            layout2 = (LinearLayout)view.findViewById(R.id.layout2);
+            layout2.setPadding(0, 0, 0, h10);
 
-        layout3 = (LinearLayout)view.findViewById(R.id.layout3);
-        layout3.setPadding(0, 0, 0, h10);
+            layout3 = (LinearLayout)view.findViewById(R.id.layout3);
+            layout3.setPadding(0, 0, 0, h10);
 
-        layout4 = (LinearLayout)view.findViewById(R.id.layout4);
-        layout4.setPadding(0, 0, 0, h10);
+            layout4 = (LinearLayout)view.findViewById(R.id.layout4);
+            layout4.setPadding(0, 0, 0, h10);
 
-        lblitem1 = (TextView)view.findViewById(R.id.lblitem1);
-        lblitem1.getLayoutParams().width = w110;
+            lblitem1 = (TextView)view.findViewById(R.id.lblitem1);
+            lblitem1.getLayoutParams().width = w110;
 
-        lblitem2 = (TextView)view.findViewById(R.id.lblitem2);
-        lblitem2.getLayoutParams().width = w110;
+            lblitem2 = (TextView)view.findViewById(R.id.lblitem2);
+            lblitem2.getLayoutParams().width = w110;
 
-        lblitem3 = (TextView)view.findViewById(R.id.lblitem3);
-        lblitem3.getLayoutParams().width = w110;
+            lblitem3 = (TextView)view.findViewById(R.id.lblitem3);
+            lblitem3.getLayoutParams().width = w110;
 
-        lblitem4 = (TextView)view.findViewById(R.id.lblitem4);
-        lblitem4.getLayoutParams().width=w110;
+            lblitem4 = (TextView)view.findViewById(R.id.lblitem4);
+            lblitem4.getLayoutParams().width=w110;
 
-        lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
-        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
-        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
-        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
+            lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
+            lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
+            lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
+            lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
 
-        breakfast = (LinearLayout)view.findViewById(R.id.breakfast);
-        breakfast.setOnClickListener(JournalFragment.this);
+            breakfast = (LinearLayout)view.findViewById(R.id.breakfast);
+            breakfast.setOnClickListener(JournalFragment.this);
 
-        lunch = (LinearLayout)view.findViewById(R.id.lunch);
-        lunch.setOnClickListener(JournalFragment.this);
+            lunch = (LinearLayout)view.findViewById(R.id.lunch);
+            lunch.setOnClickListener(JournalFragment.this);
 
-        snacks = (LinearLayout)view.findViewById(R.id.snacks);
-        snacks.setOnClickListener(JournalFragment.this);
+            snacks = (LinearLayout)view.findViewById(R.id.snacks);
+            snacks.setOnClickListener(JournalFragment.this);
 
-        dinner = (LinearLayout)view.findViewById(R.id.dinner);
-        dinner.setOnClickListener(JournalFragment.this);
+            dinner = (LinearLayout)view.findViewById(R.id.dinner);
+            dinner.setOnClickListener(JournalFragment.this);
 
-        exercise = (LinearLayout)view.findViewById(R.id.exercise);
-        exercise.setOnClickListener(JournalFragment.this);
+            exercise = (LinearLayout)view.findViewById(R.id.exercise);
+            exercise.setOnClickListener(JournalFragment.this);
 
-        img_breakfast=(ImageView)view.findViewById(R.id.img_breakfast);
-        img_lunch=(ImageView)view.findViewById(R.id.img_lunch);
-        img_snacks=(ImageView)view.findViewById(R.id.img_snacks);
-        img_dinner=(ImageView)view.findViewById(R.id.img_dinner);
-        img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
+            img_breakfast=(ImageView)view.findViewById(R.id.img_breakfast);
+            img_lunch=(ImageView)view.findViewById(R.id.img_lunch);
+            img_snacks=(ImageView)view.findViewById(R.id.img_snacks);
+            img_dinner=(ImageView)view.findViewById(R.id.img_dinner);
+            img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
 
-        lstViewBreakfast = (FrameLayout)view.findViewById(R.id.lstViewBreakfast);
-        lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-        lstViewBreakfast.setOnTouchListener(new View.OnTouchListener() {
+            lstViewBreakfast = (FrameLayout)view.findViewById(R.id.lstViewBreakfast);
+            lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
+            lstViewBreakfast.setOnTouchListener(new View.OnTouchListener() {
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
 
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
+
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
                 }
+            });
 
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
+            lstViewLunch = (FrameLayout)view.findViewById(R.id.lstViewLunch);
+            //lstViewLunch.getLayoutParams().height = h200;
+            lstViewLunch.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
+            lstViewLunch.setOnTouchListener(new View.OnTouchListener() {
 
-        lstViewLunch = (FrameLayout)view.findViewById(R.id.lstViewLunch);
-        //lstViewLunch.getLayoutParams().height = h200;
-        lstViewLunch.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-        lstViewLunch.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
 
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
                 }
+            });
 
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
+            lstViewSnacks = (FrameLayout)view.findViewById(R.id.lstViewSnakes);
+            //lstViewSnacks.getLayoutParams().height = h200;
+            lstViewSnacks.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
+            lstViewSnacks.setOnTouchListener(new View.OnTouchListener() {
 
-        lstViewSnacks = (FrameLayout)view.findViewById(R.id.lstViewSnakes);
-        //lstViewSnacks.getLayoutParams().height = h200;
-        lstViewSnacks.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-        lstViewSnacks.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
 
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
                 }
+            });
 
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
+            lstViewDinner = (FrameLayout)view.findViewById(R.id.lstViewDinner);
+            //lstViewDinner.getLayoutParams().height = h200;
+            lstViewDinner.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
+            lstViewDinner.setOnTouchListener(new View.OnTouchListener() {
 
-        lstViewDinner = (FrameLayout)view.findViewById(R.id.lstViewDinner);
-        //lstViewDinner.getLayoutParams().height = h200;
-        lstViewDinner.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-        lstViewDinner.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
 
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
                 }
+            });
 
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
+            lstViewExercise = (FrameLayout)view.findViewById(R.id.lstViewExercise);
+            //lstViewExercise.getLayoutParams().height = h200;
+            lstViewExercise.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
+            lstViewExercise.setOnTouchListener(new View.OnTouchListener() {
 
-        lstViewExercise = (FrameLayout)view.findViewById(R.id.lstViewExercise);
-        //lstViewExercise.getLayoutParams().height = h200;
-        lstViewExercise.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-        lstViewExercise.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    int action = event.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            // Disallow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                int action = event.getAction();
-                switch (action) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(true);
-                        break;
+                        case MotionEvent.ACTION_UP:
+                            // Allow ScrollView to intercept touch events.
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                    }
 
-                    case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
-                        v.getParent().requestDisallowInterceptTouchEvent(false);
-                        break;
+                    // Handle ListView touch events.
+                    v.onTouchEvent(event);
+                    return true;
                 }
-
-                // Handle ListView touch events.
-                v.onTouchEvent(event);
-                return true;
-            }
-        });
+            });
 
 
 
-        lblbrk = (TextView)view.findViewById(R.id.lblbrk);
-        lbltotalbrkcal = (TextView)view.findViewById(R.id.lbltotalbrkcal);
-        lbllunch = (TextView)view.findViewById(R.id.lbllunch);
-        lbllunchcal = (TextView)view.findViewById(R.id.lbllunchcal);
-        lblsnack = (TextView)view.findViewById(R.id.lblsnack);
-        lblsnakcal = (TextView)view.findViewById(R.id.lblsnakcal);
-        lbldinner = (TextView)view.findViewById(R.id.lbldinner);
-        lbldinnercal = (TextView)view.findViewById(R.id.lbldinnercal);
+            lblbrk = (TextView)view.findViewById(R.id.lblbrk);
+            lbltotalbrkcal = (TextView)view.findViewById(R.id.lbltotalbrkcal);
+            lbllunch = (TextView)view.findViewById(R.id.lbllunch);
+            lbllunchcal = (TextView)view.findViewById(R.id.lbllunchcal);
+            lblsnack = (TextView)view.findViewById(R.id.lblsnack);
+            lblsnakcal = (TextView)view.findViewById(R.id.lblsnakcal);
+            lbldinner = (TextView)view.findViewById(R.id.lbldinner);
+            lbldinnercal = (TextView)view.findViewById(R.id.lbldinnercal);
 
-        lblExercise = (TextView)view.findViewById(R.id.lblexercise);
-        lblexercisecal=(TextView)view.findViewById(R.id.lblexercisecal);
+            lblExercise = (TextView)view.findViewById(R.id.lblexercise);
+            lblexercisecal=(TextView)view.findViewById(R.id.lblexercisecal);
 
-        addBreakfast = (ImageView)view.findViewById(R.id.addBreakfast);
-        //addBreakfast.setOnClickListener(JournalPagerAdapter.this);
+            addBreakfast = (ImageView)view.findViewById(R.id.addBreakfast);
+            //addBreakfast.setOnClickListener(JournalPagerAdapter.this);
 
-        addBreakfast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                startAddFoodActivity("Breakfast");
-            }
-        });
-
-
-        addLunch = (ImageView)view.findViewById(R.id.addLunch);
-        addLunch.setOnClickListener(JournalPagerAdapter.this);
-
-        addLunch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                startAddFoodActivity("Lunch");
-            }
-        });
+            addBreakfast.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
+                    startAddFoodActivity("Breakfast");
+                }
+            });
 
 
-        addSnacks = (ImageView)view.findViewById(R.id.addSnacks);
-        addSnacks.setOnClickListener(JournalPagerAdapter.this);
+            addLunch = (ImageView)view.findViewById(R.id.addLunch);
+            addLunch.setOnClickListener(JournalPagerAdapter.this);
 
-        addSnacks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                startAddFoodActivity("Snacks");
-            }
-        });
+            addLunch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
+                    startAddFoodActivity("Lunch");
+                }
+            });
 
-        addDinner = (ImageView)view.findViewById(R.id.addDinner);
-        addDinner.setOnClickListener(JournalPagerAdapter.this);
 
-        addDinner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                startAddFoodActivity("Dinner");
-            }
-        });
+            addSnacks = (ImageView)view.findViewById(R.id.addSnacks);
+            addSnacks.setOnClickListener(JournalPagerAdapter.this);
 
-        addExercise = (ImageView)view.findViewById(R.id.addExercise);
-        addExercise.setOnClickListener(JournalPagerAdapter.this);
+            addSnacks.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
+                    startAddFoodActivity("Snacks");
+                }
+            });
 
-        addExercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                startAddExerciseActivity();
-            }
-        });
+            addDinner = (ImageView)view.findViewById(R.id.addDinner);
+            addDinner.setOnClickListener(JournalPagerAdapter.this);
+
+            addDinner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
+                    startAddFoodActivity("Dinner");
+                }
+            });
+
+            addExercise = (ImageView)view.findViewById(R.id.addExercise);
+            addExercise.setOnClickListener(JournalPagerAdapter.this);
+
+            addExercise.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
+                    startAddExerciseActivity();
+                }
+            });
 
 
 
 
-        food_main_layout = (LinearLayout)view.findViewById(R.id.food_main_layout);
-        food_main_layout.setPadding(w10, h10, w10, h10);
+            food_main_layout = (LinearLayout)view.findViewById(R.id.food_main_layout);
+            food_main_layout.setPadding(w10, h10, w10, h10);
 
-        btn_food_time_picker = (LinearLayout)view.findViewById(R.id.btn_food_time_picker);
-        btn_food_time_picker.setOnClickListener(JournalFragment.this);
-
-
-        img_time = (ImageView)view.findViewById(R.id.img_time);
-        img_time.setPadding(w5, 0, w5, 0);
-
-        btn_food_date_picker = (LinearLayout)view.findViewById(R.id.btn_food_date_picker);
-        btn_food_date_picker.setOnClickListener(JournalFragment.this);
-
-        img_date = (ImageView)view.findViewById(R.id.img_date);
-        img_date.setPadding(w5, 0, w5, 0);
-
-        lbl_food_date = (TextView)view.findViewById(R.id.lbl_food_date);
-        lbl_food_date.setPadding(w5, 0, 0, 0);
-        lbl_food_date.setTypeface(tf);
+            btn_food_time_picker = (LinearLayout)view.findViewById(R.id.btn_food_time_picker);
+            btn_food_time_picker.setOnClickListener(JournalFragment.this);
 
 
+            img_time = (ImageView)view.findViewById(R.id.img_time);
+            img_time.setPadding(w5, 0, w5, 0);
 
-        lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
-        lbl_food_time.setTypeface(tf);
+            btn_food_date_picker = (LinearLayout)view.findViewById(R.id.btn_food_date_picker);
+            btn_food_date_picker.setOnClickListener(JournalFragment.this);
 
-        //food_icon = (ImageView)view.findViewById(R.id.food_icon);
-        //	food_icon.setPadding(w5, h5, w5, h5);
+            img_date = (ImageView)view.findViewById(R.id.img_date);
+            img_date.setPadding(w5, 0, w5, 0);
 
-        food_header=(LinearLayout)view.findViewById(R.id.food_header);
-        food_header.setPadding(0, 0, 0, h10);
-
-        lbl_food_date.setText(date_lst.get(position));
-
-        Global_Application.total_ideal_calories=0;
-
-
-       // lblbrk.setText("Breakfast (2)" );
-
-        bolbrk=false;
-        bollunch=false;
-        boldiner=false;
-        bolsnaks=false;
-        bolexercise=false;
+            lbl_food_date = (TextView)view.findViewById(R.id.lbl_food_date);
+            lbl_food_date.setPadding(w5, 0, 0, 0);
+            lbl_food_date.setTypeface(tf);
 
 
 
-        fillBreakfastDetails();
-        fillLunchDetails();
-        fillSnacksDetails();
-        fillDinnerDetails();
-        fillExerciseDetails();
+            lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
+            lbl_food_time.setTypeface(tf);
 
-        return view;
-    }
+            //food_icon = (ImageView)view.findViewById(R.id.food_icon);
+            //	food_icon.setPadding(w5, h5, w5, h5);
+
+            food_header=(LinearLayout)view.findViewById(R.id.food_header);
+            food_header.setPadding(0, 0, 0, h10);
+
+            lbl_food_date.setText(date_lst.get(position));
+
+            Global_Application.total_ideal_calories=0;
+
+
+            // lblbrk.setText("Breakfast (2)" );
+
+            bolbrk=false;
+            bollunch=false;
+            boldiner=false;
+            bolsnaks=false;
+            bolexercise=false;
+
+
+
+            fillBreakfastDetails();
+            fillLunchDetails();
+            fillSnacksDetails();
+            fillDinnerDetails();
+            fillExerciseDetails();
+
+            return view;
+        }
 
 
 
         @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return view.equals(object);
-    }
+        public boolean isViewFromObject(View view, Object object) {
+            return view.equals(object);
+        }
 
-    @Override
-    public void restoreState(Parcelable state, ClassLoader loader) {
-    }
+        @Override
+        public void restoreState(Parcelable state, ClassLoader loader) {
+        }
 
-    @Override
-    public Parcelable saveState() {
-        return null;
-    }
+        @Override
+        public Parcelable saveState() {
+            return null;
+        }
 
-    @Override
-    public void startUpdate(View container) {
-    }
+        @Override
+        public void startUpdate(View container) {
+        }
 
-    public float getPageWidth(int position)
-    {
-        return 0.8f;
-    }
+        public float getPageWidth(int position)
+        {
+            return 0.8f;
+        }
 
 
         @Override
@@ -2146,7 +2146,7 @@ public static SherlockFragment getInstance()
 
         protected void onPostExecute(String result)
         {
-           // dialog1.dismiss();
+            // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
             if(isInternetOn()){
                 CallListTask task = new CallListTask();

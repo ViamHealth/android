@@ -37,6 +37,13 @@ public class User extends BaseModel implements Parcelable {
         if((firstName==null || firstName.isEmpty()) && (lastName==null || lastName.isEmpty()))
             return false;
 
+        if(profile==null || bmiProfile==null)
+            return false;
+
+        if(profile.getDob()==null || bmiProfile.getHeight()==null || bmiProfile.getHeight()==0 || bmiProfile.getWeight()==null
+                || bmiProfile.getWeight()==0)
+            return false;
+        
         return true;
     }
 

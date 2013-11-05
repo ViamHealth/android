@@ -151,6 +151,13 @@ public class GraphFragment extends SherlockFragment implements GoalFragment.OnGo
         selectedDateForEdit = new Date(date);
     }
 
+    @JavascriptInterface
+    public void addValue(){
+        if(onClickAddValueListener != null){
+            onClickAddValueListener.onClick(type);
+        }
+    }
+
     public void setOnClickAddValueListener(OnClickAddValueListener listener) {
         this.onClickAddValueListener = listener;
     }

@@ -259,6 +259,19 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 	}
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(dialog1!=null)
+            dialog1.dismiss();
+        dialog1 = null;
+
+        if(dialog!=null)
+            dialog.dismiss();
+        dialog = null;
+    }
+
     public class CallAddFoodTask extends AsyncTask <String, Void,String>
     {
         protected FragmentActivity activity;
@@ -281,7 +294,8 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
         {
 
             Log.i("onPostExecute", "onPostExecute");
-            dialog1.dismiss();
+            if(dialog1!=null)
+                dialog1.dismiss();
             //listfood.removeAllViews();
 
             if(result.equals("0")){
@@ -667,6 +681,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 		{
 			
 			Log.i("onPostExecute", "onPostExecute");
+                if(dialog!=null)
 				dialog.dismiss();
 				//listfood.removeAllViews();
 				
@@ -678,6 +693,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 				    adapter.notifyDataSetChanged();
 				    listfood.onRefreshComplete();
 				}else{
+                    if(dialog!=null)
 					dialog.dismiss();
 					Toast.makeText(AddBreakfast.this, "No Food found...",Toast.LENGTH_SHORT).show();
 					addfood_count.setText("("+lstResult+")");
@@ -694,7 +710,6 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 			lstResult.clear();
 			
 			lstResult.addAll(obj.SearchFoodItem(seach));
-			dialog.dismiss();
 			return null;
 		}
 		   
@@ -721,7 +736,8 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 		{
 			
 			Log.i("onPostExecute", "onPostExecute");
-				dialog1.dismiss();
+                if(dialog1!=null)
+				    dialog1.dismiss();
 				//listfood.removeAllViews();
 				food_search_name.setText(seach);
 				if(lstResult.size()>0){   
@@ -731,7 +747,6 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 				    adapter.notifyDataSetChanged();
 				    listfood.onRefreshComplete();
 				}else{
-					dialog1.dismiss();
 					Toast.makeText(AddBreakfast.this, "No Food found...",Toast.LENGTH_SHORT).show();
 					addfood_count.setText("("+lstResult.size()+")");
 					   
@@ -750,8 +765,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 			}else{
 				lstResult.addAll(obj.FoodNevigation(ga.getPrevfood()));
 			}
-			
-			dialog1.dismiss();
+
 			return null;
 		}
 		   
@@ -779,6 +793,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 			
 			Log.i("onPostExecute", "onPostExecute");
 			//generateView();
+            if(dialog1!=null)
 			dialog1.dismiss();
 		/*	Intent intent = new Intent(GoalActivity.this,MainActivity.class);
 			startActivity(intent);*/
