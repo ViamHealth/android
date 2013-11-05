@@ -20,6 +20,7 @@
         android:background="@drawable/fading_bg_row">
 
 
+
         <ImageView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:src="@drawable/right_drag"
@@ -218,6 +219,7 @@
         android:orientation="vertical"
         android:visibility="gone"
         android:background="@drawable/fading_bg_row">
+
 
         <ImageView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
