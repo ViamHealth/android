@@ -1,0 +1,140 @@
+package com.viamhealth.android.manager;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.webkit.MimeTypeMap;
+import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.viamhealth.android.utils.UIUtility;
+
+import org.apache.commons.io.FileUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * Created by naren on 05/11/13.
+ */
+public class ImageSelector {
+
+    private Context mContext;
+    private static final int CAMERA_PIC_REQUEST = 1337;
+    private static final int LIBRARY_FILE_REQUEST = 1338;
+
+    private Uri uri;
+    private Bitmap bitmap;
+    private File file;
+    private byte[] byteArray;
+
+    public ImageSelector(Context context) {
+        mContext = context;
+    }
+
+    public void pickFile() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Upload from...");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                dialog.dismiss();
+
+                if (items[item].equals("Take Photo")) {
+                    Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
+                    mContext.startActivityForResult(camera, CAMERA_PIC_REQUEST);
+                } else if (items[item].equals("Choose from Library")) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    photoPickerIntent.setType("*/*");
+                    photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                    mContext.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    public void getURI() {
+        return uri;
+    }
+
+    public void getBitmap() {
+        return bitmap;
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public byte[] getByteArray() {
+        return byteArray;
+    }
+
+    public bool onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==LIBRARY_FILE_REQUEST){
+            if(resultCode==getActivity().RESULT_OK){
+                uri = data.getData();
+                String filePath = data.getData().getPath();
+                String fileName = UIUtility.getFileName(getSherlockActivity(), uri);
+                file = new File(getRealPathFromURI(mContext, uri));
+                Toast.makeText(mContext, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
+                byteArray = new byte[0];
+                try {
+                    byteArray = FileUtils.readFileToByteArray(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("TAG", "ReadFileToByteArray", e.getCause());
+                }
+                final String fileExtension = filename.lastIndexOf(".")>-1?filename.substring(filename.lastIndexOf(".")+1):null;
+                String mimeType = fileExtension==null?null: MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
+                bitmap = mimeType.contains("image")? BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length):null;
+
+                //uploadFile(fileName, byteArray);
+                Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
+            }
+            return true;
+        }else if(requestCode==CAMERA_PIC_REQUEST) {
+            if (resultCode == getActivity().RESULT_OK) {
+                //Log.e("TAG","Path is : " + path);
+                Bundle extras = data.getExtras();
+                Bitmap bitmap = (Bitmap)extras.get("data");
+                String fileName = "From Camera of " + selectedUser.getName() + ".png";
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArray = stream.toByteArray();
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public static String getRealPathFromURI(Context context, Uri contentURI) {
+        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            return contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
+            return cursor.getString(idx);
+        }
+    }
+
+    public interface OnImageSelectedListener {
+
+    }
+}

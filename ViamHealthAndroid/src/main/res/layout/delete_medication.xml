@@ -10,22 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Are you sure you want to delete?"
-<<<<<<< .merge_file_a06956
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_margin="20dp" />
-=======
-        android:textAppearance="?android:attr/textAppearanceLarge" />
->>>>>>> .merge_file_a06344
 
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-<<<<<<< .merge_file_a06956
         android:orientation="horizontal"
         android:layout_margin="20dp">
-=======
-        android:orientation="horizontal">
->>>>>>> .merge_file_a06344
 
     <Button
         android:id="@+id/btn_yes"

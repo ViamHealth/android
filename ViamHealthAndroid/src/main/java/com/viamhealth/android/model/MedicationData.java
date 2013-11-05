@@ -1,7 +1,7 @@
 package com.viamhealth.android.model;
 
 public class MedicationData {
-<<<<<<< .merge_file_a04544
+
 	String id,reminder_medication_id,name,type,details,morning_count,afternoon_count,evening_count,night_count,user,start_timestamp,repeat_hour,repeat_day,repeat_mode,repeat_min,repeat_weekday,repeat_day_interval,start_date,end_date;
     Boolean morning_check,noon_check,evening_check,night_check,complete_check;
 =======

@@ -115,7 +115,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     functionClass obj;
     ArrayList<CategoryFood> lstResultBreakfast = new ArrayList<CategoryFood>();
     ArrayList<CategoryFood> lstResultLunch = new ArrayList<CategoryFood>();
-    ArrayList<CategoryFood> lstResultSnacks = new ArrayList<CategoryFood>();me
+    ArrayList<CategoryFood> lstResultSnacks = new ArrayList<CategoryFood>();
     ArrayList<CategoryFood> lstResultDinner = new ArrayList<CategoryFood>();
     ArrayList<CategoryExercise> lstResultExercise = new ArrayList<CategoryExercise>();
 

@@ -1,31 +1,19 @@
 package com.viamhealth.android.adapters;
 
-<<<<<<< .merge_file_a06108
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-=======
-import java.util.ArrayList;
->>>>>>> .merge_file_a02520
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-<<<<<<< .merge_file_a06108
-=======
-import android.view.Gravity;
->>>>>>> .merge_file_a02520
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-<<<<<<< .merge_file_a06108
-=======
-import android.widget.LinearLayout;
->>>>>>> .merge_file_a02520
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
@@ -35,43 +23,28 @@ import com.viamhealth.android.model.MedicationData;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-<<<<<<< .merge_file_a06108
 public class TestDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
     Context context;
     int layoutResourceId;
     Date start_date,end_date;
-=======
-public class TestDataAdapter1 extends ArrayAdapter<MedicationData> {
-    Context context;
-    int layoutResourceId;
->>>>>>> .merge_file_a02520
     ArrayList<MedicationData> lstdata = null;
     Typeface tf;
     ViamHealthPrefs appPrefs;
     int height,width,w30,w150,w10;
 
     public TestDataAdapter1(Context context, int layoutResourceId, ArrayList<MedicationData> lstdata) {
-<<<<<<< .merge_file_a06108
         super(context,lstdata);
-=======
-        super(context, layoutResourceId, lstdata);
->>>>>>> .merge_file_a02520
         // TODO Auto-generated constructor stub
 
         this.layoutResourceId = layoutResourceId;
         this.context = context;
         this.lstdata = lstdata;
     }
-<<<<<<< .merge_file_a06108
 
 
 
     @Override
     public View getItemView(int position, View convertView, ViewGroup parent) {
-=======
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
->>>>>>> .merge_file_a02520
         View row = convertView;
         FileDataHolder holder = null;
         appPrefs=new ViamHealthPrefs(context);
@@ -93,7 +66,6 @@ public class TestDataAdapter1 extends ArrayAdapter<MedicationData> {
             holder = new FileDataHolder();
 
             holder.txt_name = (TextView)row.findViewById(R.id.txt_name);
-<<<<<<< .merge_file_a06108
             //holder.txt_name.getLayoutParams().width = w150;
 
             holder.txt_morning = (TextView)row.findViewById(R.id.txt_morning);
@@ -224,15 +196,6 @@ public class TestDataAdapter1 extends ArrayAdapter<MedicationData> {
                     }
                 }
             }
-=======
-            holder.txt_morning = (TextView)row.findViewById(R.id.txt_morning);
-            holder.txt_noon = (TextView)row.findViewById(R.id.txt_noon);
-            holder.txt_night = (TextView)row.findViewById(R.id.txt_night);
-            holder.txt1 = (TextView)row.findViewById(R.id.txt1);
-            // holder.txt1.setPadding(w10, 0, 0, 0);
-            holder.txt2 = (TextView)row.findViewById(R.id.txt2);
-            // holder.txt2.setPadding(w10, 0, 0, 0);
->>>>>>> .merge_file_a02520
             row.setTag(holder);
         }
         else
@@ -245,17 +208,9 @@ public class TestDataAdapter1 extends ArrayAdapter<MedicationData> {
         holder.txt_morning.setVisibility(View.INVISIBLE);
         holder.txt_noon.setVisibility(View.INVISIBLE);
         holder.txt_night.setVisibility(View.INVISIBLE);
-<<<<<<< .merge_file_a06108
         holder.txt_morning_gap.setVisibility(View.INVISIBLE);
         holder.txt_noon_gap.setVisibility(View.INVISIBLE);
 
-=======
-        holder.img1=(ImageView)row.findViewById(R.id.img1);
-        holder.img2=(ImageView)row.findViewById(R.id.img2);
-        LinearLayout.LayoutParams lpar = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, Gravity.RIGHT);
-        holder.img2.setLayoutParams(lpar);
-        holder.img1.setLayoutParams(lpar);
->>>>>>> .merge_file_a02520
         return row;
     }
 
@@ -263,13 +218,7 @@ public class TestDataAdapter1 extends ArrayAdapter<MedicationData> {
 
     static class FileDataHolder
     {
-<<<<<<< .merge_file_a06108
         TextView txt_name,txt_morning,txt_morning_gap,txt_noon_gap,txt1,txt_noon,txt2,txt_night,txt_start_date,txt_duration,txt_duration_type;
-=======
-        TextView txt_name,txt_morning,txt1,txt_noon,txt2,txt_night;
-        ImageView img1,img2;
-
->>>>>>> .merge_file_a02520
     }
 
 

@@ -1330,7 +1330,6 @@ public class functionClass {
 					return lstData;
 				}
 
-<<<<<<< .merge_file_a09008
                 public void storeReminderReading(String reminder_id,String morning_check,String evening_check,String afternoon_check,String night_check,String complete_check,String user_id)
                 {
                     ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
@@ -1349,20 +1348,6 @@ public class functionClass {
                     try
                     {
                         client.Execute(RequestMethod.GET);
-=======
-                public void storeReminderReading(String reminder_id)
-                {
-                    ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-                    String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id;
-                    Log.e("TAG","url is : " + baseurlString);
-
-                    RestClient client = new RestClient(baseurlString);
-                    //client.AddParam();
-
-                    try
-                    {
-                        client.Execute(RequestMethod.PUT);
->>>>>>> .merge_file_a05548
                     }
                     catch (Exception e) {
                         e.printStackTrace();
@@ -1371,7 +1356,6 @@ public class functionClass {
                     responseString = client.getResponse();
                     Log.e("TAG","Response string " + responseString);
 
-<<<<<<< .merge_file_a09008
                 }
 
 
@@ -1443,18 +1427,6 @@ public class functionClass {
                     ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
                     //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
                     String baseurlString = Global_Application.url+"reminderreadings/?user="+user_id+"&"+"type="+remindertype+"&reading_date=2013-10-21";
-=======
-
-
-
-                }
-
-                public ArrayList<MedicationData> getReminderInfo(String user_id,String remindertype)
-                {
-                    ArrayList<MedicationData>	lstData = new ArrayList<MedicationData>();
-                    //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
-                    String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type="+remindertype;
->>>>>>> .merge_file_a05548
 
                     Log.e("TAG","url is : " + baseurlString);
 
@@ -1480,16 +1452,10 @@ public class functionClass {
                         for (int i = 0; i < jarray.length(); i++)
                         {
                             JSONObject c = jarray.getJSONObject(i);
-<<<<<<< .merge_file_a09008
                             lstData.add(new MedicationData(c.getJSONObject("reminder").getString("id").toString(),
                             c.getJSONObject("reminder").getString("id").toString(),
                             c.getJSONObject("reminder").getString("name").toString(),
                             c.getJSONObject("reminder").getString("type").toString(),
-=======
-                            lstData.add(new MedicationData(c.getString("id").toString(),
-                            c.getString("name").toString(),
-                            c.getString("type").toString(),
->>>>>>> .merge_file_a05548
                             "null",//c.getString("detail").toString()
                             c.getJSONObject("reminder").getString("morning_count").toString(),
                             c.getJSONObject("reminder").getString("afternoon_count").toString(),
@@ -1502,13 +1468,7 @@ public class functionClass {
                              c.getJSONObject("reminder").getString("repeat_mode").toString(),
                             "null",
                             "null",
-<<<<<<< .merge_file_a09008
                             "null",c.getJSONObject("reminder").getString("start_date").toString(),c.getJSONObject("reminder").getString("end_date").toString(),Boolean.parseBoolean("morning_check"),Boolean.parseBoolean("noon_check"),Boolean.parseBoolean("evening_check"),Boolean.parseBoolean("night_check"),Boolean.parseBoolean("complete_check")));
-=======
-                            "null",
-                            "null",c.getString("start_date").toString(),c.getString("end_date").toString()));
-
->>>>>>> .merge_file_a05548
                         }
                         Log.e("TAG","lstdata count is " + lstData.size());
 

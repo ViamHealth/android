@@ -84,21 +84,6 @@ public class Home extends BaseActivity implements OnClickListener{
 
         justRegistered = getIntent().getBooleanExtra("justRegistered", false);
 
-        // for get screen diamention
-        ScreenDimension();
-
-        //calculate dynamic height width and padding
-        w80=(int)((width*25)/100);
-        w90=(int)((width*28.12)/100);
-        w20=(int)((width*6.25)/100);
-        w5=(int)((width*1.56)/100);
-        w12=(int)((width*3.75)/100);
-
-        h90=(int)((height*18.75)/100);
-        h5=(int)((height*1.042)/100);
-        h30=(int)((height*6.25)/100);
-
-
         bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
         core_layout = (LinearLayout) findViewById(R.id.core_layout);
 

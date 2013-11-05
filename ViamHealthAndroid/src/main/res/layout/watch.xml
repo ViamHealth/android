@@ -69,7 +69,6 @@
   	   
     	      <LinearLayout android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-<<<<<<< .merge_file_a09104
             android:orientation="vertical">
             <LinearLayout
                 android:orientation="horizontal"
@@ -239,31 +238,6 @@
 
             <!--    For Reminder section layout-->
             <LinearLayout android:layout_height="fill_parent"
-=======
-            android:orientation="horizontal">
-    	          <TextView android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/normaltab_toggle"
-                android:text="Reminders"
-                android:textColor="#000000"
-                android:id="@+id/txt_reminder"
-                android:layout_weight="1"
-                android:gravity="center"/>
-    	           <TextView android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/normaltab_toggle"
-                android:text="Medicines"
-                android:id="@+id/txt_medication"
-                android:textColor="#000000"
-              android:layout_weight="1"
-                android:gravity="center"/>
-		           <TextView android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:background="@drawable/normaltab_toggle"
-                android:text="Rest All"
-                android:textColor="#000000"
-                android:id="@+id/txt_test"
->>>>>>> .merge_file_a05388
                 android:layout_weight="1"
                 android:layout_width="fill_parent"
                 android:splitMotionEvents="false"
@@ -403,7 +377,6 @@
                                 android:background="@drawable/btn_save_toggle"
                                 android:textStyle="bold" />
                         </LinearLayout>
-<<<<<<< .merge_file_a09104
 
 
                     </ScrollView>
@@ -663,131 +636,11 @@
                                 android:gravity="center_vertical|center"
                                 android:textColor="#ffffff"
                                 android:textSize="18sp"
-=======
-			                 <Button  android:id="@+id/add_medicine_reminder"
-			    	                    android:layout_height="wrap_content"
-			    	                    android:layout_width="wrap_content"
-			    	                    android:text="Add Details"
-			    	                    android:gravity="center_vertical|center"
-			    	                    android:textColor="#ffffff"
-			    	                    android:textSize="18sp"
-			    	                    android:paddingLeft="10dp"
-			    	                    android:paddingRight="10dp"
-			    	                    android:background="@drawable/btn_save_toggle"
-			    	                    android:textStyle="bold" />
-			           
-			            </LinearLayout>
-			             <LinearLayout android:layout_height="wrap_content"
-			                android:layout_width="fill_parent"
-			                android:orientation="vertical"
-							android:paddingTop="10dp"
-                             android:visibility="gone">
-			          <LinearLayout android:layout_height="wrap_content"
-			                android:layout_width="fill_parent"
-			                android:orientation="vertical"
-			                android:background="@drawable/r1">
-			                 <TextView  
-			    	                    android:layout_height="wrap_content"
-			    	                    android:layout_width="wrap_content"
-			    	                    android:text="Tests"
-			    	                    android:padding="5dp"
-			    	                    android:textColor="#000000"
-			    	                    android:textStyle="bold"/>
-			            </LinearLayout>
-			            </LinearLayout>
-			            <LinearLayout android:layout_height="wrap_content"
-			                android:layout_width="fill_parent"
-			                 android:orientation="vertical"
-			                android:background="@drawable/r2"
-                            android:visibility="gone">
-			                   <com.viamhealth.android.ui.RefreshableListView
-								    android:layout_width="fill_parent"
-								    android:cacheColorHint="#00000000"
-								    android:divider="#000000"
-								    android:paddingLeft="10dp"
-								    android:paddingRight="10dp"
-								    android:dividerHeight="1dp"
-								    android:headerDividersEnabled="false"
-							        android:footerDividersEnabled="false"
-							        android:layout_height="200dp"
-							        android:listSelector="@drawable/list_item_selector"
-								    android:id="@+id/lstReminderTest"
-                                   />
-			            </LinearLayout>
-			             <Button  android:id="@+id/add_test_reminder"
-			    	                    android:layout_height="wrap_content"
-			    	                    android:layout_width="wrap_content"
-			    	                    android:text="Add Reminder"
-			    	                    android:gravity="center_vertical|center"
-			    	                    android:textColor="#ffffff"
-			    	                    android:textSize="18sp"
-			    	                    android:paddingLeft="10dp"
-			    	                    android:paddingRight="10dp"
-			    	                    android:background="@drawable/btn_save_toggle"
-			    	                    android:textStyle="bold"
-                             android:visibility="gone"/>
-			       
-			         </LinearLayout>
-			         </ScrollView>
-			        <!-- Reminder section layout end -->
-			         
-			         <!-- Medicine section layout end -->
-			          <ScrollView android:layout_height="0dp"
-			     android:layout_weight="1"
-				    android:layout_width="fill_parent"
-				     android:splitMotionEvents="false"
-			         android:fadingEdgeLength="0dp"
-			        android:visibility="gone"
-			           android:id="@+id/medicine_scrl">
-			       <LinearLayout android:layout_height="fill_parent"
-			            android:layout_width="fill_parent"
-			            android:orientation="vertical"
-			            android:paddingLeft="10dp"
-			            android:paddingRight="10dp"
-			            android:paddingTop="5dp"
-			            android:id="@+id/medical_layout">
-			            <LinearLayout android:layout_height="wrap_content"
-			                android:layout_width="fill_parent"
-			                android:orientation="vertical"
-			                android:background="@drawable/r1">
-			                 <TextView  
-			    	                    android:layout_height="wrap_content"
-			    	                    android:layout_width="wrap_content"
-			    	                    android:text="Medicines"
-			    	                    android:padding="5dp"
-			    	                    android:textColor="#000000"
-			    	                    android:textStyle="bold"/>
-			            </LinearLayout>
-			            <LinearLayout android:layout_height="wrap_content"
-			                android:layout_width="fill_parent"
-			                 android:orientation="vertical"
-			                android:background="@drawable/r2">
-                            <!--
-			               <android.support.v4.view.ViewPager
-						        android:id="@+id/pager"
-						        android:layout_width="fill_parent"
-						        android:layout_height="0dp"
-						        android:paddingLeft="10dp"
-						        android:paddingRight="10dp"
-						        android:layout_weight="1"
-						        /> -->
-                            <com.viamhealth.android.ui.RefreshableListView
-                                android:layout_width="fill_parent"
-                                android:cacheColorHint="#00000000"
-                                android:divider="#000000"
->>>>>>> .merge_file_a05388
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
                                 android:dividerHeight="1dp"
                                 android:headerDividersEnabled="false"
-<<<<<<< .merge_file_a09104
                                 android:footerDividersEnabled="false"/>
-=======
-                                android:footerDividersEnabled="false"
-                                android:layout_height="200dp"
-                                android:listSelector="@drawable/list_item_selector"
-                                android:id="@+id/lstReminderMedicine" />
->>>>>>> .merge_file_a05388
 
 			            </LinearLayout>
 			             <LinearLayout android:layout_height="wrap_content"

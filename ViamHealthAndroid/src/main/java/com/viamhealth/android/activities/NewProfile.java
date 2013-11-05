@@ -1,11 +1,15 @@
 package com.viamhealth.android.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.util.Log;
@@ -19,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -31,6 +36,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
+import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
@@ -45,7 +51,7 @@ import org.json.JSONObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class NewProfile extends BaseFragmentActivity implements View.OnClickListener,
+public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener,
         FBLoginFragment.OnSessionStateChangeListener, EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
@@ -58,7 +64,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     String selecteduserid;
 
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
-    ImageView profile_image;
     Button btnSave, btnCancel;
     ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
@@ -76,6 +81,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     private enum RequestStatus { Not_Started, Pending, Done, Failed; }
     private RequestStatus familyMemberSelected = RequestStatus.Not_Started;
     private RequestStatus profileDataFetched = RequestStatus.Not_Started;
+
+    private ImageSelector imageSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +132,13 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         imgMale = (ImageButton) findViewById(R.id.profile_img_male);
         imgFemale = (ImageButton) findViewById(R.id.profile_img_female);
 
+        imageSelector = new ImageSelector(NewProfile.this);
+
         imgUpload = (ImageButton) findViewById(R.id.imgBtnUpload);
         imgUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImage();
+                imageSelector.pickFile();
             }
         });
 
@@ -182,9 +191,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
             getDataFromFB(FBRequestType.Family, fbid);
         } else {
-            email.setText(user.getEmail());
+            updateViewFromModel(user);
+            //email.setText(user.getEmail());
             email.setEnabled(false);
-            getDataFromFB(FBRequestType.Profile, null);
+            //getDataFromFB(FBRequestType.Profile, null);
         }
     }
 
@@ -228,17 +238,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }else{
             imgUpload.setVisibility(View.VISIBLE);
         }
-//
-//        // start Facebook Login
-//        Session.openActiveSession(this, true, new Session.StatusCallback() {
-//            // callback when session changes state
-//            @Override
-//            public void call(Session session, SessionState state, Exception exception) {
-//                if (session.isOpened()) {
-//                }
-//            }
-//        });
-
     }
 
     private void getProfileDataFromFB(Session session, String profileId){
@@ -327,8 +326,13 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 getDataFromFB(FBRequestType.FamilyProfile, profileId);
             }
         }else{//this is for facebook login pop-up
-            super.onActivityResult(requestCode, resultCode, data);
-            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            if(imageSelector.onActivityResult(requestCode, resultCode, data)){
+                Bitmap bitmap = imageSelector.getBitmap();
+                profilePic.setDefaultProfilePicture(bitmap);
+            }else{
+                super.onActivityResult(requestCode, resultCode, data);
+                Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            }
         }
     }
 

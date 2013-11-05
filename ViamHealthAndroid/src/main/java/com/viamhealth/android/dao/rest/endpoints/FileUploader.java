@@ -32,9 +32,6 @@ public class FileUploader {
         private Integer fileId;
         private String downloadURL;
 
-        this.fileId = object.getInt("id");
-        this.downloadUrl = object.getString("download_url");
-
         public int getServerResponseCode() {
             return serverResponseCode;
         }

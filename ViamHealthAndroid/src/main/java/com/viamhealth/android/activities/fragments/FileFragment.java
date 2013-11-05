@@ -40,6 +40,7 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.UploadFile;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.dao.restclient.core.RestClient;
+import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.FileData;
 import com.viamhealth.android.model.ObjectA;
 import com.viamhealth.android.model.users.User;
@@ -78,9 +79,6 @@ public class FileFragment extends SherlockFragment {
 
     private TextView filesHeader;
 
-    private static final int CAMERA_PIC_REQUEST = 1337;
-    private static final int LIBRARY_FILE_REQUEST = 1338;
-
     private Global_Application ga;
     private ViamHealthPrefs appPrefs;
 
@@ -88,6 +86,7 @@ public class FileFragment extends SherlockFragment {
     private Set<OnNewFileUploadedListener> onNewFileUploadedListener = new HashSet<OnNewFileUploadedListener>();
 
     private ActionBar actionBar;
+    private ImageSelector imageSelector;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,6 +111,8 @@ public class FileFragment extends SherlockFragment {
 
         setHasOptionsMenu(true);
 
+        imageSelector = new ImageSelector(getSherlockActivity());
+
         return view;
     }
 
@@ -119,74 +120,19 @@ public class FileFragment extends SherlockFragment {
         onNewFileUploadedListener.add(listener);
     }
 
-    private void initiateFileUpload() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
-        builder.setTitle("Upload from...");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                dialog.dismiss();
-
-                if (items[item].equals("Take Photo")) {
-                    Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
-                    startActivityForResult(camera, CAMERA_PIC_REQUEST);
-                } else if (items[item].equals("Choose from Library")) {
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    photoPickerIntent.setType("*/*");
-                    photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
-                }
-            }
-        });
-        builder.show();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e("TAG","On  ac result is called");
 
-        if(requestCode==LIBRARY_FILE_REQUEST){
-            if(resultCode==getActivity().RESULT_OK){
-                Uri uri = data.getData();
-                String filePath = data.getData().getPath();
-                String fileName = UIUtility.getFileName(getSherlockActivity(), uri);
-                File file = new File(getRealPathFromURI(uri));
-                Toast.makeText(getSherlockActivity(), "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
-                byte[] byteArray = new byte[0];
-                try {
-                    byteArray = FileUtils.readFileToByteArray(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("TAG", "ReadFileToByteArray", e.getCause());
-                }
-                uploadFile(fileName, byteArray);
-                Toast.makeText(getSherlockActivity(), "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
-            }
-        }
-
-        if(requestCode==CAMERA_PIC_REQUEST) {
-            if (resultCode == getActivity().RESULT_OK) {
-                //Log.e("TAG","Path is : " + path);
-                Bundle extras = data.getExtras();
-                Bitmap bitmap=(Bitmap)extras.get("data");
-                String fileName = "From Camera of " + selectedUser.getName() + ".png";
-                uploadImage(fileName, bitmap);
-            }
-        }
+        imageSelector.onActivityResult(requestCode, resultCode, data);
+        Uri uri = imageSelector.getURI();
+        String fileName = UIUtility.getFileName(getSherlockActivity(), uri);
+        uploadFile(fileName, imageSelector.getByteArray());
     }
 
     private void uploadFile(final String filename, final byte[] byteArray) {
-        /*Intent myintent= new Intent(getSherlockActivity(),UploadFile.class);
-        myintent.putExtra("user", (Parcelable) selectedUser);
-        myintent.putExtra("filename", fileName);
-        myintent.putExtra("content", byteArray);
-        startActivityForResult(myintent, UploadFile.getCode());*/
+
         final String fileExtension = filename.lastIndexOf(".")>-1?filename.substring(filename.lastIndexOf(".")+1):null;
         String mimeType = fileExtension==null?null:MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
         Bitmap imgBitmap = mimeType.contains("image")?BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length):null;
@@ -223,25 +169,6 @@ public class FileFragment extends SherlockFragment {
         builder.show();
     }
 
-    private void uploadImage(String fileName, Bitmap bitmap) {
-        System.gc();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        uploadFile(fileName, byteArray);
-    }
-
-    private String getRealPathFromURI(Uri contentURI) {
-        Cursor cursor = getSherlockActivity().getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            return contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
-            return cursor.getString(idx);
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(Menu.NONE, R.drawable.ic_action_upload, 1, "Upload")
@@ -260,7 +187,7 @@ public class FileFragment extends SherlockFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.drawable.ic_action_upload){
-            initiateFileUpload();
+            imageSelector.pickFile();
             return false;
         }
         return super.onOptionsItemSelected(item);

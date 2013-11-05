@@ -23,27 +23,17 @@ import com.viamhealth.android.model.MedicationData;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-<<<<<<< .merge_file_a07780
 public class MedicalDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
 	Context context; 
 	int layoutResourceId;
     Date start_date,end_date;
-=======
-public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
-	Context context; 
-	int layoutResourceId;    
->>>>>>> .merge_file_a03960
 	ArrayList<MedicationData> lstdata = null;
 	Typeface tf;
 	ViamHealthPrefs appPrefs;
 	int height,width,w30,w150,w10;
 	
 	public MedicalDataAdapter1(Context context, int layoutResourceId, ArrayList<MedicationData> lstdata) {
-<<<<<<< .merge_file_a07780
 		super(context,lstdata);
-=======
-		super(context, layoutResourceId, lstdata);
->>>>>>> .merge_file_a03960
 		// TODO Auto-generated constructor stub
 		
 		 this.layoutResourceId = layoutResourceId;
@@ -76,11 +66,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 	            holder = new FileDataHolder();
 	            
 	            holder.txt_name = (TextView)row.findViewById(R.id.txt_name);
-<<<<<<< .merge_file_a07780
 	            //holder.txt_name.getLayoutParams().width = w150;
-=======
-	            holder.txt_name.getLayoutParams().width = w150;
->>>>>>> .merge_file_a03960
 
 	            holder.txt_morning = (TextView)row.findViewById(R.id.txt_morning);
 	            //holder.txt_morning.getLayoutParams().width = w30;
@@ -132,7 +118,6 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
-<<<<<<< .merge_file_a07780
                 String get_start_date,get_end_date;
                 get_start_date=lstdata.get(position).getStart_date();
                 get_end_date=lstdata.get(position).getEnd_date();
@@ -209,11 +194,6 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
                     }
                 }
                 row.setTag(holder);
-=======
-
-	            
-	            row.setTag(holder);
->>>>>>> .merge_file_a03960
 	        }     
 	        else
 	        {  
@@ -233,12 +213,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 
 	    static class FileDataHolder
 	    {
-<<<<<<< .merge_file_a07780
 	        TextView txt_name,txt_morning,txt1,txt_noon,txt2,txt_night,txt_start_date,txt_duration,txt_duration_type;
-=======
-	        TextView txt_name,txt_morning,txt1,txt_noon,txt2,txt_night;
-	        
->>>>>>> .merge_file_a03960
 	    }
 	    
 	    
