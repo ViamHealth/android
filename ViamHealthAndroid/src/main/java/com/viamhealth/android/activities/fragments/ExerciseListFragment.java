@@ -482,7 +482,8 @@ public class ExerciseListFragment extends SherlockListFragment
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             User user = getArguments().getParcelable("user");
-            ga.lstResultExercise = obj.getExercise(user.getId().toString());
+            String date=getArguments().getString("activity_date");
+            ga.lstResultExercise = obj.getExercise(user.getId().toString(),date);
             return null;
         }
 

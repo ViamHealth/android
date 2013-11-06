@@ -82,15 +82,7 @@
                                     android:textStyle="bold"
                                     android:textColor="#ffffff"
                                     android:layout_weight="4"/>
-                                <TextView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
-                                    android:text="0"
-                                    android:gravity="center"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:id="@+id/lbltotalbrkcal"
-                                    android:layout_weight="4"
-                                    android:textColor="#ffffff"/>
+
                                 <ImageView android:layout_height="wrap_content"
                                     android:layout_width="0dp"
                                     android:src="@drawable/addicon"
@@ -121,7 +113,7 @@
                                         android:text="CA:"
                                         android:textSize="12sp"
                                         />
-                                    <TextView android:id="@+id/cal_value"
+                                    <TextView android:id="@+id/lbltotalbrkcal"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -304,15 +296,7 @@
                                     android:layout_weight="4"
                                     android:paddingLeft="5dp"
                                     android:textColor="#ffffff"/>
-                                <TextView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
-                                    android:text="0"
-                                    android:gravity="center"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:id="@+id/lbllunchcal"
-                                    android:layout_weight="4"
-                                    android:textColor="#ffffff"/>
+
                                 <ImageView android:layout_height="wrap_content"
                                     android:layout_width="0dp"
                                     android:src="@drawable/addicon"
@@ -342,7 +326,7 @@
                                         android:text="CA:"
                                         android:textSize="12sp"
                                         />
-                                    <TextView android:id="@+id/cal_value"
+                                    <TextView android:id="@+id/lbllunchcal"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -507,15 +491,7 @@
                                     android:id="@+id/lblsnack"
                                     android:textStyle="bold"
                                     android:textColor="#ffffff"/>
-                                <TextView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
-                                    android:text="0"
-                                    android:gravity="center"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:id="@+id/lblsnakcal"
-                                    android:layout_weight="4"
-                                    android:textColor="#ffffff"/>
+
                                 <ImageView android:layout_height="wrap_content"
                                     android:layout_width="0dp"
                                     android:src="@drawable/addicon"
@@ -546,7 +522,7 @@
                                         android:text="CA:"
                                         android:textSize="12sp"
                                         />
-                                    <TextView android:id="@+id/cal_value"
+                                    <TextView android:id="@+id/lblsnakcal"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -715,15 +691,7 @@
                                     android:layout_weight="4"
                                     android:id="@+id/lbldinner"
                                     android:textColor="#ffffff"/>
-                                <TextView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
-                                    android:text="0"
-                                    android:gravity="center"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:id="@+id/lbldinnercal"
-                                    android:layout_weight="4"
-                                    android:textColor="#ffffff"/>
+
                                 <ImageView android:layout_height="wrap_content"
                                     android:layout_width="0dp"
                                     android:src="@drawable/addicon"
@@ -753,7 +721,7 @@
                                         android:text="CA:"
                                         android:textSize="12sp"
                                         />
-                                    <TextView android:id="@+id/cal_value"
+                                    <TextView android:id="@+id/lbldinnercal"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -899,7 +867,7 @@
                                 android:background="#37AA4F"
                                 android:gravity="center_vertical"
                                 android:id="@+id/exercise"
-                                android:orientation="horizontal">
+                                android:orientation="vertical">
                                 <LinearLayout android:layout_height="wrap_content"
                                     android:layout_width="fill_parent"
                                     android:background="#37AA4F"
@@ -920,15 +888,7 @@
                                     android:textStyle="bold"
                                     android:id="@+id/lblexercise"
                                     android:textColor="#ffffff"/>
-                                <TextView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
-                                    android:text="0"
-                                    android:gravity="center"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:layout_weight="4"
-                                    android:id="@+id/lblexercisecal"
-                                    android:textColor="#ffffff"/>
+
                                 <ImageView android:layout_height="wrap_content"
                                     android:layout_width="0dp"
                                     android:src="@drawable/addicon"
@@ -958,7 +918,7 @@
                                         android:text="CA:"
                                         android:textSize="12sp"
                                         />
-                                    <TextView android:id="@+id/cal_value"
+                                    <TextView android:id="@+id/lblexercisecal"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -968,66 +928,7 @@
                                         android:text="25"
                                         android:textSize="12sp"
                                         />
-                                    <TextView android:id="@+id/protein"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="      PR:"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/protein_value"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="25"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="      CB:"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates_value"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="25"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/fat"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="      F:"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/fat_value"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="25"
-                                        android:textSize="12sp"
-                                        />
+
                                 </LinearLayout>
                             </LinearLayout>
                             <LinearLayout android:layout_height="wrap_content"

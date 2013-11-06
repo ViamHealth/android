@@ -37,6 +37,7 @@ public class AddExercise extends Activity{
     int time_type=0;
     float time_float;
     TextView btnSave,btnCancel;
+    String date;
 
 
 
@@ -52,6 +53,7 @@ public class AddExercise extends Activity{
         physical_activity_type=(Spinner)findViewById(R.id.exercise_type);
         physical_activity_type.setOnItemSelectedListener(new CustomOnExerciseSelectedListener());
 
+        date=getIntent().getStringExtra("activity_date");
         //ArrayAdapter<String> yourAdapter=new ArrayAdapter<String>(this, R.layout.custom_spinner_item, R.array.duration_type);
 
 
@@ -173,7 +175,7 @@ public class AddExercise extends Activity{
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 
-            obj.addExercise(user.getBmiProfile().getWeight().toString(),time_spent,physical_activity_id,calories_spent,user.getId().toString());
+            obj.addExercise(user.getBmiProfile().getWeight().toString(),time_spent,physical_activity_id,calories_spent,user.getId().toString(),date);
             return null;
         }
 

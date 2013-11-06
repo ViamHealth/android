@@ -249,7 +249,7 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 			
-				return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1","user_id");
+				return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1","user_id","");
 			}
 			   
 		}     
