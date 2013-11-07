@@ -5,6 +5,7 @@ package com.viamhealth.android;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.facebook.FacebookRequestError;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -49,11 +50,17 @@ public class Global_Application extends Application
 	public boolean calcelflg;
     public String selected_date;
 
-    public static ArrayList<CategoryFood> lstResultBreakfast = new ArrayList<CategoryFood>();
-    public static ArrayList<CategoryFood> lstResultLunch = new ArrayList<CategoryFood>();
-    public static ArrayList<CategoryFood> lstResultSnacks = new ArrayList<CategoryFood>();
-    public static ArrayList<CategoryFood> lstResultDinner = new ArrayList<CategoryFood>();
-    public static ArrayList<CategoryExercise> lstResultExercise = new ArrayList<CategoryExercise>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultBreakfast = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultLunch = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultSnacks = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultDinner = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryExercise>> lstResultExercise = new ArrayList<ArrayList<CategoryExercise>>();
+
+    public static ArrayList<CategoryFood> lstResultBreakfast=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryFood> lstResultLunch=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryFood> lstResultSnacks=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryFood> lstResultDinner=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryExercise> lstResultExercise=new ArrayList<CategoryExercise>();
 
 
     public static ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();

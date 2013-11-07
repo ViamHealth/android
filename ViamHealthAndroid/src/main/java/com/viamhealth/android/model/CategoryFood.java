@@ -1,10 +1,10 @@
 package com.viamhealth.android.model;
 
 public class CategoryFood {
-	String id,name,calories,multiplier,quantity,count,food_item,fat,cholesterol,sugar;
+	String id,name,calories,multiplier,quantity,count,food_item,fat,cholesterol,sugar,serving_unit;
 
 	public CategoryFood(String id,String food_item, String name, String calories,
-			String multiplier,String quantity,String count,String fat,String cholesterol,String sugar) {
+			String multiplier,String quantity,String count,String fat,String cholesterol,String sugar,String serving_unit) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -16,6 +16,7 @@ public class CategoryFood {
         this.fat=fat;
         this.cholesterol=cholesterol;
         this.sugar=sugar;
+        this.serving_unit=serving_unit;
 	}
 
     public String getFat()
@@ -27,6 +28,18 @@ public class CategoryFood {
     {
         this.fat=fat;
     }
+
+
+    public String getServingUnit()
+    {
+        return serving_unit;
+    }
+
+    public void setServingUnit(String serving_unit)
+    {
+        this.serving_unit=serving_unit;
+    }
+
 
     public String getCholesterol()
     {

@@ -5,11 +5,16 @@ import java.util.ArrayList;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.activities.AddBreakfast;
+import com.viamhealth.android.activities.FoodDetail;
+import com.viamhealth.android.activities.oldones.TabGroupActivity;
 import com.viamhealth.android.model.CategoryFood;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import  	android.content.Context;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +72,10 @@ public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
             holder.foodname = (TextView)row.findViewById(R.id.foodname);
             holder.calory = (TextView)row.findViewById(R.id.cal_value);
             holder.surning = (TextView)row.findViewById(R.id.serving_val);
+            holder.sugar = (TextView)row.findViewById(R.id.sugar_value);
+            holder.cholesterol = (TextView)row.findViewById(R.id.cholesterol_value);
+            holder.fat = (TextView)row.findViewById(R.id.fat_value);
+
 
             // holder.surning.getLayoutParams().width = w30;
 /*
@@ -105,7 +114,10 @@ public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
             float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
             Log.e("TAG","value of calories and textview calorie =" +calories+" "+holder.calory);
             holder.calory.setText(String.valueOf(calories));
-            holder.surning.setText(data.getMultiplier().toString());
+            holder.surning.setText(data.getMultiplier().toString()+" "+data.getServingUnit().toString());
+            holder.sugar.setText(data.getSugar().toString());
+            holder.cholesterol.setText(data.getCholesterol().toString());
+            holder.fat.setText(data.getFat().toString());
         }
        // holder.delete.setTag(data.getId().toString());
         return row;
@@ -113,7 +125,7 @@ public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
 
     static class FileDataHolder
     {
-        TextView foodname,calory,surning;
+        TextView foodname,calory,surning,sugar,cholesterol,fat;
         ImageView delete;
         LinearLayout main_list_layout;
     }

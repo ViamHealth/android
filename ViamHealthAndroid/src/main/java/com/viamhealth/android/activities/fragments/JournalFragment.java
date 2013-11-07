@@ -17,13 +17,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
@@ -37,6 +33,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -55,10 +52,7 @@ import com.viamhealth.android.adapters.ExerciseAdapter;
 import com.viamhealth.android.adapters.JournalExerciseAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
-import com.viamhealth.android.adapters.MedicalDataAdapter;
-import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
-import com.viamhealth.android.adapters.TestDataAdapter;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
@@ -70,11 +64,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -85,11 +76,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
     Display display;
     int height,width;
-    private Bundle savedInstanceState;
     int w15,w20,w10,w50,w5,h40,h10,h5,w2,h2,w110,h200,h20;
 
-    TextView lblback,lbl_food_date,lbl_food_time,lblbrk,lbltotalbrkcal,lbllunch,
-            lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lblitem1,lblitem2,lblitem3,lblitem4,lbltotcal,lblidealcal,lblcaldiff,lblcalmsg;
+    TextView lblback,lbl_food_date,lbl_food_time,lblbrk,lbltotalbrkcal,lbltotalbrksu,lbltotalbrkch,lbltotalbrkfat,lbllunchsu,lbllunchch,lbllunch,lbllunchfat,lblsnacksu,lblsnackch,lblsnackfat,lbldinnersu,lbldinnerch,lbldinnerfat,
+            lbllunchcal,lblmessage,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lblitem1,lblitem2,lblitem3,lblitem4,lbltotcal,lblidealcal,lblcaldiff,lblcalmsg;
     LinearLayout settiglayout_food,back_food_layout,food_main_layout,food_mid_layout,
             btn_food_time_picker,btn_food_date_picker,food_header,layout1,layout2,layout3,layout4,breakfast,lunch,snacks,dinner,exercise;
     ImageView img_date,img_time,food_icon,addDinner,addExercise,addSnacks,addLunch,addBreakfast;
@@ -98,7 +88,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     ImageView img_breakfast,img_lunch,img_dinner,img_snacks,img_exercise;
     String nexturl,frm;
     Typeface tf;
-    Double breakfast_cal=0.0,lunch_cal=0.0,snacks_cal=0.0,dinner_cal=0.0,exercise_cal=0.0;
+    Double breakfast_cal=0.0,lunch_cal=0.0,snacks_cal=0.0,dinner_cal=0.0,exercise_cal=0.0,sugar=0.0,cholesterol=0.0,fat=0.0;
     ProgressDialog dialog1;
     String sub_url="diet-tracker/";
     boolean bolbrk,bollunch,bolsnaks,boldiner=false,bolexercise=false;
@@ -109,25 +99,15 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     public static CallLunchListTask taskLunch;
     public static CallDinnerListTask taskDinner;
     public static CallSnaksListTask taskSnacks;
-    int counter=0;
 
 
     ViamHealthPrefs appPrefs;
     functionClass obj;
-
-    ArrayList<ArrayList<CategoryFood>> lstResultBreakfast= new ArrayList<ArrayList<CategoryFood>>();
-    ArrayList<ArrayList<CategoryFood>> lstResultLunch= new ArrayList<ArrayList<CategoryFood>>();
-    ArrayList<ArrayList<CategoryFood>> lstResultSnacks= new ArrayList<ArrayList<CategoryFood>>();
-    ArrayList<ArrayList<CategoryFood>> lstResultDinner= new ArrayList<ArrayList<CategoryFood>>();
-    ArrayList<ArrayList<CategoryExercise>> lstResultExercise= new ArrayList<ArrayList<CategoryExercise>>();
-
-/*
     ArrayList<CategoryFood> lstResultBreakfast = new ArrayList<CategoryFood>();
     ArrayList<CategoryFood> lstResultLunch = new ArrayList<CategoryFood>();
     ArrayList<CategoryFood> lstResultSnacks = new ArrayList<CategoryFood>();
     ArrayList<CategoryFood> lstResultDinner = new ArrayList<CategoryFood>();
     ArrayList<CategoryExercise> lstResultExercise = new ArrayList<CategoryExercise>();
-*/
 
     DateFormat fmtDateAndTime=DateFormat.getDateTimeInstance();
     Calendar dateAndTime=Calendar.getInstance();
@@ -140,29 +120,18 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
     double target_ideal_calories=0;
 
-    ArrayList<String> date_lst = new ArrayList<String>();
-
-
-
 
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
+    ProgressBar Prog;
 
     View view;
-    ViewPager mPager1;
-    Intent addFoodIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.item_pager_journal, container, false);
-
-
-
-        User user = getArguments().getParcelable("user");
-
+        view = inflater.inflate(R.layout.tab_fragment_journal, container, false);
         fromOldCode();
-        this.savedInstanceState=savedInstanceState;
         task1 = new CallExerciseListTask();
         taskBreakfast=new CallListTask();
         taskBreakfast.activity=getSherlockActivity();
@@ -179,10 +148,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
 
 
-    public static SherlockFragment getInstance()
-    {
-        return JournalFragment.getInstance();
-    }
+public static SherlockFragment getInstance()
+{
+    return JournalFragment.getInstance();
+}
 
 
     private void fromOldCode() {
@@ -190,16 +159,11 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
         obj=new functionClass(getSherlockActivity());
         ga=((Global_Application)getSherlockActivity().getApplicationContext());
+        selected_user=getArguments().getParcelable("user");
         args.putParcelable("user", selected_user);
-
 
         tf = Typeface.createFromAsset(getSherlockActivity().getAssets(), "Roboto-Condensed.ttf");
         //for get screen height width
-
-
-
-
-
         ScreenDimension();
 
         //calculate dynamic padding
@@ -217,8 +181,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         h2=(int)((height*0.38)/100);
         h200=(int)((height*41.67)/100);
         h20=(int)((height*4.17)/100);
-        //addFoodIntent=new Intent(getSherlockActivity(),AddBreakfast.class);
-/*
+
 
         layout1 = (LinearLayout)view.findViewById(R.id.layout1);
         layout1.setPadding(0, 0, 0, h10);
@@ -269,6 +232,12 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         img_snacks=(ImageView)view.findViewById(R.id.img_snacks);
         img_dinner=(ImageView)view.findViewById(R.id.img_dinner);
         img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
+
+        lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
+        lblmessage=(TextView)view.findViewById(R.id.status);
+        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
+        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
+        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
 
         lstViewBreakfast = (FrameLayout)view.findViewById(R.id.lstViewBreakfast);
         lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -408,12 +377,35 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         lblbrk = (TextView)view.findViewById(R.id.lblbrk);
         lbltotalbrkcal = (TextView)view.findViewById(R.id.lbltotalbrkcal);
+        lbltotalbrksu = (TextView)view.findViewById(R.id.lbltotalbrksu);
+        lbltotalbrkch = (TextView)view.findViewById(R.id.lbltotalbrkch);
+        lbltotalbrkfat = (TextView)view.findViewById(R.id.lbltotalbrkfat);
+
+
+
+
+
         lbllunch = (TextView)view.findViewById(R.id.lbllunch);
         lbllunchcal = (TextView)view.findViewById(R.id.lbllunchcal);
+        lbllunchsu = (TextView)view.findViewById(R.id.lbllunchsu);
+        lbllunchch = (TextView)view.findViewById(R.id.lbllunchch);
+        lbllunchfat = (TextView)view.findViewById(R.id.lbllunchfat);
+
+
+
+
         lblsnack = (TextView)view.findViewById(R.id.lblsnack);
         lblsnakcal = (TextView)view.findViewById(R.id.lblsnakcal);
+        lblsnacksu = (TextView)view.findViewById(R.id.lblsnacksu);
+        lblsnackch = (TextView)view.findViewById(R.id.lblsnackch);
+        lblsnackfat = (TextView)view.findViewById(R.id.lblsnackfat);
+
+
         lbldinner = (TextView)view.findViewById(R.id.lbldinner);
         lbldinnercal = (TextView)view.findViewById(R.id.lbldinnercal);
+        lbldinnersu = (TextView)view.findViewById(R.id.lbldinnersu);
+        lbldinnerch = (TextView)view.findViewById(R.id.lbldinnerch);
+        lbldinnerfat = (TextView)view.findViewById(R.id.lbldinnerfat);
 
         lblExercise = (TextView)view.findViewById(R.id.lblexercise);
         lblexercisecal=(TextView)view.findViewById(R.id.lblexercisecal);
@@ -438,7 +430,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         food_main_layout = (LinearLayout)view.findViewById(R.id.food_main_layout);
         food_main_layout.setPadding(w10, h10, w10, h10);
-
+/*
         btn_food_time_picker = (LinearLayout)view.findViewById(R.id.btn_food_time_picker);
         btn_food_time_picker.setOnClickListener(this);
 
@@ -451,21 +443,227 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         img_date = (ImageView)view.findViewById(R.id.img_date);
         img_date.setPadding(w5, 0, w5, 0);
+                lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
+        lbl_food_time.setTypeface(tf);
 
+        food_header=(LinearLayout)view.findViewById(R.id.food_header);
+        food_header.setPadding(0, 0, 0, h10);
+*/
         lbl_food_date = (TextView)view.findViewById(R.id.lbl_food_date);
+        lbl_food_date.setOnClickListener(this);
         lbl_food_date.setPadding(w5, 0, 0, 0);
         lbl_food_date.setTypeface(tf);
 
 
 
-        lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
-        lbl_food_time.setTypeface(tf);
+
 
         //food_icon = (ImageView)view.findViewById(R.id.food_icon);
         //	food_icon.setPadding(w5, h5, w5, h5);
 
-        food_header=(LinearLayout)view.findViewById(R.id.food_header);
-        food_header.setPadding(0, 0, 0, h10);
+
+
+        pYear = dateAndTime.get(Calendar.YEAR);
+        pMonth = dateAndTime.get(Calendar.MONTH);
+        pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
+        monthval=pMonth+1;
+        updateDisplay();
+        ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
+        /*
+        lstViewBreakfast.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+                if(!ga.getNextbrekfast().toString().equals("null")){
+                    nexturl = ga.getNextbrekfast();
+                    frm="b";
+                    if(isInternetOn()){
+                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
+                        task.activity =getSherlockActivity();
+                        task.execute();
+                    }else{
+                        Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        lstViewLunch.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+                if(!ga.getNextlunch().toString().equals("null")){
+                    nexturl = ga.getNextlunch();
+                    frm="l";
+                    if(isInternetOn()){
+                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
+                        task.activity =getSherlockActivity();
+                        task.execute();
+                    }else{
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        lstViewSnacks.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+                if(!ga.getNextsnacks().toString().equals("null")){
+                    nexturl = ga.getNextsnacks();
+                    frm="s";
+                    if(isInternetOn()){
+                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
+                        task.activity =getSherlockActivity();
+                        task.execute();
+                    }else{
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        lstViewExercise.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+
+                    frm="e";
+                    if(isInternetOn()){
+                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
+                        task.activity =getSherlockActivity();
+                        task.execute();
+                    }else{
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    }
+
+            }
+        });
+
+
+
+
+        lstViewDinner.setOnRefreshListener(new RefreshableListView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+                // TODO Auto-generated method stub
+                if(!ga.getNextdinner().toString().equals("null")){
+                    nexturl = ga.getNextdinner();
+                    frm="d";
+                    if(isInternetOn()){
+                        CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
+                        task.activity =getSherlockActivity();
+                        task.execute();
+                    }else{
+                        Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+
+
+
+
+
+        lstViewBreakfast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View v,final int arg2,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+                LinearLayout view = (LinearLayout)v.findViewById(R.id.main_list_delete);
+                ga.setSelectedfoodid(lstResultBreakfast.get(arg2).getId());
+                //Toast.makeText(getSherlockActivity(),"user id="+lstResultBreakfast.get(arg2).getId(),Toast.LENGTH_LONG ).show();
+                view.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View arg0) {
+                        // TODO Auto-generated method stub
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                                getSherlockActivity());
+
+                        // set title
+                        alertDialogBuilder.setTitle("Confirmation");
+
+                        // set dialog message
+                        alertDialogBuilder
+                                .setMessage("Are you sure you want to delete this food?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, close
+                                        // current activity
+                                        dialog.cancel();
+                                        if(isInternetOn()){
+                                            sub_url="diet-tracker/";
+                                            CallDeleteTask task = new CallDeleteTask();
+                                            task.activity =getSherlockActivity();
+                                            task.execute();
+                                        }else{
+                                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                })
+                                .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        // if this button is clicked, just close
+                                        // the dialog box and do nothing
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        // create alert dialog
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+
+                        // show it
+                        alertDialog.show();
+                    }
+                });
+
+                LinearLayout view1 = (LinearLayout)v.findViewById(R.id.main_list_edit);
+                view1.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
+                        final EditText input = new EditText(getSherlockActivity());
+                        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        alert.setMessage("Enter Number of Servings");
+                        alert.setView(input);
+                        Global_Application.food_item=lstResultBreakfast.get(arg2).getFoodItem();
+                        Global_Application.meal_type="BREAKFAST";
+                        alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                if(isInternetOn()){
+                                    Global_Application.food_quantity=input.getText().toString().trim();
+                                    CallEditTask task = new CallEditTask();
+                                    task.activity =getSherlockActivity();
+                                    task.execute();
+                                }else{
+                                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
+                        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+                        alert.show();
+
+                    }
+                });
+
+
+            }
+        });
+
 
 */
 
@@ -500,12 +698,12 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     public void updateData()
     {
         if(isInternetOn()){
-            /*if(getSherlockActivity()!=null)
+            if(getSherlockActivity()!=null)
             {
-            //CallListTask task = new CallListTask();
+            CallListTask task = new CallListTask();
             task.activity = getSherlockActivity();
             task.execute();
-            }*/
+            }
         }else{
             //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
         }
@@ -634,6 +832,13 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                     pMonth,
                     pDay).show();
         }
+
+        if(v==lbl_food_date){
+            new DatePickerDialog(getSherlockActivity(), d,pYear,
+                    pMonth,
+                    pDay).show();
+        }
+
         if(v==btn_food_time_picker){
             new TimePickerDialog(getSherlockActivity(), t,
                     dateAndTime.get(Calendar.HOUR_OF_DAY),
@@ -646,15 +851,15 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
-
-
         }
         if(v==addLunch){
             ga.setFoodType("Lunch");
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
         if(v==addSnacks){
@@ -662,6 +867,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
         if(v==addDinner){
@@ -669,6 +875,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
 
@@ -677,6 +884,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addExercise = new Intent(getSherlockActivity(), AddExercise.class);
             User user = getArguments().getParcelable("user");
             addExercise.putExtra("user", user);
+            addExercise.putExtra("activity_date", ga.selected_date);
             startActivity(addExercise);
 
         }
@@ -691,7 +899,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             monthval=pMonth+1;
             updateDisplay();
             ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
-            /*
             if(isInternetOn()){
 
                 CallListTask task = new CallListTask();
@@ -700,7 +907,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             }else{
                 Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
-            */
+
 
         }
     };
@@ -746,15 +953,62 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         {
 
             Log.i("onPostExecute", "onPostExecute");
-            //fillExerciseDetails();
+            if(dialog1!=null)
+            {
+                dialog1.dismiss();
+            }
+
+            Log.e("TAG", "lst size : " + lstResultExercise.size());
+            double total_calories=0.0;
+            int i=0;
+
+            for(i=0;i<lstResultExercise.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultExercise.get(i).getCalories());
+            }
+
+            if(lstResultExercise.size()>0){
+                lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
+                lblexercisecal.setText(String.valueOf(total_calories));
+                exercise_cal=total_calories;
+                //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
+                try{
+                ga.lstResultExercise=lstResultExercise;
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+                FragmentTransaction fm = man1.beginTransaction();
+                ExerciseListFragment fragment = (ExerciseListFragment)SherlockFragment.instantiate(getSherlockActivity(), ExerciseListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewExercise, fragment, "Lunch");
+                fm.commit();
+                man1.executePendingTransactions();
+                setHasOptionsMenu(true);
+                    }
+                }
+                catch(Exception e)
+                {
+
+                }
+            }
+            else
+            {
+                lblExercise.setText("Exercise (0)");
+                lblexercisecal.setText("0");
+                lstViewExercise.setVisibility(View.GONE);
+                try{
+                img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+            }
 
 
-
-
-            mPager1=(ViewPager)view.findViewById(R.id.pager1);
-
-            mPager1.setAdapter(new JournalPagerAdapter(date_lst));
-
+            fillTrackingDetails();
+            task1=null;
+            task1= new CallExerciseListTask();
 
         }
         @Override
@@ -763,14 +1017,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             User user = getArguments().getParcelable("user");
-            int i=0;
-            for (i=0;i<5;i++)
-            {
-                //arr1=obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
-                lstResultExercise.add(obj.getExercise(user.getId().toString(),date_lst.get(i)));
-            }
-
-            //lstResultExercise = obj.getExercise(user.getId().toString());
+            lstResultExercise = obj.getExercise(user.getId().toString(),ga.selected_date);
             return null;
         }
 
@@ -780,6 +1027,34 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     {
         Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
         double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
+
+
+        Prog=(ProgressBar)view.findViewById(R.id.calorie_bar);
+
+        Prog.setProgress((int)Global_Application.total_ideal_calories);
+        if(appPrefs.getTargetCaloriesPerDay()>0)
+        {
+            lbltotcal.setText(String.valueOf(appPrefs.getTargetCaloriesPerDay())+"(Daily Limit)");
+            Prog.setMax(2*appPrefs.getTargetCaloriesPerDay());
+        }
+        else
+        {
+            lbltotcal.setText(String.valueOf(appPrefs.getTargetCaloriesPerDay())+"(Daily Limit)");
+            Prog.setMax(100);
+        }
+
+        if((int)Global_Application.total_ideal_calories <= appPrefs.getTargetCaloriesPerDay())
+        {
+            lblmessage.setText("You are below the daily margin by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories));
+            lblmessage.setTextColor(Color.GREEN);
+        }
+        else
+        {
+
+            lblmessage.setText("You have exceeded daily calorie limit by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories)*(-1) );
+            lblmessage.setTextColor(Color.RED);
+        }
+/*
         lbltotcal.setText("Total Calories Consumed"+" "+Global_Application.total_ideal_calories+" Calories");
         lblidealcal.setText("Total Target Calories"+" "+target_ideal_calories+" Calories");
 
@@ -797,7 +1072,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             lblcalmsg.setText("Good Job! You are On track :)");
             lblcalmsg.setTextColor(0xFF37AA4F);
         }
-
+*/
         Global_Application.total_ideal_calories=0;
     }
 
@@ -829,15 +1104,104 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         protected void onPostExecute(String result)
         {
-            //fillBreakfastDetails();
-            if(isInternetOn()){
-                if(getSherlockActivity()!=null)
-                {
+
+            Log.i("onPostExecute", "onPostExecute");
+            //dialog1.dismiss();
+            Log.e("TAG","lst size : " + lstResultBreakfast.size());
+
+            Double total_calories=0.0;
+            breakfast_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+
+            for(int i=0;i<lstResultBreakfast.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultBreakfast.get(i).getCalories())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultBreakfast.get(i).getSugar())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultBreakfast.get(i).getCholesterol())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultBreakfast.get(i).getFat())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+            }
+
+            if(lstResultBreakfast.size()>0){
+                lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
+                lbltotalbrkcal.setText(total_calories+"");
+                lbltotalbrksu.setText(sugar+"");
+                lbltotalbrkch.setText(cholesterol+"");
+                lbltotalbrkfat.setText(fat+"");
+
+                breakfast_cal=total_calories;
+
+                ga.lstResultBreakfast=lstResultBreakfast;
+                try{
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+                FragmentTransaction fm = man1.beginTransaction();
+                BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewBreakfast, fragment, "Breakfast");
+                fm.commit();
+                man1.executePendingTransactions();
+
+
+
+                setHasOptionsMenu(true);
+                    }
+            }
+            catch(Exception e)
+            {
+
+            }
+
+                if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
                     CallLunchListTask task = new CallLunchListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
+                }else{
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
+            }else{
+
+                lblbrk.setText("Breakfast (0)");
+                lbltotalbrkcal.setText(Global_Application.totalcal+"");
+                lstViewBreakfast.setVisibility(View.GONE);
+                try{
+                    img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
+                //BreakfastAdapter adapter = new BreakfastAdapter(getSherlockActivity(),R.layout.breakfast_food_list, lstResultBreakfast);
+                //JournalFoodAdapter adapter=
+                //lstViewBreakfast.setAdapter(adapter);
+                //adapter.notifyDataSetChanged();
+                //lstViewBreakfast.onRefreshComplete();
+                //Toast.makeText(getSherlockActivity(),"Selected Date="+ga.selected_date,Toast.LENGTH_SHORT).show();
             }
+                if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
+                    CallLunchListTask task = new CallLunchListTask();
+                    task.activity =getSherlockActivity();
+                    task.execute();
+                    }
+                }else{
+                    Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            if(getSherlockActivity()!=null)
+            {
+            taskBreakfast=null;
+            taskBreakfast=new CallListTask();
+            taskBreakfast.activity=getSherlockActivity();
+            }
+
         }
 
         @Override
@@ -846,317 +1210,13 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
-            int i=0;
+
             User user = getArguments().getParcelable("user");
-            for (i=0;i<5;i++)
-            {
-                //arr1=obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
-                lstResultBreakfast.add(obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",date_lst.get(i),user.getId().toString()));
-            }
+            lstResultBreakfast = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
             return null;
         }
 
     }
-
-
-/*
-    public void fillLunchDetails()
-    {
-        Double total_calories=0.0;
-        int i=0;
-        lunch_cal=0.0;
-        for(i=0;i<lstResultLunch.size();i++)
-        {
-            total_calories+=Double.parseDouble(lstResultLunch.get(i).getCalories())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
-        }
-
-        if(lstResultLunch.size()>0){
-            lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
-            lbllunchcal.setText(total_calories+"");
-            lunch_cal=total_calories;
-            ga.lstResultLunch=lstResultLunch;
-            try{
-                SherlockFragmentActivity f1=getSherlockActivity();
-                if(f1!=null)
-                {
-                    android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                    FragmentTransaction fm = man1.beginTransaction();
-                    LunchListFragment fragment = (LunchListFragment)SherlockFragment.instantiate(getSherlockActivity(), LunchListFragment.class.getName(), args);
-                    fm.replace(R.id.lstViewLunch, fragment, "Lunch");
-                    fm.commit();
-                    man1.executePendingTransactions();
-                    setHasOptionsMenu(true);
-                }
-            }
-            catch(Exception e)
-            {
-
-            }
-
-            if(isInternetOn()){
-                if(getSherlockActivity()!=null)
-                {
-                    CallSnaksListTask task = new CallSnaksListTask();
-                    task.activity =getSherlockActivity();
-                    task.execute();
-                }
-            }else{
-                //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            lbllunch.setText("Lunch (0)");
-            lbllunchcal.setText(Global_Application.totalcal+"");
-            lstViewLunch.setVisibility(View.GONE);
-            try{
-                img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-            }
-            catch(Exception e)
-            {
-
-            }
-
-        }
-    }
-
-
-
-
-    public void fillSnacksDetails()
-    {
-        Double total_calories=0.0;
-        int i=0;
-        snacks_cal=0.0;
-        for(i=0;i<lstResultSnacks.size();i++)
-        {
-            total_calories+=Double.parseDouble(lstResultSnacks.get(i).getCalories())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
-        }
-
-        if(lstResultSnacks.size()>0){
-            lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
-            lblsnakcal.setText(total_calories+"");
-            snacks_cal=total_calories;
-            ga.lstResultSnacks=lstResultSnacks;
-            try{
-                SherlockFragmentActivity f1=getSherlockActivity();
-                if(f1!=null)
-                {
-                    android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                    FragmentTransaction fm = man1.beginTransaction();
-                    SnacksListFragment fragment = (SnacksListFragment)SherlockFragment.instantiate(getSherlockActivity(), SnacksListFragment.class.getName(), args);
-                    fm.replace(R.id.lstViewSnakes, fragment, "Lunch");
-                    fm.commit();
-                    man1.executePendingTransactions();
-                }
-
-
-                setHasOptionsMenu(true);
-            }
-            catch(Exception e)
-            {
-
-            }
-
-
-        }else{
-            lblsnack.setText("Snacks (0)");
-            lblsnakcal.setText(Global_Application.totalcal+"");
-            lstViewSnacks.setVisibility(View.GONE);
-
-            try{
-                img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-            }
-            catch(Exception e)
-            {
-
-            }
-
-        }
-
-    }
-
-    public void fillDinnerDetails()
-    {
-        Double total_calories=0.0;
-        int i=0;
-        dinner_cal=0.0;
-        for(i=0;i<lstResultDinner.size();i++)
-        {
-            total_calories+=Double.parseDouble(lstResultDinner.get(i).getCalories())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
-        }
-
-
-        if(lstResultDinner.size()>0){
-            lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
-            lbldinnercal.setText(total_calories+"");
-            dinner_cal=total_calories;
-
-            ga.lstResultDinner=lstResultDinner;
-            try{
-                SherlockFragmentActivity f1=getSherlockActivity();
-                if(f1!=null)
-                {
-                    android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-
-                    FragmentTransaction fm = man1.beginTransaction();
-                    DinnerListFragment fragment = (DinnerListFragment)SherlockFragment.instantiate(getSherlockActivity(), DinnerListFragment.class.getName(), args);
-                    fm.replace(R.id.lstViewDinner, fragment, "Lunch");
-                    fm.commit();
-                    man1.executePendingTransactions();
-
-                    setHasOptionsMenu(true);
-                }
-            }
-            catch(Exception e)
-            {
-
-            }
-
-
-        }else{
-            lbldinner.setText("Dinner (0)");
-            lbldinnercal.setText(Global_Application.totalcal+"");
-            lstViewDinner.setVisibility(View.GONE);
-
-            try{
-                img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-            }
-            catch(Exception e)
-            {
-
-            }
-
-
-            dialog1.dismiss();
-        }
-
-
-    }
-
-    public void fillExerciseDetails()
-    {
-        if(dialog1!=null)
-        {
-            dialog1.dismiss();
-        }
-
-        Log.e("TAG", "lst size : " + lstResultExercise.size());
-        double total_calories=0.0;
-        int i=0;
-
-        for(i=0;i<lstResultExercise.size();i++)
-        {
-            total_calories+=Double.parseDouble(lstResultExercise.get(i).getCalories());
-        }
-
-        if(lstResultExercise.size()>0){
-            lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
-            lblexercisecal.setText(String.valueOf(total_calories));
-            exercise_cal=total_calories;
-            //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
-            try{
-                ga.lstResultExercise=lstResultExercise;
-                SherlockFragmentActivity f1=getSherlockActivity();
-                if(f1!=null)
-                {
-                    android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                    FragmentTransaction fm = man1.beginTransaction();
-                    //args.putString();
-                    ExerciseListFragment fragment = (ExerciseListFragment)SherlockFragment.instantiate(getSherlockActivity(), ExerciseListFragment.class.getName(), args);
-                    fm.replace(R.id.lstViewExercise, fragment, "Lunch");
-                    fm.commit();
-                    man1.executePendingTransactions();
-                    setHasOptionsMenu(true);
-                }
-            }
-            catch(Exception e)
-            {
-
-            }
-        }
-        else
-        {
-            lblExercise.setText("Exercise (0)");
-            lblexercisecal.setText("0");
-            lstViewExercise.setVisibility(View.GONE);
-            try{
-                img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-            }
-            catch(Exception e)
-            {
-
-            }
-        }
-
-
-
-
-        //fillTrackingDetails();
-        task1=null;
-        task1= new CallExerciseListTask();
-    }
-
-
-    public void fillBreakfastDetails()
-    {
-        Double total_calories=0.0,fat=0.0,cholesterol=0.0,sugar=0.0;
-        breakfast_cal=0.0;
-
-        for(int i=0;i<lstResultBreakfast.size();i++)
-        {
-            total_calories+=Double.parseDouble(lstResultBreakfast.get(i).getCalories())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
-        }
-
-
-
-
-
-        Toast.makeText(getSherlockActivity(),"Call List entered",Toast.LENGTH_SHORT).show();
-
-        if(lstResultBreakfast.size()>0){
-            lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
-            lbltotalbrkcal.setText(total_calories+"");
-            breakfast_cal=total_calories;
-
-            ga.lstResultBreakfast=lstResultBreakfast;
-            try{
-                SherlockFragmentActivity f1=getSherlockActivity();
-                if(f1!=null)
-                {
-                    android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                    FragmentTransaction fm = man1.beginTransaction();
-                    BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
-                    fm.replace(R.id.lstViewBreakfast, fragment, "Breakfast");
-                    fm.commit();
-                    man1.executePendingTransactions();
-
-
-
-                    setHasOptionsMenu(true);
-                }
-            }
-            catch(Exception e)
-            {
-
-            }
-
-
-        }else{
-
-            lblbrk.setText("Breakfast (0)");
-            lbltotalbrkcal.setText(Global_Application.totalcal+"");
-            lstViewBreakfast.setVisibility(View.GONE);
-            try{
-                img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-            }
-            catch(Exception e)
-            {
-
-            }
-
-        }
-
-    }
-    */
     // async class for calling webservice and get responce message
     public class CallLunchListTask extends AsyncTask <String, Void,String>
     {
@@ -1180,15 +1240,87 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultLunch.size());
-            if(isInternetOn()){
-                if(getSherlockActivity()!=null)
-                {
+            Double total_calories=0.0;
+            int i=0;
+            lunch_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+            for(i=0;i<lstResultLunch.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultLunch.get(i).getCalories())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultLunch.get(i).getSugar())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultLunch.get(i).getCholesterol())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultLunch.get(i).getFat())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+            }
+
+            if(lstResultLunch.size()>0){
+                lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
+                lbllunchcal.setText(total_calories+"");
+                lbllunchsu.setText(sugar+"");
+                lbllunchch.setText(cholesterol+"");
+                lbllunchfat.setText(fat+"");
+
+                lunch_cal=total_calories;
+                ga.lstResultLunch=lstResultLunch;
+                try{
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+                FragmentTransaction fm = man1.beginTransaction();
+                LunchListFragment fragment = (LunchListFragment)SherlockFragment.instantiate(getSherlockActivity(), LunchListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewLunch, fragment, "Lunch");
+                fm.commit();
+                man1.executePendingTransactions();
+                setHasOptionsMenu(true);
+                    }
+            }
+            catch(Exception e)
+            {
+
+            }
+
+                if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
                     CallSnaksListTask task = new CallSnaksListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
+                }else{
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
-            }
+            }else{
+                lbllunch.setText("Lunch (0)");
+                lbllunchcal.setText(Global_Application.totalcal+"");
+                lstViewLunch.setVisibility(View.GONE);
+                try{
+                    img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
 
+                }
+
+            }
+                if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
+                    CallSnaksListTask task = new CallSnaksListTask();
+                    task.activity =getSherlockActivity();
+                    task.execute();
+                    }
+                }else{
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            if(getSherlockActivity()!=null)
+            {
+            taskLunch=null;
+            taskLunch=new CallLunchListTask();
+            taskLunch.activity=getSherlockActivity();
+            }
         }
 
         @Override
@@ -1198,13 +1330,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
             User user = getArguments().getParcelable("user");
-            int i=0;
-            for (i=0;i<5;i++)
-            {
-                //arr1=obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
-                lstResultLunch.add(obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH",date_lst.get(i),user.getId().toString()));
-            }
-            //lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH",ga.selected_date,user.getId().toString());
+            lstResultLunch = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=LUNCH",ga.selected_date,user.getId().toString());
             return null;
         }
 
@@ -1218,6 +1344,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         protected void onPreExecute()
         {
 
+            //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
+							/*	dialog1 = new ProgressDialog(getParent());
+								dialog1.setMessage("Please Wait....");
+								dialog1.show();*/
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -1228,16 +1358,94 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultSnacks.size());
-            if(isInternetOn()){
-                if(getSherlockActivity()!=null)
+
+            Double total_calories=0.0;
+            int i=0;
+            snacks_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+            for(i=0;i<lstResultSnacks.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultSnacks.get(i).getCalories())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultSnacks.get(i).getSugar())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultSnacks.get(i).getCholesterol())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultSnacks.get(i).getFat())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+            }
+
+            if(lstResultSnacks.size()>0){
+                lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
+                lblsnakcal.setText(total_calories+"");
+                lblsnacksu.setText(sugar+"");
+                lblsnackch.setText(cholesterol+"");
+                lblsnackfat.setText(fat+"");
+
+                snacks_cal=total_calories;
+                ga.lstResultSnacks=lstResultSnacks;
+                try{
+                SherlockFragmentActivity f1=getSherlockActivity();
+                if(f1!=null)
                 {
+                android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+                FragmentTransaction fm = man1.beginTransaction();
+                SnacksListFragment fragment = (SnacksListFragment)SherlockFragment.instantiate(getSherlockActivity(), SnacksListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewSnakes, fragment, "Lunch");
+                fm.commit();
+                man1.executePendingTransactions();
+                }
+
+
+                setHasOptionsMenu(true);
+            }
+            catch(Exception e)
+            {
+
+            }
+
+                if(isInternetOn()){
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+
                     CallDinnerListTask task = new CallDinnerListTask();
                     task.activity =getSherlockActivity();
                     task.execute();
+                    }
+                }else{
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                 }
+            }else{
+                lblsnack.setText("Snacks (0)");
+                lblsnakcal.setText(Global_Application.totalcal+"");
+                lstViewSnacks.setVisibility(View.GONE);
+
+                try{
+                    img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
             }
+                if(isInternetOn()){
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
 
-
+                    CallDinnerListTask task = new CallDinnerListTask();
+                    task.activity =getSherlockActivity();
+                    task.execute();
+                    }
+                }else{
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            if(getSherlockActivity()!=null)
+            {
+                taskSnacks=null;
+                taskSnacks=new CallSnaksListTask();
+            taskSnacks.activity=getSherlockActivity();}
 
         }
 
@@ -1248,13 +1456,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
             User user = getArguments().getParcelable("user");
-            int i=0;
-            for (i=0;i<5;i++)
-            {
-                //arr1=obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
-                lstResultSnacks.add(obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",date_lst.get(i),user.getId().toString()));
-            }
-            //lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",ga.selected_date,user.getId().toString());
+            lstResultSnacks = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=SNACKS",ga.selected_date,user.getId().toString());
             return null;
         }
 
@@ -1283,15 +1485,89 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultDinner.size());
+
+            Double total_calories=0.0;
+            int i=0;
+            dinner_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+
+            for(i=0;i<lstResultDinner.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultDinner.get(i).getCalories())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultDinner.get(i).getSugar())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultDinner.get(i).getCholesterol())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultDinner.get(i).getFat())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+            }
+
+
+            if(lstResultDinner.size()>0){
+                lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
+                lbldinnercal.setText(total_calories+"");
+                lbldinnersu.setText(sugar+"");
+                lbldinnerch.setText(cholesterol+"");
+                lbldinnerfat.setText(fat+"");
+
+
+                dinner_cal=total_calories;
+
+                ga.lstResultDinner=lstResultDinner;
+                try{
+                SherlockFragmentActivity f1=getSherlockActivity();
+                if(f1!=null)
+                {
+                   android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+
+                FragmentTransaction fm = man1.beginTransaction();
+                DinnerListFragment fragment = (DinnerListFragment)SherlockFragment.instantiate(getSherlockActivity(), DinnerListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewDinner, fragment, "Lunch");
+                fm.commit();
+                man1.executePendingTransactions();
+
+                setHasOptionsMenu(true);
+                    }
+            }
+            catch(Exception e)
+            {
+
+            }
+
+
+            }else{
+                lbldinner.setText("Dinner (0)");
+                lbldinnercal.setText(Global_Application.totalcal+"");
+                lstViewDinner.setVisibility(View.GONE);
+
+                try{
+                    img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+                {
+
+                }
+
+
+                dialog1.dismiss();
+            }
+
             if(isInternetOn()){
                 if(getSherlockActivity()!=null)
                 {
-                    CallExerciseListTask task = new CallExerciseListTask();
-                    task.activity =getSherlockActivity();
-                    task.execute();
+                CallExerciseListTask task = new CallExerciseListTask();
+                task.activity =getSherlockActivity();
+                task.execute();
                 }
+            }else{
+                //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
-
+            if(getSherlockActivity()!=null)
+            {
+            taskDinner=null;
+            taskDinner=new CallDinnerListTask();
+            taskDinner.activity=getSherlockActivity();
+            }
 
         }
 
@@ -1302,14 +1578,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             Global_Application.totalcal=0;
             User user = getArguments().getParcelable("user");
-            int i=0;
-            for (i=0;i<5;i++)
-            {
-                //arr1=obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=BREAKFAST",ga.selected_date,user.getId().toString());
-                lstResultDinner.add(obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER",date_lst.get(i),user.getId().toString()));
-            }
-
-            //lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER",ga.selected_date,user.getId().toString());
+            lstResultDinner = obj.FoodListing(Global_Application.url+"diet-tracker/?meal_type=DINNER",ga.selected_date,user.getId().toString());
             return null;
         }
 
@@ -1375,77 +1644,27 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
-
-        Date now = new Date();
-
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(now);
-        cal.add(Calendar.DAY_OF_YEAR,1);
-        SimpleDateFormat fmt= new SimpleDateFormat("yyyy-MM-dd");
-        date_lst.add(fmt.format(cal.getTime()));
-        cal.add(Calendar.DAY_OF_YEAR,1);
-        date_lst.add(fmt.format(cal.getTime()));
-        cal.add(Calendar.DAY_OF_YEAR,1);
-        date_lst.add(fmt.format(cal.getTime()));
-        cal.add(Calendar.DAY_OF_YEAR,1);
-        date_lst.add(fmt.format(cal.getTime()));
-        cal.add(Calendar.DAY_OF_YEAR,1);
-        date_lst.add(fmt.format(cal.getTime()));
-
-
-
-
-
-        pYear = dateAndTime.get(Calendar.YEAR);
-        pMonth = dateAndTime.get(Calendar.MONTH);
-        pDay = dateAndTime.get(Calendar.DAY_OF_MONTH);
-        monthval=pMonth+1;
-        //updateDisplay();
-        ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
+        Global_Application.total_ideal_calories=0;
         if(isInternetOn()){
-            CallListTask task = new CallListTask();
+           CallListTask task = new CallListTask();
             task.activity = getSherlockActivity();
             task.execute();
         }else{
             Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
         }
 
-        /*
+        bolbrk=false;
+        bollunch=false;
+        boldiner=false;
+        bolsnaks=false;
+        bolexercise=false;
         lstViewBreakfast.setVisibility(View.GONE);
         lstViewLunch.setVisibility(View.GONE);
         lstViewSnacks.setVisibility(View.GONE);
         lstViewDinner.setVisibility(View.GONE);
         lstViewExercise.setVisibility(View.GONE);
-*/
 
     }
-
-
-    public void startAddFoodActivity(String addFood,String date)
-    {
-        ga.setFoodType(addFood);
-        Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
-        User user = getArguments().getParcelable("user");
-        addfood.putExtra("user", user);
-        addfood.putExtra("diet_date",date);
-        startActivity(addfood);
-
-
-    }
-
-    public void startAddExerciseActivity(String date)
-    {
-        ga.setFoodType("Exercise");
-        Intent addExercise = new Intent(getSherlockActivity(),AddExercise.class);
-        User user = getArguments().getParcelable("user");
-        addExercise.putExtra("user", user);
-        addExercise.putExtra("activity_date",date);
-        startActivity(addExercise);
-
-
-    }
-
 
     // async class for calling webservice and get responce message
 
@@ -1550,799 +1769,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
 
 
-    private class JournalPagerAdapter extends PagerAdapter implements View.OnClickListener {
-        private LayoutInflater inflater;
-        private SherlockFragmentActivity sherlockact;
-        ArrayList<String> date_lst = new ArrayList<String>();
-
-        private
-        JournalPagerAdapter(ArrayList<String> date_list) {
-            //serlockact=sherlock;
-            date_lst=date_list;
-            inflater = getLayoutInflater(savedInstanceState);
-        }
-
-
-
-        @Override
-        public void destroyItem(View container, int position, Object object)
-        {
-            //	Toast.makeText(ImagePagerActivity.this,"hello" +position+"", Toast.LENGTH_LONG).show();
-            ((ViewPager) container).removeView((View) object);
-
-        }
-
-        @Override
-        public void finishUpdate(View container) {
-        }
-
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
-
-        @Override
-        synchronized public Object instantiateItem(final View localView, final int position)
-        {
-            View view = inflater.inflate(R.layout.tab_fragment_journal, null);
-            //TextView todayDate=(TextView)imageLayout.findViewById(R.id.todayDate);
-            ViewPager v1=(ViewPager)localView;
-            ((ViewPager) localView).setOffscreenPageLimit(5);
-            v1.setPageMargin(15);
-            ((ViewPager) localView).addView(view, 0);
-
-
-            layout1 = (LinearLayout)view.findViewById(R.id.layout1);
-            layout1.setPadding(0, 0, 0, h10);
-
-            layout2 = (LinearLayout)view.findViewById(R.id.layout2);
-            layout2.setPadding(0, 0, 0, h10);
-
-            layout3 = (LinearLayout)view.findViewById(R.id.layout3);
-            layout3.setPadding(0, 0, 0, h10);
-
-            layout4 = (LinearLayout)view.findViewById(R.id.layout4);
-            layout4.setPadding(0, 0, 0, h10);
-
-            lblitem1 = (TextView)view.findViewById(R.id.lblitem1);
-            lblitem1.getLayoutParams().width = w110;
-
-            lblitem2 = (TextView)view.findViewById(R.id.lblitem2);
-            lblitem2.getLayoutParams().width = w110;
-
-            lblitem3 = (TextView)view.findViewById(R.id.lblitem3);
-            lblitem3.getLayoutParams().width = w110;
-
-            lblitem4 = (TextView)view.findViewById(R.id.lblitem4);
-            lblitem4.getLayoutParams().width=w110;
-
-            lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
-            lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
-            lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
-            lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
-
-            breakfast = (LinearLayout)view.findViewById(R.id.breakfast);
-            breakfast.setOnClickListener(JournalFragment.this);
-
-            lunch = (LinearLayout)view.findViewById(R.id.lunch);
-            lunch.setOnClickListener(JournalFragment.this);
-
-            snacks = (LinearLayout)view.findViewById(R.id.snacks);
-            snacks.setOnClickListener(JournalFragment.this);
-
-            dinner = (LinearLayout)view.findViewById(R.id.dinner);
-            dinner.setOnClickListener(JournalFragment.this);
-
-            exercise = (LinearLayout)view.findViewById(R.id.exercise);
-            exercise.setOnClickListener(JournalFragment.this);
-
-            img_breakfast=(ImageView)view.findViewById(R.id.img_breakfast);
-            img_lunch=(ImageView)view.findViewById(R.id.img_lunch);
-            img_snacks=(ImageView)view.findViewById(R.id.img_snacks);
-            img_dinner=(ImageView)view.findViewById(R.id.img_dinner);
-            img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
-
-            lstViewBreakfast = (FrameLayout)view.findViewById(R.id.lstViewBreakfast);
-            lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-            lstViewBreakfast.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // TODO Auto-generated method stub
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Disallow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            // Allow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-
-                    // Handle ListView touch events.
-                    v.onTouchEvent(event);
-                    return true;
-                }
-            });
-
-            lstViewLunch = (FrameLayout)view.findViewById(R.id.lstViewLunch);
-            //lstViewLunch.getLayoutParams().height = h200;
-            lstViewLunch.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-            lstViewLunch.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // TODO Auto-generated method stub
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Disallow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            // Allow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-
-                    // Handle ListView touch events.
-                    v.onTouchEvent(event);
-                    return true;
-                }
-            });
-
-            lstViewSnacks = (FrameLayout)view.findViewById(R.id.lstViewSnakes);
-            //lstViewSnacks.getLayoutParams().height = h200;
-            lstViewSnacks.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-            lstViewSnacks.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // TODO Auto-generated method stub
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Disallow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            // Allow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-
-                    // Handle ListView touch events.
-                    v.onTouchEvent(event);
-                    return true;
-                }
-            });
-
-            lstViewDinner = (FrameLayout)view.findViewById(R.id.lstViewDinner);
-            //lstViewDinner.getLayoutParams().height = h200;
-            lstViewDinner.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-            lstViewDinner.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // TODO Auto-generated method stub
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Disallow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            // Allow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-
-                    // Handle ListView touch events.
-                    v.onTouchEvent(event);
-                    return true;
-                }
-            });
-
-            lstViewExercise = (FrameLayout)view.findViewById(R.id.lstViewExercise);
-            //lstViewExercise.getLayoutParams().height = h200;
-            lstViewExercise.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
-            lstViewExercise.setOnTouchListener(new View.OnTouchListener() {
-
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // TODO Auto-generated method stub
-                    int action = event.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            // Disallow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-
-                        case MotionEvent.ACTION_UP:
-                            // Allow ScrollView to intercept touch events.
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                    }
-
-                    // Handle ListView touch events.
-                    v.onTouchEvent(event);
-                    return true;
-                }
-            });
-
-
-
-            lblbrk = (TextView)view.findViewById(R.id.lblbrk);
-            lbltotalbrkcal = (TextView)view.findViewById(R.id.lbltotalbrkcal);
-            lbllunch = (TextView)view.findViewById(R.id.lbllunch);
-            lbllunchcal = (TextView)view.findViewById(R.id.lbllunchcal);
-            lblsnack = (TextView)view.findViewById(R.id.lblsnack);
-            lblsnakcal = (TextView)view.findViewById(R.id.lblsnakcal);
-            lbldinner = (TextView)view.findViewById(R.id.lbldinner);
-            lbldinnercal = (TextView)view.findViewById(R.id.lbldinnercal);
-
-            lblExercise = (TextView)view.findViewById(R.id.lblexercise);
-            lblexercisecal=(TextView)view.findViewById(R.id.lblexercisecal);
-
-            addBreakfast = (ImageView)view.findViewById(R.id.addBreakfast);
-            //addBreakfast.setOnClickListener(JournalPagerAdapter.this);
-
-            addBreakfast.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                    startAddFoodActivity("Breakfast",date_lst.get(position));
-                }
-            });
-
-
-            addLunch = (ImageView)view.findViewById(R.id.addLunch);
-            addLunch.setOnClickListener(JournalPagerAdapter.this);
-
-            addLunch.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                    startAddFoodActivity("Lunch",date_lst.get(position));
-                }
-            });
-
-
-            addSnacks = (ImageView)view.findViewById(R.id.addSnacks);
-            addSnacks.setOnClickListener(JournalPagerAdapter.this);
-
-            addSnacks.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                    startAddFoodActivity("Snacks",date_lst.get(position));
-                }
-            });
-
-            addDinner = (ImageView)view.findViewById(R.id.addDinner);
-            addDinner.setOnClickListener(JournalPagerAdapter.this);
-
-            addDinner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                    startAddFoodActivity("Dinner",date_lst.get(position));
-                }
-            });
-
-            addExercise = (ImageView)view.findViewById(R.id.addExercise);
-            addExercise.setOnClickListener(JournalPagerAdapter.this);
-
-            addExercise.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Intent int1=new Intent(getParentFragment().getActivity(),AddBreakfast.class);
-                    startAddExerciseActivity(date_lst.get(position));
-                }
-            });
-
-
-
-
-            food_main_layout = (LinearLayout)view.findViewById(R.id.food_main_layout);
-            food_main_layout.setPadding(w10, h10, w10, h10);
-
-           /*
-            btn_food_time_picker = (LinearLayout)view.findViewById(R.id.btn_food_time_picker);
-            btn_food_time_picker.setOnClickListener(JournalFragment.this);
-
-
-            img_time = (ImageView)view.findViewById(R.id.img_time);
-            img_time.setPadding(w5, 0, w5, 0);
-
-            btn_food_date_picker = (LinearLayout)view.findViewById(R.id.btn_food_date_picker);
-            btn_food_date_picker.setOnClickListener(JournalFragment.this);
-
-            img_date = (ImageView)view.findViewById(R.id.img_date);
-            img_date.setPadding(w5, 0, w5, 0);
-            lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
-            lbl_food_time.setTypeface(tf);
-                        food_header=(LinearLayout)view.findViewById(R.id.food_header);
-            food_header.setPadding(0, 0, 0, h10);
-*/
-            lbl_food_date = (TextView)view.findViewById(R.id.lbl_food_date);
-            lbl_food_date.setPadding(w5, 0, 0, 0);
-            lbl_food_date.setTypeface(tf);
-
-
-
-
-
-            //food_icon = (ImageView)view.findViewById(R.id.food_icon);
-            //	food_icon.setPadding(w5, h5, w5, h5);
-
-
-
-            lbl_food_date.setText(date_lst.get(position));
-
-            Global_Application.total_ideal_calories=0;
-
-
-            // lblbrk.setText("Breakfast (2)" );
-
-            bolbrk=false;
-            bollunch=false;
-            boldiner=false;
-            bolsnaks=false;
-            bolexercise=false;
-
-
-
-            //fillBreakfastDetails();
-
-            Double total_calories=0.0,fat=0.0,cholesterol=0.0,sugar=0.0;
-            breakfast_cal=0.0;
-
-            for(int i=0;i<lstResultBreakfast.get(position).size();i++)
-            {
-                total_calories+=Double.parseDouble(lstResultBreakfast.get(position).get(i).getCalories())*Double.parseDouble(lstResultBreakfast.get(position).get(i).getMultiplier());
-            }
-
-
-
-
-
-            Toast.makeText(getSherlockActivity(),"Call List entered",Toast.LENGTH_SHORT).show();
-
-            if(lstResultBreakfast.get(position).size()>0){
-                lblbrk.setText("Breakfast ("+lstResultBreakfast.get(position).get(0).getCount()+")" );
-                lbltotalbrkcal.setText(total_calories+"");
-                breakfast_cal=total_calories;
-
-                ga.lstResultBreakfast=lstResultBreakfast.get(position);
-                try{
-                    SherlockFragmentActivity f1=getSherlockActivity();
-                    if(f1!=null)
-                    {
-                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                        FragmentTransaction fm = man1.beginTransaction();
-                        BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
-                        fm.replace(R.id.lstViewBreakfast, fragment, "Breakfast");
-                        fm.commit();
-                        man1.executePendingTransactions();
-
-
-
-                        setHasOptionsMenu(true);
-                    }
-                }
-                catch(Exception e)
-                {
-
-                }
-
-
-            }else{
-
-                lblbrk.setText("Breakfast (0)");
-                lbltotalbrkcal.setText(Global_Application.totalcal+"");
-                lstViewBreakfast.setVisibility(View.GONE);
-                try{
-                    img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }
-                catch(Exception e)
-                {
-
-                }
-
-            }
-
-
-
-            lunch_cal=0.0;
-
-            for(int i=0;i<lstResultLunch.get(position).size();i++)
-            {
-                total_calories+=Double.parseDouble(lstResultLunch.get(position).get(i).getCalories())*Double.parseDouble(lstResultLunch.get(position).get(i).getMultiplier());
-            }
-
-
-
-
-
-            Toast.makeText(getSherlockActivity(),"Call List entered",Toast.LENGTH_SHORT).show();
-
-            if(lstResultLunch.get(position).size()>0){
-                lbllunch.setText("Lunch ("+lstResultLunch.get(position).get(0).getCount()+")" );
-                lbllunchcal.setText(total_calories+"");
-                lunch_cal=total_calories;
-
-                ga.lstResultLunch=lstResultLunch.get(position);
-                try{
-                    SherlockFragmentActivity f1=getSherlockActivity();
-                    if(f1!=null)
-                    {
-                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                        FragmentTransaction fm = man1.beginTransaction();
-                        LunchListFragment fragment = (LunchListFragment)SherlockFragment.instantiate(getSherlockActivity(), LunchListFragment.class.getName(), args);
-                        fm.replace(R.id.lstViewLunch, fragment, "Lunch");
-                        fm.commit();
-                        man1.executePendingTransactions();
-
-
-
-                        setHasOptionsMenu(true);
-                    }
-                }
-                catch(Exception e)
-                {
-
-                }
-
-
-            }else{
-
-                lbllunch.setText("Lunch (0)");
-                lbllunchcal.setText(Global_Application.totalcal+"");
-                lstViewLunch.setVisibility(View.GONE);
-                try{
-                    img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }
-                catch(Exception e)
-                {
-
-                }
-
-            }
-
-
-
-
-
-            snacks_cal=0.0;
-
-            for(int i=0;i<lstResultSnacks.get(position).size();i++)
-            {
-                total_calories+=Double.parseDouble(lstResultSnacks.get(position).get(i).getCalories())*Double.parseDouble(lstResultSnacks.get(position).get(i).getMultiplier());
-            }
-
-
-
-
-
-            Toast.makeText(getSherlockActivity(),"Call List entered",Toast.LENGTH_SHORT).show();
-
-            if(lstResultSnacks.get(position).size()>0){
-                lblsnack.setText("Snacks ("+lstResultSnacks.get(position).get(0).getCount()+")" );
-                lblsnakcal.setText(total_calories+"");
-                snacks_cal=total_calories;
-
-                ga.lstResultSnacks=lstResultSnacks.get(position);
-                try{
-                    SherlockFragmentActivity f1=getSherlockActivity();
-                    if(f1!=null)
-                    {
-                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                        FragmentTransaction fm = man1.beginTransaction();
-                        SnacksListFragment fragment = (SnacksListFragment)SherlockFragment.instantiate(getSherlockActivity(), SnacksListFragment.class.getName(), args);
-                        fm.replace(R.id.lstViewSnakes, fragment, "Snacks");
-                        fm.commit();
-                        man1.executePendingTransactions();
-
-
-
-                        setHasOptionsMenu(true);
-                    }
-                }
-                catch(Exception e)
-                {
-
-                }
-
-
-            }else{
-
-                lblsnack.setText("Snacks (0)");
-                lblsnakcal.setText(Global_Application.totalcal+"");
-                lstViewSnacks.setVisibility(View.GONE);
-                try{
-                    img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }
-                catch(Exception e)
-                {
-
-                }
-
-            }
-
-
-
-            dinner_cal=0.0;
-
-            for(int i=0;i<lstResultDinner.get(position).size();i++)
-            {
-                total_calories+=Double.parseDouble(lstResultDinner.get(position).get(i).getCalories())*Double.parseDouble(lstResultDinner.get(position).get(i).getMultiplier());
-            }
-
-
-
-
-
-            Toast.makeText(getSherlockActivity(),"Call List entered",Toast.LENGTH_SHORT).show();
-
-            if(lstResultDinner.get(position).size()>0){
-                lblsnack.setText("Dinner ("+lstResultDinner.get(position).get(0).getCount()+")" );
-                lblsnakcal.setText(total_calories+"");
-                dinner_cal=total_calories;
-
-                ga.lstResultDinner=lstResultDinner.get(position);
-                try{
-                    SherlockFragmentActivity f1=getSherlockActivity();
-                    if(f1!=null)
-                    {
-                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
-                        FragmentTransaction fm = man1.beginTransaction();
-                        DinnerListFragment fragment = (DinnerListFragment)SherlockFragment.instantiate(getSherlockActivity(), DinnerListFragment.class.getName(), args);
-                        fm.replace(R.id.lstViewDinner, fragment, "Dinner");
-                        fm.commit();
-                        man1.executePendingTransactions();
-
-
-
-                        setHasOptionsMenu(true);
-                    }
-                }
-                catch(Exception e)
-                {
-
-                }
-
-
-            }else{
-
-                lblsnack.setText("Dinner (0)");
-                lblsnakcal.setText(Global_Application.totalcal+"");
-                lstViewDinner.setVisibility(View.GONE);
-                try{
-                    img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }
-                catch(Exception e)
-                {
-
-                }
-
-            }
-
-
-
-
-
-
-
-
-
-            //fillLunchDetails();
-            //fillSnacksDetails();
-            //fillDinnerDetails();
-            //fillExerciseDetails();
-
-            return view;
-        }
-
-
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view.equals(object);
-        }
-
-        @Override
-        public void restoreState(Parcelable state, ClassLoader loader) {
-        }
-
-        @Override
-        public Parcelable saveState() {
-            return null;
-        }
-
-        @Override
-        public void startUpdate(View container) {
-        }
-
-        public float getPageWidth(int position)
-        {
-            return 0.90f;
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            if(v==breakfast){
-                if(bolbrk){
-                    bolbrk=false;
-                    lstViewBreakfast.setVisibility(View.GONE);
-                    lstViewLunch.setVisibility(View.GONE);
-                    lstViewSnacks.setVisibility(View.GONE);
-                    lstViewDinner.setVisibility(View.GONE);
-                    lstViewExercise.setVisibility(View.GONE);
-                    img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }else{
-                    bolbrk=true;
-                    if(lstResultBreakfast.size()>0){
-                        lstViewBreakfast.setVisibility(View.VISIBLE);
-                        lstViewLunch.setVisibility(View.GONE);
-                        lstViewSnacks.setVisibility(View.GONE);
-                        lstViewDinner.setVisibility(View.GONE);
-                        lstViewExercise.setVisibility(View.GONE);
-                        img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
-                    }
-                }
-            }
-            if(v==lunch){
-                if(bollunch){
-                    bollunch=false;
-                    lstViewBreakfast.setVisibility(View.GONE);
-                    lstViewLunch.setVisibility(View.GONE);
-                    lstViewSnacks.setVisibility(View.GONE);
-                    lstViewDinner.setVisibility(View.GONE);
-                    lstViewExercise.setVisibility(View.GONE);
-                    img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }else{
-                    bollunch=true;
-                    if(lstResultLunch.size()>0){
-                        lstViewBreakfast.setVisibility(View.GONE);
-                        lstViewLunch.setVisibility(View.VISIBLE);
-                        lstViewSnacks.setVisibility(View.GONE);
-                        lstViewDinner.setVisibility(View.GONE);
-                        lstViewExercise.setVisibility(View.GONE);
-                        img_lunch.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
-                    }
-                }
-            }
-            if(v==snacks){
-                if(bolsnaks){
-                    bolsnaks=false;
-                    lstViewBreakfast.setVisibility(View.GONE);
-                    lstViewLunch.setVisibility(View.GONE);
-                    lstViewSnacks.setVisibility(View.GONE);
-                    lstViewDinner.setVisibility(View.GONE);
-                    lstViewExercise.setVisibility(View.GONE);
-                    img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }else{
-                    bolsnaks=true;
-                    if(lstResultSnacks.size()>0){
-                        lstViewBreakfast.setVisibility(View.GONE);
-                        lstViewLunch.setVisibility(View.GONE);
-                        lstViewSnacks.setVisibility(View.VISIBLE);
-                        lstViewDinner.setVisibility(View.GONE);
-                        lstViewExercise.setVisibility(View.GONE);
-                        img_snacks.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
-                    }
-                }
-            }
-            if(v==dinner){
-
-                if(boldiner){
-                    boldiner=false;
-                    lstViewBreakfast.setVisibility(View.GONE);
-                    lstViewLunch.setVisibility(View.GONE);
-                    lstViewSnacks.setVisibility(View.GONE);
-                    lstViewDinner.setVisibility(View.GONE);
-                    lstViewExercise.setVisibility(View.GONE);
-                    img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-                }else{
-                    boldiner=true;
-                    if(lstResultDinner.size()>0){
-                        lstViewBreakfast.setVisibility(View.GONE);
-                        lstViewLunch.setVisibility(View.GONE);
-                        lstViewSnacks.setVisibility(View.GONE);
-                        lstViewDinner.setVisibility(View.VISIBLE);
-                        lstViewExercise.setVisibility(View.GONE);
-                        img_dinner.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
-                    }
-                }
-            }
-
-            if(v==exercise){
-
-                if(bolexercise){
-                    bolexercise=false;
-                    lstViewBreakfast.setVisibility(View.GONE);
-                    lstViewLunch.setVisibility(View.GONE);
-                    lstViewSnacks.setVisibility(View.GONE);
-                    lstViewDinner.setVisibility(View.GONE);
-                    lstViewExercise.setVisibility(View.GONE);
-                    img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
-
-                }else{
-                    bolexercise=true;
-                    if(lstResultExercise.size()>0){
-                        lstViewBreakfast.setVisibility(View.GONE);
-                        lstViewLunch.setVisibility(View.GONE);
-                        lstViewSnacks.setVisibility(View.GONE);
-                        lstViewDinner.setVisibility(View.GONE);
-                        lstViewExercise.setVisibility(View.VISIBLE);
-                        img_exercise.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_2));
-                    }
-                }
-            }
-
-
-            if(v==back_food_layout){
-                getSherlockActivity().finish();
-            }
-            if(v==btn_food_date_picker){
-                new DatePickerDialog(getSherlockActivity(), d,pYear,
-                        pMonth,
-                        pDay).show();
-            }
-            if(v==btn_food_time_picker){
-                new TimePickerDialog(getSherlockActivity(), t,
-                        dateAndTime.get(Calendar.HOUR_OF_DAY),
-                        dateAndTime.get(Calendar.MINUTE),
-                        true).show();
-            }
-
-            if(v==addBreakfast){
-                ga.setFoodType("Breakfast");
-                Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
-                addfood.putExtra("user", selected_user);
-                startActivity(addfood);
-            }
-            if(v==addLunch){
-                ga.setFoodType("Lunch");
-                Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
-                addfood.putExtra("user", selected_user);
-                startActivity(addfood);
-            }
-            if(v==addSnacks){
-                ga.setFoodType("Snacks");
-                Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
-                addfood.putExtra("user", selected_user);
-                startActivity(addfood);
-            }
-            if(v==addDinner){
-                ga.setFoodType("Dinner");
-                Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
-                addfood.putExtra("user", selected_user);
-                startActivity(addfood);
-            }
-
-            if(v==addExercise){
-                ga.setFoodType("Exercise");
-                Intent addExercise = new Intent(getSherlockActivity(), AddExercise.class);
-                addExercise.putExtra("user", selected_user);
-                startActivity(addExercise);
-
-            }
-
-        }
-
-    }
-
 
     public class CallDeleteTask extends AsyncTask <String, Void,String>
     {
@@ -2364,7 +1790,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         protected void onPostExecute(String result)
         {
-            // dialog1.dismiss();
+           // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
             if(isInternetOn()){
                 CallListTask task = new CallListTask();

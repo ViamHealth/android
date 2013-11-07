@@ -35,9 +35,12 @@ import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.activities.AddBreakfast;
 import com.viamhealth.android.activities.AddMedication;
 import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Downlaod;
+import com.viamhealth.android.activities.FoodDetail;
+import com.viamhealth.android.activities.oldones.TabGroupActivity;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;
@@ -185,8 +188,8 @@ public class BreakfastListFragment extends SherlockListFragment
 
                     final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
                     final EditText input = new EditText(getSherlockActivity());
-                    input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    alert.setMessage("Enter Number of Servings");
+                    input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    alert.setMessage("Enter Number of "+ga.lstResultBreakfast.get(selected_position).getServingUnit());
                     alert.setView(input);
                     Global_Application.food_item=ga.lstResultBreakfast.get(selected_position).getFoodItem();
                     Global_Application.meal_type="BREAKFAST";
@@ -336,6 +339,7 @@ public class BreakfastListFragment extends SherlockListFragment
             dialog1.setCanceledOnTouchOutside(false);
             dialog1.setMessage("Please Wait....");
             dialog1.show();
+            Toast.makeText(getSherlockActivity(),"food quantity="+Global_Application.food_quantity,Toast.LENGTH_SHORT).show();
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -445,10 +449,26 @@ public class BreakfastListFragment extends SherlockListFragment
         total_height_medicine_tab=0;
 
 
+        this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(getSherlockActivity(),"onItemClick",Toast.LENGTH_SHORT).show();
+                Intent foodDetail = new Intent(getSherlockActivity(), FoodDetail.class);
+                foodDetail.putExtra("user", user);
+                getSherlockActivity().startActivity(foodDetail);
+
+            }
+        });
+
+
+
+
         this.list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+            public boolean onItemLongClick(AdapterView<?> arg0, View v, int arg2, long arg3)
             {
+
                 if (actionMode != null) {
                     // if already in action mode - do nothing
                     return false;

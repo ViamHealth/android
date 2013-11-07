@@ -100,7 +100,7 @@
                                     <ImageView android:layout_height="wrap_content"
                                         android:layout_width="wrap_content"
                                         android:padding="5dp"
-                                        android:id="@+id/img_breakfast"
+                                        android:id="@+id/img_1"
                                         android:visibility="invisible"
                                         android:src="@drawable/picker_bg_1"/>
                                     <TextView android:id="@+id/calories"
@@ -111,7 +111,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="CA:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/lbltotalbrkcal"
                                         android:layout_height="wrap_content"
@@ -121,39 +121,19 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein"
+                                    <TextView android:id="@+id/sugar"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="      PR:"
-                                        android:textSize="12sp"
+                                        android:text="      SU:"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein_value"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="25"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="      CB:"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates_value"
+                                    <TextView android:id="@+id/lbltotalbrksu"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -161,7 +141,27 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
+                                        />
+                                    <TextView android:id="@+id/cholesterol"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:padding="5dp"
+                                        android:textColor="#ffffff"
+                                        android:text="      CH:"
+                                        android:textSize="10sp"
+                                        />
+                                    <TextView android:id="@+id/lbltotalbrkch"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:padding="5dp"
+                                        android:textColor="#ffffff"
+                                        android:text="25"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
                                         android:layout_height="wrap_content"
@@ -171,9 +171,9 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="      F:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/fat_value"
+                                    <TextView android:id="@+id/lbltotalbrkfat"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -181,7 +181,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     </LinearLayout>
                             </LinearLayout>
@@ -222,7 +222,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
                                 android:orientation="vertical"
-                                android:visibility="gone">
+                                android:visibility="visible">
                             <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
@@ -257,7 +257,6 @@
                                     android:layout_width="fill_parent"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center"
-                                    android:layout_margin="20dp"
                                     android:background="#ffffff"
                                     android:id="@+id/lstViewBreakfast"/>
 
@@ -313,7 +312,7 @@
                                     <ImageView android:layout_height="wrap_content"
                                         android:layout_width="wrap_content"
                                         android:padding="5dp"
-                                        android:id="@+id/img_breakfast"
+                                        android:id="@+id/img_1"
                                         android:visibility="invisible"
                                         android:src="@drawable/picker_bg_1"/>
                                     <TextView android:id="@+id/calories"
@@ -324,7 +323,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="CA:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/lbllunchcal"
                                         android:layout_height="wrap_content"
@@ -334,7 +333,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/protein"
                                         android:layout_height="wrap_content"
@@ -343,10 +342,10 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="      PR:"
-                                        android:textSize="12sp"
+                                        android:text="      SU:"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein_value"
+                                    <TextView android:id="@+id/lbllunchsu"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -354,19 +353,19 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/carbohydrates"
+                                    <TextView android:id="@+id/cholesterol"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="      CB:"
-                                        android:textSize="12sp"
+                                        android:text="      CH:"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/carbohydrates_value"
+                                    <TextView android:id="@+id/lbllunchch"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -374,7 +373,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
                                         android:layout_height="wrap_content"
@@ -384,9 +383,9 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="      F:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/fat_value"
+                                    <TextView android:id="@+id/lbllunchfat"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -394,7 +393,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                 </LinearLayout>
                             </LinearLayout>
@@ -429,12 +428,17 @@
                                     android:paddingRight="10dp"
                                     android:textColor="#666666"/>
                             </LinearLayout>
+                            <ScrollView
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="vertical"
+                                android:visibility="visible">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:orientation="vertical"
                                 android:id="@+id/layout2"
-                                android:visibility="gone">
+                                android:visibility="visible">
                                 <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
@@ -453,12 +457,12 @@
                                     android:layout_width="fill_parent"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center"
-                                    android:layout_margin="20dp"
                                     android:background="#ffffff"
                                     android:id="@+id/lstViewLunch"/>
 
 
                             </LinearLayout>
+                            </ScrollView>
                         </LinearLayout>
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
@@ -509,7 +513,7 @@
                                     <ImageView android:layout_height="wrap_content"
                                         android:layout_width="wrap_content"
                                         android:padding="5dp"
-                                        android:id="@+id/img_breakfast"
+                                        android:id="@+id/img_1"
                                         android:visibility="invisible"
                                         android:src="@drawable/picker_bg_1"/>
                                     <TextView android:id="@+id/calories"
@@ -520,7 +524,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="CA:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/lblsnakcal"
                                         android:layout_height="wrap_content"
@@ -530,39 +534,19 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein"
+                                    <TextView android:id="@+id/sugar"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="      PR:"
-                                        android:textSize="12sp"
+                                        android:text="      SU:"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein_value"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="25"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="      CB:"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates_value"
+                                    <TextView android:id="@+id/lblsnacksu"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -570,7 +554,27 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
+                                        />
+                                    <TextView android:id="@+id/cholesterol"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:padding="5dp"
+                                        android:textColor="#ffffff"
+                                        android:text="      CH:"
+                                        android:textSize="10sp"
+                                        />
+                                    <TextView android:id="@+id/lblsnackch"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:padding="5dp"
+                                        android:textColor="#ffffff"
+                                        android:text="25"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
                                         android:layout_height="wrap_content"
@@ -580,9 +584,9 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="      F:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/fat_value"
+                                    <TextView android:id="@+id/lblsnackfat"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -590,7 +594,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                 </LinearLayout>
 
@@ -628,11 +632,16 @@
                                     android:layout_weight="1"
                                     android:textColor="#666666"/>
                             </LinearLayout>
+                            <ScrollView
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="vertical"
+                                android:visibility="visible">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:id="@+id/layout3"
-                                android:visibility="gone">
+                                android:visibility="visible">
                                 <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
@@ -651,12 +660,12 @@
                                     android:layout_width="fill_parent"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center"
-                                    android:layout_margin="20dp"
                                     android:background="#ffffff"
                                     android:id="@+id/lstViewSnakes"/>
 
 
                             </LinearLayout>
+                            </ScrollView>
                         </LinearLayout>
 
 
@@ -708,7 +717,7 @@
                                     <ImageView android:layout_height="wrap_content"
                                         android:layout_width="wrap_content"
                                         android:padding="5dp"
-                                        android:id="@+id/img_breakfast"
+                                        android:id="@+id/img_1"
                                         android:visibility="invisible"
                                         android:src="@drawable/picker_bg_1"/>
                                     <TextView android:id="@+id/calories"
@@ -719,7 +728,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="CA:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/lbldinnercal"
                                         android:layout_height="wrap_content"
@@ -729,39 +738,19 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein"
+                                    <TextView android:id="@+id/sugar"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="      PR:"
-                                        android:textSize="12sp"
+                                        android:text="      SU:"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/protein_value"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="25"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:padding="5dp"
-                                        android:textColor="#ffffff"
-                                        android:text="      CB:"
-                                        android:textSize="12sp"
-                                        />
-                                    <TextView android:id="@+id/carbohydrates_value"
+                                    <TextView android:id="@+id/lbldinnersu"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -769,7 +758,27 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
+                                        />
+                                    <TextView android:id="@+id/cholesterol"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:padding="5dp"
+                                        android:textColor="#ffffff"
+                                        android:text="      CH:"
+                                        android:textSize="10sp"
+                                        />
+                                    <TextView android:id="@+id/lbldinnerch"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:gravity="left"
+                                        android:padding="5dp"
+                                        android:textColor="#ffffff"
+                                        android:text="25"
+                                        android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
                                         android:layout_height="wrap_content"
@@ -779,9 +788,9 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="      F:"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
-                                    <TextView android:id="@+id/fat_value"
+                                    <TextView android:id="@+id/lbldinnerfat"
                                         android:layout_height="wrap_content"
                                         android:layout_width="0dp"
                                         android:layout_weight="1"
@@ -789,7 +798,7 @@
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
                                         android:text="25"
-                                        android:textSize="12sp"
+                                        android:textSize="10sp"
                                         />
                                 </LinearLayout>
                             </LinearLayout>
@@ -825,11 +834,16 @@
                                     android:layout_weight="1"
                                     android:textColor="#666666"/>
                             </LinearLayout>
+                            <ScrollView
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="vertical"
+                                android:visibility="visible">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:id="@+id/layout4"
-                                android:visibility="gone">
+                                android:visibility="visible">
                                 <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
@@ -848,11 +862,11 @@
                                     android:layout_width="fill_parent"
                                     android:layout_height="fill_parent"
                                     android:layout_gravity="center"
-                                    android:layout_margin="20dp"
                                     android:background="#ffffff"
                                     android:id="@+id/lstViewDinner"/>
 
                             </LinearLayout>
+                            </ScrollView>
                         </LinearLayout>
 
 
@@ -861,7 +875,8 @@
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
                             android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
+                            android:layout_marginBottom="5dp"
+                            android:visibility="visible">
                             <LinearLayout android:layout_height="72dp"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
@@ -905,7 +920,7 @@
                                     <ImageView android:layout_height="wrap_content"
                                         android:layout_width="wrap_content"
                                         android:padding="5dp"
-                                        android:id="@+id/img_breakfast"
+                                        android:id="@+id/img_1"
                                         android:visibility="invisible"
                                         android:src="@drawable/picker_bg_1"/>
                                     <TextView android:id="@+id/calories"
@@ -963,11 +978,16 @@
                                     android:layout_weight="1"
                                     android:textColor="#666666"/>
                             </LinearLayout>
+                            <ScrollView
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:orientation="vertical"
+                                android:visibility="visible">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:paddingTop="5dp"
                                 android:id="@+id/layout4"
-                                android:visibility="gone">
+                                android:visibility="visible">
                                 <!--
                                 <com.viamhealth.android.ui.RefreshableListView
                                     android:layout_width="fill_parent"
@@ -991,6 +1011,7 @@
                                     android:id="@+id/lstViewExercise"/>
 
                             </LinearLayout>
+                            </ScrollView>
                         </LinearLayout>
 
 
@@ -998,26 +1019,42 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="20dp"
                             android:layout_marginBottom="5dp">
-                            <LinearLayout android:layout_height="wrap_content"
-                                android:layout_width="fill_parent"
-                                android:background="#37AA4F"
-                                android:gravity="center_vertical"
-                                android:id="@+id/total_ideal_calories"
-                                android:orientation="horizontal">
+
                                 <TextView android:layout_height="wrap_content"
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:text="Total Ideal Calories"
                                     android:textSize="16sp"
-                                    android:layout_weight="4"
                                     android:gravity="center"
                                     android:paddingLeft="5dp"
                                     android:textStyle="bold"
+                                    android:layout_gravity="center"
                                     android:id="@+id/lbl_total_calories"
-                                    android:textColor="#ffffff"/>
+                                    android:textColor="#000000"/>
 
-                            </LinearLayout>
+                            <ProgressBar
+                                android:id="@+id/calorie_bar"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_below="@+id/progressBar1"
+                                android:progressDrawable="@drawable/customprogressbar" />
+
+
+                            <TextView android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="You are on track :)"
+                                android:textSize="24sp"
+                                android:gravity="center"
+                                android:paddingLeft="5dp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:id="@+id/status"
+                                android:textColor="#ffffff"/>
+
+
 
 
                         </LinearLayout>
@@ -1025,7 +1062,8 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
@@ -1052,7 +1090,8 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="10dp">
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:gravity="center_vertical"
@@ -1078,7 +1117,8 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="15dp">
+                            android:layout_marginTop="15dp"
+                            android:visibility="gone">
                             <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:gravity="center_vertical"
