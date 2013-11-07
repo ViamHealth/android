@@ -73,6 +73,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 	ImageView back;
 	int temp=0;
 	String selecteduserid= "0";
+    String date;
 
     User user;
 
@@ -113,6 +114,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         user = intent.getParcelableExtra("user");
+        date=intent.getStringExtra("diet_date");
         bundle.putParcelable("user", user);
         headerFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.headerlayout, headerFragment);
@@ -310,7 +312,7 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 
-            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString());
+            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString(),date);
         }
 
     }

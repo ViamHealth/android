@@ -118,6 +118,7 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
         
         addBtn= (Button)findViewById(R.id.addBtn);
         addBtn.setOnClickListener(FoodDetail.this);
+        addBtn.setText("DONE");
         
         titleTxt = (TextView)findViewById(R.id.titleTxt);
         titleTxt.getLayoutParams().width = w120;
@@ -200,13 +201,15 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==addBtn){
+            finish();
+            /*
 			if(isInternetOn()){
 				CallAddFoodTask task = new CallAddFoodTask();
 				 task.activity =FoodDetail.this;
 				 task.execute();
 			}else{
 				Toast.makeText(FoodDetail.this,"Network is not available....",Toast.LENGTH_SHORT).show();
-			}
+			}*/
 		}
 	}
 	// async class for calling webservice and get responce message
@@ -249,7 +252,7 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 			
-				return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1","user_id");
+				return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1","user_id","");
 			}
 			   
 		}     

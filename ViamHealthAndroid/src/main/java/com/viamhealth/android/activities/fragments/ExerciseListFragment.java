@@ -392,7 +392,6 @@ public class ExerciseListFragment extends SherlockListFragment
             dialog1.setCanceledOnTouchOutside(false);
             dialog1.setMessage("Please Wait....");
             dialog1.show();
-            Toast.makeText(getSherlockActivity(),"Global_Application.exercise_value="+Global_Application.exercise_value,Toast.LENGTH_LONG).show();
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -482,7 +481,8 @@ public class ExerciseListFragment extends SherlockListFragment
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             User user = getArguments().getParcelable("user");
-            ga.lstResultExercise = obj.getExercise(user.getId().toString());
+            String date=getArguments().getString("activity_date");
+            ga.lstResultExercise = obj.getExercise(user.getId().toString(),date);
             return null;
         }
 
@@ -496,7 +496,6 @@ public class ExerciseListFragment extends SherlockListFragment
 
         this.adapter = new JournalExerciseAdapter(getSherlockActivity(), R.layout.row_journal_list_exercise,ga.lstResultExercise);
         this.list.setAdapter(adapter);
-        Toast.makeText(getSherlockActivity(),"size of lstResultExercise="+ga.lstResultExercise.size(),Toast.LENGTH_LONG).show();
         int total_height_medicine_tab=0,len=0,i;
 
         for (i = 0, len = adapter.getCount(); i < len; i++) {

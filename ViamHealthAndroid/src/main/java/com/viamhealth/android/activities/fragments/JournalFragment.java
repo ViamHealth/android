@@ -17,11 +17,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.InputType;
 import android.util.Log;
@@ -36,6 +33,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -54,12 +52,7 @@ import com.viamhealth.android.adapters.ExerciseAdapter;
 import com.viamhealth.android.adapters.JournalExerciseAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
-import com.viamhealth.android.adapters.MedicalDataAdapter;
-import com.viamhealth.android.adapters.MedicalDataAdapter1;
-import com.viamhealth.android.adapters.SeparatedListAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
-import com.viamhealth.android.adapters.TestDataAdapter;
-import com.viamhealth.android.adapters.TestDataAdapter1;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
@@ -71,11 +64,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -88,8 +78,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     int height,width;
     int w15,w20,w10,w50,w5,h40,h10,h5,w2,h2,w110,h200,h20;
 
-    TextView lblback,lbl_food_date,lbl_food_time,lblbrk,lbltotalbrkcal,lbllunch,
-            lbllunchcal,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lblitem1,lblitem2,lblitem3,lblitem4,lbltotcal,lblidealcal,lblcaldiff,lblcalmsg;
+    TextView lblback,lbl_food_date,lbl_food_time,lblbrk,lbltotalbrkcal,lbltotalbrksu,lbltotalbrkch,lbltotalbrkfat,lbllunchsu,lbllunchch,lbllunch,lbllunchfat,lblsnacksu,lblsnackch,lblsnackfat,lbldinnersu,lbldinnerch,lbldinnerfat,
+            lbllunchcal,lblmessage,lblsnack,lblsnakcal,lbldinner,lbldinnercal,lblExercise,lblexercisecal,lblitem1,lblitem2,lblitem3,lblitem4,lbltotcal,lblidealcal,lblcaldiff,lblcalmsg;
     LinearLayout settiglayout_food,back_food_layout,food_main_layout,food_mid_layout,
             btn_food_time_picker,btn_food_date_picker,food_header,layout1,layout2,layout3,layout4,breakfast,lunch,snacks,dinner,exercise;
     ImageView img_date,img_time,food_icon,addDinner,addExercise,addSnacks,addLunch,addBreakfast;
@@ -98,7 +88,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     ImageView img_breakfast,img_lunch,img_dinner,img_snacks,img_exercise;
     String nexturl,frm;
     Typeface tf;
-    Double breakfast_cal=0.0,lunch_cal=0.0,snacks_cal=0.0,dinner_cal=0.0,exercise_cal=0.0;
+    Double breakfast_cal=0.0,lunch_cal=0.0,snacks_cal=0.0,dinner_cal=0.0,exercise_cal=0.0,sugar=0.0,cholesterol=0.0,fat=0.0;
     ProgressDialog dialog1;
     String sub_url="diet-tracker/";
     boolean bolbrk,bollunch,bolsnaks,boldiner=false,bolexercise=false;
@@ -134,17 +124,13 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     String selecteduserid="0";
     public HashMap<String, ArrayList<String>> lst = new HashMap<String, ArrayList<String>>();
     Global_Application ga;
+    ProgressBar Prog;
 
     View view;
-    Bundle savedInstanceState;
-    private User user;
-    private ViewPager pager1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.layout_pager_journal, container, false);
-        this.savedInstanceState=savedInstanceState;
-        user=getArguments().getParcelable("user");
+        view = inflater.inflate(R.layout.tab_fragment_journal, container, false);
         fromOldCode();
         task1 = new CallExerciseListTask();
         taskBreakfast=new CallListTask();
@@ -215,8 +201,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         h20=(int)((height*4.17)/100);
 
 
-
-
         layout1 = (LinearLayout)view.findViewById(R.id.layout1);
         layout1.setPadding(0, 0, 0, h10);
 
@@ -266,6 +250,12 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         img_snacks=(ImageView)view.findViewById(R.id.img_snacks);
         img_dinner=(ImageView)view.findViewById(R.id.img_dinner);
         img_exercise=(ImageView)view.findViewById(R.id.img_exercise);
+
+        lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
+        lblmessage=(TextView)view.findViewById(R.id.status);
+        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
+        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
+        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
 
         lstViewBreakfast = (FrameLayout)view.findViewById(R.id.lstViewBreakfast);
         lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;
@@ -405,12 +395,35 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         lblbrk = (TextView)view.findViewById(R.id.lblbrk);
         lbltotalbrkcal = (TextView)view.findViewById(R.id.lbltotalbrkcal);
+        lbltotalbrksu = (TextView)view.findViewById(R.id.lbltotalbrksu);
+        lbltotalbrkch = (TextView)view.findViewById(R.id.lbltotalbrkch);
+        lbltotalbrkfat = (TextView)view.findViewById(R.id.lbltotalbrkfat);
+
+
+
+
+
         lbllunch = (TextView)view.findViewById(R.id.lbllunch);
         lbllunchcal = (TextView)view.findViewById(R.id.lbllunchcal);
+        lbllunchsu = (TextView)view.findViewById(R.id.lbllunchsu);
+        lbllunchch = (TextView)view.findViewById(R.id.lbllunchch);
+        lbllunchfat = (TextView)view.findViewById(R.id.lbllunchfat);
+
+
+
+
         lblsnack = (TextView)view.findViewById(R.id.lblsnack);
         lblsnakcal = (TextView)view.findViewById(R.id.lblsnakcal);
+        lblsnacksu = (TextView)view.findViewById(R.id.lblsnacksu);
+        lblsnackch = (TextView)view.findViewById(R.id.lblsnackch);
+        lblsnackfat = (TextView)view.findViewById(R.id.lblsnackfat);
+
+
         lbldinner = (TextView)view.findViewById(R.id.lbldinner);
         lbldinnercal = (TextView)view.findViewById(R.id.lbldinnercal);
+        lbldinnersu = (TextView)view.findViewById(R.id.lbldinnersu);
+        lbldinnerch = (TextView)view.findViewById(R.id.lbldinnerch);
+        lbldinnerfat = (TextView)view.findViewById(R.id.lbldinnerfat);
 
         lblExercise = (TextView)view.findViewById(R.id.lblexercise);
         lblexercisecal=(TextView)view.findViewById(R.id.lblexercisecal);
@@ -435,7 +448,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         food_main_layout = (LinearLayout)view.findViewById(R.id.food_main_layout);
         food_main_layout.setPadding(w10, h10, w10, h10);
-
+/*
         btn_food_time_picker = (LinearLayout)view.findViewById(R.id.btn_food_time_picker);
         btn_food_time_picker.setOnClickListener(this);
 
@@ -448,22 +461,31 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         img_date = (ImageView)view.findViewById(R.id.img_date);
         img_date.setPadding(w5, 0, w5, 0);
+                lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
+        lbl_food_time.setTypeface(tf);
 
+        food_header=(LinearLayout)view.findViewById(R.id.food_header);
+        food_header.setPadding(0, 0, 0, h10);
+*/
         lbl_food_date = (TextView)view.findViewById(R.id.lbl_food_date);
+        lbl_food_date.setOnClickListener(this);
         lbl_food_date.setPadding(w5, 0, 0, 0);
         lbl_food_date.setTypeface(tf);
 
 
 
-        lbl_food_time = (TextView)view.findViewById(R.id.lbl_food_time);
-        lbl_food_time.setTypeface(tf);
+
 
         //food_icon = (ImageView)view.findViewById(R.id.food_icon);
         //	food_icon.setPadding(w5, h5, w5, h5);
 
+<<<<<<< HEAD
         food_header=(LinearLayout)view.findViewById(R.id.food_header);
         food_header.setPadding(0, 0, 0, h10);
 */
+=======
+
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
 
         pYear = dateAndTime.get(Calendar.YEAR);
         pMonth = dateAndTime.get(Calendar.MONTH);
@@ -541,9 +563,20 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                         task.execute();
                     }else{
                         Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+<<<<<<< HEAD
+=======
+                    }
+
+            }
+        });
+
+
+
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
 
 
                     }
+<<<<<<< HEAD
 
 
             }
@@ -568,6 +601,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                     }else{
                         Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
                     }
+=======
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 }
             }
         });
@@ -668,10 +703,11 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                 });
 
 
+            }
+        });
 
 
 */
-
 
 
 
@@ -838,6 +874,13 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                     pMonth,
                     pDay).show();
         }
+
+        if(v==lbl_food_date){
+            new DatePickerDialog(getSherlockActivity(), d,pYear,
+                    pMonth,
+                    pDay).show();
+        }
+
         if(v==btn_food_time_picker){
             new TimePickerDialog(getSherlockActivity(), t,
                     dateAndTime.get(Calendar.HOUR_OF_DAY),
@@ -850,6 +893,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
         if(v==addLunch){
@@ -857,6 +901,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
         if(v==addSnacks){
@@ -864,6 +909,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
         if(v==addDinner){
@@ -871,6 +917,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addfood = new Intent(getSherlockActivity(),AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
+            addfood.putExtra("diet_date", ga.selected_date);
             startActivity(addfood);
         }
 
@@ -879,6 +926,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Intent addExercise = new Intent(getSherlockActivity(), AddExercise.class);
             User user = getArguments().getParcelable("user");
             addExercise.putExtra("user", user);
+            addExercise.putExtra("activity_date", ga.selected_date);
             startActivity(addExercise);
 
         }
@@ -975,7 +1023,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
             User user = getArguments().getParcelable("user");
-            lstResultExercise = obj.getExercise(user.getId().toString());
+            lstResultExercise = obj.getExercise(user.getId().toString(),ga.selected_date);
             return null;
         }
 
@@ -985,6 +1033,34 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
     {
         Global_Application.total_ideal_calories=breakfast_cal+lunch_cal+snacks_cal+dinner_cal-exercise_cal;
         double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
+
+
+        Prog=(ProgressBar)view.findViewById(R.id.calorie_bar);
+
+        Prog.setProgress((int)Global_Application.total_ideal_calories);
+        if(appPrefs.getTargetCaloriesPerDay()>0)
+        {
+            lbltotcal.setText(String.valueOf(appPrefs.getTargetCaloriesPerDay())+"(Daily Limit)");
+            Prog.setMax(2*appPrefs.getTargetCaloriesPerDay());
+        }
+        else
+        {
+            lbltotcal.setText(String.valueOf(appPrefs.getTargetCaloriesPerDay())+"(Daily Limit)");
+            Prog.setMax(100);
+        }
+
+        if((int)Global_Application.total_ideal_calories <= appPrefs.getTargetCaloriesPerDay())
+        {
+            lblmessage.setText("You are below the daily margin by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories));
+            lblmessage.setTextColor(Color.GREEN);
+        }
+        else
+        {
+
+            lblmessage.setText("You have exceeded daily calorie limit by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories)*(-1) );
+            lblmessage.setTextColor(Color.RED);
+        }
+/*
         lbltotcal.setText("Total Calories Consumed"+" "+Global_Application.total_ideal_calories+" Calories");
         lblidealcal.setText("Total Target Calories"+" "+target_ideal_calories+" Calories");
 
@@ -1002,7 +1078,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             lblcalmsg.setText("Good Job! You are On track :)");
             lblcalmsg.setTextColor(0xFF37AA4F);
         }
-
+*/
         Global_Application.total_ideal_calories=0;
     }
 
@@ -1039,8 +1115,76 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             //dialog1.dismiss();
             Log.e("TAG","lst size : " + lstResultBreakfast.size());
 
+<<<<<<< HEAD
             if(isInternetOn()){
                 if(getSherlockActivity()!=null)
+=======
+            Double total_calories=0.0;
+            breakfast_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+
+            for(int i=0;i<lstResultBreakfast.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultBreakfast.get(i).getCalories())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultBreakfast.get(i).getSugar())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultBreakfast.get(i).getCholesterol())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultBreakfast.get(i).getFat())*Double.parseDouble(lstResultBreakfast.get(i).getMultiplier());
+            }
+
+            if(lstResultBreakfast.size()>0){
+                lblbrk.setText("Breakfast ("+lstResultBreakfast.get(0).getCount()+")" );
+                lbltotalbrkcal.setText(total_calories+"");
+                lbltotalbrksu.setText(sugar+"");
+                lbltotalbrkch.setText(cholesterol+"");
+                lbltotalbrkfat.setText(fat+"");
+
+                breakfast_cal=total_calories;
+
+                ga.lstResultBreakfast=lstResultBreakfast;
+                try{
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+                FragmentTransaction fm = man1.beginTransaction();
+                BreakfastListFragment fragment = (BreakfastListFragment)SherlockFragment.instantiate(getSherlockActivity(), BreakfastListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewBreakfast, fragment, "Breakfast");
+                fm.commit();
+                man1.executePendingTransactions();
+
+
+
+                setHasOptionsMenu(true);
+                    }
+            }
+            catch(Exception e)
+            {
+
+            }
+
+                if(isInternetOn()){
+                    if(getSherlockActivity()!=null)
+                    {
+                    CallLunchListTask task = new CallLunchListTask();
+                    task.activity =getSherlockActivity();
+                    task.execute();
+                    }
+                }else{
+                    //Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                }
+            }else{
+
+                lblbrk.setText("Breakfast (0)");
+                lbltotalbrkcal.setText(Global_Application.totalcal+"");
+                lstViewBreakfast.setVisibility(View.GONE);
+                try{
+                    img_breakfast.setImageDrawable(getResources().getDrawable(R.drawable.picker_bg_1));
+                }
+                catch(Exception e)
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 {
                     CallLunchListTask task = new CallLunchListTask();
                     task.activity =getSherlockActivity();
@@ -1075,6 +1219,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             total_calories+=Double.parseDouble(lstResultLunch.get(i).getCalories())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
         }
 
+<<<<<<< HEAD
         if(lstResultLunch.size()>0){
             lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
             lbllunchcal.setText(total_calories+"");
@@ -1092,6 +1237,47 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
                     man1.executePendingTransactions();
                     setHasOptionsMenu(true);
                 }
+=======
+            Log.i("onPostExecute", "onPostExecute");
+            //dialog1.dismiss();
+            Log.e("TAG","lst size : " + lstResultLunch.size());
+            Double total_calories=0.0;
+            int i=0;
+            lunch_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+            for(i=0;i<lstResultLunch.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultLunch.get(i).getCalories())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultLunch.get(i).getSugar())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultLunch.get(i).getCholesterol())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultLunch.get(i).getFat())*Double.parseDouble(lstResultLunch.get(i).getMultiplier());
+            }
+
+            if(lstResultLunch.size()>0){
+                lbllunch.setText("Lunch ("+lstResultLunch.get(0).getCount()+")" );
+                lbllunchcal.setText(total_calories+"");
+                lbllunchsu.setText(sugar+"");
+                lbllunchch.setText(cholesterol+"");
+                lbllunchfat.setText(fat+"");
+
+                lunch_cal=total_calories;
+                ga.lstResultLunch=lstResultLunch;
+                try{
+                    SherlockFragmentActivity f1=getSherlockActivity();
+                    if(f1!=null)
+                    {
+                        android.support.v4.app.FragmentManager man1=f1.getSupportFragmentManager();
+                FragmentTransaction fm = man1.beginTransaction();
+                LunchListFragment fragment = (LunchListFragment)SherlockFragment.instantiate(getSherlockActivity(), LunchListFragment.class.getName(), args);
+                fm.replace(R.id.lstViewLunch, fragment, "Lunch");
+                fm.commit();
+                man1.executePendingTransactions();
+                setHasOptionsMenu(true);
+                    }
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
             }
             catch(Exception e)
             {
@@ -1200,6 +1386,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         }
 
 
+<<<<<<< HEAD
         if(lstResultDinner.size()>0){
             lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
             lbldinnercal.setText(total_calories+"");
@@ -1270,6 +1457,33 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
             try{
                 ga.lstResultExercise=lstResultExercise;
+=======
+            Double total_calories=0.0;
+            int i=0;
+            snacks_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+            for(i=0;i<lstResultSnacks.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultSnacks.get(i).getCalories())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultSnacks.get(i).getSugar())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultSnacks.get(i).getCholesterol())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultSnacks.get(i).getFat())*Double.parseDouble(lstResultSnacks.get(i).getMultiplier());
+            }
+
+            if(lstResultSnacks.size()>0){
+                lblsnack.setText("Snacks ("+lstResultSnacks.get(0).getCount()+")" );
+                lblsnakcal.setText(total_calories+"");
+                lblsnacksu.setText(sugar+"");
+                lblsnackch.setText(cholesterol+"");
+                lblsnackfat.setText(fat+"");
+
+                snacks_cal=total_calories;
+                ga.lstResultSnacks=lstResultSnacks;
+                try{
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 SherlockFragmentActivity f1=getSherlockActivity();
                 if(f1!=null)
                 {
@@ -1445,9 +1659,45 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
             Log.i("onPostExecute", "onPostExecute");
             //dialog1.dismiss();
+<<<<<<< HEAD
             Log.e("TAG","lst size : " + lstResultSnacks.size());
             if(isInternetOn()){
                 if(getSherlockActivity()!=null)
+=======
+            Log.e("TAG","lst size : " + lstResultDinner.size());
+
+            Double total_calories=0.0;
+            int i=0;
+            dinner_cal=0.0;
+            sugar=0.0;
+            cholesterol=0.0;
+            fat=0.0;
+
+
+            for(i=0;i<lstResultDinner.size();i++)
+            {
+                total_calories+=Double.parseDouble(lstResultDinner.get(i).getCalories())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+                sugar+=Double.parseDouble(lstResultDinner.get(i).getSugar())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+                cholesterol+=Double.parseDouble(lstResultDinner.get(i).getCholesterol())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+                fat+=Double.parseDouble(lstResultDinner.get(i).getFat())*Double.parseDouble(lstResultDinner.get(i).getMultiplier());
+            }
+
+
+            if(lstResultDinner.size()>0){
+                lbldinner.setText("Dinner ("+lstResultDinner.get(0).getCount()+")" );
+                lbldinnercal.setText(total_calories+"");
+                lbldinnersu.setText(sugar+"");
+                lbldinnerch.setText(cholesterol+"");
+                lbldinnerfat.setText(fat+"");
+
+
+                dinner_cal=total_calories;
+
+                ga.lstResultDinner=lstResultDinner;
+                try{
+                SherlockFragmentActivity f1=getSherlockActivity();
+                if(f1!=null)
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 {
                     CallDinnerListTask task = new CallDinnerListTask();
                     task.activity =getSherlockActivity();
@@ -1703,6 +1953,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
     private class JournalPagerAdapter extends PagerAdapter implements View.OnClickListener{
 
+<<<<<<< HEAD
         ArrayList<String> lstData = new ArrayList<String>();
         private LayoutInflater inflater;
 
@@ -2068,6 +2319,10 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         }
     }
+=======
+
+
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
 
     public class CallDeleteTask extends AsyncTask <String, Void,String>
     {

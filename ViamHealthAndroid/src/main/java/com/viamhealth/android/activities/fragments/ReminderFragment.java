@@ -1351,12 +1351,12 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
             TestDataAdapter adapter1 = new TestDataAdapter(getSherlockActivity(),R.layout.row_test_list, selected_other_data.get(position));
 
             SeparatedListAdapter adapter3 = new SeparatedListAdapter(getSherlockActivity());
-            adapter3.addSection("Medication",adapter);
+            adapter3.addSection("Medicine",adapter);
             adapter3.addSection("Rest All",adapter1);
 
             ViewPager v1=(ViewPager)localView;
 
-            ((ViewPager) localView).setOffscreenPageLimit(3);
+            ((ViewPager) localView).setOffscreenPageLimit(5);
             v1.setPageMargin(60);
 
             ((ViewPager) localView).addView(imageLayout, 0);

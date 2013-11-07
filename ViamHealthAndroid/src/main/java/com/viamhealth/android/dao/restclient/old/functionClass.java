@@ -197,11 +197,11 @@ public class functionClass {
 		}
 
 
-        public ArrayList<CategoryExercise> getExercise(String user)
+        public ArrayList<CategoryExercise> getExercise(String user,String date)
         {
             ArrayList<CategoryExercise>	lstData = new ArrayList<CategoryExercise>();
-            String baseurlString = Global_Application.url+"user-physical-activity/?user="+user;
-            Log.e("TAG","url is : " + baseurlString);
+            String baseurlString = Global_Application.url+"user-physical-activity/?user="+user+"&activity_date="+date;
+            Log.e("TAG"," get Exercise url is : " + baseurlString);
 
             RestClient client = new RestClient(baseurlString);
             client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -295,7 +295,7 @@ public class functionClass {
 								 Log.e("TAG","Calories : "  + jObject1.getString("calories"));
 								 Global_Application.totalcal+=jObject1.getDouble("calories")*multiplier;
                                  Log.e("TAG","total_calories : " + Global_Application.totalcal);
-										 lstResult.add(new CategoryFood(c.getString("id"),c.getString("food_item"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count")));
+										 lstResult.add(new CategoryFood(c.getString("id"),c.getString("food_item"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count"),jObject1.getString("total_fat"),jObject1.getString("cholesterol"),jObject1.getString("sugars"),jObject1.getString("quantity_unit")));
 								
 								}catch (JSONException e) {
 									// TODO Auto-generated catch block
@@ -416,7 +416,7 @@ public class functionClass {
 
 
 
-		public String AddFood(String id,String mealtype,String food_quantity_multiplier,String userid){
+		public String AddFood(String id,String mealtype,String food_quantity_multiplier,String userid,String date){
         String responce="1";
         String baseurlString = Global_Application.url+"diet-tracker/"+"?user="+userid;
         RestClient client = new RestClient(baseurlString);
@@ -424,9 +424,9 @@ public class functionClass {
         client.AddParam("food_item", id);
         client.AddParam("meal_type", mealtype);
         client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        client.AddParam("diet_date",sdf.format(date));
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //Date date = new Date();
+        client.AddParam("diet_date",date);
 
         Log.e("TAG","url for add food : " + baseurlString);
 
@@ -1127,17 +1127,18 @@ public class functionClass {
 					return lstData;
 				}
 
-                public void addExercise(String weight,String time_spent,String physical_activity_id,String calories_spent,String user)
+                public void addExercise(String weight,String time_spent,String physical_activity_id,String calories_spent,String user,String date)
                 {
                       ArrayList<CategoryExercise> lst= new ArrayList<CategoryExercise>();
                       String baseurlString = Global_Application.url+"user-physical-activity/?user="+user;
-                      Log.e("TAG","url is : " + baseurlString);
+                      Log.e("TAG","add exercise url is : " + baseurlString);
                       RestClient client = new RestClient(baseurlString);
                       client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                       client.AddParam("weight", weight);
                       client.AddParam("time_spent",time_spent);
                       client.AddParam("physical_activity",physical_activity_id);
                       client.AddParam("user_calories_spent", calories_spent);
+                      client.AddParam("activity_date",date);
                       try
                       {
                         client.Execute(RequestMethod.POST);

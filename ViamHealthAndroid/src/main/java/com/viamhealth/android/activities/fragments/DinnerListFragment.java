@@ -208,7 +208,6 @@ public class DinnerListFragment extends SherlockListFragment
                         }
                     });
                     alert.show();
-                    Toast.makeText(getActivity(), "Download", Toast.LENGTH_LONG).show();
                     return true;
 
 
@@ -435,7 +434,7 @@ public class DinnerListFragment extends SherlockListFragment
         //goal_count.setText("("+files.size()+")");
         this.adapter = new JournalFoodAdapter(getSherlockActivity(), R.layout.row_journal_list,ga.lstResultDinner);
         this.list.setAdapter(adapter);
-        Toast.makeText(getSherlockActivity(),"size of lstResultDinner="+ga.lstResultDinner.size(),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getSherlockActivity(),"size of lstResultDinner="+ga.lstResultDinner.size(),Toast.LENGTH_LONG).show();
         int total_height_medicine_tab=0,len=0,i;
 
         for (i = 0, len = adapter.getCount(); i < len; i++) {
@@ -511,7 +510,6 @@ public class DinnerListFragment extends SherlockListFragment
                     k++;
                 }
             }
-            Toast.makeText(getSherlockActivity(),"size of medicine listData="+listData.size(),Toast.LENGTH_LONG).show();
             ga.listData=listData;
             initListView();
 

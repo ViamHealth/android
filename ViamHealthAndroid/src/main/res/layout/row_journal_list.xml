@@ -31,7 +31,11 @@
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:textColor="#000000"
+<<<<<<< HEAD
                 android:layout_weight="4"
+=======
+                android:layout_weight="6"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:text="Abc taken"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -40,13 +44,23 @@
             <TextView android:id="@+id/serving_val"
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
+<<<<<<< HEAD
                 android:layout_weight="1"
                 android:gravity="left"
+=======
+                android:layout_weight="3"
+                android:gravity="right"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:textColor="#000000"
                 android:text="1"
                 android:textSize="12sp"
                 />
+<<<<<<< HEAD
             <TextView android:id="@+id/serving"
+=======
+            <!--
+            <TextView android:id="@+id/serving_unit"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -55,7 +69,11 @@
                 android:text="Servings"
                 android:textSize="12sp"
                 />
+<<<<<<< HEAD
 
+=======
+-->
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
             <ImageView android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:src="@drawable/edit"
@@ -101,17 +119,28 @@
                 android:text="25"
                 android:textSize="12sp"
                 />
+<<<<<<< HEAD
             <TextView android:id="@+id/protein"
+=======
+            <TextView android:id="@+id/sugar"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="left"
                 android:padding="5dp"
                 android:textColor="#000000"
+<<<<<<< HEAD
                 android:text="      PR:"
                 android:textSize="12sp"
                 />
             <TextView android:id="@+id/protein_value"
+=======
+                android:text="      SU:"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/sugar_value"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -121,17 +150,28 @@
                 android:text="25"
                 android:textSize="12sp"
                 />
+<<<<<<< HEAD
             <TextView android:id="@+id/carbohydrates"
+=======
+            <TextView android:id="@+id/cholesterol"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="left"
                 android:padding="5dp"
                 android:textColor="#000000"
+<<<<<<< HEAD
                 android:text="      CB:"
                 android:textSize="12sp"
                 />
             <TextView android:id="@+id/carbohydrates_value"
+=======
+                android:text="      CH:"
+                android:textSize="12sp"
+                />
+            <TextView android:id="@+id/cholesterol_value"
+>>>>>>> c254fe1329a9be2e75be3506d4a35a2469ad8db0
                 android:layout_height="wrap_content"
                 android:layout_width="0dp"
                 android:layout_weight="1"
