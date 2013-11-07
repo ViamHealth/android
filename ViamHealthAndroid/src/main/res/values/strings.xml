@@ -200,4 +200,28 @@
     <string name="from">from</string>
     <string name="every">every</string>
 
+    <string name="select_relation">related how?</string>
+    <string name="spouse">spouse</string>
+    <string name="father">father</string>
+    <string name="mother">mother</string>
+    <string name="son">son</string>
+    <string name="daughter">daughter</string>
+    <string name="son_in_law">son-in-law</string>
+    <string name="daughter_in_law">daughter-in-law</string>
+    <string name="father_in_law">father-in-law</string>
+    <string name="mother_in_law">mother-in-law</string>
+    <string name="brother">brother</string>
+    <string name="sister">sister</string>
+    <string name="cousin">cousin</string>
+    <string name="others">other</string>
+
+    <string name="create">Create</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="editProfile">Edit Profile</string>
+    <string name="from_facebook">From Facebook</string>
+    <string name="add_family_member">Add Family Member</string><string name="email_or_mobile">email or mobile number</string>
+
+
 </resources>

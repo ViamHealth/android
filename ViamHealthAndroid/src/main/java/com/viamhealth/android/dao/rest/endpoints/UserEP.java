@@ -13,10 +13,15 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.ProtocolException;
+import org.apache.http.impl.client.DefaultRedirectHandler;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +51,7 @@ public class UserEP extends BaseEP {
     public User SignUp(String username,String password) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"signup/";
-        Log.e("TAG", "url is : " + baseurlString);
+        Log.e(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddParam("username",username);
@@ -64,6 +69,40 @@ public class UserEP extends BaseEP {
         Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         user.setLoggedInUser(true);
+        return user;
+    }
+
+    public User AuthenticateThroughFB(String fbAccessToken){
+        String url = Global_Application.url + "account/facebook/login/token/?next=/api-token-auth/?access_token=" + fbAccessToken;
+        Log.e(TAG, "url is : " + url);
+
+        /* this will be the first rest call */
+        RestClient client = new RestClient(url);
+        client.AddParam("access_token", fbAccessToken);
+        client.setDisableAutoRedirect(true);
+
+        try{
+            client.Execute(RequestMethod.POST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        User user = null;
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+        try {
+            JSONObject jObject = new JSONObject(responseString);
+            //TODO::implement proper error handling
+            String	responsetxt1 = jObject.getString("token");
+            if(responsetxt1.length()>0){
+                Log.e(TAG,"token is " + responsetxt1);
+                appPrefs.setToken(responsetxt1);
+            }
+            user = getLoggedInUser();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return user;
     }
 
@@ -89,7 +128,7 @@ public class UserEP extends BaseEP {
             //TODO::implement proper error handling
             String	responsetxt1 = jObject.getString("token");
             if(responsetxt1.length()>0){
-                Log.e("TAG","token is " + responsetxt1);
+                Log.e(TAG,"token is " + responsetxt1);
                 appPrefs.setToken(responsetxt1);
                 responsetxt="0";
             }
@@ -97,8 +136,6 @@ public class UserEP extends BaseEP {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        getLoggedInUser();
 
         return responsetxt;
     }
@@ -108,7 +145,7 @@ public class UserEP extends BaseEP {
         if(ga.getLoggedInUser()!=null)
             return ga.getLoggedInUser();
 
-        String baseurlString = Global_Application.url+"users/me";
+        String baseurlString = Global_Application.url+"users/me/";
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -125,6 +162,14 @@ public class UserEP extends BaseEP {
         user.setLoggedInUser(true);
         ga.setLoggedInUser(user);
         return user;
+    }
+
+    public void shareUser(User user) {
+        //TODO need to implement
+    }
+
+    public void deleteUser(User user) {
+        //TODO need to implement s
     }
 
     // function for get family member list
@@ -164,7 +209,7 @@ public class UserEP extends BaseEP {
     public User getUserProfile(Long userId) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"users/"+userId+"/";
-        Log.e("TAG","url is : " + baseurlString);
+        Log.e(TAG,"url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -186,7 +231,7 @@ public class UserEP extends BaseEP {
 
     public BMIProfile getUserBMIProfile(Long userId) {
         String baseurlString = Global_Application.url+"users/"+userId+"/bmi-profile/";
-        Log.e("TAG","url is : " + baseurlString);
+        Log.e(TAG,"url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -232,7 +277,10 @@ public class UserEP extends BaseEP {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         client.AddParam("date_of_birth", formatter.format(profile.getDob()));
         client.AddParam("profile_picture", profile.getProfilePicURL());
-        client.AddParam("blood_group", profile.getBloodGroup().value());
+
+        if(profile.getBloodGroup()!=BloodGroup.None)
+            client.AddParam("blood_group", profile.getBloodGroup().value());
+
         client.AddParam("fb_profile_id", profile.getFbProfileId());
         client.AddParam("fb_username", profile.getFbUsername());
         client.AddParam("organization", profile.getOrganization());

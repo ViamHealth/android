@@ -248,7 +248,7 @@ public class FBUser {
         if(user==null)
             user = new User();
 
-        if(email!=null || email.isEmpty())
+        if(email!=null && email.isEmpty())
             user.setEmail(email);
 
         //get first name and last name

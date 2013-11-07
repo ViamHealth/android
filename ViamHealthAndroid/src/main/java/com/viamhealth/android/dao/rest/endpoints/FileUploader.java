@@ -3,8 +3,15 @@ package com.viamhealth.android.dao.rest.endpoints;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.facebook.HttpMethod;
+import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.manager.ImageSelector;
+
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -20,9 +28,10 @@ import java.net.URL;
  */
 public class FileUploader {
 
-    private static String upLoadServerUri = "http://api.viamhealth.com/";
+    private static String upLoadServerUri = Global_Application.url;
     private String formValueName = "file";
     private String uploadURL = "";
+    private String token = "";
 
     public class Response {
         private int serverResponseCode;
@@ -67,23 +76,39 @@ public class FileUploader {
             }
             return null;
         }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "serverResponseCode=" + serverResponseCode +
+                    ", serverResponseMessage='" + serverResponseMessage + '\'' +
+                    ", response='" + response + '\'' +
+                    "} " + super.toString();
+        }
     }
 
-    public Response uploadProfilePicture(String sourceFileUri, Activity activity, Long userId, Dialog dialog) {
+    public FileUploader(String token) {
+        this.token = token;
+    }
+
+    private String method = "POST";
+
+    public Response uploadProfilePicture(Uri sourceFileUri, Activity activity, Long userId, Dialog dialog) {
         formValueName = "profile_pictue";
         uploadURL = upLoadServerUri + "users/" + userId + "/profile-picture/";
+        method = "PUT";
         return upload(sourceFileUri, activity, dialog);
     }
 
-    public Response uploadFile(String sourceFileUri, Activity activity, Long userId, Dialog dialog) {
+    public Response uploadFile(Uri sourceFileUri, Activity activity, Long userId, Dialog dialog) {
         formValueName = "file";
         uploadURL = upLoadServerUri + "healthfiles/?user=" + userId;
         return upload(sourceFileUri, activity, dialog);
     }
 
-    private Response upload(String sourceFileUri, Activity activity, Dialog dialog) {
+    private Response upload(Uri sourceFileUri, final Activity activity, Dialog dialog) {
 
-        String fileName = sourceFileUri;
+        final String fileName = ImageSelector.getRealPathFromURI(activity, sourceFileUri);
 
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -93,15 +118,16 @@ public class FileUploader {
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        File sourceFile = new File(sourceFileUri);
+        File sourceFile = new File(fileName);
+        String justFileName = sourceFile.getName();
 
         if (!sourceFile.isFile()) {
             dialog.dismiss();
-            Log.e("uploadFile", "Source File not exist :" + uploadFilePath + "" + uploadFileName);
+            Log.e("uploadFile", "Source File not exist :" + fileName);
             activity.runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(activity, "Source File not exist :"
-                            + uploadFilePath + "" + uploadFileName, Toast.LENGTH_SHORT).show();
+                            + fileName, Toast.LENGTH_SHORT).show();
                 }
             });
             return null;
@@ -117,17 +143,17 @@ public class FileUploader {
                 conn.setDoInput(true); // Allow Inputs
                 conn.setDoOutput(true); // Allow Outputs
                 conn.setUseCaches(false); // Don't use a Cached Copy
-                conn.setRequestMethod("POST");
+                conn.setRequestMethod(method);
+                conn.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+                conn.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
+                conn.setRequestProperty("Authorization","Token " + token);
                 conn.setRequestProperty("Connection", "Keep-Alive");
-                conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-                conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                conn.setRequestProperty(formValueName, fileName);
+                conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
                 dos = new DataOutputStream(conn.getOutputStream());
 
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\""+formValueName+"\";filename=\""
-                        + fileName + "\"" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + sourceFile.getName() + "\"" + lineEnd);
 
                 dos.writeBytes(lineEnd);
 
@@ -153,26 +179,15 @@ public class FileUploader {
                 dos.writeBytes(lineEnd);
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
 
-                Response response = new Response();
+                final Response response = new Response();
                 // Responses from the server (code and message)
                 response.serverResponseCode = conn.getResponseCode();
                 response.serverResponseMessage = conn.getResponseMessage();
 
                 Log.i("uploadFile", "HTTP Response is : "
-                        + serverResponseMessage + ": " + serverResponseCode);
+                        + response.serverResponseMessage + ": " + response.serverResponseCode);
 
-                if(serverResponseCode == 200){
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-                            String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
-                                    +" http://www.androidexample.com/media/uploads/"
-                                    +uploadFileName;
-
-                            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                if(response.serverResponseCode == HttpStatus.SC_OK || response.serverResponseCode == HttpStatus.SC_CREATED){
 
                     InputStream is = conn.getInputStream();
                     int ch;
@@ -180,27 +195,39 @@ public class FileUploader {
                     while( ( ch = is.read() ) != -1 ){
                         b.append( (char)ch );
                     }
-                    progress+=1000;
+
                     //getSherlockActivity().setSupportProgress(progress*multiplier);
                     response.response = b.toString();
 
                     is.close();
+
+                    activity.runOnUiThread(new Runnable() {
+                        public void run() {
+
+                            String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
+                                    + response.downloadURL;
+
+                            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
 
                 //close the streams //
                 fileInputStream.close();
                 dos.flush();
                 dos.close();
+                Log.i("FileUploader", response.toString());
                 return response;
             } catch (MalformedURLException ex) {
 
                 dialog.dismiss();
                 ex.printStackTrace();
 
-                runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
                     public void run() {
                         //messageText.setText("MalformedURLException Exception : check script url.");
-                        Toast.makeText(UploadToServer.this, "MalformedURLException",
+                        Toast.makeText(activity, "MalformedURLException",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -211,10 +238,10 @@ public class FileUploader {
                 dialog.dismiss();
                 e.printStackTrace();
 
-                runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
                     public void run() {
                         //messageText.setText("Got Exception : see logcat ");
-                        Toast.makeText(UploadToServer.this, "Got Exception : see logcat ",
+                        Toast.makeText(activity, "Got Exception : see logcat ",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

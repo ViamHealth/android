@@ -29,6 +29,12 @@ public class UIUtility {
         return px;
     }
 
+    public int pxToDp(Context context, int px) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
     public static Calendar getDate(Calendar cal) {
         Calendar dayCal = Calendar.getInstance();
         dayCal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE), 0, 0, 0);

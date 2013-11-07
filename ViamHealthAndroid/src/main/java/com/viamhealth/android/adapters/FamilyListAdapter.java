@@ -36,20 +36,23 @@ public class FamilyListAdapter extends ArrayAdapter<FbFamily> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.family_list_element, parent, false);
         ProfilePictureView profilePic = (ProfilePictureView) rowView.findViewById(R.id.fam_profile_pic);
-        profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_person));
-        profilePic.setCropped(true);
-        profilePic.setPresetSize(ProfilePictureView.NORMAL);
-
         TextView relation = (TextView) rowView.findViewById(R.id.fam_proile_relation);
         TextView name = (TextView) rowView.findViewById(R.id.fam_profile_name);
 
-        name.setText(values.get(position).getName());
-        relation.setText(values.get(position).getRelationship());
-        profilePic.setProfileId(values.get(position).getId());
+        try{
+            profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_person));
+            profilePic.setCropped(true);
+            profilePic.setPresetSize(ProfilePictureView.NORMAL);
 
-        rowView.setTag(values.get(position).getId());
-        Log.d(TAG, "Added " + values.get(position) + " at position "+ position);
+            name.setText(values.get(position).getName());
+            relation.setText(values.get(position).getRelationship());
+            profilePic.setProfileId(values.get(position).getId());
 
+            rowView.setTag(values.get(position).getId());
+            Log.d(TAG, "Added " + values.get(position) + " at position "+ position);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return rowView;
     }
 

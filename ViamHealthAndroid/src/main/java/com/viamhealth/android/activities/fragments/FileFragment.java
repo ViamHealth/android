@@ -187,12 +187,15 @@ public class FileFragment extends SherlockFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.drawable.ic_action_upload){
-            imageSelector.pickFile();
+            pickFile();
             return false;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    public void pickFile() {
+        imageSelector.pickFile(ImageSelector.FileType.All);
+    }
     public interface OnNewFileUploadedListener {
         public void onNewFileUploaded(FileData fileData);
     }

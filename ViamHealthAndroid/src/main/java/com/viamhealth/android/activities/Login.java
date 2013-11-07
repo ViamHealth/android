@@ -16,17 +16,26 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -43,6 +52,9 @@ import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class Login extends BaseFragmentActivity implements OnClickListener, FBLoginFragment.OnSessionStateChangeListener {
@@ -79,7 +91,16 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
         }
 
 		appPrefs = new ViamHealthPrefs(Login.this);
-		Log.e("TAG","Token is " + appPrefs.getToken());
+
+
+        ImageView imgBtnLogo = (ImageView) findViewById(R.id.imgBtnLogo);
+        try {
+            imgBtnLogo.setImageDrawable(createLargeDrawable(R.drawable.original_logo_white));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.e("TAG","Token is " + appPrefs.getToken());
 		if(!appPrefs.getToken().equals("null") && !appPrefs.getToken().isEmpty()){
 			Intent i=new Intent(Login.this, Home.class);
 			startActivity(i);
@@ -113,41 +134,59 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
     public void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if(state.isOpened()){
             //Logged in through facebook
-            String fbToken = session.getAccessToken();
-            Toast.makeText(Login.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
-            getProfileDataFromFB(session);
+            //String fbToken = session.getAccessToken();
+            //Toast.makeText(Login.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
+            //getProfileDataFromFB(session);
         }
     }
 
-    private void getProfileDataFromFB(final Session session){
-        String api = "me";
-        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                if (graphObject != null) {
-                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                    if (jsonResponse!=null) {
-                        FBUser fbUser = FBUser.deserialize(jsonResponse);
-                        Toast.makeText(Login.this, "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
-                        User user = fbUser.toUser(null);
-                        if(Checker.isInternetOn(Login.this)){
-                            CallLoginTask task = new CallLoginTask();
-                            task.applicationContext = Login.this;
-                            task.username = user.getUsername();
-                            task.password = "m";
-                            task.fbToken = session.getAccessToken();
-                            task.execute();
-                        }else{
-                            Toast.makeText(Login.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
-                        }
-                    }
+    private static final int MAX_SIZE = 1024;
+
+    private Drawable createLargeDrawable(int resId) throws IOException {
+
+        InputStream is = getResources().openRawResource(resId);
+        BitmapRegionDecoder brd = BitmapRegionDecoder.newInstance(is, true);
+
+        try {
+            if (brd.getWidth() <= MAX_SIZE && brd.getHeight() <= MAX_SIZE) {
+                return new BitmapDrawable(getResources(), is);
+            }
+
+            int rowCount = (int) Math.ceil((float) brd.getHeight() / (float) MAX_SIZE);
+            int colCount = (int) Math.ceil((float) brd.getWidth() / (float) MAX_SIZE);
+
+            BitmapDrawable[] drawables = new BitmapDrawable[rowCount * colCount];
+
+            for (int i = 0; i < rowCount; i++) {
+
+                int top = MAX_SIZE * i;
+                int bottom = i == rowCount - 1 ? brd.getHeight() : top + MAX_SIZE;
+
+                for (int j = 0; j < colCount; j++) {
+
+                    int left = MAX_SIZE * j;
+                    int right = j == colCount - 1 ? brd.getWidth() : left + MAX_SIZE;
+
+                    Bitmap b = brd.decodeRegion(new Rect(left, top, right, bottom), null);
+                    BitmapDrawable bd = new BitmapDrawable(getResources(), b);
+                    bd.setGravity(Gravity.TOP | Gravity.LEFT);
+                    drawables[i * colCount + j] = bd;
                 }
             }
-        });
 
-        request.executeAsync();
+            LayerDrawable ld = new LayerDrawable(drawables);
+            for (int i = 0; i < rowCount; i++) {
+                for (int j = 0; j < colCount; j++) {
+                    ld.setLayerInset(i * colCount + j, MAX_SIZE * j, MAX_SIZE * i, 0, 0);
+                }
+            }
+
+            return ld;
+        }
+        finally {
+            brd.recycle();
+            return null;
+        }
     }
 
     // onclick method of all clikable control
@@ -198,7 +237,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 	public class CallLoginTask extends AsyncTask <String, Void,String>
 	{
 		protected Context applicationContext;
-        protected String username, password, fbToken;
+        protected String username, password;
 
 		@Override
 		protected void onPreExecute() {
@@ -218,6 +257,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
                 dialog.dismiss();
                 //appPrefs.setUsername(user_name.getText().toString().trim());
                 Intent i=new Intent(Login.this, Home.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
 			}
 		}  

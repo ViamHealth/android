@@ -4,27 +4,37 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
- 
+
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
 
@@ -41,7 +51,7 @@ public class RestClient {
 	private String response;
 	private int responseCode;
 	
-	private String url;
+	private String mUrl;
 	
 	// HTTP Basic Authentication
 	private String username;
@@ -49,8 +59,13 @@ public class RestClient {
 	
 	protected Context context;
 
+    private RequestMethod mMethod;
+
+    private boolean disableAutoRedirect = false;
+
+
 	public RestClient(String url) {
-		this.url = url;
+		this.mUrl = url;
 		params = new ArrayList<NameValuePair>();
 		headers = new ArrayList<NameValuePair>();
 	}
@@ -61,7 +76,15 @@ public class RestClient {
 		password = pass;
 	}
 
-	public void AddHeader(String name, String value) {
+    public boolean isDisableAutoRedirect() {
+        return disableAutoRedirect;
+    }
+
+    public void setDisableAutoRedirect(boolean disableAutoRedirect) {
+        this.disableAutoRedirect = disableAutoRedirect;
+    }
+
+    public void AddHeader(String name, String value) {
 		headers.add(new BasicNameValuePair(name, value));
 	}
 
@@ -81,8 +104,13 @@ public class RestClient {
 		params.add(new BasicNameValuePair(name, value));
 	}
 
-	public void Execute(RequestMethod method) throws Exception {
-		switch (method) {
+    public void Execute(RequestMethod method) throws Exception {
+        Execute(method, mUrl);
+    }
+
+	public void Execute(RequestMethod method, String url) throws Exception {
+		mMethod = method;
+        switch (method) {
 			case GET: {
 				HttpGet request = new HttpGet(url + addGetParams());
 				request = (HttpGet) addHeaderParams(request);
@@ -112,9 +140,9 @@ public class RestClient {
 	}
 
 	private HttpUriRequest addHeaderParams(HttpUriRequest request) throws Exception {
-			for (NameValuePair h : headers) {
+		for (NameValuePair h : headers) {
 			request.addHeader(h.getName(), h.getValue());
-			}
+		}
 		return request;
 	}
 
@@ -169,7 +197,7 @@ public class RestClient {
 		jsonBody = data;
 	}
 
-	private void executeRequest(HttpUriRequest request, String url) {
+	private void executeRequest(HttpUriRequest request, String url) throws Exception {
 
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpParams params = client.getParams();
@@ -177,25 +205,39 @@ public class RestClient {
 		// Setting 30 second timeouts
 		HttpConnectionParams.setConnectionTimeout(params, 30 * 1000);
 		HttpConnectionParams.setSoTimeout(params, 30 * 1000);
-		
+
+        if(disableAutoRedirect)
+            params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
+
 		HttpResponse httpResponse;
 
 		try {
+            Log.i("RestClient", "Before Request " + request.toString());
 			httpResponse = client.execute(request);
 			responseCode = httpResponse.getStatusLine().getStatusCode();
 			message = httpResponse.getStatusLine().getReasonPhrase();
-			
+            Log.i("RestClient", "After Request " + httpResponse.toString());
 			HttpEntity entity = httpResponse.getEntity();
 			
 			if (entity != null) {
 		
-			InputStream instream = entity.getContent();
-			response = convertStreamToString(instream);
-			
-			// Closing the input stream will trigger connection release
-			instream.close();
-		}
+                InputStream instream = entity.getContent();
+                response = convertStreamToString(instream);
 
+                // Closing the input stream will trigger connection release
+                instream.close();
+		    }
+
+            //TODO this needs to be handled differently - need to give it a thought
+            if(responseCode == HttpStatus.SC_MOVED_TEMPORARILY){
+                Header[] headers = httpResponse.getHeaders("Location");
+                if (headers != null && headers.length != 0) {
+                    String newUrl = headers[headers.length - 1].getValue();
+                    // call again with new URL
+                    Execute(mMethod, newUrl);
+                }
+                //TODO is this a error that needs to be handled?
+            }
 		} catch (ClientProtocolException e) {
 			client.getConnectionManager().shutdown();
 			e.printStackTrace();
@@ -237,7 +279,7 @@ public class RestClient {
                 ", params=" + params +
                 ", response='" + response + '\'' +
                 ", responseCode=" + responseCode +
-                ", url='" + url + '\'' +
+                ", mUrl='" + mUrl + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", context=" + context +

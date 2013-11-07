@@ -112,35 +112,10 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
     public void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if(state.isOpened()){
             //SignedUP through facebook
-            String fbToken = session.getAccessToken();
-            Toast.makeText(Register.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
-            getProfileDataFromFB(session);
+            //String fbToken = session.getAccessToken();
+            //Toast.makeText(Register.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
+            //getProfileDataFromFB(session);
         }
-    }
-
-    private void getProfileDataFromFB(Session session){
-        String api = "me";
-        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                if (graphObject != null) {
-                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                    if (jsonResponse!=null) {
-                        FBUser fbUser = FBUser.deserialize(jsonResponse);
-                        Toast.makeText(Register.this, "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
-                        user = fbUser.toUser(null);
-                        user_name.setText(user.getUsername());
-                        password.setText("m");
-                        confirm_password.setText("m");
-                        btnRegister.performClick();
-                    }
-                }
-            }
-        });
-
-        request.executeAsync();
     }
 
     // onclick method of all clikable control
@@ -157,7 +132,6 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
                     task.applicationContext = Register.this;
                     task.username = user_name.getText().toString();
                     task.password = password.getText().toString();
-                    task.user = user;
                     task.execute();
                 }else{
                     Toast.makeText(Register.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
@@ -189,12 +163,12 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
         }
         return val;
     }
+
     // async class for calling webservice and get responce message
     public class CallSignupTask extends AsyncTask <String, Void,String>
     {
         protected Context applicationContext;
         protected String username, password;
-        protected User user;
 
         @Override
         protected void onPreExecute()
@@ -212,6 +186,8 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
             if(result.equals("0")){//just registered
                 dialog.dismiss();
                 Intent i = new Intent(Register.this,Home.class);
+                i.putExtra("justRegistered", true);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
             }else{
@@ -227,14 +203,10 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
             Log.i("doInBackground--Object", "doInBackground--Object");
 
             String result = "1";
+
             User createdUser = obj.SignUp(username, password);
             if(createdUser!=null) {
                 result = obj.Login(username, password);
-
-                if(user!=null){
-                    user.setId(createdUser.getId());
-                    user = obj.updateUser(user);
-                }
             }
             return result;
         }

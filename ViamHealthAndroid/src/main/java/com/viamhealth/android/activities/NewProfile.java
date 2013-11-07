@@ -2,28 +2,35 @@ package com.viamhealth.android.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -36,6 +43,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
+import com.viamhealth.android.dao.rest.endpoints.FileUploader;
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
@@ -43,6 +51,7 @@ import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
+import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
 import org.json.JSONException;
@@ -50,9 +59,10 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener,
-        FBLoginFragment.OnSessionStateChangeListener, EditText.OnFocusChangeListener {
+public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener, EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
 
@@ -67,12 +77,14 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
     Button btnSave, btnCancel;
     ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
-    Spinner bloodGroup;
+    Spinner bloodGroup, relation;
 
     User user = null;
     Profile profile = null;
 
-    private FBLoginFragment fbLoginFragment;
+    private enum UserType {
+        Manual, FB;
+    }
 
     private enum FBRequestType {
         Profile, Family, FamilyProfile;
@@ -84,30 +96,23 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
     private ImageSelector imageSelector;
 
+    private UserType userType;
+
+    private static String TAG = "NewProfile";
+
+    private boolean isEditMode = false;
+    private ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        if (savedInstanceState == null) {
-            // Add the fragment on initial activity setup
-            fbLoginFragment = new FBLoginFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fbLoginFragment, fbLoginFragment)
-                    .commit();
-        } else {
-            // Or set the fragment from restored state info
-            fbLoginFragment = (FBLoginFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.fbLoginFragment);
-        }
-
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         setContentView(R.layout.activity_new_profile);
 
         ga=((Global_Application)getApplicationContext());
+        if(ga==null)
+            throw new NullPointerException("Application in itself is null");
+
         appPrefs=new ViamHealthPrefs(this);
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
@@ -118,6 +123,16 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
         user = (User) intent.getParcelableExtra("user");
+        isEditMode = intent.getBooleanExtra("isEditMode", false);
+
+        if(user!=null && user.getId()>0)
+            isEditMode = true;
+
+        if(user!=null && user.getProfile()!=null && user.getProfile().getFbProfileId()!=null
+                && !user.getProfile().getFbProfileId().isEmpty())
+            userType = UserType.FB;
+        else
+            userType = userType.Manual;
 
         if(user==null)
             user = new User();
@@ -135,12 +150,17 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         imageSelector = new ImageSelector(NewProfile.this);
 
         imgUpload = (ImageButton) findViewById(R.id.imgBtnUpload);
-        imgUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageSelector.pickFile();
-            }
-        });
+        if(userType==UserType.Manual){
+            imgUpload.setVisibility(View.VISIBLE);
+            imgUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageSelector.pickFile(ImageSelector.FileType.Image);
+                }
+            });
+        }else{
+            imgUpload.setVisibility(View.INVISIBLE);
+        }
 
         //by default set the gender as Male
         updateGender(Gender.Male);
@@ -176,42 +196,68 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         mobileNumber = (EditText) findViewById(R.id.profile_phone);
         bloodGroup = (Spinner) findViewById(R.id.profile_blood_group);
         email = (EditText) findViewById(R.id.profile_email);
+        relation = (Spinner) findViewById(R.id.profile_relation);
 
         height = (EditText) findViewById(R.id.input_height);
         weight = (EditText) findViewById(R.id.input_weight);
 
-        profile.setBloodGroup(BloodGroup.O_Positive);
-
         profileDataFetched = RequestStatus.Not_Started;
         familyMemberSelected = RequestStatus.Not_Started;
 
-        if(!user.isLoggedInUser()){
+        /*if(!user.isLoggedInUser()){
             String fbid = null;
-            if(ga.getLoggedInUser().getProfile()!=null)
+            Log.i(TAG, ga.getLoggedInUser().toString());
+            if(ga.getLoggedInUser()!=null && ga.getLoggedInUser().getProfile()!=null)
                 fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
-            getDataFromFB(FBRequestType.Family, fbid);
+            if(fbid!=null && !fbid.isEmpty())
+                getDataFromFB(FBRequestType.Family, fbid);
         } else {
             updateViewFromModel(user);
             //email.setText(user.getEmail());
-            email.setEnabled(false);
+            if(user.isLoggedInUser())
+                email.setEnabled(false);
             //getDataFromFB(FBRequestType.Profile, null);
-        }
+        }*/
+
+        updateViewFromModel(user);
+
+        if(user.isLoggedInUser() && user.getEmail()!=null && !user.getEmail().isEmpty())
+            email.setEnabled(false);
+
+
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        String title = isEditMode ? getString(R.string.edit) + " Profile" : getString(R.string.add_family_member);
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(user.getName());
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        /*** Action bar Creation Ends Here ***/
     }
 
     @Override
-    public void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if(state.isOpened()){
-            if(!user.isLoggedInUser()){
-                String fbid = null;
-                if(ga.getLoggedInUser().getProfile()!=null)
-                    fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
-                getDataFromFB(FBRequestType.Family, fbid);
-            } else {
-                getDataFromFB(FBRequestType.Profile, null);
-            }
-        }else{
-            imgUpload.setVisibility(View.VISIBLE);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.activity_add_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.fbFamilyMember){
+            String fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
+            getDataFromFB(FBRequestType.Family, fbid);
+            return true;
         }
+
+        if(item.getItemId()== android.R.id.home){
+            Intent returnIntent = new Intent();
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void getDataFromFB(final FBRequestType type, final String profileId) {
@@ -285,8 +331,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
     }
 
     private void updateViewFromModel(User user) {
-        if(!user.isLoggedInUser())
-            email.setText(user.getEmail());
+        email.setText(user.getEmail());
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
 
@@ -305,7 +350,12 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             mobileNumber.setText(user.getProfile().getMobileNumber());
             organization.setText(user.getProfile().getOrganization());
 
+            if(user.getProfile().getFbProfileId()!=null && !user.getProfile().getFbProfileId().isEmpty()){
+                imgUpload.setVisibility(View.GONE);
+            }
         }
+
+
     }
 
     private void updateViewFromFBData(FBUser fbUser){
@@ -327,7 +377,8 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         }else{//this is for facebook login pop-up
             if(imageSelector.onActivityResult(requestCode, resultCode, data)){
-                Bitmap bitmap = imageSelector.getBitmap();
+                int size = UIUtility.dpToPx(NewProfile.this, 120);
+                Bitmap bitmap = imageSelector.getBitmap(size, size);
                 profilePic.setDefaultProfilePicture(bitmap);
             }else{
                 super.onActivityResult(requestCode, resultCode, data);
@@ -437,6 +488,34 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         }else{//when focused out
 
+        }
+    }
+
+    public class UploadProfilePicTask extends AsyncTask<Void, Void, FileUploader.Response> {
+
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(NewProfile.this);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("uploading your image..");
+            //dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(FileUploader.Response s) {
+            dialog.dismiss();
+        }
+
+        @Override
+        protected FileUploader.Response doInBackground(Void... params) {
+            FileUploader uploader = new FileUploader(appPrefs.getToken());
+            long userId = ga.getLoggedInUser().getId();
+            FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getURI(),
+                                                        NewProfile.this, userId, dialog);
+            //Log.i(TAG, response.toString());
+            return response;
         }
     }
 

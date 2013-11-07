@@ -143,8 +143,8 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
         if(action == Actions.UploadFiles){
             mTabHost.setCurrentTabByTag("files");
-            com.viamhealth.android.activities.oldones.fragments.FileFragment fragment = (com.viamhealth.android.activities.oldones.fragments.FileFragment) mTabManager.getCurrentSelectedTabFragment();
-            fragment.uploadImage();
+            FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
+            fragment.pickFile();
         } else if(action == Actions.SetGoal){
             mTabHost.setCurrentTabByTag("goals");
         }

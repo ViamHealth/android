@@ -1,5 +1,6 @@
 package com.viamhealth.android.manager;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -32,6 +34,8 @@ public class ImageSelector {
     private static final int CAMERA_PIC_REQUEST = 1337;
     private static final int LIBRARY_FILE_REQUEST = 1338;
 
+    public enum FileType { Image, All; }
+
     private Uri uri;
     private Bitmap bitmap;
     private File file;
@@ -41,7 +45,7 @@ public class ImageSelector {
         mContext = context;
     }
 
-    public void pickFile() {
+    public void pickFile(final FileType type) {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
 
@@ -54,26 +58,73 @@ public class ImageSelector {
                 dialog.dismiss();
 
                 if (items[item].equals("Take Photo")) {
+                    File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImage.jpg");
+                    Uri outputFileUri = Uri.fromFile(file);
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
-                    mContext.startActivityForResult(camera, CAMERA_PIC_REQUEST);
+                    camera.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                    ((Activity)mContext).startActivityForResult(camera, CAMERA_PIC_REQUEST);
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    photoPickerIntent.setType("*/*");
+                    if(type==FileType.Image)
+                        photoPickerIntent.setType("image/*");
+                    if(type==FileType.All)
+                        photoPickerIntent.setType("*/*");
                     photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    mContext.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
+                    ((Activity)mContext).startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
                 }
             }
         });
         builder.show();
     }
 
-    public void getURI() {
+    public Uri getURI() {
         return uri;
     }
 
-    public void getBitmap() {
+    public Bitmap getBitmap() {
         return bitmap;
+    }
+
+    public Bitmap getBitmap(int height, int width) {
+        //String mimeType = mContext.getContentResolver().getType(uri);
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
+
+        if(!options.outMimeType.contains("image"))
+            return null;
+
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
+
+        return bitmap;
+    }
+
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     public File getFile() {
@@ -84,12 +135,13 @@ public class ImageSelector {
         return byteArray;
     }
 
-    public bool onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==LIBRARY_FILE_REQUEST){
-            if(resultCode==getActivity().RESULT_OK){
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==LIBRARY_FILE_REQUEST || requestCode==CAMERA_PIC_REQUEST){
+            if(resultCode==((Activity)mContext).RESULT_OK){
+                System.gc();
                 uri = data.getData();
                 String filePath = data.getData().getPath();
-                String fileName = UIUtility.getFileName(getSherlockActivity(), uri);
+                String fileName = UIUtility.getFileName(mContext, uri);
                 file = new File(getRealPathFromURI(mContext, uri));
                 Toast.makeText(mContext, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
                 byteArray = new byte[0];
@@ -99,26 +151,24 @@ public class ImageSelector {
                     e.printStackTrace();
                     Log.e("TAG", "ReadFileToByteArray", e.getCause());
                 }
-                final String fileExtension = filename.lastIndexOf(".")>-1?filename.substring(filename.lastIndexOf(".")+1):null;
-                String mimeType = fileExtension==null?null: MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileExtension);
-                bitmap = mimeType.contains("image")? BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length):null;
 
                 //uploadFile(fileName, byteArray);
                 Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
+                return true;
             }
-            return true;
-        }else if(requestCode==CAMERA_PIC_REQUEST) {
-            if (resultCode == getActivity().RESULT_OK) {
+        }/*else if(requestCode==CAMERA_PIC_REQUEST) {
+            if (resultCode == ((Activity)mContext).RESULT_OK) {
                 //Log.e("TAG","Path is : " + path);
                 Bundle extras = data.getExtras();
-                Bitmap bitmap = (Bitmap)extras.get("data");
-                String fileName = "From Camera of " + selectedUser.getName() + ".png";
+                bitmap = (Bitmap)extras.get("data");
+                String fileName = "image.png";
+                System.gc();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byteArray = stream.toByteArray();
+                return true;
             }
-            return true;
-        }
+        }*/
 
         return false;
     }

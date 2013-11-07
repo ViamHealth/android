@@ -251,7 +251,7 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
             menu.clear();
             final int checked = adapter.getCheckedItemCount();
             // update title with number of checked items
-            mode.setTitle(checked + " " +this.selected);
+            mode.setTitle(checked + " " + this.selected);
             switch (checked) {
                 case 0:
                     // if nothing checked - exit action mode
