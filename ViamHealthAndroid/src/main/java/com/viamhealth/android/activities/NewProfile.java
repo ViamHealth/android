@@ -183,10 +183,6 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         btnSave.setTypeface(tf);
         btnSave.setOnClickListener(this);
 
-        btnCancel=(Button)findViewById(R.id.btnCancel_profile);
-        btnCancel.setTypeface(tf);
-        btnCancel.setOnClickListener(this);
-
         firstName = (EditText) findViewById(R.id.profile_first_name);
         lastName = (EditText) findViewById(R.id.profile_last_name);
         dob = (EditText) findViewById(R.id.profile_dob);
