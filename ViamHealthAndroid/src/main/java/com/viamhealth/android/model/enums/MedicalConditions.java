@@ -11,6 +11,7 @@ import java.util.Map;
  * Created by naren on 10/10/13.
  */
 public enum MedicalConditions implements OrFragmentManager.FragmentSpinnerElement {
+    None(0, R.string.none, ""),
     Obese(1, R.string.medical_conidtion_obese, "weightgoal.html"),
     BloodPressure(2, R.string.medical_conidtion_bp, "bpgoal.html"),
     Diabetes(3, R.string.medical_conidtion_diabetes, "sugargoal.html"),

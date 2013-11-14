@@ -272,5 +272,15 @@ public class CholesterolGoal extends Goal {
 
             return healthyRangeJSON;
         }
+
+        @Override
+        public int getMax() {
+            return 0;
+        }
+
+        @Override
+        public int getMin() {
+            return 0;
+        }
     }
 }

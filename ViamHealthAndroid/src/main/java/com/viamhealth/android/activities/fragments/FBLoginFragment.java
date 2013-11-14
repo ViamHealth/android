@@ -185,7 +185,7 @@ public class FBLoginFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(getActivity(), R.style.Greentheme);
             dialog.show();
         }
 
@@ -199,6 +199,7 @@ public class FBLoginFragment extends Fragment {
                 i.putExtra("justRegistered", true);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
+                getActivity().finish();
             }
         }
 

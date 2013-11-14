@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal|center_vertical"
-    android:orientation="vertical"
-    android:background="#37aa4f">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/loginwrapper"
@@ -51,7 +50,8 @@
                 android:ems="20"
                 android:id="@+id/user_name"
                 android:layout_gravity="center"
-                android:hint="@string/username" />
+                android:hint="@string/username"
+                android:gravity="center_horizontal" />
 
             <EditText
                 android:layout_width="fill_parent"
@@ -61,7 +61,8 @@
                 android:id="@+id/user_password"
                 android:layout_gravity="center"
                 android:hint="@string/password"
-                android:password="true" />
+                android:password="true"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 

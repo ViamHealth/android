@@ -222,6 +222,16 @@ public class BPGoal extends Goal {
         }
 
         @Override
+        public int getMax() {
+            return Math.max(maxSP, maxDP);
+        }
+
+        @Override
+        public int getMin() {
+            return Math.min(minSP, minDP);
+        }
+
+        @Override
         public String toString() {
             return "HealthyRange{" +
                     "minSP=" + minSP +

@@ -84,7 +84,7 @@ $(function () {
             title: {
                 text: "Timeline"
             },
-            max: android.goal.targetDate,
+            //max: android.goal.targetDate,
             plotLines: [{
                 value: android.goal.targetDate,
                 width: 2,
@@ -99,7 +99,6 @@ $(function () {
                 dashStyle: "ShortDash",
                 zIndex: 2
             }]
-
         },
         yAxis : {
             title: {
@@ -160,7 +159,8 @@ $(function () {
                 zIndex: 2
             }                       ],
             type: 'linear',
-            min: 20
+            min: android.yAxis.min,
+            max: android.yAxis.max
         },
         plotOptions: {
             series: {

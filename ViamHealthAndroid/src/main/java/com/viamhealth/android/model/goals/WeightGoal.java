@@ -3,6 +3,8 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.viamhealth.android.utils.JsonGraphDataBuilder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -119,7 +121,6 @@ public class WeightGoal extends Goal implements Parcelable {
         return object;
     }
 
-
     public class HealthyRange extends Goal.HealthyRange {
         private double maxWeight;
         private double minWeight;
@@ -152,6 +153,16 @@ public class WeightGoal extends Goal implements Parcelable {
             }
 
             return healthyRangeJSON;
+        }
+
+        @Override
+        public int getMax() {
+            return new Double(maxWeight).intValue();
+        }
+
+        @Override
+        public int getMin() {
+            return new Double(minWeight).intValue();
         }
     }
 }

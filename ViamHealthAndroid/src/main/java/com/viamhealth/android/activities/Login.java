@@ -101,33 +101,29 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
         }
 
         Log.e("TAG","Token is " + appPrefs.getToken());
-		if(!appPrefs.getToken().equals("null") && !appPrefs.getToken().isEmpty()){
-			Intent i=new Intent(Login.this, Home.class);
-			startActivity(i);
-		}else{
-			dbAdapter=new DataBaseAdapter(getApplicationContext());
-			dbAdapter.createDatabase();
-			dbAdapter.insertDefaulValues();
+        dbAdapter=new DataBaseAdapter(getApplicationContext());
+        dbAdapter.createDatabase();
+        dbAdapter.insertDefaulValues();
 
-            userEndPoint=new UserEP(Login.this, (Global_Application)getApplicationContext());
-			
-			Typeface tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
-		       
-			ScreenDimension();
-		    
-			user_name = (EditText)findViewById(R.id.user_name);
-			user_password = (EditText)findViewById(R.id.user_password);
-			user_password.setTypeface(tf);
-			user_name.setTypeface(tf);
-			    
-			login_btn=(Button)findViewById(R.id.login_btn);
-			login_btn.setOnClickListener(this);
-			login_btn.setTypeface(tf);
+        userEndPoint=new UserEP(Login.this, (Global_Application)getApplicationContext());
 
-			sign_up=(TextView)findViewById(R.id.sign_up);
-			sign_up.setOnClickListener(this);
-			sign_up.setTypeface(tf);	
-		}
+        Typeface tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
+
+        ScreenDimension();
+
+        user_name = (EditText)findViewById(R.id.user_name);
+        user_password = (EditText)findViewById(R.id.user_password);
+        user_password.setTypeface(tf);
+        user_name.setTypeface(tf);
+
+        login_btn=(Button)findViewById(R.id.login_btn);
+        login_btn.setOnClickListener(this);
+        login_btn.setTypeface(tf);
+
+        sign_up=(TextView)findViewById(R.id.sign_up);
+        sign_up.setOnClickListener(this);
+        sign_up.setTypeface(tf);
+
 	}
 
     @Override
@@ -212,7 +208,6 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 			Intent i = new Intent(Login.this, Register.class);
 			startActivity(i);
 		}
-		
 	}
 
 	// function for validation
@@ -242,7 +237,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		@Override
 		protected void onPreExecute() {
 			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-			dialog = new ProgressDialog(Login.this);
+			dialog = new ProgressDialog(Login.this, R.style.Greentheme);
 			dialog.setMessage("we are validating your identity....");
 			dialog.show();
 			Log.i("onPreExecute", "onPreExecute");
@@ -259,6 +254,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
                 Intent i=new Intent(Login.this, Home.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
+                finish();
 			}
 		}  
 

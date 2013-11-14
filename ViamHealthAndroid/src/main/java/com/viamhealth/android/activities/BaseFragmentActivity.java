@@ -5,12 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Created by naren on 05/10/13.
  */
-public class BaseFragmentActivity extends FragmentActivity {
+public class BaseFragmentActivity extends SherlockFragmentActivity {
 
     Display display;
     int height,width;

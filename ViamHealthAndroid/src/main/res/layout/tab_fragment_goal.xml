@@ -2,8 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#eeeeee">
+    android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -11,7 +10,8 @@
         android:id="@+id/initial_layout"
         android:textAlignment="center"
         android:layout_gravity="center"
-        android:foregroundGravity="center|center_horizontal">
+        android:foregroundGravity="center|center_horizontal"
+        android:visibility="gone">
 
         <LinearLayout
             android:orientation="vertical"
@@ -41,26 +41,35 @@
                 android:id="@+id/btnAddGoal"
                 android:layout_gravity="center"
                 android:textSize="30dp"
-                style="@style/ButtonReverseTheme"
                 android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:textColor="#ffffff" />
+                android:layout_marginRight="25dp"/>
         </LinearLayout>
 
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/final_layout">
+        android:id="@+id/final_layout"
+        android:visibility="visible">
 
         <android.support.v4.view.ViewPager
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff" />
-    </LinearLayout>
+            android:layout_marginTop="5dp"
+            android:layout_above="@+id/titles" />
+
+        <com.viamhealth.android.ui.viewpagerindicator.CirclePageIndicator
+            android:id="@+id/titles"
+            android:layout_height="15dp"
+            android:layout_width="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="false"
+            android:layout_margin="5dp" />
+
+    </RelativeLayout>
 
 </LinearLayout>

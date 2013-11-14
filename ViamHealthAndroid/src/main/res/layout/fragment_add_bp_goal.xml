@@ -11,16 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
-        android:layout_marginTop="20dp"
         android:id="@+id/section_present">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/present_values"
-            android:layout_gravity="center"
-            android:textColor="#000000" />
 
         <EditText
             android:id="@+id/add_goal_present_sp"
@@ -28,13 +19,12 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            style="@style/EditTextGreenTheme"
             android:text="" />
 
         <EditText
@@ -43,13 +33,12 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            style="@style/EditTextGreenTheme" />
+            android:layout_marginTop="20dp" />
 
         <EditText
             android:id="@+id/add_goal_present_pr"
@@ -57,30 +46,20 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            style="@style/EditTextGreenTheme" />
+            android:visibility="gone" />
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/goal_settings"
-            android:id="@+id/textView"
-            android:layout_gravity="center"
-            android:textColor="#000000" />
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/add_goal_target_sp"
@@ -88,13 +67,12 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            style="@style/EditTextGreenTheme" />
+            android:layout_marginTop="20dp" />
 
         <EditText
             android:id="@+id/add_goal_target_dp"
@@ -102,13 +80,12 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            style="@style/EditTextGreenTheme"
             android:textIsSelectable="false" />
 
         <EditText
@@ -117,27 +94,27 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            style="@style/EditTextGreenTheme"
-            android:textIsSelectable="false" />
+            android:textIsSelectable="false"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/add_goal_target_date"
             android:hint="target date"
-            style="@style/EditTextGreenTheme"
             android:inputType="date"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp" />
 
     </LinearLayout>
 </LinearLayout>

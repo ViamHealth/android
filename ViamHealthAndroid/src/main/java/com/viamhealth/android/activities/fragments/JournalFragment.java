@@ -67,6 +67,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 /**
@@ -145,14 +146,6 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         return view;
 
     }
-
-
-
-public static SherlockFragment getInstance()
-{
-    return JournalFragment.getInstance();
-}
-
 
     private void fromOldCode() {
 
@@ -912,13 +905,12 @@ public static SherlockFragment getInstance()
         }
     };
     private void updateDisplay() {
-        lbl_food_date.setText(
-                new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(pYear).append("-")
-                        .append(pMonth + 1).append("-")
-                        .append(pDay).append(" "));
+        lbl_food_date.setText(new StringBuilder()
+                .append(dateAndTime.get(Calendar.YEAR)).append("-")
+                .append(dateAndTime.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)).append("-")
+                .append(dateAndTime.get(Calendar.DATE)).append(" "));
     }
+
     private void updateLabelTime() {
 
         lbl_food_time.setText(dateAndTime.HOUR +":" +dateAndTime.MINUTE +":"+dateAndTime.SECOND);

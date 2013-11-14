@@ -18,8 +18,7 @@
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:id="@+id/reminder_header"
-            android:layout_margin="20dp"
-            style="@style/EditTextGreenTheme" />
+            android:layout_margin="20dp"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -50,7 +49,6 @@
                     android:id="@+id/etMorning"
                     android:text="09:00 AM"
                     android:clickable="false"
-                    style="@style/EditTextGreenTheme"
                     android:gravity="center_vertical|center_horizontal" />
 
                 <NumberPicker
@@ -84,7 +82,6 @@
                     android:id="@+id/etNoon"
                     android:text="03:00 PM"
                     android:clickable="false"
-                    style="@style/EditTextGreenTheme"
                     android:gravity="center_vertical|center_horizontal" />
 
                 <NumberPicker
@@ -119,7 +116,6 @@
                     android:id="@+id/etNight"
                     android:text="09:00 PM"
                     android:clickable="false"
-                    style="@style/EditTextGreenTheme"
                     android:gravity="center_vertical|center_horizontal" />
 
                 <NumberPicker
@@ -184,8 +180,7 @@
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:id="@+id/etComment"
-            android:layout_margin="20dp"
-            style="@style/EditTextGreenTheme" />
+            android:layout_margin="20dp"/>
 
     </LinearLayout>
 
@@ -200,8 +195,7 @@
             android:layout_height="48dp"
             android:text="@string/save"
             android:id="@+id/btnSave"
-            android:layout_gravity="center_horizontal"
-            style="@style/ButtonReverseTheme" />
+            android:layout_gravity="center_horizontal"/>
 
         <Button
             style="?android:attr/buttonStyleSmall"

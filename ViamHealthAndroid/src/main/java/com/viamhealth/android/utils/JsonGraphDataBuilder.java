@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +21,7 @@ import java.util.Map;
 public class JsonGraphDataBuilder {
 
     private JSONObject object = new JSONObject();
+    private Integer max, min;
 
     public JsonGraphDataBuilder(){
 
@@ -31,6 +34,26 @@ public class JsonGraphDataBuilder {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        return this;
+    }
+
+    public JsonGraphDataBuilder writeYAxisExtras(JsonOutput item) {
+        JSONObject yaxis = new JSONObject();
+
+        try {
+            yaxis.put("max", item.getMax());
+            yaxis.put("min", item.getMin());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            object.put("yAxis", yaxis);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return this;
     }
 
@@ -72,7 +95,12 @@ public class JsonGraphDataBuilder {
         public enum GraphSeries { A, B, C, D};
 
         public JSONObject toJSON(GraphSeries series);
+        public int getMax();
+        public int getMin();
+
     }
+
+
 
 
 }

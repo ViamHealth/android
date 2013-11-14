@@ -54,7 +54,8 @@ public class UserEP extends BaseEP {
         Log.e(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
-        client.AddParam("username",username);
+
+        client.AddParam("email",username);
         client.AddParam("password",password);
 
         try
@@ -69,6 +70,7 @@ public class UserEP extends BaseEP {
         Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         user.setLoggedInUser(true);
+        ga.setLoggedInUser(user);
         return user;
     }
 
@@ -112,7 +114,7 @@ public class UserEP extends BaseEP {
         String baseurlString = Global_Application.url+"api-token-auth/";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddParam("username",username);
+        client.AddParam("email",username);
         client.AddParam("password",password);
 
         try{
@@ -160,6 +162,7 @@ public class UserEP extends BaseEP {
         Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         user.setLoggedInUser(true);
+        user.setBmiProfile(getUserBMIProfile(user.getId()));
         ga.setLoggedInUser(user);
         return user;
     }
@@ -368,6 +371,7 @@ public class UserEP extends BaseEP {
             user.setFirstName(jsonUser.getString("first_name"));
             user.setLastName(jsonUser.getString("last_name"));
             user.setProfile(processProfileResponse(jsonUser.getJSONObject("profile")));
+            user.setMobile(jsonUser.getString("mobile"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -480,6 +484,9 @@ public class UserEP extends BaseEP {
         updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
         user.setId(updatedUser.getId());
 
+        User loggedInUser = ga.getLoggedInUser();
+        if(loggedInUser.getId()==user.getId())
+            ga.setLoggedInUser(user);
 
         return user;
     }

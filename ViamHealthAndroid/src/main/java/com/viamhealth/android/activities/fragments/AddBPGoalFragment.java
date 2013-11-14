@@ -80,7 +80,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
         BPGoal goal = new BPGoal();
         goal.setSystolicPressure(Integer.parseInt(tSP.getText().toString()));
         goal.setDiastolicPressure(Integer.parseInt(tDP.getText().toString()));
-        goal.setPulseRate(Integer.parseInt(tPR.getText().toString()));
+        //goal.setPulseRate(Integer.parseInt(tPR.getText().toString()));
         try{
             goal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
@@ -95,7 +95,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
             BPGoalReading readings = new BPGoalReading();
             readings.setSystolicPressure(Integer.parseInt(pSP.getText().toString()));
             readings.setDiastolicPressure(Integer.parseInt(pDP.getText().toString()));
-            readings.setPulseRate(Integer.parseInt(pPR.getText().toString()));
+            //readings.setPulseRate(Integer.parseInt(pPR.getText().toString()));
             readings.setReadingDate(new Date());
             return readings;
         }

@@ -29,8 +29,6 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_greentheme</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_greentheme</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Greentheme</item>
-        
-        
     </style>
 
     <style name="ActionBar.Solid.Greentheme" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
