@@ -84,10 +84,10 @@
     <string name="cancel">Cancel</string>
     <string name="title_activity_new_profile">NewProfile</string>
     <string name="name">name</string>
-    <string name="first_name">first name</string>
-    <string name="last_name">last name</string>
-    <string name="dob">date of birth</string>
-    <string name="email">\@email</string>
+    <string name="first_name">First name*</string>
+    <string name="last_name">Last name</string>
+    <string name="dob">date of birth*</string>
+    <string name="email">\@email*</string>
     <string name="phone">mobile number</string>
     <string name="location">location</string>
     <string name="organization">organization</string>
@@ -158,8 +158,8 @@
     <string name="target_ldl">target ldl</string>
     <string name="target_tryglecerides">target tryglecerides</string>
     <string name="file_title">description of the file</string>
-    <string name="profile_height">how tall are you?</string>
-    <string name="profile_weight">how much do you weigh?</string>
+    <string name="profile_height">how tall are you?(cm)*</string>
+    <string name="profile_weight">how much do you weigh?(kg)*</string>
     <string name="add_weight">Add</string>
     <string name="title_activity_add_goal_value">Add Value</string>
     <string name="title_activity_add_weight">Add Weight</string>

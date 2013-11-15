@@ -195,6 +195,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/profile_relation"
                         android:layout_gravity="center"
+                        android:visibility="gone"
                         android:spinnerMode="dropdown"
                         android:focusableInTouchMode="true"
                         android:gravity="center_vertical|center_horizontal" />

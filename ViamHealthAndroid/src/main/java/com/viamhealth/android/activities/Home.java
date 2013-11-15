@@ -357,6 +357,7 @@ public class Home extends BaseActivity implements OnClickListener{
             selectedUser = lstFamily.get(index);
         }
 
+
         if(isEditMode){
             if(actionMode!=null){
                 actionMode.setTitle(selectedUser.getName() + " selected");
@@ -368,7 +369,10 @@ public class Home extends BaseActivity implements OnClickListener{
                 Boolean isLoggedInUser = false;
 
                 Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
-                addProfileIntent.putExtra("user", selectedUser);
+                if(lstFamily.size() > index)
+                {
+                    addProfileIntent.putExtra("user", selectedUser);
+                }
                 startActivityForResult(addProfileIntent, index);
             }else{
                 Intent intent = new Intent(Home.this, TabActivity.class);
