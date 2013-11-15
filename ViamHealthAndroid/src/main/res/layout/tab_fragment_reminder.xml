@@ -575,16 +575,14 @@
                 android:layout_width="fill_parent"
                 android:layout_height="72dp"
                 android:text="@string/set_medi_reminders"
-                android:layout_gravity="center"
-                style="@style/ButtonReverseTheme" />
+                android:layout_gravity="center"/>
 
             <Button
                 android:id="@+id/add_test_rem"
                 android:layout_width="fill_parent"
                 android:layout_height="72dp"
                 android:text="@string/set_others_reminders"
-                android:layout_gravity="center"
-                style="@style/ButtonReverseTheme" />
+                android:layout_gravity="center"/>
 
         </LinearLayout>
     </FrameLayout>

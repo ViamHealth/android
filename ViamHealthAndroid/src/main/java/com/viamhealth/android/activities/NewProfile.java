@@ -13,9 +13,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
@@ -62,7 +65,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener, EditText.OnFocusChangeListener {
+public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener,
+        EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
 
@@ -196,6 +200,49 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         height = (EditText) findViewById(R.id.input_height);
         weight = (EditText) findViewById(R.id.input_weight);
+
+        //height.setOnKeyListener(this);
+        height.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String units = "cms";
+                //event.getNumber();
+                if(!s.toString().contains(units)){
+                    height.setText(s.toString() + " " + units);
+                }
+            }
+        });
+        weight.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //if(s.)
+                String units = "kgs";
+                //event.getNumber();
+                if(!s.toString().contains(units))
+                    s.append(" " + units);
+            }
+        });
+        //weight.setOnKeyListener(this);
 
         profileDataFetched = RequestStatus.Not_Started;
         familyMemberSelected = RequestStatus.Not_Started;
@@ -351,7 +398,11 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         }
 
-
+        if(user.getBmiProfile()!=null){
+            BMIProfile bmip = user.getBmiProfile();
+            if(bmip.getHeight()>0) height.setText(bmip.getHeight().toString());
+            if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
+        }
     }
 
     private void updateViewFromFBData(FBUser fbUser){
@@ -412,8 +463,10 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        bmi.setHeight(Integer.parseInt(height.getText().toString()));
-        bmi.setWeight(Double.parseDouble(weight.getText().toString()));
+        String[] strH = height.getText().toString().split(" ");
+        String[] strW = weight.getText().toString().split(" ");
+        bmi.setHeight(Integer.parseInt(strH[0]));
+        bmi.setWeight(Double.parseDouble(strW[0]));
 
         user.setBmiProfile(bmi);
 

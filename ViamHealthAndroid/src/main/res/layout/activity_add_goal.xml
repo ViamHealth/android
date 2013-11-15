@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
@@ -6,13 +6,9 @@
 
     <ScrollView android:layout_height="fill_parent"
         android:layout_width="match_parent"
-        android:background="#ffffff">
-
-    <LinearLayout android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="#37AA4F"
-        android:gravity="center_vertical|center_horizontal"
-        android:orientation="vertical">
+        android:background="#ffffff"
+        android:layout_gravity="center"
+        android:layout_above="@+id/btnSave">
 
     <LinearLayout
         android:id="@+id/add_goal_data_layout"
@@ -21,34 +17,13 @@
         android:orientation="vertical"
         android:layout_margin="20dp" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:background="#37AA4F"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:id="@+id/btnSave"
-            android:layout_gravity="center"
-            style="@style/ButtonReverseTheme" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/cancel"
-            android:id="@+id/btnCancel"
-            android:layout_gravity="center"
-            android:gravity="center_vertical|center_horizontal" />
-    </LinearLayout>
-
-    </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="@string/save"
+        android:id="@+id/btnSave"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

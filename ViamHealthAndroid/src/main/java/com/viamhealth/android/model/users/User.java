@@ -61,10 +61,10 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getUsername() {
-        if((username==null || username.isEmpty()) && (email!=null || email.isEmpty()))
+        if((username==null || username.isEmpty()) && (email!=null && email.isEmpty()))
             return email;
 
-        if((username==null || username.isEmpty()) && (mobile!=null || mobile.isEmpty()))
+        if((username==null || username.isEmpty()) && (mobile!=null && mobile.isEmpty()))
             return mobile;
 
         return username;

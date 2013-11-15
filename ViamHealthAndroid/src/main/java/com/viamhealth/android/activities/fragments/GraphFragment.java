@@ -9,6 +9,7 @@ import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -18,7 +19,12 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
 import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -47,12 +53,30 @@ public class GraphFragment extends SherlockFragment implements GoalFragment.OnGo
     MedicalConditions type;
     ActionMode actionMode;
 
+    Date startDate, endDate, currentDate;
+    ProgressBar timeLinePB;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_graph, container, false);
 
         type = (MedicalConditions) getArguments().getSerializable("type");
         json = getArguments().getString("json");
+        Goal goal = getArguments().getParcelable("goal");
+        startDate = goal.getStartDate();
+        endDate = goal.getTargetDate();
+        currentDate = goal.getPresentDate();
+
+        DateTime targetDateTime = new DateTime(endDate.getTime());
+        DateTime startDateTime = new DateTime(startDate.getTime());
+        DateTime presentDateTime = new DateTime(currentDate.getTime());
+        Days noOfDays = Days.daysBetween(targetDateTime, startDateTime);
+        int daysToReachTarget = Math.abs(noOfDays.getDays());
+        noOfDays = Days.daysBetween(presentDateTime, startDateTime);
+        int daysPassedBy = Math.abs(noOfDays.getDays());
+        timeLinePB = (ProgressBar) view.findViewById(R.id.timeLineProgressBar);
+        timeLinePB.setMax(daysToReachTarget);
+        timeLinePB.setProgress(daysPassedBy);
 
         webView = (WebView) view.findViewById(R.id.webView);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -91,42 +115,23 @@ public class GraphFragment extends SherlockFragment implements GoalFragment.OnGo
         return super.onOptionsItemSelected(item);
     }
 
-    /*    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New Value")
-                .setIcon(R.drawable.ic_content_new)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        menu.add(Menu.NONE, R.drawable.ic_action_goal, 10, "New Goal")
-                .setIcon(R.drawable.ic_action_goal)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.ic_content_new){
-            if(onClickAddValueListener != null){
-                onClickAddValueListener.onClick(type);
-            }
-            return false;
-        }
-        if(item.getItemId()==R.drawable.ic_action_goal){
-            if(onClickAddGoalListener != null){
-                onClickAddGoalListener.onClick();
-            }
-            return false;
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
-
     public MedicalConditions getType() {
         return type;
     }
 
     @Override
-    public void onChange(String json) {
+    public void onChange(String json, Goal goal) {
         this.json = json;
         Log.i(TAG, this.json);
+
+        currentDate = goal.getPresentDate();
+        DateTime startDateTime = new DateTime(startDate.getTime());
+        DateTime presentDateTime = new DateTime(currentDate.getTime());
+        Days noOfDays = Days.daysBetween(presentDateTime, startDateTime);
+        int daysPassedBy = Math.abs(noOfDays.getDays());
+
+        timeLinePB.setProgress(daysPassedBy);
+
         //reload the webView
         webView.loadUrl( "javascript:window.location.reload( true )" );
     }

@@ -191,12 +191,12 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(returnIntent);
-            return false;
+            return true;
         }
 
         if(item.getItemId() == android.R.id.home) {
             finish();
-            return false;
+            return true;
         }
 
         return retVal;

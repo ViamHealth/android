@@ -194,5 +194,15 @@ public class DiabetesGoal extends Goal {
 
             return healthyRangeJSON;
         }
+
+        @Override
+        public int getMax() {
+            return Math.max(maxFBS, maxRBS);
+        }
+
+        @Override
+        public int getMin() {
+            return Math.min(minFBS, minRBS);
+        }
     }
 }

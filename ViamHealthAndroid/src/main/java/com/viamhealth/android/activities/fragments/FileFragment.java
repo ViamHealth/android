@@ -145,7 +145,7 @@ public class FileFragment extends SherlockFragment {
         final TextView txtViewFileName = (TextView) dialogView.findViewById(R.id.file_name);
         txtViewFileName.setText(filename.lastIndexOf(".")>-1?filename.substring(0,filename.lastIndexOf(".")):filename);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity(), R.style.GreenTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity(), R.style.Greentheme);
         builder.setView(dialogView);
         builder.setPositiveButton("Upload", new DialogInterface.OnClickListener() {
             @Override

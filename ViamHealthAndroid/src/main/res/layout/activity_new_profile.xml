@@ -25,7 +25,6 @@
             android:text="@string/save"
             android:id="@+id/btnSave_profile"
             android:layout_gravity="center|left"
-            style="@style/ButtonReverseTheme"
             android:clickable="true"
             android:layout_weight="1" />
 
@@ -133,7 +132,7 @@
                     <EditText
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapWords"
                         android:hint="@string/first_name"
                         android:ems="15"
                         android:id="@+id/profile_first_name"
@@ -145,7 +144,7 @@
                     <EditText
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
+                        android:inputType="textCapWords"
                         android:hint="@string/last_name"
                         android:ems="15"
                         android:id="@+id/profile_last_name"
@@ -207,7 +206,6 @@
                         android:id="@+id/input_height"
                         android:layout_gravity="center"
                         android:inputType="numberDecimal"
-                        style="@style/EditTextGreenTheme"
                         android:hint="@string/profile_height"
                         android:gravity="center_horizontal" />
 
@@ -218,7 +216,6 @@
                         android:ems="10"
                         android:id="@+id/input_weight"
                         android:layout_gravity="center"
-                        style="@style/EditTextGreenTheme"
                         android:hint="@string/profile_weight"
                         android:gravity="center_horizontal" />
 
@@ -237,7 +234,6 @@
                     android:ems="10"
                     android:id="@+id/input_systolic"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_systolic"
                     android:gravity="center_horizontal" />
 
@@ -248,7 +244,6 @@
                     android:ems="10"
                     android:id="@+id/input_diastolic"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_diastolic"
                     android:gravity="center_horizontal" />
 
@@ -265,7 +260,6 @@
                     android:ems="10"
                     android:id="@+id/input_fasting"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_fbs"
                     android:gravity="center_horizontal" />
 
@@ -276,7 +270,6 @@
                     android:ems="10"
                     android:id="@+id/input_random"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_rbs"
                     android:gravity="center_horizontal" />
 
@@ -293,7 +286,6 @@
                     android:ems="10"
                     android:id="@+id/input_hdl"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_hdl"
                     android:gravity="center_horizontal" />
 
@@ -304,7 +296,6 @@
                     android:ems="10"
                     android:id="@+id/input_ldl"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_ldl"
                     android:gravity="center_horizontal" />
 
@@ -315,7 +306,6 @@
                     android:ems="10"
                     android:id="@+id/input_tryglecerides"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:hint="@string/present_tryglecerides"
                     android:gravity="center_horizontal" />
 
@@ -326,7 +316,6 @@
                     android:ems="10"
                     android:id="@+id/input_total_cholesterol"
                     android:layout_gravity="center"
-                    style="@style/EditTextGreenTheme"
                     android:gravity="center_horizontal"
                     android:text="Total Cholesterol" />
 

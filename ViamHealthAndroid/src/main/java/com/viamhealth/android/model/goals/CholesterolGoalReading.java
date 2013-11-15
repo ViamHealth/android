@@ -107,4 +107,14 @@ public class CholesterolGoalReading extends GoalReadings {
 
         return object;
     }
+
+    @Override
+    public int getMax() {
+        return Math.max(Math.max(Math.max(hdl, ldl), triglycerides), total);
+    }
+
+    @Override
+    public int getMin() {
+        return Math.min(Math.min(Math.min(hdl, ldl), triglycerides), total);
+    }
 }

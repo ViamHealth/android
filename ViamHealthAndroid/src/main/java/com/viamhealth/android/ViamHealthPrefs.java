@@ -71,7 +71,7 @@ public class ViamHealthPrefs {
 
 
 	public String getToken() {
-		return appSharedPrefs.getString(token, "null");
+		return appSharedPrefs.getString(token, null);
 	}
 
 	public void setToken(String _token) {

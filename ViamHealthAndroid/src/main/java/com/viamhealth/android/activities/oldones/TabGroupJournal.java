@@ -37,7 +37,7 @@ public class TabGroupJournal extends TabGroupActivity
 	        super.onCreate(savedInstanceState);
 	        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 	        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	        startChildActivity("CameraPage", new Intent(this,GoalActivity.class));
+	        //startChildActivity("CameraPage", new Intent(this,GoalActivity.class));
 	          
 	    }
 	 

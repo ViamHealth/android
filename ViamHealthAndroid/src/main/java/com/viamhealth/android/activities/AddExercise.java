@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.BreakfastAdapter;
@@ -28,7 +30,7 @@ import com.viamhealth.android.model.users.User;
 /**
  * Created by Administrator on 10/14/13.
  */
-public class AddExercise extends Activity{
+public class AddExercise extends SherlockActivity {
     functionClass obj;
     String weight,time_spent,physical_activity_id,calories_spent="";
     EditText time_val,calories_val;
@@ -105,6 +107,11 @@ public class AddExercise extends Activity{
             }
         });
 
+
+        getSupportActionBar().setTitle("Add Exercise");
+        getSupportActionBar().setSubtitle(user.getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         btnCancel=(TextView)findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,9 +120,16 @@ public class AddExercise extends Activity{
             }
         });
 
-
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public class CustomOnTimeSelectedListener implements AdapterView.OnItemSelectedListener {
 

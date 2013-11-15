@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="none">None</string>
     <string name="app_name">ViamHealth</string>
     <string name="menu_settings">Logout</string>
     <string name="hello_world">Hello world!</string>
@@ -153,7 +154,7 @@
     <string name="present_hdl">present hdl</string>
     <string name="present_ldl">present ldl</string>
     <string name="present_tryglecerides">present tryglecerides</string>
-    <string name="total_cholesterol">total cholesterol is</string>
+    <string name="total_cholesterol">total cholesterol</string>
     <string name="target_hdl">target hdl</string>
     <string name="target_ldl">target ldl</string>
     <string name="target_tryglecerides">target tryglecerides</string>
@@ -221,7 +222,7 @@
     <string name="delete">Delete</string>
     <string name="editProfile">Edit Profile</string>
     <string name="from_facebook">From Facebook</string>
-    <string name="add_family_member">Add Family Member</string><string name="email_or_mobile">email or mobile number</string>
+    <string name="add_family_member">Add Family Member</string><string name="email_or_mobile">email or mobile number</string><string name="target">Target</string><string name="present">Present</string><string name="timeline">Timeline</string>
 
 
 </resources>

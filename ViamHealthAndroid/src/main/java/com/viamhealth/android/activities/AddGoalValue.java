@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.AddBPValue;
 import com.viamhealth.android.activities.fragments.AddCholesterolValue;
@@ -30,6 +32,7 @@ import com.viamhealth.android.activities.oldones.AddCholesterolGoal;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.UIUtility;
 
 import java.util.Calendar;
@@ -45,6 +48,9 @@ public class AddGoalValue extends BaseFragmentActivity {
     MedicalConditions type;
 
     boolean shouldUpdate = false;
+
+    User user;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,17 +98,9 @@ public class AddGoalValue extends BaseFragmentActivity {
             }
         });
 
-        TextView btnCancel = (TextView) findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
         Intent intent = getIntent();
         type = (MedicalConditions) intent.getSerializableExtra("type");
+        user = (User) intent.getParcelableExtra("user");
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArray("readings", intent.getParcelableArrayExtra("readings"));
@@ -112,6 +110,26 @@ public class AddGoalValue extends BaseFragmentActivity {
         ft.add(R.id.container, fragment);
         ft.commit();
         getSupportFragmentManager().executePendingTransactions();
+
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        String title = "Add " + getString(type.key()) + " Reading";
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(user.getName());
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        /*** Action bar Creation Ends Here ***/
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private Fragment getFragment(MedicalConditions mc, Bundle bundle) {

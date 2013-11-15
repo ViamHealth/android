@@ -1,10 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    android:background="#cdcdcd" >
+    android:layout_marginBottom="20dp">
 
 
     <WebView
@@ -12,6 +11,35 @@
         android:layout_height="fill_parent"
         android:id="@+id/webView"
         android:layout_gravity="center"
-        android:background="#efefef" />
+        android:layout_above="@+id/timelineLayout" />
 
-</FrameLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="false"
+        android:id="@+id/timelineLayout"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/timeline"
+            android:id="@+id/textView2"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:textIsSelectable="false" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/timeLineProgressBar"
+            android:layout_margin="20dp"
+            android:progressDrawable="@drawable/timelineprogressbar" />
+
+    </LinearLayout>
+</RelativeLayout>

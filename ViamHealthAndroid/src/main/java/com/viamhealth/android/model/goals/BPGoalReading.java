@@ -71,6 +71,15 @@ public class BPGoalReading extends GoalReadings {
         return object;
     }
 
+    @Override
+    public int getMax() {
+        return Math.max(systolicPressure, diastolicPressure);
+    }
+
+    @Override
+    public int getMin() {
+        return Math.min(systolicPressure, diastolicPressure);
+    }
 
     public static final Parcelable.Creator<BPGoalReading> CREATOR = new Parcelable.Creator<BPGoalReading>() {
         public BPGoalReading createFromParcel(Parcel in) {

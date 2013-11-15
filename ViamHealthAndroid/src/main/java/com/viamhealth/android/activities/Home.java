@@ -52,6 +52,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+
 public class Home extends BaseActivity implements OnClickListener{
 	Display display;
 	int width,height;
@@ -76,8 +78,21 @@ public class Home extends BaseActivity implements OnClickListener{
     boolean isEditMode = false;
 
     private ActionMode actionMode;
-	
-	@Override
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+    }
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
@@ -90,57 +105,49 @@ public class Home extends BaseActivity implements OnClickListener{
         userEndPoint = new UserEP(this, ga);
         user = ga.getLoggedInUser();
 
-        if(getIntent().getBooleanExtra("logout", false)) {
-            logout();
-            return;
+        if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
+            Intent loginIntent = new Intent(Home.this, Login.class);
+            startActivity(loginIntent);
+        }else{
+            if(getIntent().getBooleanExtra("logout", false)) {
+                logout();
+                return;
+            }
+
+            justRegistered = getIntent().getBooleanExtra("justRegistered", false);
+            lstFamily = getIntent().getParcelableArrayListExtra("family");
+
+            //for generate square
+            main_layout = (LinearLayout)findViewById(R.id.main_layout);
+
+            ScreenDimension();
+
+            next();
+        }
+    }
+
+    private void next() {
+        //if the only logged-in user has not yet created the profile than
+        //force for profile creation
+        User user = ga.getLoggedInUser();
+        boolean getFamilyData = false;
+        if(user==null){
+            getFamilyData = true;
+        }else if(lstFamily==null || lstFamily.size()==0){
+            getFamilyData = false;
+            lstFamily = new ArrayList<User>();
+            lstFamily.add(user);
         }
 
-        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
-        lstFamily = getIntent().getParcelableArrayListExtra("family");
+        if(lstFamily!=null && lstFamily.size()>0)
+            generateView();
 
-        bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
-        core_layout = (LinearLayout) findViewById(R.id.core_layout);
-
-        //for generate square
-        main_layout = (LinearLayout)findViewById(R.id.main_layout);
-        core_layout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideBottomLayout();
-            }
-        });
-
-        hideBottomLayout();
-
-        Button btnSetGoal = (Button) bottom_layout.findViewById(R.id.btnSetGoal);
-        btnSetGoal.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, TabActivity.class);
-                intent.putExtra("user", user);
-                Parcelable[] users = new Parcelable[lstFamily.size()];
-                intent.putExtra("users", lstFamily.toArray(users));
-                intent.putExtra("action", TabActivity.Actions.SetGoal);
-                startActivity(intent);
-            }
-        });
-
-        Button btnUploadFiles = (Button) bottom_layout.findViewById(R.id.btnUploadFiles);
-        btnUploadFiles.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, TabActivity.class);
-                intent.putExtra("user", user);
-                Parcelable[] users = new Parcelable[lstFamily.size()];
-                intent.putExtra("users", lstFamily.toArray(users));
-                intent.putExtra("action", TabActivity.Actions.UploadFiles);
-                startActivity(intent);
-            }
-        });
-
-
-
-        if(lstFamily==null || lstFamily.size()==0){
+        if(!getFamilyData && !user.isProfileCreated()){
+            // logged In User's profile not yet completed then show this
+            Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
+            addProfileIntent.putExtra("user", user);
+            startActivityForResult(addProfileIntent, 0);
+        } else if(getFamilyData) {//fetch the data
             lstFamily = new ArrayList<User>();
             if(Checker.isInternetOn(Home.this)){
                 GetFamilyListTask task = new GetFamilyListTask();
@@ -149,18 +156,23 @@ public class Home extends BaseActivity implements OnClickListener{
             }else{
                 Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
             }
+        } else {//take the user to the goals screen for the loggedInUser
+            Intent intent = new Intent(Home.this, TabActivity.class);
+            intent.putExtra("user", user);
+            Parcelable[] users = new Parcelable[lstFamily.size()];
+            intent.putExtra("users", lstFamily.toArray(users));
+            startActivity(intent);
         }
-
-        if(justRegistered==true)
-            showBottomLayout();
-
-        ScreenDimension();
     }
 
     private void logout() {
-        callFacebookLogout();
-        Intent i = new Intent(Home.this,Login.class);
+        if(ga.getLoggedInUser().getProfile()!=null && ga.getLoggedInUser().getProfile().getFbProfileId()!=null
+                && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
+            callFacebookLogout();
+
+        ga.setLoggedInUser(null);
         appPrefs.setToken(null);
+        Intent i = new Intent(Home.this, Home.class);
         startActivity(i);
         finish();
     }
@@ -272,6 +284,11 @@ public class Home extends BaseActivity implements OnClickListener{
             frm.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    int index = v.getId();
+                    selectedViewPosition = index;
+                    if(lstFamily.size() > index) {
+                        selectedUser = lstFamily.get(index);
+                    }
                     startActionMode(new HomeActionModeCallback());
                     return false;
                 }
@@ -343,10 +360,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-
-        hideBottomLayout();
-
-        Log.e("TAG","id is : " + v.getId());
+        Log.e("TAG", "id is : " + v.getId());
         int index = v.getId();
         this.selectedViewPosition = index;
         LinearLayout tr1lay=(LinearLayout)tiles.get(index);
@@ -385,10 +399,22 @@ public class Home extends BaseActivity implements OnClickListener{
 	}
 
     @Override
+    public void onBackPressed() {
+        if(actionMode!=null){
+            actionMode.finish();
+        }
+
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
         if(resultCode==RESULT_OK){
             if(requestCode < 100) {
+                if(isEditMode && actionMode!=null)
+                    actionMode.finish();
+
                 user = (User) data.getParcelableExtra("user");
                 if(Checker.isInternetOn(Home.this)){
                     CallAddProfileTask task = new CallAddProfileTask();
@@ -404,18 +430,6 @@ public class Home extends BaseActivity implements OnClickListener{
         }
     }
 
-    private void showBottomLayout() {
-        bottom_layout.setVisibility(View.VISIBLE);
-
-        /* Set the name in the bottom_layer and slide-it-up */
-        TextView name = (TextView) bottom_layout.findViewById(R.id.txtViewName);
-        name.setText(user.getName());
-    }
-
-    private void hideBottomLayout() {
-        bottom_layout.setVisibility(View.GONE);
-    }
-
     // async class for calling webservice and get responce message
     public class CallAddProfileTask extends AsyncTask<String, Void, String>
     {
@@ -424,7 +438,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected void onPreExecute()
         {
-            dialog = new ProgressDialog(Home.this);
+            dialog = new ProgressDialog(Home.this, R.style.Greentheme);
             dialog.setMessage("still capturing your profile...");
             dialog.show();
         }
@@ -435,12 +449,6 @@ public class Home extends BaseActivity implements OnClickListener{
                 try{
                     generateTile(lstFamily.size()-1, false);
                     generateTile(lstFamily.size(), true);
-
-                    /* Set the name in the bottom_layer and slide-it-up */
-                    TextView name = (TextView) bottom_layout.findViewById(R.id.txtViewName);
-                    name.setText(user.getName());
-
-                    showBottomLayout();
                 } catch (ImproperArgumentsPassedException ime) {
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
@@ -471,7 +479,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
         @Override
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Home.this);
+            dialog = new ProgressDialog(Home.this, R.style.Greentheme);
             dialog.setMessage("deleting the profile....");
             dialog.show();
         }
@@ -505,7 +513,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
         @Override
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Home.this);
+            dialog = new ProgressDialog(Home.this, R.style.Greentheme);
             dialog.setMessage("sharing the profile....");
             dialog.show();
         }
@@ -534,7 +542,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected void onPreExecute() {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(Home.this);
+            dialog = new ProgressDialog(Home.this, ProgressDialog.THEME_HOLO_LIGHT);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("loading your family");
             dialog.show();
@@ -547,7 +555,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 logout();
                 return;
             }
-            generateView();
+            next();
             dialog.dismiss();
         }
 

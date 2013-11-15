@@ -51,14 +51,12 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/etDuration"
-            style="@style/EditTextGreenTheme"
             android:layout_weight="1" />
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/spDuration"
-            style="@style/SpinnerGreenTheme"
             android:layout_weight="1" />
 
     </LinearLayout>
@@ -85,14 +83,12 @@
             android:inputType="number"
             android:ems="10"
             android:id="@+id/etFrequency"
-            style="@style/EditTextGreenTheme"
             android:layout_weight="1" />
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/spFrequency"
-            style="@style/SpinnerGreenTheme"
             android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

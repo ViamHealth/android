@@ -1,6 +1,8 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,7 @@ import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoal;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.ui.viewpagerindicator.CirclePageIndicator;
 import com.viamhealth.android.utils.BMRCalculator;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.JsonGraphDataBuilder;
@@ -51,6 +55,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -59,6 +64,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+//import com.viewpagerindicator.CirclePageIndicator;
 /**
  * Created by naren on 07/10/13.
  */
@@ -80,7 +86,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
     WebViewFragmentPagerAdapter mPagerAdapter;
 
     FrameLayout initial_layout;
-    LinearLayout final_layout;
+    RelativeLayout final_layout;
 
     ViamHealthPrefs appPrefs;
 
@@ -114,7 +120,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
         dialog = new ProgressDialog(getSherlockActivity());
         dialog.setCanceledOnTouchOutside(false);
 
-        final_layout = (LinearLayout) view.findViewById(R.id.final_layout);
+        final_layout = (RelativeLayout) view.findViewById(R.id.final_layout);
         final_layout.setVisibility(View.GONE);
 
         initial_layout = (FrameLayout) view.findViewById(R.id.initial_layout);
@@ -123,24 +129,9 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
         mPager = (ViewPager) final_layout.findViewById(R.id.pager);
         mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-        mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i2) {
 
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                //GraphFragment fragment = graphFragments.get(i);
-                //MedicalConditions mc = fragment.getType();
-                //actionBar.setSubtitle(mc.key());
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
+        CirclePageIndicator circlePageIndicator = (CirclePageIndicator) final_layout.findViewById(R.id.titles);
+        circlePageIndicator.setViewPager(mPager);
 
         if(action == TabActivity.Actions.SetGoal){
             addNewGoal();
@@ -189,10 +180,12 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
         if(!goalsConfiguredMap.containsKey(mc))
             return null;
 
-        List<GoalReadings> readings = goalsConfiguredMap.get(mc).getReadings();
         Goal goal = goalsConfiguredMap.get(mc);
+        List<GoalReadings> readings = goal.getReadings();
+
 
         JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
+
         builder.write("goal", goal, null)
                .write("seriesA", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
 
@@ -201,8 +194,11 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
 
         if(mc==MedicalConditions.Cholesterol){
             builder.write("seriesC", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
-            builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
+            //builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
         }
+
+        builder.writeYAxisExtras(goal);
+
         return builder.toString();
 
     }
@@ -213,10 +209,61 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
     }
 
     public void addNewGoal() {
-        Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
-        i.putExtra("user", selectedUser);
-        i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
-        startActivityForResult(i, ACTION_CONFIGURE_GOAL);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
+        builder.setTitle("Set Goals for...");
+        String[] mcs = getMedicalConditions(getBundleFromMap(goalsConfiguredMap));
+        if(mcs==null || mcs.length==0){
+            builder.setMessage("There are no more goals to configure. Lets wait for some to be completed!");
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+        }else{
+            final String[] items = Arrays.copyOf(mcs, mcs.length);
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    MedicalConditions selectedMC = MedicalConditions.None;
+                    if (items[item].equals(getString(MedicalConditions.Diabetes.key()))) {
+                        selectedMC = MedicalConditions.Diabetes;
+                    } else if (items[item].equals(getString(MedicalConditions.Cholesterol.key()))) {
+                        selectedMC = MedicalConditions.Cholesterol;
+                    } else if (items[item].equals(getString(MedicalConditions.BloodPressure.key()))) {
+                        selectedMC = MedicalConditions.BloodPressure;
+                    } else if (items[item].equals(getString(MedicalConditions.Obese.key()))) {
+                        selectedMC = MedicalConditions.Obese;
+                    }
+
+                    Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
+                    i.putExtra("user", selectedUser);
+                    i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+                    i.putExtra("type", selectedMC);
+                    startActivityForResult(i, ACTION_CONFIGURE_GOAL);
+                }
+            });
+        }
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                //finish();
+            }
+        });
+        builder.show();
+    }
+
+    private String[] getMedicalConditions(Bundle goalsConfigued) {
+        MedicalConditions[] mcs = MedicalConditions.values();
+        String[] items = new String[mcs.length];
+        int actualSize = 0;
+        for (int i=0; i<mcs.length; i++){
+            if(mcs[i] == MedicalConditions.None || goalsConfigued.containsKey(mcs[i].name()))
+                continue;
+            items[actualSize++] = getString(mcs[i].key());
+        }
+
+        return Arrays.copyOf(items, actualSize);
     }
 
     @Override
@@ -310,14 +357,14 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
         OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
 
         if(listener != null){
-            listener.onChange(getDataForGraph(mc));
+            listener.onChange(getDataForGraph(mc), goalsConfiguredMap.get(mc));
         }
         else
             mPagerAdapter.notifyDataSetChanged();
     }
 
     public interface OnGoalDataChangeListener {
-        public void onChange(String json);
+        public void onChange(String json, Goal goal);
         public void onAdd(String json);
         //public void onUpdate(String json);
     }
@@ -338,8 +385,10 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
             if(fragment == null) {
                 Bundle args = new Bundle();
                 final MedicalConditions mc = (MedicalConditions)goalsConfiguredMap.keySet().toArray()[position];
+                Goal goal = goalsConfiguredMap.get(mc);
                 args.putSerializable("type", mc);
                 args.putString("json", getDataForGraph(mc));
+                args.putParcelable("goal", goal);
                 fragment = (GraphFragment)Fragment.instantiate(getActivity(), GraphFragment.class.getName(), args);
                 setOnGoalDataChangeListener(mc, fragment);
                 fragment.setOnClickAddValueListener(new GraphFragment.OnClickAddValueListener() {
@@ -347,6 +396,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
                     public void onClick(MedicalConditions medicalCondition) {
                         Intent i = new Intent(getSherlockActivity(), AddGoalValue.class);
                         i.putExtra("type", medicalCondition);
+                        i.putExtra("user", selectedUser);
                         List<GoalReadings> grs = goalsConfiguredMap.get(medicalCondition).getReadings();
                         Parcelable[] readings = new Parcelable[grs.size()];
                         readings = grs.toArray(readings);

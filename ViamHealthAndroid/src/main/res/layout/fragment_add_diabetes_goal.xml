@@ -10,18 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="visible"
-        android:id="@+id/section_present"
-        android:layout_marginTop="20dp">
+        android:id="@+id/section_present">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/present_values"
-            android:layout_gravity="center"
-            android:textColor="#FFFFFF" />
-
-        <LinearLayout
+            <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -62,8 +53,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/seekBar_present_fbs"
-                android:layout_gravity="center"
-                style="@style/SeekBarGreenTheme" />
+                android:layout_gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,8 +97,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/seekBar_present_rbs"
-                android:layout_gravity="center"
-                style="@style/SeekBarGreenTheme" />
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <EditText
@@ -117,14 +106,15 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            style="@style/EditTextReverseTheme"
-            android:text="" />
+            android:text=""
+            android:visibility="visible"
+            android:textIsSelectable="false" />
 
         <EditText
             android:id="@+id/add_goal_present_rbs"
@@ -132,30 +122,19 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            style="@style/EditTextReverseTheme" />
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible"
-        android:layout_marginTop="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/goal_settings"
-            android:id="@+id/textView"
-            android:layout_gravity="center"
-            android:textColor="#FFFFFF" />
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -197,8 +176,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/seekBar_target_fbs"
-                android:layout_gravity="center"
-                style="@style/SeekBarGreenTheme" />
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -241,8 +219,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/seekBar_target_rbs"
-                android:layout_gravity="center"
-                style="@style/SeekBarGreenTheme" />
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <EditText
@@ -251,13 +228,12 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            style="@style/EditTextReverseTheme" />
+            android:layout_marginTop="20dp" />
 
         <EditText
             android:id="@+id/add_goal_target_rbs"
@@ -265,27 +241,26 @@
             android:inputType="numberSigned"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            style="@style/EditTextReverseTheme"
             android:textIsSelectable="false" />
 
         <EditText
             android:id="@+id/add_goal_target_date"
             android:hint="target date"
-            style="@style/EditTextReverseTheme"
             android:inputType="date"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:gravity="center_vertical|center_horizontal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:padding="5dp"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp" />
 
     </LinearLayout>
 </LinearLayout>
