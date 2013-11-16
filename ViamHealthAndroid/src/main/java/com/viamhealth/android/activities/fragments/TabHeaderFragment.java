@@ -39,6 +39,8 @@ public class TabHeaderFragment extends Fragment {
         profilePic.setCropped(true);
 
         ImageView logo = (ImageView) view.findViewById(R.id.header_logo);
+        logo.setMinimumHeight(100);
+        logo.setMinimumWidth(100);
         logo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

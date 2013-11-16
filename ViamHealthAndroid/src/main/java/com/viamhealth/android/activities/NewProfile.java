@@ -129,6 +129,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
+
         if(user!=null && user.getId()>0)
             isEditMode = true;
 
