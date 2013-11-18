@@ -86,6 +86,8 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
     User user = null;
     Profile profile = null;
 
+    boolean isImageSelected = false;
+
     private enum UserType {
         Manual, FB;
     }
@@ -428,6 +430,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 int size = UIUtility.dpToPx(NewProfile.this, 120);
                 Bitmap bitmap = imageSelector.getBitmap(size, size);
                 profilePic.setDefaultProfilePicture(bitmap);
+                isImageSelected = true;
             }else{
                 super.onActivityResult(requestCode, resultCode, data);
                 Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
@@ -476,16 +479,26 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         return user;
     }
 
+    protected void updateUser(User u) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("user", u);
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
+
     @Override
     public void onClick(View v) {
         Intent returnIntent = new Intent();
 
         if(v == btnSave){
             if(validate()){
-                User user = generateModelFromView();
-                returnIntent.putExtra("user", user);
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                if(isImageSelected){
+                    UploadProfilePicTask task = new UploadProfilePicTask();
+                    task.execute();
+                }else{
+                    User newUser = generateModelFromView();
+                    updateUser(newUser);
+                }
             }
         }else if(v == btnCancel) {
             setResult(RESULT_CANCELED, returnIntent);
@@ -554,17 +567,19 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         }
 
         @Override
-        protected void onPostExecute(FileUploader.Response s) {
+        protected void onPostExecute(FileUploader.Response response) {
             dialog.dismiss();
+            User newUser = generateModelFromView();
+            newUser.getProfile().setProfilePicURL(response.getDownloadURL());
+            updateUser(newUser);
         }
 
         @Override
         protected FileUploader.Response doInBackground(Void... params) {
             FileUploader uploader = new FileUploader(appPrefs.getToken());
-            long userId = ga.getLoggedInUser().getId();
+            long userId = user.getId();
             FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getURI(),
                                                         NewProfile.this, userId, dialog);
-            //Log.i(TAG, response.toString());
             return response;
         }
     }

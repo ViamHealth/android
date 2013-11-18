@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -30,7 +31,9 @@ import java.io.IOException;
  */
 public class ImageSelector {
 
-    private Context mContext;
+    private Activity mActivity;
+    private Fragment mFragment;
+
     private static final int CAMERA_PIC_REQUEST = 1337;
     private static final int LIBRARY_FILE_REQUEST = 1338;
 
@@ -41,15 +44,19 @@ public class ImageSelector {
     private File file;
     private byte[] byteArray;
 
-    public ImageSelector(Context context) {
-        mContext = context;
+    public ImageSelector(Activity activity) {
+        mActivity = activity;
+    }
+
+    public ImageSelector(Fragment fragment) {
+        mFragment = fragment;
     }
 
     public void pickFile(final FileType type) {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("Upload from...");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -63,7 +70,11 @@ public class ImageSelector {
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                    ((Activity)mContext).startActivityForResult(camera, CAMERA_PIC_REQUEST);
+                    if(mActivity!=null)
+                        mActivity.startActivityForResult(camera, CAMERA_PIC_REQUEST);
+                    else
+                        mFragment.startActivityForResult(camera, CAMERA_PIC_REQUEST);
+
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     if(type==FileType.Image)
@@ -71,7 +82,12 @@ public class ImageSelector {
                     if(type==FileType.All)
                         photoPickerIntent.setType("*/*");
                     photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
-                    ((Activity)mContext).startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
+
+                    if(mActivity!=null)
+                        mActivity.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
+                    else
+                        mFragment.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
+
                 }
             }
         });
@@ -136,14 +152,16 @@ public class ImageSelector {
     }
 
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        Activity activity = mActivity==null ? mFragment.getActivity() : mActivity;
+
         if(requestCode==LIBRARY_FILE_REQUEST || requestCode==CAMERA_PIC_REQUEST){
-            if(resultCode==((Activity)mContext).RESULT_OK){
+            if(resultCode==activity.RESULT_OK){
                 System.gc();
                 uri = data.getData();
                 String filePath = data.getData().getPath();
-                String fileName = UIUtility.getFileName(mContext, uri);
-                file = new File(getRealPathFromURI(mContext, uri));
-                Toast.makeText(mContext, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
+                String fileName = UIUtility.getFileName(activity, uri);
+                file = new File(getRealPathFromURI(activity, uri));
+                Toast.makeText(activity, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
                 byteArray = new byte[0];
                 try {
                     byteArray = FileUtils.readFileToByteArray(file);
@@ -153,22 +171,10 @@ public class ImageSelector {
                 }
 
                 //uploadFile(fileName, byteArray);
-                Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
                 return true;
             }
-        }/*else if(requestCode==CAMERA_PIC_REQUEST) {
-            if (resultCode == ((Activity)mContext).RESULT_OK) {
-                //Log.e("TAG","Path is : " + path);
-                Bundle extras = data.getExtras();
-                bitmap = (Bitmap)extras.get("data");
-                String fileName = "image.png";
-                System.gc();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byteArray = stream.toByteArray();
-                return true;
-            }
-        }*/
+        }
 
         return false;
     }

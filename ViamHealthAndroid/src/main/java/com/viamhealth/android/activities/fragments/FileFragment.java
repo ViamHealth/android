@@ -111,7 +111,7 @@ public class FileFragment extends SherlockFragment {
 
         setHasOptionsMenu(true);
 
-        imageSelector = new ImageSelector(getSherlockActivity());
+        imageSelector = new ImageSelector(this);
 
         return view;
     }
@@ -196,6 +196,7 @@ public class FileFragment extends SherlockFragment {
     public void pickFile() {
         imageSelector.pickFile(ImageSelector.FileType.All);
     }
+
     public interface OnNewFileUploadedListener {
         public void onNewFileUploaded(FileData fileData);
     }

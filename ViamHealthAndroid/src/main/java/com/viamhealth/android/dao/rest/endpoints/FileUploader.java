@@ -145,7 +145,7 @@ public class FileUploader {
                 conn.setUseCaches(false); // Don't use a Cached Copy
                 conn.setRequestMethod(method);
                 conn.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
-                conn.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
+                //conn.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
                 conn.setRequestProperty("Authorization","Token " + token);
                 conn.setRequestProperty("Connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
@@ -153,8 +153,9 @@ public class FileUploader {
                 dos = new DataOutputStream(conn.getOutputStream());
 
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
+                Log.i("FileUploader", twoHyphens + boundary + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + sourceFile.getName() + "\"" + lineEnd);
-
+                Log.i("FileUploader", "Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + sourceFile.getName() + "\"" + lineEnd);
                 dos.writeBytes(lineEnd);
 
                 // create a buffer of  maximum size
@@ -167,12 +168,10 @@ public class FileUploader {
                 bytesRead = fileInputStream.read(buffer, 0, bufferSize);
 
                 while (bytesRead > 0) {
-
                     dos.write(buffer, 0, bufferSize);
                     bytesAvailable = fileInputStream.available();
                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
                 }
 
                 // send multipart form data necesssary after file data...

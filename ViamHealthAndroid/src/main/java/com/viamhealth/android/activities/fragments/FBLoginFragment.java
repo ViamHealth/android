@@ -185,7 +185,7 @@ public class FBLoginFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity(), R.style.Greentheme);
+            dialog = new ProgressDialog(getActivity(), R.style.StyledProgressDialog);
             dialog.show();
         }
 

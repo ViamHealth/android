@@ -3,9 +3,10 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="Reversetheme" parent="@style/Theme.Greentheme">
+  <style name="Reversetheme" parent="@style/Theme.Sherlock.Green">
     <item name="android:background">@color/app_green</item>
-    <item name="android:textColor">@android:color/white</item>
+
+    <item name="android:textViewStyle">@style/TextViewReversetheme</item>
 
     <item name="android:editTextStyle">@style/EditTextReversetheme</item>
 
