@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,6 +24,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -54,16 +57,53 @@ public class ImageSelector {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-
                 dialog.dismiss();
-
                 if (items[item].equals("Take Photo")) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImage.jpg");
                     Uri outputFileUri = Uri.fromFile(file);
+                    uri=outputFileUri;
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
                     ((Activity)mContext).startActivityForResult(camera, CAMERA_PIC_REQUEST);
+                    /*
+                    Camera cam=null;
+                    Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+                    int cameraCount = Camera.getNumberOfCameras();
+                    for ( int camIdx = 0; camIdx < cameraCount; camIdx++ ) {
+                        Camera.getCameraInfo( camIdx, cameraInfo );
+                        if ( cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT  ) {
+                            try {
+                                //cam = Camera.open( camIdx );
+                            } catch (RuntimeException e) {
+                                Log.e("camera open", "Camera failed to open: " + e.getLocalizedMessage());
+                            }
+                        }
+                    }
+
+                    cam = Camera.open( Camera.CameraInfo.CAMERA_FACING_FRONT );
+                    Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] data, Camera camera) {
+                            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "myImage.jpg");
+                            if (file == null) {
+                                return;
+                            }
+                            try {
+                                FileOutputStream fos = new FileOutputStream(file);
+                                fos.write(data);
+                                fos.close();
+                            } catch (FileNotFoundException e) {
+
+                            } catch (IOException e) {
+                            }
+                        }
+                    };
+
+                    cam.takePicture(null,null,mPicture);
+                    */
+                    //camera.
+
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     if(type==FileType.Image)
@@ -139,11 +179,12 @@ public class ImageSelector {
         if(requestCode==LIBRARY_FILE_REQUEST || requestCode==CAMERA_PIC_REQUEST){
             if(resultCode==((Activity)mContext).RESULT_OK){
                 System.gc();
-                uri = data.getData();
-                String filePath = data.getData().getPath();
+                //uri = data.getData();
+               //String filePath = data.getData().getPath();
+                String filePath=uri.getPath();
                 String fileName = UIUtility.getFileName(mContext, uri);
                 file = new File(getRealPathFromURI(mContext, uri));
-                Toast.makeText(mContext, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(mContext, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
                 byteArray = new byte[0];
                 try {
                     byteArray = FileUtils.readFileToByteArray(file);
@@ -153,7 +194,7 @@ public class ImageSelector {
                 }
 
                 //uploadFile(fileName, byteArray);
-                Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
+                //Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
                 return true;
             }
         }/*else if(requestCode==CAMERA_PIC_REQUEST) {
@@ -168,7 +209,8 @@ public class ImageSelector {
                 byteArray = stream.toByteArray();
                 return true;
             }
-        }*/
+        }
+        */
 
         return false;
     }
