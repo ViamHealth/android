@@ -122,7 +122,18 @@ public class Home extends BaseActivity implements OnClickListener{
 
             ScreenDimension();
 
-            next();
+            //next();
+            lstFamily = new ArrayList<User>();
+
+            //Monjyoti:commented
+            if(Checker.isInternetOn(Home.this)){
+                GetFamilyListTask task = new GetFamilyListTask();
+                task.applicationContext = Home.this;
+                task.execute();
+            }else{
+                Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
@@ -147,7 +158,9 @@ public class Home extends BaseActivity implements OnClickListener{
             Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
             addProfileIntent.putExtra("user", user);
             startActivityForResult(addProfileIntent, 0);
-        } else if(getFamilyData) {//fetch the data
+        }
+
+		else if(getFamilyData) {//fetch the data
             lstFamily = new ArrayList<User>();
             if(Checker.isInternetOn(Home.this)){
                 GetFamilyListTask task = new GetFamilyListTask();
@@ -156,13 +169,18 @@ public class Home extends BaseActivity implements OnClickListener{
             }else{
                 Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
             }
-        } else {//take the user to the goals screen for the loggedInUser
+        }else {//take the user to the goals screen for the loggedInUser\
+
+            //Monjyoti:commented
             Intent intent = new Intent(Home.this, TabActivity.class);
             intent.putExtra("user", user);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
-            startActivity(intent);
+            //startActivity(intent);
+
         }
+
+
     }
 
     private void logout() {
