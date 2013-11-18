@@ -146,24 +146,28 @@ public class UserEP extends BaseEP {
 
         if(ga.getLoggedInUser()!=null)
             return ga.getLoggedInUser();
+        User user=null;
 
         String baseurlString = Global_Application.url+"users/me/";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        if(appPrefs.getToken()!=null)
+        {
+            client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 
-        try{
-            client.Execute(RequestMethod.GET);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try{
+                client.Execute(RequestMethod.GET);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            String responseString = client.getResponse();
+            Log.i(TAG, client.toString());
+            user = processUserResponse(responseString);
+            user.setLoggedInUser(true);
+            user.setBmiProfile(getUserBMIProfile(user.getId()));
+            ga.setLoggedInUser(user);
         }
-
-        String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
-        User user = processUserResponse(responseString);
-        user.setLoggedInUser(true);
-        user.setBmiProfile(getUserBMIProfile(user.getId()));
-        ga.setLoggedInUser(user);
         return user;
     }
 

@@ -23,6 +23,7 @@ import com.viamhealth.android.model.goals.WeightGoal;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,7 +82,9 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
                 pHeight.setEnabled(false);
                 pWeight.setText(user.getBmiProfile().getWeight().toString());
                 pWeight.setEnabled(false);
-                tWeight.setText((getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())).toString());
+                DecimalFormat d=new DecimalFormat("0.0");
+
+                tWeight.setText(d.format(getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())));
             }
         }
 
@@ -97,7 +100,8 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
         int height = Integer.parseInt(pHeight.getText().toString());
         double weight = Double.parseDouble(pWeight.getText().toString());
-        tWeight.setText((getIdealTargetWeight(height, weight)).toString());
+        DecimalFormat d=new DecimalFormat("0.0");
+        tWeight.setText(d.format((getIdealTargetWeight(height, weight))));
     }
 
     private Double getIdealTargetWeight(Integer height, Double weight) {
