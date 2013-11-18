@@ -237,7 +237,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		@Override
 		protected void onPreExecute() {
 			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-			dialog = new ProgressDialog(Login.this, R.style.Greentheme);
+			dialog = new ProgressDialog(Login.this, R.style.StyledProgressDialog);
 			dialog.setMessage("we are validating your identity....");
 			dialog.show();
 			Log.i("onPreExecute", "onPreExecute");

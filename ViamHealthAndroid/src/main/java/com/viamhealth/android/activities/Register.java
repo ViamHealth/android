@@ -174,7 +174,7 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
         protected void onPreExecute()
         {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(Register.this, R.style.Greentheme);
+            dialog = new ProgressDialog(Register.this, R.style.StyledProgressDialog);
             dialog.setMessage("we are creating your identity....");
             dialog.show();
             Log.i("onPreExecute", "onPreExecute");

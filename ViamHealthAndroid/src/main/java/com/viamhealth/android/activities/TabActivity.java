@@ -168,10 +168,10 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
     }
 
     protected View getTabIndicator(int labelId, int drawableId) {
-        View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator, mTabHost.getTabWidget(), false);
-        TextView title = (TextView) tabIndicator.findViewById(R.id.title);
+        View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator_holo, mTabHost.getTabWidget(), false);
+        TextView title = (TextView) tabIndicator.findViewById(android.R.id.title);
         title.setText(getString(labelId));
-        ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);
+        ImageView icon = (ImageView) tabIndicator.findViewById(android.R.id.icon);
         icon.setImageResource(drawableId);
 
         return tabIndicator;
@@ -231,6 +231,11 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
                 }
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public enum Actions { UploadFiles, SetGoal; }

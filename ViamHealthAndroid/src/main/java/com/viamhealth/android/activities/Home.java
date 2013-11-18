@@ -456,7 +456,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected void onPreExecute()
         {
-            dialog = new ProgressDialog(Home.this, R.style.Greentheme);
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
             dialog.setMessage("still capturing your profile...");
             dialog.show();
         }
@@ -497,7 +497,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
         @Override
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Home.this, R.style.Greentheme);
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
             dialog.setMessage("deleting the profile....");
             dialog.show();
         }
@@ -531,7 +531,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
         @Override
         protected void onPreExecute(){
-            dialog = new ProgressDialog(Home.this, R.style.Greentheme);
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
             dialog.setMessage("sharing the profile....");
             dialog.show();
         }
@@ -560,7 +560,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected void onPreExecute() {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(Home.this, ProgressDialog.THEME_HOLO_LIGHT);
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("loading your family");
             dialog.show();
@@ -607,7 +607,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             menu.clear();
-            mode.setTitle("Edit Mode");
+            actionMode.setTitle(selectedUser.getName() + " selected");
             getSupportMenuInflater().inflate(R.menu.home, menu);
             return true;
         }

@@ -87,7 +87,7 @@
         <activity android:name="com.viamhealth.android.activities.AddBreakfast" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddExercise"
-            android:theme="@style/Theme.Greentheme"
+            android:theme="@style/Theme.Sherlock.Green"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.oldones.Reminder" >

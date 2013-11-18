@@ -194,7 +194,7 @@ public class ImageSelector {
                 }
 
                 //uploadFile(fileName, byteArray);
-                //Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
                 return true;
             }
         }/*else if(requestCode==CAMERA_PIC_REQUEST) {
