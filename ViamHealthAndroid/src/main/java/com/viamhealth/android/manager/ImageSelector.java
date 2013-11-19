@@ -72,6 +72,7 @@ public class ImageSelector {
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
                     /*
                     Camera cam=null;
                     Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -109,11 +110,11 @@ public class ImageSelector {
                     cam.takePicture(null,null,mPicture);
                     */
                     //camera.
+
                     if(mActivity!=null)
                         mActivity.startActivityForResult(camera, CAMERA_PIC_REQUEST);
                     else
                         mFragment.startActivityForResult(camera, CAMERA_PIC_REQUEST);
-
 
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -203,6 +204,7 @@ public class ImageSelector {
                 String fileName = UIUtility.getFileName(mActivity, uri);
                 file = new File(getRealPathFromURI(mActivity, uri));
                 //Toast.makeText(mContext, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
+
                 byteArray = new byte[0];
                 try {
                     byteArray = FileUtils.readFileToByteArray(file);
@@ -215,6 +217,7 @@ public class ImageSelector {
                 Toast.makeText(activity, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
                 return true;
             }
+
         }/*else if(requestCode==CAMERA_PIC_REQUEST) {
             if (resultCode == ((Activity)mContext).RESULT_OK) {
                 //Log.e("TAG","Path is : " + path);
@@ -229,6 +232,7 @@ public class ImageSelector {
             }
         }
         */
+
 
         return false;
     }
