@@ -283,7 +283,7 @@ public class UserEP extends BaseEP {
         client.AddParam("gender", profile.getGender().key());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         client.AddParam("date_of_birth", formatter.format(profile.getDob()));
-        client.AddParam("profile_picture", profile.getProfilePicURL());
+        client.AddParam("profile_picture_url", profile.getProfilePicURL());
 
         if(profile.getBloodGroup()!=BloodGroup.None)
             client.AddParam("blood_group", profile.getBloodGroup().value());
@@ -435,29 +435,98 @@ public class UserEP extends BaseEP {
         Profile pd = new Profile();
         Profile.Location location = pd.new Location();
         pd.setLocation(location);
-        try{
-            /* need to deserialize Profile object */
+
+        /* need to deserialize Profile object */
+        try {
             pd.setGender(Gender.get(jsonProfile.getString("gender")));
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            pd.setDob(formatter.parse(jsonProfile.getString("date_of_birth")));
-            pd.setBloodGroup(BloodGroup.get(jsonProfile.getInt("blood_group")));
-            pd.setFbProfileId(jsonProfile.getString("fb_profile_id"));
-            pd.setOrganization(jsonProfile.getString("organization"));
-            pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
-
-            location.setState(jsonProfile.getString("state"));
-            location.setStreet(jsonProfile.getString("street"));
-            location.setCountry(jsonProfile.getString("country"));
-            location.setCity(jsonProfile.getString("city"));
-            location.setZip(jsonProfile.getString("zip_code"));
-            location.setLattitude(jsonProfile.getDouble("lattitude"));
-            location.setLongitude(jsonProfile.getDouble("longitude"));
-            location.setAddress(jsonProfile.getString("address"));
-
-            pd.setLocation(location);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            pd.setDob(formatter.parse(jsonProfile.getString("date_of_birth")));
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pd.setBloodGroup(BloodGroup.get(jsonProfile.getInt("blood_group")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pd.setFbProfileId(jsonProfile.getString("fb_profile_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pd.setOrganization(jsonProfile.getString("organization"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setState(jsonProfile.getString("state"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setStreet(jsonProfile.getString("street"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setCountry(jsonProfile.getString("country"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setCity(jsonProfile.getString("city"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setZip(jsonProfile.getString("zip_code"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setLattitude(jsonProfile.getDouble("lattitude"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setLongitude(jsonProfile.getDouble("longitude"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setAddress(jsonProfile.getString("address"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pd.setLocation(location);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

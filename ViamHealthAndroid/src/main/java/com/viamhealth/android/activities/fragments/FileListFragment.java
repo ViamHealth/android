@@ -228,15 +228,13 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
     }
 
     // all our ActionMode stuff here :)
-    private final class ActionModeCallback implements ActionMode.Callback
-    {
+    private final class ActionModeCallback implements ActionMode.Callback {
 
         // " selected" string resource to update ActionBar text
         private String selected = getActivity().getString(R.string.selected);
 
         @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu)
-        {
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             adapter.enterMultiMode();
             // save global action mode
             actionMode = mode;
@@ -245,8 +243,7 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
 
 
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu)
-        {
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             // remove previous items
             menu.clear();
             final int checked = adapter.getCheckedItemCount();
@@ -259,13 +256,11 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
                     return true;
                 case 1:
                     // all items - rename + delete
-                    getSherlockActivity().getSupportMenuInflater().inflate(
-                            R.menu.action_mode_files, menu);
+                    getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_files, menu);
                     initShareActionProvider(menu);
                     return true;
                 default:
-                    getSherlockActivity().getSupportMenuInflater().inflate(
-                            R.menu.action_mode_files, menu);
+                    getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_files, menu);
                     initShareActionProvider(menu);
                     return true;
             }

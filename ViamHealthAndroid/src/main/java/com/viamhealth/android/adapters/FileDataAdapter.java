@@ -2,8 +2,11 @@ package com.viamhealth.android.adapters;
 
 import java.net.URI;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -47,36 +50,43 @@ public class FileDataAdapter extends MultiSelectionAdapter<FileData> {
 
     @Override
 	public View getItemView(int position, View convertView, ViewGroup parent) {
-	        View row = convertView;
-	        FileDataHolder holder = null;
-	        tf = Typeface.createFromAsset(context.getAssets(),"Aparajita.ttf");
-	        
-	        if(row == null){
-	            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-	            row = inflater.inflate(layoutResourceId, parent, false);
-	            holder = new FileDataHolder();
-	            holder.main_list_layout=(LinearLayout)row.findViewById(R.id.main_list_layout);
-	            holder.img_icon=(ImageView)row.findViewById(R.id.img_icon);
-	            holder.desc_layout=(LinearLayout)row.findViewById(R.id.desc_layout);
-	            holder.img_name = (TextView)row.findViewById(R.id.img_name);
-	            holder.img_desc = (TextView)row.findViewById(R.id.img_desc);
-	            row.setTag(holder);
-	        } else {
-	            holder = (FileDataHolder)row.getTag();
-	        }
-	        
-	        FileData data = lstdata.get(position);
-	        holder.img_name.setText(data.getName().toString());
-	        return row;
-	    }
-	    
-	    static class FileDataHolder
-	    {
-	        TextView img_name,img_desc,img_lbl,img_date;
-	        LinearLayout main_list_layout,desc_layout,end_layout;
-	        ImageView img_icon;
-	    }
-	    
-	    
-	}
+        View row = convertView;
+        FileDataHolder holder = null;
+        tf = Typeface.createFromAsset(context.getAssets(),"Aparajita.ttf");
+
+        if(row == null){
+            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+            row = inflater.inflate(layoutResourceId, parent, false);
+            holder = new FileDataHolder();
+            holder.main_list_layout=(LinearLayout)row.findViewById(R.id.main_list_layout);
+            holder.img_icon=(ImageView)row.findViewById(R.id.img_icon);
+            holder.desc_layout=(LinearLayout)row.findViewById(R.id.desc_layout);
+            holder.img_name = (TextView)row.findViewById(R.id.img_name);
+            holder.img_desc = (TextView)row.findViewById(R.id.img_desc);
+            row.setTag(holder);
+        } else {
+            holder = (FileDataHolder)row.getTag();
+        }
+
+        FileData data = lstdata.get(position);
+        holder.img_name.setText(data.getName().toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(data.getUpdatedOn());
+        holder.img_desc.setText(new StringBuilder()
+                .append("Uploaded by ")
+                .append(data.getUpdatedBy())
+                .append(" on ")
+                .append(cal.get(Calendar.DATE)).append("-")
+                .append(cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)).append("-")
+                .append(cal.get(Calendar.YEAR)));
+
+        return row;
+    }
+
+    static class FileDataHolder {
+        TextView img_name,img_desc,img_lbl,img_date;
+        LinearLayout main_list_layout,desc_layout,end_layout;
+        ImageView img_icon;
+    }
+}
 

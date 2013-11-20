@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.viamhealth.android.activities.fragments.TabHeaderFragment;
+import com.actionbarsherlock.app.ActionBar;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 
@@ -31,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -77,11 +78,11 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 
     User user;
 
+    ActionBar actionBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 		setContentView(R.layout.add_breakfast);
@@ -105,20 +106,9 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 		h5=(int)((height*1.042)/100);
 		h40=(int)((height*8.33)/100);
 
-        /* Add the header fragment*/
-        //headerlayout;
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        TabHeaderFragment headerFragment = new TabHeaderFragment();
         Intent intent = getIntent();
-        Bundle bundle = new Bundle();
         user = intent.getParcelableExtra("user");
         date=intent.getStringExtra("diet_date");
-        bundle.putParcelable("user", user);
-        headerFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.headerlayout, headerFragment);
-        fragmentTransaction.commit();
 
 		//control casting and control onclick management
 		add_heding = (LinearLayout)findViewById(R.id.add_heding);
@@ -133,8 +123,6 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 		food_search_name.setPadding(w10, 0, 0, 0);
 		
 		
-		lbl_add_food_name = (TextView)findViewById(R.id.lbl_add_food_name);
-		lbl_add_food_name.setText(ga.getFoodType());
 		header_layout=(LinearLayout)findViewById(R.id.header_layout);
 		header_layout.setPadding(w5, h10, w5, h10);
 		
@@ -255,10 +243,20 @@ public class AddBreakfast extends BaseFragmentActivity implements OnClickListene
 				}
 			}
 		   });
-		
-				
-			
-	}
+
+
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Add " + ga.getFoodType());
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+
+        Context themedContext = actionBar.getThemedContext();
+        /*** Action bar Creation Ends Here ***/
+
+
+    }
 
 
     @Override

@@ -6,16 +6,10 @@
     android:orientation="vertical"
     android:background="#EFEFEF" >
 
-        <FrameLayout android:id="@+id/headerlayout"
-            android:layout_width="match_parent"
-            android:layout_height="58dp">
-        </FrameLayout>
-
-  <FrameLayout
+    <FrameLayout
     android:id="@+id/main_layout"
     android:layout_height="fill_parent"
-    android:layout_width="match_parent"
-    android:layout_below="@id/headerlayout">
+    android:layout_width="match_parent">
 
      <LinearLayout
         android:id="@+id/actionbarlayot"
@@ -37,7 +31,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
 
-           >
+            android:visibility="gone">
 
            <TextView
                android:id="@+id/lbl_add_food"

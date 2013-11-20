@@ -40,7 +40,6 @@ import com.viamhealth.android.activities.AddMedication;
 import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Downlaod;
 import com.viamhealth.android.activities.FoodDetail;
-import com.viamhealth.android.activities.oldones.TabGroupActivity;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;

@@ -46,15 +46,13 @@ public class FileLoader {
         fileCache=new FileCache(context);
         authToken = token;
         executorService=Executors.newFixedThreadPool(5);
-
     }
 
     public interface OnFileLoadedListener {
         public void OnFileLoaded(File file);
     }
 
-    public void LoadFile(String url, String filename, OnFileLoadedListener listener)
-    {
+    public void LoadFile(String url, String filename, OnFileLoadedListener listener) {
         List<Byte> byteArray = memoryCache.get(url);
         File f = fileCache.getFile(url, UIUtility.getFileExtension(filename));
         if(f.exists() && f.length()>0){
@@ -65,14 +63,12 @@ public class FileLoader {
         }
     }
 
-    private void queueFile(String url, String extension, OnFileLoadedListener listener)
-    {
+    private void queueFile(String url, String extension, OnFileLoadedListener listener) {
         FileToLoad p=new FileToLoad(url, extension, listener);
         executorService.submit(new FilesLoader(p));
     }
 
-    private byte[] getByteArray(String url, String extension)
-    {
+    private byte[] getByteArray(String url, String extension) {
         File f=fileCache.getFile(url, extension);
 
         //from SD cache
@@ -86,7 +82,8 @@ public class FileLoader {
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
             conn.setRequestMethod("GET");
-            conn.setRequestProperty("Authorization", "Token " + authToken);
+            if(authToken!=null)
+                conn.setRequestProperty("Authorization", "Token " + authToken);
             conn.setConnectTimeout(30000);
             conn.setReadTimeout(30000);
             conn.setInstanceFollowRedirects(true);
@@ -113,8 +110,7 @@ public class FileLoader {
     }
 
     //Task for the queue
-    private class FileToLoad
-    {
+    private class FileToLoad {
         public String url;
         public OnFileLoadedListener listener;
         public String extension;
@@ -153,8 +149,7 @@ public class FileLoader {
     }*/
 
     //Used to display bitmap in the UI thread
-    class FileDisplayer implements Runnable
-    {
+    class FileDisplayer implements Runnable {
         byte[] byteArray;
         FileToLoad fileToLoad;
         public FileDisplayer(byte[] b, FileToLoad f){byteArray=b;fileToLoad=f;}

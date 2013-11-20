@@ -55,7 +55,6 @@ import com.viamhealth.android.activities.AddTest;
 import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.activities.OnSwipeTouchListener;
-import com.viamhealth.android.activities.oldones.InviteUser;
 import com.viamhealth.android.adapters.MedicalDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;
 import com.viamhealth.android.adapters.SeparatedListAdapter;
@@ -517,28 +516,7 @@ public class ReminderFragment extends SherlockFragment implements View.OnClickLi
                 getActivity().findViewById(R.id.main_layout).setVisibility(View.VISIBLE);
             }
 
-
-/*
-            RefreshableListView lstReminderTest=(RefreshableListView)view.findViewById(R.id.lstRemTest);
-            TestDataAdapter1 adapter = new TestDataAdapter1(getSherlockActivity(),R.layout.row_medical_list1, otherData);
-            lstReminderTest.setAdapter(adapter);
-
-            int total_height_test_tab=0,i,len;
-
-            for (i = 0, len = adapter.getCount(); i < len; i++) {
-                View listItem = adapter.getView(i, null, lstReminderTest);
-                listItem.measure(0, 0);
-                int list_child_item_height = listItem.getMeasuredHeight()+lstReminderTest.getDividerHeight();//item height
-                total_height_test_tab += list_child_item_height; //
-            }
-
-            LinearLayout.LayoutParams l4= new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,total_height_test_tab+40);
-            lstReminderTest.setLayoutParams(l4);
-            total_height_test_tab=0;
-*/
             mPager1.setAdapter(new ImagePagerAdapter(lst));
-
-
         }
 
         @Override
