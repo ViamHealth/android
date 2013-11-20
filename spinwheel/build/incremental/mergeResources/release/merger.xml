@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\res" >
+            <file
+                name="wheel_bg_hor"
+                path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\drawable\wheel_bg_hor.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="wheel_bg_ver"
+                path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\drawable\wheel_bg_ver.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="wheel_val"
+                path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\drawable\wheel_val.xml"
+                qualifiers=""
+                type="drawable" />
+            <file
+                path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\values\wheel__attrs.xml"
+                qualifiers="" >
+                <declare-styleable name="WheelHorizontalView" >
+                    <attr
+                        name="selectionDividerWidth"
+                        format="dimension" />
+                </declare-styleable>
+                <declare-styleable name="AbstractWheelView" >
+                    <attr
+                        name="visibleItems"
+                        format="integer" />
+                    <attr
+                        name="isAllVisible"
+                        format="boolean" />
+                    <attr
+                        name="itemOffsetPercent"
+                        format="integer" />
+                    <attr
+                        name="itemsPadding"
+                        format="dimension" />
+                    <attr
+                        name="selectionDividerDimmedAlpha"
+                        format="integer" />
+                    <attr
+                        name="selectionDividerActiveAlpha"
+                        format="integer" />
+                    <attr
+                        name="selectionDivider"
+                        format="reference" />
+                    <attr
+                        name="itemsDimmedAlpha"
+                        format="integer" />
+                    <attr
+                        name="isCyclic"
+                        format="boolean" />
+                </declare-styleable>
+                <declare-styleable name="WheelVerticalView" >
+                    <attr
+                        name="selectionDividerHeight"
+                        format="dimension" />
+                </declare-styleable>
+
+                <attr
+                    name="abstractWheelViewStyle"
+                    format="reference" />
+            </file>
+        </source>
+        <source path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\build\res\rs\release" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="C:\Users\Administrator\Documents\GitHub\android\spinwheel\build-types\release\res" />
+    </dataSet>
+
+</merger>

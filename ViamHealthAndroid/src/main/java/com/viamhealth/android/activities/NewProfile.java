@@ -65,6 +65,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
+import antistatic.spinnerwheel.OnWheelScrollListener;
+import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
+import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
+import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
+
 public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener,
         EditText.OnFocusChangeListener {
 
@@ -130,6 +137,16 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
+
+        final AbstractWheel feet = (AbstractWheel) findViewById(R.id.feet);
+        feet.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        feet.setCyclic(true);
+        final AbstractWheel inches = (AbstractWheel) findViewById(R.id.inches);
+        inches.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        inches.setCyclic(true);
+        final AbstractWheel cms = (AbstractWheel) findViewById(R.id.cms);
+        cms.setViewAdapter(new NumericWheelAdapter(this, 0, 23));
+        cms.setCyclic(true);
 
 
         if(user!=null && user.getId()>0)
@@ -201,10 +218,11 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         email = (EditText) findViewById(R.id.profile_email);
         relation = (Spinner) findViewById(R.id.profile_relation);
 
-        height = (EditText) findViewById(R.id.input_height);
+        //height = (EditText) findViewById(R.id.input_height);
         weight = (EditText) findViewById(R.id.input_weight);
 
         //height.setOnKeyListener(this);
+        /*
         height.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -213,7 +231,10 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                String units = "cms";
+                if(!s.toString().contains(units)){
+                   // height.setText(s.toString() + " " + units);
+                }
             }
 
             @Override
@@ -221,10 +242,12 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 String units = "cms";
                 //event.getNumber();
                 if(!s.toString().contains(units)){
-                    height.setText(s.toString() + " " + units);
+                    //height.setText(s.toString() + " " + units);
                 }
             }
         });
+        */
+
         weight.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
