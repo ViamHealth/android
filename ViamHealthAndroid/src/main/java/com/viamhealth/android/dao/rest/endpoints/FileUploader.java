@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.facebook.HttpMethod;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.manager.ImageSelector;
+import com.viamhealth.android.model.FileData;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONException;
@@ -32,6 +33,7 @@ public class FileUploader {
     private String formValueName = "file";
     private String uploadURL = "";
     private String token = "";
+    private Long userId;
 
     public class Response {
         private int serverResponseCode;
@@ -65,12 +67,83 @@ public class FileUploader {
             return 0;
         }
 
+        public FileData getFileDate() {
+            if(response==null || response.isEmpty())
+                return null;
+
+            FileData data = null;
+            JSONObject object = null;
+            try {
+                data = new FileData();
+                object = new JSONObject(response);
+                data.setId(object.getString("id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setUser(object.getString("user"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setName(object.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setDescription(object.getString("description"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setMimeType(object.getString("mime_type"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setDownload_url(object.getString("download_url"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setUpdatedBy(object.getLong("updated_by"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setUpdatedOn(object.getLong("updated_at")*1000);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return data;
+        }
+
         public String getDownloadURL() {
             if(response==null || response.isEmpty())
                 return null;
             try {
                 JSONObject object = new JSONObject(response);
                 return object.getString("download_url");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public String getProfilePicUrl() {
+            if(response==null || response.isEmpty())
+                return null;
+            try {
+                JSONObject object = new JSONObject(response);
+                return object.getString("profile_picture_url");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -94,7 +167,7 @@ public class FileUploader {
     private String method = "POST";
 
     public Response uploadProfilePicture(Uri sourceFileUri, Activity activity, Long userId, Dialog dialog) {
-        formValueName = "profile_pictue";
+        formValueName = "profile_picture";
         uploadURL = upLoadServerUri + "users/" + userId + "/profile-picture/";
         method = "PUT";
         return upload(sourceFileUri, activity, dialog);
@@ -209,7 +282,6 @@ public class FileUploader {
                             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 }
 
                 //close the streams //

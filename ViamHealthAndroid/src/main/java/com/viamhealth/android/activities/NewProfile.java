@@ -47,6 +47,7 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.rest.endpoints.FileUploader;
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
@@ -54,12 +55,15 @@ import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
+import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileDescriptor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,8 +89,11 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
     User user = null;
     Profile profile = null;
+    ImageView imgView = null;
 
     boolean isImageSelected = false;
+
+    private final String TAG = "NewProfile";
 
     private enum UserType {
         Manual, FB;
@@ -103,8 +110,6 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
     private ImageSelector imageSelector;
 
     private UserType userType;
-
-    private static String TAG = "NewProfile";
 
     private boolean isEditMode = false;
     private ActionBar actionBar;
@@ -123,14 +128,15 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
-        profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
-        profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+
 
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
+        profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
+        imgView = (ImageView) findViewById(R.id.profilepiclocal);
 
         if(user!=null && user.getId()>0)
             isEditMode = true;
@@ -162,15 +168,13 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             imgUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(TAG, "OnCreate::OnClick of ImgUpload:: picking an image");
                     imageSelector.pickFile(ImageSelector.FileType.Image);
                 }
             });
         }else{
             imgUpload.setVisibility(View.INVISIBLE);
         }
-
-        //by default set the gender as Male
-        updateGender(Gender.Male);
 
         imgMale.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -401,6 +405,24 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         }
 
+        if(user!=null && user.getProfile()!=null && user.getProfile().getProfilePicURL()!=null &&
+                !user.getProfile().getProfilePicURL().isEmpty()){
+            FileLoader loader = new FileLoader(NewProfile.this, appPrefs.getToken());
+            loader.LoadFile(user.getProfile().getProfilePicURL(), user.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                @Override
+                public void OnFileLoaded(File file) {
+                    int size = UIUtility.dpToPx(NewProfile.this, 120);
+                    imgView.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), size, size));
+                    imgView.setVisibility(View.VISIBLE);
+                    profilePic.setVisibility(View.GONE);
+                }
+            });
+        }else{
+            profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+            imgView.setVisibility(View.GONE);
+            profilePic.setVisibility(View.VISIBLE);
+        }
+
         if(user.getBmiProfile()!=null){
             BMIProfile bmip = user.getBmiProfile();
             if(bmip.getHeight()>0) height.setText(bmip.getHeight().toString());
@@ -423,15 +445,18 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             if(resultCode==RESULT_OK){
                 familyMemberSelected = RequestStatus.Done;
                 String profileId = data.getStringExtra("profileId");
+                Log.d(TAG, "onActivityResult::ProfileId selected from FB Family list - " + profileId);
                 getDataFromFB(FBRequestType.FamilyProfile, profileId);
             }
         }else{//this is for facebook login pop-up
             if(imageSelector.onActivityResult(requestCode, resultCode, data)){
+                Log.d(TAG, "onActivityResult::ImageSelected - " + imageSelector.getURI().toString());
                 int size = UIUtility.dpToPx(NewProfile.this, 120);
                 Bitmap bitmap = imageSelector.getBitmap(size, size);
                 profilePic.setDefaultProfilePicture(bitmap);
                 isImageSelected = true;
             }else{
+                Log.d(TAG, "onActivityResult::else");
                 super.onActivityResult(requestCode, resultCode, data);
                 Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
             }
@@ -491,12 +516,14 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         Intent returnIntent = new Intent();
 
         if(v == btnSave){
+            Log.d(TAG, "onClick : btnSave clicked - isImageSelected - " + isImageSelected);
             if(validate()){
                 if(isImageSelected){
                     UploadProfilePicTask task = new UploadProfilePicTask();
                     task.execute();
                 }else{
                     User newUser = generateModelFromView();
+                    Log.d(TAG, "onClick : generated user from model " + newUser);
                     updateUser(newUser);
                 }
             }
@@ -563,14 +590,16 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             dialog = new ProgressDialog(NewProfile.this);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("uploading your image..");
-            //dialog.show();
+            dialog.show();
         }
 
         @Override
         protected void onPostExecute(FileUploader.Response response) {
             dialog.dismiss();
+            Log.d(TAG, "AsyncTask : generating user from model");
             User newUser = generateModelFromView();
-            newUser.getProfile().setProfilePicURL(response.getDownloadURL());
+            newUser.getProfile().setProfilePicURL(response.getProfilePicUrl());
+            Log.d(TAG, "AsyncTask : generated user from model " + newUser);
             updateUser(newUser);
         }
 
@@ -578,8 +607,18 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         protected FileUploader.Response doInBackground(Void... params) {
             FileUploader uploader = new FileUploader(appPrefs.getToken());
             long userId = user.getId();
+            if(userId==0){
+                //create user
+                Log.i(TAG, "AsyncTask : Creating a new user as userId = 0 ");
+                UserEP userEP = new UserEP(NewProfile.this, ga);
+                user = userEP.updateUser(user);
+                userId = user.getId();
+                Log.i(TAG, "AsyncTask : Creating a new user - " + user);
+            }
+            Log.i(TAG, "AsyncTask : Uploading the file now");
             FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getURI(),
                                                         NewProfile.this, userId, dialog);
+            Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
             return response;
         }
     }

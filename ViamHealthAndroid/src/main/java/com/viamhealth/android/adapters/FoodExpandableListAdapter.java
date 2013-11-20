@@ -19,8 +19,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ExpandableListAdapter;
 
-import com.viamhealth.android.activities.oldones.TabGroupActivity;
-
 public class FoodExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
 	public Context context;
 	CheckBox checkBox;
@@ -142,9 +140,9 @@ public class FoodExpandableListAdapter extends BaseExpandableListAdapter impleme
 					// TODO Auto-generated method stub
 					appPrefs.setGrpfoodname(holder.txt_grp_food_name.getText().toString());
 					Log.e("TAG","food name : " + appPrefs.getGrpfoodname());
-					Intent AddBreakfast = new Intent(context, com.viamhealth.android.activities.AddBreakfast.class);
-					TabGroupActivity parentoption = (TabGroupActivity)context;
-					parentoption.startChildActivity("AddBreakfast",AddBreakfast);
+					//Intent AddBreakfast = new Intent(context, com.viamhealth.android.activities.AddBreakfast.class);
+					//TabGroupActivity parentoption = (TabGroupActivity)context;
+					//parentoption.startChildActivity("AddBreakfast",AddBreakfast);
 					
 				}
 			});

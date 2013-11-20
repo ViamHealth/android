@@ -50,6 +50,7 @@ public class ImageSelector {
 
     public ImageSelector(Fragment fragment) {
         mFragment = fragment;
+        mActivity = mFragment.getActivity();
     }
 
     public void pickFile(final FileType type) {
@@ -66,14 +67,14 @@ public class ImageSelector {
 
                 if (items[item].equals("Take Photo")) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImage.jpg");
-                    Uri outputFileUri = Uri.fromFile(file);
+                    uri = Uri.fromFile(file);
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
-                    camera.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                    if(mActivity!=null)
-                        mActivity.startActivityForResult(camera, CAMERA_PIC_REQUEST);
-                    else
+                    camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                    if(mFragment!=null)
                         mFragment.startActivityForResult(camera, CAMERA_PIC_REQUEST);
+                    else
+                        mActivity.startActivityForResult(camera, CAMERA_PIC_REQUEST);
 
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -83,10 +84,10 @@ public class ImageSelector {
                         photoPickerIntent.setType("*/*");
                     photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
 
-                    if(mActivity!=null)
-                        mActivity.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
-                    else
+                    if(mFragment!=null)
                         mFragment.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
+                    else
+                        mActivity.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
 
                 }
             }
@@ -99,6 +100,23 @@ public class ImageSelector {
     }
 
     public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public static Bitmap getReducedBitmapfromFile(String filePath, int height, int width) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        if(!options.outMimeType.contains("image"))
+            return null;
+
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+
         return bitmap;
     }
 
@@ -157,8 +175,13 @@ public class ImageSelector {
         if(requestCode==LIBRARY_FILE_REQUEST || requestCode==CAMERA_PIC_REQUEST){
             if(resultCode==activity.RESULT_OK){
                 System.gc();
-                uri = data.getData();
-                String filePath = data.getData().getPath();
+                String filePath = null;
+                if(requestCode==LIBRARY_FILE_REQUEST){
+                    uri = data.getData();
+                    filePath = data.getData().getPath();
+                }else{
+                    filePath = getRealPathFromURI(activity, uri);
+                }
                 String fileName = UIUtility.getFileName(activity, uri);
                 file = new File(getRealPathFromURI(activity, uri));
                 Toast.makeText(activity, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();

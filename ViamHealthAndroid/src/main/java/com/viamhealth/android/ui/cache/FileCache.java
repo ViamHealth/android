@@ -19,7 +19,10 @@ public class FileCache {
 
     public File getFile(String url, String extension){
         String filename = String.valueOf(url.hashCode());
-        File f = new File(cacheDir, filename.concat(".").concat(extension));
+        if(extension!=null && !extension.isEmpty())
+            filename = filename.concat(".").concat(extension);
+
+        File f = new File(cacheDir, filename);
         return f;
 
     }

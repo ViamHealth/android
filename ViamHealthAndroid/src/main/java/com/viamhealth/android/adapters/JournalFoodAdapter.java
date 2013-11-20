@@ -7,7 +7,6 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddBreakfast;
 import com.viamhealth.android.activities.FoodDetail;
-import com.viamhealth.android.activities.oldones.TabGroupActivity;
 import com.viamhealth.android.model.CategoryFood;
 import android.app.Activity;
 import android.app.ProgressDialog;

@@ -28,7 +28,6 @@ import com.viamhealth.android.activities.fragments.AddCholesterolValue;
 import com.viamhealth.android.activities.fragments.AddDiabetesValue;
 import com.viamhealth.android.activities.fragments.AddValueBaseFragment;
 import com.viamhealth.android.activities.fragments.AddWeightValue;
-import com.viamhealth.android.activities.oldones.AddCholesterolGoal;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoalReadings;

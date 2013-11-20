@@ -54,7 +54,7 @@ public class functionClass {
 			}else{
 				val=searchKey;
 			}
-			String baseurlString = Global_Application.url+"food-items/?search="+val;    
+			String baseurlString = Global_Application.url+"food-items/?page_size=100&search="+val;
 			Log.e("TAG","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString.trim());   
@@ -1030,10 +1030,13 @@ public class functionClass {
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
-										 
-				                      lstData.add(new FileData(c.getString("id").toString(), c.getString("user"),
+
+                                      FileData data = new FileData(c.getString("id").toString(), c.getString("user"),
                                               c.getString("name"), c.getString("description"),
-                                              c.getString("download_url"), c.getString("mime_type")));
+                                              c.getString("download_url"), c.getString("mime_type"));
+                                      data.setUpdatedBy(c.getLong("updated_by"));
+                                      data.setUpdatedOn(c.getLong("updated_at")*1000);
+				                      lstData.add(data);
 				  				 }
 
 							 Log.e("TAG","lstdata count is " + lstData.size());

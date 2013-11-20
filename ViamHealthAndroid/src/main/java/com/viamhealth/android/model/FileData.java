@@ -2,12 +2,18 @@ package com.viamhealth.android.model;
 
 import android.net.Uri;
 
+import java.util.Date;
+
 public class FileData {
 	String id,user,name,description,download_url, mimeType;
+    Long updatedBy;
+    Date updatedOn;
+
 	boolean checked=false;
 
+    public FileData() {}
 
-	public FileData(String id, String user, String name, String description,
+    public FileData(String id, String user, String name, String description,
 			String download_url, String mimeType) {
 		super();
 		this.id = id;
@@ -29,7 +35,27 @@ public class FileData {
         return null;
     }
 
-	public boolean isChecked() {
+    public Long getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Date getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn = updatedOn;
+    }
+
+    public void setUpdatedOn(Long updatedOn) {
+        this.updatedOn = new Date(updatedOn);
+    }
+
+    public boolean isChecked() {
 		return checked;
 	}
 

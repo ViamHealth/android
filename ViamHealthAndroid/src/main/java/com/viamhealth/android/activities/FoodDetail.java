@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.viamhealth.android.Global_Application;
-import com.viamhealth.android.activities.fragments.TabHeaderFragment;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -95,17 +94,10 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
         w120=(int)((width*37.5)/100);
         h40=(int)((height*8.33)/100);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        TabHeaderFragment headerFragment = new TabHeaderFragment();
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         user = intent.getParcelableExtra("user");
         bundle.putParcelable("user", user);
-        headerFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.headerlayout, headerFragment);
-        fragmentTransaction.commit();
 
         LinearLayout main=(LinearLayout)findViewById(R.id.main);
         main.setPadding(0, h10, 0, h10);

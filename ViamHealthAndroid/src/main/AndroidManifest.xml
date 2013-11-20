@@ -144,6 +144,10 @@
             android:theme="@style/Greentheme">
         </activity>
         <activity
+            android:name="com.viamhealth.android.activities.AddFoodActivity"
+            android:theme="@style/Greentheme">
+        </activity>
+        <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"
             android:label="@string/title_activity_add_medication"
             android:theme="@android:style/Theme.Dialog" >

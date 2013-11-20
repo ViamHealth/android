@@ -1,5 +1,6 @@
 package com.viamhealth.android.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,9 @@ import com.viamhealth.android.ViamHealthPrefs;
 
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
+import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
@@ -79,6 +82,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
     private ActionMode actionMode;
 
+    private final String TAG = "Home";
 
     @Override
     protected void onStart() {
@@ -276,10 +280,12 @@ public class Home extends BaseActivity implements OnClickListener{
             throw new Home.ImproperArgumentsPassedException("Either there are no members in the family or the postion is greater than or equal to the family size");
 
         ProfilePictureView imgProfile = null;
+        ImageView imgView = null;
         if(tile!=null){
             imgProfile = (ProfilePictureView)tile.findViewWithTag("ppic");
+            imgView = (ImageView)tile.findViewWithTag("ppiciv");
         }
-        if(tile == null || imgProfile == null){ // if the tiel is not yet created then create it
+        if(tile == null || imgProfile == null || imgView == null){ // if the tiel is not yet created then create it
             if(tile != null){
                 horizontalLinearLayout.removeViewAt(position%2);
                 tiles.remove(position);
@@ -293,7 +299,7 @@ public class Home extends BaseActivity implements OnClickListener{
             tile.setPadding(2, 2, 2, 2);
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
+                    width/2, width/2);
 
             FrameLayout frm = new FrameLayout(Home.this);
             frm.setLayoutParams(lp);
@@ -313,18 +319,45 @@ public class Home extends BaseActivity implements OnClickListener{
             });
 
             imgProfile = new ProfilePictureView(Home.this);
-            imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
             imgProfile.setPresetSize(ProfilePictureView.LARGE);
             imgProfile.setLayoutParams(lp);
             imgProfile.setCropped(true);
             imgProfile.setTag("ppic");
+            Log.d(TAG, "GenerateTile::profilePic- default being set to - social_add_person");
+            imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+
+            final ProfilePictureView ppv = imgProfile;
+            final ImageView iv = new ImageView(Home.this);
+            iv.setLayoutParams(lp);
+            iv.setTag("ppiciv");
+
+            User u = lstFamily.get(position);
+            if(u!=null && u.getProfile()!=null && u.getProfile().getProfilePicURL()!=null &&
+                    !u.getProfile().getProfilePicURL().isEmpty()){
+                FileLoader loader = new FileLoader(Home.this, null);
+                loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
+                        iv.setVisibility(View.VISIBLE);
+                        ppv.setVisibility(View.GONE);
+                    }
+                });
+            }else{
+                iv.setVisibility(View.GONE);
+                imgProfile.setVisibility(View.VISIBLE);
+            }
+            imgView = iv;
             imgProfile.setProfileId(lstFamily.get(position).getProfile().getFbProfileId());
 
             Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
             imgProfile.setAnimation(anim);
+            imgView.setAnimation(anim);
             anim.start();
 
             frm.addView(imgProfile);
+            frm.addView(imgView);
 
             LinearLayout lay = new LinearLayout(Home.this);
             lay.setOrientation(LinearLayout.VERTICAL);
@@ -347,10 +380,33 @@ public class Home extends BaseActivity implements OnClickListener{
             tiles.add(tile);
         } else {
             imgProfile = (ProfilePictureView)tile.findViewWithTag("ppic");
-            imgProfile.setProfileId(lstFamily.get(position).getProfile().getFbProfileId());
+            imgView = (ImageView) tile.findViewWithTag("ppiciv");
+
             Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
             imgProfile.setAnimation(anim);
+            imgView.setAnimation(anim);
             anim.start();
+
+            final ProfilePictureView ppv = imgProfile;
+            final ImageView iv = imgView;
+            User u = lstFamily.get(position);
+            if(u!=null && u.getProfile()!=null && u.getProfile().getProfilePicURL()!=null &&
+                    !u.getProfile().getProfilePicURL().isEmpty()){
+                FileLoader loader = new FileLoader(Home.this, null);
+                loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
+                        iv.setVisibility(View.VISIBLE);
+                        ppv.setVisibility(View.GONE);
+                    }
+                });
+            }else{
+                imgProfile.setProfileId(u.getProfile().getFbProfileId());
+                iv.setVisibility(View.GONE);
+                imgProfile.setVisibility(View.VISIBLE);
+            }
 
             TextView txtName = (TextView)tile.findViewWithTag("pname");
             txtName.setText(lstFamily.get(position).getName());
