@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -62,9 +65,7 @@ public class ImageSelector {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-
                 dialog.dismiss();
-
                 if (items[item].equals("Take Photo")) {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImage.jpg");
                     uri = Uri.fromFile(file);
@@ -185,6 +186,7 @@ public class ImageSelector {
                 String fileName = UIUtility.getFileName(activity, uri);
                 file = new File(getRealPathFromURI(activity, uri));
                 Toast.makeText(activity, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
+
                 byteArray = new byte[0];
                 try {
                     byteArray = FileUtils.readFileToByteArray(file);
@@ -197,7 +199,22 @@ public class ImageSelector {
                 Toast.makeText(activity, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
                 return true;
             }
+
+        }/*else if(requestCode==CAMERA_PIC_REQUEST) {
+            if (resultCode == ((Activity)mContext).RESULT_OK) {
+                //Log.e("TAG","Path is : " + path);
+                Bundle extras = data.getExtras();
+                bitmap = (Bitmap)extras.get("data");
+                String fileName = "image.png";
+                System.gc();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArray = stream.toByteArray();
+                return true;
+            }
         }
+        */
+
 
         return false;
     }
