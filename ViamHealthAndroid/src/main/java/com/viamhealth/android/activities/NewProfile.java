@@ -120,6 +120,8 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
     private boolean isEditMode = false;
     private ActionBar actionBar;
+    AbstractWheel feet,inches,cms;
+    String[] arr= new String[96];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,31 +144,54 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
+        int i,j,k=0;
 
-        final AbstractWheel feet = (AbstractWheel) findViewById(R.id.feet);
-        feet.setViewAdapter(new NumericWheelAdapter(this, 0, 9));
+        for(i=1;i<=8;i++)
+        {
+            for(j=0;j<=11;j++)
+            {
+                arr[k]=""+i+" ' "+j;
+                k++;
+            }
+
+        }
+
+        //String str1[]= new String[]{"val1","val2","val3"};
+
+        feet = (AbstractWheel) findViewById(R.id.feet);
+        ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
+        feet.setViewAdapter(adapter);
         feet.setCyclic(true);
-        final AbstractWheel inches = (AbstractWheel) findViewById(R.id.inches);
-        inches.setViewAdapter(new NumericWheelAdapter(this, 0, 12));
-        inches.setCyclic(true);
-        final AbstractWheel cms = (AbstractWheel) findViewById(R.id.cms);
+
+        cms = (AbstractWheel) findViewById(R.id.cms);
         cms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
         cms.setCyclic(true);
-
-        final AbstractWheel kgs = (AbstractWheel) findViewById(R.id.kgs);
-        kgs.setViewAdapter(new NumericWheelAdapter(this, 0, 200));
-        kgs.setCyclic(true);
-
-        final AbstractWheel gms = (AbstractWheel) findViewById(R.id.grams);
-        gms.setViewAdapter(new NumericWheelAdapter(this, 0, 200000));
-        gms.setCyclic(true);
+        boolean flag=false;
 
 
-        OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
+        final OnWheelChangedListener heightListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                cms.setCurrentItem((int)((feet.getCurrentItem()*12+inches.getCurrentItem())*2.54));
+                cms.setCurrentItem((int)((feet.getCurrentItem()+12)*2.54));
             }
         };
+
+
+        OnWheelChangedListener cmvalListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                //feet.removeChangingListener(heightListener);
+                if(cms.getCurrentItem()<11)
+                {
+                    feet.setCurrentItem(0);
+                }
+                else
+                {
+                    feet.setCurrentItem((cms.getCurrentItem()-11));
+                }
+                //feet.addChangingListener(heightListener);
+            }
+        };
+
+
 
 /*
         OnWheelChangedListener heightcmlistener = new OnWheelChangedListener() {
@@ -178,28 +203,17 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
 */
 
-        OnWheelChangedListener weightListener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                gms.setCurrentItem((int)((kgs.getCurrentItem())*1000));
-            }
-        };
-/*
-        OnWheelChangedListener weightgramlistener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                kgs.setCurrentItem((int)((gms.getCurrentItem())/1000));
-            }
-        };
-*/
 
-        feet.addChangingListener(wheelListener);
-        inches.addChangingListener(wheelListener);
-        //cms.addChangingListener(heightcmlistener);
-        kgs.addChangingListener(weightListener);
-        //gms.addChangingListener(weightgramlistener);
+
+        feet.addChangingListener(heightListener);
+        //cms.addChangingListener(cmvalListener);
+
 
 
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         imgView = (ImageView) findViewById(R.id.profilepiclocal);
+
+
 
 
         if(user!=null && user.getId()>0)
@@ -270,7 +284,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         relation = (Spinner) findViewById(R.id.profile_relation);
 
         //height = (EditText) findViewById(R.id.input_height);
-        //weight = (EditText) findViewById(R.id.input_weight);
+        weight = (EditText) findViewById(R.id.input_weight);
 
         //height.setOnKeyListener(this);
         /*
@@ -297,7 +311,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 }
             }
         });
-
+ */
 
         weight.addTextChangedListener(new TextWatcher() {
             @Override
@@ -319,7 +333,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                     s.append(" " + units);
             }
         });
-        */
+
         //weight.setOnKeyListener(this);
 
         profileDataFetched = RequestStatus.Not_Started;
@@ -356,6 +370,9 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         actionBar.setLogo(R.drawable.ic_action_white_brand);
         /*** Action bar Creation Ends Here ***/
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -563,7 +580,8 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        String[] strH = height.getText().toString().split(" ");
+        String[] strH = String.valueOf(cms.getCurrentItem()).split(" ");
+        //height.getText().toString().split(" ");
         String[] strW = weight.getText().toString().split(" ");
         bmi.setHeight(Integer.parseInt(strH[0]));
         bmi.setWeight(Double.parseDouble(strW[0]));
