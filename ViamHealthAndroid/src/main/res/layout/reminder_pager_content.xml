@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView" >
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView" />
+    </ScrollView>
+    <FrameLayout
+        android:id="@+id/initial_layout"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/reminder_initial_string"
+                android:id="@+id/textView"
+                android:layout_gravity="center"
+                android:textColor="@color/app_green" />
+
+            <Button
+                android:id="@+id/add_rem"
+                android:layout_width="fill_parent"
+                android:layout_height="72dp"
+                android:text="@string/set_reminders"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

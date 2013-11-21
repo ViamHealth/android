@@ -169,11 +169,13 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         boolean flag=false;
 
 
+
         final OnWheelChangedListener heightListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 cms.setCurrentItem((int)((feet.getCurrentItem()+12)*2.54));
             }
         };
+
 
 
         OnWheelChangedListener cmvalListener = new OnWheelChangedListener() {
@@ -191,8 +193,6 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         };
 
-
-
 /*
         OnWheelChangedListener heightcmlistener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
@@ -207,6 +207,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         feet.addChangingListener(heightListener);
         //cms.addChangingListener(cmvalListener);
+
 
 
 
@@ -311,7 +312,9 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 }
             }
         });
+
  */
+
 
         weight.addTextChangedListener(new TextWatcher() {
             @Override
@@ -542,6 +545,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 int size = UIUtility.dpToPx(NewProfile.this, 120);
                 Bitmap bitmap = imageSelector.getBitmap(size, size);
                 profilePic.setDefaultProfilePicture(bitmap);
+                imgView.setImageBitmap(bitmap);
                 isImageSelected = true;
             }else{
                 Log.d(TAG, "onActivityResult::else");

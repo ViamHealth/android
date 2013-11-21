@@ -191,7 +191,8 @@
     <string name="file_name">file name</string>
     <string name="reminder_initial_string">Alarms! Great way of reminding!!\n\n
         you can set reminders on any kind of medications, lab tests, doctor visits, meals, activities, etc...\n\n</string>
-    <string name="set_medi_reminders">set reminders for medicines</string>
+    <string name="reminder_no_data">No reminders set for this day</string>
+    <string name="set_reminders">set reminders</string>
     <string name="set_others_reminders">set reminders for rest everything</string>
     <string name="morning">morning</string>
     <string name="noon">noon</string>
@@ -222,7 +223,34 @@
     <string name="delete">Delete</string>
     <string name="editProfile">Edit Profile</string>
     <string name="from_facebook">From Facebook</string>
-    <string name="add_family_member">Add Family Member</string><string name="email_or_mobile">email or mobile number</string><string name="target">Target</string><string name="present">Present</string><string name="timeline">Timeline</string>
+    <string name="add_family_member">Add Family Member</string>
+    <string name="email_or_mobile">email or mobile number</string>
+    <string name="target">Target</string>
+    <string name="present">Present</string>
+    <string name="timeline">Timeline</string>
+    <string name="dashboard">Dashboard</string>
 
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="other">Other</string>
+    <string name="medicine">Medicine</string>
+    <string name="labtest">Lab-Test</string>
+    <string name="drappointment">Dr-Appointment</string>
+    <string name="meals">Meals</string>
+    <string name="activities">Activities</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
+    <string name="selectFood">Select Food Type</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="snacks">Snacks</string>
+    <string name="dinner">Dinner</string>
 
 </resources>

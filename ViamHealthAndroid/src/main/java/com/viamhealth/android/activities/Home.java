@@ -691,7 +691,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
             TextView message = (TextView) dialogView.findViewById(R.id.confirmMessage);
             message.setText("delete " + selectedUser.getName() + "?");
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.Greentheme);
             builder.setView(dialogView);
             builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
                 @Override
@@ -745,7 +745,7 @@ public class Home extends BaseActivity implements OnClickListener{
                     return false;
                 }
             });
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.Greentheme);
             builder.setView(dialogView);
             builder.setCancelable(true);
             builder.setTitle("Share To...");
