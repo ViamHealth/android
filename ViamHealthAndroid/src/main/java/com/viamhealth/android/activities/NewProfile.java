@@ -69,6 +69,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
+import antistatic.spinnerwheel.OnWheelScrollListener;
+import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
+import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
+import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
+
 public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener,
         EditText.OnFocusChangeListener {
 
@@ -135,8 +142,65 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
+
+        final AbstractWheel feet = (AbstractWheel) findViewById(R.id.feet);
+        feet.setViewAdapter(new NumericWheelAdapter(this, 0, 9));
+        feet.setCyclic(true);
+        final AbstractWheel inches = (AbstractWheel) findViewById(R.id.inches);
+        inches.setViewAdapter(new NumericWheelAdapter(this, 0, 12));
+        inches.setCyclic(true);
+        final AbstractWheel cms = (AbstractWheel) findViewById(R.id.cms);
+        cms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
+        cms.setCyclic(true);
+
+        final AbstractWheel kgs = (AbstractWheel) findViewById(R.id.kgs);
+        kgs.setViewAdapter(new NumericWheelAdapter(this, 0, 200));
+        kgs.setCyclic(true);
+
+        final AbstractWheel gms = (AbstractWheel) findViewById(R.id.grams);
+        gms.setViewAdapter(new NumericWheelAdapter(this, 0, 200000));
+        gms.setCyclic(true);
+
+
+        OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                cms.setCurrentItem((int)((feet.getCurrentItem()*12+inches.getCurrentItem())*2.54));
+            }
+        };
+
+/*
+        OnWheelChangedListener heightcmlistener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                feet.setCurrentItem((int)(cms.getCurrentItem())/12);
+                inches.setCurrentItem((int)(cms.getCurrentItem())%12);
+            }
+        };
+
+*/
+
+        OnWheelChangedListener weightListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                gms.setCurrentItem((int)((kgs.getCurrentItem())*1000));
+            }
+        };
+/*
+        OnWheelChangedListener weightgramlistener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                kgs.setCurrentItem((int)((gms.getCurrentItem())/1000));
+            }
+        };
+*/
+
+        feet.addChangingListener(wheelListener);
+        inches.addChangingListener(wheelListener);
+        //cms.addChangingListener(heightcmlistener);
+        kgs.addChangingListener(weightListener);
+        //gms.addChangingListener(weightgramlistener);
+
+
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         imgView = (ImageView) findViewById(R.id.profilepiclocal);
+
 
         if(user!=null && user.getId()>0)
             isEditMode = true;
@@ -205,10 +269,11 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         email = (EditText) findViewById(R.id.profile_email);
         relation = (Spinner) findViewById(R.id.profile_relation);
 
-        height = (EditText) findViewById(R.id.input_height);
-        weight = (EditText) findViewById(R.id.input_weight);
+        //height = (EditText) findViewById(R.id.input_height);
+        //weight = (EditText) findViewById(R.id.input_weight);
 
         //height.setOnKeyListener(this);
+        /*
         height.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -217,7 +282,10 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                String units = "cms";
+                if(!s.toString().contains(units)){
+                   // height.setText(s.toString() + " " + units);
+                }
             }
 
             @Override
@@ -225,10 +293,12 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 String units = "cms";
                 //event.getNumber();
                 if(!s.toString().contains(units)){
-                    height.setText(s.toString() + " " + units);
+                    //height.setText(s.toString() + " " + units);
                 }
             }
         });
+
+
         weight.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -249,6 +319,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                     s.append(" " + units);
             }
         });
+        */
         //weight.setOnKeyListener(this);
 
         profileDataFetched = RequestStatus.Not_Started;

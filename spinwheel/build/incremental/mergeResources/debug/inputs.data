@@ -1,0 +1,7 @@
+# incremental data. DO NOT EDIT.
+# format is <lastModified> <length> <SHA-1> <path>
+# Encoding is UTF-8
+1379449930000 1515 42f14c81427d00c15f8178d7b2b02c708afe1da2 C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\drawable\wheel_bg_hor.xml
+1379449930000 1360 056b76f959a13a1a4e9c18162fd5ade240acd3df C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\drawable\wheel_bg_ver.xml
+1379449930000 1016 f38485c3194b7e5f741ca5d793ebb119e83f618f C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\drawable\wheel_val.xml
+1379449930000 998 78b5c0ad435525bbd557e795572ecc2a4d7a5b15 C:\Users\Administrator\Documents\GitHub\android\spinwheel\res\values\wheel__attrs.xml
