@@ -30,6 +30,7 @@ import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
 import com.viamhealth.android.activities.fragments.NewReminders;
 import com.viamhealth.android.activities.fragments.ReminderFragment;
+import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 
@@ -121,7 +122,7 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
                 JournalFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
-                ReminderFragment.class, bundle);
+                ReminderFragmentNew.class, bundle);
                 //NewReminders.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),

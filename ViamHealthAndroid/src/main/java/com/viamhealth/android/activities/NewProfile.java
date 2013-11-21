@@ -454,6 +454,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 int size = UIUtility.dpToPx(NewProfile.this, 120);
                 Bitmap bitmap = imageSelector.getBitmap(size, size);
                 profilePic.setDefaultProfilePicture(bitmap);
+                imgView.setImageBitmap(bitmap);
                 isImageSelected = true;
             }else{
                 Log.d(TAG, "onActivityResult::else");
