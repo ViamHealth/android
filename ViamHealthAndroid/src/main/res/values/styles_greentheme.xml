@@ -3,6 +3,37 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="StyledProgressDialog" parent="@android:style/Theme.Holo.Dialog">
+    <item name="android:windowFrame">@null</item>
+    <item name="android:windowBackground">@android:color/white</item>
+    <item name="android:colorBackgroundCacheHint">@android:color/white</item>
+    <item name="android:background">@android:color/white</item>
+    <item name="android:textViewStyle">@style/TextViewGreentheme</item>
+</style>
+
+    <style name="AlertDialogGreenTheme" parent="@style/StyledProgressDialog">
+    <item name="android:textViewStyle">@style/TextViewGreentheme</item>
+    <item name="android:tabWidgetStyle">@style/TabWidgetGreentheme</item>
+    <item name="android:editTextStyle">@style/EditTextGreentheme</item>
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGreentheme</item>
+    <item name="android:checkboxStyle">@style/CheckBoxGreentheme</item>
+    <item name="android:radioButtonStyle">@style/RadioButtonGreentheme</item>
+    <item name="android:buttonStyle">@style/ButtonGreentheme</item>
+    <item name="android:imageButtonStyle">@style/ImageButtonGreentheme</item>
+    <item name="android:spinnerStyle">@style/SpinnerGreentheme</item>
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerGreentheme.DropDown</item>
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGreentheme</item>
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarGreentheme</item>
+    <item name="android:seekBarStyle">@style/SeekBarGreentheme</item>
+    <item name="android:ratingBarStyle">@style/RatingBarGreentheme</item>
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreentheme</item>
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreentheme</item>
+    <item name="android:buttonStyleToggle">@style/ToggleGreentheme</item>
+    <item name="android:listViewStyle">@style/ListViewGreentheme</item>
+    <item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>
+    <item name="android:spinnerItemStyle">@style/SpinnerItemGreentheme</item>
+</style>
+
   <style name="EditTextGreentheme" parent="android:Widget.EditText">
 	  <item name="android:background">@drawable/edit_text_holo_light</item>
 	  <item name="android:textColor">@color/app_green</item>
