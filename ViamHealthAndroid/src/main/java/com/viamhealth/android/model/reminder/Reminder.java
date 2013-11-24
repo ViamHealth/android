@@ -1,5 +1,6 @@
 package com.viamhealth.android.model.reminder;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,10 +8,11 @@ import com.viamhealth.android.model.enums.ReminderTime;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.enums.RepeatMode;
 import com.viamhealth.android.model.enums.RepeatWeekDay;
+import com.viamhealth.android.utils.DateUtils;
+import com.viamhealth.android.utils.ParcelableUtils;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,56 +20,21 @@ import java.util.Map;
  */
 public class Reminder implements Parcelable {
 
-    Long id;
-    Long userId;
+    Long id = 0L;
+    Long userId = 0L;
     ReminderType type = ReminderType.Other;
     String name;
     String details;
-    Map<ReminderTime, ReminderTimeData> mapReminderTimeData = new HashMap<ReminderTime, ReminderTimeData>();
+    Map<Integer, ReminderTimeData> mapReminderTimeData = new HashMap<Integer, ReminderTimeData>();
     Date startDate;
     Date endDate;
     RepeatMode repeatMode = RepeatMode.None;
-    Integer repeatDay;
-    Integer repeatHour;
-    Integer repeatMin;
-    Integer repeatEveryX;
-    Integer repeatICounter;
+    Integer repeatDay = 0;
+    Integer repeatHour = 0;
+    Integer repeatMin = 0;
+    Integer repeatEveryX = 0;
+    Integer repeatICounter = 0;
     RepeatWeekDay repeatWeekDay = RepeatWeekDay.None;
-
-    public class ReminderTimeData implements Parcelable{
-        Integer count;
-
-        public Integer getCount() {
-            return count;
-        }
-
-        public void setCount(Integer count) {
-            this.count = count;
-        }
-
-        public ReminderTimeData() {}
-
-        public ReminderTimeData(Parcel in) {
-            count = in.readInt();
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeInt(count);
-        }
-
-        @Override
-        public String toString() {
-            return "ReminderTimeData{" +
-                    "count=" + count +
-                    "} " + super.toString();
-        }
-    }
 
     public Reminder() {
     }
@@ -185,11 +152,31 @@ public class Reminder implements Parcelable {
     }
 
     public void putReminderTimeData(ReminderTime time, ReminderTimeData data) {
-        mapReminderTimeData.put(time, data);
+        mapReminderTimeData.put(time.ordinal(), data);
     }
 
     public ReminderTimeData getReminderTimeData(ReminderTime time) {
-        return mapReminderTimeData.get(time);
+        return mapReminderTimeData.get(time.ordinal());
+    }
+
+    public String getRepeatString(Context context) {
+
+        if(startDate==null || repeatMode==RepeatMode.None || repeatEveryX<1)
+            return "";
+
+        //once every <2> <week> from <stDate>, <x> times
+        StringBuilder builder = new StringBuilder();
+        builder = builder.append("once every ");
+
+        if(repeatEveryX>1)
+                builder = builder.append(repeatEveryX).append(" ");
+
+        builder = builder.append(context.getString(repeatMode.resId())).append(repeatEveryX>1?"s ":" ")
+                    .append("from").append(" ")
+                    .append(DateUtils.getDisplayText(startDate)).append(", ")
+                    .append(repeatICounter).append(" times");
+
+        return builder.toString();
     }
 
     @Override
@@ -229,8 +216,8 @@ public class Reminder implements Parcelable {
         type = ReminderType.get(in.readInt());
         name = in.readString();
         details = in.readString();
-        startDate = new Date(in.readLong());;
-        endDate = new Date(in.readLong());;
+        startDate = (Date) in.readValue(null);
+        endDate = (Date) in.readValue(null);
         repeatMode = RepeatMode.get(in.readInt());
         repeatDay = in.readInt();
         repeatHour = in.readInt();
@@ -238,7 +225,7 @@ public class Reminder implements Parcelable {
         repeatEveryX = in.readInt();
         repeatICounter = in.readInt();
         repeatWeekDay = RepeatWeekDay.get(in.readInt());
-        mapReminderTimeData = in.readHashMap(null);
+        mapReminderTimeData = ParcelableUtils.readMap(in, ReminderTimeData.class);
     }
 
     @Override
@@ -253,8 +240,8 @@ public class Reminder implements Parcelable {
         dest.writeInt(type.value());
         dest.writeString(name);
         dest.writeString(details);
-        dest.writeLong(startDate.getTime());
-        dest.writeLong(endDate.getTime());
+        dest.writeValue(startDate);
+        dest.writeValue(endDate);
         dest.writeInt(repeatMode.value());
         dest.writeInt(repeatDay);
         dest.writeInt(repeatHour);
@@ -262,6 +249,6 @@ public class Reminder implements Parcelable {
         dest.writeInt(repeatEveryX);
         dest.writeInt(repeatICounter);
         dest.writeInt(repeatWeekDay.value());
-        dest.writeMap(mapReminderTimeData);
+        ParcelableUtils.writeMap(mapReminderTimeData, dest);
     }
 }

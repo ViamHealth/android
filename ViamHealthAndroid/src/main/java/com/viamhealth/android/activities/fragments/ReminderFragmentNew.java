@@ -1,22 +1,27 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.Gravity;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ListAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -30,19 +35,20 @@ import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.activities.AddReminder;
 import com.viamhealth.android.dao.rest.endpoints.ReminderEP;
-import com.viamhealth.android.dao.restclient.old.functionClass;
+import com.viamhealth.android.model.enums.ReminderTime;
+import com.viamhealth.android.model.enums.ReminderType;
+import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
+import com.viamhealth.android.model.reminder.ReminderTimeData;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.PagerContainer;
+import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.DateUtils;
 
-import org.joda.time.DateTime;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +77,9 @@ public class ReminderFragmentNew extends SherlockFragment {
     PagerAdapter mPagerAdapter;
     Map<Date, List<ReminderReading>> mapReadings = new HashMap<Date, List<ReminderReading>>();
 
+    final int ADD_REMINDER_REQUEST = 125;
+    final int EDIT_REMINDER_REQUEST = 126;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.tab_fragment_reminder_new, container, false);
@@ -87,18 +96,18 @@ public class ReminderFragmentNew extends SherlockFragment {
         mContainer = (PagerContainer) mView.findViewById(R.id.container);
         mViewPager = mContainer.getViewPager();
 
-        mPagerAdapter = new MyPagerAdapter();
+        mPagerAdapter = new ReminderPagerAdapter(getSherlockActivity().getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
 
         //Necessary or the pager will only have one extra page to show
-        // make this at least however many pages you can see
+        //make this at least however many pages you can see
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
 
         //A little space between pages
         mViewPager.setPageMargin(15);
 
         //If hardware acceleration is enabled, you should also remove
-        // clipping on the pager for its children.
+        //clipping on the pager for its children.
         mViewPager.setClipChildren(false);
 
         setHasOptionsMenu(true);
@@ -113,10 +122,10 @@ public class ReminderFragmentNew extends SherlockFragment {
         if(date==null){
             Date todayMidnight = DateUtils.getToday(new Date());
             final int milliSecInDay = 24 * 60 * 60 * 1000;
-            dates.add(todayMidnight);
-            dates.add(new Date(todayMidnight.getTime()-(1*milliSecInDay))); //-1 day
-            dates.add(new Date(todayMidnight.getTime()-(2*milliSecInDay))); //-2 day
             dates.add(new Date(todayMidnight.getTime()-(3*milliSecInDay))); //-3 day
+            dates.add(new Date(todayMidnight.getTime()-(2*milliSecInDay))); //-2 day
+            dates.add(new Date(todayMidnight.getTime()-(1*milliSecInDay))); //-1 day
+            dates.add(todayMidnight);
             dates.add(new Date(todayMidnight.getTime()+(1*milliSecInDay))); //+1 day
             dates.add(new Date(todayMidnight.getTime()+(2*milliSecInDay))); //+2 day
             dates.add(new Date(todayMidnight.getTime()+(3*milliSecInDay))); //+3 day
@@ -124,10 +133,15 @@ public class ReminderFragmentNew extends SherlockFragment {
             dates.add(date);
         }
 
-        RetrieveReminderReading task = new RetrieveReminderReading();
-        Date[] d = new Date[dates.size()];
-        task.execute(dates.toArray(d));
+        if(Checker.isInternetOn(getActivity())){
+            RetrieveReminderReading task = new RetrieveReminderReading();
+            Date[] d = new Date[dates.size()];
+            task.execute(dates.toArray(d));
+        }else{
+            Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+        }
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(Menu.NONE, R.drawable.ic_action_reminders, 10, "New Reminder")
@@ -145,104 +159,136 @@ public class ReminderFragmentNew extends SherlockFragment {
     }
 
     protected void addNewReminder() {
-        Toast.makeText(getSherlockActivity(), "Add New Reminder", Toast.LENGTH_LONG).show();
+        addNewReminder(null);
     }
 
-    protected void addNewReminder(Date date) {
-        if(date==null)
-        Toast.makeText(getSherlockActivity(), "Add New Reminder for " + date.toString(), Toast.LENGTH_LONG).show();
-    }
-
-    private class MyListAdapter extends ArrayAdapter<ReminderReading> {
-
-        final ReminderReading[] readings;
-        final int layoutResourceId;
-        final Activity activity;
-
-        private MyListAdapter(Context context, ReminderReading[] objects) {
-            super(context, R.layout.row_medical_list, objects);
-            layoutResourceId = R.layout.row_medical_list;
-            readings = objects;
-            this.activity = (Activity) context;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View row = convertView;
-
-            if(row == null){
-                LayoutInflater inflater = activity.getLayoutInflater();
-                row = inflater.inflate(layoutResourceId, parent, false);
-
-            }
-
-            TextView txtName = (TextView)row.findViewById(R.id.txt_name);
-            txtName.setText(readings[position].getReminder().getName());
-
-            return row;
-        }
-    }
-
-    //Nothing special about this adapter, just throwing up colored views for demo
-    private class MyPagerAdapter extends PagerAdapter {
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View view = LayoutInflater.from(getSherlockActivity()).inflate(R.layout.reminder_pager_content, container);
-            ScrollView sView = (ScrollView)view.findViewById(R.id.scrollView);
-            FrameLayout fL = (FrameLayout)view.findViewById(R.id.initial_layout);
-
-            Date currentDate = getDateFromPosition(position);
-            List<ReminderReading> readings = mapReadings.get(currentDate);
-            if(mapReadings.keySet().size()==0 || readings==null || readings.isEmpty()){
-                sView.setVisibility(View.GONE);
-                fL.setVisibility(View.VISIBLE);
-                TextView tView = (TextView) view.findViewById(R.id.textView);
-                if(mapReadings.keySet().size()==0){
-                    tView.setText(R.string.reminder_initial_string);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==Activity.RESULT_OK){
+            if(requestCode==ADD_REMINDER_REQUEST || requestCode == EDIT_REMINDER_REQUEST){
+                Reminder reminder = data.getParcelableExtra("reminder");
+                if(Checker.isInternetOn(getActivity())){
+                    SaveReminder task = new SaveReminder();
+                    task.reminder = reminder;
+                    task.execute();
                 }else{
-                    tView.setText(R.string.reminder_no_data);
+                    Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                sView.setVisibility(View.VISIBLE);
-                fL.setVisibility(View.GONE);
             }
+        }
+    }
 
-            Button btn = (Button) view.findViewById(R.id.add_rem);
-            btn.setOnClickListener(new View.OnClickListener() {
+    protected void addNewReminder(final Date date) {
+        final ReminderType[] types = ReminderType.values();
+        final CharSequence[] items = new CharSequence[types.length];
+        for(int i=0; i<types.length; i++){
+            items[i] = getString(types[i].resId());
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
+        builder.setTitle("Choose a reminder type...");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ReminderType type = types[which];
+                Intent addReminderIntent = new Intent(getActivity(), AddReminder.class);
+                addReminderIntent.putExtra("type", type);
+                addReminderIntent.putExtra("date", date);
+                addReminderIntent.putExtra("user", user);
+                startActivityForResult(addReminderIntent, ADD_REMINDER_REQUEST);
+                //Toast.makeText(getSherlockActivity(), "Add New Reminder for " + date.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        builder.show();
+    }
+
+    public interface OnRefreshReminderReadingListener {
+        public void OnRefresh(List<ReminderReading> readings);
+    }
+
+    protected Map<Date, OnRefreshReminderReadingListener> listenerMap = new HashMap<Date, OnRefreshReminderReadingListener>();
+
+    public void setOnRefreshReminderReadingListener(Date key, OnRefreshReminderReadingListener listener) {
+        this.listenerMap.put(key, listener);
+    }
+
+    protected void OnRefreshReminderReading(Map<Date, List<ReminderReading>> mReadings) {
+        if(listenerMap!=null){
+            for(Date date : mReadings.keySet()){
+                if(listenerMap.get(date)==null) continue;
+                listenerMap.get(date).OnRefresh(mReadings.get(date));
+            }
+        }
+    }
+
+    private class ReminderPagerAdapter extends FragmentPagerAdapter {
+
+        private SparseArray<ReminderPagerFragment> reminderPages = new SparseArray<ReminderPagerFragment>();
+
+        private ReminderPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            ReminderPagerFragment fragment = reminderPages.get(position);
+            Bundle args = new Bundle();
+            args.putParcelable("user", user);
+            Date date = getDateFromPosition(position);
+            args.putLong("currentDateInMs", date.getTime());
+            args.putBoolean("isFirstTime", mapReadings.keySet().size() == 0 ? true : false);
+            args.putParcelableArrayList("readings", (ArrayList<ReminderReading>) mapReadings.get(date));
+            fragment = (ReminderPagerFragment) SherlockFragment.instantiate(getSherlockActivity(), ReminderPagerFragment.class.getName(), args);
+            fragment.setOnRemiderDataChangeListener(new ReminderPagerFragment.OnRemiderDataChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    addNewReminder();
+                public void OnEdit(Reminder reminder) {
+                    Intent addReminderIntent = new Intent(getActivity(), AddReminder.class);
+                    addReminderIntent.putExtra("type", reminder.getType());
+                    addReminderIntent.putExtra("date", reminder.getStartDate());
+                    addReminderIntent.putExtra("user", user);
+                    addReminderIntent.putExtra("reminder", reminder);
+                    startActivityForResult(addReminderIntent, EDIT_REMINDER_REQUEST);
+                }
+
+                @Override
+                public void OnDelete(Reminder[] reminder) {
+                    if(Checker.isInternetOn(getActivity())){
+                        DeleteReminder task = new DeleteReminder();
+                        task.execute(reminder);
+                    }else{
+                        Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void OnAdd(Date date) {
+                    addNewReminder(date);
                 }
             });
+            setOnRefreshReminderReadingListener(date, fragment);
+            return fragment;
+        }
 
-            if(readings!=null && readings.size()>0){
-                //construct the list view here
-                ListView listView = (ListView) view.findViewById(R.id.listView);
-                ReminderReading[] rds = new ReminderReading[readings.size()];
-                MyListAdapter listAdapter = new MyListAdapter(getSherlockActivity(), readings.toArray(rds));
-                listView.setAdapter(listAdapter);
-            }
-
-//            TextView view = new TextView(getSherlockActivity());
-//            view.setText("Item "+position);
-//            view.setGravity(Gravity.CENTER);
-//            view.setBackgroundColor(Color.argb(255, position * 50, position * 10, position * 50));
-
-            container.addView(view);
-            return view;
+        @Override
+        public void notifyDataSetChanged() {
+            reminderPages.clear();
+            super.notifyDataSetChanged();
         }
 
         private Date getDateFromPosition(int position){
             Date todayMidnight = DateUtils.getToday(new Date());
             final int milliSecInDay = 24 * 60 * 60 * 1000;
-            int noOfDays = 3 - position;
+            int dataAvailableForPastDays = getDataAvailableForPastDays(todayMidnight, milliSecInDay);
+            int noOfDays = dataAvailableForPastDays - position;
             return new Date(todayMidnight.getTime()-(noOfDays*milliSecInDay));
         }
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View)object);
+        private int getDataAvailableForPastDays(Date today, int dayInMS) {
+            if(mapReadings.containsKey(today.getTime()-(3*dayInMS))) return 3;
+            if(mapReadings.containsKey(today.getTime()-(2*dayInMS))) return 2;
+            if(mapReadings.containsKey(today.getTime()-(1*dayInMS))) return 1;
+            return 0;
         }
 
         @Override
@@ -250,18 +296,11 @@ public class ReminderFragmentNew extends SherlockFragment {
             int count = mapReadings.keySet().size();
             if(count==0)
                 return 1;
-
             return count;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return (view == object);
         }
     }
 
-    public class RetrieveReminderReading extends AsyncTask <Date, Void, String>
-    {
+    public class RetrieveReminderReading extends AsyncTask <Date, Void, String> {
         protected Context applicationContext;
 
         @Override
@@ -269,6 +308,7 @@ public class ReminderFragmentNew extends SherlockFragment {
         }
 
         protected void onPostExecute(String result) {
+            OnRefreshReminderReading(mapReadings);
             mPagerAdapter.notifyDataSetChanged();
         }
 
@@ -287,4 +327,40 @@ public class ReminderFragmentNew extends SherlockFragment {
 
     }
 
+    public class SaveReminder extends AsyncTask<Void, Void, Void> {
+
+        protected Reminder reminder;
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            getReadings(null);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(reminder.getId()==null || reminder.getId()==0)
+                reminder = reminderEP.add(user.getId(), reminder);
+            else
+                reminder = reminderEP.update(reminder);
+            return null;
+        }
+    }
+
+    public class DeleteReminder extends AsyncTask<Reminder, Void, Void> {
+
+        protected Activity activity;
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            getReadings(null);
+        }
+
+        @Override
+        protected Void doInBackground(Reminder... params) {
+            for(Reminder reminder : params ){
+                reminderEP.delete(reminder.getId());
+            }
+            return null;
+        }
+    }
 }

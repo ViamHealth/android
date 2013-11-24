@@ -384,7 +384,7 @@ public class GoalFragment extends SherlockFragment implements View.OnClickListen
             GraphFragment fragment = graphFragments.get(position);
             if(fragment == null) {
                 Bundle args = new Bundle();
-                final MedicalConditions mc = (MedicalConditions)goalsConfiguredMap.keySet().toArray()[position];
+                final MedicalConditions mc = (MedicalConditions) goalsConfiguredMap.keySet().toArray()[position];
                 Goal goal = goalsConfiguredMap.get(mc);
                 args.putSerializable("type", mc);
                 args.putString("json", getDataForGraph(mc));
