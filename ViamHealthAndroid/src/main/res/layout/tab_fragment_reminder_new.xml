@@ -17,7 +17,6 @@
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="20dp"
-            android:background="#ffffff"
             android:layout_gravity="center_horizontal" />
 
    </com.viamhealth.android.ui.PagerContainer>

@@ -132,7 +132,11 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         if(reading.isCompleteCheck()){
             check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
         }else{
-            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+            if(DateUtils.hasElapsed(reading.getReadingDate())){
+                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+            }else{
+                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
+            }
         }
 
         check.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +147,11 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                     check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
                 }else{
                     reading.setCompleteCheck(false);
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+                    if(DateUtils.hasElapsed(reading.getReadingDate())){
+                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+                    }else{
+                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
+                    }
                 }
                 onSaveReminderAction(reading);
             }
