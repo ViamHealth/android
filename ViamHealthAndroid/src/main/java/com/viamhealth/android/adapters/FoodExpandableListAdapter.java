@@ -140,8 +140,8 @@ public class FoodExpandableListAdapter extends BaseExpandableListAdapter impleme
 					// TODO Auto-generated method stub
 					appPrefs.setGrpfoodname(holder.txt_grp_food_name.getText().toString());
 					Log.e("TAG","food name : " + appPrefs.getGrpfoodname());
-					//Intent AddBreakfast = new Intent(context, com.viamhealth.android.activities.AddBreakfast.class);
-					//TabGroupActivity parentoption = (TabGroupActivity)context;
+					//Intent AddBreakfast = new Intent(activity, com.viamhealth.android.activities.AddBreakfast.class);
+					//TabGroupActivity parentoption = (TabGroupActivity)activity;
 					//parentoption.startChildActivity("AddBreakfast",AddBreakfast);
 					
 				}

@@ -200,7 +200,7 @@
     <string name="repeat">repeat</string>
     <string name="repeat_part">repeat for</string>
     <string name="from">from</string>
-    <string name="every">every</string>
+    <string name="every">once every</string>
 
     <string name="select_relation">related how?</string>
     <string name="spouse">spouse</string>
@@ -243,14 +243,18 @@
     <string name="drappointment">Dr-Appointment</string>
     <string name="meals">Meals</string>
     <string name="activities">Activities</string>
-    <string name="daily">Daily</string>
-    <string name="weekly">Weekly</string>
-    <string name="monthly">Monthly</string>
-    <string name="yearly">Yearly</string>
+    <string name="daily">Day</string>
+    <string name="weekly">Week</string>
+    <string name="monthly">Month</string>
+    <string name="yearly">Year</string>
+    <string name="custom">Custom</string>
     <string name="selectFood">Select Food Type</string>
     <string name="breakfast">Breakfast</string>
     <string name="lunch">Lunch</string>
     <string name="snacks">Snacks</string>
     <string name="dinner">Dinner</string>
+    <string name="dosage">dosage</string>
+    <string name="notes">notes</string>
+    <string name="hint_reminder_medicine_name">name of the medicine</string>
 
 </resources>

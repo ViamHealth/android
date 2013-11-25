@@ -10,11 +10,13 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:id="@+id/container"
-        android:background="#CCC">
+        android:background="#cccccc">
 
         <android.support.v4.view.ViewPager
-            android:layout_width="250dp"
+            android:id="@+id/viewpager"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
             android:layout_gravity="center_horizontal" />
 
    </com.viamhealth.android.ui.PagerContainer>

@@ -10,10 +10,10 @@ import com.viamhealth.android.model.enums.ReminderTime;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.enums.RepeatMode;
 import com.viamhealth.android.model.enums.RepeatWeekDay;
-import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.reminder.Action;
 import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
-import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.model.reminder.ReminderTimeData;
 import com.viamhealth.android.utils.DateUtils;
 
 import org.apache.http.HttpStatus;
@@ -45,17 +45,28 @@ public class ReminderEP extends BaseEP {
         client.AddParam("type", reminder.getType().value());
         client.AddParam("name", reminder.getName());
         client.AddParam("details", reminder.getDetails());
-        client.AddParam("morning_count", reminder.getReminderTimeData(ReminderTime.Morning).getCount());
-        client.AddParam("afternoon_count", reminder.getReminderTimeData(ReminderTime.Noon).getCount());
-        client.AddParam("evening_count", reminder.getReminderTimeData(ReminderTime.Evening).getCount());
-        client.AddParam("night_count", reminder.getReminderTimeData(ReminderTime.Night).getCount());
+        if(reminder.getReminderTimeData(ReminderTime.Morning)!=null)
+            client.AddParam("morning_count", reminder.getReminderTimeData(ReminderTime.Morning).getCount());
+        if(reminder.getReminderTimeData(ReminderTime.Noon)!=null)
+            client.AddParam("afternoon_count", reminder.getReminderTimeData(ReminderTime.Noon).getCount());
+        if(reminder.getReminderTimeData(ReminderTime.Evening)!=null)
+            client.AddParam("evening_count", reminder.getReminderTimeData(ReminderTime.Evening).getCount());
+        if(reminder.getReminderTimeData(ReminderTime.Night)!=null)
+            client.AddParam("night_count", reminder.getReminderTimeData(ReminderTime.Night).getCount());
+
         client.AddParam("start_date", formater.format(reminder.getStartDate()));
-        client.AddParam("end_date", formater.format(reminder.getEndDate().getTime()));
+
+        if(reminder.getEndDate()!=null)
+            client.AddParam("end_date", formater.format(reminder.getEndDate()));
+
         client.AddParam("repeat_mode", reminder.getRepeatMode().value());
         client.AddParam("repeat_day", reminder.getRepeatDay());
         client.AddParam("repeat_hour", reminder.getRepeatHour());
         client.AddParam("repeat_min", reminder.getRepeatMin());
-        client.AddParam("repeat_weekday", reminder.getRepeatWeekDay().value());
+
+        if(reminder.getRepeatWeekDay() != RepeatWeekDay.None)
+            client.AddParam("repeat_weekday", reminder.getRepeatWeekDay().value());
+
         client.AddParam("repeat_every_x", reminder.getRepeatEveryX());
         client.AddParam("repeat_i_counter", reminder.getRepeatICounter());
         return client;
@@ -95,7 +106,7 @@ public class ReminderEP extends BaseEP {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_CREATED)
+        if(client.getResponseCode() != HttpStatus.SC_OK)
             return null;
 
         String responseString = client.getResponse();
@@ -106,6 +117,7 @@ public class ReminderEP extends BaseEP {
     public Map<ReminderType, List<Reminder>> get(Long userId, ReminderType type){
         Params params = new Params();
         params.put("user", userId.toString());
+        params.put("page_size", "100");
 
         if(type!=null)
             params.put("type", String.valueOf(type.value()));
@@ -160,22 +172,71 @@ public class ReminderEP extends BaseEP {
         }
 
         List<ReminderReading> readings = getReadings(params);
-        int count = readings.size();
+        int count = readings==null ? 0 : readings.size();
         Map<Date, List<ReminderReading>> mapResult = new HashMap<Date, List<ReminderReading>>();
+        Date today = new Date();
+        int dayInMilliSecs = 24 * 60 * 60 * 1000;
         for(int i=0; i<count; i++){
             ReminderReading r = readings.get(i);
-            List<ReminderReading> rs = mapResult.get(DateUtils.getToday(r.getReadingDate()));
+            //TODO need to just do r.getReadingDate once the server sid ebug is fixed
+            Date midnightDate = DateUtils.getToday(r.getReadingDate());
+            List<ReminderReading> rs = mapResult.get(midnightDate);
             if(rs == null){
                 rs = new ArrayList<ReminderReading>();
             }
             rs.add(r);
-            mapResult.put(DateUtils.getToday(r.getReadingDate()), rs);
+            mapResult.put(DateUtils.getToday(midnightDate), rs);
         }
         return mapResult;
 
     }
 
+    protected boolean addCheckParam(RestClient client, Action action, String paramKey){
+        boolean isCheck = true;
+        if(action!=null){
+            isCheck = action.isCheck();
+            client.AddParam(paramKey, action.isCheck().toString());
+        }else
+            isCheck = false;
+        return isCheck;
+    }
+
+    public ReminderReading updateReading(ReminderReading reading) {
+        Params params = new Params();
+        params.put("user", reading.getUserId().toString());
+
+        RestClient client = getRestClient("reminderreadings/" + reading.getId(), params);
+
+        Boolean completeCheck = addCheckParam(client, reading.getAction(ReminderTime.Morning), "morning_check");
+
+        boolean isCheck = addCheckParam(client, reading.getAction(ReminderTime.Noon), "afternoon_check");
+        completeCheck = !isCheck ? false : completeCheck;
+
+        isCheck = addCheckParam(client, reading.getAction(ReminderTime.Evening), "evening_check");
+        completeCheck = !isCheck ? false : completeCheck;
+
+        isCheck = addCheckParam(client, reading.getAction(ReminderTime.Night), "night_check");
+        completeCheck = !isCheck ? false : completeCheck;
+
+        //TODO complete check should consider only those times when there is atleast more than 1 dosage
+        client.AddParam("complete_check", completeCheck.toString());
+
+        try {
+            client.Execute(RequestMethod.PUT);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(client.getResponseCode() != HttpStatus.SC_OK)
+            return null;
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+        return processReminderReading(responseString);
+    }
+
     protected List<ReminderReading> getReadings(Params params){
+        params.put("page_size", "100");
         RestClient client = getRestClient("reminderreadings", params);
         try {
             client.Execute(RequestMethod.GET);
@@ -268,21 +329,27 @@ public class ReminderEP extends BaseEP {
             reminder.setDetails(jsonReminder.getString("details"));
 
             reminder.setStartDate(formater.parse(jsonReminder.getString("start_date")));
-            reminder.setEndDate(formater.parse(jsonReminder.getString("end_date")));
+            try {
+                reminder.setEndDate(formater.parse(jsonReminder.getString("end_date")));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            Reminder.ReminderTimeData morningData = reminder.new ReminderTimeData();
+            ReminderTimeData morningData = new ReminderTimeData();
             morningData.setCount(jsonReminder.getInt("morning_count"));
             reminder.putReminderTimeData(ReminderTime.Morning, morningData);
 
-            Reminder.ReminderTimeData noonData = reminder.new ReminderTimeData();
+            ReminderTimeData noonData = new ReminderTimeData();
             noonData.setCount(jsonReminder.getInt("afternoon_count"));
             reminder.putReminderTimeData(ReminderTime.Noon, noonData);
 
-            Reminder.ReminderTimeData eveningData = reminder.new ReminderTimeData();
+            ReminderTimeData eveningData = new ReminderTimeData();
             eveningData.setCount(jsonReminder.getInt("eveing_count"));
             reminder.putReminderTimeData(ReminderTime.Evening, eveningData);
 
-            Reminder.ReminderTimeData nightData = reminder.new ReminderTimeData();
+            ReminderTimeData nightData = new ReminderTimeData();
             nightData.setCount(jsonReminder.getInt("night_count"));
             reminder.putReminderTimeData(ReminderTime.Night, nightData);
 
@@ -302,6 +369,17 @@ public class ReminderEP extends BaseEP {
         return reminder;
     }
 
+    protected ReminderReading processReminderReading(String responseString) {
+        try {
+            JSONObject response = new JSONObject(responseString);
+            return processReminderReading(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     protected ReminderReading processReminderReading(JSONObject jsonReminder) {
         ReminderReading reading = null;
         try {
@@ -311,27 +389,31 @@ public class ReminderEP extends BaseEP {
             reading.setUserId(jsonReminder.getLong("user"));
             reading.setCompleteCheck(jsonReminder.getBoolean("complete_check"));
             reading.setReminder(processReminder(jsonReminder.getJSONObject("reminder")));
-            reading.setReadingDate(formater.parse(jsonReminder.getString("reading_date")));
+            try {
+                reading.setReadingDate(formater.parse(jsonReminder.getString("reading_date")));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            ReminderReading.Action morningAction = reading.new Action();
+            Action morningAction = new Action();
             morningAction.setCheck(jsonReminder.getBoolean("morning_check"));
             reading.putAction(ReminderTime.Morning, morningAction);
 
-            ReminderReading.Action noonAction = reading.new Action();
+            Action noonAction = new Action();
             noonAction.setCheck(jsonReminder.getBoolean("afternoon_check"));
             reading.putAction(ReminderTime.Noon, noonAction);
 
-            ReminderReading.Action eveningCheck = reading.new Action();
+            Action eveningCheck = new Action();
             eveningCheck.setCheck(jsonReminder.getBoolean("evening_check"));
             reading.putAction(ReminderTime.Evening, eveningCheck);
 
-            ReminderReading.Action nightCheck = reading.new Action();
+            Action nightCheck = new Action();
             nightCheck.setCheck(jsonReminder.getBoolean("night_check"));
             reading.putAction(ReminderTime.Night, nightCheck);
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
             e.printStackTrace();
         }
 

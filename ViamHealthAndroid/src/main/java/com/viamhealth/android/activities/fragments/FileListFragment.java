@@ -105,8 +105,7 @@ public class FileListFragment extends SherlockListFragment implements FileFragme
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
         if (this.actionMode != null) {
             this.actionMode.finish();

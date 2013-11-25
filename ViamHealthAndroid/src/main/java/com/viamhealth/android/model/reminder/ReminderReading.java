@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.enums.ReminderTime;
+import com.viamhealth.android.utils.ParcelableUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,16 +19,16 @@ public class ReminderReading implements Parcelable {
     Long userId;
     Date readingDate;
     Reminder reminder;
-    Map<ReminderTime, Action> mapAction = new HashMap<ReminderTime, Action>();
+    Map<Integer, Action> mapAction = new HashMap<Integer, Action>();
     boolean completeCheck = false;
 
 
     public void putAction(ReminderTime time, Action data) {
-        mapAction.put(time, data);
+        mapAction.put(time.ordinal(), data);
     }
 
     public Action getAction(ReminderTime time) {
-        return mapAction.get(time);
+        return mapAction.get(time.ordinal());
     }
 
     public boolean isCompleteCheck() {
@@ -70,40 +71,6 @@ public class ReminderReading implements Parcelable {
         this.reminder = reminder;
     }
 
-    public class Action implements Parcelable {
-        Boolean check;
-
-        public boolean isCheck() {
-            return check;
-        }
-
-        public void setCheck(boolean check) {
-            this.check = check;
-        }
-
-        public Action() {}
-        public Action(Parcel in) {
-            check = (Boolean) in.readValue(null);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeValue(check);
-        }
-
-        @Override
-        public String toString() {
-            return "Action{" +
-                    "check=" + check +
-                    "} " + super.toString();
-        }
-    }
-
     public static final Parcelable.Creator<ReminderReading> CREATOR = new Parcelable.Creator<ReminderReading>() {
         public ReminderReading createFromParcel(Parcel in) {
             return new ReminderReading(in);
@@ -121,7 +88,7 @@ public class ReminderReading implements Parcelable {
         readingDate = new Date(in.readLong());
         reminder = (Reminder) in.readParcelable(null);
         completeCheck = (Boolean) in.readValue(null);
-        mapAction = in.readHashMap(null);
+        mapAction = ParcelableUtils.readMap(in, Action.class);
     }
 
     @Override
@@ -136,6 +103,6 @@ public class ReminderReading implements Parcelable {
         dest.writeLong(readingDate.getTime());
         dest.writeParcelable(reminder, flags);
         dest.writeValue(completeCheck);
-        dest.writeMap(mapAction);
+        ParcelableUtils.writeMap(mapAction, dest);
     }
 }

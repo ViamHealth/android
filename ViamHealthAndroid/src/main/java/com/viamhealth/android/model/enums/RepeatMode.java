@@ -14,7 +14,8 @@ public enum RepeatMode {
     Daily(1, R.string.daily),
     Weekly(2, R.string.weekly),
     Monthly(3, R.string.monthly),
-    Yearly(4, R.string.yearly);
+    Yearly(4, R.string.yearly),
+    Custom(5, R.string.custom);
 
     private int value;
     private int resId;
