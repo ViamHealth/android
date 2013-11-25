@@ -10,21 +10,24 @@ import java.util.Map;
  * Created by naren on 21/11/13.
  */
 public enum ReminderType {
-    Medicine(2, R.string.medicine),
-    DrAppointments(4, R.string.drappointment),
-    LabTests(3, R.string.labtest),
-    Meals(5, R.string.meals),
-    Activities(6, R.string.activities),
-    Other(1, R.string.other);
+    Medicine(2, R.string.medicine, R.string.hint_reminder_medicine_name),
+    DrAppointments(4, R.string.drappointment, R.string.hint_reminder_drappointment_name),
+    LabTests(3, R.string.labtest, R.string.hint_reminder_labTests_name),
+    Meals(5, R.string.meals, R.string.hint_reminder_meals_name),
+    Activities(6, R.string.activities, R.string.hint_reminder_activities_name),
+    Other(1, R.string.other, R.string.hint_reminder_other_name);
 
     private int value;
     private int resId;
+    private int nameHintResId;
 
-    ReminderType(int value, int resId){
+    ReminderType(int value, int resId, int hintId){
         this.value = value;
         this.resId = resId;
+        this.nameHintResId = hintId;
     }
 
+    public int hintResId() {return nameHintResId;}
     public int resId() {return resId;}
     public int value() {return value;}
 

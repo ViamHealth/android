@@ -128,7 +128,7 @@ public class AddReminder extends BaseFragmentActivity {
             repeatTextView.setVisibility(View.VISIBLE);
             repeatTextView.setText(reminder.getRepeatString(AddReminder.this));
         }
-
+        etName.setHint(reminder.getType().hintResId());
         etName.setText(reminder.getName());
         etNotes.setText(reminder.getDetails());
 
@@ -280,6 +280,7 @@ public class AddReminder extends BaseFragmentActivity {
             adapter1 = new FrequencySpinnerAdapter(mContext, Arrays.copyOfRange(modes, 1, modes.length-1));
             frequeSpinner1.setAdapter(adapter1);
 
+            updateModelFromView();
             updateRepeatDataFromReminder();
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
             dialogBuilder.setView(dialogView);

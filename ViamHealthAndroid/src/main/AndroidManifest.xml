@@ -58,7 +58,8 @@
         android:allowBackup="true"
         android:debuggable="true"
         android:icon="@drawable/ic_launcher"
-        android:label="ViamHealth" >
+        android:label="ViamHealth"
+        android:theme="@style/Greentheme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
@@ -75,8 +76,8 @@
         <activity android:name="com.facebook.LoginActivity" />
         <activity
             android:name="com.viamhealth.android.activities.Login"
-            android:screenOrientation="portrait"
-            android:theme="@style/Reversetheme"/>
+            android:theme="@style/Reversetheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.viamhealth.android.activities.TabGroupActivityty"
             android:noHistory="true"
@@ -87,14 +88,7 @@
         <activity android:name="com.viamhealth.android.activities.AddBreakfast" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddExercise"
-            android:theme="@style/Greentheme"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.oldones.Reminder" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.oldones.Settings"
-            android:label="@string/title_activity_settings" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.Register"
@@ -102,32 +96,26 @@
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.UploadFile"
-            android:theme="@style/Greentheme" >
+            android:name="com.viamhealth.android.activities.UploadFile">
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.Downlaod"
-            android:theme="@style/Greentheme"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
         <activity
-            android:name=".activities.AddReminder"
-            android:theme="@style/Greentheme" >
+            android:name=".activities.AddReminder">
         </activity>
         <activity android:name="com.viamhealth.android.activities.FoodDetail" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.AddTest"
-            android:label="@string/title_activity_add_medicaletst"
-            android:theme="@style/Greentheme" >
+            android:label="@string/title_activity_add_medicaletst">
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddMedication"
-            android:theme="@style/Greentheme">
+            android:name="com.viamhealth.android.activities.AddMedication">
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.NewProfile"
-            android:theme="@style/Greentheme">
+            android:name="com.viamhealth.android.activities.NewProfile">
         </activity>
         <activity
             android:name="com.viamhealth.android.NewHome"
@@ -135,25 +123,20 @@
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.FBFamilyListActivity"
-            android:label="@string/title_activity_fbfamily_list"
-            android:theme="@style/Greentheme">
+            android:label="@string/title_activity_fbfamily_list">
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/Greentheme">
+            android:configChanges="orientation|screenSize">
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddGoalActivity"
-            android:theme="@style/Greentheme">
+            android:name="com.viamhealth.android.activities.AddGoalActivity">
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddGoalValue"
-            android:theme="@style/Greentheme">
+            android:name="com.viamhealth.android.activities.AddGoalValue">
         </activity>
         <activity
-            android:name="com.viamhealth.android.activities.AddFoodActivity"
-            android:theme="@style/Greentheme">
+            android:name="com.viamhealth.android.activities.AddFoodActivity">
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"

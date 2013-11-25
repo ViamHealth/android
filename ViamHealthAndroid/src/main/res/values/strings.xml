@@ -255,6 +255,11 @@
     <string name="dinner">Dinner</string>
     <string name="dosage">dosage</string>
     <string name="notes">notes</string>
-    <string name="hint_reminder_medicine_name">name of the medicine</string>
+    <string name="hint_reminder_medicine_name">medicine name</string>
+    <string name="hint_reminder_labTests_name">test name</string>
+    <string name="hint_reminder_activities_name">activity</string>
+    <string name="hint_reminder_meals_name">meal</string>
+    <string name="hint_reminder_drappointment_name">doctor name</string>
+    <string name="hint_reminder_other_name">name</string>
 
 </resources>

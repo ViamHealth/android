@@ -135,8 +135,6 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
-
-
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
         user = (User) intent.getParcelableExtra("user");

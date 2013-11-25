@@ -318,51 +318,98 @@ public class ReminderEP extends BaseEP {
     }
 
     protected Reminder processReminder(JSONObject jsonReminder) {
-        Reminder reminder = null;
-        try {
-            reminder = new Reminder();
+        Reminder reminder = new Reminder();
 
+        try {
             reminder.setId(jsonReminder.getLong("id"));
             reminder.setUserId(jsonReminder.getLong("user"));
             reminder.setName(jsonReminder.getString("name"));
             reminder.setType(ReminderType.get(jsonReminder.getInt("type")));
             reminder.setDetails(jsonReminder.getString("details"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        try {
             reminder.setStartDate(formater.parse(jsonReminder.getString("start_date")));
-            try {
-                reminder.setEndDate(formater.parse(jsonReminder.getString("end_date")));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setEndDate(formater.parse(jsonReminder.getString("end_date")));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        try {
             ReminderTimeData morningData = new ReminderTimeData();
             morningData.setCount(jsonReminder.getInt("morning_count"));
             reminder.putReminderTimeData(ReminderTime.Morning, morningData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        try {
             ReminderTimeData noonData = new ReminderTimeData();
             noonData.setCount(jsonReminder.getInt("afternoon_count"));
             reminder.putReminderTimeData(ReminderTime.Noon, noonData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        try {
             ReminderTimeData eveningData = new ReminderTimeData();
             eveningData.setCount(jsonReminder.getInt("eveing_count"));
             reminder.putReminderTimeData(ReminderTime.Evening, eveningData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        try {
             ReminderTimeData nightData = new ReminderTimeData();
             nightData.setCount(jsonReminder.getInt("night_count"));
             reminder.putReminderTimeData(ReminderTime.Night, nightData);
-
-            reminder.setRepeatDay(jsonReminder.getInt("repeat_day"));
-            reminder.setRepeatHour(jsonReminder.getInt("repeat_hour"));
-            reminder.setRepeatMin(jsonReminder.getInt("repeat_min"));
-            reminder.setRepeatEveryX(jsonReminder.getInt("repeat_every_x"));
-            reminder.setRepeatICounter(jsonReminder.getInt("repeat_i_counter"));
-            reminder.setRepeatMode(RepeatMode.get(jsonReminder.getInt("repeat_mode")));
-            reminder.setRepeatWeekDay(RepeatWeekDay.get(jsonReminder.getInt("repeat_weekday")));
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
+        }
+
+        try {
+            reminder.setRepeatDay(jsonReminder.getInt("repeat_day"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setRepeatHour(jsonReminder.getInt("repeat_hour"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setRepeatMin(jsonReminder.getInt("repeat_min"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setRepeatEveryX(jsonReminder.getInt("repeat_every_x"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setRepeatICounter(jsonReminder.getInt("repeat_i_counter"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setRepeatMode(RepeatMode.get(jsonReminder.getInt("repeat_mode")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            reminder.setRepeatWeekDay(RepeatWeekDay.get(jsonReminder.getInt("repeat_weekday")));
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

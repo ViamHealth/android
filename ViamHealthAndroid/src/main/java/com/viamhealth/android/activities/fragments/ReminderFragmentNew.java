@@ -104,7 +104,7 @@ public class ReminderFragmentNew extends SherlockFragment {
         mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
 
         //A little space between pages
-        mViewPager.setPageMargin(15);
+        mViewPager.setPageMargin(20);
 
         //If hardware acceleration is enabled, you should also remove
         //clipping on the pager for its children.
@@ -229,6 +229,11 @@ public class ReminderFragmentNew extends SherlockFragment {
         private ReminderPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
+//        @Override
+//        public float getPageWidth(int position) {
+//            return (0.9f);
+//        }
 
         @Override
         public Fragment getItem(int position) {

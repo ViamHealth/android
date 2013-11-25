@@ -18,9 +18,9 @@
     android:layout_height="75dp"
     android:layout_weight="1"
     android:orientation="vertical"
-    style="@style/TabGreentheme"
     android:padding="5dp"
     android:gravity="center"
+    style="@style/TabGreentheme"
     android:layout_width="0dip">
 
     <ImageView
@@ -38,8 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        style="@style/TabTextGreentheme"
         android:layout_below="@android:id/icon"
+        style="@style/TabTextGreentheme"
         android:text="@string/tab_label_goal" />
 
 </RelativeLayout>

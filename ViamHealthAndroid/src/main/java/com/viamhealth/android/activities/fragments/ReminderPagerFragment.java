@@ -242,13 +242,15 @@ public class ReminderPagerFragment extends SherlockListFragment implements Remin
                     mode.finish();
                     return true;
                 case 1:
-                    // only edit
-                    menu.add(Menu.NONE, R.id.action_mode_edit, Menu.NONE, "Edit")
-                            .setIcon(R.drawable.ic_action_edit_white)
-                            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                    // both edit and delete
+                    getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_reminder, menu);
                     return true;
                 default:
-                    getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_reminder, menu);
+                    //only delete
+                    menu.add(Menu.NONE, R.id.action_mode_delete, Menu.NONE, "Edit")
+                            .setIcon(R.drawable.ic_action_delete)
+                            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
                     return true;
             }
         }

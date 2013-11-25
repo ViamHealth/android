@@ -125,14 +125,14 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
 
     private void completeCheckViewInit(final View row, final int position) {
 
-        final long currentDate = currDate.getTime();
-
         final ReminderReading reading = readings.get(position);
+        final long currentDate = reading.getReadingDate().getTime();
+        final int milliSecDiff = 21 * 60 * 60 * 1000;
         final FrameLayout check = (FrameLayout) row.findViewById(R.id.completeCheck);
         if(reading.isCompleteCheck()){
             check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
         }else{
-            if(DateUtils.hasElapsed(reading.getReadingDate())){
+            if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
                 check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
             }else{
                 check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
@@ -147,7 +147,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                     check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
                 }else{
                     reading.setCompleteCheck(false);
-                    if(DateUtils.hasElapsed(reading.getReadingDate())){
+                    if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
                         check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
                     }else{
                         check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));

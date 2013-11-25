@@ -3,7 +3,7 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="Greentheme" parent="@style/Theme.Sherlock.Green">
+  <style name="Greentheme" parent="@style/Theme.Viamhealth">
     <item name="android:textViewStyle">@style/TextViewGreentheme</item>
     <item name="android:tabWidgetStyle">@style/TabWidgetGreentheme</item>
     <item name="android:editTextStyle">@style/EditTextGreentheme</item>
