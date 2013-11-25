@@ -157,7 +157,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         }
 
         //String str1[]= new String[]{"val1","val2","val3"};
-
+/*
         feet = (AbstractWheel) findViewById(R.id.feet);
         ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
         feet.setViewAdapter(adapter);
@@ -192,6 +192,8 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 //feet.addChangingListener(heightListener);
             }
         };
+        feet.addChangingListener(heightListener);
+*/
 
 /*
         OnWheelChangedListener heightcmlistener = new OnWheelChangedListener() {
@@ -205,7 +207,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
 
 
-        feet.addChangingListener(heightListener);
+
         //cms.addChangingListener(cmvalListener);
 
 
@@ -284,11 +286,11 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         email = (EditText) findViewById(R.id.profile_email);
         relation = (Spinner) findViewById(R.id.profile_relation);
 
-        //height = (EditText) findViewById(R.id.input_height);
+        height = (EditText) findViewById(R.id.input_height);
         weight = (EditText) findViewById(R.id.input_weight);
 
         //height.setOnKeyListener(this);
-        /*
+
         height.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -313,7 +315,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         });
 
- */
+
 
 
         weight.addTextChangedListener(new TextWatcher() {
@@ -584,8 +586,9 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        String[] strH = String.valueOf(cms.getCurrentItem()).split(" ");
-        //height.getText().toString().split(" ");
+        String[] strH = height.getText().toString().split(" ");
+        //String.valueOf(cms.getCurrentItem()).split(" ");
+
         String[] strW = weight.getText().toString().split(" ");
         bmi.setHeight(Integer.parseInt(strH[0]));
         bmi.setWeight(Double.parseDouble(strW[0]));

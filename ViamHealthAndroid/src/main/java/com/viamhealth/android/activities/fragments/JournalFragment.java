@@ -843,7 +843,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
 
         if(v==addBreakfast){
             ga.setFoodType("Breakfast");
-            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
@@ -852,7 +853,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         }
         if(v==addLunch){
             ga.setFoodType("Lunch");
-            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
@@ -861,7 +863,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         }
         if(v==addSnacks){
             ga.setFoodType("Snacks");
-            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
@@ -870,7 +873,8 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         }
         if(v==addDinner){
             ga.setFoodType("Dinner");
-            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
