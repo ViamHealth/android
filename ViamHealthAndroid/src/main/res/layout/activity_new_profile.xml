@@ -276,7 +276,7 @@
                             android:text="cm" />
 
                     </LinearLayout>
-
+<!--
                     <LinearLayout
                         android:layout_height="wrap_content"
                         android:layout_width="fill_parent"
@@ -322,8 +322,8 @@
 
                     </LinearLayout>
 
+-->
 
-<!--
                     <EditText
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -333,7 +333,6 @@
                         android:layout_gravity="center"
                         android:hint="@string/profile_weight"
                         android:gravity="center_horizontal" />
--->
                 </LinearLayout>
 
             </LinearLayout>

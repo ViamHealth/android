@@ -153,13 +153,6 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         cms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
         cms.setCyclic(true);
 
-        final AbstractWheel kgs = (AbstractWheel) findViewById(R.id.kgs);
-        kgs.setViewAdapter(new NumericWheelAdapter(this, 0, 200));
-        kgs.setCyclic(true);
-
-        final AbstractWheel gms = (AbstractWheel) findViewById(R.id.grams);
-        gms.setViewAdapter(new NumericWheelAdapter(this, 0, 200000));
-        gms.setCyclic(true);
 
 
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
@@ -168,34 +161,12 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             }
         };
 
-/*
-        OnWheelChangedListener heightcmlistener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                feet.setCurrentItem((int)(cms.getCurrentItem())/12);
-                inches.setCurrentItem((int)(cms.getCurrentItem())%12);
-            }
-        };
 
-*/
-
-        OnWheelChangedListener weightListener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                gms.setCurrentItem((int)((kgs.getCurrentItem())*1000));
-            }
-        };
-/*
-        OnWheelChangedListener weightgramlistener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                kgs.setCurrentItem((int)((gms.getCurrentItem())/1000));
-            }
-        };
-*/
 
         feet.addChangingListener(wheelListener);
         inches.addChangingListener(wheelListener);
         //cms.addChangingListener(heightcmlistener);
-        kgs.addChangingListener(weightListener);
-        //gms.addChangingListener(weightgramlistener);
+
 
 
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
@@ -297,7 +268,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                 }
             }
         });
-
+*/
 
         weight.addTextChangedListener(new TextWatcher() {
             @Override
@@ -319,7 +290,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
                     s.append(" " + units);
             }
         });
-        */
+
         //weight.setOnKeyListener(this);
 
         profileDataFetched = RequestStatus.Not_Started;
