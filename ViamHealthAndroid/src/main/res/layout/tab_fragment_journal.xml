@@ -33,11 +33,13 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="20 March 2013"
-                        android:textColor="#000000"
+                        android:textColor="#37AA4F"
                         android:textSize="15sp"
                         android:layout_gravity="center" />
 
                 </FrameLayout>
+
+
 
                 <ScrollView
                     android:layout_width="fill_parent"
@@ -45,12 +47,55 @@
                     android:splitMotionEvents="false"
                     android:fadingEdgeLength="0dp"
                     android:layout_gravity="center_horizontal">
+
                     <LinearLayout android:layout_height="fill_parent"
                         android:layout_width="fill_parent"
                         android:orientation="vertical"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:paddingTop="10dp">
+                        <LinearLayout android:layout_height="wrap_content"
+                            android:layout_width="fill_parent"
+                            android:orientation="vertical"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginBottom="5dp">
+
+                            <TextView android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="Total Ideal Calories"
+                                android:textSize="16sp"
+                                android:gravity="center"
+                                android:paddingLeft="5dp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:id="@+id/lbl_total_calories"
+                                android:textColor="#000000"/>
+
+                            <ProgressBar
+                                android:id="@+id/calorie_bar"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_below="@+id/progressBar1"
+                                android:progressDrawable="@drawable/customprogressbar" />
+
+
+                            <TextView android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:text="You are on track :)"
+                                android:textSize="20sp"
+                                android:gravity="center"
+                                android:paddingLeft="5dp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:id="@+id/status"
+                                android:textColor="#ffffff"/>
+
+
+
+
+                        </LinearLayout>
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
@@ -1016,48 +1061,7 @@
 
 
 
-                        <LinearLayout android:layout_height="wrap_content"
-                            android:layout_width="fill_parent"
-                            android:orientation="vertical"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginBottom="5dp">
 
-                                <TextView android:layout_height="wrap_content"
-                                    android:layout_width="wrap_content"
-                                    android:text="Total Ideal Calories"
-                                    android:textSize="16sp"
-                                    android:gravity="center"
-                                    android:paddingLeft="5dp"
-                                    android:textStyle="bold"
-                                    android:layout_gravity="center"
-                                    android:id="@+id/lbl_total_calories"
-                                    android:textColor="#000000"/>
-
-                            <ProgressBar
-                                android:id="@+id/calorie_bar"
-                                style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_below="@+id/progressBar1"
-                                android:progressDrawable="@drawable/customprogressbar" />
-
-
-                            <TextView android:layout_height="wrap_content"
-                                android:layout_width="wrap_content"
-                                android:text="You are on track :)"
-                                android:textSize="24sp"
-                                android:gravity="center"
-                                android:paddingLeft="5dp"
-                                android:textStyle="bold"
-                                android:layout_gravity="center"
-                                android:id="@+id/status"
-                                android:textColor="#ffffff"/>
-
-
-
-
-                        </LinearLayout>
 
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
