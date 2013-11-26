@@ -18,16 +18,24 @@
 
         <ImageView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_brand_logo"
+            android:src="@drawable/ic_action_brand_logo_selector"
             android:layout_gravity="center_vertical" />
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Crocin 500mg"
-            android:layout_gravity="center"
-            android:id="@+id/txtViewName" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Crocin 500mg"
+                android:layout_gravity="center"
+                android:textColor="@drawable/row_textcolor_selector"
+                android:id="@+id/txtViewName" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
@@ -42,7 +50,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:id="@+id/completeCheck"
-                android:background="@drawable/medicine_check_checked"
+                android:background="@drawable/medicine_check_checked_selector"
                 android:layout_gravity="center|right">
 
             </FrameLayout>
@@ -75,7 +83,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:id="@+id/morningCheck"
-                android:background="@drawable/medicine_check_checked"
+                android:background="@drawable/medicine_check_checked_selector"
                 android:layout_gravity="center_horizontal">
 
                 <TextView
@@ -94,6 +102,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/morning"
                 android:id="@+id/textView"
+                android:textColor="@drawable/row_textcolor_selector"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
@@ -111,7 +120,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:id="@+id/noonCheck"
-                android:background="@drawable/medicine_check_unchecked"
+                android:background="@drawable/medicine_check_unchecked_selector"
                 android:layout_gravity="center_horizontal">
 
                 <TextView
@@ -130,6 +139,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/noon"
                 android:id="@+id/textView"
+                android:textColor="@drawable/row_textcolor_selector"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
@@ -147,7 +157,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:id="@+id/nightCheck"
-                android:background="@drawable/medicine_check_amber"
+                android:background="@drawable/medicine_check_amber_selector"
                 android:layout_gravity="center_horizontal">
 
                 <TextView
@@ -166,6 +176,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/night"
                 android:id="@+id/textView"
+                android:textColor="@drawable/row_textcolor_selector"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>

@@ -57,7 +57,7 @@ import java.util.Map;
 /**
  * Created by naren on 20/11/13.
  */
-public class ReminderFragmentNew extends SherlockFragment {
+public class ReminderFragmentNew extends BaseFragment {
 
     View mView;
     PagerContainer mContainer;

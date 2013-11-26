@@ -37,7 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class DisplayImage extends Activity implements OnClickListener{
+public class DisplayImage extends BaseActivity implements OnClickListener{
 	private static final int CAMERA_PIC_REQUEST = 1337;
 	Bitmap mBitmap,b1;
 	byte[] byteArray;

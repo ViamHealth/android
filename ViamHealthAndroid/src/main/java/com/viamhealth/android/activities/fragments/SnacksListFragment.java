@@ -36,7 +36,6 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddMedication;
-import com.viamhealth.android.activities.DeleteMedication;
 import com.viamhealth.android.activities.Downlaod;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
@@ -65,7 +64,7 @@ import java.util.Set;
 /**
  * Created by naren on 27/10/13.
  */
-public class SnacksListFragment extends SherlockListFragment
+public class SnacksListFragment extends BaseListFragment
 {
 
     private MultiSelectionAdapter adapter;

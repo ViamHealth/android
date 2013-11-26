@@ -23,13 +23,12 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
-import com.viamhealth.android.activities.fragments.NewReminders;
-import com.viamhealth.android.activities.fragments.ReminderFragment;
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
@@ -40,7 +39,7 @@ import java.util.List;
 /**
  * Created by naren on 07/10/13.
  */
-public class TabActivity extends SherlockFragmentActivity implements View.OnClickListener, ActionBar.OnNavigationListener {
+public class TabActivity extends BaseFragmentActivity implements View.OnClickListener, ActionBar.OnNavigationListener {
 
     TabHost mTabHost;
     TabManager mTabManager;
@@ -150,6 +149,18 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
             mTabHost.setCurrentTabByTag("goals");
         }
     }
+
+/*    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
+    }*/
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {

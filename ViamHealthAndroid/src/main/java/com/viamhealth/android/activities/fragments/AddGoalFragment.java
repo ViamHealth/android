@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by naren on 10/10/13.
  */
-public abstract class AddGoalFragment extends Fragment {
+public abstract class AddGoalFragment extends BaseFragment {
 
     protected AddGoalFragmentManager mManager = null;
     protected User user;

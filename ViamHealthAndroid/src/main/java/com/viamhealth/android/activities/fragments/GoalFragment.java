@@ -68,7 +68,7 @@ import java.util.Set;
 /**
  * Created by naren on 07/10/13.
  */
-public class GoalFragment extends SherlockFragment implements View.OnClickListener {
+public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     //Map<MedicalConditions, List<GoalReadings>> goalReadingsMap = new HashMap<MedicalConditions, List<GoalReadings>>();
     Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();

@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -37,5 +38,15 @@ public class BaseFragmentActivity extends SherlockFragmentActivity {
         h20=(int)((height*4.17)/100);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
+    }
 }

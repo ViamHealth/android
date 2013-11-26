@@ -3,7 +3,6 @@ package com.viamhealth.android.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.model.enums.ReminderTime;
@@ -19,7 +17,6 @@ import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.Action;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.reminder.ReminderTimeData;
-import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.DateUtils;
 
 import java.util.Date;
@@ -77,12 +74,12 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         final TextView count = (TextView) row.findViewById(textResId);
         if(data!=null && data.getCount()>0){
             if(action!=null && action.isCheck()){
-                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
+                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
             }else{
                 if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
                 }else{
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
+                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
                 }
             }
 
@@ -90,7 +87,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
             count.setTextColor(android.R.color.white);
         }else{
             //check.setVisibility(View.GONE);
-            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default));
+            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
             count.setText("0");
             count.setTextColor(android.R.color.black);
         }
@@ -101,13 +98,13 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                 if(data!=null && data.getCount()>0){
                     if(!action.isCheck()){
                         action.setCheck(true);
-                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
+                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
                     }else{
                         action.setCheck(false);
                         if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+                            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
                         }else{
-                            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
+                            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
                         }
                     }
                     count.setText(data.getCount().toString());
@@ -115,7 +112,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                     readings.get(position).putAction(time, action);
                     onSaveReminderAction(readings.get(position));
                 }else{
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default));
+                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
                     count.setText("0");
                     count.setTextColor(android.R.color.black);
                 }
@@ -130,12 +127,12 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         final int milliSecDiff = 21 * 60 * 60 * 1000;
         final FrameLayout check = (FrameLayout) row.findViewById(R.id.completeCheck);
         if(reading.isCompleteCheck()){
-            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
+            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
         }else{
             if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
             }else{
-                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
+                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
             }
         }
 
@@ -144,13 +141,13 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
             public void onClick(View v) {
                 if(!reading.isCompleteCheck()){
                     reading.setCompleteCheck(true);
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked));
+                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
                 }else{
                     reading.setCompleteCheck(false);
                     if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked));
+                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
                     }else{
-                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber));
+                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
                     }
                 }
                 onSaveReminderAction(reading);

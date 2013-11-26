@@ -75,7 +75,7 @@ import java.util.Locale;
 /**
  * Created by naren on 07/10/13.
  */
-public class JournalFragment extends SherlockFragment implements View.OnClickListener,ExerciseListFragment.CommunicationActivity {
+public class JournalFragment extends BaseFragment implements View.OnClickListener,ExerciseListFragment.CommunicationActivity {
 
     Display display;
     int height,width;

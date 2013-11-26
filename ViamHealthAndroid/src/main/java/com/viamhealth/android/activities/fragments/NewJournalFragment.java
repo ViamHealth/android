@@ -10,7 +10,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 /**
  * Created by naren on 31/10/13.
  */
-public class NewJournalFragment extends SherlockFragment {
+public class NewJournalFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

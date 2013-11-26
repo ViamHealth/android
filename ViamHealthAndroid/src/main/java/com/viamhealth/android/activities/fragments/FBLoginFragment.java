@@ -38,7 +38,7 @@ import java.util.Arrays;
 /**
  * Created by naren on 05/10/13.
  */
-public class FBLoginFragment extends Fragment {
+public class FBLoginFragment extends BaseFragment {
 
     private static final String TAG = "FBLoginFragment";
 

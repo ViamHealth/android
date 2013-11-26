@@ -30,7 +30,7 @@ import java.util.Date;
 /**
  * Created by naren on 18/10/13.
  */
-public class GraphFragment extends SherlockFragment implements GoalFragment.OnGoalDataChangeListener {
+public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDataChangeListener {
 
     private static final String TAG = "GraphFragment";
     private Date selectedDateForEdit = null;

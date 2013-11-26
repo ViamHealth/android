@@ -19,7 +19,7 @@
 
 <resources>
 
-    <style name="Theme.Viamhealth" parent="@style/Theme.Sherlock">
+    <style name="Theme.Viamhealth" parent="@style/Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarItemBackground">@drawable/selectable_background_viamhealth</item>
         <item name="popupMenuStyle">@style/PopupMenu.Viamhealth</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.Viamhealth</item>
@@ -29,7 +29,7 @@
         <item name="actionModeBackground">@drawable/cab_background_top_viamhealth</item>
         <item name="actionModeSplitBackground">@drawable/cab_background_bottom_viamhealth</item>
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Viamhealth</item>
-
+        <item name="android:textViewStyle">@style/TextViewReversetheme</item>
         
     </style>
 

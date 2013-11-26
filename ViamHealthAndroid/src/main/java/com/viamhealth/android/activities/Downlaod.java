@@ -19,7 +19,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-public class Downlaod extends Activity {
+public class Downlaod extends BaseActivity {
 	public Button btndownload,btncancle;
 	private DownloadManager downloadManager;
 	private long downloadReference;

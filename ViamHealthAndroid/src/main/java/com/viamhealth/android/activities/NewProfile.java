@@ -76,7 +76,7 @@ import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
 import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
-public class NewProfile extends SherlockFragmentActivity implements View.OnClickListener,
+public class NewProfile extends BaseFragmentActivity implements View.OnClickListener,
         EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";

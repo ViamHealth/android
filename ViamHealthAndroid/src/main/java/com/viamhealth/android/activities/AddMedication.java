@@ -52,7 +52,7 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AddMedication extends FragmentActivity implements OnClickListener{
+public class AddMedication extends BaseFragmentActivity implements OnClickListener{
 	Display display;
 	int height,width;
 	ProgressDialog dialog1;

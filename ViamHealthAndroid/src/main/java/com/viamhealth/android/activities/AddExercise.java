@@ -30,7 +30,7 @@ import com.viamhealth.android.model.users.User;
 /**
  * Created by Administrator on 10/14/13.
  */
-public class AddExercise extends SherlockActivity {
+public class AddExercise extends BaseActivity {
     functionClass obj;
     String weight,time_spent,physical_activity_id,calories_spent="";
     EditText time_val,calories_val;

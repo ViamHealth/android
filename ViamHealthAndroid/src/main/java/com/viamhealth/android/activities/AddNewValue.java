@@ -47,7 +47,7 @@ import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-public class AddNewValue extends Activity implements OnClickListener {
+public class AddNewValue extends BaseActivity implements OnClickListener {
 	private static ProgressDialog dialog;
 	
 	Display display;

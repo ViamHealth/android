@@ -60,7 +60,7 @@ import java.util.Set;
 /**
  * Created by naren on 27/10/13.
  */
-public class FileListFragment extends SherlockListFragment implements FileFragment.OnNewFileUploadedListener {
+public class FileListFragment extends BaseListFragment implements FileFragment.OnNewFileUploadedListener {
 
     private MultiSelectionAdapter adapter;
     private ListView list;

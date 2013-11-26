@@ -38,6 +38,7 @@
   </style>
 
   <style name="SpinnerGreentheme" parent="android:Widget.Spinner">
+      <item name="android:textColor">@android:color/white</item>
       <item name="android:background">@drawable/spinner_background_holo_light</item>
       <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
   </style>

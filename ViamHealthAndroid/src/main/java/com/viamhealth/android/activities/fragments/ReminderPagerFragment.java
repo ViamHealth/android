@@ -55,7 +55,7 @@ import java.util.Set;
 /**
  * Created by naren on 24/11/13.
  */
-public class ReminderPagerFragment extends SherlockListFragment implements ReminderFragmentNew.OnRefreshReminderReadingListener {
+public class ReminderPagerFragment extends BaseListFragment implements ReminderFragmentNew.OnRefreshReminderReadingListener {
 
     Map<Date, List<ReminderReading>> mapReading = new HashMap<Date, List<ReminderReading>>();
 
