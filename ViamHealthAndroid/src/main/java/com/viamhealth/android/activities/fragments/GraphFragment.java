@@ -139,7 +139,8 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
     @Override
     public void onAdd(String jsonReading) {
         Log.i(TAG, jsonReading);
-        String url = "javascript:addPoint('" + jsonReading + "')";
+        //String url = "javascript:addPoint('" + jsonReading + "')";
+        String url = "javascript:addPoint('" + " " + "')";
         Log.i(TAG, url);
         webView.loadUrl(url);
     }

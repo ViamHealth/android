@@ -142,7 +142,4 @@
         <item name="internalMaxHeight">180dip</item>">
         <item name="virtualButtonPressedDrawable">@drawable/item_background_holo_light</item>">
     </style> -->
-
-
-
 </resources>

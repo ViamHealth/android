@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -120,6 +121,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     private boolean isEditMode = false;
     private ActionBar actionBar;
+    AbstractWheel feet,inches,cms;
+    String[] arr= new String[96];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,35 +143,72 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
+        int i,j,k=0;
 
-        final AbstractWheel feet = (AbstractWheel) findViewById(R.id.feet);
-        feet.setViewAdapter(new NumericWheelAdapter(this, 0, 9));
+        for(i=1;i<=8;i++)
+        {
+            for(j=0;j<=11;j++)
+            {
+                arr[k]=""+i+" ' "+j;
+                k++;
+            }
+
+        }
+
+        //String str1[]= new String[]{"val1","val2","val3"};
+
+        feet = (AbstractWheel) findViewById(R.id.feet);
+        ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
+        feet.setViewAdapter(adapter);
         feet.setCyclic(true);
-        final AbstractWheel inches = (AbstractWheel) findViewById(R.id.inches);
-        inches.setViewAdapter(new NumericWheelAdapter(this, 0, 12));
-        inches.setCyclic(true);
-        final AbstractWheel cms = (AbstractWheel) findViewById(R.id.cms);
+
+        cms = (AbstractWheel) findViewById(R.id.cms);
         cms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
         cms.setCyclic(true);
+        boolean flag=false;
 
 
 
-        OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
+        final OnWheelChangedListener heightListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                cms.setCurrentItem((int)((feet.getCurrentItem()*12+inches.getCurrentItem())*2.54));
+                cms.setCurrentItem((int)((feet.getCurrentItem()+12)*2.54));
             }
         };
 
 
 
-        feet.addChangingListener(wheelListener);
-        inches.addChangingListener(wheelListener);
-        //cms.addChangingListener(heightcmlistener);
+
+        feet.addChangingListener(heightListener);
+
+
+        OnWheelChangedListener cmvalListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                feet.removeChangingListener(heightListener);
+                if((cms.getCurrentItem()*2)/5<11)
+                {
+                    feet.setCurrentItem(0);
+                }
+                else
+                {
+                    feet.setCurrentItem((((cms.getCurrentItem()*2)/5)-12));
+                }
+                feet.addChangingListener(heightListener);
+            }
+        };
+
+
+
+
+
+        cms.addChangingListener(cmvalListener);
+
 
 
 
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         imgView = (ImageView) findViewById(R.id.profilepiclocal);
+
+
 
 
         if(user!=null && user.getId()>0)
@@ -237,12 +277,15 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         bloodGroup = (Spinner) findViewById(R.id.profile_blood_group);
         email = (EditText) findViewById(R.id.profile_email);
         relation = (Spinner) findViewById(R.id.profile_relation);
+/*
+        height = (EditText) findViewById(R.id.input_height);
+        */
 
-        //height = (EditText) findViewById(R.id.input_height);
-        //weight = (EditText) findViewById(R.id.input_weight);
+        weight = (EditText) findViewById(R.id.input_weight);
+
 
         //height.setOnKeyListener(this);
-        /*
+/*
         height.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -266,6 +309,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 }
             }
         });
+
+
 */
 
         weight.addTextChangedListener(new TextWatcher() {
@@ -325,6 +370,9 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         actionBar.setLogo(R.drawable.ic_action_white_brand);
         /*** Action bar Creation Ends Here ***/
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -465,7 +513,21 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         if(user.getBmiProfile()!=null){
             BMIProfile bmip = user.getBmiProfile();
-            if(bmip.getHeight()>0) height.setText(bmip.getHeight().toString());
+            //Toast.makeText(getApplicationContext(),"retrieved height="+bmip.getHeight(),Toast.LENGTH_LONG).show();
+            if(bmip.getHeight()>0){
+                cms.setCurrentItem(bmip.getHeight());
+
+                if((cms.getCurrentItem()*2)/5<11)
+                {
+                    feet.setCurrentItem(0);
+                }
+               else
+                {
+                    feet.setCurrentItem(((cms.getCurrentItem()*2)/5-12));
+                }
+
+            }
+            //height.setText(bmip.getHeight().toString());
             if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
         }
     }
@@ -533,7 +595,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        String[] strH = height.getText().toString().split(" ");
+        String[] strH = String.valueOf(cms.getCurrentItem()).split(" ");
+        //height.getText().toString().split(" ");
+        //Toast.makeText(getApplicationContext(),"stored height="+strH[0],Toast.LENGTH_LONG).show();
+
         String[] strW = weight.getText().toString().split(" ");
         bmi.setHeight(Integer.parseInt(strH[0]));
         bmi.setWeight(Double.parseDouble(strW[0]));
@@ -592,11 +657,12 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             dob.setError(getString(R.string.profile_dob_not_present));
             isValid = false;
         }
-
+/*
         if(height.getText().length()==0){
             height.setError(getString(R.string.profile_height_not_present));
             isValid = false;
         }
+*/
 
         if(weight.getText().length()==0){
             weight.setError(getString(R.string.profile_weight_not_present));

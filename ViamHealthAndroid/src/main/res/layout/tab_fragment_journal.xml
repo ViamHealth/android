@@ -34,7 +34,7 @@
                         android:layout_width="wrap_content"
                         android:text="20 March 2013"
                         android:textColor="#000000"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:layout_gravity="center" />
 
                 </FrameLayout>
@@ -120,7 +120,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/sugar"
@@ -140,7 +140,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/cholesterol"
@@ -160,7 +160,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
@@ -180,7 +180,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     </LinearLayout>
@@ -332,7 +332,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/protein"
@@ -352,7 +352,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/cholesterol"
@@ -372,7 +372,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
@@ -392,7 +392,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                 </LinearLayout>
@@ -533,7 +533,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/sugar"
@@ -553,7 +553,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/cholesterol"
@@ -573,7 +573,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
@@ -593,7 +593,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                 </LinearLayout>
@@ -737,7 +737,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/sugar"
@@ -757,7 +757,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/cholesterol"
@@ -777,7 +777,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                     <TextView android:id="@+id/fat"
@@ -797,7 +797,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="10sp"
                                         />
                                 </LinearLayout>
@@ -940,7 +940,7 @@
                                         android:gravity="left"
                                         android:padding="5dp"
                                         android:textColor="#ffffff"
-                                        android:text="25"
+                                        android:text="0"
                                         android:textSize="12sp"
                                         />
 
