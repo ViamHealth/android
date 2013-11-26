@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -157,7 +158,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         }
 
         //String str1[]= new String[]{"val1","val2","val3"};
-/*
+
         feet = (AbstractWheel) findViewById(R.id.feet);
         ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
         feet.setViewAdapter(adapter);
@@ -178,37 +179,30 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
 
 
+
+        feet.addChangingListener(heightListener);
+
+
         OnWheelChangedListener cmvalListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                //feet.removeChangingListener(heightListener);
-                if(cms.getCurrentItem()<11)
+                feet.removeChangingListener(heightListener);
+                if((cms.getCurrentItem()*2)/5<11)
                 {
                     feet.setCurrentItem(0);
                 }
                 else
                 {
-                    feet.setCurrentItem((cms.getCurrentItem()-11));
+                    feet.setCurrentItem((((cms.getCurrentItem()*2)/5)-12));
                 }
-                //feet.addChangingListener(heightListener);
-            }
-        };
-        feet.addChangingListener(heightListener);
-*/
-
-/*
-        OnWheelChangedListener heightcmlistener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                feet.setCurrentItem((int)(cms.getCurrentItem())/12);
-                inches.setCurrentItem((int)(cms.getCurrentItem())%12);
+                feet.addChangingListener(heightListener);
             }
         };
 
-*/
 
 
 
 
-        //cms.addChangingListener(cmvalListener);
+        cms.addChangingListener(cmvalListener);
 
 
 
@@ -285,12 +279,15 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         bloodGroup = (Spinner) findViewById(R.id.profile_blood_group);
         email = (EditText) findViewById(R.id.profile_email);
         relation = (Spinner) findViewById(R.id.profile_relation);
-
+/*
         height = (EditText) findViewById(R.id.input_height);
+        */
+
         weight = (EditText) findViewById(R.id.input_weight);
 
-        //height.setOnKeyListener(this);
 
+        //height.setOnKeyListener(this);
+/*
         height.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -316,7 +313,7 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
         });
 
 
-
+*/
 
         weight.addTextChangedListener(new TextWatcher() {
             @Override
@@ -518,7 +515,21 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         if(user.getBmiProfile()!=null){
             BMIProfile bmip = user.getBmiProfile();
-            if(bmip.getHeight()>0) height.setText(bmip.getHeight().toString());
+            //Toast.makeText(getApplicationContext(),"retrieved height="+bmip.getHeight(),Toast.LENGTH_LONG).show();
+            if(bmip.getHeight()>0){
+                cms.setCurrentItem(bmip.getHeight());
+
+                if((cms.getCurrentItem()*2)/5<11)
+                {
+                    feet.setCurrentItem(0);
+                }
+               else
+                {
+                    feet.setCurrentItem(((cms.getCurrentItem()*2)/5-12));
+                }
+
+            }
+            //height.setText(bmip.getHeight().toString());
             if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
         }
     }
@@ -586,8 +597,9 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        String[] strH = height.getText().toString().split(" ");
-        //String.valueOf(cms.getCurrentItem()).split(" ");
+        String[] strH = String.valueOf(cms.getCurrentItem()).split(" ");
+        //height.getText().toString().split(" ");
+        //Toast.makeText(getApplicationContext(),"stored height="+strH[0],Toast.LENGTH_LONG).show();
 
         String[] strW = weight.getText().toString().split(" ");
         bmi.setHeight(Integer.parseInt(strH[0]));
@@ -647,11 +659,12 @@ public class NewProfile extends SherlockFragmentActivity implements View.OnClick
             dob.setError(getString(R.string.profile_dob_not_present));
             isValid = false;
         }
-
+/*
         if(height.getText().length()==0){
             height.setError(getString(R.string.profile_height_not_present));
             isValid = false;
         }
+*/
 
         if(weight.getText().length()==0){
             weight.setError(getString(R.string.profile_weight_not_present));

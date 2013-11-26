@@ -900,7 +900,11 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             pDay=dayOfMonth;
             pYear=year;
             monthval=pMonth+1;
-            updateDisplay();
+            //updateDisplay();
+            lbl_food_date.setText(new StringBuilder()
+                    .append(pYear).append("-")
+                    .append(monthval).append("-")
+                    .append(pDay).append(" "));
             ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
             if(isInternetOn()){
 
@@ -910,6 +914,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
             }else{
                 Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
             }
+
 
 
         }
@@ -1037,7 +1042,7 @@ public class JournalFragment extends SherlockFragment implements View.OnClickLis
         if(appPrefs.getTargetCaloriesPerDay()>0)
         {
             lbltotcal.setText(String.valueOf(appPrefs.getTargetCaloriesPerDay())+"(Daily Limit)");
-            Prog.setMax(2*appPrefs.getTargetCaloriesPerDay());
+            Prog.setMax(appPrefs.getTargetCaloriesPerDay());
         }
         else
         {

@@ -34,7 +34,7 @@
                         android:layout_width="wrap_content"
                         android:text="20 March 2013"
                         android:textColor="#000000"
-                        android:textSize="20sp"
+                        android:textSize="15sp"
                         android:layout_gravity="center" />
 
                 </FrameLayout>
