@@ -7,16 +7,55 @@
     <ScrollView android:layout_height="match_parent"
         android:layout_width="fill_parent"
         android:splitMotionEvents="false"
-        android:fadingEdgeLength="0dp">
-        <LinearLayout
-            android:id="@+id/main_layout"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:padding="5dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:baselineAligned="false">
+        android:fadingEdgeLength="0dp"
+        android:visibility="gone"
+        android:id="@+id/scroller">
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/main_layout"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:padding="5dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:baselineAligned="false"
+                android:visibility="visible">
+
+            </LinearLayout>
+
     </ScrollView>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/splash"
+        android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:src="@drawable/original_logo_white"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="100dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:textSize="12dp"
+                android:textColor="#ffffff"
+                android:gravity="center_horizontal"
+                android:layout_alignParentBottom="true"
+                android:text="@string/copyright" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imgLogo" />
+
+    </RelativeLayout>
+
 </LinearLayout>

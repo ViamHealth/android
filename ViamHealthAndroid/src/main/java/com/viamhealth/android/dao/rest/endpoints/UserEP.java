@@ -14,6 +14,7 @@ import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.ProtocolException;
 import org.apache.http.impl.client.DefaultRedirectHandler;
 import org.apache.http.protocol.HttpContext;
@@ -171,12 +172,47 @@ public class UserEP extends BaseEP {
         return user;
     }
 
-    public void shareUser(User user) {
-        //TODO need to implement
+    public boolean shareUser(User userToShare, String email, Boolean isSelf) {
+        String baseurlString = Global_Application.url+"share/";
+
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddParam("email", email);
+        client.AddParam("share_user_id", userToShare.getId());
+        client.AddParam("is_self", isSelf.toString());
+
+        try {
+            client.Execute(RequestMethod.POST);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, "shareUser:" + client.toString());
+        if(client.getResponseCode()!= HttpStatus.SC_CREATED || client.getResponseCode() != HttpStatus.SC_OK)
+            return false;
+
+        return true;
     }
 
-    public void deleteUser(User user) {
-        //TODO need to implement s
+    public boolean deleteUser(User user) {
+        String baseurlString = Global_Application.url+"users/"+user.getId().toString();
+
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+        try {
+            client.Execute(RequestMethod.DELETE);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, "shareUser:" + client.toString());
+        if(client.getResponseCode()!= HttpStatus.SC_NO_CONTENT)
+            return false;
+
+        return true;
     }
 
     // function for get family member list

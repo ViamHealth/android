@@ -20,6 +20,7 @@
 
   <style name="CheckBoxGreentheme" parent="android:Widget.CompoundButton.CheckBox">
       <item name="android:button">@drawable/btn_check_holo_light</item>
+      <item name="android:textColor">@color/app_green</item>
   </style>
 
   <style name="RadioButtonGreentheme" parent="android:Widget.CompoundButton.RadioButton">
@@ -118,13 +119,13 @@
 	  <item name="android:textColor">@android:color/white</item>
   </style>
 
-  <style name="ListViewGreentheme" parent="android:Widget.ListView">
-      <item name="android:listSelector">@drawable/list_selector_holo_light</item>
-  </style>
+  <!--<style name="ListViewGreentheme" parent="android:Widget.ListView">-->
+      <!--<item name="android:listSelector">@drawable/list_selector_holo_light</item>-->
+  <!--</style>-->
 
-  <style name="ListViewGreentheme.White" parent="android:Widget.ListView.White">
-      <item name="android:listSelector">@drawable/list_selector_holo_light</item>
-  </style>
+  <!--<style name="ListViewGreentheme.White" parent="android:Widget.ListView.White">-->
+      <!--<item name="android:listSelector">@drawable/list_selector_holo_light</item>-->
+  <!--</style>-->
 
   <style name="SpinnerItemGreentheme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
       <item name="android:textColor">@color/app_green</item>

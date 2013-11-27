@@ -104,7 +104,7 @@ public class User extends BaseModel implements Parcelable {
         if(this.lastName!=null && !this.lastName.isEmpty())
             return lastName;
 
-        if(this.email!=null && !this.lastName.isEmpty() )
+        if(this.email!=null && !this.email.isEmpty() )
             return email;
 
         if(username!=null && !username.isEmpty())

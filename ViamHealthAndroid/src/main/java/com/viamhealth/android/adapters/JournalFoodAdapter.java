@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.activities.AddBreakfast;
 import com.viamhealth.android.activities.FoodDetail;
 import com.viamhealth.android.model.CategoryFood;
 import android.app.Activity;

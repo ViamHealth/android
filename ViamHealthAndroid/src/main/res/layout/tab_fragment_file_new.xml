@@ -5,24 +5,6 @@
     android:layout_height="match_parent"
     android:background="#eeeeee">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="center">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/tab_label_file"
-            android:id="@+id/files_header"
-            android:textColor="#000000"
-            android:textStyle="bold|normal"
-            android:textSize="25dp"
-            android:gravity="center_vertical|left"
-            android:layout_marginLeft="20dp" />
-    </LinearLayout>
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

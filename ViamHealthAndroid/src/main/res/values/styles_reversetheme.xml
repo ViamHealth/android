@@ -15,11 +15,12 @@
   </style>
 
     <style name="TextViewReversetheme" parent="android:Widget.TextView">
-        <item name="android:textColor">#ffffff</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
   <style name="CheckBoxReversetheme" parent="android:Widget.CompoundButton.CheckBox">
       <item name="android:button">@drawable/btn_check_holo_dark</item>
+      <item name="android:textColor">@android:color/white</item>
   </style>
 
   <style name="RadioButtonReversetheme" parent="android:Widget.CompoundButton.RadioButton">

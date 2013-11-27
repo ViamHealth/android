@@ -44,7 +44,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.activities.AddBreakfast;
 import com.viamhealth.android.activities.AddExercise;
 import com.viamhealth.android.activities.AddFoodActivity;
 import com.viamhealth.android.adapters.BreakfastAdapter;
@@ -843,8 +842,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
         if(v==addBreakfast){
             ga.setFoodType("Breakfast");
-            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
-            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
@@ -853,8 +851,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         }
         if(v==addLunch){
             ga.setFoodType("Lunch");
-            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
-            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
@@ -863,8 +860,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         }
         if(v==addSnacks){
             ga.setFoodType("Snacks");
-            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
-            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);
@@ -873,8 +869,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         }
         if(v==addDinner){
             ga.setFoodType("Dinner");
-            //Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
-            Intent addfood = new Intent(getSherlockActivity(), AddBreakfast.class);
+            Intent addfood = new Intent(getSherlockActivity(), AddFoodActivity.class);
             User user = getArguments().getParcelable("user");
             addfood.putExtra("user", user);
             addfood.putExtra("diet_date", ga.selected_date);

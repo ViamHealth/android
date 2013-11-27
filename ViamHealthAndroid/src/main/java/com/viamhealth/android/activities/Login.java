@@ -92,14 +92,6 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 
 		appPrefs = new ViamHealthPrefs(Login.this);
 
-
-        ImageView imgBtnLogo = (ImageView) findViewById(R.id.imgBtnLogo);
-        try {
-            imgBtnLogo.setImageDrawable(createLargeDrawable(R.drawable.original_logo_white));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         Log.e("TAG","Token is " + appPrefs.getToken());
         dbAdapter=new DataBaseAdapter(getApplicationContext());
         dbAdapter.createDatabase();

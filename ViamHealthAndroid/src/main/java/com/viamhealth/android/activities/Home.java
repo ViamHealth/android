@@ -52,6 +52,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,7 +67,11 @@ public class Home extends BaseActivity implements OnClickListener{
 	LinearLayout main_layout, bottom_layout, core_layout;
 	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
 	List<FrameLayout> frames = new ArrayList<FrameLayout>();
-	
+
+    RelativeLayout splashScreen;
+    ScrollView scroller;
+    ProgressBar bar;
+
 	ViamHealthPrefs appPrefs;
 	Global_Application ga;
 	int cnt=0,_count=0, selectedViewPosition = 0;
@@ -109,6 +116,14 @@ public class Home extends BaseActivity implements OnClickListener{
         userEndPoint = new UserEP(this, ga);
         user = ga.getLoggedInUser();
 
+        //for generate square
+        scroller = (ScrollView)findViewById(R.id.scroller);
+        splashScreen = (RelativeLayout) findViewById(R.id.splash);
+        bar = (ProgressBar) findViewById(R.id.progressBar);
+
+        scroller.setVisibility(View.GONE);
+        splashScreen.setVisibility(View.VISIBLE);
+
         if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
             Intent loginIntent = new Intent(Home.this, Login.class);
             startActivity(loginIntent);
@@ -118,11 +133,10 @@ public class Home extends BaseActivity implements OnClickListener{
                 return;
             }
 
+            main_layout = (LinearLayout)findViewById(R.id.main_layout);
+
             justRegistered = getIntent().getBooleanExtra("justRegistered", false);
             lstFamily = getIntent().getParcelableArrayListExtra("family");
-
-            //for generate square
-            main_layout = (LinearLayout)findViewById(R.id.main_layout);
 
             ScreenDimension();
 
@@ -181,10 +195,7 @@ public class Home extends BaseActivity implements OnClickListener{
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
             //startActivity(intent);
-
         }
-
-
     }
 
     private void logout() {
@@ -547,7 +558,7 @@ public class Home extends BaseActivity implements OnClickListener{
     }
 
     // async class for calling webservice and get responce message
-    public class CallDeleteProfileTask extends AsyncTask<String, Void, String>
+    public class CallDeleteProfileTask extends AsyncTask<String, Void, Boolean>
     {
         protected Context applicationContext;
 
@@ -558,8 +569,8 @@ public class Home extends BaseActivity implements OnClickListener{
             dialog.show();
         }
 
-        protected void onPostExecute(String result) {
-            if(result.toString().equals("0")){
+        protected void onPostExecute(Boolean result) {
+            if(result){
                 dialog.dismiss();
                 Intent intent = new Intent(Home.this, Home.class);
                 ArrayList<User> families = (ArrayList<User>) lstFamily;
@@ -568,22 +579,25 @@ public class Home extends BaseActivity implements OnClickListener{
                 startActivity(intent);
             }else{
                 dialog.dismiss();
-                Toast.makeText(Home.this, "Not able to add a new profile...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "Not able to delete "+selectedUser.getName()+"...", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Boolean doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
-            userEP.deleteUser(selectedUser);
+            boolean isSuccess = userEP.deleteUser(selectedUser);
             lstFamily.set(selectedViewPosition, user);
-            return "0";
+            return isSuccess;
         }
     }
 
-    public class CallShareProfileTask extends AsyncTask<String, Void, String>
+    public class CallShareProfileTask extends AsyncTask<String, Void, Boolean>
     {
         protected Context applicationContext;
+        protected String email;
+        protected boolean isSelf;
+        protected User userToShare;
 
         @Override
         protected void onPreExecute(){
@@ -592,20 +606,19 @@ public class Home extends BaseActivity implements OnClickListener{
             dialog.show();
         }
 
-        protected void onPostExecute(String result) {
-            if(result.toString().equals("0")){
+        protected void onPostExecute(Boolean result) {
+            if(result){
                 dialog.dismiss();
             }else{
                 dialog.dismiss();
-                Toast.makeText(Home.this, "Not able to add a new profile...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "Not able to share "+userToShare.getName()+" to "+ email +"...", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected Boolean doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
-            userEP.shareUser(selectedUser);
-            return "0";
+            return userEP.shareUser(userToShare, email, isSelf);
         }
     }
     // async class for calling webservice and get responce message
@@ -619,7 +632,7 @@ public class Home extends BaseActivity implements OnClickListener{
             dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("loading your family");
-            dialog.show();
+            //dialog.show();
             Log.i("onPreExecute", "onPreExecute");
 
         }
@@ -629,8 +642,11 @@ public class Home extends BaseActivity implements OnClickListener{
                 logout();
                 return;
             }
+            splashScreen.setVisibility(View.GONE);
+            scroller.setVisibility(View.VISIBLE);
+
             next();
-            dialog.dismiss();
+            //dialog.dismiss();
         }
 
         @Override
@@ -697,15 +713,11 @@ public class Home extends BaseActivity implements OnClickListener{
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    CallDeleteProfileTask task = new CallDeleteProfileTask();
-                    task.applicationContext = Home.this;
-                    task.execute();
-                }
-            });
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                    if (Checker.isInternetOn(Home.this)) {
+                        CallDeleteProfileTask task = new CallDeleteProfileTask();
+                        task.applicationContext = Home.this;
+                        task.execute();
+                    }
                 }
             });
             builder.show();
@@ -715,18 +727,25 @@ public class Home extends BaseActivity implements OnClickListener{
             View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.share_profile, null);
 
             final EditText shareTo = (EditText) dialogView.findViewById(R.id.shareTo);
-            CheckBox chkBox = (CheckBox) dialogView.findViewById(R.id.shareToSelf);
+            final CheckBox chkBox = (CheckBox) dialogView.findViewById(R.id.shareToSelf);
             chkBox.setText("Sharing with " + selectedUser.getName());
 
             chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if(isChecked && (shareTo.getText().toString()==null || shareTo.getText().toString().isEmpty())) {
-                        if(selectedUser.getEmail()!=null && !selectedUser.getEmail().isEmpty())
+                        if(selectedUser.getEmail()!=null && !selectedUser.getEmail().isEmpty()){
                             shareTo.setText(selectedUser.getEmail());
-                        else if(selectedUser.getProfile()!=null && selectedUser.getProfile().getMobileNumber()!=null
+                            shareTo.setEnabled(false);
+                        }
+
+                        //TODO when we support mobile based identification
+                        /*else if(selectedUser.getProfile()!=null && selectedUser.getProfile().getMobileNumber()!=null
                                     && !selectedUser.getProfile().getMobileNumber().isEmpty())
-                            shareTo.setText(selectedUser.getProfile().getMobileNumber());
+                            shareTo.setText(selectedUser.getProfile().getMobileNumber());*/
+                    }else{
+                        shareTo.setText("");
+                        shareTo.setEnabled(true);
                     }
                 }
             });
@@ -745,7 +764,7 @@ public class Home extends BaseActivity implements OnClickListener{
                     return false;
                 }
             });
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.StyledProgressDialog);
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.AlertDialogGreenTheme);
             builder.setView(dialogView);
             builder.setCancelable(true);
             builder.setTitle("Share To...");
@@ -753,15 +772,14 @@ public class Home extends BaseActivity implements OnClickListener{
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
-                    CallShareProfileTask task = new CallShareProfileTask();
-                    task.applicationContext = Home.this;
-                    task.execute();
-                }
-            });
-            builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
+                    if(Checker.isInternetOn(Home.this)){
+                        CallShareProfileTask task = new CallShareProfileTask();
+                        task.applicationContext = Home.this;
+                        task.userToShare = selectedUser;
+                        task.email = shareTo.getText().toString();
+                        task.isSelf = chkBox.isChecked();
+                        task.execute();
+                    }
                 }
             });
             builder.show();

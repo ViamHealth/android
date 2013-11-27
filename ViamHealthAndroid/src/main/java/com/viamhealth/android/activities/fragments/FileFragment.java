@@ -78,8 +78,6 @@ import java.util.Set;
  */
 public class FileFragment extends BaseFragment {
 
-    private TextView filesHeader;
-
     private Global_Application ga;
     private ViamHealthPrefs appPrefs;
 
@@ -94,8 +92,6 @@ public class FileFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_file_new, container, false);
-
-        filesHeader = (TextView) view.findViewById(R.id.files_header);
 
         ga = ((Global_Application)getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());

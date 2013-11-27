@@ -13,8 +13,8 @@ public enum ReminderType {
     Medicine(2, R.string.medicine, R.string.hint_reminder_medicine_name),
     DrAppointments(4, R.string.drappointment, R.string.hint_reminder_drappointment_name),
     LabTests(3, R.string.labtest, R.string.hint_reminder_labTests_name),
-    Meals(5, R.string.meals, R.string.hint_reminder_meals_name),
-    Activities(6, R.string.activities, R.string.hint_reminder_activities_name),
+//    Meals(5, R.string.meals, R.string.hint_reminder_meals_name),
+//    Activities(6, R.string.activities, R.string.hint_reminder_activities_name),
     Other(1, R.string.other, R.string.hint_reminder_other_name);
 
     private int value;

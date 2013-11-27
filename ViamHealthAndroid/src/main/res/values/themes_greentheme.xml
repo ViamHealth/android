@@ -21,8 +21,8 @@
     <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreentheme</item>
     <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreentheme</item>
     <item name="android:buttonStyleToggle">@style/ToggleGreentheme</item>
-    <item name="android:listViewStyle">@style/ListViewGreentheme</item>
-    <item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>
+    <!--<item name="android:listViewStyle">@style/ListViewGreentheme</item>-->
+    <!--<item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>-->
     <item name="android:spinnerItemStyle">@style/SpinnerItemGreentheme</item>
   </style>
 

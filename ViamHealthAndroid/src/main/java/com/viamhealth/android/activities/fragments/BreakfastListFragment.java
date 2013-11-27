@@ -35,7 +35,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.activities.AddBreakfast;
 import com.viamhealth.android.activities.AddMedication;
 import com.viamhealth.android.activities.Downlaod;
 import com.viamhealth.android.activities.FoodDetail;

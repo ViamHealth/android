@@ -37,7 +37,6 @@ import java.util.List;
  */
 public class AddFoodActivity extends BaseFragmentActivity implements SearchView.OnQueryTextListener {
 
-    TextView food_search_name;
     RefreshableListView listFood;
 
     ActionBar actionBar;
@@ -82,7 +81,6 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         Context themedContext = actionBar.getThemedContext();
         /*** Action bar Creation Ends Here ***/
 
-        food_search_name = (TextView) findViewById(R.id.food_search_name);
         listFood = (RefreshableListView) findViewById(R.id.lstfood);
     }
 
@@ -143,11 +141,8 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             Log.i("onPostExecute", "onPostExecute");
             if(dialog!=null)
                 dialog.dismiss();
-            //listfood.removeAllViews();
 
             if(lstResult.size()>0){
-                //addfood_count.setText("("+lstResult.size()+")");
-                food_search_name.setText(searchQuery);
                 FoodAdapter adapter = new FoodAdapter(AddFoodActivity.this, R.layout.addfoodlist, lstResult);
                 listFood.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
