@@ -26,7 +26,8 @@
                 <FrameLayout
                     android:id="@+id/food_header"
                     android:layout_width="fill_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:layout_gravity="center">
 
                     <TextView android:id="@+id/lbl_food_date"
@@ -83,7 +84,7 @@
                             <TextView android:layout_height="wrap_content"
                                 android:layout_width="wrap_content"
                                 android:text="You are on track :)"
-                                android:textSize="20sp"
+                                android:textSize="13sp"
                                 android:gravity="center"
                                 android:paddingLeft="5dp"
                                 android:textStyle="bold"
@@ -99,8 +100,8 @@
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
                             android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
-                            <LinearLayout android:layout_height="72dp"
+                            android:layout_marginBottom="0dp">
+                            <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
                                 android:id="@+id/breakfast"
@@ -270,7 +271,7 @@
                             <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
-                                android:paddingTop="5dp"
+                                android:paddingTop="0dp"
                                 android:orientation="vertical"
                                 android:id="@+id/layout1">
                                 <!-- <ListView
@@ -311,9 +312,8 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
-                            <LinearLayout android:layout_height="72dp"
+                            android:layout_marginBottom="0dp">
+                            <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
                                 android:gravity="center_vertical"
@@ -508,12 +508,12 @@
                             </LinearLayout>
                             </ScrollView>
                         </LinearLayout>
+
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
-                            <LinearLayout android:layout_height="72dp"
+                            android:layout_marginBottom="0dp">
+                            <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
                                 android:gravity="center_vertical"
@@ -716,9 +716,8 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp">
-                            <LinearLayout android:layout_height="72dp"
+                            android:layout_marginBottom="0dp">
+                            <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
                                 android:gravity="center_vertical"
@@ -918,10 +917,9 @@
                         <LinearLayout android:layout_height="wrap_content"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
-                            android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             android:visibility="visible">
-                            <LinearLayout android:layout_height="72dp"
+                            <LinearLayout android:layout_height="wrap_content"
                                 android:layout_width="fill_parent"
                                 android:background="#37AA4F"
                                 android:gravity="center_vertical"

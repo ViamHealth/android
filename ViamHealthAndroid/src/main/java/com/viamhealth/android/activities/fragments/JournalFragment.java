@@ -1047,13 +1047,13 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
         if((int)Global_Application.total_ideal_calories <= appPrefs.getTargetCaloriesPerDay())
         {
-            lblmessage.setText("You are below the daily margin by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories));
-            lblmessage.setTextColor(Color.GREEN);
+            lblmessage.setText("Below the daily margin by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories));
+            lblmessage.setTextColor(getResources().getColor(R.color.app_green));
         }
         else
         {
 
-            lblmessage.setText("You have exceeded daily calorie limit by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories)*(-1) );
+            lblmessage.setText("Exceeded daily calorie limit by "+(appPrefs.getTargetCaloriesPerDay()-(int)Global_Application.total_ideal_calories)*(-1) );
             lblmessage.setTextColor(Color.RED);
         }
 /*
