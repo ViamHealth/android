@@ -7,9 +7,11 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,9 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
     User user;
 
+    functionClass obj;
+    ProgressDialog dialog1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +84,34 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         actionBar.setLogo(R.drawable.ic_action_white_brand);
 
         Context themedContext = actionBar.getThemedContext();
+        obj=new functionClass(AddFoodActivity.this);
         /*** Action bar Creation Ends Here ***/
 
         listFood = (RefreshableListView) findViewById(R.id.lstfood);
+
+        listFood.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+                                    long arg3) {
+                // TODO Auto-generated method stub
+
+                ga.setLstFood(lstResult);
+                ga.setFoodPos(position);
+                Toast.makeText(getApplicationContext(),"onItemClick position "+position,Toast.LENGTH_LONG);
+                //Intent foodDetail = new Intent(AddBreakfast.this, FoodDetail.class);
+                //TabGroupActivity parentoption = (TabGroupActivity)AddBreakfast.this;
+                //parentoption.startChildActivity("foodDetail",foodDetail);
+                //foodDetail.putExtra("user", user);
+                //startActivityForResult(foodDetail, 1);
+                CallAddFoodTask tsk1= new CallAddFoodTask();
+                tsk1.execute();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("user", user);
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -165,6 +195,52 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
             lstResult.addAll(dao.SearchFoodItem(searchQuery));
             return null;
+        }
+
+    }
+
+    public class CallAddFoodTask extends AsyncTask <String, Void,String>
+    {
+        protected FragmentActivity activity;
+
+        @Override
+        protected void onPreExecute()
+        {
+
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog1 = new ProgressDialog(AddFoodActivity.this);
+            dialog1.setCanceledOnTouchOutside(false);
+            dialog1.setMessage("Please Wait....");
+            dialog1.show();
+            Toast.makeText(getApplicationContext(),"Food Detail position before async task"+ga.getFoodPos(),Toast.LENGTH_LONG);
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+
+            Log.i("onPostExecute", "onPostExecute");
+            if(dialog1!=null)
+                dialog1.dismiss();
+            //listfood.removeAllViews();
+
+            if(result.equals("0")){
+                Toast.makeText(AddFoodActivity.this, "Food added successfully...",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String addFood=null;
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+
+            //return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString());
+            return addFood;
         }
 
     }
