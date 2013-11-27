@@ -31,7 +31,10 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 import com.viamhealth.android.utils.Checker;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -156,7 +159,12 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         protected void onPreExecute()
         {
 
-            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            //dialog = ProgressDialog.show(applicationContext, ""Please wait...", true);
+            if(dialog!=null)
+            {
+                dialog.dismiss();
+                dialog=null;
+            }
             dialog = new ProgressDialog(AddFoodActivity.this);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
@@ -170,7 +178,10 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
             Log.i("onPostExecute", "onPostExecute");
             if(dialog!=null)
+            {
                 dialog.dismiss();
+                dialog=null;
+            }
 
             if(lstResult.size()>0){
                 FoodAdapter adapter = new FoodAdapter(AddFoodActivity.this, R.layout.addfoodlist, lstResult);
@@ -179,8 +190,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 listFood.onRefreshComplete();
             }else{
                 if(dialog!=null)
+                {
                     dialog.dismiss();
-                Toast.makeText(AddFoodActivity.this, "No Food found...", Toast.LENGTH_SHORT).show();
+                    dialog=null;
+                }
+                //Toast.makeText(AddFoodActivity.this, "No Food found...", Toast.LENGTH_SHORT).show();
                 //addfood_count.setText("("+lstResult+")");
             }
 
@@ -238,9 +252,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date=new Date();
 
-            //return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString());
-            return addFood;
+            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString(),dateFormat.format(date));
+
         }
 
     }
