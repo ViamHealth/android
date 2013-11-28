@@ -120,6 +120,15 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
@@ -163,25 +172,20 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         protected Context applicationContext;
 
         @Override
-        protected void onPreExecute()
-        {
-
-            //dialog = ProgressDialog.show(applicationContext, ""Please wait...", true);
-            if(dialog!=null)
-            {
+        protected void onPreExecute() {
+            if(dialog!=null){
                 dialog.dismiss();
                 dialog=null;
             }
+
             dialog = new ProgressDialog(AddFoodActivity.this);
             dialog.setCanceledOnTouchOutside(false);
             dialog.setMessage("Please Wait....");
             dialog.show();
             Log.i("onPreExecute", "onPreExecute");
-
         }
 
-        protected void onPostExecute(String result)
-        {
+        protected void onPostExecute(String result){
 
             Log.i("onPostExecute", "onPostExecute");
             if(dialog!=null)

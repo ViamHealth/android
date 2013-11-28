@@ -9,11 +9,11 @@ import java.util.Map;
  */
 public enum LifeStyle {
 
-    Sedentary(1, "Very Severy Underweight"),
-    LightlyActive(2, "Severy Underweight"),
-    ModeratelyActive(3, "Underweight"),
-    VeryActive(4, "Normal"),
-    ExtremelyActive(5, "Overweight");
+    Sedentary(1, "Sedentary"),
+    LightlyActive(2, "Lightly Active"),
+    ModeratelyActive(3, "Moderately Active"),
+    VeryActive(4, "Very Active"),
+    ExtremelyActive(5, "Extremenly Active");
 
     private final int value;
     private final String key;

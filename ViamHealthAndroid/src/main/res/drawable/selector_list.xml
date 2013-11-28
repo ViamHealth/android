@@ -5,6 +5,6 @@
     <item android:drawable="@color/holo_light_selected" android:state_checked="true"/>
     <item android:drawable="@color/holo_light_selected" android:state_selected="true"/>
     <item android:drawable="@color/holo_light_selected" android:state_pressed="true"/>
-    <item android:drawable="@color/holo_light_selected"/>
+    <item android:drawable="@android:color/white"/>
 
 </selector>

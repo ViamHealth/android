@@ -15,16 +15,14 @@
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         android:required="false" />
     <uses-permission
-    android:name="android.permission.CAMERA"
-    android:required="false" />
+        android:name="android.permission.CAMERA"
+        android:required="false" />
     <uses-permission
         android:name="android.permission.camera"
         android:required="false" />
     <uses-permission
         android:name="android.permission.camera.autofocus"
         android:required="false" />
-
-
     <uses-permission
         android:name="android.permission.FLASHLIGHT"
         android:required="false" />
@@ -59,14 +57,14 @@
         android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="ViamHealth"
-        android:theme="@style/Greentheme">
+        android:theme="@style/Greentheme" >
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
         <activity
             android:name="com.viamhealth.android.activities.Home"
-            android:theme="@style/Reversetheme">
+            android:theme="@style/Reversetheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -76,8 +74,8 @@
         <activity android:name="com.facebook.LoginActivity" />
         <activity
             android:name="com.viamhealth.android.activities.Login"
-            android:theme="@style/Reversetheme"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Reversetheme" />
         <activity
             android:name="com.viamhealth.android.activities.TabGroupActivityty"
             android:noHistory="true"
@@ -87,7 +85,8 @@
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddBreakfast" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.AddExercise"
+        <activity
+            android:name="com.viamhealth.android.activities.AddExercise"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
         <activity
@@ -95,54 +94,38 @@
             android:theme="@style/Reversetheme"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.UploadFile">
+        <activity android:name="com.viamhealth.android.activities.UploadFile" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.Downlaod"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
-        <activity
-            android:name=".activities.AddReminder">
+        <activity android:name="com.viamhealth.android.activities.AddReminder" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.FoodDetail" >
         </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.AddTest"
-            android:label="@string/title_activity_add_medicaletst">
+        <activity android:name="com.viamhealth.android.activities.NewProfile" >
         </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.AddMedication">
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.NewProfile">
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.NewHome"
-            android:label="@string/title_activity_new_home" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.FBFamilyListActivity"
-            android:label="@string/title_activity_fbfamily_list">
+        <activity android:name="com.viamhealth.android.activities.FBFamilyListActivity" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize" >
         </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.AddGoalActivity">
+        <activity android:name="com.viamhealth.android.activities.AddGoalActivity" >
         </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.AddGoalValue">
+        <activity android:name="com.viamhealth.android.activities.AddGoalValue" >
         </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.AddFoodActivity">
+        <activity android:name="com.viamhealth.android.activities.AddFoodActivity" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"
-            android:label="@string/title_activity_add_medication"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
-
+        <activity
+            android:name="com.viamhealth.android.activities.ForgotPassword"
+            android:theme="@style/Reversetheme">
+        </activity>
     </application>
+
 </manifest>

@@ -208,9 +208,9 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         lblitem4.getLayoutParams().width=w110;
 
         lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
-        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
-        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
-        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
+        //lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
+        //lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
+        //lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
 
         breakfast = (LinearLayout)view.findViewById(R.id.breakfast);
         breakfast.setOnClickListener(this);
@@ -235,9 +235,9 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
         lbltotcal = (TextView)view.findViewById(R.id.lbl_total_calories);
         lblmessage=(TextView)view.findViewById(R.id.status);
-        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
-        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
-        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
+//        lblidealcal=(TextView)view.findViewById(R.id.lbl_ideal_calories);
+//        lblcaldiff=(TextView)view.findViewById(R.id.lbl_cal_diff);
+//        lblcalmsg=(TextView)view.findViewById(R.id.lbl_calorie_message);
 
         lstViewBreakfast = (FrameLayout)view.findViewById(R.id.lstViewBreakfast);
         lstViewBreakfast.getLayoutParams().height =LinearLayout.LayoutParams.WRAP_CONTENT;

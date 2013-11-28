@@ -14,7 +14,8 @@ repositories {
 }
 
 dependencies {
-    compile 'com.nineoldandroids:library:2.2.0'
+//    compile 'com.nineoldandroids:library:2.2.0'
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 
 android {

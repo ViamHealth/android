@@ -5,10 +5,11 @@
     android:orientation="horizontal" 
     android:background="#ffffff">
     
-    <LinearLayout 
+    <LinearLayout
         android:id="@+id/main_list_layout"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
+<<<<<<< HEAD
         android:orientation="horizontal">
          <LinearLayout 
         android:layout_height="wrap_content"
@@ -25,12 +26,26 @@
                  android:layout_weight="1"
                 android:textStyle="bold"
                 />
+=======
+        android:orientation="horizontal"
+        android:layout_margin="5dp">
+>>>>>>> 123624668252ba43df9c776f96f418d79c34287a
+
+        <TextView android:id="@+id/food_name"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:text="EGG WHITES"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical|left"
+            android:textSize="18sp"
+            android:singleLine="false"
+            android:layout_marginLeft="10dp" />
 
 
-      		<ImageView android:layout_height="wrap_content"
-      		    android:layout_width="wrap_content"
-
-                android:src="@drawable/ic_content_new_green"/>
-        </LinearLayout>
- </LinearLayout>
+        <ImageView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:src="@drawable/ic_content_new_green"
+            android:layout_marginRight="10dp" />
+    </LinearLayout>
 </LinearLayout>

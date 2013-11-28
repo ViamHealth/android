@@ -119,13 +119,13 @@
 	  <item name="android:textColor">@android:color/white</item>
   </style>
 
-  <!--<style name="ListViewGreentheme" parent="android:Widget.ListView">-->
-      <!--<item name="android:listSelector">@drawable/list_selector_holo_light</item>-->
-  <!--</style>-->
+  <style name="ListViewGreentheme" parent="android:Widget.ListView">
+      <item name="android:listSelector">@drawable/list_selector_holo_light</item>
+  </style>
 
-  <!--<style name="ListViewGreentheme.White" parent="android:Widget.ListView.White">-->
-      <!--<item name="android:listSelector">@drawable/list_selector_holo_light</item>-->
-  <!--</style>-->
+  <style name="ListViewGreentheme.White" parent="android:Widget.ListView.White">
+      <item name="android:listSelector">@drawable/list_selector_holo_light</item>
+  </style>
 
   <style name="SpinnerItemGreentheme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
       <item name="android:textColor">@color/app_green</item>

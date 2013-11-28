@@ -63,7 +63,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 	Button login_btn;
 	
 	EditText user_name, user_password;
-	TextView sign_up;
+	TextView sign_up, forgotPassword;
 	UserEP userEndPoint;
 
 	DataBaseAdapter dbAdapter;
@@ -116,6 +116,9 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
         sign_up.setOnClickListener(this);
         sign_up.setTypeface(tf);
 
+        forgotPassword = (TextView)findViewById(R.id.forgotPassword);
+        forgotPassword.setOnClickListener(this);
+        forgotPassword.setTypeface(tf);
 	}
 
     @Override
@@ -200,6 +203,11 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 			Intent i = new Intent(Login.this, Register.class);
 			startActivity(i);
 		}
+        if(v==forgotPassword){
+            Intent i = new Intent(Login.this, ForgotPassword.class);
+            i.putExtra("email", user_name.getText().toString());
+            startActivity(i);
+        }
 	}
 
 	// function for validation
