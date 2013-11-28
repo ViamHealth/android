@@ -55,6 +55,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp">
                         <LinearLayout android:layout_height="wrap_content"
+                            android:id="@+id/calorie_layout"
                             android:layout_width="fill_parent"
                             android:orientation="vertical"
                             android:layout_marginTop="5dp"

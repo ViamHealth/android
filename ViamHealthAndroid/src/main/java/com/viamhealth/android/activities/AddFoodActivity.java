@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -137,12 +139,17 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     public boolean onQueryTextSubmit(String s) {
         //TODO get the food data from the API
         searchQuery = s;
+        //hideKeyboard();
         if(Checker.isInternetOn(AddFoodActivity.this)){
             CallSearchFoodTask task = new CallSearchFoodTask();
             task.applicationContext = AddFoodActivity.this;
             task.execute();
         }
         return true;
+    }
+    private void hideKeyboard(){
+        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @Override
@@ -188,6 +195,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 listFood.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listFood.onRefreshComplete();
+                hideKeyboard();
             }else{
                 if(dialog!=null)
                 {
@@ -197,8 +205,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 //Toast.makeText(AddFoodActivity.this, "No Food found...", Toast.LENGTH_SHORT).show();
                 //addfood_count.setText("("+lstResult+")");
             }
+            //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         }
+
+
 
         @Override
         protected String doInBackground(String... params) {

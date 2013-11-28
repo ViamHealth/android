@@ -61,7 +61,7 @@ public class AddExercise extends BaseActivity {
 
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
                 R.array.time_type, R.layout.custom_spinner_item); //change the last argument here to your xml above.
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         time_check.setAdapter(typeAdapter);
 
 
