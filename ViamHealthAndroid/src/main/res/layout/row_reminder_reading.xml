@@ -35,6 +35,14 @@
                 android:textColor="@drawable/row_textcolor_selector"
                 android:id="@+id/txtViewName" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Small Text"
+                android:id="@+id/txtViewDesc"
+                android:layout_gravity="center_vertical" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -44,7 +52,8 @@
             android:layout_weight="1"
             android:id="@+id/completeLayout"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical">
 
             <FrameLayout
                 android:layout_width="26dp"

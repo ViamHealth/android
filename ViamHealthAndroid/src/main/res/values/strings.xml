@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="networkNotAvailable">Network not availble. Please check your internet connection and then try again.</string>
     <string name="none">None</string>
+    <string name="changePassword">Change Password</string>
     <string name="app_name">ViamHealth</string>
     <string name="menu_settings">Logout</string>
     <string name="hello_world">Hello world!</string>
@@ -24,6 +26,7 @@
     <string name="medical_conidtion_diabetes">Diabetes</string>
     <string name="medical_conidtion_cholesterol">Cholesterol</string>
     <string name="selected">selected</string>
+    <string name="inviteUser">Invite User</string>
 
     <string-array name="goal_name_array">
         <item>Blood Glucose</item>
@@ -54,6 +57,7 @@
         <item>Months</item>
         <item>Years</item>
     </string-array>
+
     <string name="tab_label_medicines">Medicines</string>
     <string name="tab_label_others">Others</string>
     <string name="title_activity_add_breakfast">AddBreakfast</string>
@@ -201,7 +205,6 @@
     <string name="repeat_part">repeat for</string>
     <string name="from">from</string>
     <string name="every">once every</string>
-
     <string name="select_relation">related how?</string>
     <string name="spouse">spouse</string>
     <string name="father">father</string>
@@ -216,7 +219,6 @@
     <string name="sister">sister</string>
     <string name="cousin">cousin</string>
     <string name="others">other</string>
-
     <string name="create">Create</string>
     <string name="edit">Edit</string>
     <string name="share">Share</string>
@@ -229,7 +231,6 @@
     <string name="present">Present</string>
     <string name="timeline">Timeline</string>
     <string name="dashboard">Dashboard</string>
-
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
@@ -262,5 +263,10 @@
     <string name="hint_reminder_drappointment_name">doctor name</string>
     <string name="hint_reminder_other_name">name</string>
     <string name="copyright">\u00A9 2013 Viam Health</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="mailMe">Mail Me</string>
+    <string name="oldPassword">#old password</string>
+    <string name="newPassword">#new password</string>
+    <string name="reEnterNewPassword">#confirm new password</string>
 
 </resources>

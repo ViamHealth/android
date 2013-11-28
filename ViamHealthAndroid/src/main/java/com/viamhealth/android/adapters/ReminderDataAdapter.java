@@ -175,6 +175,14 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         TextView txtName = (TextView)row.findViewById(R.id.txtViewName);
         txtName.setText(readings.get(position).getReminder().getName());
 
+        TextView txtDesc = (TextView)row.findViewById(R.id.txtViewDesc);
+        String desc = readings.get(position).getReminder().getDetails();
+        if(desc!=null && !desc.isEmpty()){
+            txtDesc.setVisibility(View.VISIBLE);
+            txtDesc.setText(desc);
+        }else{
+            txtDesc.setVisibility(View.GONE);
+        }
         final ReminderType type = readings.get(position).getReminder().getType();
         if(type == ReminderType.Medicine){
             completeLayout.setVisibility(View.GONE);
@@ -190,5 +198,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
 
         return row;
     }
+
+
 
 }

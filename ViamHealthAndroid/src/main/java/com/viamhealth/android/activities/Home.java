@@ -18,6 +18,7 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
@@ -203,11 +204,10 @@ public class Home extends BaseActivity implements OnClickListener{
                 && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
             callFacebookLogout();
 
-        ga.setLoggedInUser(null);
-        appPrefs.setToken(null);
-        Intent i = new Intent(Home.this, Home.class);
-        startActivity(i);
-        finish();
+        if(Checker.isInternetOn(Home.this)){
+            LogoutTask task = new LogoutTask();
+            task.execute();
+        }
     }
 
     public void callFacebookLogout() {
@@ -242,6 +242,66 @@ public class Home extends BaseActivity implements OnClickListener{
             startActionMode(new HomeActionModeCallback());
             return false;
         }
+
+        if(item.getItemId() == R.id.menu_invite) {
+            InviteUser inviteUser = new InviteUser(Home.this, ga);
+            inviteUser.show();
+        }
+
+        if(item.getItemId()==R.id.menu_change_password){
+            View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.dialog_change_password, null);
+            final EditText old = (EditText) dialogView.findViewById(R.id.old);
+            final EditText newP = (EditText) dialogView.findViewById(R.id.newP);
+            final EditText newPAgain = (EditText) dialogView.findViewById(R.id.new_again);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.AlertDialogGreenTheme);
+            builder.setTitle("Change Password");
+            builder.setView(dialogView);
+            builder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+                private boolean isValid(){
+                    String oStr = old.getText().toString();
+                    String nStr = newP.getText().toString();
+                    String naStr = newP.getText().toString();
+
+                    if(oStr==null || oStr.isEmpty()){
+                        old.setError("old password is mandatory");
+                        return false;
+                    }
+
+                    if(nStr==null || nStr.isEmpty()){
+                        newP.setError("new password is mandatory");
+                        return false;
+                    }
+
+                    if(naStr==null || naStr.isEmpty()){
+                        newPAgain.setError("confirm the new password");
+                        return false;
+                    }
+
+                    if(!nStr.equals(naStr)){
+                        newP.setError("new passwords do not match");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(Checker.isInternetOn(Home.this)){
+                        if(isValid()){
+                            ChangePasswordTask task = new ChangePasswordTask();
+                            task.execute(old.getText().toString(), newP.getText().toString());
+                        }
+                    }else{
+                        Toast.makeText(Home.this, R.string.networkNotAvailable, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            builder.show();
+            return false;
+        }
+
         return retVal;
     }
 
@@ -659,6 +719,58 @@ public class Home extends BaseActivity implements OnClickListener{
             return null;
         }
 
+    }
+
+    public class LogoutTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            splashScreen.setVisibility(View.VISIBLE);
+            scroller.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            ga.setLoggedInUser(null);
+            appPrefs.setToken(null);
+            Intent i = new Intent(Home.this, Login.class);
+            startActivity(i);
+            finish();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return userEndPoint.Logout();
+        }
+    }
+
+
+    public class ChangePasswordTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("changing your password...");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            dialog.dismiss();
+            String msg;
+            if(aBoolean){
+                msg = "Changed your password successfully.";
+            }else{
+                msg = "Sorry! Couldn't change your password. Please try after some time.";
+            }
+            Toast.makeText(Home.this, msg, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return userEndPoint.ChangePassword(params[0], params[1]);
+        }
     }
 
     public class ImproperArgumentsPassedException extends Exception {

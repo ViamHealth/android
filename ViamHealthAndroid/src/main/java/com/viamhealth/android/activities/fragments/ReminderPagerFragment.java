@@ -177,6 +177,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     }
                     // set checked selected item and enter multi selection mode
                     adapter.toggleChecked(position);
+                    view.setSelected(true);
                     getSherlockActivity().startActionMode(new ReminderListActionMode());
                     actionMode.invalidate();
                     return true;
@@ -245,6 +246,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     // both edit and delete
                     getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_reminder, menu);
                     return true;
+
                 default:
                     //only delete
                     menu.add(Menu.NONE, R.id.action_mode_delete, Menu.NONE, "Edit")

@@ -1,9 +1,6 @@
 package com.viamhealth.android.activities;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -11,42 +8,29 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Display;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.facebook.widget.ProfilePictureView;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
-import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.rest.endpoints.FileUploader;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
@@ -54,26 +38,19 @@ import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
-import antistatic.spinnerwheel.OnWheelScrollListener;
-import antistatic.spinnerwheel.adapters.AbstractWheelTextAdapter;
 import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
@@ -121,8 +98,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     private boolean isEditMode = false;
     private ActionBar actionBar;
-    AbstractWheel feet,inches,cms;
+    AbstractWheel wheelFeet, wheelCms;
     String[] arr= new String[96];
+
+    private OnWheelChangedListener onWheelInchesChangedListener, onWheelCmsChangedListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,73 +122,54 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
-        int i,j,k=0;
+        int k=0;
 
-        for(i=1;i<=8;i++)
-        {
-            for(j=0;j<=11;j++)
-            {
-                arr[k]=""+i+" ' "+j;
+        for(int i=1;i<=8;i++) {
+            for(int j=0;j<=11;j++) {
+                arr[k]=""+i+"' "+j+ "\"";
                 k++;
             }
-
         }
 
         //String str1[]= new String[]{"val1","val2","val3"};
 
-        feet = (AbstractWheel) findViewById(R.id.feet);
+        wheelFeet = (AbstractWheel) findViewById(R.id.feet);
         ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
-        feet.setViewAdapter(adapter);
-        feet.setCyclic(true);
+        wheelFeet.setViewAdapter(adapter);
+        wheelFeet.setCyclic(true);
 
-        cms = (AbstractWheel) findViewById(R.id.cms);
-        cms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
-        cms.setCyclic(true);
+        wheelCms = (AbstractWheel) findViewById(R.id.cms);
+        wheelCms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
+        wheelCms.setCyclic(true);
         boolean flag=false;
 
-
-
-        final OnWheelChangedListener heightListener = new OnWheelChangedListener() {
+        onWheelInchesChangedListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                cms.setCurrentItem((int)((feet.getCurrentItem()+12)*2.54));
+                wheelCms.removeChangingListener(onWheelCmsChangedListener);
+                int inchesIndex = wheelFeet.getCurrentItem();
+                int inches = inchesIndex + 12;
+                int curCMS = getCMSfromInches(inches);
+                wheelCms.setCurrentItem(curCMS);
+                wheelCms.addChangingListener(onWheelCmsChangedListener);
             }
         };
 
-
-
-
-        feet.addChangingListener(heightListener);
-
-
-        OnWheelChangedListener cmvalListener = new OnWheelChangedListener() {
+        onWheelCmsChangedListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                feet.removeChangingListener(heightListener);
-                if((cms.getCurrentItem()*2)/5<11)
-                {
-                    feet.setCurrentItem(0);
-                }
-                else
-                {
-                    feet.setCurrentItem((((cms.getCurrentItem()*2)/5)-12));
-                }
-                feet.addChangingListener(heightListener);
+                wheelFeet.removeChangingListener(onWheelInchesChangedListener);
+                int curCMS = wheelCms.getCurrentItem();
+                int curInches = getInchesFromCMS(curCMS);
+                int inchesIndex = curInches<11 ? 0 : (curInches-12);
+                wheelFeet.setCurrentItem(inchesIndex);
+                wheelFeet.addChangingListener(onWheelInchesChangedListener);
             }
         };
 
-
-
-
-
-        cms.addChangingListener(cmvalListener);
-
-
-
+        wheelFeet.addChangingListener(onWheelInchesChangedListener);
+        wheelCms.addChangingListener(onWheelCmsChangedListener);
 
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         imgView = (ImageView) findViewById(R.id.profilepiclocal);
-
-
-
 
         if(user!=null && user.getId()>0)
             isEditMode = true;
@@ -277,64 +237,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         bloodGroup = (Spinner) findViewById(R.id.profile_blood_group);
         email = (EditText) findViewById(R.id.profile_email);
         relation = (Spinner) findViewById(R.id.profile_relation);
-/*
-        height = (EditText) findViewById(R.id.input_height);
-        */
 
         weight = (EditText) findViewById(R.id.input_weight);
-
-
-        //height.setOnKeyListener(this);
-/*
-        height.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String units = "cms";
-                if(!s.toString().contains(units)){
-                   // height.setText(s.toString() + " " + units);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String units = "cms";
-                //event.getNumber();
-                if(!s.toString().contains(units)){
-                    //height.setText(s.toString() + " " + units);
-                }
-            }
-        });
-
-
-*/
-
-        weight.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //if(s.)
-                String units = "kgs";
-                //event.getNumber();
-                if(!s.toString().contains(units))
-                    s.append(" " + units);
-            }
-        });
-
-        //weight.setOnKeyListener(this);
 
         profileDataFetched = RequestStatus.Not_Started;
         familyMemberSelected = RequestStatus.Not_Started;
@@ -370,9 +274,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         actionBar.setLogo(R.drawable.ic_action_white_brand);
         /*** Action bar Creation Ends Here ***/
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -513,23 +414,23 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         if(user.getBmiProfile()!=null){
             BMIProfile bmip = user.getBmiProfile();
-            //Toast.makeText(getApplicationContext(),"retrieved height="+bmip.getHeight(),Toast.LENGTH_LONG).show();
             if(bmip.getHeight()>0){
-                cms.setCurrentItem(bmip.getHeight());
-
-                if((cms.getCurrentItem()*2)/5<11)
-                {
-                    feet.setCurrentItem(0);
-                }
-               else
-                {
-                    feet.setCurrentItem(((cms.getCurrentItem()*2)/5-12));
-                }
-
+                wheelCms.setCurrentItem(bmip.getHeight());
+                int inches = getInchesFromCMS(wheelCms.getCurrentItem());
+                int inchesIndex = inches<11?0:(inches-12);
+                wheelFeet.setCurrentItem(inchesIndex);
             }
             //height.setText(bmip.getHeight().toString());
             if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
         }
+    }
+
+    private int getCMSfromInches(int inches){
+        return (inches * 254)/100;
+    }
+
+    private int getInchesFromCMS(int cms){
+        return (cms * 100)/254;
     }
 
     private void updateViewFromFBData(FBUser fbUser){
@@ -595,7 +496,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        String[] strH = String.valueOf(cms.getCurrentItem()).split(" ");
+        String[] strH = String.valueOf(wheelCms.getCurrentItem()).split(" ");
         //height.getText().toString().split(" ");
         //Toast.makeText(getApplicationContext(),"stored height="+strH[0],Toast.LENGTH_LONG).show();
 
@@ -641,10 +542,12 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     private boolean validate() {
         boolean isValid = true;
-        if(email.getText().length()==0){
-            email.setError(getString(R.string.profile_email_not_present));
-            isValid=false;
-        } else if(!Validator.isEmailValid(email.getText().toString())){
+        //Email is not mandatory so removing this check
+//        if(email.getText().length()==0){
+//            email.setError(getString(R.string.profile_email_not_present));
+//            isValid=false;
+//        } else
+        if(!Validator.isEmailValid(email.getText().toString())){
             email.setError(getString(R.string.profile_email_not_valid));
             isValid=false;
         }

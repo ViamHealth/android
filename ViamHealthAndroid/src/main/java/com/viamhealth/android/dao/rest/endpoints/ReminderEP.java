@@ -207,6 +207,7 @@ public class ReminderEP extends BaseEP {
 
         RestClient client = getRestClient("reminderreadings/" + reading.getId(), params);
 
+        client.AddParam("reading_date", formater.format(reading.getReadingDate()));
         Boolean completeCheck = addCheckParam(client, reading.getAction(ReminderTime.Morning), "morning_check");
 
         boolean isCheck = addCheckParam(client, reading.getAction(ReminderTime.Noon), "afternoon_check");

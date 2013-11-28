@@ -80,6 +80,8 @@ public class ReminderFragmentNew extends BaseFragment {
     final int ADD_REMINDER_REQUEST = 125;
     final int EDIT_REMINDER_REQUEST = 126;
 
+    int currentDayPosition = 0;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.tab_fragment_reminder_new, container, false);
@@ -95,20 +97,6 @@ public class ReminderFragmentNew extends BaseFragment {
         mActionBar = getSherlockActivity().getSupportActionBar();
         mContainer = (PagerContainer) mView.findViewById(R.id.container);
         mViewPager = mContainer.getViewPager();
-
-        mPagerAdapter = new ReminderPagerAdapter(getSherlockActivity().getSupportFragmentManager());
-        mViewPager.setAdapter(mPagerAdapter);
-
-        //Necessary or the pager will only have one extra page to show
-        //make this at least however many pages you can see
-        mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
-
-        //A little space between pages
-        mViewPager.setPageMargin(20);
-
-        //If hardware acceleration is enabled, you should also remove
-        //clipping on the pager for its children.
-        mViewPager.setClipChildren(false);
 
         setHasOptionsMenu(true);
 
@@ -131,6 +119,10 @@ public class ReminderFragmentNew extends BaseFragment {
             dates.add(new Date(todayMidnight.getTime()+(3*milliSecInDay))); //+3 day
         }else{
             dates.add(date);
+        }
+
+        for(Date d : dates){
+            mapReadings.put(d, null);
         }
 
         if(Checker.isInternetOn(getActivity())){
@@ -214,6 +206,21 @@ public class ReminderFragmentNew extends BaseFragment {
     }
 
     protected void OnRefreshReminderReading(Map<Date, List<ReminderReading>> mReadings) {
+        if(mPagerAdapter==null){
+            mPagerAdapter = new ReminderPagerAdapter(getSherlockActivity().getSupportFragmentManager());
+            mViewPager.setAdapter(mPagerAdapter);
+            //Necessary or the pager will only have one extra page to show
+            //make this at least however many pages you can see
+            mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
+            //A little space between pages
+            mViewPager.setPageMargin(20);
+
+            //If hardware acceleration is enabled, you should also remove
+            //clipping on the pager for its children.
+            mViewPager.setClipChildren(false);
+            mViewPager.setCurrentItem(currentDayPosition, true);
+        }
+
         if(listenerMap!=null){
             for(Date date : mReadings.keySet()){
                 if(listenerMap.get(date)==null) continue;
@@ -241,6 +248,9 @@ public class ReminderFragmentNew extends BaseFragment {
             Bundle args = new Bundle();
             args.putParcelable("user", user);
             Date date = getDateFromPosition(position);
+            Date today = DateUtils.getToday(new Date());
+            if(date.equals(today))
+                currentDayPosition = position;
             args.putLong("currentDateInMs", date.getTime());
             args.putBoolean("isFirstTime", mapReadings.keySet().size() == 0 ? true : false);
             args.putParcelableArrayList("readings", (ArrayList<ReminderReading>) mapReadings.get(date));
@@ -290,9 +300,9 @@ public class ReminderFragmentNew extends BaseFragment {
         }
 
         private int getDataAvailableForPastDays(Date today, int dayInMS) {
-            if(mapReadings.containsKey(today.getTime()-(3*dayInMS))) return 3;
-            if(mapReadings.containsKey(today.getTime()-(2*dayInMS))) return 2;
-            if(mapReadings.containsKey(today.getTime()-(1*dayInMS))) return 1;
+            if(mapReadings.containsKey(new Date(today.getTime()-(3*dayInMS)))) return 3;
+            if(mapReadings.containsKey(new Date(today.getTime()-(2*dayInMS)))) return 2;
+            if(mapReadings.containsKey(new Date(today.getTime()-(1*dayInMS)))) return 1;
             return 0;
         }
 

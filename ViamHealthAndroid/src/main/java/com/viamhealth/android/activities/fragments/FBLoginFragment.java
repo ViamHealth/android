@@ -69,41 +69,41 @@ public class FBLoginFragment extends BaseFragment {
         scListener.onSessionStateChange(session, state, exception);
         if (state.isOpened()) {
             Log.i(TAG, "Logged in...");
-            getProfileDataFromFB(session);
+            //getProfileDataFromFB(session);
+            if(Checker.isInternetOn(getActivity())){
+                FBAuthenticateTask task = new FBAuthenticateTask();
+                task.applicationContext = getActivity();
+                task.user = null;
+                task.fbToken = session.getAccessToken();
+                task.execute();
+            }else{
+                Toast.makeText(getActivity(),"there is no network around here...",Toast.LENGTH_SHORT).show();
+            }
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }
     }
 
-    private void getProfileDataFromFB(final Session session){
-        String api = "me";
-        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                if (graphObject != null) {
-                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                    if (jsonResponse!=null) {
-                        FBUser fbUser = FBUser.deserialize(jsonResponse);
-                        Toast.makeText(getActivity(), "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
-                        User user = fbUser.toUser(null);
-                        if(Checker.isInternetOn(getActivity())){
-                            FBAuthenticateTask task = new FBAuthenticateTask();
-                            task.applicationContext = getActivity();
-                            task.user = user;
-                            task.fbToken = session.getAccessToken();
-                            task.execute();
-                        }else{
-                            Toast.makeText(getActivity(),"there is no network around here...",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }
-        });
-
-        request.executeAsync();
-    }
+//    private void getProfileDataFromFB(final Session session){
+//        String api = "me";
+//        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
+//            @Override
+//            public void onCompleted(Response response) {
+//                GraphObject graphObject = response.getGraphObject();
+//                FacebookRequestError error = response.getError();
+//                if (graphObject != null) {
+//                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
+//                    if (jsonResponse!=null) {
+//                        FBUser fbUser = FBUser.deserialize(jsonResponse);
+//                        Toast.makeText(getActivity(), "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
+//                        User user = fbUser.toUser(null);
+//                    }
+//                }
+//            }
+//        });
+//
+//        request.executeAsync();
+//    }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -207,12 +207,12 @@ public class FBLoginFragment extends BaseFragment {
         protected Boolean doInBackground(Void... params) {
             // TODO Auto-generated method stub
             Boolean hasFailed = true;
-            User createdUser = userEndPoint.AuthenticateThroughFB(fbToken);
-            if(createdUser!=null && user!=null){
-                user.setId(createdUser.getId());
-                user = userEndPoint.updateUser(user);
-            }
-            if(createdUser!=null)
+            user = userEndPoint.AuthenticateThroughFB(fbToken);
+//            if(createdUser!=null && user!=null){
+//                user.setId(createdUser.getId());
+//                user = userEndPoint.updateUser(user);
+//            }
+            if(user!=null)
                 hasFailed = false;
 
             return hasFailed;

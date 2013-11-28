@@ -18,12 +18,93 @@ public class BMIProfile implements Parcelable {
     BMIClassifier bmiClassifier;
     int bmr;
 
+    int systolicPressure;
+    int diastolicPressure;
+    int pulseRate;
+    int randomSugar;
+    int fastingSugar;
+    int hdl;
+    int ldl;
+    int triglycerides;
+
     public boolean isEmpty() {
         if(height==0)
             return true;
 
         else
             return false;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getSystolicPressure() {
+        return systolicPressure;
+    }
+
+    public void setSystolicPressure(int systolicPressure) {
+        this.systolicPressure = systolicPressure;
+    }
+
+    public int getDiastolicPressure() {
+        return diastolicPressure;
+    }
+
+    public void setDiastolicPressure(int diastolicPressure) {
+        this.diastolicPressure = diastolicPressure;
+    }
+
+    public int getPulseRate() {
+        return pulseRate;
+    }
+
+    public void setPulseRate(int pulseRate) {
+        this.pulseRate = pulseRate;
+    }
+
+    public int getRandomSugar() {
+        return randomSugar;
+    }
+
+    public void setRandomSugar(int randomSugar) {
+        this.randomSugar = randomSugar;
+    }
+
+    public int getFastingSugar() {
+        return fastingSugar;
+    }
+
+    public void setFastingSugar(int fastingSugar) {
+        this.fastingSugar = fastingSugar;
+    }
+
+    public int getHdl() {
+        return hdl;
+    }
+
+    public void setHdl(int hdl) {
+        this.hdl = hdl;
+    }
+
+    public int getLdl() {
+        return ldl;
+    }
+
+    public void setLdl(int ldl) {
+        this.ldl = ldl;
+    }
+
+    public int getTriglycerides() {
+        return triglycerides;
+    }
+
+    public void setTriglycerides(int triglycerides) {
+        this.triglycerides = triglycerides;
     }
 
     public Double getWeight() {
@@ -75,7 +156,15 @@ public class BMIProfile implements Parcelable {
                 ", lifeStyle=" + lifeStyle +
                 ", bmiClassifier=" + bmiClassifier +
                 ", bmr=" + bmr +
-                "} " + super.toString();
+                ", systolicPressure=" + systolicPressure +
+                ", diastolicPressure=" + diastolicPressure +
+                ", pulseRate=" + pulseRate +
+                ", randomSugar=" + randomSugar +
+                ", fastingSugar=" + fastingSugar +
+                ", hdl=" + hdl +
+                ", ldl=" + ldl +
+                ", triglycerides=" + triglycerides +
+                '}';
     }
 
     @Override
@@ -90,6 +179,15 @@ public class BMIProfile implements Parcelable {
         dest.writeInt(this.bmr);
         //dest.writeValue(this.bmiClassifier);
         //dest.writeValue(this.lifeStyle);
+        dest.writeInt(systolicPressure);
+        dest.writeInt(diastolicPressure);
+        dest.writeInt(pulseRate);
+        dest.writeInt(fastingSugar);
+        dest.writeInt(randomSugar);
+        dest.writeInt(hdl);
+        dest.writeInt(ldl);
+        dest.writeInt(triglycerides);
+
     }
 
     public BMIProfile(Parcel in) {
@@ -98,6 +196,14 @@ public class BMIProfile implements Parcelable {
         this.bmr = in.readInt();
         //this.bmiClassifier = (BMIClassifier) in.readValue(null);
         //this.lifeStyle = (LifeStyle) in.readValue(null);
+        systolicPressure = in.readInt();
+        diastolicPressure = in.readInt();
+        pulseRate = in.readInt();
+        fastingSugar = in.readInt();
+        randomSugar = in.readInt();
+        hdl = in.readInt();
+        ldl = in.readInt();
+        triglycerides = in.readInt();
     }
 
     public BMIProfile() {

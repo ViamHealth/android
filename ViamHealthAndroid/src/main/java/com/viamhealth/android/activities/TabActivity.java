@@ -32,6 +32,8 @@ import com.viamhealth.android.activities.fragments.JournalFragment;
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.tasks.InviteUser;
+import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,18 +152,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         }
     }
 
-/*    @Override
-    protected void onStart() {
-        super.onStart();
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EasyTracker.getInstance(this).activityStop(this);
-    }*/
-
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         //mSelected.setText("Selected: " + mLocations[itemPosition]);
@@ -211,6 +201,10 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             return true;
         }
 
+        if(item.getItemId() == R.id.menu_invite) {
+            InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application)getApplicationContext());
+            inviteUser.show();
+        }
         return retVal;
     }
 
@@ -225,7 +219,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             }
 
         }
-
         tabs.setVisibility(View.VISIBLE);
     }
 

@@ -1,6 +1,7 @@
 package com.viamhealth.android.adapters;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
 
     private LayoutInflater inflater;
     private List<T> items;
+    private SparseArray<View> views = new SparseArray<View>();
+
 
     // all our checked indexes go here
     private HashSet<Integer> checkedItems;
@@ -28,15 +31,13 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
     private boolean multiMode;
     private OnItemToggledListener onItemToggledListener;
 
-    public MultiSelectionAdapter(Context context, List<T> items)
-    {
+    public MultiSelectionAdapter(Context context, List<T> items){
         this.inflater = LayoutInflater.from(context);
         this.items = items;
         this.checkedItems = new HashSet<Integer>();
     }
 
-    public MultiSelectionAdapter(Context context)
-    {
+    public MultiSelectionAdapter(Context context){
         this(context, new ArrayList<T>());
     }
 
@@ -44,21 +45,34 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
         this.onItemToggledListener = onItemToggledListener;
     }
 
-    public void enterMultiMode()
-    {
+    public void enterMultiMode(){
         this.multiMode = true;
         this.notifyDataSetChanged();
     }
 
-    public void exitMultiMode()
-    {
+    public void exitMultiMode() {
         this.checkedItems.clear();
         this.multiMode = false;
         this.notifyDataSetChanged();
     }
 
+    private void setBackground(int pos, boolean selected){
+        int version = android.os.Build.VERSION.SDK_INT;
+        View convertView = views.get(pos);
+        if(version < 11){
+            int value = selected ? 1 : -1;
+            value = value * android.R.attr.state_checked;
+            convertView.getBackground().setState(
+                    new int[] { android.R.attr.state_checked });
+        }else{
+            convertView.setSelected(selected);
+        }
+    }
+
     public void setChecked(int pos, boolean checked)
     {
+
+        this.setBackground(pos, checked);
         if (checked) {
             this.checkedItems.add(Integer.valueOf(pos));
         } else {
@@ -194,6 +208,7 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
             }
         }
 
+        views.put(position, convertView);
         return convertView;
     }
 

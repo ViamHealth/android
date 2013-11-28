@@ -39,9 +39,30 @@ public class UserEP extends BaseEP {
         super(context, app);
     }
 
-    public String inviteUser(String email, String firstname,String lastname){
-        String	responsetxt="1";
-        return responsetxt;
+    public Boolean InviteUser(String email){
+        String baseurlString = Global_Application.url+"invite/";
+        Log.e(TAG, "url is : " + baseurlString);
+
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddParam("email",email);
+
+        try{
+            client.Execute(RequestMethod.POST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+
+        if(client.getResponseCode()==HttpStatus.SC_OK ||
+                client.getResponseCode()==HttpStatus.SC_CREATED ||
+                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+            return true;
+
+        return false;
     }
 
     public void logout() {
@@ -75,14 +96,122 @@ public class UserEP extends BaseEP {
         return user;
     }
 
-    public User AuthenticateThroughFB(String fbAccessToken){
-        String url = Global_Application.url + "account/facebook/login/token/?next=/api-token-auth/?access_token=" + fbAccessToken;
+    public boolean ChangePassword(String oldPassword, String newPassword){
+        String baseurlString = Global_Application.url+"users/change-password/";
+        Log.e(TAG, "url is : " + baseurlString);
+
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddParam("old_password", oldPassword);
+        client.AddParam("password", newPassword);
+
+        try{
+            client.Execute(RequestMethod.POST);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+
+        if(client.getResponseCode()==HttpStatus.SC_OK ||
+                client.getResponseCode()==HttpStatus.SC_CREATED ||
+                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+            return true;
+
+        return false;
+    }
+    public boolean ForgotPassword(String email){
+        String baseurlString = Global_Application.url+"forgot-password-email/";
+        Log.e(TAG, "url is : " + baseurlString);
+
+        RestClient client = new RestClient(baseurlString);
+
+        client.AddParam("email",email);
+
+        try
+        {
+            client.Execute(RequestMethod.POST);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+
+        if(client.getResponseCode()==HttpStatus.SC_OK ||
+                client.getResponseCode()==HttpStatus.SC_CREATED ||
+                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+            return true;
+
+        return false;
+    }
+
+    public boolean Logout(){
+        String url = Global_Application.url + "logout/";
         Log.e(TAG, "url is : " + url);
+
+        if(appPrefs.getToken()==null)
+            return false;
 
         /* this will be the first rest call */
         RestClient client = new RestClient(url);
-        client.AddParam("access_token", fbAccessToken);
-        client.setDisableAutoRedirect(true);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+        try{
+            client.Execute(RequestMethod.GET);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, client.toString());
+
+        if(client.getResponseCode()==HttpStatus.SC_OK ||
+                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+            return true;
+
+        return false;
+    }
+
+    public User AuthenticateThroughFB(String fbAccessToken){
+        return _login(fbAccessToken, null, LoginType.FB);
+    }
+
+    private enum LoginType {
+        Email,
+        Mobile,
+        FB,
+        UserName;
+    }
+
+    private User _login(String key, String password, LoginType type){
+        String baseurlString = Global_Application.url+"api-token-auth/";
+
+        RestClient client = new RestClient(baseurlString);
+
+        switch(type){
+            case FB:
+                client.AddParam("access_token", key);
+                break;
+
+            case Email:
+                client.AddParam("email",key);
+                client.AddParam("password",password);
+                break;
+
+            case Mobile:
+                client.AddParam("mobile",key);
+                client.AddParam("password",password);
+                break;
+
+            case UserName:
+                client.AddParam("username",key);
+                client.AddParam("password",password);
+                break;
+
+        }
 
         try{
             client.Execute(RequestMethod.POST);
@@ -90,9 +219,9 @@ public class UserEP extends BaseEP {
             e.printStackTrace();
         }
 
-        User user = null;
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+        Log.i(TAG, "login:" + client.toString());
+        User user = null;
         try {
             JSONObject jObject = new JSONObject(responseString);
             //TODO::implement proper error handling
@@ -112,34 +241,7 @@ public class UserEP extends BaseEP {
     // function for call login service
     public String Login(String username,String password) {
         String	responsetxt="1";
-        String baseurlString = Global_Application.url+"api-token-auth/";
-
-        RestClient client = new RestClient(baseurlString);
-        client.AddParam("email",username);
-        client.AddParam("password",password);
-
-        try{
-            client.Execute(RequestMethod.POST);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
-        try {
-            JSONObject jObject = new JSONObject(responseString);
-            //TODO::implement proper error handling
-            String	responsetxt1 = jObject.getString("token");
-            if(responsetxt1.length()>0){
-                Log.e(TAG,"token is " + responsetxt1);
-                appPrefs.setToken(responsetxt1);
-                responsetxt="0";
-            }
-            getLoggedInUser();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        _login(username, password, LoginType.Email);
         return responsetxt;
     }
 
@@ -299,6 +401,15 @@ public class UserEP extends BaseEP {
         client.AddParam("weight", profile.getWeight());
         //TODO::lifestyle
 
+        client.AddParam("systolic_pressure", profile.getSystolicPressure());
+        client.AddParam("diastolic_pressure", profile.getDiastolicPressure());
+        client.AddParam("pulse_rate", profile.getPulseRate());
+        client.AddParam("fasting", profile.getFastingSugar());
+        client.AddParam("random", profile.getRandomSugar());
+        client.AddParam("hdl", profile.getHdl());
+        client.AddParam("ldl", profile.getLdl());
+        client.AddParam("triglycerides", profile.getTriglycerides());
+
         try{
             client.Execute(RequestMethod.PUT);
         } catch (Exception e) {
@@ -320,6 +431,7 @@ public class UserEP extends BaseEP {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         client.AddParam("date_of_birth", formatter.format(profile.getDob()));
         client.AddParam("profile_picture_url", profile.getProfilePicURL());
+        client.AddParam("mobile", profile.getMobileNumber());
 
         if(profile.getBloodGroup()!=BloodGroup.None)
             client.AddParam("blood_group", profile.getBloodGroup().value());
@@ -453,13 +565,62 @@ public class UserEP extends BaseEP {
     private BMIProfile processBMIProfileResponse(JSONObject jsonProfile){
 
         BMIProfile pd = new BMIProfile();
-        try{
-            /* need to deserialize Profile object */
+
+        /* need to deserialize Profile object */
+        try {
             pd.setHeight(jsonProfile.getInt("height"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             pd.setWeight(jsonProfile.getDouble("weight"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
             pd.setBmr(jsonProfile.getInt("bmr"));
-            //pd.setBmiClassifier();
-            //pd.setLifeStyle();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //pd.setBmiClassifier();
+        //pd.setLifeStyle();
+        try {
+            pd.setSystolicPressure(jsonProfile.getInt("systolic_pressure"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setDiastolicPressure(jsonProfile.getInt("diastolic_pressure"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setPulseRate(jsonProfile.getInt("pulse_rate"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setFastingSugar(jsonProfile.getInt("fasting"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setRandomSugar(jsonProfile.getInt("random"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setHdl(jsonProfile.getInt("hdl"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setLdl(jsonProfile.getInt("ldl"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setTriglycerides(jsonProfile.getInt("triglycerides"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -508,6 +669,12 @@ public class UserEP extends BaseEP {
 
         try {
             pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            pd.setMobileNumber(jsonProfile.getString("mobile"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
