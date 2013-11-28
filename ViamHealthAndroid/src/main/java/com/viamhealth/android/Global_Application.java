@@ -3,7 +3,9 @@ package com.viamhealth.android;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.facebook.FacebookRequestError;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -15,6 +17,8 @@ import com.viamhealth.android.dao.db.DataBaseAdapter;
 import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
 import com.viamhealth.android.model.MedicationData;
+import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
 import com.viamhealth.android.model.FoodData;
@@ -61,6 +65,7 @@ public class Global_Application extends Application
     public static ArrayList<CategoryFood> lstResultSnacks=new ArrayList<CategoryFood>();
     public static ArrayList<CategoryFood> lstResultDinner=new ArrayList<CategoryFood>();
     public static ArrayList<CategoryExercise> lstResultExercise=new ArrayList<CategoryExercise>();
+    public static Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
 
 
     public static ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();

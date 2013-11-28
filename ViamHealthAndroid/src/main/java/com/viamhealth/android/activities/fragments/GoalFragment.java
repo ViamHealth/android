@@ -89,6 +89,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     RelativeLayout final_layout;
 
     ViamHealthPrefs appPrefs;
+    Global_Application ga=null;
 
     ActionBar actionBar;
 
@@ -129,6 +130,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         mPager = (ViewPager) final_layout.findViewById(R.id.pager);
         mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        ga=((Global_Application)getSherlockActivity().getApplicationContext());
 
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator) final_layout.findViewById(R.id.titles);
         circlePageIndicator.setViewPager(mPager);
@@ -510,6 +512,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         @Override
         protected Void doInBackground(Void... params) {
             goalsConfiguredMap = goalHelper.getAllGoalsConfigured(selectedUser.getId());
+            ga.goalsConfiguredMap=goalsConfiguredMap;
             //goalReadingsMap = goalHelper.getAllGoalReadings(selectedUser.getId());
             updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
             if(selectedUser.getBmiProfile().isEmpty())
