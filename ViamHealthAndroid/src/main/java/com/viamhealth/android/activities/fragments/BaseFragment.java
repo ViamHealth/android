@@ -23,10 +23,14 @@ public class BaseFragment extends SherlockFragment {
         mTracker = GoogleAnalytics.getInstance(getSherlockActivity()).getTracker(getString(R.string.ga_trackingId));
     }
 
+    public String getScreenName(){
+        return getClass().getSimpleName();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-        mTracker.set(Fields.SCREEN_NAME, getClass().getSimpleName());
+        mTracker.set(Fields.SCREEN_NAME, getScreenName());
         mTracker.send(MapBuilder.createAppView().build());
     }
 }

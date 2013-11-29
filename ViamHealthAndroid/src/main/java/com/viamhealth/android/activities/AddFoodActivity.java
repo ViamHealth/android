@@ -102,11 +102,6 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 ga.setLstFood(lstResult);
                 ga.setFoodPos(position);
                 Toast.makeText(getApplicationContext(),"onItemClick position "+position,Toast.LENGTH_LONG);
-                //Intent foodDetail = new Intent(AddBreakfast.this, FoodDetail.class);
-                //TabGroupActivity parentoption = (TabGroupActivity)AddBreakfast.this;
-                //parentoption.startChildActivity("foodDetail",foodDetail);
-                //foodDetail.putExtra("user", user);
-                //startActivityForResult(foodDetail, 1);
                 CallAddFoodTask tsk1= new CallAddFoodTask();
                 tsk1.execute();
                 Intent returnIntent = new Intent();
@@ -133,6 +128,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         searchView.setQueryHint("Search for food...");
         searchView.setOnQueryTextListener(this);
         //searchView.setOnSuggestionListener(this);
+
+        SearchView.SearchAutoComplete text = (SearchView.SearchAutoComplete) searchView.findViewById(com.actionbarsherlock.R.id.abs__search_src_text);
+        text.setHint("search for food items");
+        text.setHintTextColor(android.R.color.white);
+        text.setBackground(getResources().getDrawable(R.drawable.edit_text_holo_dark));
 
         menu.add("Search")
                 .setIcon(com.actionbarsherlock.R.drawable.abs__ic_search)
@@ -179,10 +179,8 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         }
 
         protected void onPostExecute(String result){
-
             Log.i("onPostExecute", "onPostExecute");
-            if(dialog!=null)
-            {
+            if(dialog!=null){
                 dialog.dismiss();
                 dialog=null;
             }
@@ -217,15 +215,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
     }
 
-    public class CallAddFoodTask extends AsyncTask <String, Void,String>
-    {
+    public class CallAddFoodTask extends AsyncTask <String, Void,String>{
         protected FragmentActivity activity;
 
         @Override
-        protected void onPreExecute()
-        {
-
-            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+        protected void onPreExecute(){
             dialog1 = new ProgressDialog(AddFoodActivity.this);
             dialog1.setCanceledOnTouchOutside(false);
             dialog1.setMessage("Please Wait....");
@@ -235,9 +229,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
         }
 
-        protected void onPostExecute(String result)
-        {
-
+        protected void onPostExecute(String result){
             Log.i("onPostExecute", "onPostExecute");
             if(dialog1!=null)
                 dialog1.dismiss();

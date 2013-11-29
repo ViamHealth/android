@@ -121,7 +121,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:hint="@string/email"
+                        android:hint="@string/username"
                         android:ems="15"
                         android:id="@+id/profile_email"
                         android:layout_gravity="center"
@@ -225,16 +225,17 @@
                    <LinearLayout
                        android:layout_height="wrap_content"
                        android:layout_width="fill_parent"
-                       android:orientation="horizontal">
+                       android:orientation="horizontal"
+                       android:background="#efefef">
 
                        <ImageView
                            android:layout_width="0dp"
                            android:layout_weight="2"
                            android:layout_height="wrap_content"
-                           android:src="@drawable/ic_height"
                            android:id="@+id/feet_image"
                            android:layout_gravity="center"
-                           android:gravity="center_horizontal"/>
+                           android:gravity="center_horizontal"
+                           android:src="@drawable/ic_height" />
 
                        <LinearLayout
                            android:layout_width="0dp"
@@ -267,55 +268,6 @@
                                android:background="@drawable/spinner_background"/>
                         </LinearLayout>
                    </LinearLayout>
-
-
-<!--
-                    <LinearLayout
-                        android:layout_height="wrap_content"
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="2"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/feet_text"
-                            android:layout_gravity="center"
-                            android:gravity="center_horizontal"
-                            android:text="Weight  "
-                            android:textSize="18sp"/>
-
-                        <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/kgs"
-                            android:layout_height="wrap_content"
-                            android:layout_width="0dp"
-                            android:layout_weight="2"
-                            android:background="@drawable/btn_save_toggle"/>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/feet_text"
-                            android:layout_gravity="center"
-                            android:gravity="center_horizontal"
-                            android:text="kgs    " />
-                        <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/grams"
-                            android:layout_height="wrap_content"
-                            android:layout_width="wrap_content"
-                            android:background="@drawable/btn_save_toggle"/>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/inches_text"
-                            android:layout_gravity="center"
-                            android:gravity="center_horizontal"
-                            android:text="grams" />
-
-                    </LinearLayout>
-
--->
 
                     <EditText
                         android:layout_width="fill_parent"
@@ -412,20 +364,23 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/input_tryglecerides"
+                    android:id="@+id/input_triglycerides"
                     android:layout_gravity="center"
                     android:hint="@string/present_tryglecerides"
                     android:gravity="center_horizontal" />
 
-                <TextView
+                <EditText
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
-                    android:ems="10"
                     android:id="@+id/input_total_cholesterol"
                     android:layout_gravity="center"
                     android:gravity="center_horizontal"
-                    android:text="Total Cholesterol" />
+                    android:text="Total Cholesterol"
+                    android:layout_marginTop="10dp"
+                    android:ems="15"
+                    android:enabled="false"
+                    android:textSize="15sp" />
 
             </LinearLayout>
 

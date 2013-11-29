@@ -19,6 +19,7 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
+import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
@@ -579,6 +580,7 @@ public class Home extends BaseActivity implements OnClickListener{
     public class CallAddProfileTask extends AsyncTask<String, Void, String>
     {
         protected Context applicationContext;
+        protected boolean isBeingUpdated;
 
         @Override
         protected void onPreExecute()
@@ -592,8 +594,12 @@ public class Home extends BaseActivity implements OnClickListener{
         {
             if(result.toString().equals("0")){
                 try{
-                    generateTile(lstFamily.size()-1, false);
-                    generateTile(lstFamily.size(), true);
+                    if(isBeingUpdated){
+                        generateTile(selectedViewPosition, false);
+                    }else{
+                        generateTile(lstFamily.size()-1, false);
+                        generateTile(lstFamily.size(), true);
+                    }
                 } catch (ImproperArgumentsPassedException ime) {
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
@@ -607,7 +613,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
-            boolean isBeingUpdated = (user.getId()>0)? true: false;
+            isBeingUpdated = (user.getId()>0)? true: false;
             user = userEP.updateUser(user);
             if(isBeingUpdated)
                 lstFamily.set(selectedViewPosition, user);
@@ -652,35 +658,6 @@ public class Home extends BaseActivity implements OnClickListener{
         }
     }
 
-    public class CallShareProfileTask extends AsyncTask<String, Void, Boolean>
-    {
-        protected Context applicationContext;
-        protected String email;
-        protected boolean isSelf;
-        protected User userToShare;
-
-        @Override
-        protected void onPreExecute(){
-            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
-            dialog.setMessage("sharing the profile....");
-            dialog.show();
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if(result){
-                dialog.dismiss();
-            }else{
-                dialog.dismiss();
-                Toast.makeText(Home.this, "Not able to share "+userToShare.getName()+" to "+ email +"...", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        @Override
-        protected Boolean doInBackground(String... params) {
-            UserEP userEP = new UserEP(Home.this, ga);
-            return userEP.shareUser(userToShare, email, isSelf);
-        }
-    }
     // async class for calling webservice and get responce message
     public class GetFamilyListTask extends AsyncTask <String, Void,String>
     {
@@ -833,68 +810,13 @@ public class Home extends BaseActivity implements OnClickListener{
                 }
             });
             builder.show();
+            actionMode.finish();
         }
 
         private void shareUser() {
-            View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.share_profile, null);
-
-            final EditText shareTo = (EditText) dialogView.findViewById(R.id.shareTo);
-            final CheckBox chkBox = (CheckBox) dialogView.findViewById(R.id.shareToSelf);
-            chkBox.setText("Sharing with " + selectedUser.getName());
-
-            chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked && (shareTo.getText().toString()==null || shareTo.getText().toString().isEmpty())) {
-                        if(selectedUser.getEmail()!=null && !selectedUser.getEmail().isEmpty()){
-                            shareTo.setText(selectedUser.getEmail());
-                            shareTo.setEnabled(false);
-                        }
-
-                        //TODO when we support mobile based identification
-                        /*else if(selectedUser.getProfile()!=null && selectedUser.getProfile().getMobileNumber()!=null
-                                    && !selectedUser.getProfile().getMobileNumber().isEmpty())
-                            shareTo.setText(selectedUser.getProfile().getMobileNumber());*/
-                    }else{
-                        shareTo.setText("");
-                        shareTo.setEnabled(true);
-                    }
-                }
-            });
-
-            shareTo.setOnKeyListener(new View.OnKeyListener() {
-                @Override
-                public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    String un = shareTo.getText().toString();
-                    if(un.matches("^[0-9]{1,10}$"))
-                        shareTo.setInputType(InputType.TYPE_CLASS_PHONE);
-                    else if(Validator.isEmailValid(un))
-                        shareTo.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                    else
-                        shareTo.setError("email of abc@gmail.com or mobile number without country code like 1234512345");
-
-                    return false;
-                }
-            });
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.AlertDialogGreenTheme);
-            builder.setView(dialogView);
-            builder.setCancelable(true);
-            builder.setTitle("Share To...");
-            builder.setPositiveButton("share", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    if(Checker.isInternetOn(Home.this)){
-                        CallShareProfileTask task = new CallShareProfileTask();
-                        task.applicationContext = Home.this;
-                        task.userToShare = selectedUser;
-                        task.email = shareTo.getText().toString();
-                        task.isSelf = chkBox.isChecked();
-                        task.execute();
-                    }
-                }
-            });
-            builder.show();
+            ShareUser share = new ShareUser(Home.this, ga, selectedUser);
+            share.show();
+            actionMode.finish();
         }
 
         private void editUser() {
@@ -902,6 +824,7 @@ public class Home extends BaseActivity implements OnClickListener{
             addProfileIntent.putExtra("user", selectedUser);
             addProfileIntent.putExtra("isEditMode", true);
             startActivityForResult(addProfileIntent, selectedViewPosition);
+            actionMode.finish();
         }
 
         @Override

@@ -26,6 +26,7 @@ public class BMIProfile implements Parcelable {
     int hdl;
     int ldl;
     int triglycerides;
+    int totalCholesterol;
 
     public boolean isEmpty() {
         if(height==0)
@@ -107,6 +108,14 @@ public class BMIProfile implements Parcelable {
         this.triglycerides = triglycerides;
     }
 
+    public int getTotalCholesterol() {
+        return totalCholesterol;
+    }
+
+    public void setTotalCholesterol(int totalCholesterol) {
+        this.totalCholesterol = totalCholesterol;
+    }
+
     public Double getWeight() {
         return weight;
     }
@@ -164,6 +173,7 @@ public class BMIProfile implements Parcelable {
                 ", hdl=" + hdl +
                 ", ldl=" + ldl +
                 ", triglycerides=" + triglycerides +
+                ", totalCholesterol=" + totalCholesterol +
                 '}';
     }
 
@@ -187,7 +197,7 @@ public class BMIProfile implements Parcelable {
         dest.writeInt(hdl);
         dest.writeInt(ldl);
         dest.writeInt(triglycerides);
-
+        dest.writeInt(totalCholesterol);
     }
 
     public BMIProfile(Parcel in) {
@@ -204,6 +214,7 @@ public class BMIProfile implements Parcelable {
         hdl = in.readInt();
         ldl = in.readInt();
         triglycerides = in.readInt();
+        totalCholesterol = in.readInt();
     }
 
     public BMIProfile() {

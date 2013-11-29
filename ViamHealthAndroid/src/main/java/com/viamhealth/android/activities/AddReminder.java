@@ -213,12 +213,15 @@ public class AddReminder extends BaseFragmentActivity {
 
         FrequencySpinnerAdapter adapter1, adapter;
 
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        DialogFragment newFragment;
+
+        private boolean show(View v){
+            if(newFragment!=null && newFragment.isVisible())
+                return true;
             EditText text = (EditText) v;
             int inputType = text.getInputType();
             if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
-                DialogFragment newFragment = new DatePickerFragment(text);
+                newFragment = new DatePickerFragment(text);
                 newFragment.show(getSupportFragmentManager(), "datePicker");
                 return true;
             }
@@ -226,17 +229,14 @@ public class AddReminder extends BaseFragmentActivity {
         }
 
         @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            EditText text = (EditText) v;
-            int inputType = text.getInputType();
-            if(hasFocus){//when focused in
-                if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
-                    DialogFragment newFragment = new DatePickerFragment(text);
-                    newFragment.show(getSupportFragmentManager(), "datePicker");
-                }
-            }else{//when focused out
+        public boolean onTouch(View v, MotionEvent event) {
+            return show(v);
+        }
 
-            }
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if(hasFocus)
+                show(v);
         }
 
         public OnRepeatBtnClickListener(Context context) {

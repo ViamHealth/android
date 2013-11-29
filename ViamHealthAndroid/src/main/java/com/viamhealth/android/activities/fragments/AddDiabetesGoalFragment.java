@@ -71,8 +71,10 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         } else {
-            tRBS.setText(String.valueOf(140));
-            tFBS.setText(String.valueOf(100));
+            //tRBS.setText(String.valueOf(140));
+            //tFBS.setText(String.valueOf(100));
+            if(user.getBmiProfile().getFastingSugar()>0) pFBS.setText(String.valueOf(user.getBmiProfile().getFastingSugar()));
+            if(user.getBmiProfile().getRandomSugar()>0) pRBS.setText(String.valueOf(user.getBmiProfile().getRandomSugar()));
         }
 
 

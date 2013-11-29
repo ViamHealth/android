@@ -401,14 +401,29 @@ public class UserEP extends BaseEP {
         client.AddParam("weight", profile.getWeight());
         //TODO::lifestyle
 
-        client.AddParam("systolic_pressure", profile.getSystolicPressure());
-        client.AddParam("diastolic_pressure", profile.getDiastolicPressure());
-        client.AddParam("pulse_rate", profile.getPulseRate());
-        client.AddParam("fasting", profile.getFastingSugar());
-        client.AddParam("random", profile.getRandomSugar());
-        client.AddParam("hdl", profile.getHdl());
-        client.AddParam("ldl", profile.getLdl());
-        client.AddParam("triglycerides", profile.getTriglycerides());
+        if(profile.getSystolicPressure()>0)
+            client.AddParam("systolic_pressure", profile.getSystolicPressure());
+
+        if(profile.getDiastolicPressure()>0)
+            client.AddParam("diastolic_pressure", profile.getDiastolicPressure());
+
+        if(profile.getPulseRate()>0)
+            client.AddParam("pulse_rate", profile.getPulseRate());
+
+        if(profile.getFastingSugar()>0)
+            client.AddParam("fasting", profile.getFastingSugar());
+
+        if(profile.getRandomSugar()>0)
+            client.AddParam("random", profile.getRandomSugar());
+
+        if(profile.getHdl()>0)
+            client.AddParam("hdl", profile.getHdl());
+
+        if(profile.getLdl()>0)
+            client.AddParam("ldl", profile.getLdl());
+
+        if(profile.getTriglycerides()>0)
+            client.AddParam("triglycerides", profile.getTriglycerides());
 
         try{
             client.Execute(RequestMethod.PUT);
@@ -429,24 +444,47 @@ public class UserEP extends BaseEP {
 
         client.AddParam("gender", profile.getGender().key());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        client.AddParam("date_of_birth", formatter.format(profile.getDob()));
-        client.AddParam("profile_picture_url", profile.getProfilePicURL());
-        client.AddParam("mobile", profile.getMobileNumber());
+
+        if(profile.getDob()!=null && profile.getDob().getTime()>0)
+            client.AddParam("date_of_birth", formatter.format(profile.getDob()));
+
+        if(profile.getProfilePicURL()!=null && !profile.getProfilePicURL().isEmpty())
+            client.AddParam("profile_picture_url", profile.getProfilePicURL());
+
+        if(profile.getMobileNumber()!=null && !profile.getMobileNumber().isEmpty())
+            client.AddParam("mobile", profile.getMobileNumber());
 
         if(profile.getBloodGroup()!=BloodGroup.None)
             client.AddParam("blood_group", profile.getBloodGroup().value());
 
-        client.AddParam("fb_profile_id", profile.getFbProfileId());
-        client.AddParam("fb_username", profile.getFbUsername());
-        client.AddParam("organization", profile.getOrganization());
-        client.AddParam("street", profile.getLocation().getStreet());
-        client.AddParam("city", profile.getLocation().getCity());
-        client.AddParam("state", profile.getLocation().getState());
-        client.AddParam("country", profile.getLocation().getCountry());
-        client.AddParam("zip_code", profile.getLocation().getZip());
-        client.AddParam("lattitude", profile.getLocation().getLattitude());
-        client.AddParam("longitude", profile.getLocation().getLongitude());
-        client.AddParam("address", profile.getLocation().getAddress());
+//        client.AddParam("fb_profile_id", profile.getFbProfileId());
+//        client.AddParam("fb_username", profile.getFbUsername());
+        if(profile.getOrganization()!=null && !profile.getOrganization().isEmpty())
+            client.AddParam("organization", profile.getOrganization());
+
+        if(profile.getLocation().getStreet()!=null && !profile.getLocation().getStreet().isEmpty())
+            client.AddParam("street", profile.getLocation().getStreet());
+
+        if(profile.getLocation().getCity()!=null && !profile.getLocation().getCity().isEmpty())
+            client.AddParam("city", profile.getLocation().getCity());
+
+        if(profile.getLocation().getState()!=null && !profile.getLocation().getState().isEmpty())
+            client.AddParam("state", profile.getLocation().getState());
+
+        if(profile.getLocation().getCountry()!=null && !profile.getLocation().getCountry().isEmpty())
+            client.AddParam("country", profile.getLocation().getCountry());
+
+        if(profile.getLocation().getZip()!=null && !profile.getLocation().getZip().isEmpty())
+            client.AddParam("zip_code", profile.getLocation().getZip());
+
+        if(profile.getLocation().getLattitude()>0)
+            client.AddParam("lattitude", profile.getLocation().getLattitude());
+
+        if(profile.getLocation().getLongitude()>0)
+            client.AddParam("longitude", profile.getLocation().getLongitude());
+
+        if(profile.getLocation().getAddress()!=null && !profile.getLocation().getAddress().isEmpty())
+            client.AddParam("address", profile.getLocation().getAddress());
 
         try{
             client.Execute(RequestMethod.PUT);
@@ -459,7 +497,7 @@ public class UserEP extends BaseEP {
         return processProfileResponse(responseString);
     }
 
-    private User updateUser(Long userId, String firstName, String lastName, String username){
+    private User updateUser(Long userId, String firstName, String lastName, String email){
         String responce="1";
         String baseurlString = Global_Application.url+"users/";
 
@@ -474,7 +512,9 @@ public class UserEP extends BaseEP {
 
         try{
             if(userId==null || userId==0){
-                client.AddParam("username", username);
+                if(email!=null && !email.isEmpty())
+                    client.AddParam("email", email);
+
                 client.Execute(RequestMethod.POST);
             } else
                 client.Execute(RequestMethod.PUT);
@@ -753,12 +793,15 @@ public class UserEP extends BaseEP {
     public User updateUser(User user) {
 
         // Update the user data
-        User updatedUser = updateUser(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername());
+        User updatedUser = updateUser(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+
+        if(updatedUser==null)
+            return null;
 
         //Update profile data
-        updateProfile(updatedUser.getId(), user.getProfile());
-        updateBMIProfile(updatedUser.getId(), user.getBmiProfile());
         user.setId(updatedUser.getId());
+        user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));
+        user.setBmiProfile(updateBMIProfile(updatedUser.getId(), user.getBmiProfile()));
 
         User loggedInUser = ga.getLoggedInUser();
         if(loggedInUser.getId()==user.getId())

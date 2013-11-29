@@ -29,8 +29,16 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_viamhealth</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_viamhealth</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Viamhealth</item>
-        <item name="android:textViewStyle">@style/TextViewReversetheme</item>
-        
+        <item name="android:titleTextStyle">@style/ActionBar.TitleTextStyle</item>
+        <item name="android:subtitleTextStyle">@style/ActionBar.SubTitleTextStyle</item>
+    </style>
+
+    <style name="ActionBar.TitleTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Title.Inverse">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="ActionBar.SubTitleTextStyle" parent="TextAppearance.Sherlock.Widget.ActionBar.Subtitle.Inverse">
+        <item name="android:textColor">#ffffff</item>
     </style>
 
     <style name="ActionBar.Solid.Viamhealth" parent="@style/Widget.Sherlock.ActionBar.Solid">

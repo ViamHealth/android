@@ -60,26 +60,4 @@ public class UIUtility {
             ex.printStackTrace();
         }
     }
-
-    public static String getFileName(Context context, Uri uri){
-        String fileName = null;
-
-        String scheme = uri.getScheme();
-        if(scheme==null)
-            return null;
-
-        if (scheme.equals("file")) {
-            fileName = uri.getLastPathSegment();
-        }
-        else if (scheme.equals("content")) {
-            String[] proj = {MediaStore.Files.FileColumns.TITLE };
-            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
-            if (cursor != null && cursor.getCount() != 0) {
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE);
-                cursor.moveToFirst();
-                fileName = cursor.getString(columnIndex);
-            }
-        }
-        return fileName;
-    }
 }

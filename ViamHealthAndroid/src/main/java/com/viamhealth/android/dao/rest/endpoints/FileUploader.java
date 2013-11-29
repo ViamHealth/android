@@ -166,22 +166,20 @@ public class FileUploader {
 
     private String method = "POST";
 
-    public Response uploadProfilePicture(Uri sourceFileUri, Activity activity, Long userId, Dialog dialog) {
+    public Response uploadProfilePicture(final String fileName, Activity activity, Long userId, Dialog dialog) {
         formValueName = "profile_picture";
         uploadURL = upLoadServerUri + "users/" + userId + "/profile-picture/";
         method = "PUT";
-        return upload(sourceFileUri, activity, dialog);
+        return upload(fileName, activity, dialog);
     }
 
-    public Response uploadFile(Uri sourceFileUri, Activity activity, Long userId, Dialog dialog) {
+    public Response uploadFile(final String fileName, Activity activity, Long userId, Dialog dialog) {
         formValueName = "file";
         uploadURL = upLoadServerUri + "healthfiles/?user=" + userId;
-        return upload(sourceFileUri, activity, dialog);
+        return upload(fileName, activity, dialog);
     }
 
-    private Response upload(Uri sourceFileUri, final Activity activity, Dialog dialog) {
-
-        final String fileName = ImageSelector.getRealPathFromURI(activity, sourceFileUri);
+    private Response upload(final String fileName, final Activity activity, Dialog dialog) {
 
         HttpURLConnection conn = null;
         DataOutputStream dos = null;

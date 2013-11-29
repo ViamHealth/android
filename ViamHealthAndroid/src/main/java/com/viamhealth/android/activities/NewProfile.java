@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -39,6 +40,7 @@ import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.model.enums.Gender;
+import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
@@ -67,6 +69,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     String selecteduserid;
 
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
+    EditText systolic, diastolic, fasting, random, hdl, ldl, tri, totalCholesterol;
+
     Button btnSave, btnCancel;
     ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
@@ -239,6 +243,15 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         relation = (Spinner) findViewById(R.id.profile_relation);
 
         weight = (EditText) findViewById(R.id.input_weight);
+        systolic = (EditText) findViewById(R.id.input_systolic);
+        diastolic = (EditText) findViewById(R.id.input_diastolic);
+        fasting = (EditText) findViewById(R.id.input_fasting);
+        random = (EditText) findViewById(R.id.input_random);
+        hdl = (EditText) findViewById(R.id.input_hdl);
+        ldl = (EditText) findViewById(R.id.input_ldl);
+        tri = (EditText) findViewById(R.id.input_triglycerides);
+
+        totalCholesterol = (EditText) findViewById(R.id.input_total_cholesterol);
 
         profileDataFetched = RequestStatus.Not_Started;
         familyMemberSelected = RequestStatus.Not_Started;
@@ -262,6 +275,17 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         if(user.isLoggedInUser() && user.getEmail()!=null && !user.getEmail().isEmpty())
             email.setEnabled(false);
+        else{
+            if(isEditMode){
+                email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUser share = new ShareUser(NewProfile.this, ga, user);
+                        share.show();
+                    }
+                });
+            }
+        }
 
 
         /*** Action Bar Creation starts here ***/
@@ -386,8 +410,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 location.setText(user.getProfile().getLocation().toShortString());
 
             profilePic.setProfileId(user.getProfile().getFbProfileId());
-            mobileNumber.setText(user.getProfile().getMobileNumber());
-            organization.setText(user.getProfile().getOrganization());
+            if(user.getProfile().getMobileNumber()!=null)mobileNumber.setText(user.getProfile().getMobileNumber());
+            if(user.getProfile().getOrganization()!=null)organization.setText(user.getProfile().getOrganization());
 
             if(user.getProfile().getFbProfileId()!=null && !user.getProfile().getFbProfileId().isEmpty()){
                 imgUpload.setVisibility(View.GONE);
@@ -414,14 +438,32 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         if(user.getBmiProfile()!=null){
             BMIProfile bmip = user.getBmiProfile();
-            if(bmip.getHeight()>0){
-                wheelCms.setCurrentItem(bmip.getHeight());
-                int inches = getInchesFromCMS(wheelCms.getCurrentItem());
-                int inchesIndex = inches<11?0:(inches-12);
-                wheelFeet.setCurrentItem(inchesIndex);
+            int height = bmip.getHeight();
+            if(height==0){
+                height = 160;
             }
+            wheelCms.setCurrentItem(height);
+            int inches = getInchesFromCMS(wheelCms.getCurrentItem());
+            int inchesIndex = inches<11?0:(inches-12);
+            wheelFeet.setCurrentItem(inchesIndex);
+
             //height.setText(bmip.getHeight().toString());
             if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
+
+            if(bmip.getSystolicPressure()>0) systolic.setText(String.valueOf(bmip.getSystolicPressure()));
+            if(bmip.getDiastolicPressure()>0) diastolic.setText(String.valueOf(bmip.getDiastolicPressure()));
+            if(bmip.getFastingSugar()>0) fasting.setText(String.valueOf(bmip.getFastingSugar()));
+            if(bmip.getRandomSugar()>0) random.setText(String.valueOf(bmip.getRandomSugar()));
+            if(bmip.getHdl()>0) hdl.setText(String.valueOf(bmip.getHdl()));
+            if(bmip.getLdl()>0) ldl.setText(String.valueOf(bmip.getLdl()));
+            if(bmip.getTriglycerides()>0) tri.setText(String.valueOf(bmip.getTriglycerides()));
+
+            if(bmip.getTotalCholesterol()>0){
+                totalCholesterol.setText(String.valueOf(bmip.getTotalCholesterol()));
+                totalCholesterol.setVisibility(View.VISIBLE);
+            }else{
+                totalCholesterol.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -452,19 +494,25 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 getDataFromFB(FBRequestType.FamilyProfile, profileId);
             }
         }else{//this is for facebook login pop-up
-            if(imageSelector.onActivityResult(requestCode, resultCode, data)){
-                Log.d(TAG, "onActivityResult::ImageSelected - " + imageSelector.getURI().toString());
-                int size = UIUtility.dpToPx(NewProfile.this, 120);
-                Bitmap bitmap = imageSelector.getBitmap(size, size);
-                profilePic.setDefaultProfilePicture(bitmap);
-                imgView.setImageBitmap(bitmap);
-                isImageSelected = true;
+            if(imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
+                @Override
+                public void OnLoad(ImageSelector imageSelector) {
+                    Log.d(TAG, "onActivityResult::ImageSelected - " + imageSelector.getURI().toString());
+                    int size = UIUtility.dpToPx(NewProfile.this, 120);
+                    Bitmap bitmap = imageSelector.getBitmap(size, size);
+                    profilePic.setDefaultProfilePicture(bitmap);
+                    imgView.setImageBitmap(bitmap);
+                    isImageSelected = true;
+                }
+            })){
+
             }else{
                 Log.d(TAG, "onActivityResult::else");
                 super.onActivityResult(requestCode, resultCode, data);
                 Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
             }
         }
+
     }
 
     private User generateModelFromView() {
@@ -504,9 +552,71 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         bmi.setHeight(Integer.parseInt(strH[0]));
         bmi.setWeight(Double.parseDouble(strW[0]));
 
-        user.setBmiProfile(bmi);
+        String str = "";
+        str = systolic.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setSystolicPressure(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
 
-        /* TODO set BP, Diabetes and Cholesterol profiles too */
+        str = diastolic.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setDiastolicPressure(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = fasting.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setFastingSugar(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = random.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setRandomSugar(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = hdl.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setHdl(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = ldl.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setLdl(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = tri.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setTriglycerides(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        user.setBmiProfile(bmi);
 
         return user;
     }
@@ -547,7 +657,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 //            email.setError(getString(R.string.profile_email_not_present));
 //            isValid=false;
 //        } else
-        if(!Validator.isEmailValid(email.getText().toString())){
+        if(email.getText().length()>0 && !Validator.isEmailValid(email.getText().toString())){
             email.setError(getString(R.string.profile_email_not_valid));
             isValid=false;
         }
@@ -626,7 +736,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 Log.i(TAG, "AsyncTask : Creating a new user - " + user);
             }
             Log.i(TAG, "AsyncTask : Uploading the file now");
-            FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getURI(),
+            FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getFileName(),
                                                         NewProfile.this, userId, dialog);
             Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
             return response;

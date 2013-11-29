@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -79,15 +80,20 @@ public class FileLoader {
         //from web
         try {
             byte[] byteArray=null;
-            URL imageUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
-            conn.setRequestMethod("GET");
-            if(authToken!=null)
-                conn.setRequestProperty("Authorization", "Token " + authToken);
-            conn.setConnectTimeout(30000);
-            conn.setReadTimeout(30000);
-            conn.setInstanceFollowRedirects(true);
-            InputStream is=conn.getInputStream();
+            InputStream is= null;
+            if (url.startsWith("content://com.google.android.gallery3d")){
+                is = mContext.getContentResolver().openInputStream(Uri.parse(url));
+            }else{
+                URL imageUrl = new URL(url);
+                HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
+                conn.setRequestMethod("GET");
+                if(authToken!=null)
+                    conn.setRequestProperty("Authorization", "Token " + authToken);
+                conn.setConnectTimeout(30000);
+                conn.setReadTimeout(30000);
+                conn.setInstanceFollowRedirects(true);
+                is = conn.getInputStream();
+            }
             OutputStream os = new FileOutputStream(f);
             UIUtility.CopyStream(is, os);
             os.close();

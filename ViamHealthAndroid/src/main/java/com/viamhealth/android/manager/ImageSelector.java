@@ -8,25 +8,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.hardware.Camera;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
-import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.viamhealth.android.utils.UIUtility;
+import com.viamhealth.android.ui.helper.FileLoader;
 
 import org.apache.commons.io.FileUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -46,6 +38,7 @@ public class ImageSelector {
     private Bitmap bitmap;
     private File file;
     private byte[] byteArray;
+    private String fileName;
 
     public ImageSelector(Activity activity) {
         mActivity = activity;
@@ -54,6 +47,22 @@ public class ImageSelector {
     public ImageSelector(Fragment fragment) {
         mFragment = fragment;
         mActivity = mFragment.getActivity();
+    }
+
+    public interface OnImageLoadedListener {
+        public void OnLoad(ImageSelector imageSelector);
+    }
+
+    private OnImageLoadedListener onImageLoadedListener;
+
+    public void setOnImageLoadedListener(OnImageLoadedListener listener) {
+        this.onImageLoadedListener = listener;
+    }
+
+    protected void dispatchOnImageLoadEvent() {
+        if(this.onImageLoadedListener!=null){
+            onImageLoadedListener.OnLoad(ImageSelector.this);
+        }
     }
 
     public void pickFile(final FileType type) {
@@ -98,6 +107,10 @@ public class ImageSelector {
 
     public Uri getURI() {
         return uri;
+    }
+
+    public String getFileName() {
+        return file.getName();
     }
 
     public Bitmap getBitmap() {
@@ -170,63 +183,85 @@ public class ImageSelector {
         return byteArray;
     }
 
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data, OnImageLoadedListener listener) {
+        setOnImageLoadedListener(listener);
         Activity activity = mActivity==null ? mFragment.getActivity() : mActivity;
 
         if(requestCode==LIBRARY_FILE_REQUEST || requestCode==CAMERA_PIC_REQUEST){
             if(resultCode==activity.RESULT_OK){
                 System.gc();
-                String filePath = null;
                 if(requestCode==LIBRARY_FILE_REQUEST){
                     uri = data.getData();
-                    filePath = data.getData().getPath();
-                }else{
-                    filePath = getRealPathFromURI(activity, uri);
                 }
-                String fileName = UIUtility.getFileName(activity, uri);
-                file = new File(getRealPathFromURI(activity, uri));
-                Toast.makeText(activity, "File Name - " + fileName + "\nisHierarchical - " + uri.isHierarchical() + "\n Scheme - " + uri.getScheme(), Toast.LENGTH_LONG).show();
-
-                byteArray = new byte[0];
-                try {
-                    byteArray = FileUtils.readFileToByteArray(file);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e("TAG", "ReadFileToByteArray", e.getCause());
-                }
-
-                //uploadFile(fileName, byteArray);
-                Toast.makeText(activity, "File Path - " + filePath + "\n File Name - " + fileName, Toast.LENGTH_LONG).show();
-                return true;
+                getRealPathFromURI(activity, uri, new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        byteArray = new byte[0];
+                        try {
+                            byteArray = FileUtils.readFileToByteArray(file);
+                            dispatchOnImageLoadEvent();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.e("TAG", "ReadFileToByteArray", e.getCause());
+                        }
+                    }
+                });
             }
-
-        }/*else if(requestCode==CAMERA_PIC_REQUEST) {
-            if (resultCode == ((Activity)mContext).RESULT_OK) {
-                //Log.e("TAG","Path is : " + path);
-                Bundle extras = data.getExtras();
-                bitmap = (Bitmap)extras.get("data");
-                String fileName = "image.png";
-                System.gc();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byteArray = stream.toByteArray();
-                return true;
-            }
+            return true;//means response has been processed here
         }
-        */
 
 
         return false;
     }
 
-    public static String getRealPathFromURI(Context context, Uri contentURI) {
-        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            return contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA);
-            return cursor.getString(idx);
+    protected enum UriType {
+        PicasaImage,
+        GalleryImage,
+        FilePath;
+    }
+
+    public static void getRealPathFromURI(Context context, Uri uri, FileLoader.OnFileLoadedListener listener){
+        String filePath = null;
+
+        String scheme = uri.getScheme();
+        if(scheme==null)
+            return;
+
+        if (scheme.equals("file")) {
+            listener.OnFileLoaded(new File(uri.getLastPathSegment()));
+        }
+        else if (scheme.equals("content")) {
+            if (uri.toString().startsWith("content://com.android.gallery3d.provider")) {
+                uri = Uri.parse(uri.toString().replace("com.android.gallery3d", "com.google.android.gallery3d"));
+            }
+            String[] proj = {MediaStore.Files.FileColumns.TITLE, MediaStore.MediaColumns.DISPLAY_NAME};
+            UriType type;
+            if(uri.toString().startsWith("content://com.google.android.gallery3d.provider")){ // in case of picasa image from gallery
+                type = UriType.PicasaImage;
+            }else{
+                type = UriType.FilePath;
+            }
+
+            Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
+            if (cursor != null) {
+                if(cursor.getCount() != 0){
+                    cursor.moveToFirst();
+                    if(type==UriType.PicasaImage){// if it is a picasa image on newer devices with OS 3.0 and up
+                        int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
+                        if(columnIndex!=-1){
+                            FileLoader loader = new FileLoader(context, null);
+                            loader.LoadFile(uri.toString(), null, listener);
+                        }
+                    }else if(type==UriType.FilePath){
+                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE);
+                        listener.OnFileLoaded(new File(cursor.getString(columnIndex)));
+                    }
+                }
+            }// If it is a picasa image on devices running OS prior to 3.0
+            else if (uri != null && uri.toString().length() > 0) {
+                FileLoader loader = new FileLoader(context, null);
+                loader.LoadFile(uri.toString(), null, listener);
+            }
         }
     }
 

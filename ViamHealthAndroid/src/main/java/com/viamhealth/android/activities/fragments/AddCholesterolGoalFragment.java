@@ -17,6 +17,7 @@ import com.viamhealth.android.model.goals.CholesterolGoal;
 import com.viamhealth.android.model.goals.CholesterolGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.users.BMIProfile;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -61,6 +62,11 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
             tTG.setText(goal.getTriglycerides());
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+        }else{
+            BMIProfile profile = user.getBmiProfile();
+            if(profile.getHdl()>0) pHDL.setText(String.valueOf(profile.getHdl()));
+            if(profile.getLdl()>0) pLDL.setText(String.valueOf(profile.getLdl()));
+            if(profile.getTriglycerides()>0) pTG.setText(String.valueOf(profile.getTriglycerides()));
         }
 
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);

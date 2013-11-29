@@ -63,6 +63,9 @@ public class AddBPGoalFragment extends AddGoalFragment {
             tPR.setText(goal.getPulseRate());
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+        }else{
+            if(user.getBmiProfile().getSystolicPressure()>0) pSP.setText(String.valueOf(user.getBmiProfile().getSystolicPressure()));
+            if(user.getBmiProfile().getDiastolicPressure()>0) pDP.setText(String.valueOf(user.getBmiProfile().getDiastolicPressure()));
         }
 
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);

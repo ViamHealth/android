@@ -97,6 +97,19 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
     }
 
     @Override
+    public String getScreenName() {
+        if(type!=null){
+            switch (type){
+                case Obese: return "Weight Graph";
+                case BloodPressure: return "Blood Pressure Graph";
+                case Diabetes: return "Blood Sugar Graph";
+                case Cholesterol: return "Cholesterol Graph";
+            }
+        }
+        return super.getScreenName();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(Menu.NONE, R.drawable.ic_content_new, 1, "New Value")
                 .setIcon(R.drawable.ic_content_new)

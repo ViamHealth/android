@@ -123,11 +123,15 @@ public class FileFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        imageSelector.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult::imageFile - " + imageSelector.getURI().toString());
-        Uri uri = imageSelector.getURI();
-        String fileName = UIUtility.getFileName(getSherlockActivity(), uri);
-        uploadFile(fileName, imageSelector.getByteArray());
+        imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
+            @Override
+            public void OnLoad(ImageSelector imageSelector) {
+                Log.d(TAG, "onActivityResult::imageFile - " + imageSelector.getURI().toString());
+                Uri uri = imageSelector.getURI();
+                String fileName = imageSelector.getFile().getName();
+                uploadFile(fileName, imageSelector.getByteArray());
+            }
+        });
     }
 
     private void uploadFile(final String filename, final byte[] byteArray) {
@@ -241,7 +245,7 @@ public class FileFragment extends BaseFragment {
             // TODO Auto-generated method stub
             Log.i(TAG, "UploadAsynTask::execute - uploading file - " + this.fileName);
             FileUploader uploader = new FileUploader(appPrefs.getToken());
-            FileUploader.Response response = uploader.uploadFile(imageSelector.getURI(),
+            FileUploader.Response response = uploader.uploadFile(imageSelector.getFileName(),
                     getActivity(), selectedUser.getId(), dialog);
 
             Log.i(TAG, "UploadAsynTask::execute - uploaded file with response - " + response);
