@@ -72,7 +72,7 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
     public void setChecked(int pos, boolean checked)
     {
 
-        this.setBackground(pos, checked);
+        //this.setBackground(pos, checked);
         if (checked) {
             this.checkedItems.add(Integer.valueOf(pos));
         } else {
