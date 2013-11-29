@@ -106,6 +106,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
                 ga.setLstFood(lstResult);
                 ga.setFoodPos(position);
+
                 Toast.makeText(getApplicationContext(),"onItemClick position "+position,Toast.LENGTH_LONG);
                 CallAddFoodTask tsk1= new CallAddFoodTask();
                 tsk1.execute();
@@ -166,7 +167,10 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     }
     private void hideKeyboard(){
         InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if(inputManager!=null && getCurrentFocus()!=null)
+        {
+            inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
     }
 
     @Override
@@ -270,7 +274,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date=new Date();
 
-            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString(),dateFormat.format(date));
+            return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1",user.getId().toString(),ga.selected_date);
 
         }
 

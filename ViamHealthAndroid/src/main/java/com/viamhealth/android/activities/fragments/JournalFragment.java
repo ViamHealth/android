@@ -1662,6 +1662,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         }
         LinearLayout calorie_layout=(LinearLayout)view.findViewById(R.id.calorie_layout);
 
+
         if(ga.goalsConfiguredMap==null || ga.goalsConfiguredMap.isEmpty())
         {
             calorie_layout.setVisibility(View.GONE);
