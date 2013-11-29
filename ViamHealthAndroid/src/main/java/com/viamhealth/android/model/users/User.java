@@ -114,8 +114,6 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getEmail() {
-        if((email==null || email.isEmpty()) && (username!=null && !username.isEmpty()))
-            return username;
         return email;
     }
 

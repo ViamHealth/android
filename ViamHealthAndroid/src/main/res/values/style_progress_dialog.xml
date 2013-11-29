@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="StyledDialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:buttonBarStyle">@style/StyledDialog.ButtonBar</item>
+        <item name="android:colorBackgroundCacheHint">@android:color/white</item>
         <item name="android:textViewStyle">@style/TextViewGreentheme</item>
         <item name="android:tabWidgetStyle">@style/TabWidgetGreentheme</item>
         <item name="android:editTextStyle">@style/EditTextGreentheme</item>
@@ -18,10 +22,18 @@
         <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreentheme</item>
         <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreentheme</item>
         <item name="android:buttonStyleToggle">@style/ToggleGreentheme</item>
-        <!--<item name="android:listViewStyle">@style/ListViewGreentheme</item>-->
-        <!--<item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>-->
+        <item name="android:listViewStyle">@style/ListViewGreentheme</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItemGreentheme</item>
         <!--<item name="android:dialogTitleDecorLayout">@layout/base_dialog_title</item>-->
+    </style>
+
+    <style name="StyledDialog.ButtonBar">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:dividerPadding">0dp</item>
     </style>
 
     <style name="AlertDialogGreenTheme" parent="@style/StyledDialog">

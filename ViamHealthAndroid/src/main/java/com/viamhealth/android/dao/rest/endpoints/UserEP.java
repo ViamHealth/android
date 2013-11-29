@@ -254,8 +254,7 @@ public class UserEP extends BaseEP {
         String baseurlString = Global_Application.url+"users/me/";
 
         RestClient client = new RestClient(baseurlString);
-        if(appPrefs.getToken()!=null)
-        {
+        if(appPrefs.getToken()!=null){
             client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 
             try{
@@ -558,12 +557,16 @@ public class UserEP extends BaseEP {
 
         try{
             user.setId(jsonUser.getLong("id"));
-            user.setEmail(jsonUser.getString("email"));
+
+            if(!jsonUser.isNull("email"))
+                user.setEmail(jsonUser.getString("email"));
+
             user.setUsername(jsonUser.getString("username"));
             user.setFirstName(jsonUser.getString("first_name"));
             user.setLastName(jsonUser.getString("last_name"));
             user.setProfile(processProfileResponse(jsonUser.getJSONObject("profile")));
-            user.setMobile(jsonUser.getString("mobile"));
+            user.setMobile(user.getProfile().getMobileNumber());
+            //user.setMobile(jsonUser.getString("mobile"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -682,7 +685,8 @@ public class UserEP extends BaseEP {
 
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            pd.setDob(formatter.parse(jsonProfile.getString("date_of_birth")));
+            if(!jsonProfile.isNull("date_of_birth"))
+                pd.setDob(formatter.parse(jsonProfile.getString("date_of_birth")));
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -692,65 +696,82 @@ public class UserEP extends BaseEP {
         try {
             pd.setBloodGroup(BloodGroup.get(jsonProfile.getInt("blood_group")));
         } catch (JSONException e) {
+            pd.setBloodGroup(BloodGroup.None);
             e.printStackTrace();
         }
 
         try {
-            pd.setFbProfileId(jsonProfile.getString("fb_profile_id"));
+            if(!jsonProfile.isNull("fb_profile_id"))
+                pd.setFbProfileId(jsonProfile.getString("fb_profile_id"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            pd.setOrganization(jsonProfile.getString("organization"));
+            if(!jsonProfile.isNull("fb_username"))
+                pd.setFbUsername(jsonProfile.getString("fb_username"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
+            if(!jsonProfile.isNull("organization"))
+                pd.setOrganization(jsonProfile.getString("organization"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            pd.setMobileNumber(jsonProfile.getString("mobile"));
+            if(!jsonProfile.isNull("profile_picture_url"))
+                pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            location.setState(jsonProfile.getString("state"));
+            if(!jsonProfile.isNull("mobile"))
+                pd.setMobileNumber(jsonProfile.getString("mobile"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            location.setStreet(jsonProfile.getString("street"));
+            if(!jsonProfile.isNull("state"))
+                location.setState(jsonProfile.getString("state"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            location.setCountry(jsonProfile.getString("country"));
+            if(!jsonProfile.isNull("street"))
+                location.setStreet(jsonProfile.getString("street"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            location.setCity(jsonProfile.getString("city"));
+            if(!jsonProfile.isNull("country"))
+                location.setCountry(jsonProfile.getString("country"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            location.setZip(jsonProfile.getString("zip_code"));
+            if(!jsonProfile.isNull("city"))
+                location.setCity(jsonProfile.getString("city"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            location.setLattitude(jsonProfile.getDouble("lattitude"));
+            if(!jsonProfile.isNull("zip_code"))
+                location.setZip(jsonProfile.getString("zip_code"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            location.setLattitude(jsonProfile.getDouble("longitude"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -762,16 +783,14 @@ public class UserEP extends BaseEP {
         }
 
         try {
-            location.setAddress(jsonProfile.getString("address"));
+            if(!jsonProfile.isNull("address"))
+                location.setAddress(jsonProfile.getString("address"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        try {
-            pd.setLocation(location);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        pd.setLocation(location);
 
         return pd;
     }

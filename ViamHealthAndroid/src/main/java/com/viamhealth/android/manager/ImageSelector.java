@@ -110,6 +110,8 @@ public class ImageSelector {
     }
 
     public String getFileName() {
+        if(file==null)
+            return null;
         return file.getName();
     }
 
@@ -179,6 +181,10 @@ public class ImageSelector {
         return file;
     }
 
+    protected void setFile(File file) {
+        this.file = file;
+    }
+
     public byte[] getByteArray() {
         return byteArray;
     }
@@ -196,6 +202,7 @@ public class ImageSelector {
                 getRealPathFromURI(activity, uri, new FileLoader.OnFileLoadedListener() {
                     @Override
                     public void OnFileLoaded(File file) {
+                        setFile(file);
                         byteArray = new byte[0];
                         try {
                             byteArray = FileUtils.readFileToByteArray(file);
@@ -234,7 +241,7 @@ public class ImageSelector {
             if (uri.toString().startsWith("content://com.android.gallery3d.provider")) {
                 uri = Uri.parse(uri.toString().replace("com.android.gallery3d", "com.google.android.gallery3d"));
             }
-            String[] proj = {MediaStore.Files.FileColumns.TITLE, MediaStore.MediaColumns.DISPLAY_NAME};
+            String[] proj = {MediaStore.Files.FileColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME};
             UriType type;
             if(uri.toString().startsWith("content://com.google.android.gallery3d.provider")){ // in case of picasa image from gallery
                 type = UriType.PicasaImage;
@@ -253,7 +260,7 @@ public class ImageSelector {
                             loader.LoadFile(uri.toString(), null, listener);
                         }
                     }else if(type==UriType.FilePath){
-                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.TITLE);
+                        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
                         listener.OnFileLoaded(new File(cursor.getString(columnIndex)));
                     }
                 }

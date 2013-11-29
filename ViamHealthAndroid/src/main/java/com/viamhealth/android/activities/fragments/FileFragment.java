@@ -245,7 +245,7 @@ public class FileFragment extends BaseFragment {
             // TODO Auto-generated method stub
             Log.i(TAG, "UploadAsynTask::execute - uploading file - " + this.fileName);
             FileUploader uploader = new FileUploader(appPrefs.getToken());
-            FileUploader.Response response = uploader.uploadFile(imageSelector.getFileName(),
+            FileUploader.Response response = uploader.uploadFile(imageSelector.getFile(),
                     getActivity(), selectedUser.getId(), dialog);
 
             Log.i(TAG, "UploadAsynTask::execute - uploaded file with response - " + response);

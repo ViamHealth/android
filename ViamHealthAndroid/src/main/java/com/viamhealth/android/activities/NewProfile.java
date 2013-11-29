@@ -736,7 +736,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 Log.i(TAG, "AsyncTask : Creating a new user - " + user);
             }
             Log.i(TAG, "AsyncTask : Uploading the file now");
-            FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getFileName(),
+            FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getFile(),
                                                         NewProfile.this, userId, dialog);
             Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
             return response;

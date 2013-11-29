@@ -164,9 +164,13 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         int noonTimeInMs = 15 * 60 * 60 * 1000;
         int nightTimeInMs = 21 * 60 * 60 * 1000;
 
-        if(row == null){
-            LayoutInflater inflater = activity.getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+        try {
+            if(row == null){
+                LayoutInflater inflater = activity.getLayoutInflater();
+                row = inflater.inflate(layoutResourceId, parent, false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         LinearLayout medicineLayout = (LinearLayout) row.findViewById(R.id.medicineLayout);

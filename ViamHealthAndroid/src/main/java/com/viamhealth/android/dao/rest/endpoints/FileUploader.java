@@ -166,20 +166,20 @@ public class FileUploader {
 
     private String method = "POST";
 
-    public Response uploadProfilePicture(final String fileName, Activity activity, Long userId, Dialog dialog) {
+    public Response uploadProfilePicture(final File sourceFile, Activity activity, Long userId, Dialog dialog) {
         formValueName = "profile_picture";
         uploadURL = upLoadServerUri + "users/" + userId + "/profile-picture/";
         method = "PUT";
-        return upload(fileName, activity, dialog);
+        return upload(sourceFile, activity, dialog);
     }
 
-    public Response uploadFile(final String fileName, Activity activity, Long userId, Dialog dialog) {
+    public Response uploadFile(final File sourceFile, Activity activity, Long userId, Dialog dialog) {
         formValueName = "file";
         uploadURL = upLoadServerUri + "healthfiles/?user=" + userId;
-        return upload(fileName, activity, dialog);
+        return upload(sourceFile, activity, dialog);
     }
 
-    private Response upload(final String fileName, final Activity activity, Dialog dialog) {
+    private Response upload(final File sourceFile, final Activity activity, Dialog dialog) {
 
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -189,8 +189,8 @@ public class FileUploader {
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
-        File sourceFile = new File(fileName);
         String justFileName = sourceFile.getName();
+        final String fileName = sourceFile.getName();
 
         if (!sourceFile.isFile()) {
             dialog.dismiss();
