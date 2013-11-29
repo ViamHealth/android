@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -134,6 +137,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
         searchView.setQueryHint("Search for food...");
         searchView.setOnQueryTextListener(this);
+        AutoCompleteTextView searchText = (AutoCompleteTextView) searchView.findViewById(R.id.abs__search_src_text);
+        searchText.setHintTextColor(getResources().getColor(android.R.color.black));
+        searchText.setTextColor(getResources().getColor(android.R.color.black));
+
+
         //searchView.setOnSuggestionListener(this);
 
         menu.add("Search")
