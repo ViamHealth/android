@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
     Context context;
@@ -94,7 +95,19 @@ public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
 
 
             row.setTag(holder);
-         */
+
+
+            holder.foodname.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(context,"clicked",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"onItemClick",Toast.LENGTH_SHORT).show();
+                    Intent foodDetail = new Intent(context, FoodDetail.class);
+                    //foodDetail.putExtra("user", user);
+                    context.startActivity(foodDetail);
+                }
+            });
+            */
         }
         else
         {

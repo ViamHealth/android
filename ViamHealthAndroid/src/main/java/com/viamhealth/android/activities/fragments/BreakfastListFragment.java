@@ -445,6 +445,16 @@ public class BreakfastListFragment extends BaseListFragment
         this.list.setLayoutParams(l3);
         total_height_medicine_tab=0;
 
+/*
+        this.list.setOnClickListener(new AdapterView.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getSherlockActivity(),"onItemClick",Toast.LENGTH_SHORT).show();
+            }
+        });
+*/
 
         this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

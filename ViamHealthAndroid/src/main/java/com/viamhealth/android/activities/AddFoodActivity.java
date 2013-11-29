@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,8 +12,12 @@ import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -127,6 +132,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         SearchView searchView = new SearchView(getSupportActionBar().getThemedContext());
         searchView.setQueryHint("Search for food...");
         searchView.setOnQueryTextListener(this);
+        AutoCompleteTextView searchText = (AutoCompleteTextView) searchView.findViewById(R.id.abs__search_src_text);
+        searchText.setHintTextColor(getResources().getColor(android.R.color.black));
+        searchText.setTextColor(getResources().getColor(android.R.color.black));
+
+
         //searchView.setOnSuggestionListener(this);
 
         SearchView.SearchAutoComplete text = (SearchView.SearchAutoComplete) searchView.findViewById(com.actionbarsherlock.R.id.abs__search_src_text);
@@ -146,12 +156,17 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     public boolean onQueryTextSubmit(String s) {
         //TODO get the food data from the API
         searchQuery = s;
+        //hideKeyboard();
         if(Checker.isInternetOn(AddFoodActivity.this)){
             CallSearchFoodTask task = new CallSearchFoodTask();
             task.applicationContext = AddFoodActivity.this;
             task.execute();
         }
         return true;
+    }
+    private void hideKeyboard(){
+        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     @Override
@@ -190,6 +205,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 listFood.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 listFood.onRefreshComplete();
+                hideKeyboard();
             }else{
                 if(dialog!=null)
                 {
@@ -199,8 +215,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 //Toast.makeText(AddFoodActivity.this, "No Food found...", Toast.LENGTH_SHORT).show();
                 //addfood_count.setText("("+lstResult+")");
             }
+            //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         }
+
+
 
         @Override
         protected String doInBackground(String... params) {

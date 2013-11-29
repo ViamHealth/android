@@ -53,10 +53,13 @@ import com.viamhealth.android.adapters.JournalExerciseAdapter;
 import com.viamhealth.android.adapters.JournalFoodAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
+import com.viamhealth.android.dao.rest.endpoints.GoalsEPHelper;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.CategoryExercise;
 import com.viamhealth.android.model.CategoryFood;
 import com.viamhealth.android.model.enums.FoodType;
+import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
 
@@ -68,7 +71,9 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -129,6 +134,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
     ProgressBar Prog;
 
     View view;
+    Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -1031,8 +1037,8 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         double target_ideal_calories = appPrefs.getTargetCaloriesPerDay();
 
 
-        Prog=(ProgressBar)view.findViewById(R.id.calorie_bar);
 
+        Prog=(ProgressBar)view.findViewById(R.id.calorie_bar);
         Prog.setProgress((int)Global_Application.total_ideal_calories);
         if(appPrefs.getTargetCaloriesPerDay()>0)
         {
@@ -1653,6 +1659,16 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
             task.execute();
         }else{
             Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+        }
+        LinearLayout calorie_layout=(LinearLayout)view.findViewById(R.id.calorie_layout);
+
+        if(ga.goalsConfiguredMap==null || ga.goalsConfiguredMap.isEmpty())
+        {
+            calorie_layout.setVisibility(View.GONE);
+        }
+        else
+        {
+            calorie_layout.setVisibility(View.VISIBLE);
         }
 
         bolbrk=false;
