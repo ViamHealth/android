@@ -1,5 +1,9 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,25 +16,27 @@ import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
+import com.viamhealth.android.activities.AddGoalActivity;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
+import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.goals.WeightGoal;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by naren on 18/10/13.
  */
-public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDataChangeListener {
+public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDataChangeListener, View.OnLongClickListener {
 
     private static final String TAG = "GraphFragment";
     private Date selectedDateForEdit = null;
@@ -52,9 +58,13 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
 
     MedicalConditions type;
     ActionMode actionMode;
+    ActionBar actionBar;
+
 
     Date startDate, endDate, currentDate;
     ProgressBar timeLinePB;
+
+    Goal goal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,7 +72,7 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
 
         type = (MedicalConditions) getArguments().getSerializable("type");
         json = getArguments().getString("json");
-        Goal goal = getArguments().getParcelable("goal");
+        goal = getArguments().getParcelable("goal");
         startDate = goal.getStartDate();
         endDate = goal.getTargetDate();
         currentDate = goal.getPresentDate();
@@ -89,11 +99,35 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
                 return super.onConsoleMessage(consoleMessage);
             }
         });
+        webView.setOnLongClickListener(GraphFragment.this);
         webView.loadUrl("file:///android_asset/" + type.assetName());
+
+        actionBar = getSherlockActivity().getSupportActionBar();
 
         setHasOptionsMenu(true);
 
         return view;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        //enable the action mode
+        getSherlockActivity().startActionMode(new GraphActionModeCallback());
+        return false;
+    }
+
+    @Override
+    public void onPause() {
+        if(actionMode!=null)
+            actionMode.finish();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        if(actionMode!=null)
+            actionMode.finish();
+        super.onResume();
     }
 
     @Override
@@ -164,17 +198,35 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
     }
 
     @JavascriptInterface
-    public void onItemClick(long date) {
-        if(actionMode == null)
-            getSherlockActivity().startActionMode(new ActionModeCallback());
-        selectedDateForEdit = new Date(date);
-    }
-
-    @JavascriptInterface
     public void addValue(){
         if(onClickAddValueListener != null){
             onClickAddValueListener.onClick(type);
         }
+    }
+
+    public interface OnGoalModifyListener {
+        public void OnEdit(Goal goal, MedicalConditions type);
+        public void OnDelete(Goal goal, MedicalConditions type);
+    }
+
+    private OnGoalModifyListener onGoalModifyListener;
+
+    public void setOnGoalModifyListener(OnGoalModifyListener listener) {
+        this.onGoalModifyListener = listener;
+    }
+
+    private void editGoal() {
+        if(this.onGoalModifyListener!=null){
+            this.onGoalModifyListener.OnEdit(goal, type);
+        }
+        actionMode.finish();
+    }
+
+    private void deleteGoal() {
+        if(this.onGoalModifyListener!=null){
+            this.onGoalModifyListener.OnDelete(goal, type);
+        }
+        actionMode.finish();
     }
 
     public void setOnClickAddValueListener(OnClickAddValueListener listener) {
@@ -186,7 +238,7 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
     }
 
     // all our ActionMode stuff here :)
-    private final class ActionModeCallback implements ActionMode.Callback {
+    private final class GraphActionModeCallback implements ActionMode.Callback {
 
         // " selected" string resource to update ActionBar text
         private String selected = getActivity().getString(R.string.selected);
@@ -205,7 +257,7 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
             menu.clear();
             //final int checked = adapter.getCheckedItemCount();
             // update title with number of checked items
-            mode.setTitle("Edit graph data");
+            mode.setTitle("Edit " + getString(type.key()) + " Goal");
             getSherlockActivity().getSupportMenuInflater().inflate(R.menu.action_mode_graph, menu);
             return true;
         }
@@ -214,11 +266,12 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_mode_edit:
-                    Toast.makeText(getActivity(), "Edit graph data for the date " + selectedDateForEdit, Toast.LENGTH_LONG).show();
+                    editGoal();
+                    //Toast.makeText(getActivity(), "Edit graph " , Toast.LENGTH_LONG).show();
                     return true;
 
                 case R.id.action_mode_delete:
-                    Toast.makeText(getActivity(), "Delete graph data for the date " + selectedDateForEdit, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Delete graph ", Toast.LENGTH_LONG).show();
                     return true;
 
                 default:
@@ -233,4 +286,5 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
         }
 
     }
+
 }

@@ -11,25 +11,16 @@ import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.ConsoleMessage;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -51,13 +42,8 @@ import com.viamhealth.android.utils.BMRCalculator;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.JsonGraphDataBuilder;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -297,7 +283,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 MedicalConditions selectedCondition = (MedicalConditions)data.getSerializableExtra("type");
                 if(goal!=null){
                     if(Checker.isInternetOn(getSherlockActivity())) {
-                        CreateGoal task = new CreateGoal();
+                        SaveGoal task = new SaveGoal();
                         task.type = selectedCondition;
                         task.reading = readings;
                         task.execute(goal);
@@ -370,6 +356,23 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         public void onAdd(String json);
         //public void onUpdate(String json);
     }
+
+    private void editGoal(Goal goal, MedicalConditions type){
+
+    }
+
+    private void deleteGoal(Goal goal, MedicalConditions type){
+        AlertDialog.Builder buildr = new AlertDialog.Builder(getSherlockActivity());
+        buildr.setTitle("Delete " + getString(type.key()) + " Goal");
+        buildr.setMessage("Are you sure?");
+        buildr.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        buildr.show();
+    }
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -393,6 +396,17 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 args.putParcelable("goal", goal);
                 fragment = (GraphFragment)Fragment.instantiate(getActivity(), GraphFragment.class.getName(), args);
                 setOnGoalDataChangeListener(mc, fragment);
+                fragment.setOnGoalModifyListener(new GraphFragment.OnGoalModifyListener() {
+                    @Override
+                    public void OnEdit(Goal goal, MedicalConditions type) {
+                        editGoal(goal, type);
+                    }
+
+                    @Override
+                    public void OnDelete(Goal goal, MedicalConditions type) {
+                        deleteGoal(goal, type);
+                    }
+                });
                 fragment.setOnClickAddValueListener(new GraphFragment.OnClickAddValueListener() {
                     @Override
                     public void onClick(MedicalConditions medicalCondition) {
@@ -466,15 +480,29 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    public class CreateGoal extends AsyncTask<Goal, Void, Void> {
+//    public class DeleteGoal extends AsyncTask<Integer, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Integer... params) {
+//            //goalHelper.
+//        }
+//    }
+    public class SaveGoal extends AsyncTask<Goal, Void, Void> {
 
         MedicalConditions type;
         GoalReadings reading;
+        boolean isUpdate = false;
 
         @Override
         protected Void doInBackground(Goal... goals) {
             for(int i=0; i<goals.length; i++){
-                goalsConfiguredMap.put(type, goalHelper.createGoal(type, goals[i], selectedUser.getId()));
+                Goal goal = goals[i];
+                if(goal.getId()>0){
+                    isUpdate = true;
+                    goalsConfiguredMap.put(type, goalHelper.updateGoal(type, goal, selectedUser.getId()));
+                }else{
+                    isUpdate = false;
+                    goalsConfiguredMap.put(type, goalHelper.createGoal(type, goal, selectedUser.getId()));
+                }
             }
             if(type==MedicalConditions.Obese)
                 updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
@@ -490,7 +518,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
             dialog.dismiss();
-            if(reading!=null){
+            if(reading!=null && !isUpdate){
                 SaveGoalReading task = new SaveGoalReading();
                 task.type = type;
                 task.execute(reading);

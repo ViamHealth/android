@@ -51,6 +51,7 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
         if(!bundle.isEmpty())
             goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
 
+
         dialog = new ProgressDialog(getActivity());
 
         targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
