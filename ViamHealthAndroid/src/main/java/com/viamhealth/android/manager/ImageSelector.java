@@ -143,7 +143,7 @@ public class ImageSelector {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
 
-        if(!options.outMimeType.contains("image"))
+        if(options.outMimeType==null || !options.outMimeType.contains("image"))
             return null;
 
         options.inSampleSize = calculateInSampleSize(options, width, height);

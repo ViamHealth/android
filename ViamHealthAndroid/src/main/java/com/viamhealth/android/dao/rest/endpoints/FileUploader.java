@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.facebook.HttpMethod;
 import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.R;
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.FileData;
 
@@ -323,4 +324,21 @@ public class FileUploader {
 
         } // End else block
     }
+
+    public static int getFileIcon(String mimeType) {
+        if(mimeType.contains("pdf")){
+            return R.drawable.selector_icon_pdf;
+        }
+        if(mimeType.contains("jpeg")){
+            return R.drawable.selector_icon_jpeg;
+        }
+        if(mimeType.startsWith("image/")){
+            return R.drawable.selector_icon_image_file_type;
+        }
+        if(mimeType.startsWith("text/")){
+            return R.drawable.selector_icon_text_file_type;
+        }
+        return R.drawable.selector_icon_unknown_file_type;
+    }
+
 }

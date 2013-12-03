@@ -13,24 +13,24 @@
 
         <ImageView   
             android:id="@+id/img_icon"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_width="wrap_content"
-            android:src="@drawable/img_icon_file"
+            android:src="@drawable/selector_icon_jpeg"
             android:layout_gravity="center"
             android:duplicateParentState="true"
-            android:layout_marginLeft="20dp" />
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:id="@+id/desc_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="20dp"
             android:layout_gravity="center"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="10dp"
             android:duplicateParentState="true"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp">
 
             <TextView android:id="@+id/img_name"
                 android:layout_height="wrap_content"

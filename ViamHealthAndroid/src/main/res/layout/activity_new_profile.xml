@@ -169,25 +169,25 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:id="@+id/profile_img_male"
                             android:src="@drawable/ic_male_unselected"
-                            android:background="#ffffff"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
+                            android:background="@android:color/transparent"
                             android:scaleType="centerInside" />
 
                         <ImageButton
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:id="@+id/profile_img_female"
                             android:src="@drawable/ic_female_unselected"
-                            android:background="#ffffff"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
+                            android:background="@android:color/transparent"
                             android:scaleType="centerInside" />
                     </LinearLayout>
 
@@ -249,10 +249,10 @@
                                android:layout_height="wrap_content"
                                android:gravity="center_horizontal"
                                android:text="inches"/>
-                           <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/feet"
-                               android:layout_height="wrap_content"
-                               android:layout_width="fill_parent"
-                               android:background="@drawable/spinner_background"/>
+                           <!--<antistatic.spinnerwheel.WheelVerticalView android:id="@+id/feet"-->
+                               <!--android:layout_height="wrap_content"-->
+                               <!--android:layout_width="fill_parent"-->
+                               <!--android:background="@drawable/spinner_background"/>-->
                        </LinearLayout>
                        <LinearLayout
                            android:layout_width="0dp"
@@ -264,10 +264,10 @@
                                android:layout_height="wrap_content"
                                android:gravity="center_horizontal"
                                android:text="cms"/>
-                           <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/cms"
-                               android:layout_height="wrap_content"
-                               android:layout_width="fill_parent"
-                               android:background="@drawable/spinner_background"/>
+                           <!--<antistatic.spinnerwheel.WheelVerticalView android:id="@+id/cms"-->
+                               <!--android:layout_height="wrap_content"-->
+                               <!--android:layout_width="fill_parent"-->
+                               <!--android:background="@drawable/spinner_background"/>-->
                         </LinearLayout>
                    </LinearLayout>
 

@@ -12,25 +12,26 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:duplicateParentState="true">
 
         <ImageView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:src="@drawable/selector_icon_medicine"
             android:layout_gravity="center_vertical"
             android:visibility="visible"
             android:duplicateParentState="true"
-            android:id="@+id/reminder_icon" />
+            android:id="@+id/reminder_icon"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:duplicateParentState="true">
+            android:duplicateParentState="true"
+            android:layout_marginLeft="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +51,8 @@
                 android:id="@+id/txtViewDesc"
                 android:textColor="@color/row_textcolor_selector"
                 android:layout_gravity="center_vertical"
-                android:duplicateParentState="true"/>
+                android:duplicateParentState="true"
+                android:layout_marginLeft="2dp" />
 
         </LinearLayout>
 

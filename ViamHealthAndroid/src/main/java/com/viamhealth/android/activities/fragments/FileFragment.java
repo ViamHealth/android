@@ -45,6 +45,7 @@ import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.FileData;
 import com.viamhealth.android.model.ObjectA;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.UIUtility;
 
 import org.apache.commons.io.FileUtils;
@@ -145,6 +146,10 @@ public class FileFragment extends BaseFragment {
         ImageView img_display = (ImageView) dialogView.findViewById(R.id.img_display);
         if(imgBitmap!=null){
             img_display.setImageBitmap(imgBitmap);
+        }else{
+            String fn = imageSelector.getFileName();
+            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(UIUtility.getFileExtension(fn));
+            img_display.setImageDrawable(getResources().getDrawable(FileUploader.getFileIcon(mimeType)));
         }
         final TextView txtViewFileName = (TextView) dialogView.findViewById(R.id.file_name);
         txtViewFileName.setText(filename);
