@@ -173,6 +173,8 @@ public class AddReminder extends BaseFragmentActivity {
         reminder.setDetails(etNotes.getText().toString());
         reminder.setType(type);
 
+        Date today = new Date();
+        reminder.setStartDate(today);
         if(type!=ReminderType.Medicine){
             return;
         }
@@ -335,7 +337,15 @@ public class AddReminder extends BaseFragmentActivity {
                 reminder.setStartDate(new Date());
             }
 
-            reminder.setRepeatICounter(Integer.parseInt(etDuration.getText().toString()));
+            if(etDuration.getText().toString().trim().length()==0)
+            {
+             reminder.setRepeatICounter(1);
+            }
+            else
+            {
+                reminder.setRepeatICounter(Integer.parseInt(etDuration.getText().toString()));
+            }
+
             RepeatMode selectedRepeatMode = (RepeatMode) frequeSpinner.getSelectedItem();
             if(selectedRepeatMode!=RepeatMode.Custom && selectedRepeatMode!=RepeatMode.None){
                 reminder.setRepeatMode(selectedRepeatMode);

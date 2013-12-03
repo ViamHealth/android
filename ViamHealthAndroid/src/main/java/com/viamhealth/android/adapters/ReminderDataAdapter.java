@@ -84,12 +84,13 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
             }
 
             count.setText(data.getCount().toString());
-            count.setTextColor(android.R.color.white);
+            //count.setText("0");
+            //count.setTextColor(android.R.color.white);
         }else{
             //check.setVisibility(View.GONE);
             check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
             count.setText("0");
-            count.setTextColor(android.R.color.black);
+            //count.setTextColor(android.R.color.black);
         }
 
         check.setOnClickListener(new View.OnClickListener() {
@@ -108,13 +109,13 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                         }
                     }
                     count.setText(data.getCount().toString());
-                    count.setTextColor(android.R.color.white);
+                    //count.setTextColor(android.R.color.white);
                     readings.get(position).putAction(time, action);
                     onSaveReminderAction(readings.get(position));
                 }else{
                     check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
                     count.setText("0");
-                    count.setTextColor(android.R.color.black);
+                    //count.setTextColor(android.R.color.black);
                 }
             }
         });
