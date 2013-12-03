@@ -73,6 +73,7 @@ public class Global_Application extends Application
 
     private User loggedInUser;
 
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -97,6 +98,8 @@ public class Global_Application extends Application
 		// method.
 	
 	}
+
+
 
 
     public User getLoggedInUser() {

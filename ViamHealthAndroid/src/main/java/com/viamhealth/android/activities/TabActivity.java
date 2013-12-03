@@ -65,6 +65,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         setContentView(R.layout.tab_main_activity);
 
 
+
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
         mTabHost = (TabHost)findViewById(R.id.tabHost);
         mTabHost.setup();
         mTabHost.setOnClickListener(this);
@@ -124,7 +131,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                 ReminderFragmentNew.class, bundle);
-                //NewReminders.class, bundle);
+        //NewReminders.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
                 //FileFragment.class, bundle);
