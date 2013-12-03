@@ -214,7 +214,9 @@ public class ReminderFragmentNew extends BaseFragment {
     protected void OnRefreshReminderReading(Map<Date, List<ReminderReading>> mReadings) {
         if(mPagerAdapter==null){
             mPagerAdapter = new ReminderPagerAdapter(getChildFragmentManager());
+        }
             mViewPager.setAdapter(mPagerAdapter);
+
             //Necessary or the pager will only have one extra page to show
             //make this at least however many pages you can see
             mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
@@ -225,7 +227,7 @@ public class ReminderFragmentNew extends BaseFragment {
             //clipping on the pager for its children.
             mViewPager.setClipChildren(false);
             mViewPager.setCurrentItem(currentDayPosition, true);
-        }
+
 
         if(listenerMap!=null){
             for(Date date : mReadings.keySet()){
@@ -255,7 +257,7 @@ public class ReminderFragmentNew extends BaseFragment {
             args.putLong("currentDateInMs", date.getTime());
             args.putBoolean("isFirstTime", mapReadings.keySet().size() == 0 ? true : false);
             args.putParcelableArrayList("readings", (ArrayList<ReminderReading>) mapReadings.get(date));
-            fragment = (ReminderPagerFragment) SherlockFragment.instantiate(getSherlockActivity(), ReminderPagerFragment.class.getName(), args);
+            fragment = (ReminderPagerFragment)Fragment.instantiate(getActivity(), ReminderPagerFragment.class.getName(), args);
             fragment.setOnRemiderDataChangeListener(new ReminderPagerFragment.OnRemiderDataChangeListener() {
                 @Override
                 public void OnEdit(Reminder reminder) {

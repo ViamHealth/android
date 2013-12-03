@@ -216,7 +216,7 @@ public class AddReminder extends BaseFragmentActivity {
         DialogFragment newFragment;
 
         private boolean show(View v){
-            if(newFragment!=null && newFragment.isVisible())
+            if(newFragment!=null /*&& newFragment.isVisible()*/)
                 return true;
             EditText text = (EditText) v;
             int inputType = text.getInputType();
@@ -230,13 +230,13 @@ public class AddReminder extends BaseFragmentActivity {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            return show(v);
+             return show(v);
         }
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if(hasFocus)
-                show(v);
+            //if(hasFocus)
+                //show(v);
         }
 
         public OnRepeatBtnClickListener(Context context) {
