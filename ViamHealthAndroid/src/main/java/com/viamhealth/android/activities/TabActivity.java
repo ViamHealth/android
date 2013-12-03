@@ -64,14 +64,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.tab_main_activity);
 
-
-
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
         mTabHost = (TabHost)findViewById(R.id.tabHost);
         mTabHost.setup();
         mTabHost.setOnClickListener(this);
@@ -157,6 +149,11 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         } else if(action == Actions.SetGoal){
             mTabHost.setCurrentTabByTag("goals");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

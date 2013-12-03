@@ -2,6 +2,7 @@ package com.viamhealth.android.activities.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,6 +66,8 @@ public class ReminderFragmentNew extends BaseFragment {
 
     ActionBar mActionBar;
 
+    ProgressDialog mDialog;
+
     ViamHealthPrefs appPrefs;
     Global_Application ga;
     Typeface tf;
@@ -97,6 +100,9 @@ public class ReminderFragmentNew extends BaseFragment {
         mActionBar = getSherlockActivity().getSupportActionBar();
         mContainer = (PagerContainer) mView.findViewById(R.id.container);
         mViewPager = mContainer.getViewPager();
+
+        mDialog = new ProgressDialog(getSherlockActivity());
+        mDialog.setCanceledOnTouchOutside(false);
 
         setHasOptionsMenu(true);
 
@@ -207,7 +213,7 @@ public class ReminderFragmentNew extends BaseFragment {
 
     protected void OnRefreshReminderReading(Map<Date, List<ReminderReading>> mReadings) {
         if(mPagerAdapter==null){
-            mPagerAdapter = new ReminderPagerAdapter(getSherlockActivity().getSupportFragmentManager());
+            mPagerAdapter = new ReminderPagerAdapter(getChildFragmentManager());
             mViewPager.setAdapter(mPagerAdapter);
             //Necessary or the pager will only have one extra page to show
             //make this at least however many pages you can see
@@ -236,11 +242,6 @@ public class ReminderFragmentNew extends BaseFragment {
         private ReminderPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
-//        @Override
-//        public float getPageWidth(int position) {
-//            return (0.9f);
-//        }
 
         @Override
         public Fragment getItem(int position) {
@@ -317,12 +318,16 @@ public class ReminderFragmentNew extends BaseFragment {
 
     public class RetrieveReminderReading extends AsyncTask <Date, Void, String> {
         protected Context applicationContext;
+        protected ProgressDialog dialog;
 
         @Override
         protected void onPreExecute() {
+            mDialog.setMessage("getting reminders...");
+            mDialog.show();
         }
 
         protected void onPostExecute(String result) {
+            mDialog.dismiss();
             OnRefreshReminderReading(mapReadings);
             mPagerAdapter.notifyDataSetChanged();
         }
