@@ -88,15 +88,16 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
     @Override
     public Goal getGoal() {
-        DiabetesGoal goal = new DiabetesGoal();
-        goal.setFbs(Integer.parseInt(tFBS.getText().toString()));
-        goal.setRbs(Integer.parseInt(tRBS.getText().toString()));
+        DiabetesGoal dbgoal = new DiabetesGoal();
+        setDefaultGoalAttributes(goal, dbgoal);
+        dbgoal.setFbs(Integer.parseInt(tFBS.getText().toString()));
+        dbgoal.setRbs(Integer.parseInt(tRBS.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            dbgoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return dbgoal;
     }
 
     @Override

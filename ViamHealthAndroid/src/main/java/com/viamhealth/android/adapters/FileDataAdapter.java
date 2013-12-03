@@ -72,6 +72,7 @@ public class FileDataAdapter extends MultiSelectionAdapter<FileData> {
         holder.img_name.setText(data.getName().toString());
         Calendar cal = Calendar.getInstance();
         cal.setTime(data.getUpdatedOn());
+        holder.img_icon.setImageDrawable(context.getResources().getDrawable(getFileIcon(data.getMimeType())));
         holder.img_desc.setText(new StringBuilder()
                 .append("Uploaded by ")
                 .append(data.getUpdatedBy())
@@ -81,6 +82,22 @@ public class FileDataAdapter extends MultiSelectionAdapter<FileData> {
                 .append(cal.get(Calendar.YEAR)));
 
         return row;
+    }
+
+    private int getFileIcon(String mimeType) {
+        if(mimeType.contains("pdf")){
+            return R.drawable.selector_icon_pdf;
+        }
+        if(mimeType.contains("jpeg")){
+            return R.drawable.selector_icon_jpeg;
+        }
+        if(mimeType.startsWith("image/")){
+            return R.drawable.selector_icon_image_file_type;
+        }
+        if(mimeType.startsWith("text/")){
+            return R.drawable.selector_icon_text_file_type;
+        }
+        return R.drawable.selector_icon_unknown_file_type;
     }
 
     static class FileDataHolder {

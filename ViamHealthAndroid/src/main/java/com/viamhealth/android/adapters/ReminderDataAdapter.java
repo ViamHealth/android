@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -176,6 +177,14 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         LinearLayout medicineLayout = (LinearLayout) row.findViewById(R.id.medicineLayout);
         LinearLayout completeLayout = (LinearLayout) row.findViewById(R.id.completeLayout);
 
+        ImageView reminderIcon = (ImageView) row.findViewById(R.id.reminder_icon);
+        final ReminderType type = readings.get(position).getReminder().getType();
+        if(type.iconId()==null){
+            reminderIcon.setVisibility(View.INVISIBLE);
+        }else{
+            reminderIcon.setVisibility(View.VISIBLE);
+            reminderIcon.setImageDrawable(activity.getResources().getDrawable(type.iconId()));
+        }
         TextView txtName = (TextView)row.findViewById(R.id.txtViewName);
         txtName.setText(readings.get(position).getReminder().getName());
 
@@ -187,7 +196,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         }else{
             txtDesc.setVisibility(View.GONE);
         }
-        final ReminderType type = readings.get(position).getReminder().getType();
+
         if(type == ReminderType.Medicine){
             completeLayout.setVisibility(View.GONE);
             medicineLayout.setVisibility(View.VISIBLE);
@@ -202,7 +211,4 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
 
         return row;
     }
-
-
-
 }

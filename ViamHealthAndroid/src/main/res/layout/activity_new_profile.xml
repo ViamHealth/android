@@ -169,24 +169,26 @@
                         android:orientation="horizontal">
 
                         <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
                             android:id="@+id/profile_img_male"
-                            android:src="@drawable/ic_men_enabled"
+                            android:src="@drawable/ic_male_unselected"
                             android:background="#ffffff"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="5dp"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:scaleType="centerInside" />
 
                         <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="fill_parent"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
                             android:id="@+id/profile_img_female"
-                            android:src="@drawable/ic_woman_disabled"
+                            android:src="@drawable/ic_female_unselected"
                             android:background="#ffffff"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="20dp"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"
+                            android:scaleType="centerInside" />
                     </LinearLayout>
 
                     <EditText

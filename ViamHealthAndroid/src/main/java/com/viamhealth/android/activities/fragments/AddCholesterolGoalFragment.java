@@ -81,16 +81,17 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
 
     @Override
     public Goal getGoal() {
-        CholesterolGoal goal = new CholesterolGoal();
-        goal.setHdl(Integer.parseInt(tHDL.getText().toString()));
-        goal.setLdl(Integer.parseInt(tLDL.getText().toString()));
-        goal.setTriglycerides(Integer.parseInt(tTG.getText().toString()));
+        CholesterolGoal cholesterolGoal = new CholesterolGoal();
+        setDefaultGoalAttributes(goal, cholesterolGoal);
+        cholesterolGoal.setHdl(Integer.parseInt(tHDL.getText().toString()));
+        cholesterolGoal.setLdl(Integer.parseInt(tLDL.getText().toString()));
+        cholesterolGoal.setTriglycerides(Integer.parseInt(tTG.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            cholesterolGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return cholesterolGoal;
     }
 
     @Override

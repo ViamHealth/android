@@ -142,9 +142,9 @@ public class GoalsEPHelper extends BaseEP {
         return map;
     }
 
-    public Goal createGoal(MedicalConditions mc, Goal goal, Long userId) {
+    public Goal saveGoal(MedicalConditions mc, Goal goal, Long userId) {
         GoalsEP ep = getEndPoint(mc);
-        return ep.createGoalForUser(userId, goal);
+        return ep.saveGoalForUser(userId, goal);
     }
 
     public Goal updateGoal(MedicalConditions mc, Goal goal, Long userId) {

@@ -159,23 +159,29 @@ public abstract class GoalsEP extends BaseEP {
         return processGoalReading(responseString);
     }
 
-    public Goal createGoalForUser(Long userId, Goal goal) {
+    public Goal saveGoalForUser(Long userId, Goal goal) {
 
-        RestClient client = getRestClient(getGoalURL(), userId);
+        String url = getGoalURL();
+        if(goal.getId()>0)
+            url += "/" + goal.getId();
+        RestClient client = getRestClient(url, userId);
         client.AddParam("target_date", formater.format(goal.getTargetDate()));
 
         addParams(client, goal);
 
         try {
-            client.Execute(RequestMethod.POST);
+            if(goal.getId()>0)
+                client.Execute(RequestMethod.PUT);
+            else
+                client.Execute(RequestMethod.POST);
         }catch (Exception e) {
             e.printStackTrace();
         }
 
         Goal returnGoal = null;
-        if(client.getResponseCode()==HttpStatus.SC_CREATED) {
+        Log.i(TAG, client.toString());
+        if(client.getResponseCode()==HttpStatus.SC_CREATED || client.getResponseCode()==HttpStatus.SC_OK) {
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
             returnGoal = processGoalResponse(responseString);
         }
 

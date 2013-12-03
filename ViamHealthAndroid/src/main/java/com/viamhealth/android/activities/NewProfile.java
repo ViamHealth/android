@@ -381,11 +381,11 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         int mresId, fresId;
 
         if(gender == Gender.Male){
-            mresId = R.drawable.ic_men_enabled;
-            fresId = R.drawable.ic_woman_disabled;
+            mresId = R.drawable.ic_male;
+            fresId = R.drawable.ic_female_unselected;
         }else{
-            mresId = R.drawable.ic_man_disabled;
-            fresId = R.drawable.ic_woman_enabled;
+            mresId = R.drawable.ic_male_unselected;
+            fresId = R.drawable.ic_female;
         }
 
         imgMale.setImageResource(mresId);

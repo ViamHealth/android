@@ -117,14 +117,15 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
     @Override
     public Goal getGoal() {
-        WeightGoal goal = new WeightGoal();
-        goal.setWeight(Double.parseDouble(tWeight.getText().toString()));
+        WeightGoal weightGoal = new WeightGoal();
+        setDefaultGoalAttributes(goal, weightGoal);
+        weightGoal.setWeight(Double.parseDouble(tWeight.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            weightGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return weightGoal;
     }
 
     @Override

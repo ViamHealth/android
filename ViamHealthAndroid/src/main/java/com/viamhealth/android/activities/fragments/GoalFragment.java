@@ -358,7 +358,11 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void editGoal(Goal goal, MedicalConditions type){
-
+        Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
+        i.putExtra("user", selectedUser);
+        i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+        i.putExtra("type", type);
+        startActivityForResult(i, ACTION_CONFIGURE_GOAL);
     }
 
     private void deleteGoal(Goal goal, MedicalConditions type){
@@ -494,16 +498,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(Goal... goals) {
-            for(int i=0; i<goals.length; i++){
-                Goal goal = goals[i];
-                if(goal.getId()>0){
-                    isUpdate = true;
-                    goalsConfiguredMap.put(type, goalHelper.updateGoal(type, goal, selectedUser.getId()));
-                }else{
-                    isUpdate = false;
-                    goalsConfiguredMap.put(type, goalHelper.createGoal(type, goal, selectedUser.getId()));
-                }
+            //TODO support multiple goals saving if required later
+            Goal goal = goals[0];
+            if(goal.getId()>0){
+                isUpdate = true;
+            }else{
+                isUpdate = false;
             }
+            goalsConfiguredMap.put(type, goalHelper.saveGoal(type, goal, selectedUser.getId()));
             if(type==MedicalConditions.Obese)
                 updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
             return null;

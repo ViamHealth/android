@@ -12,7 +12,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
@@ -20,10 +20,11 @@
 
         <ImageView android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_brand_logo_selector"
+            android:src="@drawable/selector_icon_medicine"
             android:layout_gravity="center_vertical"
-            android:visibility="invisible"
-            android:duplicateParentState="true"/>
+            android:visibility="visible"
+            android:duplicateParentState="true"
+            android:id="@+id/reminder_icon" />
 
         <LinearLayout
             android:orientation="vertical"
@@ -47,6 +48,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/txtViewDesc"
+                android:textColor="@color/row_textcolor_selector"
                 android:layout_gravity="center_vertical"
                 android:duplicateParentState="true"/>
 

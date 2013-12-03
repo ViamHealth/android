@@ -80,16 +80,17 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
     @Override
     public Goal getGoal() {
-        BPGoal goal = new BPGoal();
-        goal.setSystolicPressure(Integer.parseInt(tSP.getText().toString()));
-        goal.setDiastolicPressure(Integer.parseInt(tDP.getText().toString()));
+        BPGoal bpGoal = new BPGoal();
+        setDefaultGoalAttributes(goal, bpGoal);
+        bpGoal.setSystolicPressure(Integer.parseInt(tSP.getText().toString()));
+        bpGoal.setDiastolicPressure(Integer.parseInt(tDP.getText().toString()));
         //goal.setPulseRate(Integer.parseInt(tPR.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            bpGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return bpGoal;
     }
 
     @Override
