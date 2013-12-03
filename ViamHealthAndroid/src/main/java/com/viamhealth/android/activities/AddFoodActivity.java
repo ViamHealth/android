@@ -113,7 +113,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("user", user);
                 setResult(RESULT_OK, returnIntent);
-                finish();
+
             }
         });
     }
@@ -261,6 +261,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             if(result.equals("0")){
                 Toast.makeText(AddFoodActivity.this, "Food added successfully...",Toast.LENGTH_SHORT).show();
             }
+            finish();
 
         }
 
