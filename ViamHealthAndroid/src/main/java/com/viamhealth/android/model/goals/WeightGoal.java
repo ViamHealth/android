@@ -70,12 +70,13 @@ public class WeightGoal extends Goal implements Parcelable {
         super(in);
         this.weight = in.readDouble();
         int readingsCount = in.readInt();
-        WeightGoalReadings[] readArr = new WeightGoalReadings[readingsCount];
+        //WeightGoalReadings[] readArr;// = new WeightGoalReadings[readingsCount];
+        Parcelable[] readArr = in.readParcelableArray(null);
         if(readingsCount>0){
-            in.readTypedArray(readArr, WeightGoalReadings.CREATOR);
+            //readArr = in.readParcelableArray(WeightGoalReadings.class.getClassLoader());
             this.readings = new ArrayList<GoalReadings>(readingsCount);
             for(int i=0; i<readingsCount; i++){
-                 this.readings.add(readArr[i]);
+                 this.readings.add((WeightGoalReadings)readArr[i]);
             }
         }else{
             this.readings = new ArrayList<GoalReadings>();
@@ -94,7 +95,8 @@ public class WeightGoal extends Goal implements Parcelable {
         int readingsCount = this.readings==null?0:this.readings.size();
         WeightGoalReadings[] readArr = new WeightGoalReadings[readingsCount];
         dest.writeInt(readingsCount);
-        dest.writeTypedArray(this.readings.toArray(readArr), flags);
+        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
+        //dest.writeTypedArray(this.readings.toArray(readArr), flags);
     }
 
     public static final Parcelable.Creator<WeightGoal> CREATOR = new Parcelable.Creator<WeightGoal>() {

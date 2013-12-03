@@ -235,7 +235,7 @@ public class ImageSelector {
             return;
 
         if (scheme.equals("file")) {
-            listener.OnFileLoaded(new File(uri.getLastPathSegment()));
+            listener.OnFileLoaded(new File(uri.getPath()));
         }
         else if (scheme.equals("content")) {
             if (uri.toString().startsWith("content://com.android.gallery3d.provider")) {

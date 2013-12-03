@@ -43,11 +43,13 @@ public abstract class AddGoalFragment extends BaseFragment {
     public abstract GoalReadings getGoalReadings();
 
     public void setDefaultGoalAttributes(Goal from, Goal to){
-        to.setId(from.getId());
-        to.setUserId(from.getUserId());
-        to.setCreated(from.getCreated());
-        to.setUpdated(from.getUpdated());
-        to.setUpdatedBy(from.getUpdatedBy());
+        if(from!=null && from.getId()!=null && from.getId()>0){
+            to.setId(from.getId());
+            to.setUserId(from.getUserId());
+            to.setCreated(from.getCreated());
+            to.setUpdated(from.getUpdated());
+            to.setUpdatedBy(from.getUpdatedBy());
+        }
     }
 
 }
