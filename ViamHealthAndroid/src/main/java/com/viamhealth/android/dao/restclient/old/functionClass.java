@@ -1,5 +1,6 @@
 package com.viamhealth.android.dao.restclient.old;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1129,6 +1130,43 @@ public class functionClass {
 						}
 					return lstData;
 				}
+
+    public String[] retrieveExercise() {
+
+        String[] exercise_list=null;
+        String baseurlString = Global_Application.url+"physical-activity/?page_size=900";
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        try
+        {
+            client.Execute(RequestMethod.GET);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        responseString = client.getResponse();
+        Log.e("TAG","get exercise list Response string " + responseString);
+        JSONObject jObject = null;
+        try {
+            jObject = new JSONObject(responseString);
+
+        JSONArray jarray= null;
+            jarray = jObject.getJSONArray("results");
+
+        exercise_list=new String[jarray.length()];
+        for (int i = 0; i < jarray.length(); i++)
+        {
+            exercise_list[i]=jarray.getJSONObject(i).getString("label");
+        }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return exercise_list;
+    }
+
+
+
 
                 public void addExercise(String weight,String time_spent,String physical_activity_id,String calories_spent,String user,String date)
                 {

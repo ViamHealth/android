@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,8 +39,9 @@ public class AddExercise extends BaseActivity {
     User user;
     int time_type=0;
     float time_float;
-    TextView btnSave,btnCancel;
+    Button btnSave,btnCancel;
     String date;
+    String exercise_list[]=null;
 
 
 
@@ -59,16 +61,15 @@ public class AddExercise extends BaseActivity {
         //ArrayAdapter<String> yourAdapter=new ArrayAdapter<String>(this, R.layout.custom_spinner_item, R.array.duration_type);
 
 
+        RetrieveExerciseList fillExercise= new RetrieveExerciseList();
+        fillExercise.execute();
+
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
                 R.array.time_type, R.layout.custom_spinner_item); //change the last argument here to your xml above.
         //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         time_check.setAdapter(typeAdapter);
 
 
-        ArrayAdapter<CharSequence> exerciseAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
-                R.array.exercise_list, R.layout.custom_spinner_item); //change the last argument here to your xml above.
-        //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        physical_activity_type.setAdapter(exerciseAdapter);
 
 
         //TextView tv=(TextView)time_check.getSelectedView();
@@ -77,7 +78,7 @@ public class AddExercise extends BaseActivity {
         time_check.setOnItemSelectedListener(new CustomOnTimeSelectedListener());
 
 
-        btnSave=(TextView)findViewById(R.id.btnSave);
+        btnSave=(Button)findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +113,7 @@ public class AddExercise extends BaseActivity {
         getSupportActionBar().setSubtitle(user.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        btnCancel=(TextView)findViewById(R.id.btnCancel);
+        btnCancel=(Button)findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,12 +152,57 @@ public class AddExercise extends BaseActivity {
     public class CustomOnExerciseSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-            physical_activity_id=String.valueOf(pos);
+            physical_activity_id=String.valueOf(pos+1);
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
             // TODO Auto-generated method stub
             time_type=0;
+        }
+
+    }
+
+
+    public class RetrieveExerciseList extends AsyncTask<String, Void,String>
+    {
+        protected FragmentActivity activity;
+        ProgressDialog mDialog;
+
+        @Override
+        protected void onPreExecute()
+        {
+            mDialog=new ProgressDialog(AddExercise.this);
+            mDialog.setMessage("Please Wait...");
+            mDialog.show();
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+            if(mDialog!=null)
+            {
+                mDialog.dismiss();
+                mDialog=null;
+            }
+            Toast.makeText(getApplicationContext(),"time_spent  = "+time_spent,Toast.LENGTH_LONG).show();
+
+            ArrayAdapter exerciseAdapter = new ArrayAdapter (AddExercise.this, R.layout.custom_spinner_item,exercise_list);
+ //change the last argument here to your xml above.
+            //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            physical_activity_type.setAdapter(exerciseAdapter);
+            //finish();
+
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+
+            exercise_list=obj.retrieveExercise();
+            return null;
         }
 
     }
@@ -171,7 +217,7 @@ public class AddExercise extends BaseActivity {
         protected void onPreExecute()
         {
 
-
+            Toast.makeText(getApplicationContext(),"physical activity id="+physical_activity_id,Toast.LENGTH_SHORT).show();
 
         }
 

@@ -18,6 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
+        android:spinnerMode="dropdown"
         android:entries="@array/exercise_list"
         android:prompt="@string/exercise_type_prompt"
         android:textAlignment="center" />
@@ -39,9 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:hint="Enter Time"
-            android:textColor="@android:color/holo_blue_dark"
             android:textSize="15sp"
-            android:textColorHint="@android:color/holo_blue_dark"
             android:cursorVisible="true"
             android:gravity="center_vertical"
             android:singleLine="true"
@@ -59,6 +58,7 @@
             android:textColor="#000000"
             android:entries="@array/time_type"
             android:prompt="@string/enter_time"
+            android:spinnerMode="dropdown"
             android:textAlignment="center" />
 
 
@@ -83,7 +83,6 @@
             android:inputType="number"
             android:textSize="15sp"
             android:cursorVisible="true"
-            android:textColor="@android:color/holo_blue_dark"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:padding="5dp"/>
@@ -109,19 +108,18 @@
         android:layout_marginRight="20dp">
 
 
-        <TextView
+        <Button
             android:id="@+id/btnCancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/inviteuser_btn_toggle"
             android:gravity="center"
             android:text="Cancel"
-            android:textColor="@android:color/holo_blue_dark"
             android:textSize="17sp"
             android:layout_weight="1"
             android:textStyle="bold"
             android:visibility="gone" />
-        <TextView
+        <Button
             android:id="@+id/btnSave"
             android:layout_height="48dp"
             android:layout_width="fill_parent"
