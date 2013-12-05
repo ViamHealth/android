@@ -20,7 +20,7 @@
             android:id="@+id/profile_submid_layout"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-       android:orientation="vertical"
+            android:orientation="vertical"
             android:padding="10dp">
             <LinearLayout android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
@@ -68,7 +68,8 @@
            android:id="@+id/file_desc"
            android:hint="@string/file_title"
            android:textAlignment="center"
-           android:gravity="center_vertical|center_horizontal" />
+           android:gravity="center_vertical|center_horizontal"
+           android:visibility="gone" />
    </LinearLayout>
  <LinearLayout android:id="@+id/newval_btn_layout"
                 android:layout_height="fill_parent"

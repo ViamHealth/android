@@ -43,12 +43,12 @@ public class BPGoal extends Goal {
         diastolicPressure = in.readInt();
         pulseRate = in.readInt();
         int readingsCount = in.readInt();
-        BPGoalReading[] readArr = new BPGoalReading[readingsCount];
+        Parcelable[] readArr = in.readParcelableArray(BPGoalReading.class.getClassLoader());//new BPGoalReading[readingsCount];
         if(readingsCount>0){
-            in.readTypedArray(readArr, BPGoalReading.CREATOR);
+            //in.readTypedArray(readArr, BPGoalReading.CREATOR);
             this.readings = new ArrayList<GoalReadings>(readingsCount);
             for(int i=0; i<readingsCount; i++){
-                this.readings.add(readArr[i]);
+                this.readings.add((BPGoalReading)readArr[i]);
             }
         }else{
             this.readings = new ArrayList<GoalReadings>();
@@ -124,7 +124,7 @@ public class BPGoal extends Goal {
         int readingsCount = this.readings==null?0:this.readings.size();
         BPGoalReading[] readArr = new BPGoalReading[readingsCount];
         dest.writeInt(readingsCount);
-        dest.writeTypedArray(this.readings.toArray(readArr), flags);
+        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
     }
 
     @Override

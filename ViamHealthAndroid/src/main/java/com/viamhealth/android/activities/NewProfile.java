@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -26,12 +27,15 @@ import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionLoginBehavior;
+import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.facebook.widget.ProfilePictureView;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
+import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.rest.endpoints.FileUploader;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
@@ -69,7 +73,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     String selecteduserid;
 
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
-    EditText systolic, diastolic, fasting, random, hdl, ldl, tri, totalCholesterol;
+    EditText systolic, diastolic, fasting, random, hdl, ldl, tri;
+    TextView totalCholesterol;
 
     Button btnSave, btnCancel;
     ImageButton imgMale, imgFemale, imgUpload;
@@ -209,8 +214,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                     imageSelector.pickFile(ImageSelector.FileType.Image);
                 }
             });
-        }else{
-            imgUpload.setVisibility(View.INVISIBLE);
         }
 
         imgMale.setOnClickListener(new View.OnClickListener() {
@@ -251,7 +254,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         ldl = (EditText) findViewById(R.id.input_ldl);
         tri = (EditText) findViewById(R.id.input_triglycerides);
 
-        totalCholesterol = (EditText) findViewById(R.id.input_total_cholesterol);
+        totalCholesterol = (TextView) findViewById(R.id.input_total_cholesterol);
 
         profileDataFetched = RequestStatus.Not_Started;
         familyMemberSelected = RequestStatus.Not_Started;
@@ -287,7 +290,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             }
         }
 
-
         /*** Action Bar Creation starts here ***/
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -301,15 +303,21 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.activity_add_profile, menu);
-        return true;
+        //User liu = ga.getLoggedInUser();
+        //if(liu.getProfile()!=null && liu.getProfile().getFbProfileId()!=null && !liu.getProfile().getFbProfileId().isEmpty()){
+            getSupportMenuInflater().inflate(R.menu.activity_add_profile, menu);
+            return true;
+        //}
+
+        //return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.fbFamilyMember){
             String fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
-            getDataFromFB(FBRequestType.Family, fbid);
+            createSessionAndGetDataFromFB(FBRequestType.Family, fbid);
+            imgUpload.setVisibility(View.INVISIBLE);
             return true;
         }
 
@@ -323,36 +331,68 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-    private void getDataFromFB(final FBRequestType type, final String profileId) {
-        Session session = Session.getActiveSession();
-        if (session != null && session.isOpened() ) {
-            imgUpload.setVisibility(View.GONE);
-            if(type==FBRequestType.Family){
-                if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
-                    return;
-                Intent intent = new Intent(NewProfile.this, FBFamilyListActivity.class);
-                startActivityForResult(intent, 1);
-                familyMemberSelected = RequestStatus.Pending;
-            } else {
-                if(profileDataFetched==RequestStatus.Done || profileDataFetched==RequestStatus.Pending)
-                    return;
-                getProfileDataFromFB(session, profileId);
-                profileDataFetched = RequestStatus.Pending;
-                dialog = new ProgressDialog(NewProfile.this);
-                String whose = type==FBRequestType.Profile?"your":"your family members";
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.setMessage("we are getting "+whose+" data...");
-                dialog.show();
+    private void getDataFromFB(Session session, final FBRequestType type, final String profileId){
+        //imgUpload.setVisibility(View.GONE);
+        if(type==FBRequestType.Family){
+            if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
+                return;
+            Intent intent = new Intent(NewProfile.this, FBFamilyListActivity.class);
+            startActivityForResult(intent, 1);
+            familyMemberSelected = RequestStatus.Pending;
+        } else {
+            if(profileDataFetched==RequestStatus.Done || profileDataFetched==RequestStatus.Pending)
+                return;
+            getProfileDataFromFB(session, profileId);
+            profileDataFetched = RequestStatus.Pending;
+            dialog = new ProgressDialog(NewProfile.this);
+            String whose = type==FBRequestType.Profile?"your":"your family members";
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("we are getting "+whose+" data...");
+            dialog.show();
+        }
+    }
+
+    protected class FBSessionCallback implements Session.StatusCallback {
+        private FBRequestType type;
+        private String profileId;
+
+        private FBSessionCallback(FBRequestType type, String profileId) {
+            this.type = type;
+            this.profileId = profileId;
+        }
+
+        @Override
+        public void call(Session sess, SessionState state, Exception exception) {
+            if(sess!=null && sess.isOpened()){
+                getDataFromFB(sess, type, profileId);
+            }else{
+                imgUpload.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    private void createSessionAndGetDataFromFB(final FBRequestType type, final String profileId) {
+        Session session = Session.getActiveSession();
+        if(session == null || session.getState().isClosed()){
+            session = new Session.Builder(this).setApplicationId(getString(R.string.app_id)).build();
+            Session.setActiveSession(session);
+            Session.StatusCallback callback = new FBSessionCallback(type, profileId);
+            Session.OpenRequest request = new Session.OpenRequest(NewProfile.this);
+            request.setCallback(callback);
+            request.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
+            request.setPermissions(FBLoginFragment.fbPermissions);
+            session.openForRead(request);
         }else{
-            imgUpload.setVisibility(View.VISIBLE);
+            getDataFromFB(session, type, profileId);
         }
     }
 
     private void getProfileDataFromFB(Session session, String profileId){
         String api = "me";
+
         if(profileId!=null && !profileId.isEmpty())
             api = profileId;
+
         Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
@@ -364,12 +404,19 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                         FBUser fbUser = FBUser.deserialize(jsonResponse);
                         updateViewFromFBData(fbUser);
                         profileDataFetched = RequestStatus.Done;
+                        imgUpload.setVisibility(View.INVISIBLE);
                         dialog.dismiss();
+                    }else{
+                        imgUpload.setVisibility(View.VISIBLE);
                     }
+                }else{
+                    imgUpload.setVisibility(View.VISIBLE);
                 }
 
-                if(error!=null)
+                if(error==null){
                     profileDataFetched = RequestStatus.Failed;
+                    imgUpload.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -383,9 +430,12 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         if(gender == Gender.Male){
             mresId = R.drawable.ic_male;
             fresId = R.drawable.ic_female_unselected;
-        }else{
+        }else if(gender == Gender.Female) {
             mresId = R.drawable.ic_male_unselected;
             fresId = R.drawable.ic_female;
+        }else{
+            mresId = R.drawable.ic_male_unselected;
+            fresId = R.drawable.ic_female_unselected;
         }
 
         imgMale.setImageResource(mresId);
@@ -413,9 +463,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             if(user.getProfile().getMobileNumber()!=null)mobileNumber.setText(user.getProfile().getMobileNumber());
             if(user.getProfile().getOrganization()!=null)organization.setText(user.getProfile().getOrganization());
 
-            if(user.getProfile().getFbProfileId()!=null && !user.getProfile().getFbProfileId().isEmpty()){
-                imgUpload.setVisibility(View.GONE);
-            }
         }
 
         if(user!=null && user.getProfile()!=null && user.getProfile().getProfilePicURL()!=null &&
@@ -459,7 +506,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             if(bmip.getTriglycerides()>0) tri.setText(String.valueOf(bmip.getTriglycerides()));
 
             if(bmip.getTotalCholesterol()>0){
-                totalCholesterol.setText(String.valueOf(bmip.getTotalCholesterol()));
+                totalCholesterol.setText(getString(R.string.total_cholesterol) + String.valueOf(bmip.getTotalCholesterol()));
                 totalCholesterol.setVisibility(View.VISIBLE);
             }else{
                 totalCholesterol.setVisibility(View.GONE);
@@ -491,10 +538,12 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 familyMemberSelected = RequestStatus.Done;
                 String profileId = data.getStringExtra("profileId");
                 Log.d(TAG, "onActivityResult::ProfileId selected from FB Family list - " + profileId);
-                getDataFromFB(FBRequestType.FamilyProfile, profileId);
+                createSessionAndGetDataFromFB(FBRequestType.FamilyProfile, profileId);
+            }else{
+                imgUpload.setVisibility(View.VISIBLE);
             }
         }else{//this is for facebook login pop-up
-            if(imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
+            if(!imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
                 @Override
                 public void OnLoad(ImageSelector imageSelector) {
                     Log.d(TAG, "onActivityResult::ImageSelected - " + imageSelector.getURI().toString());
@@ -505,8 +554,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                     isImageSelected = true;
                 }
             })){
-
-            }else{
                 Log.d(TAG, "onActivityResult::else");
                 super.onActivityResult(requestCode, resultCode, data);
                 Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
@@ -668,6 +715,11 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         if(dob.getText().length()==0){
             dob.setError(getString(R.string.profile_dob_not_present));
+            isValid = false;
+        }
+
+        if(profile.getGender()==Gender.None){
+            Toast.makeText(NewProfile.this, "select the gender to proceed", Toast.LENGTH_LONG).show();
             isValid = false;
         }
 /*

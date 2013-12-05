@@ -15,6 +15,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.ProtocolException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -24,6 +25,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultRedirectHandler;
@@ -52,7 +54,8 @@ public class RestClient {
 	private int responseCode;
 	
 	private String mUrl;
-	
+	private int maxRetries = 3;
+
 	// HTTP Basic Authentication
 	private String username;
 	private String password;
@@ -203,18 +206,25 @@ public class RestClient {
 		HttpParams params = client.getParams();
 		
 		// Setting 30 second timeouts
-		HttpConnectionParams.setConnectionTimeout(params, 30 * 1000);
-		HttpConnectionParams.setSoTimeout(params, 30 * 1000);
+		HttpConnectionParams.setConnectionTimeout(params, 60 * 1000);
+		HttpConnectionParams.setSoTimeout(params, 60 * 1000);
 
         if(disableAutoRedirect)
             params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
 
+        client.setHttpRequestRetryHandler(new HttpRequestRetryHandler() {
+            @Override
+            public boolean retryRequest(IOException e, int i, HttpContext httpContext) {
+                if(i > maxRetries) return false;
+                return true;
+            }
+        });
 		HttpResponse httpResponse;
 
 		try {
             Log.i("RestClient", "Before Request " + request.toString());
-			httpResponse = client.execute(request);
-			responseCode = httpResponse.getStatusLine().getStatusCode();
+            httpResponse = client.execute(request);
+            responseCode = httpResponse.getStatusLine().getStatusCode();
 			message = httpResponse.getStatusLine().getReasonPhrase();
             Log.i("RestClient", "After Request " + httpResponse.toString());
 			HttpEntity entity = httpResponse.getEntity();

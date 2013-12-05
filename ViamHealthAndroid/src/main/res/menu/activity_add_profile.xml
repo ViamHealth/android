@@ -4,6 +4,6 @@
         android:id="@+id/fbFamilyMember"
         android:showAsAction="ifRoom"
         android:title="@string/from_facebook"
-        android:icon="@drawable/com_facebook_inverse_icon"/>
+        android:icon="@drawable/ic_facebook_icon"/>
 
 </menu>

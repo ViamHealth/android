@@ -11,6 +11,17 @@
     tools:context=".NewProfile">
 
     <LinearLayout
+        android:id="@+id/fbLoginFragment"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"/>
+
+    <LinearLayout
         android:id="@+id/llbuttons"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -237,7 +248,8 @@
                            android:id="@+id/feet_image"
                            android:layout_gravity="center"
                            android:gravity="center_horizontal"
-                           android:src="@drawable/ic_height" />
+                           android:src="@drawable/ic_height"
+                           android:scaleType="centerCrop" />
 
                        <LinearLayout
                            android:layout_width="0dp"
@@ -249,10 +261,10 @@
                                android:layout_height="wrap_content"
                                android:gravity="center_horizontal"
                                android:text="inches"/>
-                           <!--<antistatic.spinnerwheel.WheelVerticalView android:id="@+id/feet"-->
-                               <!--android:layout_height="wrap_content"-->
-                               <!--android:layout_width="fill_parent"-->
-                               <!--android:background="@drawable/spinner_background"/>-->
+                           <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/feet"
+                               android:layout_height="wrap_content"
+                               android:layout_width="fill_parent"
+                               android:background="@drawable/spinner_background"/>
                        </LinearLayout>
                        <LinearLayout
                            android:layout_width="0dp"
@@ -264,10 +276,10 @@
                                android:layout_height="wrap_content"
                                android:gravity="center_horizontal"
                                android:text="cms"/>
-                           <!--<antistatic.spinnerwheel.WheelVerticalView android:id="@+id/cms"-->
-                               <!--android:layout_height="wrap_content"-->
-                               <!--android:layout_width="fill_parent"-->
-                               <!--android:background="@drawable/spinner_background"/>-->
+                           <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/cms"
+                               android:layout_height="wrap_content"
+                               android:layout_width="fill_parent"
+                               android:background="@drawable/spinner_background"/>
                         </LinearLayout>
                    </LinearLayout>
 
@@ -371,14 +383,14 @@
                     android:hint="@string/present_tryglecerides"
                     android:gravity="center_horizontal" />
 
-                <EditText
+                <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:id="@+id/input_total_cholesterol"
                     android:layout_gravity="center"
                     android:gravity="center_horizontal"
-                    android:text="Total Cholesterol"
+                    android:text="@string/total_cholesterol"
                     android:layout_marginTop="10dp"
                     android:ems="15"
                     android:enabled="false"

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,7 +129,7 @@ public class AddReminder extends BaseFragmentActivity {
             repeatTextView.setVisibility(View.VISIBLE);
             repeatTextView.setText(reminder.getRepeatString(AddReminder.this));
         }
-        etName.setHint(reminder.getType().hintResId());
+        etName.setHint(type.hintResId());
         etName.setText(reminder.getName());
         etNotes.setText(reminder.getDetails());
 
@@ -213,7 +214,7 @@ public class AddReminder extends BaseFragmentActivity {
         EditText etStartDate, etXDays, etDuration;
         Spinner frequeSpinner, frequeSpinner1;
 
-        FrequencySpinnerAdapter adapter1, adapter;
+        ArrayAdapter<String> adapter1, adapter;
 
         DialogFragment newFragment;
 
@@ -259,12 +260,13 @@ public class AddReminder extends BaseFragmentActivity {
             etXDays.setVisibility(View.GONE);
 
             final RepeatMode[] modes = RepeatMode.values();
-            adapter = new FrequencySpinnerAdapter(mContext, Arrays.copyOfRange(modes, 1, modes.length));
+            String[] items = getSpinnerElements(modes, 1, modes.length);
+            adapter = new ArrayAdapter<String>(mContext, R.layout.custom_spinner_item, items);
             frequeSpinner.setAdapter(adapter);
             frequeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    RepeatMode mode = adapter.getItem(position);
+                    RepeatMode mode = modes[position+1];
                     if(mode==RepeatMode.Custom){
                         //frequeSpinner.setVisibility(View.GONE);
                         etXDays.setVisibility(View.VISIBLE);
@@ -279,7 +281,8 @@ public class AddReminder extends BaseFragmentActivity {
                 }
             });
 
-            adapter1 = new FrequencySpinnerAdapter(mContext, Arrays.copyOfRange(modes, 1, modes.length-1));
+            String[] items1 = getSpinnerElements(modes, 1, modes.length-1);
+            adapter1 = new ArrayAdapter<String>(mContext, R.layout.custom_spinner_item, items1);
             frequeSpinner1.setAdapter(adapter1);
 
             updateModelFromView();
@@ -337,12 +340,10 @@ public class AddReminder extends BaseFragmentActivity {
                 reminder.setStartDate(new Date());
             }
 
-            if(etDuration.getText().toString().trim().length()==0)
-            {
+            if(etDuration.getText().toString().trim().length()==0){
              reminder.setRepeatICounter(1);
             }
-            else
-            {
+            else{
                 reminder.setRepeatICounter(Integer.parseInt(etDuration.getText().toString()));
             }
 
@@ -357,6 +358,13 @@ public class AddReminder extends BaseFragmentActivity {
             }
         }
 
+        protected String[] getSpinnerElements(RepeatMode[] modes, int from, int to){
+            String[] items = new String[to-from];
+            for(int i=from, j=0; i<to; i++, j++){
+                items[j] = mContext.getString(modes[i].resId());
+            }
+            return items;
+        }
 
         protected class FrequencySpinnerAdapter extends ArrayAdapter<RepeatMode> {
 
@@ -381,7 +389,7 @@ public class AddReminder extends BaseFragmentActivity {
                 TextView txtName = (TextView)row.findViewById(android.R.id.text1);
                 txtName.setText(activity.getString(getItem(position).resId()));
 
-                row.setMinimumHeight(UIUtility.dpToPx(AddReminder.this, 24));
+                row.setMinimumHeight(UIUtility.dpToPx(AddReminder.this, 36));
                 return row;
             }
 

@@ -76,7 +76,7 @@ public class FileDataAdapter extends MultiSelectionAdapter<FileData> {
         holder.img_icon.setImageDrawable(context.getResources().getDrawable(FileUploader.getFileIcon(data.getMimeType())));
         holder.img_desc.setText(new StringBuilder()
                 .append("Uploaded by ")
-                .append(data.getUpdatedBy())
+                .append(data.getUpdatedByName())
                 .append(" on ")
                 .append(cal.get(Calendar.DATE)).append("-")
                 .append(cal.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.US)).append("-")

@@ -1035,6 +1035,7 @@ public class functionClass {
                                               c.getString("name"), c.getString("description"),
                                               c.getString("download_url"), c.getString("mime_type"));
                                       data.setUpdatedBy(c.getLong("updated_by"));
+                                      data.setUpdatedByName(c.getString("updated_by_name"));
                                       data.setUpdatedOn(c.getLong("updated_at")*1000);
 				                      lstData.add(data);
 				  				 }

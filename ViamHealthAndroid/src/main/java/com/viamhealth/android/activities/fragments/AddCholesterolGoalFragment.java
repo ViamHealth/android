@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.model.enums.MedicalConditions;
@@ -25,11 +26,12 @@ import java.util.Date;
 /**
  * Created by naren on 10/10/13.
  */
-public class AddCholesterolGoalFragment extends AddGoalFragment {
+public class AddCholesterolGoalFragment extends AddGoalFragment implements View.OnFocusChangeListener {
 
     CholesterolGoal goal;
 
     EditText pHDL, pLDL, pTG, tHDL, tLDL, tTG;
+    TextView tTotal, pTotal;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
 
         user = getArguments().getParcelable("user");
         Bundle bundle = getArguments().getBundle("goals");
-        if(!bundle.isEmpty())
+        if(bundle!=null && !bundle.isEmpty())
             goal = (CholesterolGoal) bundle.getParcelable(MedicalConditions.Cholesterol.name());
 
         dialog = new ProgressDialog(getActivity());
@@ -51,6 +53,8 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
         tHDL = (EditText) view.findViewById(R.id.add_goal_target_hdl);
         tLDL = (EditText) view.findViewById(R.id.add_goal_target_ldl);
         tTG = (EditText) view.findViewById(R.id.add_goal_target_try);
+        pTotal = (TextView) view.findViewById(R.id.add_goal_present_total);
+        tTotal = (TextView) view.findViewById(R.id.add_goal_target_total);
 
         if(user==null)
             return null;
@@ -60,6 +64,12 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
             tHDL.setText(goal.getHdl());
             tLDL.setText(goal.getLdl());
             tTG.setText(goal.getTriglycerides());
+            if(goal.getTotal()>0){
+                tTotal.setVisibility(View.VISIBLE);
+                tTotal.setText(getString(R.string.total_cholesterol) + goal.getTotal());
+            }else{
+                tTotal.setVisibility(View.GONE);
+            }
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         }else{
@@ -67,12 +77,61 @@ public class AddCholesterolGoalFragment extends AddGoalFragment {
             if(profile.getHdl()>0) pHDL.setText(String.valueOf(profile.getHdl()));
             if(profile.getLdl()>0) pLDL.setText(String.valueOf(profile.getLdl()));
             if(profile.getTriglycerides()>0) pTG.setText(String.valueOf(profile.getTriglycerides()));
+            if(profile.getTotalCholesterol()>0) {
+                tTotal.setVisibility(View.VISIBLE);
+                tTotal.setText(getString(R.string.total_cholesterol) + profile.getTotalCholesterol());
+            }else{
+                tTotal.setVisibility(View.GONE);
+            }
         }
+
+        tHDL.setOnFocusChangeListener(this);
+        tLDL.setOnFocusChangeListener(this);
+        tTG.setOnFocusChangeListener(this);
+        pHDL.setOnFocusChangeListener(this);
+        pLDL.setOnFocusChangeListener(this);
+        pTG.setOnFocusChangeListener(this);
 
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);
         date.setOnFocusChangeListener(mManager);
 
         return view;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if(hasFocus){ // if the editTexts got focus
+            return;
+        }
+
+        int hdl, ldl, tg, total;
+        if(v==tHDL || v==tLDL || v==tTG){//the target total needs to be updated
+            try {
+                hdl = Integer.parseInt(tHDL.getText().toString());
+                ldl = Integer.parseInt(tLDL.getText().toString());
+                tg = Integer.parseInt(tTG.getText().toString());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return;
+            }
+            total = hdl + ldl + tg/5;
+            tTotal.setVisibility(View.VISIBLE);
+            tTotal.setText(getString(R.string.total_cholesterol) + " " + String.valueOf(total));
+        }
+
+        if(v==pHDL || v==pLDL || v==pTG){//the target total needs to be updated
+            try {
+                hdl = Integer.parseInt(pHDL.getText().toString());
+                ldl = Integer.parseInt(pLDL.getText().toString());
+                tg = Integer.parseInt(pTG.getText().toString());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return;
+            }
+            total = hdl + ldl + tg/5;
+            pTotal.setVisibility(View.VISIBLE);
+            pTotal.setText(getString(R.string.total_cholesterol) + " " + String.valueOf(total));
+        }
     }
 
     private boolean validation() {

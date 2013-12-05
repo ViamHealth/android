@@ -142,17 +142,18 @@ public class Home extends BaseActivity implements OnClickListener{
 
             ScreenDimension();
 
-            //next();
-            lstFamily = new ArrayList<User>();
-
-            //Monjyoti:commented
-            if(Checker.isInternetOn(Home.this)){
-                GetFamilyListTask task = new GetFamilyListTask();
-                task.applicationContext = Home.this;
-                task.execute();
-            }else{
-                Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
-            }
+            next();
+//            if(lstFamily==null)
+//                lstFamily = new ArrayList<User>();
+//
+//            //Monjyoti:commented
+//            if(Checker.isInternetOn(Home.this)){
+//                GetFamilyListTask task = new GetFamilyListTask();
+//                task.applicationContext = Home.this;
+//                task.execute();
+//            }else{
+//                Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+//            }
 
         }
     }
@@ -162,12 +163,8 @@ public class Home extends BaseActivity implements OnClickListener{
         //force for profile creation
         User user = ga.getLoggedInUser();
         boolean getFamilyData = false;
-        if(user==null){
+        if(user==null || lstFamily==null || lstFamily.size()==0){
             getFamilyData = true;
-        }else if(lstFamily==null || lstFamily.size()==0){
-            getFamilyData = false;
-            lstFamily = new ArrayList<User>();
-            lstFamily.add(user);
         }
 
         if(lstFamily!=null && lstFamily.size()>0)
@@ -196,7 +193,7 @@ public class Home extends BaseActivity implements OnClickListener{
             intent.putExtra("user", user);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
-            //startActivity(intent);
+            startActivity(intent);
         }
     }
 
@@ -402,6 +399,7 @@ public class Home extends BaseActivity implements OnClickListener{
             final ImageView iv = new ImageView(Home.this);
             iv.setLayoutParams(lp);
             iv.setTag("ppiciv");
+            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             User u = lstFamily.get(position);
             if(u!=null && u.getProfile()!=null && u.getProfile().getProfilePicURL()!=null &&
@@ -638,6 +636,7 @@ public class Home extends BaseActivity implements OnClickListener{
         protected void onPostExecute(Boolean result) {
             if(result){
                 dialog.dismiss();
+                lstFamily.remove(selectedViewPosition);
                 Intent intent = new Intent(Home.this, Home.class);
                 ArrayList<User> families = (ArrayList<User>) lstFamily;
                 intent.putParcelableArrayListExtra("family", families);
@@ -653,7 +652,7 @@ public class Home extends BaseActivity implements OnClickListener{
         protected Boolean doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
             boolean isSuccess = userEP.deleteUser(selectedUser);
-            lstFamily.set(selectedViewPosition, user);
+            //lstFamily.set(selectedViewPosition, user);
             return isSuccess;
         }
     }

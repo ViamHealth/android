@@ -290,14 +290,16 @@ public class UserEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, "shareUser:" + client.toString());
-        if(client.getResponseCode()!= HttpStatus.SC_CREATED || client.getResponseCode() != HttpStatus.SC_OK)
+        if(client.getResponseCode()!= HttpStatus.SC_CREATED
+                || client.getResponseCode() != HttpStatus.SC_OK
+                || client.getResponseCode() != HttpStatus.SC_NO_CONTENT)
             return false;
 
         return true;
     }
 
     public boolean deleteUser(User user) {
-        String baseurlString = Global_Application.url+"users/"+user.getId().toString();
+        String baseurlString = Global_Application.url+"users/"+user.getId().toString()+"/";
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -309,7 +311,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, "shareUser:" + client.toString());
+        Log.i(TAG, "deleteUser:" + client.toString());
         if(client.getResponseCode()!= HttpStatus.SC_NO_CONTENT)
             return false;
 
@@ -664,6 +666,11 @@ public class UserEP extends BaseEP {
         }
         try {
             pd.setTriglycerides(jsonProfile.getInt("triglycerides"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            pd.setTotalCholesterol(jsonProfile.getInt("total_cholesterol"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

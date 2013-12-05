@@ -75,12 +75,12 @@ public class DiabetesGoal extends Goal {
         fbs = in.readInt();
         rbs = in.readInt();
         int readingsCount = in.readInt();
-        DiabetesGoalReading[] readArr = new DiabetesGoalReading[readingsCount];
+        Parcelable[] readArr = in.readParcelableArray(DiabetesGoalReading.class.getClassLoader());//new DiabetesGoalReading[readingsCount];
         if(readingsCount>0){
-            in.readTypedArray(readArr, DiabetesGoalReading.CREATOR);
+            //in.readTypedArray(readArr, DiabetesGoalReading.CREATOR);
             this.readings = new ArrayList<GoalReadings>(readingsCount);
             for(int i=0; i<readingsCount; i++){
-                this.readings.add(readArr[i]);
+                this.readings.add((DiabetesGoalReading)readArr[i]);
             }
         }else{
             this.readings = new ArrayList<GoalReadings>();
@@ -95,7 +95,7 @@ public class DiabetesGoal extends Goal {
         int readingsCount = this.readings==null?0:this.readings.size();
         DiabetesGoalReading[] readArr = new DiabetesGoalReading[readingsCount];
         dest.writeInt(readingsCount);
-        dest.writeTypedArray(this.readings.toArray(readArr), flags);
+        dest.writeParcelableArray(this.readings.toArray(readArr), flags);
     }
 
     @Override

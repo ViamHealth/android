@@ -251,7 +251,7 @@ public class FileFragment extends BaseFragment {
             Log.i(TAG, "UploadAsynTask::execute - uploading file - " + this.fileName);
             FileUploader uploader = new FileUploader(appPrefs.getToken());
             FileUploader.Response response = uploader.uploadFile(imageSelector.getFile(),
-                    getActivity(), selectedUser.getId(), dialog);
+                    getActivity(), selectedUser.getId(), dialog, fileName);
 
             Log.i(TAG, "UploadAsynTask::execute - uploaded file with response - " + response);
             return response;

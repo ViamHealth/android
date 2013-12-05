@@ -24,6 +24,7 @@ import com.facebook.model.GraphObject;
 import com.facebook.widget.LoginButton;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
+import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.activities.Register;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
@@ -34,6 +35,7 @@ import com.viamhealth.android.utils.Checker;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by naren on 05/10/13.
@@ -45,20 +47,25 @@ public class FBLoginFragment extends BaseFragment {
     private UiLifecycleHelper uiHelper;
     private OnSessionStateChangeListener scListener;
 
+    private ViamHealthPrefs appPrefs;
+
     boolean isPaused = false;
 
     UserEP userEndPoint;
+
+    public static List<String> fbPermissions = Arrays.asList("user_birthday", "user_hometown", "user_location", "email",
+            "user_relationships", "user_friends", "user_work_history",
+            "friends_about_me", "friends_birthday", "friends_hometown", "friends_location",
+            "friends_work_history");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fb_login_fragment, container, false);
 
+        appPrefs = new ViamHealthPrefs(getSherlockActivity());
         LoginButton login = (LoginButton) view.findViewById(R.id.authButton);
         login.setFragment(this);
-        login.setReadPermissions(Arrays.asList("user_birthday", "user_hometown", "user_location", "email",
-                            "user_relationships", "user_friends", "user_work_history",
-                            "friends_about_me", "friends_birthday", "friends_hometown", "friends_location",
-                            "friends_work_history"));
+        login.setReadPermissions(fbPermissions);
 
         userEndPoint = new UserEP(getActivity(), (Global_Application)getActivity().getApplicationContext());
 
@@ -75,6 +82,7 @@ public class FBLoginFragment extends BaseFragment {
                 task.applicationContext = getActivity();
                 task.user = null;
                 task.fbToken = session.getAccessToken();
+                appPrefs.setFBAccessToken(session.getAccessToken());
                 task.execute();
             }else{
                 Toast.makeText(getActivity(),"there is no network around here...",Toast.LENGTH_SHORT).show();

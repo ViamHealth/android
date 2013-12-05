@@ -18,6 +18,6 @@
         android:ems="10"
         android:id="@+id/shareTo"
         android:layout_margin="20dp"
-        android:hint="@string/email_or_mobile"
-        android:gravity="center_vertical|center_horizontal" />
+        android:gravity="center_vertical|center_horizontal"
+        android:hint="@string/email" />
 </LinearLayout>

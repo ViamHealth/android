@@ -8,7 +8,8 @@
 <LinearLayout
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
     <LinearLayout
         android:orientation="vertical"
@@ -68,19 +69,18 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp" />
 
-        <EditText
+        <TextView
             android:id="@+id/add_goal_present_total"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_height="48dp"
             android:layout_width="match_parent"
             android:textSize="18sp"
-            android:textColor="#000000"
             android:gravity="center_vertical|center_horizontal"
             android:singleLine="true"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:hint="@string/total_cholesterol" />
+            android:text="@string/total_cholesterol" />
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -139,26 +139,25 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"/>
 
-        <EditText
+        <TextView
             android:id="@+id/add_goal_target_total"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:textColor="#000000"
             android:textSize="18sp"
             android:gravity="center_vertical|center_horizontal"
             android:singleLine="true"
             android:padding="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:hint="@string/total_cholesterol" />
+            android:text="@string/total_cholesterol" />
 
     </LinearLayout>
 
 </LinearLayout>
 <EditText
     android:id="@+id/add_goal_target_date"
-    android:hint="target date"
+    android:hint="@string/targetDate"
     android:inputType="date"
     android:layout_height="48dp"
     android:layout_width="match_parent"

@@ -10,6 +10,7 @@ public class ViamHealthPrefs {
 	public SharedPreferences.Editor prefsEditor;
 	
 	public String token = "token";
+    public String fbtoken = "fbtoken";
 	public String menuList = "menuList";
 	public String reloadgraph = "reloadgraph";
 	public String goalname = "goalname";
@@ -77,6 +78,13 @@ public class ViamHealthPrefs {
 	public void setToken(String _token) {
 		this.prefsEditor.putString(token, _token).commit();
 	}
+    public String getFBAccessToken() {
+        return appSharedPrefs.getString(fbtoken, null);
+    }
+
+    public void setFBAccessToken(String _token) {
+        this.prefsEditor.putString(fbtoken, _token).commit();
+    }
 
 	public String getMenuList() {
 		return appSharedPrefs.getString(menuList, "");

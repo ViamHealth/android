@@ -171,16 +171,16 @@ public class FileUploader {
         formValueName = "profile_picture";
         uploadURL = upLoadServerUri + "users/" + userId + "/profile-picture/";
         method = "PUT";
-        return upload(sourceFile, activity, dialog);
+        return upload(sourceFile, activity, dialog, null);
     }
 
-    public Response uploadFile(final File sourceFile, Activity activity, Long userId, Dialog dialog) {
+    public Response uploadFile(final File sourceFile, Activity activity, Long userId, Dialog dialog, String fileName) {
         formValueName = "file";
         uploadURL = upLoadServerUri + "healthfiles/?user=" + userId;
-        return upload(sourceFile, activity, dialog);
+        return upload(sourceFile, activity, dialog, fileName);
     }
 
-    private Response upload(final File sourceFile, final Activity activity, Dialog dialog) {
+    private Response upload(final File sourceFile, final Activity activity, Dialog dialog, String filename) {
 
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -191,7 +191,7 @@ public class FileUploader {
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
         String justFileName = sourceFile.getName();
-        final String fileName = sourceFile.getName();
+        final String fileName = filename==null?sourceFile.getName():filename;
 
         if (!sourceFile.isFile()) {
             dialog.dismiss();
@@ -226,8 +226,8 @@ public class FileUploader {
 
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
                 Log.i("FileUploader", twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + sourceFile.getName() + "\"" + lineEnd);
-                Log.i("FileUploader", "Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + sourceFile.getName() + "\"" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + fileName + "\"" + lineEnd);
+                Log.i("FileUploader", "Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + fileName + "\"" + lineEnd);
                 dos.writeBytes(lineEnd);
 
                 // create a buffer of  maximum size

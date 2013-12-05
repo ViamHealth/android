@@ -21,7 +21,7 @@ public class Profile implements Parcelable{
     private Location location;
     private BloodGroup bloodGroup = BloodGroup.None;
     private Date dob;
-    private Gender gender = Gender.Male;
+    private Gender gender = Gender.None;
     private String profilePicURL;
 
     private String fbProfileId;

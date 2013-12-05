@@ -8,6 +8,7 @@ public class FileData {
 	String id,user,name,description,download_url, mimeType;
     Long updatedBy;
     Date updatedOn;
+    String updatedByName;
 
 	boolean checked=false;
 
@@ -33,6 +34,14 @@ public class FileData {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String getUpdatedByName() {
+        return updatedByName;
+    }
+
+    public void setUpdatedByName(String updatedByName) {
+        this.updatedByName = updatedByName;
     }
 
     public Long getUpdatedBy() {

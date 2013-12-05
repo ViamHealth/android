@@ -21,7 +21,6 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.BreakfastAdapter;
 import com.viamhealth.android.adapters.DinnerAdapter;
-import com.viamhealth.android.adapters.ExerciseAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
 import com.viamhealth.android.dao.restclient.old.functionClass;
