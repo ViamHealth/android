@@ -84,14 +84,17 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Goal goal = fm.getGoal();
-                GoalReadings goalReading = fm.getGoalReadings();
-                Intent intent = new Intent();
-                intent.putExtra("goal", goal);
-                intent.putExtra("reading", goalReading);
-                intent.putExtra("type", fm.getType());
-                setResult(RESULT_OK, intent);
-                finish();
+                AddGoalFragment activeFragment = fm.getActiveGoalFragment();
+                if(activeFragment.isValid()){
+                    Goal goal = activeFragment.getGoal();
+                    GoalReadings goalReading = activeFragment.getGoalReadings();
+                    Intent intent = new Intent();
+                    intent.putExtra("goal", goal);
+                    intent.putExtra("reading", goalReading);
+                    intent.putExtra("type", fm.getType());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
 

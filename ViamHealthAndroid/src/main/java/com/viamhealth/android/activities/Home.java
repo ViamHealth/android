@@ -598,6 +598,7 @@ public class Home extends BaseActivity implements OnClickListener{
                         generateTile(lstFamily.size()-1, false);
                         generateTile(lstFamily.size(), true);
                     }
+
                 } catch (ImproperArgumentsPassedException ime) {
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }

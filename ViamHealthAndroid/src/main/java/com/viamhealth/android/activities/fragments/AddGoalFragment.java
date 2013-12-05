@@ -42,6 +42,14 @@ public abstract class AddGoalFragment extends BaseFragment {
     public abstract Goal getGoal();
     public abstract GoalReadings getGoalReadings();
 
+    public boolean isValid(){
+        return true;
+    }
+
+    public void onTargetDateChange () {
+
+    }
+
     public void setDefaultGoalAttributes(Goal from, Goal to){
         if(from!=null && from.getId()!=null && from.getId()>0){
             to.setId(from.getId());

@@ -135,7 +135,7 @@ public class FileFragment extends BaseFragment {
         });
     }
 
-    private void uploadFile(final String filename, final byte[] byteArray) {
+    private void uploadFile(String filename, final byte[] byteArray) {
         Log.d(TAG, "uploadFile::filename - " + filename);
         final String fileExtension = UIUtility.getFileExtension(filename);
 
@@ -152,6 +152,7 @@ public class FileFragment extends BaseFragment {
             img_display.setImageDrawable(getResources().getDrawable(FileUploader.getFileIcon(mimeType)));
         }
         final TextView txtViewFileName = (TextView) dialogView.findViewById(R.id.file_name);
+        filename = fileExtension!=null ? filename.substring(0, filename.lastIndexOf(".")) : filename;
         txtViewFileName.setText(filename);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity(), R.style.StyledProgressDialog);
@@ -164,13 +165,6 @@ public class FileFragment extends BaseFragment {
                 task.fileName = fn + "." + fileExtension;
                 task.byteArray = byteArray;
                 task.execute();
-                dialog.dismiss();
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });

@@ -36,11 +36,18 @@ public class AddGoalFragmentManager extends OrFragmentManager implements EditTex
         int inputType = text.getInputType();
         if(hasFocus){//when focused in
             if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
-                DialogFragment newFragment = new DatePickerFragment(text);
+                DialogFragment newFragment = new DatePickerFragment(text, new DatePickerFragment.OnDateChangeListener() {
+                    @Override
+                    public void OnDateChange() {
+                        AddGoalFragment fragment = (AddGoalFragment) mLastShownFragment.fragment;
+                        fragment.onTargetDateChange();
+                    }
+                });
                 newFragment.show(mActivity.getSupportFragmentManager(), "datePicker");
             }
         }else{//when focused out
-
+            AddGoalFragment fragment = (AddGoalFragment) mLastShownFragment.fragment;
+            fragment.onTargetDateChange();
         }
     }
 
@@ -62,5 +69,9 @@ public class AddGoalFragmentManager extends OrFragmentManager implements EditTex
 
     public MedicalConditions getType() {
         return (MedicalConditions) this.mLastShownFragment.key;
+    }
+
+    public AddGoalFragment getActiveGoalFragment () {
+        return (AddGoalFragment) this.mLastShownFragment.fragment;
     }
 }

@@ -745,7 +745,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         int inputType = text.getInputType();
         if(hasFocus){//when focused in
             if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
-                DialogFragment newFragment = new DatePickerFragment(text);
+                DialogFragment newFragment = new DatePickerFragment(text, null);
                 newFragment.show(this.getSupportFragmentManager(), "datePicker");
             }
         }else{//when focused out

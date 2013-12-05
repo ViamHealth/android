@@ -224,7 +224,7 @@ public class AddReminder extends BaseFragmentActivity {
             EditText text = (EditText) v;
             int inputType = text.getInputType();
             if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
-                newFragment = new DatePickerFragment(text);
+                newFragment = new DatePickerFragment(text, null);
                 newFragment.show(getSupportFragmentManager(), "datePicker");
                 return true;
             }

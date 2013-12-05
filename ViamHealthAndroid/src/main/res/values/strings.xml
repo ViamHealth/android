@@ -268,6 +268,10 @@
     <string name="oldPassword">#old password</string>
     <string name="newPassword">#new password</string>
     <string name="reEnterNewPassword">#confirm new password</string>
+    <string name="weightGoalUnhealthyWarning">You are planning to lose %.1fKgs per week. It is unhealthy to lose more than 1Kg per week. Consider revising your weight loss goal to 0.5Kg per week.</string>
+    <string name="weightGoalAggressiveWarning">You are planning to lose %.1fKg per week. It is an aggressive target. Consider revising your weight loss goal to 0.5Kg per week.</string>
+    <string name="weightGoalIdealTarget">It is healthy and ideal to lose upto 0.5Kg per week.</string>
+    <string name="weightGoalIdealTargetYourDate">You are planning to lose %.1fKg per week. It is a healthy way to lose. </string>
     <string name="targetDate">target date</string><string name="repeatFor">eg: 2</string><string name="onceEvery">eg: 3</string><string name="fromdate">eg: 21/03/2013</string>
 
 </resources>

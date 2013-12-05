@@ -26,7 +26,8 @@
             android:id="@+id/etStartDate"
             android:layout_gravity="right"
             android:layout_marginLeft="20dp"
-            android:hint="@string/fromdate" />
+            android:hint="@string/fromdate"
+            android:gravity="center_horizontal" />
     </LinearLayout>
 
     <LinearLayout
@@ -53,7 +54,8 @@
             android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:hint="@string/repeatFor" />
+            android:hint="@string/repeatFor"
+            android:gravity="center_horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -96,15 +98,15 @@
             android:ems="10"
             android:id="@+id/etXDays"
             android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:hint="@string/onceEvery" />
+            android:layout_marginLeft="10dp"
+            android:hint="@string/onceEvery"
+            android:gravity="center_horizontal" />
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:id="@+id/frequencySpinner1"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:spinnerMode="dropdown"
             android:layout_weight="1" />
@@ -113,7 +115,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:id="@+id/frequencySpinner"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginBottom="10dp"
             android:spinnerMode="dropdown"
             android:layout_weight="1" />
