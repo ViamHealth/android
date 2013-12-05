@@ -977,7 +977,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             if(lstResultExercise.size()>0){
                 lblExercise.setText("Exercise ("+lstResultExercise.size()+")" );
-                lblexercisecal.setText(String.valueOf(total_calories));
+                lblexercisecal.setText(String.format("%.1f",total_calories));
                 exercise_cal=total_calories;
                 //ExerciseAdapter adapter = new ExerciseAdapter(getSherlockActivity(),R.layout.exercise_list, lstResultExercise);
                 try{

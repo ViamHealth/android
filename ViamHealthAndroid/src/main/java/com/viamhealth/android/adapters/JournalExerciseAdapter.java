@@ -89,7 +89,7 @@ public class JournalExerciseAdapter extends MultiSelectionAdapter<CategoryExerci
         if(holder!=null)
         {
             holder.exercisename.setText(data.getName().toString());
-            holder.calory.setText(data.getCalories().toString());
+            holder.calory.setText(String.format("%.1f",Double.valueOf(data.getCalories())));
             holder.time.setText(data.getTime().toString());
         }
         //holder.delete.setTag(data.getId().toString());
