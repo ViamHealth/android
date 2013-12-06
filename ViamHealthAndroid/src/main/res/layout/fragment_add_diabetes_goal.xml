@@ -13,121 +13,65 @@
         android:id="@+id/section_present">
 
             <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="5dp"
-            android:visibility="gone">
-
-            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/fbs"
-                    android:id="@+id/textView2"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textColor="#000000" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/txt_add_present_fbs"
-                    android:layout_gravity="center|right"
-                    android:gravity="center_vertical|right"
-                    android:paddingRight="10dp"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <SeekBar
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/seekBar_present_fbs"
-                android:layout_gravity="center" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="5dp"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
+                android:layout_marginTop="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/rbs"
-                    android:id="@+id/textView2"
-                    android:layout_gravity="center"
+                    android:text="@string/fastingBloodSugar"
+                    android:id="@+id/textView"
+                    android:gravity="bottom" />
+
+                <EditText
+                    android:id="@+id/add_goal_present_fbs"
+                    android:hint="@string/present_fbs_hint"
+                    android:inputType="numberSigned"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
                     android:gravity="center_vertical|center_horizontal"
-                    android:textColor="#000000" />
+                    android:singleLine="true"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp">
 
                 <TextView
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/txt_add_present_rbs"
-                    android:layout_gravity="center|right"
-                    android:gravity="center_vertical|right"
-                    android:paddingRight="10dp"
-                    android:textColor="#000000" />
-            </LinearLayout>
+                    android:text="@string/randomBloodSugar"
+                    android:id="@+id/textView"
+                    android:gravity="bottom" />
 
-            <SeekBar
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/seekBar_present_rbs"
-                android:layout_gravity="center"/>
+                <EditText
+                    android:id="@+id/add_goal_present_rbs"
+                    android:hint="@string/present_rbs_hint"
+                    android:inputType="numberSigned"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:singleLine="true"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/add_goal_present_fbs"
-            android:hint="@string/present_fbs"
-            android:inputType="numberSigned"
-            android:layout_height="48dp"
-            android:layout_width="match_parent"
-            android:textSize="15sp"
-            android:gravity="center_vertical|center_horizontal"
-            android:singleLine="false"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text=""
-            android:visibility="visible"
-            android:textIsSelectable="false" />
-
-        <EditText
-            android:id="@+id/add_goal_present_rbs"
-            android:hint="@string/present_rbs"
-            android:inputType="numberSigned"
-            android:layout_height="48dp"
-            android:layout_width="match_parent"
-            android:textSize="15sp"
-            android:gravity="center_vertical|center_horizontal"
-            android:singleLine="false"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
@@ -137,118 +81,63 @@
         android:visibility="visible">
 
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="5dp"
-            android:visibility="gone">
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/fbs"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textColor="#000000" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/txt_add_target_fbs"
-                    android:layout_gravity="center|right"
-                    android:gravity="center_vertical|right"
-                    android:paddingRight="10dp"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <SeekBar
-                android:layout_width="fill_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/seekBar_target_fbs"
-                android:layout_gravity="center"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/target_fbs"
+                android:id="@+id/textView"
+                android:gravity="bottom" />
+
+            <EditText
+                android:id="@+id/add_goal_target_fbs"
+                android:inputType="numberSigned"
+                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:singleLine="true"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
         </LinearLayout>
 
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="5dp"
-            android:visibility="gone">
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/rbs"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:textColor="#000000" />
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
-                    android:id="@+id/txt_add_target_rbs"
-                    android:layout_gravity="center|right"
-                    android:gravity="center_vertical|right"
-                    android:paddingRight="10dp"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <SeekBar
-                android:layout_width="fill_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/seekBar_target_rbs"
-                android:layout_gravity="center"/>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/target_rbs"
+                android:id="@+id/textView"
+                android:gravity="bottom" />
+
+            <EditText
+                android:id="@+id/add_goal_target_rbs"
+                android:inputType="numberSigned"
+                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:singleLine="true"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp" />
+
         </LinearLayout>
-
-        <EditText
-            android:id="@+id/add_goal_target_fbs"
-            android:hint="@string/target_fbs"
-            android:inputType="numberSigned"
-            android:layout_height="48dp"
-            android:layout_width="match_parent"
-            android:textSize="15sp"
-            android:gravity="center_vertical|center_horizontal"
-            android:singleLine="false"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp" />
-
-        <EditText
-            android:id="@+id/add_goal_target_rbs"
-            android:hint="@string/target_rbs"
-            android:inputType="numberSigned"
-            android:layout_height="48dp"
-            android:layout_width="match_parent"
-            android:textSize="15sp"
-            android:gravity="center_vertical|center_horizontal"
-            android:singleLine="false"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:textIsSelectable="false" />
-
         <EditText
             android:id="@+id/add_goal_target_date"
             android:hint="target date"

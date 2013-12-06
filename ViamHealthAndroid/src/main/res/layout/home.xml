@@ -35,9 +35,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:src="@drawable/original_logo_white"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="100dp" />
+                android:layout_alignParentTop="false"
+                android:layout_marginTop="100dp"
+                android:layout_centerInParent="true" />
 
             <TextView
                 android:layout_width="fill_parent"
@@ -49,12 +49,33 @@
                 android:layout_alignParentBottom="true"
                 android:text="@string/copyright" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imgLogo" />
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_below="@+id/imgLogo">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/imgLogo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/loggingOutMsg"
+                android:id="@+id/logoutMsg"
+                android:layout_toRightOf="@+id/progressBar"
+                android:layout_alignTop="@+id/progressBar"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp" />
+        </LinearLayout>
 
     </RelativeLayout>
 

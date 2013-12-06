@@ -65,12 +65,12 @@ public class ForgotPassword extends BaseFragmentActivity {
     private boolean isValid(){
         String email = etEmail.getText().toString();
         if(email==null || email.isEmpty()){
-            etEmail.setError("please enter the email-id registered with us");
+            etEmail.setError(getString(R.string.email_registered_with_us_is_mandatory));
             return false;
         }
 
         if(!Validator.isEmailValid(email)){
-            etEmail.setError("please enter a valid email. Eg: abcd@gmail.com");
+            etEmail.setError(getString(R.string.login_user_name_not_email));
             return false;
         }
 
@@ -84,20 +84,20 @@ public class ForgotPassword extends BaseFragmentActivity {
         @Override
         protected void onPreExecute() {
             dialog = new ProgressDialog(ForgotPassword.this, R.style.StyledProgressDialog);
-            dialog.setMessage("about to mail you auto generated password....");
+            dialog.setMessage(getString(R.string.forgotPasswordTaskMessage));
             dialog.show();
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             dialog.dismiss();
-            String msg = "";
+            int msgResId;
             if(aBoolean){
-                msg = "mailed you auto generated password";
+                msgResId = R.string.forgotPasswordTaskSuccess;
             }else{
-                msg = "there was some problem in mailing you, please try again later";
+                msgResId = R.string.forgotPasswordTaskFailure;
             }
-            Toast.makeText(ForgotPassword.this, msg, Toast.LENGTH_LONG).show();
+            Toast.makeText(ForgotPassword.this, msgResId, Toast.LENGTH_LONG).show();
         }
 
         @Override

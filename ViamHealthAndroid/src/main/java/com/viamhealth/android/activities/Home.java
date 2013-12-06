@@ -73,6 +73,7 @@ public class Home extends BaseActivity implements OnClickListener{
     RelativeLayout splashScreen;
     ScrollView scroller;
     ProgressBar bar;
+    TextView logoutMessage;
 
 	ViamHealthPrefs appPrefs;
 	Global_Application ga;
@@ -121,7 +122,9 @@ public class Home extends BaseActivity implements OnClickListener{
         //for generate square
         scroller = (ScrollView)findViewById(R.id.scroller);
         splashScreen = (RelativeLayout) findViewById(R.id.splash);
-        bar = (ProgressBar) findViewById(R.id.progressBar);
+        bar = (ProgressBar) splashScreen.findViewById(R.id.progressBar);
+        logoutMessage = (TextView) splashScreen.findViewById(R.id.logoutMsg);
+        logoutMessage.setVisibility(View.GONE);
 
         scroller.setVisibility(View.GONE);
         splashScreen.setVisibility(View.VISIBLE);
@@ -143,22 +146,14 @@ public class Home extends BaseActivity implements OnClickListener{
             ScreenDimension();
 
             next();
-//            if(lstFamily==null)
-//                lstFamily = new ArrayList<User>();
-//
-//            //Monjyoti:commented
-//            if(Checker.isInternetOn(Home.this)){
-//                GetFamilyListTask task = new GetFamilyListTask();
-//                task.applicationContext = Home.this;
-//                task.execute();
-//            }else{
-//                Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
-//            }
-
         }
     }
 
     private void next() {
+        next(false);
+    }
+
+    private void next(boolean moveToTabActivity) {
         //if the only logged-in user has not yet created the profile than
         //force for profile creation
         User user = ga.getLoggedInUser();
@@ -167,26 +162,30 @@ public class Home extends BaseActivity implements OnClickListener{
             getFamilyData = true;
         }
 
-        if(lstFamily!=null && lstFamily.size()>0)
+        if(lstFamily!=null && lstFamily.size()>0){
             generateView();
+            splashScreen.setVisibility(View.GONE);
+            scroller.setVisibility(View.VISIBLE);
+        }
 
         if(!getFamilyData && !user.isProfileCreated()){
             // logged In User's profile not yet completed then show this
             Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
             addProfileIntent.putExtra("user", user);
             startActivityForResult(addProfileIntent, 0);
-        }
-
-		else if(getFamilyData) {//fetch the data
+        } else if(getFamilyData) {//fetch the data
             lstFamily = new ArrayList<User>();
             if(Checker.isInternetOn(Home.this)){
                 GetFamilyListTask task = new GetFamilyListTask();
                 task.applicationContext = Home.this;
                 task.execute();
             }else{
-                Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
             }
-        }else {//take the user to the goals screen for the loggedInUser\
+        } else if(moveToTabActivity){//take the user to the goals screen for the loggedInUser\
+
+            splashScreen.setVisibility(View.GONE);
+            scroller.setVisibility(View.VISIBLE);
 
             //Monjyoti:commented
             Intent intent = new Intent(Home.this, TabActivity.class);
@@ -198,6 +197,11 @@ public class Home extends BaseActivity implements OnClickListener{
     }
 
     private void logout() {
+        splashScreen.setVisibility(View.VISIBLE);
+        scroller.setVisibility(View.GONE);
+
+        logoutMessage.setVisibility(View.VISIBLE);
+
         if(ga.getLoggedInUser().getProfile()!=null && ga.getLoggedInUser().getProfile().getFbProfileId()!=null
                 && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
             callFacebookLogout();
@@ -253,31 +257,31 @@ public class Home extends BaseActivity implements OnClickListener{
             final EditText newPAgain = (EditText) dialogView.findViewById(R.id.new_again);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.AlertDialogGreenTheme);
-            builder.setTitle("Change Password");
+            builder.setTitle(R.string.changePasswordTitle);
             builder.setView(dialogView);
-            builder.setPositiveButton("Change", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
                 private boolean isValid(){
                     String oStr = old.getText().toString();
                     String nStr = newP.getText().toString();
                     String naStr = newP.getText().toString();
 
                     if(oStr==null || oStr.isEmpty()){
-                        old.setError("old password is mandatory");
+                        old.setError(getString(R.string.oldPasswordMandatory));
                         return false;
                     }
 
                     if(nStr==null || nStr.isEmpty()){
-                        newP.setError("new password is mandatory");
+                        newP.setError(getString(R.string.newPasswordMandatory));
                         return false;
                     }
 
                     if(naStr==null || naStr.isEmpty()){
-                        newPAgain.setError("confirm the new password");
+                        newPAgain.setError(getString(R.string.confirmNewPasswordMandatory));
                         return false;
                     }
 
                     if(!nStr.equals(naStr)){
-                        newP.setError("new passwords do not match");
+                        newP.setError(getString(R.string.newPasswordsDoNotMatch));
                         return false;
                     }
 
@@ -402,8 +406,16 @@ public class Home extends BaseActivity implements OnClickListener{
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             User u = lstFamily.get(position);
-            if(u!=null && u.getProfile()!=null && u.getProfile().getProfilePicURL()!=null &&
-                    !u.getProfile().getProfilePicURL().isEmpty()){
+            if(u==null || u.getProfile()==null || //if user or proile is not yet set
+                    (u.getProfile().getFbProfileId()!=null && !u.getProfile().getFbProfileId().isEmpty()) // if fbId is valid one then
+                    || (u.getProfile().getProfilePicURL()==null || u.getProfile().getProfilePicURL().isEmpty() // if profilePic is default or not set then
+                            || u.getProfile().getProfilePicURL().endsWith("default_profile_picture_n.jpg"))){
+                iv.setVisibility(View.GONE);
+                imgProfile.setVisibility(View.VISIBLE);
+
+                if(u!=null && u.getProfile()!=null)
+                    imgProfile.setProfileId(u.getProfile().getFbProfileId());
+            }else{
                 FileLoader loader = new FileLoader(Home.this, null);
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
@@ -414,12 +426,9 @@ public class Home extends BaseActivity implements OnClickListener{
                         ppv.setVisibility(View.GONE);
                     }
                 });
-            }else{
-                iv.setVisibility(View.GONE);
-                imgProfile.setVisibility(View.VISIBLE);
             }
+
             imgView = iv;
-            imgProfile.setProfileId(lstFamily.get(position).getProfile().getFbProfileId());
 
             Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
             imgProfile.setAnimation(anim);
@@ -440,6 +449,7 @@ public class Home extends BaseActivity implements OnClickListener{
             txtName.setGravity(Gravity.CENTER);
             txtName.setText(lstFamily.get(position).getName());
             txtName.setTag("pname");
+            //txtName.setTypeface();
             lay.addView(txtName);
 
             frm.addView(lay);
@@ -584,7 +594,7 @@ public class Home extends BaseActivity implements OnClickListener{
         protected void onPreExecute()
         {
             dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
-            dialog.setMessage("still capturing your profile...");
+            dialog.setMessage("capturing your profile...");
             dialog.show();
         }
 

@@ -85,33 +85,12 @@ public class FBLoginFragment extends BaseFragment {
                 appPrefs.setFBAccessToken(session.getAccessToken());
                 task.execute();
             }else{
-                Toast.makeText(getActivity(),"there is no network around here...",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
             }
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
         }
     }
-
-//    private void getProfileDataFromFB(final Session session){
-//        String api = "me";
-//        Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
-//            @Override
-//            public void onCompleted(Response response) {
-//                GraphObject graphObject = response.getGraphObject();
-//                FacebookRequestError error = response.getError();
-//                if (graphObject != null) {
-//                    JSONObject jsonResponse = graphObject.getInnerJSONObject();
-//                    if (jsonResponse!=null) {
-//                        FBUser fbUser = FBUser.deserialize(jsonResponse);
-//                        Toast.makeText(getActivity(), "FbUser - " + fbUser.toString(), Toast.LENGTH_LONG).show();
-//                        User user = fbUser.toUser(null);
-//                    }
-//                }
-//            }
-//        });
-//
-//        request.executeAsync();
-//    }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -194,13 +173,14 @@ public class FBLoginFragment extends BaseFragment {
         protected void onPreExecute() {
             //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
             dialog = new ProgressDialog(getActivity(), R.style.StyledProgressDialog);
+            dialog.setMessage(getString(R.string.loginMessage));
             dialog.show();
         }
 
         protected void onPostExecute(Boolean hasFailed) {
             if(hasFailed){
                 dialog.dismiss();
-                Toast.makeText(getActivity(), "wrong credentials were given", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
             }else{
                 dialog.dismiss();
                 Intent i = new Intent(getActivity(), Home.class);
@@ -216,10 +196,6 @@ public class FBLoginFragment extends BaseFragment {
             // TODO Auto-generated method stub
             Boolean hasFailed = true;
             user = userEndPoint.AuthenticateThroughFB(fbToken);
-//            if(createdUser!=null && user!=null){
-//                user.setId(createdUser.getId());
-//                user = userEndPoint.updateUser(user);
-//            }
             if(user!=null)
                 hasFailed = false;
 

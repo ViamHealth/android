@@ -92,7 +92,6 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 
 		appPrefs = new ViamHealthPrefs(Login.this);
 
-        Log.e("TAG","Token is " + appPrefs.getToken());
         dbAdapter=new DataBaseAdapter(getApplicationContext());
         dbAdapter.createDatabase();
         dbAdapter.insertDefaulValues();
@@ -195,7 +194,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 					task.execute();
 				}
 			}else{
-				Toast.makeText(Login.this,"there is no network around here...",Toast.LENGTH_SHORT).show();
+				Toast.makeText(Login.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
 			}
 		}
 		if(v==sign_up){
@@ -238,16 +237,14 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		protected void onPreExecute() {
 			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
 			dialog = new ProgressDialog(Login.this, R.style.StyledProgressDialog);
-			dialog.setMessage("we are validating your identity....");
+			dialog.setMessage(getString(R.string.loginMessage));
 			dialog.show();
-			Log.i("onPreExecute", "onPreExecute");
 		}
 		 
 		protected void onPostExecute(String response) {
-			Log.i("onPostExecute", "onPostExecute");
 			if(!response.equals("0")){
                 dialog.dismiss();
-                Toast.makeText(Login.this, "wrong credentials were given",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Login.this, R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
 			}else{
                 dialog.dismiss();
                 //appPrefs.setUsername(user_name.getText().toString().trim());
@@ -261,7 +258,6 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			Log.i("doInBackground--Object", "doInBackground--Object");
 			return userEndPoint.Login(username, password);
 		}
 		   

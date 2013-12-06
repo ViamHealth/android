@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- All Toast Messages -->
+    <string name="loginMessage">we are validating your identity....</string>
+    <string name="loginFailureMessage">wrong credentials were given</string>
+
+
+    <string name="email_registered_with_us_is_mandatory">please enter the email-id registered with us</string>
+
+
+    <string name="forgotPasswordTaskMessage">about to mail you auto generated password....</string>
+    <string name="forgotPasswordTaskSuccess">mailed you auto generated password</string>
+    <string name="forgotPasswordTaskFailure">there was some problem in mailing you, please try again later</string>
+
+    <string name="changePasswordTitle">Change Password</string>
+    <string name="change">Change</string>
+
+    <string name="oldPasswordMandatory">old password is mandatory</string>
+    <string name="newPasswordMandatory">new password is mandatory</string>
+    <string name="confirmNewPasswordMandatory">confirm the new password</string>
+    <string name="newPasswordsDoNotMatch">new passwords do not match</string>
+
     <string name="networkNotAvailable">Network not availble. Please check your internet connection and then try again.</string>
     <string name="none">None</string>
     <string name="changePassword">Change Password</string>
@@ -124,7 +144,7 @@
     <string name="resgiter">Register</string>
     <string name="confirm_password">#password - confirm</string>
     <string name="login_user_name_not_present">need your identity to log you in</string>
-    <string name="login_user_password_not_present">need your identity to log you in</string>
+    <string name="login_user_password_not_present">need your password to log you in</string>
     <string name="login_user_name_not_email">this doesnt look like an email-id</string>
     <string name="register_user_name_not_present">need your identity to log you in</string>
     <string name="register_user_password_not_present">need your identity to log you in</string>
@@ -147,8 +167,8 @@
     <string name="present_values">Present Data (if you know)</string>
     <string name="fbs">Fasting Blood Sugar</string>
     <string name="rbs">Random Blood Sugar</string>
-    <string name="present_fbs">fasting blood sugar</string>
-    <string name="present_rbs">random blood sugar</string>
+    <string name="present_fbs_hint">empty stomach</string>
+    <string name="present_rbs_hint">1.5-2 hrs after food</string>
     <string name="target_fbs">target fasting blood sugar</string>
     <string name="target_rbs">target random blood sugar</string>
     <string name="present_systolic">systolic pressure</string>
@@ -272,6 +292,20 @@
     <string name="weightGoalAggressiveWarning">You are planning to lose %.1fKg per week. It is an aggressive target. Consider revising your weight loss goal to 0.5Kg per week.</string>
     <string name="weightGoalIdealTarget">It is healthy and ideal to lose upto 0.5Kg per week.</string>
     <string name="weightGoalIdealTargetYourDate">You are planning to lose %.1fKg per week. It is a healthy way to lose. </string>
-    <string name="targetDate">target date</string><string name="repeatFor">eg: 2</string><string name="onceEvery">eg: 3</string><string name="fromdate">eg: 21/03/2013</string>
+    <string name="targetDate">target date</string><string name="repeatFor">eg: 2</string>
+    <string name="onceEvery">eg: 3</string>
+    <string name="fromdate">eg: 21/03/2013</string>
+    <string name="currentHeight">height</string>
+    <string name="cms">cms</string>
+    <string name="presentWeight">weight</string>
+    <string name="kgs">kgs</string>
+    <string name="targetWeight">target weight</string>
+    <string name="fastingBloodSugar">fasting blood sugar</string>
+    <string name="randomBloodSugar">random blood sugar</string>
+    <string name="systolic">systolic pressure</string>
+    <string name="diastolic">diastolic pressure</string>
+    <string name="systolicHint">80 of 80/120</string>
+    <string name="diastolicHint">120 of 80/120</string>
+    <string name="loggingOutMsg">Logging Out...</string>
 
 </resources>

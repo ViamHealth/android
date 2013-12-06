@@ -12,31 +12,85 @@
             android:layout_gravity="center"
             android:visibility="visible">
 
-            <EditText
-                android:id="@+id/add_goal_height_input"
-                android:hint="current height in cms"
-                android:inputType="numberSigned"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
-            <EditText
-                android:id="@+id/add_goal_weight_input"
-                android:hint="current weight in kgs"
-                android:inputType="numberSigned"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/currentHeight"
+                    android:id="@+id/textView"
+                    android:gravity="bottom" />
+
+                <EditText
+                    android:id="@+id/add_goal_height_input"
+                    android:inputType="numberSigned"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:singleLine="true"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/cms"
+                    android:id="@+id/textView2"
+                    android:gravity="bottom" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/presentWeight"
+                    android:id="@+id/textView"
+                    android:gravity="bottom" />
+
+                <EditText
+                    android:id="@+id/add_goal_weight_input"
+                    android:inputType="numberSigned"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:singleLine="true"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/kgs"
+                    android:id="@+id/textView2"
+                    android:gravity="bottom" />
+
+            </LinearLayout>
 
         </LinearLayout>
         <LinearLayout
@@ -46,20 +100,45 @@
             android:layout_gravity="center"
             android:visibility="visible">
 
-            <EditText
-                android:id="@+id/add_goal_target_weight"
-                android:hint="target weight in kgs"
-                android:inputType="numberDecimal|numberSigned"
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
                 android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:numeric="signed|decimal" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/targetWeight"
+                    android:id="@+id/textView"
+                    android:gravity="bottom" />
+
+                <EditText
+                    android:id="@+id/add_goal_target_weight"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:singleLine="true"
+                    android:padding="5dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/kgs"
+                    android:id="@+id/textView2"
+                    android:gravity="bottom" />
+
+            </LinearLayout>
             <EditText
                 android:id="@+id/add_goal_target_date"
                 android:hint="target date"

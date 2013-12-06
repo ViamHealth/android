@@ -112,7 +112,8 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|top">
+                android:layout_gravity="center_horizontal|top"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -183,7 +184,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:id="@+id/profile_img_male"
-                            android:src="@drawable/ic_warning"
+                            android:src="@drawable/ic_woman_disabled"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
@@ -194,7 +195,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:id="@+id/profile_img_female"
-                            android:src="@drawable/ic_warning"
+                            android:src="@drawable/ic_woman_disabled"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="20dp"
                             android:layout_weight="1"
@@ -299,27 +300,70 @@
 
             <LinearLayout android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <EditText
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/input_systolic"
-                    android:layout_gravity="center"
-                    android:hint="@string/present_systolic"
-                    android:gravity="center_horizontal" />
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
 
-                <EditText
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/systolic"
+                        android:id="@+id/textView"
+                        android:gravity="bottom" />
+
+                    <EditText
+                        android:id="@+id/input_systolic"
+                        android:hint="@string/systolicHint"
+                        android:inputType="numberSigned"
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:singleLine="true"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/input_diastolic"
-                    android:layout_gravity="center"
-                    android:hint="@string/present_diastolic"
-                    android:gravity="center_horizontal" />
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/diastolic"
+                        android:id="@+id/textView"
+                        android:gravity="bottom" />
+
+                    <EditText
+                        android:id="@+id/input_diastolic"
+                        android:hint="@string/diastolicHint"
+                        android:inputType="numberSigned"
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:singleLine="true"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -327,26 +371,62 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <EditText
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/input_fasting"
-                    android:layout_gravity="center"
-                    android:hint="@string/present_fbs"
-                    android:gravity="center_horizontal" />
+                    android:layout_height="48dp">
 
-                <EditText
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/fastingBloodSugar"
+                        android:id="@+id/textView"
+                        android:gravity="bottom" />
+
+                    <EditText
+                        android:id="@+id/input_fasting"
+                        android:hint="@string/present_fbs_hint"
+                        android:inputType="numberSigned"
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:singleLine="true"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:id="@+id/input_random"
-                    android:layout_gravity="center"
-                    android:hint="@string/present_rbs"
-                    android:gravity="center_horizontal" />
+                    android:layout_height="48dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/randomBloodSugar"
+                        android:id="@+id/textView"
+                        android:gravity="bottom" />
+
+                    <EditText
+                        android:id="@+id/input_random"
+                        android:hint="@string/present_rbs_hint"
+                        android:inputType="numberSigned"
+                        android:layout_height="fill_parent"
+                        android:layout_width="wrap_content"
+                        android:textSize="18sp"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:singleLine="true"
+                        android:padding="5dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout android:layout_width="fill_parent"

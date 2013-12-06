@@ -463,25 +463,26 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             if(user.getProfile().getMobileNumber()!=null)mobileNumber.setText(user.getProfile().getMobileNumber());
             if(user.getProfile().getOrganization()!=null)organization.setText(user.getProfile().getOrganization());
 
+            if((user.getProfile().getFbProfileId()!=null && !user.getProfile().getFbProfileId().isEmpty())
+                    || (user.getProfile().getProfilePicURL()==null || user.getProfile().getProfilePicURL().isEmpty())){
+                profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+                imgView.setVisibility(View.GONE);
+                profilePic.setVisibility(View.VISIBLE);
+            }else {
+                FileLoader loader = new FileLoader(NewProfile.this, appPrefs.getToken());
+                loader.LoadFile(user.getProfile().getProfilePicURL(), user.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        int size = UIUtility.dpToPx(NewProfile.this, 120);
+                        imgView.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), size, size));
+                        imgView.setVisibility(View.VISIBLE);
+                        profilePic.setVisibility(View.GONE);
+                        }
+                });
+            }
+
         }
 
-        if(user!=null && user.getProfile()!=null && user.getProfile().getProfilePicURL()!=null &&
-                !user.getProfile().getProfilePicURL().isEmpty()){
-            FileLoader loader = new FileLoader(NewProfile.this, appPrefs.getToken());
-            loader.LoadFile(user.getProfile().getProfilePicURL(), user.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
-                @Override
-                public void OnFileLoaded(File file) {
-                    int size = UIUtility.dpToPx(NewProfile.this, 120);
-                    imgView.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), size, size));
-                    imgView.setVisibility(View.VISIBLE);
-                    profilePic.setVisibility(View.GONE);
-                }
-            });
-        }else{
-            profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
-            imgView.setVisibility(View.GONE);
-            profilePic.setVisibility(View.VISIBLE);
-        }
 
         if(user.getBmiProfile()!=null){
             BMIProfile bmip = user.getBmiProfile();
