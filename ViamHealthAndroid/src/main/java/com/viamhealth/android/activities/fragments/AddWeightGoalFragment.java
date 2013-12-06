@@ -120,6 +120,13 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
     @Override
     public void onTargetDateChange() {
+        double targetWeight = Double.parseDouble(tWeight.getText().toString());
+        double presentWeight = user.getBmiProfile().getWeight();
+        if(presentWeight-targetWeight<=1){
+            warningImage.setVisibility(View.GONE);
+            warningText.setVisibility(View.GONE);
+            return;
+        }
         double weightDiffPerWeek = getWeightDiffPerWeek();
         if(weightDiffPerWeek > 1.0){
             warningImage.setVisibility(View.VISIBLE);

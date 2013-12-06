@@ -250,6 +250,16 @@ public class Home extends BaseActivity implements OnClickListener{
             inviteUser.show();
         }
 
+        if(item.getItemId() == R.id.menu_refresh) {
+            if(Checker.isInternetOn(Home.this)){
+                GetFamilyListTask task = new GetFamilyListTask();
+                task.applicationContext = Home.this;
+                task.execute();
+            }else{
+                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
+            }
+        }
+
         if(item.getItemId()==R.id.menu_change_password){
             View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.dialog_change_password, null);
             final EditText old = (EditText) dialogView.findViewById(R.id.old);

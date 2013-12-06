@@ -290,12 +290,12 @@ public class UserEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, "shareUser:" + client.toString());
-        if(client.getResponseCode()!= HttpStatus.SC_CREATED
-                || client.getResponseCode() != HttpStatus.SC_OK
-                || client.getResponseCode() != HttpStatus.SC_NO_CONTENT)
-            return false;
+        if(client.getResponseCode()== HttpStatus.SC_CREATED
+                || client.getResponseCode() == HttpStatus.SC_OK
+                || client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
+            return true;
 
-        return true;
+        return false;
     }
 
     public boolean deleteUser(User user) {
@@ -312,10 +312,10 @@ public class UserEP extends BaseEP {
 
         String responseString = client.getResponse();
         Log.i(TAG, "deleteUser:" + client.toString());
-        if(client.getResponseCode()!= HttpStatus.SC_NO_CONTENT)
-            return false;
+        if(client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
+            return true;
 
-        return true;
+        return false;
     }
 
     // function for get family member list
