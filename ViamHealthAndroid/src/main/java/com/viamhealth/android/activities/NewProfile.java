@@ -779,7 +779,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         @Override
         protected FileUploader.Response doInBackground(Void... params) {
             FileUploader uploader = new FileUploader(appPrefs.getToken());
-            long userId = user.getId();
+            long userId = user==null?0:user.getId();
             if(userId==0){
                 //create user
                 Log.i(TAG, "AsyncTask : Creating a new user as userId = 0 ");

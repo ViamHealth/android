@@ -198,7 +198,7 @@ public class FileUploader {
             Log.e("uploadFile", "Source File not exist :" + fileName);
             activity.runOnUiThread(new Runnable() {
                 public void run() {
-                    Toast.makeText(activity, "Source File not exist :"
+                    Toast.makeText(activity, "file does not exist :"
                             + fileName, Toast.LENGTH_SHORT).show();
                 }
             });
@@ -278,7 +278,7 @@ public class FileUploader {
                             String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
                                     + response.downloadURL;
 
-                            Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
