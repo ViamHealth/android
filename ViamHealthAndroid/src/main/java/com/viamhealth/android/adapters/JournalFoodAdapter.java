@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.activities.FoodDetail;
 import com.viamhealth.android.model.CategoryFood;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import  	android.content.Context;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +22,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
+public class JournalFoodAdapter extends MultiSelectionAdapter<CategoryFood> {
     Context context;
     int layoutResourceId;
     ArrayList<CategoryFood> lstdata = new ArrayList<CategoryFood>();
@@ -32,7 +36,7 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
 
 
     public JournalFoodAdapter(Context context, int layoutResourceId, ArrayList<CategoryFood> lstdata) {
-        super(context, layoutResourceId, lstdata);
+        super(context, lstdata);
         // TODO Auto-generated constructor stub
 
         this.layoutResourceId = layoutResourceId;
@@ -40,7 +44,7 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
         this.lstdata = lstdata;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getItemView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         FileDataHolder holder = null;
         appPrefs=new ViamHealthPrefs(context);
@@ -67,6 +71,10 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
             holder.foodname = (TextView)row.findViewById(R.id.foodname);
             holder.calory = (TextView)row.findViewById(R.id.cal_value);
             holder.surning = (TextView)row.findViewById(R.id.serving_val);
+            holder.sugar = (TextView)row.findViewById(R.id.sugar_value);
+            holder.cholesterol = (TextView)row.findViewById(R.id.cholesterol_value);
+            holder.fat = (TextView)row.findViewById(R.id.fat_value);
+
 
             // holder.surning.getLayoutParams().width = w30;
 /*
@@ -87,7 +95,19 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
 
 
             row.setTag(holder);
-         */
+
+
+            holder.foodname.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(context,"clicked",Toast.LENGTH_LONG).show();
+                    Toast.makeText(context,"onItemClick",Toast.LENGTH_SHORT).show();
+                    Intent foodDetail = new Intent(context, FoodDetail.class);
+                    //foodDetail.putExtra("user", user);
+                    context.startActivity(foodDetail);
+                }
+            });
+            */
         }
         else
         {
@@ -99,21 +119,24 @@ public class JournalFoodAdapter extends ArrayAdapter<CategoryFood> {
 
         CategoryFood data = lstdata.get(position);
 
-        holder.foodname.setText(data.getName().toString());
-
-        float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
-
-        holder.calory.setText(String.valueOf(calories));
-
-        holder.surning.setText(data.getMultiplier().toString());
-
+        if(holder!=null)
+        {
+            holder.foodname.setText(data.getName().toString());
+            float calories=Float.valueOf(data.getCalories())*Float.valueOf(data.getMultiplier());
+            Log.e("TAG","value of calories and textview calorie =" +calories+" "+holder.calory);
+            holder.calory.setText(String.valueOf(calories));
+            holder.surning.setText(data.getMultiplier().toString()+" "+data.getServingUnit().toString());
+            holder.sugar.setText(data.getSugar().toString());
+            holder.cholesterol.setText(data.getCholesterol().toString());
+            holder.fat.setText(data.getFat().toString());
+        }
        // holder.delete.setTag(data.getId().toString());
         return row;
     }
 
     static class FileDataHolder
     {
-        TextView foodname,calory,surning;
+        TextView foodname,calory,surning,sugar,cholesterol,fat;
         ImageView delete;
         LinearLayout main_list_layout;
     }

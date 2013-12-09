@@ -2,22 +2,26 @@ package com.viamhealth.android.activities;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.BreakfastAdapter;
 import com.viamhealth.android.adapters.DinnerAdapter;
-import com.viamhealth.android.adapters.ExerciseAdapter;
 import com.viamhealth.android.adapters.LunchAdapter;
 import com.viamhealth.android.adapters.SnacksAdapter;
 import com.viamhealth.android.dao.restclient.old.functionClass;
@@ -26,7 +30,7 @@ import com.viamhealth.android.model.users.User;
 /**
  * Created by Administrator on 10/14/13.
  */
-public class AddExercise extends Activity{
+public class AddExercise extends BaseActivity {
     functionClass obj;
     String weight,time_spent,physical_activity_id,calories_spent="";
     EditText time_val,calories_val;
@@ -34,7 +38,9 @@ public class AddExercise extends Activity{
     User user;
     int time_type=0;
     float time_float;
-    TextView btnSave,btnCancel;
+    Button btnSave,btnCancel;
+    String date;
+    String exercise_list[]=null;
 
 
 
@@ -49,10 +55,29 @@ public class AddExercise extends Activity{
         calories_val=(EditText)findViewById(R.id.txt_calories);
         physical_activity_type=(Spinner)findViewById(R.id.exercise_type);
         physical_activity_type.setOnItemSelectedListener(new CustomOnExerciseSelectedListener());
+
+        date=getIntent().getStringExtra("activity_date");
+        //ArrayAdapter<String> yourAdapter=new ArrayAdapter<String>(this, R.layout.custom_spinner_item, R.array.duration_type);
+
+
+        RetrieveExerciseList fillExercise= new RetrieveExerciseList();
+        fillExercise.execute();
+
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.time_type, R.layout.custom_spinner_item); //change the last argument here to your xml above.
+        //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        time_check.setAdapter(typeAdapter);
+
+
+
+
+        //TextView tv=(TextView)time_check.getSelectedView();
+        //tv.setTextColor(Color.BLACK);
+
         time_check.setOnItemSelectedListener(new CustomOnTimeSelectedListener());
 
 
-        btnSave=(TextView)findViewById(R.id.btnSave);
+        btnSave=(Button)findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +107,12 @@ public class AddExercise extends Activity{
             }
         });
 
-        btnCancel=(TextView)findViewById(R.id.btnCancel);
+
+        getSupportActionBar().setTitle("Add Exercise");
+        getSupportActionBar().setSubtitle(user.getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        btnCancel=(Button)findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,9 +120,16 @@ public class AddExercise extends Activity{
             }
         });
 
-
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public class CustomOnTimeSelectedListener implements AdapterView.OnItemSelectedListener {
 
@@ -114,12 +151,57 @@ public class AddExercise extends Activity{
     public class CustomOnExerciseSelectedListener implements AdapterView.OnItemSelectedListener {
 
         public void onItemSelected(AdapterView<?> parent, View view, int pos,long id) {
-            physical_activity_id=String.valueOf(pos);
+            physical_activity_id=String.valueOf(pos+1);
         }
         @Override
         public void onNothingSelected(AdapterView<?> arg0) {
             // TODO Auto-generated method stub
             time_type=0;
+        }
+
+    }
+
+
+    public class RetrieveExerciseList extends AsyncTask<String, Void,String>
+    {
+        protected FragmentActivity activity;
+        ProgressDialog mDialog;
+
+        @Override
+        protected void onPreExecute()
+        {
+            mDialog=new ProgressDialog(AddExercise.this);
+            mDialog.setMessage("Please Wait...");
+            mDialog.show();
+
+        }
+
+        protected void onPostExecute(String result)
+        {
+            if(mDialog!=null)
+            {
+                mDialog.dismiss();
+                mDialog=null;
+            }
+            Toast.makeText(getApplicationContext(),"time_spent  = "+time_spent,Toast.LENGTH_LONG).show();
+
+            ArrayAdapter exerciseAdapter = new ArrayAdapter (AddExercise.this, R.layout.custom_spinner_item,exercise_list);
+ //change the last argument here to your xml above.
+            //typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            physical_activity_type.setAdapter(exerciseAdapter);
+            //finish();
+
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            Log.i("doInBackground--Object", "doInBackground--Object");
+            //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
+
+            exercise_list=obj.retrieveExercise();
+            return null;
         }
 
     }
@@ -134,7 +216,7 @@ public class AddExercise extends Activity{
         protected void onPreExecute()
         {
 
-
+            Toast.makeText(getApplicationContext(),"physical activity id="+physical_activity_id,Toast.LENGTH_SHORT).show();
 
         }
 
@@ -152,7 +234,7 @@ public class AddExercise extends Activity{
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 
-            obj.addExercise(user.getBmiProfile().getWeight().toString(),time_spent,physical_activity_id,calories_spent,user.getId().toString());
+            obj.addExercise(user.getBmiProfile().getWeight().toString(),time_spent,physical_activity_id,calories_spent,user.getId().toString(),date);
             return null;
         }
 

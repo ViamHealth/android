@@ -1,39 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="horizontal" 
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:background="#ffffff">
-    
-    <LinearLayout 
+
+    <LinearLayout
         android:id="@+id/main_list_layout"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
+        android:layout_gravity="center_vertical"
         android:orientation="horizontal"
-    					>
-         <LinearLayout 
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:orientation="horizontal"
-        
-           android:layout_gravity="center_vertical"
-        >
-           <TextView android:id="@+id/food_name"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+            <TextView android:id="@+id/food_name"
                 android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:text="Egg Whites"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical|left"
+                android:textSize="16sp"
+                android:singleLine="false"
+                android:layout_marginLeft="10dp"
+                android:minHeight="36dp"
+                android:gravity="center_vertical"
+                android:layout_marginRight="10dp" />
+
+
+            <ImageView android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:textColor="#000000"
-                android:text="EGG WHITES"
-                android:textSize="14sp"
-                 android:layout_weight="1"
-                android:textStyle="bold"
-                />
-           
-      
-      		<ImageView android:layout_height="wrap_content"
-      		    android:layout_width="wrap_content"
-      		    android:padding="5dp"
-      		 
-      		    android:src="@drawable/addindicator"/>
-        </LinearLayout>
- </LinearLayout>
+                android:src="@drawable/ic_content_new_green"
+                android:layout_marginRight="10dp" />
+    </LinearLayout>
 </LinearLayout>

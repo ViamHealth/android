@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    tools:context=".activities.Login">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_margin="20dp">
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:id="@+id/reminder_name"
+            android:hint="@string/hint_reminder_medicine_name" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/medicine_layout"
+            android:baselineAligned="false"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#efefef"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/morning"
+                    android:id="@+id/textView"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/etMorning"
+                    android:text="(09:00 AM)"
+                    android:clickable="false"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:ems="10" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/etMorningCount"
+                    android:hint="@string/dosage"
+                    android:gravity="center_horizontal"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/noon"
+                    android:id="@+id/textView"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/etNoon"
+                    android:text="(03:00 PM)"
+                    android:clickable="false"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:hint="@string/dosage"
+                    android:gravity="center_horizontal"
+                    android:id="@+id/etNoonCount"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/night"
+                    android:id="@+id/textView"
+                    android:textColor="#000000"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="time"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/etNight"
+                    android:text="(09:00 PM)"
+                    android:clickable="false"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:hint="@string/dosage"
+                    android:gravity="center_horizontal"
+                    android:id="@+id/etNightCount"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/repeat"
+                android:id="@+id/textView3"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center_vertical|left"
+                android:textAlignment="gravity"
+                android:gravity="center_vertical|left"
+                android:layout_marginTop="15dp" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_navigation_next_item_white"
+                android:layout_gravity="right"
+                android:layout_marginRight="20dp"
+                android:id="@+id/repeatBtn"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Small Text"
+                android:id="@+id/repeatTextView"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_alignParentBottom="false"
+                android:layout_below="@+id/repeatBtn"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="10dp"
+                android:singleLine="false" />
+        </RelativeLayout>
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:id="@+id/etComment"
+            android:hint="@string/notes"
+            android:layout_marginTop="20dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:text="@string/save"
+        android:id="@+id/btnSave"
+        android:layout_gravity="center_horizontal|bottom"/>
+
+</FrameLayout>

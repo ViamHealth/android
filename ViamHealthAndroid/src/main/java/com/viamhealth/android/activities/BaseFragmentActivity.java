@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Display;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * Created by naren on 05/10/13.
  */
-public class BaseFragmentActivity extends FragmentActivity {
+public class BaseFragmentActivity extends SherlockFragmentActivity {
 
     Display display;
     int height,width;
@@ -36,5 +38,15 @@ public class BaseFragmentActivity extends FragmentActivity {
         h20=(int)((height*4.17)/100);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
+    }
 }

@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".UploadFile" 
-    android:background="#37aa4f"
+    tools:context=".UploadFile"
     android:orientation="vertical">
   <FrameLayout 
     android:id="@+id/main_layout"
@@ -21,19 +20,18 @@
             android:id="@+id/profile_submid_layout"
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
-       android:orientation="vertical"
+            android:orientation="vertical"
             android:padding="10dp">
             <LinearLayout android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
-                android:orientation="horizontal"
-                android:background="#ffffff">
+                android:orientation="horizontal">
             	<FrameLayout android:layout_height="wrap_content"
                 android:layout_width="fill_parent"
                 android:id="@+id/l1"
                 >
 
-                    <ImageView android:layout_height="96dp"
-                        android:layout_width="96dp"
+                    <ImageView android:layout_height="198dp"
+                        android:layout_width="198dp"
                         android:src="@drawable/ic_collections_collection"
                         android:id="@+id/img_display"
                         android:layout_gravity="center" />
@@ -42,30 +40,36 @@
                         android:layout_width="wrap_content"
                         android:text="Upload Photo"
                         android:paddingLeft="10dp"
-                        android:textColor="#444444"
                         android:textSize="18dp"
-
                         android:layout_gravity="center_horizontal|bottom"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:id="@+id/txtViewUpload"
+                        android:visibility="gone" />
 
                 </FrameLayout>
             </LinearLayout>
             
    <LinearLayout android:layout_height="wrap_content"
        android:layout_width="fill_parent"
-       android:orientation="horizontal"
+       android:orientation="vertical"
        android:paddingLeft="20dp"
        android:paddingRight="20dp"
-       android:paddingTop="10dp"
-       android:background="#ffffff">
+       android:paddingTop="30dp">
+
+       <EditText
+           android:layout_width="fill_parent"
+           android:layout_height="fill_parent"
+           android:id="@+id/file_name"
+           android:hint="@string/file_name"
+           android:gravity="center_horizontal" />
 
        <EditText android:layout_height="wrap_content"
            android:layout_width="fill_parent"
            android:id="@+id/file_desc"
-           style="@style/EditTextGreenTheme"
            android:hint="@string/file_title"
            android:textAlignment="center"
-           android:gravity="center_vertical|center_horizontal" />
+           android:gravity="center_vertical|center_horizontal"
+           android:visibility="gone" />
    </LinearLayout>
  <LinearLayout android:id="@+id/newval_btn_layout"
                 android:layout_height="fill_parent"
@@ -73,16 +77,14 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal|bottom"
                 android:paddingBottom="20dp"
-     android:background="#37AA4F">
+     android:visibility="gone">
                       <Button
                           android:id="@+id/btnUpload"
                           android:layout_width="fill_parent"
                           android:layout_height="wrap_content"
                           android:gravity="center_vertical|center"
                           android:text="Save"
-                          android:textColor="#ffffff"
-                          android:textSize="23sp"
-                          style="@style/ButtonReverseTheme" />
+                          android:textSize="23sp"/>
 
      <TextView
          android:layout_width="wrap_content"

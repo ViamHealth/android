@@ -1,6 +1,11 @@
 package com.viamhealth.android.dao.restclient.old;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +47,7 @@ public class functionClass {
 	// seach food item
 	
 	
-		public ArrayList<FoodData> SearchFoodItem(String searchKey){
+		public ArrayList<FoodData> SearchFoodItem(String searchKey, int pageNumber){
 			ga=new Global_Application();
 			ArrayList<FoodData> lstResult = new ArrayList<FoodData>();
 			String responsetxt;
@@ -52,8 +57,13 @@ public class functionClass {
 			}else{
 				val=searchKey;
 			}
-			String baseurlString = Global_Application.url+"food-items/?search="+val;    
-			Log.e("TAG","url is : " + baseurlString);
+            try {
+                val = URLEncoder.encode(val, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            String baseurlString = Global_Application.url+"food-items/?page_size=1000&page="+pageNumber+"&search="+val;
+			Log.e("FoodEP","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString.trim());   
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -66,6 +76,7 @@ public class functionClass {
 				e.printStackTrace();
 			}
 
+            Log.i("FoodEP", client.toString());
 			responseString = client.getResponse();
 			
 				try {
@@ -195,11 +206,11 @@ public class functionClass {
 		}
 
 
-        public ArrayList<CategoryExercise> getExercise(String user)
+        public ArrayList<CategoryExercise> getExercise(String user,String date)
         {
             ArrayList<CategoryExercise>	lstData = new ArrayList<CategoryExercise>();
-            String baseurlString = Global_Application.url+"user-physical-activity/?user="+user;
-            Log.e("TAG","url is : " + baseurlString);
+            String baseurlString = Global_Application.url+"user-physical-activity/?user="+user+"&activity_date="+date;
+            Log.e("TAG"," get Exercise url is : " + baseurlString);
 
             RestClient client = new RestClient(baseurlString);
             client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -235,11 +246,13 @@ public class functionClass {
         }
 
 
-		public ArrayList<CategoryFood> FoodListing(String baseurlString){
+		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date,String user){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
-			RestClient client = new RestClient(baseurlString);   
+            baseurlString+="&user="+user+"&diet_date="+date;
+			RestClient client = new RestClient(baseurlString);
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-            Log.e("TAG","baseurlString : " + baseurlString);
+            Log.e("TAG","baseurlString food listing: " + baseurlString);
+            //client.AddParam("diet_date",date);
 		  
 			try
 			{
@@ -290,7 +303,8 @@ public class functionClass {
 								 Log.e("TAG","res : " + responseString1);
 								 Log.e("TAG","Calories : "  + jObject1.getString("calories"));
 								 Global_Application.totalcal+=jObject1.getDouble("calories")*multiplier;
-										 lstResult.add(new CategoryFood(c.getString("id"),c.getString("food_item"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count")));
+                                 Log.e("TAG","total_calories : " + Global_Application.totalcal);
+										 lstResult.add(new CategoryFood(c.getString("id"),c.getString("food_item"),jObject1.getString("name"), jObject1.getString("calories"), c.getString("food_quantity_multiplier"),jObject1.getString("quantity"),jObject.getString("count"),jObject1.getString("total_fat"),jObject1.getString("cholesterol"),jObject1.getString("sugars"),jObject1.getString("quantity_unit")));
 								
 								}catch (JSONException e) {
 									// TODO Auto-generated catch block
@@ -315,6 +329,9 @@ public class functionClass {
         client.AddParam("food_item", food_item);
         client.AddParam("meal_type", meal_type);
         client.AddParam("food_quantity_multiplier", food_quantities);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        client.AddParam("diet_date",sdf.format(date));
 
 
         try
@@ -366,6 +383,9 @@ public class functionClass {
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                     Log.e("TAG","Delete Food : " + baseurlString);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = new Date();
+                    client.AddParam("diet_date",sdf.format(date));
 				  
 					try
 					{
@@ -405,14 +425,20 @@ public class functionClass {
 
 
 
-		public String AddFood(String id,String mealtype,String food_quantity_multiplier){
+		public String AddFood(String id,String mealtype,String food_quantity_multiplier,String userid,String date){
         String responce="1";
-        String baseurlString = Global_Application.url+"diet-tracker/";
+        String baseurlString = Global_Application.url+"diet-tracker/"+"?user="+userid;
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
         client.AddParam("food_item", id);
         client.AddParam("meal_type", mealtype);
         client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //Date date = new Date();
+        client.AddParam("diet_date",date);
+
+        Log.e("TAG","url for add food : " + baseurlString);
+
         try
         {
             client.Execute(RequestMethod.POST);
@@ -422,7 +448,7 @@ public class functionClass {
         }
 
         responseString = client.getResponse();
-        Log.e("TAG","Responce : " + responseString);
+        Log.e("TAG","Responce for add food : " + responseString);
         try {
             jObject = new JSONObject(responseString);
             if(responseString.length()>0){
@@ -980,7 +1006,10 @@ public class functionClass {
 					return "0";
 				}
 		// function for get file data
-				public ArrayList<FileData> getFile(String baseurlString){
+				public ArrayList<FileData> getFile(Long userId, String searchString){
+                    String baseurlString = Global_Application.url + "healthfiles/?page_size=100&user=" + userId;
+                    if(searchString!=null && !searchString.isEmpty())
+                        baseurlString += "&search=" + searchString;
 					ArrayList<FileData>	lstData = new ArrayList<FileData>();
 					Log.e("TAG","url is : " + baseurlString);
 					
@@ -996,6 +1025,9 @@ public class functionClass {
 						e.printStackTrace();
 					}
 
+                    if(client.getResponseCode()>400){
+                        return null;
+                    }
 					responseString = client.getResponse();
 					Log.e("TAG","Response string " + responseString);
 					
@@ -1007,10 +1039,16 @@ public class functionClass {
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
-										 
-				                      lstData.add(new FileData(c.getString("id").toString(), c.getString("user").toString(), c.getString("name").toString(), c.getString("description").toString(), c.getString("download_url")));
+
+                                      FileData data = new FileData(c.getString("id").toString(), c.getString("user"),
+                                              c.getString("name"), c.getString("description"),
+                                              c.getString("download_url"), c.getString("mime_type"));
+                                      data.setUpdatedBy(c.getLong("updated_by"));
+                                      data.setUpdatedByName(c.getString("updated_by_name"));
+                                      data.setUpdatedOn(c.getLong("updated_at")*1000);
+				                      lstData.add(data);
 				  				 }
-				              
+
 							 Log.e("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
@@ -1102,17 +1140,55 @@ public class functionClass {
 					return lstData;
 				}
 
-                public void addExercise(String weight,String time_spent,String physical_activity_id,String calories_spent,String user)
+    public String[] retrieveExercise() {
+
+        String[] exercise_list=null;
+        String baseurlString = Global_Application.url+"physical-activity/?page_size=900";
+        RestClient client = new RestClient(baseurlString);
+        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        try
+        {
+            client.Execute(RequestMethod.GET);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        responseString = client.getResponse();
+        Log.e("TAG","get exercise list Response string " + responseString);
+        JSONObject jObject = null;
+        try {
+            jObject = new JSONObject(responseString);
+
+        JSONArray jarray= null;
+            jarray = jObject.getJSONArray("results");
+
+        exercise_list=new String[jarray.length()];
+        for (int i = 0; i < jarray.length(); i++)
+        {
+            exercise_list[i]=jarray.getJSONObject(i).getString("label");
+        }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return exercise_list;
+    }
+
+
+
+
+                public void addExercise(String weight,String time_spent,String physical_activity_id,String calories_spent,String user,String date)
                 {
                       ArrayList<CategoryExercise> lst= new ArrayList<CategoryExercise>();
                       String baseurlString = Global_Application.url+"user-physical-activity/?user="+user;
-                      Log.e("TAG","url is : " + baseurlString);
+                      Log.e("TAG","add exercise url is : " + baseurlString);
                       RestClient client = new RestClient(baseurlString);
                       client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
                       client.AddParam("weight", weight);
                       client.AddParam("time_spent",time_spent);
                       client.AddParam("physical_activity",physical_activity_id);
                       client.AddParam("user_calories_spent", calories_spent);
+                      client.AddParam("activity_date",date);
                       try
                       {
                         client.Execute(RequestMethod.POST);
@@ -1653,7 +1729,7 @@ public class functionClass {
 				public ArrayList<MedicalData> UpdateMedication(String id,String user_id,String type,String name,String detail,String morning,String afternoon,
 															String evening,String night,String start_timestamp,
 														    String repeat_hour,String repeat_day,String repeat_mode,String repeat_min,
-														    String repeat_weekday,String repeat_day_interval){
+														    String repeat_weekday,String repeat_day_interval,String start_date,String end_date){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"reminders/"+id+"/"+"?type="+type;  //?user="+user_id;
 					Log.e("TAG","url is : " + baseurlString);
@@ -1678,6 +1754,8 @@ public class functionClass {
 					client.AddParam("repeat_min", repeat_min.toString());
 					client.AddParam("repeat_weekday", repeat_weekday.toString());
 					client.AddParam("repeat_day_interval", repeat_day_interval.toString());
+                    client.AddParam("start_date",start_date);
+                    client.AddParam("end_date",end_date);
 					
 					try
 					{

@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-
-import com.viamhealth.android.activities.oldones.InviteUser;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 
 import com.viamhealth.android.dao.restclient.old.functionClass;
@@ -49,7 +47,7 @@ import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-public class AddNewValue extends Activity implements OnClickListener {
+public class AddNewValue extends BaseActivity implements OnClickListener {
 	private static ProgressDialog dialog;
 	
 	Display display;
@@ -407,8 +405,8 @@ public class AddNewValue extends Activity implements OnClickListener {
 			menu_invite_food.setVisibility(View.VISIBLE);
 			menu_invite_out_food.setVisibility(View.INVISIBLE);
 			Log.e("TAG","Clicked");
-			Intent i = new Intent(AddNewValue.this,InviteUser.class);
-			startActivity(i);
+			//Intent i = new Intent(AddNewValue.this,InviteUser.class);
+			//startActivity(i);
 		}
 		if(v==btn_date_picker){
 			//appPrefs.setDateAdded("0");

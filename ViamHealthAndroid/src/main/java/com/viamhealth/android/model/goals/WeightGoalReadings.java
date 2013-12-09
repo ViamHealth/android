@@ -83,4 +83,14 @@ public class WeightGoalReadings extends GoalReadings implements Parcelable {
 
         return object;
     }
+
+    @Override
+    public int getMax() {
+        return new Double(weight).intValue();
+    }
+
+    @Override
+    public int getMin() {
+        return new Double(weight).intValue();
+    }
 }

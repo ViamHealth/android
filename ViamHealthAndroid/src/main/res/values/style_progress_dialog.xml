@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="StyledDialog" parent="@android:style/Theme.Holo.Light.Dialog">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:buttonBarStyle">@style/StyledDialog.ButtonBar</item>
+        <item name="android:colorBackgroundCacheHint">@android:color/white</item>
+        <item name="android:textViewStyle">@style/TextViewGreentheme</item>
+        <item name="android:tabWidgetStyle">@style/TabWidgetGreentheme</item>
+        <item name="android:editTextStyle">@style/EditTextGreentheme</item>
+        <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGreentheme</item>
+        <item name="android:checkboxStyle">@style/CheckBoxGreentheme</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonGreentheme</item>
+        <item name="android:buttonStyle">@style/ButtonGreentheme</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonGreentheme</item>
+        <item name="android:spinnerStyle">@style/SpinnerGreentheme</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerGreentheme.DropDown</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGreentheme</item>
+        <item name="android:progressBarStyleHorizontal">@style/ProgressBarGreentheme</item>
+        <item name="android:seekBarStyle">@style/SeekBarGreentheme</item>
+        <item name="android:ratingBarStyle">@style/RatingBarGreentheme</item>
+        <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreentheme</item>
+        <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreentheme</item>
+        <item name="android:buttonStyleToggle">@style/ToggleGreentheme</item>
+        <item name="android:listViewStyle">@style/ListViewGreentheme</item>
+        <item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemGreentheme</item>
+        <!--<item name="android:dialogTitleDecorLayout">@layout/base_dialog_title</item>-->
+    </style>
+
+    <style name="StyledDialog.ButtonBar">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:dividerPadding">0dp</item>
+    </style>
+
+    <style name="AlertDialogGreenTheme" parent="@style/StyledDialog">
+        <item name="android:alertDialogStyle">@style/AlertDialogStyle</item>
+    </style>
+
+    <style name="StyledProgressDialog" parent="@style/AlertDialogGreenTheme">
+
+    </style>
+
+    <style name="AlertDialogStyle">
+        <item name="android:fullDark">@android:color/white</item>
+        <item name="android:topDark">@android:color/white</item>
+        <item name="android:centerDark">@android:color/white</item>
+        <item name="android:bottomDark">@android:color/white</item>
+        <item name="android:fullBright">@android:color/white</item>
+        <item name="android:topBright">@android:color/white</item>
+        <item name="android:centerBright">@android:color/white</item>
+        <item name="android:bottomBright">@android:color/white</item>
+        <item name="android:bottomMedium">@android:color/white</item>
+        <item name="android:centerMedium">@android:color/white</item>
+    </style>
+</resources>

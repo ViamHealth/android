@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.viamhealth.android.Global_Application;
-import com.viamhealth.android.activities.fragments.TabHeaderFragment;
 import com.viamhealth.android.adapters.GoalDataAdapter;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -95,17 +94,10 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
         w120=(int)((width*37.5)/100);
         h40=(int)((height*8.33)/100);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        TabHeaderFragment headerFragment = new TabHeaderFragment();
         Intent intent = getIntent();
         Bundle bundle = new Bundle();
         user = intent.getParcelableExtra("user");
         bundle.putParcelable("user", user);
-        headerFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.headerlayout, headerFragment);
-        fragmentTransaction.commit();
 
         LinearLayout main=(LinearLayout)findViewById(R.id.main);
         main.setPadding(0, h10, 0, h10);
@@ -118,6 +110,7 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
         
         addBtn= (Button)findViewById(R.id.addBtn);
         addBtn.setOnClickListener(FoodDetail.this);
+        addBtn.setText("DONE");
         
         titleTxt = (TextView)findViewById(R.id.titleTxt);
         titleTxt.getLayoutParams().width = w120;
@@ -200,13 +193,15 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		if(v==addBtn){
+            finish();
+            /*
 			if(isInternetOn()){
 				CallAddFoodTask task = new CallAddFoodTask();
 				 task.activity =FoodDetail.this;
 				 task.execute();
 			}else{
 				Toast.makeText(FoodDetail.this,"Network is not available....",Toast.LENGTH_SHORT).show();
-			}
+			}*/
 		}
 	}
 	// async class for calling webservice and get responce message
@@ -249,7 +244,7 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 				Log.i("doInBackground--Object", "doInBackground--Object");
 				//ga.lstResult=obj.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
 			
-				return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1");
+				return obj.AddFood(ga.getLstFood().get(ga.getFoodPos()).getId(), ga.getFoodType().toUpperCase(), "1","user_id","");
 			}
 			   
 		}     

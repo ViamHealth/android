@@ -110,8 +110,9 @@ public class GoalsEPHelper extends BaseEP {
         Map<MedicalConditions, Goal> map = new LinkedHashMap<MedicalConditions, Goal>();
 
         WeightGoal weightGoal = (WeightGoal)weight.getGoalsForUser(userId);
-        if(weightGoal != null)
+        if(weightGoal != null){
             map.put(MedicalConditions.Obese, weightGoal);
+        }
 
         DiabetesGoal dGoal = (DiabetesGoal) sugar.getGoalsForUser(userId);
         if(dGoal != null)
@@ -141,9 +142,9 @@ public class GoalsEPHelper extends BaseEP {
         return map;
     }
 
-    public Goal createGoal(MedicalConditions mc, Goal goal, Long userId) {
+    public Goal saveGoal(MedicalConditions mc, Goal goal, Long userId) {
         GoalsEP ep = getEndPoint(mc);
-        return ep.createGoalForUser(userId, goal);
+        return ep.saveGoalForUser(userId, goal);
     }
 
     public Goal updateGoal(MedicalConditions mc, Goal goal, Long userId) {

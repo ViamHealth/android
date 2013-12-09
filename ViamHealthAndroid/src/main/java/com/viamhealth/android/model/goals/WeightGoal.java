@@ -3,11 +3,14 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.viamhealth.android.utils.JsonGraphDataBuilder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -15,6 +18,7 @@ import java.util.List;
  */
 public class WeightGoal extends Goal implements Parcelable {
     double weight;
+
     //List<WeightGoalReadings> readings = new ArrayList<WeightGoalReadings>();
 
     @Override
@@ -23,8 +27,9 @@ public class WeightGoal extends Goal implements Parcelable {
     }
 
     @Override
-    public void setReadings(List<GoalReadings> readings) {
-        for(GoalReadings reading : readings){
+    public void setReadings(List<GoalReadings> rds) {
+        this.readings.clear();
+        for(GoalReadings reading : rds){
             this.readings.add((WeightGoalReadings) reading);
         }
     }
@@ -64,7 +69,18 @@ public class WeightGoal extends Goal implements Parcelable {
     public WeightGoal(Parcel in) {
         super(in);
         this.weight = in.readDouble();
-        this.readings = in.readArrayList(null);
+        int readingsCount = in.readInt();
+        //WeightGoalReadings[] readArr;// = new WeightGoalReadings[readingsCount];
+        Parcelable[] readArr = in.readParcelableArray(WeightGoalReadings.class.getClassLoader());
+        if(readingsCount>0){
+            //readArr = in.readParcelableArray(WeightGoalReadings.class.getClassLoader());
+            this.readings = new ArrayList<GoalReadings>(readingsCount);
+            for(int i=0; i<readingsCount; i++){
+                 this.readings.add((WeightGoalReadings)readArr[i]);
+            }
+        }else{
+            this.readings = new ArrayList<GoalReadings>();
+        }
     }
 
     @Override
@@ -76,8 +92,11 @@ public class WeightGoal extends Goal implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeDouble(this.weight);
-        WeightGoalReadings[] readArr = new WeightGoalReadings[this.readings.size()];
+        int readingsCount = this.readings==null?0:this.readings.size();
+        WeightGoalReadings[] readArr = new WeightGoalReadings[readingsCount];
+        dest.writeInt(readingsCount);
         dest.writeParcelableArray(this.readings.toArray(readArr), flags);
+        //dest.writeTypedArray(this.readings.toArray(readArr), flags);
     }
 
     public static final Parcelable.Creator<WeightGoal> CREATOR = new Parcelable.Creator<WeightGoal>() {
@@ -103,7 +122,6 @@ public class WeightGoal extends Goal implements Parcelable {
 
         return object;
     }
-
 
     public class HealthyRange extends Goal.HealthyRange {
         private double maxWeight;
@@ -137,6 +155,16 @@ public class WeightGoal extends Goal implements Parcelable {
             }
 
             return healthyRangeJSON;
+        }
+
+        @Override
+        public int getMax() {
+            return new Double(maxWeight).intValue();
+        }
+
+        @Override
+        public int getMin() {
+            return new Double(minWeight).intValue();
         }
     }
 }

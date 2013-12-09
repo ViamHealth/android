@@ -25,21 +25,25 @@ console.log(android);
 $(function () {
     $('#container').highcharts({
         chart: {
-            type: "spline"
+            type: "spline",
+            events: {
+                    click: function(e) {
+                        goals.addValue();
+                    }
+            }
         },
         title: {
-            text: "Blood Sugar Goal"
+            text: "Blood Sugar"
         },
         legend: {
             enabled: false
         },
         xAxis: {
-            tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
             },
-            max: android.goal.targetDate,
+            //max: android.goal.targetDate,
             plotLines: [{
                 value: android.goal.targetDate,
                 width: 2,
@@ -115,7 +119,21 @@ $(function () {
                 zIndex: 2
             }                       ],
             type: 'linear',
-            min: 20
+            min: android.yAxis.min,
+            max: android.yAxis.max
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function() {
+                            //alert ('Category: '+ this.x +', value: '+ this.y);
+                            goals.onItemClick(this.x);
+                        }
+                    }
+                }
+            }
         },
         series: [{
             id: "seriesA",

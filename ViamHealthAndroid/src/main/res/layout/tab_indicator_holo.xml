@@ -14,25 +14,32 @@
      limitations under the License.
 -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="@dimen/tab_host_default_height"
-    android:orientation="horizontal"
-    style="@style/TabGreenTheme"
-    android:gravity="center">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="75dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:gravity="center"
+    style="@style/TabGreentheme"
+    android:layout_width="0dip">
 
     <ImageView
         android:id="@android:id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:visibility="gone"
-        android:contentDescription="@null" />
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_action_log" />
 
     <TextView
         android:id="@android:id/title"
+        android:textSize="10sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        style="@style/TabTextGreenTheme" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@android:id/icon"
+        style="@style/TabTextGreentheme"
+        android:text="@string/tab_label_goal" />
 
-</LinearLayout>
+</RelativeLayout>

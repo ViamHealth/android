@@ -8,6 +8,7 @@ import java.util.Map;
  * Created by naren on 02/10/13.
  */
 public enum Gender {
+    None(0, "None"),
     Male(1, "MALE"),
     Female(2, "FEMALE");
 

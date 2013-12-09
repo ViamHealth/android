@@ -1,8 +1,13 @@
 package com.viamhealth.android.activities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
@@ -11,12 +16,18 @@ import com.viamhealth.android.ViamHealthPrefs;
 
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
+import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.tasks.InviteUser;
+import com.viamhealth.android.tasks.ShareUser;
+import com.viamhealth.android.ui.helper.FileLoader;
+import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
+import com.viamhealth.android.utils.Validator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ProgressDialog;
@@ -25,21 +36,31 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Parcelable;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.analytics.tracking.android.EasyTracker;
 
 public class Home extends BaseActivity implements OnClickListener{
 	Display display;
@@ -48,7 +69,12 @@ public class Home extends BaseActivity implements OnClickListener{
 	LinearLayout main_layout, bottom_layout, core_layout;
 	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
 	List<FrameLayout> frames = new ArrayList<FrameLayout>();
-	
+
+    RelativeLayout splashScreen;
+    ScrollView scroller;
+    ProgressBar bar;
+    TextView logoutMessage;
+
 	ViamHealthPrefs appPrefs;
 	Global_Application ga;
 	int cnt=0,_count=0, selectedViewPosition = 0;
@@ -56,12 +82,31 @@ public class Home extends BaseActivity implements OnClickListener{
 	ArrayList<String> msgArray = new ArrayList<String>();
 	List<User> lstFamily = null;
 	ProgressDialog dialog;
-	
+
 	UserEP userEndPoint;
-	User user;
+	User user, selectedUser;
     private DisplayImageOptions options;
-	
-	@Override
+
+    boolean justRegistered = false;
+    boolean isEditMode = false;
+
+    private ActionMode actionMode;
+
+    private final String TAG = "Home";
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //EasyTracker.getInstance(this).activityStop(this);  // Add this method.
+    }
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
@@ -72,82 +117,203 @@ public class Home extends BaseActivity implements OnClickListener{
         appPrefs = new ViamHealthPrefs(Home.this);
         ga=((Global_Application)getApplicationContext());
         userEndPoint = new UserEP(this, ga);
-
-        if(getIntent().getBooleanExtra("logout", false))
-        {
-            Intent i = new Intent(Home.this,Login.class);
-            appPrefs.setToken(null);
-            startActivity(i);
-            finish();
-            return;
-        }
-
-        // for get screen diamention
-        ScreenDimension();
-
-        //calculate dynamic height width and padding
-        w80=(int)((width*25)/100);
-        w90=(int)((width*28.12)/100);
-        w20=(int)((width*6.25)/100);
-        w5=(int)((width*1.56)/100);
-        w12=(int)((width*3.75)/100);
-
-        h90=(int)((height*18.75)/100);
-        h5=(int)((height*1.042)/100);
-        h30=(int)((height*6.25)/100);
-
-
-        bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
-        core_layout = (LinearLayout) findViewById(R.id.core_layout);
+        user = ga.getLoggedInUser();
 
         //for generate square
-        main_layout = (LinearLayout)findViewById(R.id.main_layout);
-        main_layout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideBottomLayout();
-            }
-        });
+        scroller = (ScrollView)findViewById(R.id.scroller);
+        splashScreen = (RelativeLayout) findViewById(R.id.splash);
+        bar = (ProgressBar) splashScreen.findViewById(R.id.progressBar);
+        logoutMessage = (TextView) splashScreen.findViewById(R.id.logoutMsg);
+        logoutMessage.setVisibility(View.GONE);
 
-        hideBottomLayout();
+        scroller.setVisibility(View.GONE);
+        splashScreen.setVisibility(View.VISIBLE);
 
-        Button btnSetGoal = (Button) bottom_layout.findViewById(R.id.btnSetGoal);
-        btnSetGoal.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, TabActivity.class);
-                intent.putExtra("user", user);
-                Parcelable[] usersList = new Parcelable[lstFamily.size()];
-                intent.putExtra("users", lstFamily.toArray(usersList));
-                intent.putExtra("action", TabActivity.Actions.SetGoal);
-                startActivity(intent);
-            }
-        });
-
-        Button btnUploadFiles = (Button) bottom_layout.findViewById(R.id.btnUploadFiles);
-        btnUploadFiles.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Home.this, TabActivity.class);
-                intent.putExtra("user", user);
-                Parcelable[] usersList = new Parcelable[lstFamily.size()];
-                intent.putExtra("users", lstFamily.toArray(usersList));
-                intent.putExtra("action", TabActivity.Actions.UploadFiles);
-                startActivity(intent);
-            }
-        });
-
-
-        lstFamily = new ArrayList<User>();
-
-        if(isInternetOn()){
-            CalluserMeTask task = new CalluserMeTask();
-            task.applicationContext = Home.this;
-            task.execute();
+        if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
+            Intent loginIntent = new Intent(Home.this, Login.class);
+            startActivity(loginIntent);
         }else{
-            Toast.makeText(Home.this,"Network is not available....",Toast.LENGTH_SHORT).show();
+            if(getIntent().getBooleanExtra("logout", false)) {
+                logout();
+                return;
+            }
+
+            main_layout = (LinearLayout)findViewById(R.id.main_layout);
+
+            justRegistered = getIntent().getBooleanExtra("justRegistered", false);
+            lstFamily = getIntent().getParcelableArrayListExtra("family");
+
+            ScreenDimension();
+
+            next();
+        }
+    }
+
+    private void next() {
+        next(false);
+    }
+
+    private void next(boolean moveToTabActivity) {
+        //if the only logged-in user has not yet created the profile than
+        //force for profile creation
+        User user = ga.getLoggedInUser();
+        boolean getFamilyData = false;
+        if(user==null || lstFamily==null || lstFamily.size()==0){
+            getFamilyData = true;
         }
 
+        if(lstFamily!=null && lstFamily.size()>0){
+            generateView();
+            splashScreen.setVisibility(View.GONE);
+            scroller.setVisibility(View.VISIBLE);
+        }
+
+        if(!getFamilyData && !user.isProfileCreated()){
+            // logged In User's profile not yet completed then show this
+            Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
+            addProfileIntent.putExtra("user", user);
+            startActivityForResult(addProfileIntent, 0);
+        } else if(getFamilyData) {//fetch the data
+            lstFamily = new ArrayList<User>();
+            if(Checker.isInternetOn(Home.this)){
+                GetFamilyListTask task = new GetFamilyListTask();
+                task.applicationContext = Home.this;
+                task.execute();
+            }else{
+                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
+            }
+        } else if(moveToTabActivity){//take the user to the goals screen for the loggedInUser\
+            splashScreen.setVisibility(View.GONE);
+            scroller.setVisibility(View.VISIBLE);
+
+            //Monjyoti:commented
+            Intent intent = new Intent(Home.this, TabActivity.class);
+            intent.putExtra("user", user);
+            Parcelable[] users = new Parcelable[lstFamily.size()];
+            intent.putExtra("users", lstFamily.toArray(users));
+            startActivity(intent);
+        }
+    }
+
+    private void logout() {
+        splashScreen.setVisibility(View.VISIBLE);
+        scroller.setVisibility(View.GONE);
+
+        logoutMessage.setVisibility(View.VISIBLE);
+
+        if(ga.getLoggedInUser().getProfile()!=null && ga.getLoggedInUser().getProfile().getFbProfileId()!=null
+                && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
+            callFacebookLogout();
+
+        if(Checker.isInternetOn(Home.this)){
+            LogoutTask task = new LogoutTask();
+            task.execute();
+        }
+    }
+
+    public void callFacebookLogout() {
+        Session session = Session.getActiveSession();
+        if (session != null) {
+            if (!session.isClosed()) {
+                session.closeAndClearTokenInformation();
+            }
+        } else {
+            session = new Session(Home.this);
+            Session.setActiveSession(session);
+
+            session.closeAndClearTokenInformation();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.home_menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean retVal = super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.menu_logout){
+            logout();
+            return false;
+        }
+
+        if(item.getItemId()==R.id.menu_edit){
+            startActionMode(new HomeActionModeCallback());
+            return false;
+        }
+
+        if(item.getItemId() == R.id.menu_invite) {
+            InviteUser inviteUser = new InviteUser(Home.this, ga);
+            inviteUser.show();
+        }
+
+        if(item.getItemId() == R.id.menu_refresh) {
+            if(Checker.isInternetOn(Home.this)){
+                GetFamilyListTask task = new GetFamilyListTask();
+                task.applicationContext = Home.this;
+                task.execute();
+            }else{
+                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(item.getItemId()==R.id.menu_change_password){
+            View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.dialog_change_password, null);
+            final EditText old = (EditText) dialogView.findViewById(R.id.old);
+            final EditText newP = (EditText) dialogView.findViewById(R.id.newP);
+            final EditText newPAgain = (EditText) dialogView.findViewById(R.id.new_again);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.AlertDialogGreenTheme);
+            builder.setTitle(R.string.changePasswordTitle);
+            builder.setView(dialogView);
+            builder.setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
+                private boolean isValid(){
+                    String oStr = old.getText().toString();
+                    String nStr = newP.getText().toString();
+                    String naStr = newP.getText().toString();
+
+                    if(oStr==null || oStr.isEmpty()){
+                        old.setError(getString(R.string.oldPasswordMandatory));
+                        return false;
+                    }
+
+                    if(nStr==null || nStr.isEmpty()){
+                        newP.setError(getString(R.string.newPasswordMandatory));
+                        return false;
+                    }
+
+                    if(naStr==null || naStr.isEmpty()){
+                        newPAgain.setError(getString(R.string.confirmNewPasswordMandatory));
+                        return false;
+                    }
+
+                    if(!nStr.equals(naStr)){
+                        newP.setError(getString(R.string.newPasswordsDoNotMatch));
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(Checker.isInternetOn(Home.this)){
+                        if(isValid()){
+                            ChangePasswordTask task = new ChangePasswordTask();
+                            task.execute(old.getText().toString(), newP.getText().toString());
+                        }
+                    }else{
+                        Toast.makeText(Home.this, R.string.networkNotAvailable, Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            builder.show();
+            return false;
+        }
+
+        return retVal;
     }
 
     @Override
@@ -155,13 +321,11 @@ public class Home extends BaseActivity implements OnClickListener{
         super.onResume();
 	}
 
-	public void ScreenDimension()
-    {
+	public void ScreenDimension(){
         display = getWindowManager().getDefaultDisplay();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
         height = display.getHeight();
-
     }
 
     private void generateTile(int position, boolean shouldCreateAddNewProfileTile) throws ImproperArgumentsPassedException {
@@ -198,10 +362,12 @@ public class Home extends BaseActivity implements OnClickListener{
             throw new Home.ImproperArgumentsPassedException("Either there are no members in the family or the postion is greater than or equal to the family size");
 
         ProfilePictureView imgProfile = null;
+        ImageView imgView = null;
         if(tile!=null){
             imgProfile = (ProfilePictureView)tile.findViewWithTag("ppic");
+            imgView = (ImageView)tile.findViewWithTag("ppiciv");
         }
-        if(tile == null || imgProfile == null){ // if the tiel is not yet created then create it
+        if(tile == null || imgProfile == null || imgView == null){ // if the tiel is not yet created then create it
             if(tile != null){
                 horizontalLinearLayout.removeViewAt(position%2);
                 tiles.remove(position);
@@ -215,26 +381,71 @@ public class Home extends BaseActivity implements OnClickListener{
             tile.setPadding(2, 2, 2, 2);
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
+                    width/2, width/2);
 
             FrameLayout frm = new FrameLayout(Home.this);
             frm.setLayoutParams(lp);
             frm.setId(position);
             frm.setOnClickListener(Home.this);
+            frm.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int index = v.getId();
+                    selectedViewPosition = index;
+                    if(lstFamily.size() > index) {
+                        selectedUser = lstFamily.get(index);
+                    }
+                    startActionMode(new HomeActionModeCallback());
+                    return false;
+                }
+            });
 
             imgProfile = new ProfilePictureView(Home.this);
-            imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
             imgProfile.setPresetSize(ProfilePictureView.LARGE);
             imgProfile.setLayoutParams(lp);
             imgProfile.setCropped(true);
             imgProfile.setTag("ppic");
-            imgProfile.setProfileId(lstFamily.get(position).getProfile().getFbProfileId());
+            Log.d(TAG, "GenerateTile::profilePic- default being set to - social_add_person");
+            imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+
+            final ProfilePictureView ppv = imgProfile;
+            final ImageView iv = new ImageView(Home.this);
+            iv.setLayoutParams(lp);
+            iv.setTag("ppiciv");
+            iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+            User u = lstFamily.get(position);
+            if(u==null || u.getProfile()==null || //if user or proile is not yet set
+                    (u.getProfile().getFbProfileId()!=null && !u.getProfile().getFbProfileId().isEmpty()) // if fbId is valid one then
+                    || (u.getProfile().getProfilePicURL()==null || u.getProfile().getProfilePicURL().isEmpty() // if profilePic is default or not set then
+                            || u.getProfile().getProfilePicURL().endsWith("default_profile_picture_n.jpg"))){
+                iv.setVisibility(View.GONE);
+                imgProfile.setVisibility(View.VISIBLE);
+
+                if(u!=null && u.getProfile()!=null)
+                    imgProfile.setProfileId(u.getProfile().getFbProfileId());
+            }else{
+                FileLoader loader = new FileLoader(Home.this, null);
+                loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
+                        iv.setVisibility(View.VISIBLE);
+                        ppv.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            imgView = iv;
 
             Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
             imgProfile.setAnimation(anim);
+            imgView.setAnimation(anim);
             anim.start();
 
             frm.addView(imgProfile);
+            frm.addView(imgView);
 
             LinearLayout lay = new LinearLayout(Home.this);
             lay.setOrientation(LinearLayout.VERTICAL);
@@ -247,6 +458,7 @@ public class Home extends BaseActivity implements OnClickListener{
             txtName.setGravity(Gravity.CENTER);
             txtName.setText(lstFamily.get(position).getName());
             txtName.setTag("pname");
+            //txtName.setTypeface();
             lay.addView(txtName);
 
             frm.addView(lay);
@@ -257,10 +469,33 @@ public class Home extends BaseActivity implements OnClickListener{
             tiles.add(tile);
         } else {
             imgProfile = (ProfilePictureView)tile.findViewWithTag("ppic");
-            imgProfile.setProfileId(lstFamily.get(position).getProfile().getFbProfileId());
+            imgView = (ImageView) tile.findViewWithTag("ppiciv");
+
             Animation anim = AnimationUtils.loadAnimation(Home.this, R.anim.fade_in);
             imgProfile.setAnimation(anim);
+            imgView.setAnimation(anim);
             anim.start();
+
+            final ProfilePictureView ppv = imgProfile;
+            final ImageView iv = imgView;
+            User u = lstFamily.get(position);
+            if(u!=null && u.getProfile()!=null && u.getProfile().getProfilePicURL()!=null &&
+                    !u.getProfile().getProfilePicURL().isEmpty()){
+                FileLoader loader = new FileLoader(Home.this, null);
+                loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
+                        iv.setVisibility(View.VISIBLE);
+                        ppv.setVisibility(View.GONE);
+                    }
+                });
+            }else{
+                imgProfile.setProfileId(u.getProfile().getFbProfileId());
+                iv.setVisibility(View.GONE);
+                imgProfile.setVisibility(View.VISIBLE);
+            }
 
             TextView txtName = (TextView)tile.findViewWithTag("pname");
             txtName.setText(lstFamily.get(position).getName());
@@ -288,52 +523,64 @@ public class Home extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-
-        hideBottomLayout();
-
-        Log.e("TAG","id is : " + v.getId());
+        Log.e("TAG", "id is : " + v.getId());
         int index = v.getId();
         this.selectedViewPosition = index;
         LinearLayout tr1lay=(LinearLayout)tiles.get(index);
         Boolean shouldCreateProfile = index<lstFamily.size() && lstFamily.get(index).isProfileCreated() ?
                                         false : true;
 
-        User selectedUser = null;
         if(lstFamily.size() > index) {
             selectedUser = lstFamily.get(index);
         }
-        if(shouldCreateProfile){
-            appPrefs.setBtnprofile_hide("1");
-            Long userId = null;
-            Boolean isLoggedInUser = false;
 
-            Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
-            addProfileIntent.putExtra("user", selectedUser);
-            startActivityForResult(addProfileIntent, index);
+
+        if(isEditMode){
+            if(actionMode!=null){
+                actionMode.setTitle(selectedUser.getName() + " selected");
+            }
         }else{
-            //FrameLayout tr1frm=(FrameLayout) tiles.get(index).findViewWithTag("frame");
-            //LinearLayout tr1=(LinearLayout)tr1frm.getChildAt(1);
-            //TextView txt = (TextView)tr1.getChildAt(0);
-            //appPrefs.setProfileName(selectedUser.getName());
-            //appPrefs.setGoalDisable("0");
+            if(shouldCreateProfile){
+                appPrefs.setBtnprofile_hide("1");
+                Long userId = null;
+                Boolean isLoggedInUser = false;
 
-            Intent intent = new Intent(Home.this, TabActivity.class);
-            intent.putExtra("user", selectedUser);
-            Parcelable[] usersList = new Parcelable[lstFamily.size()];
-            intent.putExtra("users", lstFamily.toArray(usersList));
-            startActivity(intent);
+                Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
+                if(lstFamily.size() > index)
+                {
+                    addProfileIntent.putExtra("user", selectedUser);
+                }
+                startActivityForResult(addProfileIntent, index);
+            }else{
+                Intent intent = new Intent(Home.this, TabActivity.class);
+                intent.putExtra("user", selectedUser);
+                Parcelable[] users = new Parcelable[lstFamily.size()];
+                intent.putExtra("users", lstFamily.toArray(users));
+                startActivity(intent);
+            }
+        }
+	}
 
+
+    @Override
+    public void onBackPressed() {
+        if(actionMode!=null){
+            actionMode.finish();
         }
 
-	}
+        super.onBackPressed();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
         if(resultCode==RESULT_OK){
             if(requestCode < 100) {
+                if(isEditMode && actionMode!=null)
+                    actionMode.finish();
+
                 user = (User) data.getParcelableExtra("user");
-                if(isInternetOn()){
+                if(Checker.isInternetOn(Home.this)){
                     CallAddProfileTask task = new CallAddProfileTask();
                     task.applicationContext = Home.this;
                     task.execute();
@@ -347,32 +594,17 @@ public class Home extends BaseActivity implements OnClickListener{
         }
     }
 
-    private void showBottomLayout() {
-        /*Animation slideUpIn = AnimationUtils.loadAnimation(Home.this, R.anim.slide_up);
-        bottom_layout.startAnimation(slideUpIn);*/
-        bottom_layout.setVisibility(View.VISIBLE);
-        int blHeight = bottom_layout.getHeight();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) core_layout.getLayoutParams();
-        params.height = height - blHeight - UIUtility.dpToPx(Home.this, 20);
-        core_layout.setLayoutParams(params);
-    }
-
-    private void hideBottomLayout() {
-        bottom_layout.setVisibility(View.GONE);
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) core_layout.getLayoutParams();
-        params.height = LinearLayout.LayoutParams.MATCH_PARENT;
-        core_layout.setLayoutParams(params);
-    }
     // async class for calling webservice and get responce message
     public class CallAddProfileTask extends AsyncTask<String, Void, String>
     {
         protected Context applicationContext;
+        protected boolean isBeingUpdated;
 
         @Override
         protected void onPreExecute()
         {
-            dialog = new ProgressDialog(Home.this);
-            dialog.setMessage("still capturing your profile...");
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
+            dialog.setMessage("capturing your profile...");
             dialog.show();
         }
 
@@ -380,14 +612,13 @@ public class Home extends BaseActivity implements OnClickListener{
         {
             if(result.toString().equals("0")){
                 try{
-                    generateTile(lstFamily.size()-1, false);
-                    generateTile(lstFamily.size(), true);
+                    if(isBeingUpdated){
+                        generateTile(selectedViewPosition, false);
+                    }else{
+                        generateTile(lstFamily.size()-1, false);
+                        generateTile(lstFamily.size(), true);
+                    }
 
-                    /* Set the name in the bottom_layer and slide-it-up */
-                    TextView name = (TextView) bottom_layout.findViewById(R.id.txtViewName);
-                    name.setText(user.getName());
-
-                    showBottomLayout();
                 } catch (ImproperArgumentsPassedException ime) {
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
@@ -401,7 +632,7 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
-            boolean isBeingUpdated = (user.getId()>0)? true: false;
+            isBeingUpdated = (user.getId()>0)? true: false;
             user = userEP.updateUser(user);
             if(isBeingUpdated)
                 lstFamily.set(selectedViewPosition, user);
@@ -412,72 +643,213 @@ public class Home extends BaseActivity implements OnClickListener{
     }
 
     // async class for calling webservice and get responce message
-		public class CalluserMeTask extends AsyncTask <String, Void,String>
-		{
-			protected Context applicationContext;
+    public class CallDeleteProfileTask extends AsyncTask<String, Void, Boolean>
+    {
+        protected Context applicationContext;
 
-			@Override
-			protected void onPreExecute() {
-				//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-				dialog = new ProgressDialog(Home.this);
-				dialog.setCanceledOnTouchOutside(false);
-				dialog.setMessage("loading your family");
-				dialog.show();
-				Log.i("onPreExecute", "onPreExecute");
-				
-			}        
-			 
-			protected void onPostExecute(String result) {
-                generateView();
-				dialog.dismiss();
-			}
-
-			@Override
-			protected String doInBackground(String... params) {
-                lstFamily.clear();
-				if(ga.getLoggedInUser()==null){
-                    userEndPoint.getLoggedInUser();
-                }
-                lstFamily.add(ga.getLoggedInUser());
-                lstFamily.addAll(userEndPoint.GetFamilyMembers());
-				return null;
-			}
-			   
-		}     
-
-	// function for check internet is available or not
-	public final boolean isInternetOn() {
-
-		  ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-		  if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-		    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-		    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-		    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-		   return true;
-		  }
-
-		  else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-		    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-		   return false;
-		  }
-
-		  return false;
-		 }
-	@Override
-    public void onBackPressed() 
-        {
-			moveTaskToBack(true);  
-			System.exit(0);
-			return;
-         
+        @Override
+        protected void onPreExecute(){
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
+            dialog.setMessage("deleting the profile....");
+            dialog.show();
         }
 
+        protected void onPostExecute(Boolean result) {
+            if(result){
+                dialog.dismiss();
+                lstFamily.remove(selectedViewPosition);
+                Intent intent = new Intent(Home.this, Home.class);
+                ArrayList<User> families = (ArrayList<User>) lstFamily;
+                intent.putParcelableArrayListExtra("family", families);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else{
+                dialog.dismiss();
+                Toast.makeText(Home.this, "Not able to delete "+selectedUser.getName()+"...", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            UserEP userEP = new UserEP(Home.this, ga);
+            boolean isSuccess = userEP.deleteUser(selectedUser);
+            //lstFamily.set(selectedViewPosition, user);
+            return isSuccess;
+        }
+    }
+
+    // async class for calling webservice and get responce message
+    public class GetFamilyListTask extends AsyncTask <String, Void,String>
+    {
+        protected Context applicationContext;
+
+        @Override
+        protected void onPreExecute() {
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("loading your family");
+            //dialog.show();
+            Log.i("onPreExecute", "onPreExecute");
+
+        }
+
+        protected void onPostExecute(String result) {
+            if(lstFamily.isEmpty()){
+                logout();
+                return;
+            }
+            splashScreen.setVisibility(View.GONE);
+            scroller.setVisibility(View.VISIBLE);
+
+            next();
+            //dialog.dismiss();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            lstFamily.clear();
+            if(ga.getLoggedInUser()==null){
+                userEndPoint.getLoggedInUser();
+            }
+            lstFamily.addAll(userEndPoint.GetFamilyMembers());
+            return null;
+        }
+
+    }
+
+    public class LogoutTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            splashScreen.setVisibility(View.VISIBLE);
+            scroller.setVisibility(View.GONE);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            ga.setLoggedInUser(null);
+            appPrefs.setToken(null);
+            Intent i = new Intent(Home.this, Login.class);
+            startActivity(i);
+            finish();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return userEndPoint.Logout();
+        }
+    }
+
+
+    public class ChangePasswordTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("changing your password...");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            dialog.dismiss();
+            String msg;
+            if(aBoolean){
+                msg = "Changed your password successfully.";
+            }else{
+                msg = "Sorry! Couldn't change your password. Please try after some time.";
+            }
+            Toast.makeText(Home.this, msg, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return userEndPoint.ChangePassword(params[0], params[1]);
+        }
+    }
 
     public class ImproperArgumentsPassedException extends Exception {
-
         public ImproperArgumentsPassedException(String detailMessage) {
             super(detailMessage);
+        }
+    }
+
+    private final class HomeActionModeCallback implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            isEditMode = true;
+            actionMode = mode;
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            menu.clear();
+            actionMode.setTitle(selectedUser.getName() + " selected");
+            getSupportMenuInflater().inflate(R.menu.home, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
+            switch(menuItem.getItemId()){
+                case R.id.action_mode_edit: //edit
+                    editUser();
+                    return true;
+
+                case R.id.action_mode_share: //share
+                    shareUser();
+                    return true;
+
+                case R.id.action_mode_delete: //delete
+                    deleteUser();
+                    return true;
+            }
+            return false;
+        }
+
+        private void deleteUser() {
+            View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.delete_confirmation, null);
+
+            TextView message = (TextView) dialogView.findViewById(R.id.confirmMessage);
+            message.setText("delete " + selectedUser.getName() + "?");
+            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.StyledProgressDialog);
+            builder.setView(dialogView);
+            builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    if (Checker.isInternetOn(Home.this)) {
+                        CallDeleteProfileTask task = new CallDeleteProfileTask();
+                        task.applicationContext = Home.this;
+                        task.execute();
+                    }
+                }
+            });
+            builder.show();
+            actionMode.finish();
+        }
+
+        private void shareUser() {
+            ShareUser share = new ShareUser(Home.this, ga, selectedUser);
+            share.show();
+            actionMode.finish();
+        }
+
+        private void editUser() {
+            Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
+            addProfileIntent.putExtra("user", selectedUser);
+            addProfileIntent.putExtra("isEditMode", true);
+            startActivityForResult(addProfileIntent, selectedViewPosition);
+            actionMode.finish();
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            isEditMode = false;
         }
     }
 }

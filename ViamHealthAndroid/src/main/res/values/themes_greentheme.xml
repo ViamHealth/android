@@ -3,56 +3,28 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="GreenTheme" parent="android:Theme.Light">
 
-    <item name="android:editTextStyle">@style/EditTextGreenTheme</item>
-
-    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGreenTheme</item>
-
-    <item name="android:checkboxStyle">@style/CheckBoxGreenTheme</item>
-
-    <item name="android:radioButtonStyle">@style/RadioButtonGreenTheme</item>
-
-    <item name="android:buttonStyle">@style/ButtonGreenTheme</item>
-
-    <item name="android:imageButtonStyle">@style/ImageButtonGreenTheme</item>
-
-    <item name="android:spinnerStyle">@style/SpinnerGreenTheme</item>
-
-    <item name="android:dropDownSpinnerStyle">@style/SpinnerGreenTheme.DropDown</item>
-
-    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGreenTheme</item>
-
-    <item name="android:progressBarStyleHorizontal">@style/ProgressBarGreenTheme</item>
-
-    <item name="android:seekBarStyle">@style/SeekBarGreenTheme</item>
-
-    <item name="android:ratingBarStyle">@style/RatingBarGreenTheme</item>
-
-    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreenTheme</item>
-
-    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreenTheme</item>
-
-    <item name="android:buttonStyleToggle">@style/ToggleGreenTheme</item>
-
-    <item name="android:listViewStyle">@style/ListViewGreenTheme</item>
-
-    <item name="android:listViewWhiteStyle">@style/ListViewGreenTheme.White</item>
-
-    <item name="android:spinnerItemStyle">@style/SpinnerItemGreenTheme</item>
-
-  <item name="android:actionBarItemBackground">@drawable/selectable_background_greentheme</item>
-  <item name="android:popupMenuStyle">@style/PopupMenu.Greentheme</item>
-  <item name="android:dropDownListViewStyle">@style/DropDownListView.Greentheme</item>
-  <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Greentheme</item>
-  <item name="android:actionDropDownStyle">@style/DropDownNav.Greentheme</item>
-  <item name="android:actionBarStyle">@style/ActionBar.Solid.Greentheme</item>
-  <item name="android:actionModeBackground">@drawable/cab_background_top_greentheme</item>
-  <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_greentheme</item>
-  <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Greentheme</item>
-
-
-
+  <style name="Greentheme" parent="@style/Theme.Viamhealth">
+    <item name="android:textViewStyle">@style/TextViewGreentheme</item>
+    <item name="android:tabWidgetStyle">@style/TabWidgetGreentheme</item>
+    <item name="android:editTextStyle">@style/EditTextGreentheme</item>
+    <item name="android:autoCompleteTextViewStyle">@style/AutoCompleteTextViewGreentheme</item>
+    <item name="android:checkboxStyle">@style/CheckBoxGreentheme</item>
+    <item name="android:radioButtonStyle">@style/RadioButtonGreentheme</item>
+    <item name="android:buttonStyle">@style/ButtonGreentheme</item>
+    <item name="android:imageButtonStyle">@style/ImageButtonGreentheme</item>
+    <item name="android:spinnerStyle">@style/SpinnerGreentheme</item>
+    <item name="android:dropDownSpinnerStyle">@style/SpinnerGreentheme.DropDown</item>
+    <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemGreentheme</item>
+    <item name="android:progressBarStyleHorizontal">@style/ProgressBarGreentheme</item>
+    <item name="android:seekBarStyle">@style/SeekBarGreentheme</item>
+    <item name="android:ratingBarStyle">@style/RatingBarGreentheme</item>
+    <item name="android:ratingBarStyleIndicator">@style/RatingBarBigGreentheme</item>
+    <item name="android:ratingBarStyleSmall">@style/RatingBarSmallGreentheme</item>
+    <item name="android:buttonStyleToggle">@style/ToggleGreentheme</item>
+    <item name="android:listViewStyle">@style/ListViewGreentheme</item>
+    <item name="android:listViewWhiteStyle">@style/ListViewGreentheme.White</item>
+    <item name="android:spinnerItemStyle">@style/SpinnerItemGreentheme</item>
   </style>
 
 </resources>

@@ -11,6 +11,7 @@ import com.viamhealth.android.model.BaseModel;
 public class User extends BaseModel implements Parcelable {
     String username;
     String email;
+    String mobile;
     String firstName;
     String lastName;
 
@@ -37,6 +38,13 @@ public class User extends BaseModel implements Parcelable {
         if((firstName==null || firstName.isEmpty()) && (lastName==null || lastName.isEmpty()))
             return false;
 
+        if(profile==null || bmiProfile==null)
+            return false;
+
+        if(profile.getDob()==null || bmiProfile.getHeight()==null || bmiProfile.getHeight()==0 || bmiProfile.getWeight()==null
+                || bmiProfile.getWeight()==0)
+            return false;
+        
         return true;
     }
 
@@ -44,9 +52,21 @@ public class User extends BaseModel implements Parcelable {
         isLoggedInUser = loggedInUser;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
     public String getUsername() {
-        if((username==null || username.isEmpty()) && (email!=null || email.isEmpty()))
+        if((username==null || username.isEmpty()) && (email!=null && email.isEmpty()))
             return email;
+
+        if((username==null || username.isEmpty()) && (mobile!=null && mobile.isEmpty()))
+            return mobile;
+
         return username;
     }
 
@@ -84,7 +104,7 @@ public class User extends BaseModel implements Parcelable {
         if(this.lastName!=null && !this.lastName.isEmpty())
             return lastName;
 
-        if(this.email!=null && !this.lastName.isEmpty() )
+        if(this.email!=null && !this.email.isEmpty() )
             return email;
 
         if(username!=null && !username.isEmpty())
@@ -94,8 +114,6 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getEmail() {
-        if((email==null || email.isEmpty()) && (username!=null && !username.isEmpty()))
-            return username;
         return email;
     }
 
@@ -132,6 +150,7 @@ public class User extends BaseModel implements Parcelable {
         super.writeToParcel(dest, flags);
         dest.writeString(this.username);
         dest.writeString(this.email);
+        dest.writeString(this.mobile);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
         dest.writeString(this.name);
@@ -145,6 +164,7 @@ public class User extends BaseModel implements Parcelable {
         super(in);
         this.username = in.readString();
         this.email = in.readString();
+        this.mobile = in.readString();
         this.firstName = in.readString();
         this.lastName = in.readString();
         this.name = in.readString();

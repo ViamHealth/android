@@ -51,6 +51,7 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
         if(!bundle.isEmpty())
             goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
 
+
         dialog = new ProgressDialog(getActivity());
 
         targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
@@ -71,8 +72,10 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         } else {
-            tRBS.setText(String.valueOf(140));
-            tFBS.setText(String.valueOf(100));
+            //tRBS.setText(String.valueOf(140));
+            //tFBS.setText(String.valueOf(100));
+            if(user.getBmiProfile().getFastingSugar()>0) pFBS.setText(String.valueOf(user.getBmiProfile().getFastingSugar()));
+            if(user.getBmiProfile().getRandomSugar()>0) pRBS.setText(String.valueOf(user.getBmiProfile().getRandomSugar()));
         }
 
 
@@ -85,15 +88,16 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
     @Override
     public Goal getGoal() {
-        DiabetesGoal goal = new DiabetesGoal();
-        goal.setFbs(Integer.parseInt(tFBS.getText().toString()));
-        goal.setRbs(Integer.parseInt(tRBS.getText().toString()));
+        DiabetesGoal dbgoal = new DiabetesGoal();
+        setDefaultGoalAttributes(goal, dbgoal);
+        dbgoal.setFbs(Integer.parseInt(tFBS.getText().toString()));
+        dbgoal.setRbs(Integer.parseInt(tRBS.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            dbgoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return dbgoal;
     }
 
     @Override

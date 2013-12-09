@@ -46,7 +46,31 @@ public abstract class Goal extends BaseModel implements Parcelable, JsonGraphDat
     public Date getTargetDate() {
         return targetDate;
     }
+    public Date getStartDate() {
+        if(readings==null)
+            return null;
 
+        int count = readings.size();
+        Date date = new Date();
+        for(int i=0; i<count; i++){
+            Date rd = readings.get(i).getReadingDate();
+            date.setTime(Math.min(rd.getTime(), date.getTime()));
+        }
+        return date;
+    }
+
+    public Date getPresentDate() {
+        if(readings==null)
+            return null;
+
+        int count = readings.size();
+        Date date = new Date();
+        for(int i=0; i<count; i++){
+            Date rd = readings.get(i).getReadingDate();
+            date.setTime(Math.max(rd.getTime(), date.getTime()));
+        }
+        return date;
+    }
     public void setTargetDate(Date targetDate) {
         this.targetDate = targetDate;
     }
@@ -89,6 +113,38 @@ public abstract class Goal extends BaseModel implements Parcelable, JsonGraphDat
             e.printStackTrace();
         }
         return object;
+    }
+
+    protected Integer round(Integer num, boolean upper) {
+        if(num==null)
+            throw new NullPointerException("num cannot be null");
+        int multiplier_factor = upper ? 1 : -1;
+        Integer round = (num/5 + multiplier_factor) * 5;
+        return round;
+    }
+
+    @Override
+    public int getMax() {
+        int max = healthyRange.getMax();
+
+        int rCount = readings.size();
+        for(int i=0; i<rCount; i++){
+            max = Math.max(readings.get(i).getMax(), max);
+            max = round(max, true);
+        }
+        return max;
+    }
+
+    @Override
+    public int getMin() {
+        int min = healthyRange.getMin();
+
+        int rCount = readings.size();
+        for(int i=0; i<rCount; i++){
+            min = Math.min(readings.get(i).getMin(), min);
+            min = round(min, false);
+        }
+        return min;
     }
 
     public abstract class HealthyRange implements JsonGraphDataBuilder.JsonOutput {

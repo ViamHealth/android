@@ -3,6 +3,8 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.viamhealth.android.utils.JsonGraphDataBuilder;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -85,5 +87,15 @@ public class DiabetesGoalReading extends GoalReadings {
         }
 
         return object;
+    }
+
+    @Override
+    public int getMax() {
+        return Math.max(fbs, rbs);
+    }
+
+    @Override
+    public int getMin() {
+        return Math.min(fbs, rbs);
     }
 }

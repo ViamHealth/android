@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 10/12/13.
  */
-public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
+public class JournalExerciseAdapter extends MultiSelectionAdapter<CategoryExercise> {
 
     Context context;
     int layoutResourceId;
@@ -37,7 +37,7 @@ public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
 
 
     public JournalExerciseAdapter(Context context, int layoutResourceId, ArrayList<CategoryExercise> lstdata) {
-        super(context, layoutResourceId, lstdata);
+        super(context, lstdata);
         // TODO Auto-generated constructor stub
 
         this.layoutResourceId = layoutResourceId;
@@ -46,7 +46,7 @@ public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getItemView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         FileDataHolder holder = null;
         appPrefs=new ViamHealthPrefs(context);
@@ -78,7 +78,7 @@ public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
             holder.delete = (ImageView)row.findViewById(R.id.delete);
 
 
-            row.setTag(holder);
+            //row.setTag(holder);
         }
         else
         {
@@ -86,9 +86,12 @@ public class JournalExerciseAdapter extends ArrayAdapter<CategoryExercise> {
         }
         Log.e("TAG",position+"");
         CategoryExercise data = lstdata.get(position);
-        holder.exercisename.setText(data.getName().toString());
-        holder.calory.setText(data.getCalories().toString());
-        holder.time.setText(data.getTime().toString());
+        if(holder!=null)
+        {
+            holder.exercisename.setText(data.getName().toString());
+            holder.calory.setText(String.format("%.1f",Double.valueOf(data.getCalories())));
+            holder.time.setText(data.getTime().toString());
+        }
         //holder.delete.setTag(data.getId().toString());
         return row;
     }

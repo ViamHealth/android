@@ -2,8 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tabHost"
-    android:background="#ffffff">
+    android:id="@+id/tabHost">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -28,15 +27,14 @@
                 android:focusable="false"
                 android:layout_below="@+id/tabHeader"
                 android:background="#ffffff"
-                android:clickable="false"
-                android:layout_marginTop="58dp">
+                android:clickable="false">
             </FrameLayout>
 
-            <FrameLayout android:id="@+id/tabHeader"
+            <!--<FrameLayout android:id="@+id/tabHeader"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"
                 android:background="#37AA4F">
-            </FrameLayout>
+            </FrameLayout>-->
 
         </FrameLayout>
 
@@ -44,9 +42,7 @@
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            style="@style/TabReverseTheme"
-            android:background="#37AA4F" />
+            android:layout_weight="0" />
 
     </LinearLayout>
 </TabHost>

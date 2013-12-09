@@ -1,1 +1,1 @@
-include ':ViamHealthAndroid', ':ScrollingTabLib', ':facebook'
+include ':ViamHealthAndroid', ':facebook', ':spinwheel'

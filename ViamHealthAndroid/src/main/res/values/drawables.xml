@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="row_textcolor_selected_d">@android:color/white</drawable>
+    <drawable name="row_textcolor_not_selected_d">@color/app_green</drawable>
+</resources>

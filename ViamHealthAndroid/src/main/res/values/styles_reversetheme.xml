@@ -3,50 +3,54 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="EditTextReverseTheme" parent="android:Widget.EditText">
+  <style name="EditTextReversetheme" parent="android:Widget.EditText">
 	  <item name="android:background">@drawable/edit_text_holo_dark</item>
 	  <item name="android:textColor">#ffffff</item>
-      <item name="android:textColorHint">#cdcdcd</item>
   </style>
 
-  <style name="AutoCompleteTextViewReverseTheme" parent="android:Widget.AutoCompleteTextView">
+  <style name="AutoCompleteTextViewReversetheme" parent="android:Widget.AutoCompleteTextView">
       <item name="android:dropDownSelector">@drawable/list_selector_holo_dark</item>
 	  <item name="android:background">@drawable/edit_text_holo_dark</item>
 	  <item name="android:textColor">#ffffff</item>
   </style>
 
-  <style name="CheckBoxReverseTheme" parent="android:Widget.CompoundButton.CheckBox">
+    <style name="TextViewReversetheme" parent="android:Widget.TextView">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+  <style name="CheckBoxReversetheme" parent="android:Widget.CompoundButton.CheckBox">
       <item name="android:button">@drawable/btn_check_holo_dark</item>
+      <item name="android:textColor">@android:color/white</item>
   </style>
 
-  <style name="RadioButtonReverseTheme" parent="android:Widget.CompoundButton.RadioButton">
+  <style name="RadioButtonReversetheme" parent="android:Widget.CompoundButton.RadioButton">
       <item name="android:button">@drawable/btn_radio_holo_dark</item>
   </style>
 
-  <style name="ButtonReverseTheme" parent="android:Widget.Button">
+  <style name="ButtonReversetheme" parent="android:Widget.Button">
 	  <item name="android:background">@drawable/btn_default_holo_dark</item>
 	  <item name="android:minHeight">48dip</item>
 	  <item name="android:minWidth">64dip</item>
-	  <item name="android:textColor">#ffffff</item>
+	  <item name="android:textColor">@color/app_green</item>
   </style>
 
-  <style name="ImageButtonReverseTheme" parent="android:Widget.ImageButton">
+  <style name="ImageButtonReversetheme" parent="android:Widget.ImageButton">
 	  <item name="android:background">@drawable/btn_default_holo_dark</item>
   </style>
 
-  <style name="SpinnerReverseTheme" parent="android:Widget.Spinner">
+  <style name="SpinnerReversetheme" parent="android:Widget.Spinner">
       <item name="android:background">@drawable/spinner_background_holo_dark</item>
       <item name="android:dropDownSelector">@drawable/list_selector_holo_dark</item>
   </style>
 
-  <style name="SpinnerReverseTheme.DropDown">
+  <style name="SpinnerReversetheme.DropDown">
       <item name="android:spinnerMode">dropdown</item>
   </style>
 
-  <style name="SpinnerDropDownItemReverseTheme" parent="android:Widget.DropDownItem.Spinner">
+  <style name="SpinnerDropDownItemReversetheme" parent="android:Widget.DropDownItem.Spinner">
       <item name="android:checkMark">@drawable/btn_radio_holo_dark</item>
   </style>
-  <style name="TabReverseTheme">
+  <style name="TabReversetheme">
       <item name="android:paddingLeft">16dip</item>
       <item name="android:paddingRight">16dip</item>
       <item name="android:background">@drawable/tab_indicator_holo</item>
@@ -55,7 +59,7 @@
       <item name="android:minWidth">80dip</item>
   </style>
 
-  <style name="TabTextReverseTheme">
+  <style name="TabTextReversetheme">
 	  <item name="android:textColor">#ffffff</item>
       <item name="android:textSize">12sp</item>
       <item name="android:textStyle">bold</item>
@@ -65,14 +69,14 @@
       <item name="android:maxWidth">180dip</item>
   </style>
 
-  <style name="ProgressBarReverseTheme" parent="android:Widget.ProgressBar.Horizontal">
+  <style name="ProgressBarReversetheme" parent="android:Widget.ProgressBar.Horizontal">
       <item name="android:progressDrawable">@drawable/progress_horizontal_holo_dark</item>
       <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_dark</item>
       <item name="android:minHeight">16dip</item>
       <item name="android:maxHeight">16dip</item>
   </style>
 
-  <style name="SeekBarReverseTheme" parent="android:Widget.SeekBar">
+  <style name="SeekBarReversetheme" parent="android:Widget.SeekBar">
       <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
       <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_dark</item>
       <item name="android:minHeight">13dip</item>
@@ -83,41 +87,54 @@
       <item name="android:paddingRight">16dip</item>
   </style>
 
-  <style name="RatingBarReverseTheme" parent="android:Widget.RatingBar">
+  <style name="RatingBarReversetheme" parent="android:Widget.RatingBar">
       <item name="android:progressDrawable">@drawable/ratingbar_full_holo_dark</item>
       <item name="android:indeterminateDrawable">@drawable/ratingbar_full_holo_dark</item>
   </style>
 
-  <style name="RatingBarBigReverseTheme">
+  <style name="RatingBarBigReversetheme">
       <item name="android:progressDrawable">@drawable/ratingbar_holo_dark</item>
       <item name="android:indeterminateDrawable">@drawable/ratingbar_holo_dark</item>
       <item name="android:minHeight">35dip</item>
       <item name="android:maxHeight">35dip</item>
   </style>
 
-  <style name="RatingBarSmallReverseTheme">
+  <style name="RatingBarSmallReversetheme">
       <item name="android:progressDrawable">@drawable/ratingbar_small_holo_dark</item>
       <item name="android:indeterminateDrawable">@drawable/ratingbar_small_holo_dark</item>
       <item name="android:minHeight">16dip</item>
       <item name="android:maxHeight">16dip</item>
   </style>
 
-  <style name="ToggleReverseTheme" parent="android:Widget.Button.Toggle">
+  <style name="ToggleReversetheme" parent="android:Widget.Button.Toggle">
       <item name="android:background">@drawable/btn_toggle_holo_dark</item>
       <item name="android:minHeight">48dip</item>
 	  <item name="android:textColor">#ffffff</item>
   </style>
 
-  <style name="ListViewReverseTheme" parent="android:Widget.ListView">
+  <style name="ListViewReversetheme" parent="android:Widget.ListView">
       <item name="android:listSelector">@drawable/list_selector_holo_dark</item>
   </style>
 
-  <style name="ListViewReverseTheme.White" parent="android:Widget.ListView.White">
+  <style name="ListViewReversetheme.White" parent="android:Widget.ListView.White">
       <item name="android:listSelector">@drawable/list_selector_holo_dark</item>
   </style>
 
-  <style name="SpinnerItemReverseTheme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+  <style name="SpinnerItemReversetheme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
       <item name="android:textColor">#ffffff</item>
   </style>
+
+  <!--<style name="NumberPickerReversetheme">
+      <item name="android:orientation">vertical</item>">
+      <item name="android:fadingEdge">vertical</item>">
+      <item name="android:fadingEdgeLength">50dip</item>">
+      <item name="solidColor">@android:color/transparent</item>">
+      <item name="selectionDivider">@drawable/numberpicker_selection_divider</item>">
+      <item name="selectionDividerHeight">2dip</item>">
+      <item name="internalLayout">@layout/number_picker_with_selector_wheel</item>">
+      <item name="internalMinWidth">64dip</item>">
+      <item name="internalMaxHeight">180dip</item>">
+      <item name="virtualButtonPressedDrawable">@drawable/item_background_holo_dark</item>">
+  </style>-->
 
 </resources>

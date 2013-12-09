@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- All Toast Messages -->
+    <string name="loginMessage">we are validating your identity....</string>
+    <string name="loginFailureMessage">wrong credentials were given</string>
+
+
+    <string name="email_registered_with_us_is_mandatory">please enter the email-id registered with us</string>
+
+
+    <string name="forgotPasswordTaskMessage">about to mail you auto generated password....</string>
+    <string name="forgotPasswordTaskSuccess">mailed you auto generated password</string>
+    <string name="forgotPasswordTaskFailure">there was some problem in mailing you, please try again later</string>
+
+    <string name="changePasswordTitle">Change Password</string>
+    <string name="change">Change</string>
+
+    <string name="oldPasswordMandatory">old password is mandatory</string>
+    <string name="newPasswordMandatory">new password is mandatory</string>
+    <string name="confirmNewPasswordMandatory">confirm the new password</string>
+    <string name="newPasswordsDoNotMatch">new passwords do not match</string>
+
+    <string name="networkNotAvailable">Network not availble. Please check your internet connection and then try again.</string>
+    <string name="none">None</string>
+    <string name="changePassword">Change Password</string>
     <string name="app_name">ViamHealth</string>
     <string name="menu_settings">Logout</string>
     <string name="hello_world">Hello world!</string>
@@ -18,10 +41,12 @@
     <string name="title_activity_add_profile">AddProfile</string>
     <string name="title_activity_file">File</string>
     <string name="title_activity_food_diary">FoodDiary</string>
-    <string name="medical_conidtion_obese">Obesity</string>
+    <string name="medical_conidtion_obese">Weight</string>
     <string name="medical_conidtion_bp">Blood Pressure</string>
     <string name="medical_conidtion_diabetes">Diabetes</string>
     <string name="medical_conidtion_cholesterol">Cholesterol</string>
+    <string name="selected">selected</string>
+    <string name="inviteUser">Invite User</string>
 
     <string-array name="goal_name_array">
         <item>Blood Glucose</item>
@@ -53,6 +78,8 @@
         <item>Years</item>
     </string-array>
 
+    <string name="tab_label_medicines">Medicines</string>
+    <string name="tab_label_others">Others</string>
     <string name="title_activity_add_breakfast">AddBreakfast</string>
     <string name="title_activity_tab_group_reminder">TabGroupReminder</string>
     <string name="title_activity_reminder">Reminder</string>
@@ -77,15 +104,16 @@
     <string name="ptr_pull_to_refresh">Pull to refresh</string>
     <string name="ptr_release_to_refresh">Release to refresh</string>
     <string name="ptr_refreshing">Refreshing…</string>
+    <string name="refresh">Refresh…</string>
     <string name="ptr_last_updated">Updated: %1$s</string>
     <string name="register">Register</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_new_profile">NewProfile</string>
     <string name="name">name</string>
-    <string name="first_name">first name</string>
-    <string name="last_name">last name</string>
-    <string name="dob">date of birth</string>
-    <string name="email">\@email</string>
+    <string name="first_name">First Name*</string>
+    <string name="last_name">Last Name</string>
+    <string name="dob">date of birth*</string>
+    <string name="email">\@email*</string>
     <string name="phone">mobile number</string>
     <string name="location">location</string>
     <string name="organization">organization</string>
@@ -101,7 +129,7 @@
         <item>AB-</item>
     </string-array>
 
-    <string name="app_id">477626235650508</string>
+    <string name="app_id">603777449653645</string>
     <string name="save">Save</string>
     <string name="title_activity_new_home">NewHome</string>
     <string name="reminder_type_prompt">Type</string>
@@ -111,12 +139,13 @@
     <string name="title_activity_delete_medication">Delete Medication</string>
     <string name="title_activity_fbfamily_list">Add Family Member</string>
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="password">#password</string>
     <string name="username">\@email</string>
     <string name="resgiter">Register</string>
     <string name="confirm_password">#password - confirm</string>
     <string name="login_user_name_not_present">need your identity to log you in</string>
-    <string name="login_user_password_not_present">need your identity to log you in</string>
+    <string name="login_user_password_not_present">need your password to log you in</string>
     <string name="login_user_name_not_email">this doesnt look like an email-id</string>
     <string name="register_user_name_not_present">need your identity to log you in</string>
     <string name="register_user_password_not_present">need your identity to log you in</string>
@@ -139,24 +168,24 @@
     <string name="present_values">Present Data (if you know)</string>
     <string name="fbs">Fasting Blood Sugar</string>
     <string name="rbs">Random Blood Sugar</string>
-    <string name="present_fbs">present fasting blood sugar (empty stomach)</string>
-    <string name="present_rbs">present random blood sugar (2 hrs after food)</string>
+    <string name="present_fbs_hint">empty stomach</string>
+    <string name="present_rbs_hint">1.5-2 hrs after food</string>
     <string name="target_fbs">target fasting blood sugar</string>
     <string name="target_rbs">target random blood sugar</string>
-    <string name="present_systolic">present systolic pressure (80 in 80-120)</string>
-    <string name="present_diastolic">present diastolic pressure (120 in 80-120)</string>
-    <string name="target_systolic">target systolic pressure (80 in 80-120)</string>
-    <string name="target_diastolic">target diastolic pressure (120 in 80-120)</string>
-    <string name="present_hdl">present hdl</string>
-    <string name="present_ldl">present ldl</string>
-    <string name="present_tryglecerides">present tryglecerides</string>
-    <string name="total_cholesterol">total cholesterol is</string>
+    <string name="present_systolic">systolic pressure</string>
+    <string name="present_diastolic">diastolic pressure</string>
+    <string name="target_systolic">target systolic pressure</string>
+    <string name="target_diastolic">target diastolic pressure</string>
+    <string name="present_hdl">hdl</string>
+    <string name="present_ldl">ldl</string>
+    <string name="present_tryglecerides">tryglecerides</string>
+    <string name="total_cholesterol">total : </string>
     <string name="target_hdl">target hdl</string>
     <string name="target_ldl">target ldl</string>
     <string name="target_tryglecerides">target tryglecerides</string>
     <string name="file_title">description of the file</string>
-    <string name="profile_height">how tall are you?</string>
-    <string name="profile_weight">how much do you weigh?</string>
+    <string name="profile_height">how tall are you?(cm)*</string>
+    <string name="profile_weight">how much do you weigh?(kg)*</string>
     <string name="add_weight">Add</string>
     <string name="title_activity_add_goal_value">Add Value</string>
     <string name="title_activity_add_weight">Add Weight</string>
@@ -166,8 +195,8 @@
     <string name="diabetes_reading">diabetes reading</string>
     <string name="present_pulse_rate">pulse rate</string>
     <string name="target_pulse_rate">target pulse rate</string>
-    <string name="sp_add">Systolic Pressure</string>
-    <string name="dp_add">Diastolic Pressure</string>
+    <string name="sp_add">Systolic</string>
+    <string name="dp_add">Diastolic</string>
     <string name="pr_add">Pulse Rate</string>
     <string name="hdl_value">HDL</string>
     <string name="ldl_value">LDL</string>
@@ -178,7 +207,105 @@
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="add_another_profile">add another profile</string><string name="label_create_healthy_goal_trailer">time to create some
-                healthy goals....</string><string name="random_sugar">random sugar value</string><string name="fasting_sugar">fasting sugar value</string>
+    <string name="add_another_profile">add another profile</string>
+    <string name="label_create_healthy_goal_trailer">time to focus on your health</string>
+    <string name="random_sugar">random sugar value</string>
+    <string name="fasting_sugar">fasting sugar value</string>
+    <string name="medicine_separator">-</string>
+    <string name="file_name">file name</string>
+    <string name="reminder_initial_string">Alarms! Great way of reminding!!\n\n
+        you can set reminders on any kind of medications, lab tests, doctor visits, meals, activities, etc...\n\n</string>
+    <string name="reminder_no_data">No reminders set for this day</string>
+    <string name="set_reminders">set reminders</string>
+    <string name="set_others_reminders">set reminders for rest everything</string>
+    <string name="morning">morning</string>
+    <string name="noon">noon</string>
+    <string name="night">night</string>
+    <string name="repeat">repeat</string>
+    <string name="repeat_part">repeat for</string>
+    <string name="from">from</string>
+    <string name="every">once every</string>
+    <string name="select_relation">related how?</string>
+    <string name="spouse">spouse</string>
+    <string name="father">father</string>
+    <string name="mother">mother</string>
+    <string name="son">son</string>
+    <string name="daughter">daughter</string>
+    <string name="son_in_law">son-in-law</string>
+    <string name="daughter_in_law">daughter-in-law</string>
+    <string name="father_in_law">father-in-law</string>
+    <string name="mother_in_law">mother-in-law</string>
+    <string name="brother">brother</string>
+    <string name="sister">sister</string>
+    <string name="cousin">cousin</string>
+    <string name="others">other</string>
+    <string name="create">Create</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
+    <string name="editProfile">Edit Profile</string>
+    <string name="from_facebook">From Facebook</string>
+    <string name="add_family_member">Add Family Member</string>
+    <string name="email_or_mobile">email or mobile number</string>
+    <string name="target">Target</string>
+    <string name="present">Present</string>
+    <string name="timeline">Timeline</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="other">Other</string>
+    <string name="medicine">Medicine</string>
+    <string name="labtest">Lab-Test</string>
+    <string name="drappointment">Dr-Appointment</string>
+    <string name="meals">Meals</string>
+    <string name="activities">Activities</string>
+    <string name="daily">Day</string>
+    <string name="weekly">Week</string>
+    <string name="monthly">Month</string>
+    <string name="yearly">Year</string>
+    <string name="custom">Custom</string>
+    <string name="selectFood">Select Food Type</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="snacks">Snacks</string>
+    <string name="dinner">Dinner</string>
+    <string name="dosage">dosage</string>
+    <string name="notes">notes</string>
+    <string name="hint_reminder_medicine_name">medicine name</string>
+    <string name="hint_reminder_labTests_name">test name</string>
+    <string name="hint_reminder_activities_name">activity</string>
+    <string name="hint_reminder_meals_name">meal</string>
+    <string name="hint_reminder_drappointment_name">doctor name</string>
+    <string name="hint_reminder_other_name">name</string>
+    <string name="copyright">\u00A9 2013 Viam Health</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="mailMe">Mail Me</string>
+    <string name="oldPassword">#old password</string>
+    <string name="newPassword">#new password</string>
+    <string name="reEnterNewPassword">#confirm new password</string>
+    <string name="weightGoalUnhealthyWarning">You are planning to lose %.1fKgs per week. It is unhealthy to lose more than 1Kg per week. Consider revising your weight loss goal to 0.5Kg per week.</string>
+    <string name="weightGoalAggressiveWarning">You are planning to lose %.1fKg per week. It is an aggressive target. Consider revising your weight loss goal to 0.5Kg per week.</string>
+    <string name="weightGoalIdealTarget">It is healthy and ideal to lose upto 0.5Kg per week.</string>
+    <string name="weightGoalIdealTargetYourDate">You are planning to lose %.1fKg per week. That\'s a healthy amount to lose every week. </string>
+    <string name="targetDate">target date</string><string name="repeatFor">eg: 2</string>
+    <string name="onceEvery">eg: 3</string>
+    <string name="fromdate">eg: 21/03/2013</string>
+    <string name="currentHeight">height</string>
+    <string name="cms">cms</string>
+    <string name="presentWeight">weight</string>
+    <string name="kgs">kgs</string>
+    <string name="targetWeight">target weight</string>
+    <string name="fastingBloodSugar">fasting blood sugar</string>
+    <string name="randomBloodSugar">random blood sugar</string>
+    <string name="systolic">systolic pressure</string>
+    <string name="diastolic">diastolic pressure</string>
+    <string name="systolicHint">80 of 80/120</string>
+    <string name="diastolicHint">120 of 80/120</string>
+    <string name="loggingOutMsg">Logging Out...</string>
 
 </resources>

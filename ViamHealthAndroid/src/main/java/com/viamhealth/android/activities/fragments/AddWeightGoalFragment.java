@@ -1,7 +1,9 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -23,8 +28,14 @@ import com.viamhealth.android.model.goals.WeightGoal;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Weeks;
+
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,9 +56,13 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
     ProgressDialog dialog;
     SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
 
+    final Double idealWeightPerWeek = 0.5;
+
+    ImageView warningImage;
+    TextView warningText;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
 
         View view = inflater.inflate(R.layout.fragment_add_weight_goal, container, false);
 
@@ -64,6 +79,9 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         pHeight = (EditText) view.findViewById(R.id.add_goal_height_input);
         pWeight = (EditText) view.findViewById(R.id.add_goal_weight_input);
         tWeight = (EditText) view.findViewById(R.id.add_goal_target_weight);
+        warningImage = (ImageView) view.findViewById(R.id.imgWarning);
+        warningText = (TextView) view.findViewById(R.id.tvWarning);
+        warningImage.setVisibility(View.GONE);
 
         if(user==null)
             return null;
@@ -81,11 +99,45 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
                 pHeight.setEnabled(false);
                 pWeight.setText(user.getBmiProfile().getWeight().toString());
                 pWeight.setEnabled(false);
-                tWeight.setText((getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())).toString());
+                DecimalFormat d=new DecimalFormat("0.0");
+                tWeight.setText(d.format(getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())));
+                targetDate.setText(formater.format(getIdealTargetDate()));
             }
         }
 
+        tWeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus && targetDate.getText().length()==0){
+                    targetDate.setText(formater.format(getIdealTargetDate()));
+                }
+            }
+        });
+
         return view;
+    }
+
+
+    @Override
+    public void onTargetDateChange() {
+        double targetWeight = Double.parseDouble(tWeight.getText().toString());
+        double presentWeight = user.getBmiProfile().getWeight();
+        if(presentWeight-targetWeight<=1){
+            warningImage.setVisibility(View.GONE);
+            warningText.setVisibility(View.GONE);
+            return;
+        }
+        double weightDiffPerWeek = getWeightDiffPerWeek();
+        if(weightDiffPerWeek > 1.0){
+            warningImage.setVisibility(View.VISIBLE);
+            warningText.setText(String.format(getString(R.string.weightGoalUnhealthyWarning), weightDiffPerWeek));
+        }else if(weightDiffPerWeek > 0.5){
+            warningImage.setVisibility(View.VISIBLE);
+            warningText.setText(String.format(getString(R.string.weightGoalAggressiveWarning), weightDiffPerWeek));
+        }else{
+            warningImage.setVisibility(View.GONE);
+            warningText.setText(String.format(getString(R.string.weightGoalIdealTargetYourDate), weightDiffPerWeek));
+        }
     }
 
     public void onFocusChange(View v, boolean hasFocus) {
@@ -97,7 +149,8 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
         int height = Integer.parseInt(pHeight.getText().toString());
         double weight = Double.parseDouble(pWeight.getText().toString());
-        tWeight.setText((getIdealTargetWeight(height, weight)).toString());
+        DecimalFormat d=new DecimalFormat("0.0");
+        tWeight.setText(d.format((getIdealTargetWeight(height, weight))));
     }
 
     private Double getIdealTargetWeight(Integer height, Double weight) {
@@ -107,20 +160,95 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         return idealWeight;
     }
 
-    private boolean validation() {
+    private Date getIdealTargetDate() {
+        DateTime start = new DateTime();
+        double targetWeight = Double.parseDouble(tWeight.getText().toString());
+        double presentWeight = user.getBmiProfile().getWeight();
+        double weightDiff = Math.abs(targetWeight - presentWeight);
+
+        Double idealTWD = Math.ceil(weightDiff / idealWeightPerWeek);
+        int idealTargetWeeks = idealTWD.intValue();
+
+        DateTime idealTD = start.plusWeeks(idealTargetWeeks);
+
+        return new Date(idealTD.getMillis());
+    }
+
+    private double getWeightDiffPerWeek() {
+        DateTime start = new DateTime();
+        try {
+            DateTime end = new DateTime(formater.parse(targetDate.getText().toString()).getTime());
+            int weeksForTarget = Weeks.weeksBetween(start, end).getWeeks();
+            weeksForTarget = Math.abs(weeksForTarget);
+
+            double targetWeight = Double.parseDouble(tWeight.getText().toString());
+            double presentWeight = user.getBmiProfile().getWeight();
+            double weightDiff = Math.abs(targetWeight - presentWeight);
+
+            return weightDiff/weeksForTarget;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
+    public boolean isValid() {
+//        try {
+//            //get the weight to be reduced per week
+//            DateTime start = new DateTime();
+//            DateTime end = new DateTime(formater.parse(targetDate.getText().toString()).getTime());
+//            int weeksForTarget = Weeks.weeksBetween(start, end).getWeeks();
+//            weeksForTarget = Math.abs(weeksForTarget);
+//
+//            double targetWeight = Double.parseDouble(tWeight.getText().toString());
+//            double presentWeight = user.getBmiProfile().getWeight();
+//            double weightDiff = Math.abs(targetWeight - presentWeight);
+//
+//            double weightDiffPerWeek = weightDiff/weeksForTarget;
+//            Double idealTWD = Math.ceil(weightDiff / idealWeightPerWeek);
+//            int idealTargetWeeks = idealTWD.intValue();
+//
+//            DateTime idealTD = start.plusWeeks(idealTargetWeeks);
+//
+//            final Date idealTargDate = new Date(idealTD.getMillis());
+//            if(weightDiffPerWeek>1.0){
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
+//                builder.setMessage("Its possible to reach this target only if you fast! \n On a aggressive mode its healthy to reduce 0.5 kgs per week. It takes "+idealTargetWeeks+" weeks to reach your target weight. Do you want me to set target date based on this?");
+//                builder.setPositiveButton("sure", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        targetDate.setText(formater.format(idealTargDate));
+//                    }
+//                });
+//                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    @Override
+//                    public void onCancel(DialogInterface dialog) {
+//                        targetDate.setText("");
+//                    }
+//                });
+//                builder.show();
+//                return false;
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+
         return true;
     }
 
     @Override
     public Goal getGoal() {
-        WeightGoal goal = new WeightGoal();
-        goal.setWeight(Double.parseDouble(tWeight.getText().toString()));
+        WeightGoal weightGoal = new WeightGoal();
+        setDefaultGoalAttributes(goal, weightGoal);
+        weightGoal.setWeight(Double.parseDouble(tWeight.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            weightGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return weightGoal;
     }
 
     @Override

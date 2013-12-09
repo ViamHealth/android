@@ -2,9 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    style="@style/EditTextReverseTheme"
-    android:background="#37aa4f">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -18,6 +16,7 @@
             android:text="@string/fasting"
             android:id="@+id/cbFasting"
             android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_marginLeft="20dp" />
 
         <CheckBox
@@ -26,7 +25,9 @@
             android:text="@string/random"
             android:id="@+id/cbRandom"
             android:layout_weight="1"
-            android:layout_marginLeft="20dp" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_marginLeft="20dp"
+            android:checked="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +43,7 @@
             android:inputType="numberSigned"
             android:ems="10"
             android:id="@+id/input_fasting"
-            style="@style/EditTextGreenTheme"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center_vertical|center_horizontal"
             android:hint="@string/fasting_sugar" />
 
@@ -50,9 +51,9 @@
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:inputType="numberSigned"
-            style="@style/EditTextGreenTheme"
             android:ems="10"
             android:id="@+id/input_random"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center_vertical|center_horizontal"
             android:hint="@string/random_sugar"
             android:layout_marginTop="10dp" />

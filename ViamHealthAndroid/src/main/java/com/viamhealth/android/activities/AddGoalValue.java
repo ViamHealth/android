@@ -20,16 +20,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.AddBPValue;
 import com.viamhealth.android.activities.fragments.AddCholesterolValue;
 import com.viamhealth.android.activities.fragments.AddDiabetesValue;
 import com.viamhealth.android.activities.fragments.AddValueBaseFragment;
 import com.viamhealth.android.activities.fragments.AddWeightValue;
-import com.viamhealth.android.activities.oldones.AddCholesterolGoal;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
+import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.UIUtility;
 
 import java.util.Calendar;
@@ -46,6 +48,9 @@ public class AddGoalValue extends BaseFragmentActivity {
 
     boolean shouldUpdate = false;
 
+    User user;
+    ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +63,8 @@ public class AddGoalValue extends BaseFragmentActivity {
         setDate();setTime();
 
         LinearLayout timePicker = (LinearLayout) findViewById(R.id.btn_time_picker);
+        //TODO this is for time being
+        timePicker.setVisibility(View.GONE);
         timePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,17 +97,9 @@ public class AddGoalValue extends BaseFragmentActivity {
             }
         });
 
-        TextView btnCancel = (TextView) findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
-
         Intent intent = getIntent();
         type = (MedicalConditions) intent.getSerializableExtra("type");
+        user = (User) intent.getParcelableExtra("user");
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArray("readings", intent.getParcelableArrayExtra("readings"));
@@ -110,6 +109,26 @@ public class AddGoalValue extends BaseFragmentActivity {
         ft.add(R.id.container, fragment);
         ft.commit();
         getSupportFragmentManager().executePendingTransactions();
+
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        String title = "Add " + getString(type.key()) + " Reading";
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(user.getName());
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        /*** Action bar Creation Ends Here ***/
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private Fragment getFragment(MedicalConditions mc, Bundle bundle) {
@@ -150,19 +169,22 @@ public class AddGoalValue extends BaseFragmentActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             shouldUpdate = true;
                             save();
+                            dialog.dismiss();
                         }
                     })
                     .setNegativeButton("Nope..", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            shouldUpdate = false;
-                            save();
+                            dialog.dismiss();
+                            //save();
                         }
                     });
 
             AlertDialog dialog = builder.create();
             dialog.show();
 
+        }else{
+            save();
         }
     }
 

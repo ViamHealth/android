@@ -3,14 +3,22 @@ package com.viamhealth.android;
 
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.facebook.FacebookRequestError;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
+import com.viamhealth.android.model.CategoryExercise;
+import com.viamhealth.android.model.CategoryFood;
+import com.viamhealth.android.model.MedicationData;
+import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
 import com.viamhealth.android.model.FoodData;
@@ -35,15 +43,36 @@ public class Global_Application extends Application
 	public static String selectedfoodid,selectedexerciseid,food_item,food_quantity,meal_type,weight,user_calories,time_spent,exercise_value;
 	public static double totalcal=0;
 	public String path;
+    public static double total_ideal_calories=0;
 	public String fileuri=null;
+    public String currentUser=null;
     public byte fileByte[]=null;
 	public String addvalType;
 	public String weightid,cholesterolid,glucoseid,bpid;
 	public boolean weightupdate, cholesterolupdate,glucoseupdate,bpupdate;
 	public static List<User> lstfamilyglobal;
 	public boolean calcelflg;
+    public String selected_date;
+
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultBreakfast = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultLunch = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultSnacks = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryFood>> lstResultDinner = new ArrayList<ArrayList<CategoryFood>>();
+    //public static ArrayList<ArrayList<CategoryExercise>> lstResultExercise = new ArrayList<ArrayList<CategoryExercise>>();
+
+    public static ArrayList<CategoryFood> lstResultBreakfast=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryFood> lstResultLunch=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryFood> lstResultSnacks=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryFood> lstResultDinner=new ArrayList<CategoryFood>();
+    public static ArrayList<CategoryExercise> lstResultExercise=new ArrayList<CategoryExercise>();
+    public static Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
+
+
+    public static ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
+    public static ArrayList<MedicationData> otherData = new ArrayList<MedicationData>();
 
     private User loggedInUser;
+
 
 	@Override
 	public void onCreate() {
@@ -71,13 +100,16 @@ public class Global_Application extends Application
 	}
 
 
+
+
     public User getLoggedInUser() {
         return loggedInUser;
     }
 
     public void setLoggedInUser(User loggedInUser) {
         this.loggedInUser = loggedInUser;
-        this.loggedInUser.setLoggedInUser(true);
+        if(this.loggedInUser!=null)
+            this.loggedInUser.setLoggedInUser(true);
     }
 
     public boolean isCalcelflg() {
@@ -266,6 +298,14 @@ public class Global_Application extends Application
 	public void setSelectedfoodid(String selectedfoodid) {
 		this.selectedfoodid = selectedfoodid;
 	}
+
+    public String getSelectedexerciseid() {
+        return selectedexerciseid;
+    }
+
+    public void setSelectedExerciseid(String selectedexerciseid) {
+        this.selectedexerciseid = selectedexerciseid;
+    }
 
 	public static String getNextfile() {
 		return nextfile;

@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.AddBPGoalFragment;
 import com.viamhealth.android.activities.fragments.AddCholesterolGoalFragment;
@@ -34,6 +36,7 @@ import com.viamhealth.android.manager.OrFragmentManager;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.users.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,10 +53,13 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
     AddGoalFragmentManager fm;
     ProgressDialog progressDialog;
 
+    ActionBar actionBar;
+    User user;
+    MedicalConditions type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_add_goal);
@@ -61,8 +67,10 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         Intent intent = getIntent();
         Bundle goalsConfigured = intent.getBundleExtra("goals");
 
+        user = intent.getParcelableExtra("user");
+        type = (MedicalConditions)intent.getSerializableExtra("type");
         Bundle bundle = new Bundle();
-        bundle.putParcelable("user", intent.getParcelableExtra("user"));
+        bundle.putParcelable("user", user);
         bundle.putBundle("goals", goalsConfigured);
 
 
@@ -76,67 +84,41 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Goal goal = fm.getGoal();
-                GoalReadings goalReading = fm.getGoalReadings();
-                Intent intent = new Intent();
-                intent.putExtra("goal", goal);
-                intent.putExtra("reading", goalReading);
-                intent.putExtra("type", fm.getType());
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-        btnCancel = (TextView) findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(AddGoalActivity.this);
-        builder.setTitle("Set Goals for...");
-        String[] mcs = getMedicalConditions(goalsConfigured);
-        final String[] items = Arrays.copyOf(mcs, mcs.length);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (items[item].equals(getString(MedicalConditions.Diabetes.key()))) {
-                    fm.changeFragment(MedicalConditions.Diabetes);
-                } else if (items[item].equals(getString(MedicalConditions.Cholesterol.key()))) {
-                    fm.changeFragment(MedicalConditions.Cholesterol);
-                } else if (items[item].equals(getString(MedicalConditions.BloodPressure.key()))) {
-                    fm.changeFragment(MedicalConditions.BloodPressure);
-                } else if (items[item].equals(getString(MedicalConditions.Obese.key()))) {
-                    fm.changeFragment(MedicalConditions.Obese);
-                } else {
+                AddGoalFragment activeFragment = fm.getActiveGoalFragment();
+                if(activeFragment.isValid()){
+                    Goal goal = activeFragment.getGoal();
+                    GoalReadings goalReading = activeFragment.getGoalReadings();
                     Intent intent = new Intent();
-                    setResult(RESULT_CANCELED, intent);
+                    intent.putExtra("goal", goal);
+                    intent.putExtra("reading", goalReading);
+                    intent.putExtra("type", fm.getType());
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
         });
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                finish();
-            }
-        });
-        builder.show();
+
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        String title = "Set " + getString(type.key()) + " Goal";
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(user.getName());
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        /*** Action bar Creation Ends Here ***/
+
+        fm.changeFragment(type);
+
     }
 
-    private String[] getMedicalConditions(Bundle goalsConfigued) {
-        MedicalConditions[] mcs = MedicalConditions.values();
-        String[] items = new String[mcs.length];
-        for (int i=0; i<mcs.length; i++){
-            if(goalsConfigued.containsKey(mcs[i].name()))
-                continue;
-            items[i] = getString(mcs[i].key());
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            finish();
+            return true;
         }
-
-        return items;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -149,10 +131,7 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_goal, menu);
-        return true;
+    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+        return super.onCreateOptionsMenu(menu);
     }
-
 }

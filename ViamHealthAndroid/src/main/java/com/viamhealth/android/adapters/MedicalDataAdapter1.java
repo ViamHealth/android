@@ -23,7 +23,7 @@ import com.viamhealth.android.model.MedicationData;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
+public class MedicalDataAdapter1 extends MultiSelectionAdapter<MedicationData> {
 	Context context; 
 	int layoutResourceId;
     Date start_date,end_date;
@@ -33,15 +33,18 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 	int height,width,w30,w150,w10;
 	
 	public MedicalDataAdapter1(Context context, int layoutResourceId, ArrayList<MedicationData> lstdata) {
-		super(context, layoutResourceId, lstdata);
+		super(context,lstdata);
 		// TODO Auto-generated constructor stub
 		
 		 this.layoutResourceId = layoutResourceId;
 	     this.context = context;
 	     this.lstdata = lstdata;
 	}
-	 @Override
-	    public View getView(int position, View convertView, ViewGroup parent) {
+
+
+
+    @Override
+	    public View getItemView(int position, View convertView, ViewGroup parent) {
 	        View row = convertView;
 	        FileDataHolder holder = null;
 	        appPrefs=new ViamHealthPrefs(context);
@@ -93,7 +96,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						TextView txt = (TextView)v.findViewById(R.id.txt_morning);
-						txt.setBackgroundColor(Color.GREEN);
+						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
 	            
@@ -103,7 +106,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						TextView txt = (TextView)v.findViewById(R.id.txt_noon);
-						txt.setBackgroundColor(Color.GREEN);
+						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
 	            holder.txt_night.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +115,7 @@ public class MedicalDataAdapter1 extends ArrayAdapter<MedicationData> {
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						TextView txt = (TextView)v.findViewById(R.id.txt_night);
-						txt.setBackgroundColor(Color.GREEN);
+						//txt.setBackgroundColor(Color.GREEN);
 					}
 				});
                 String get_start_date,get_end_date;

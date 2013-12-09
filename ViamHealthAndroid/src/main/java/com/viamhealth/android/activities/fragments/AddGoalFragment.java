@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by naren on 10/10/13.
  */
-public abstract class AddGoalFragment extends Fragment {
+public abstract class AddGoalFragment extends BaseFragment {
 
     protected AddGoalFragmentManager mManager = null;
     protected User user;
@@ -41,5 +41,23 @@ public abstract class AddGoalFragment extends Fragment {
 
     public abstract Goal getGoal();
     public abstract GoalReadings getGoalReadings();
+
+    public boolean isValid(){
+        return true;
+    }
+
+    public void onTargetDateChange () {
+
+    }
+
+    public void setDefaultGoalAttributes(Goal from, Goal to){
+        if(from!=null && from.getId()!=null && from.getId()>0){
+            to.setId(from.getId());
+            to.setUserId(from.getUserId());
+            to.setCreated(from.getCreated());
+            to.setUpdated(from.getUpdated());
+            to.setUpdatedBy(from.getUpdatedBy());
+        }
+    }
 
 }

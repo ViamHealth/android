@@ -52,7 +52,7 @@ import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AddMedication extends FragmentActivity implements OnClickListener{
+public class AddMedication extends BaseFragmentActivity implements OnClickListener{
 	Display display;
 	int height,width;
 	ProgressDialog dialog1;
@@ -199,7 +199,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
             noon_layout.setVisibility(View.VISIBLE);
             night_layout.setVisibility(View.VISIBLE);
             btnSave.setText("Edit");
-            Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"start date="+int_edit.getStringExtra("start_date"),Toast.LENGTH_LONG).show();
 
         }
         else if(int_edit.getBooleanExtra("iseditOthers",false)==true)
@@ -212,7 +212,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
             morning_layout.setVisibility(View.GONE);
             noon_layout.setVisibility(View.GONE);
             night_layout.setVisibility(View.GONE);
-            Toast.makeText(getApplicationContext(),"pos 1",Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"pos 1",Toast.LENGTH_LONG).show();
         }
 
         else if(int_edit.getBooleanExtra("isMedReminders",false)==true)
@@ -730,6 +730,7 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
 				dialog1 = new ProgressDialog(AddMedication.this);
 				dialog1.setMessage("Please Wait....");
 				dialog1.show();
+                end_date=getEndDate(txt_duration_val.getText().toString());
 				Log.i("onPreExecute", "onPreExecute");
 				
 			}       
@@ -780,7 +781,9 @@ public class AddMedication extends FragmentActivity implements OnClickListener{
                                                 "0",//ddl_repeate_mode.getSelectedItem().toString()
                                                 "0",// txt_min.getText().toString()
                                                 "1", //txt_week.getText().toString()
-                                                "0");//txt_day_interval.getText().toString()
+                                                "0",
+                                                 ""+start_year+"-"+start_month+"-"+start_day,
+                                                end_date);//txt_day_interval.getText().toString()
 
 			    return null;
 			}

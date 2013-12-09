@@ -63,6 +63,9 @@ public class AddBPGoalFragment extends AddGoalFragment {
             tPR.setText(goal.getPulseRate());
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+        }else{
+            if(user.getBmiProfile().getSystolicPressure()>0) pSP.setText(String.valueOf(user.getBmiProfile().getSystolicPressure()));
+            if(user.getBmiProfile().getDiastolicPressure()>0) pDP.setText(String.valueOf(user.getBmiProfile().getDiastolicPressure()));
         }
 
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);
@@ -77,16 +80,17 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
     @Override
     public Goal getGoal() {
-        BPGoal goal = new BPGoal();
-        goal.setSystolicPressure(Integer.parseInt(tSP.getText().toString()));
-        goal.setDiastolicPressure(Integer.parseInt(tDP.getText().toString()));
-        goal.setPulseRate(Integer.parseInt(tPR.getText().toString()));
+        BPGoal bpGoal = new BPGoal();
+        setDefaultGoalAttributes(goal, bpGoal);
+        bpGoal.setSystolicPressure(Integer.parseInt(tSP.getText().toString()));
+        bpGoal.setDiastolicPressure(Integer.parseInt(tDP.getText().toString()));
+        //goal.setPulseRate(Integer.parseInt(tPR.getText().toString()));
         try{
-            goal.setTargetDate(formater.parse(targetDate.getText().toString()));
+            bpGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
         } catch(ParseException e){
             e.printStackTrace();
         }
-        return goal;
+        return bpGoal;
     }
 
     @Override
@@ -95,7 +99,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
             BPGoalReading readings = new BPGoalReading();
             readings.setSystolicPressure(Integer.parseInt(pSP.getText().toString()));
             readings.setDiastolicPressure(Integer.parseInt(pDP.getText().toString()));
-            readings.setPulseRate(Integer.parseInt(pPR.getText().toString()));
+            //readings.setPulseRate(Integer.parseInt(pPR.getText().toString()));
             readings.setReadingDate(new Date());
             return readings;
         }

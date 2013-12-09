@@ -1,6 +1,5 @@
 package com.viamhealth.android.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,14 +7,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,38 +22,31 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.ActionBarSherlock;
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.SubMenu;
-import com.facebook.widget.ProfilePictureView;
+import com.actionbarsherlock.view.Window;
+import com.google.analytics.tracking.android.EasyTracker;
+
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
-import com.viamhealth.android.activities.fragments.ReminderFragment;
-import com.viamhealth.android.activities.fragments.TabHeaderFragment;
-import com.viamhealth.android.manager.ActionBarTabManager;
+import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.tasks.InviteUser;
+import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by naren on 07/10/13.
  */
-public class TabActivity extends SherlockFragmentActivity implements View.OnClickListener, MenuItem.OnMenuItemClickListener {
+public class TabActivity extends BaseFragmentActivity implements View.OnClickListener, ActionBar.OnNavigationListener {
 
     TabHost mTabHost;
     //TabManager mTabManager;
@@ -66,10 +56,12 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
     private final Map<Integer, User> usersMap = new HashMap<Integer, User>();
 
     Animation animationMoveIn, animationMoveOut;
-    LinearLayout tabContent;// tabHeader;
+    FrameLayout tabContent;//, tabHeader;
     TabWidget tabs;
 
     ActionBar actionBar;
+    User user;
+    final List<User> users = new ArrayList<User>();
 
     boolean headerIsVisible = true;
 
@@ -81,16 +73,21 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.tab_main_activity_new);
-        //setTheme(R.style.Theme_Greentheme);
+        this.requestWindowFeature(Window.FEATURE_PROGRESS);
+        setContentView(R.layout.tab_main_activity);
 
-        //mTabHost = (TabHost)findViewById(R.id.tabHost);
-        //mTabHost.setup();
-        //mTabHost.setOnClickListener(this);
-        mTabManager = new ActionBarTabManager(this, R.id.realtabcontent);
+        mTabHost = (TabHost)findViewById(R.id.tabHost);
+        mTabHost.setup();
+        mTabHost.setOnClickListener(this);
+        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent, true);
 
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
+        user = (User) intent.getParcelableExtra("user");
+        Parcelable[] pUsers = intent.getParcelableArrayExtra("users");
+        for(int i=0; i<pUsers.length; i++){
+            users.add((User) pUsers[i]);
+        }
 
         Actions action = (Actions) intent.getSerializableExtra("action");
 
@@ -122,23 +119,51 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
         //TODO use Action Bar to create the Header
 
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+
+        Context themedContext = actionBar.getThemedContext();
+        //UsersMenuAdapter adapter = new UsersMenuAdapter(themedContext, users);
+        List<String> strUserNames = new ArrayList<String>(users.size());
+        //strUserNames.add(user.getName());
+        int currentUserIndex = 0;
+        for(int i=0; i<users.size(); i++){
+            if(users.get(i).getId().equals(user.getId()))
+                currentUserIndex = i;
+            strUserNames.add(users.get(i).getName());
+        }
+        ArrayAdapter<String> list = new ArrayAdapter<String>(themedContext, com.actionbarsherlock.R.layout.sherlock_spinner_item, strUserNames);
+        list.setDropDownViewResource(com.actionbarsherlock.R.layout.sherlock_spinner_dropdown_item);
+
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        actionBar.setListNavigationCallbacks(list, this);
+
+        actionBar.setSelectedNavigationItem(currentUserIndex);
+        /*** Action bar Creation Ends Here ***/
+
         /* Create the Tab Header */
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
         /* Create Tabs */
-        /*mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal)),
+        mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
                 GoalFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("journal").setIndicator(getTabIndicator(R.string.tab_label_journal, R.drawable.ic_action_log)),
                 JournalFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
-                ReminderFragment.class, bundle);
+                ReminderFragmentNew.class, bundle);
+        //NewReminders.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
+                //FileFragment.class, bundle);
                 FileFragment.class, bundle);
-        */
+
 
         animationMoveIn = new TranslateAnimation(0, 0, -29, 29);
         animationMoveIn.setDuration(2000);
@@ -148,15 +173,16 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
         animationMoveOut.setDuration(2000);
         animationMoveOut.setRepeatCount(0);
 
-        tabContent = (LinearLayout) findViewById(R.id.realtabcontent);
+        tabContent = (FrameLayout) findViewById(R.id.realtabcontent);
         //tabHeader = (FrameLayout) findViewById(R.id.tabHeader);
-        //tabs = (TabWidget) findViewById(android.R.id.tabs);
+        tabs = (TabWidget) findViewById(android.R.id.tabs);
+
 
         if(action == Actions.UploadFiles){
             //mTabHost.setCurrentTabByTag("files");
             mTabManager.selectTab(TabTypes.Files.name());
             FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
-            fragment.uploadImage();
+            fragment.pickFile();
         } else if(action == Actions.SetGoal){
             //mTabHost.setCurrentTabByTag("goals");
             mTabManager.selectTab(TabTypes.Goals.name());
@@ -166,30 +192,35 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
             mTabManager.selectTab(savedInstanceState.getString("tab"));
             //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
-
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //outState.putString("tab", mTabHost.getCurrentTabTag());
-        outState.putString("tab", mTabManager.getCurrentSelectedTab());
+    public void onResume() {
+        super.onResume();
     }
 
-    protected void getActionBarTab(TabTypes type, Bundle args) {
-        ActionBar.Tab tab = getSupportActionBar().newTab();
-        tab.setCustomView(getTabIndicator(type.res(), type.icon()));
-        tab.setTabListener(mTabManager);
-        tab.setTag(type.name());
-        mTabManager.addTab(tab, type.name(), type.clss(), args);
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        //mSelected.setText("Selected: " + mLocations[itemPosition]);
+        User usr = users.get(itemPosition);
+        if(usr.getId().equals(user.getId()))
+            return false;
+
+        Toast.makeText(TabActivity.this, "Selected User " + usr.getName(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(TabActivity.this, TabActivity.class);
+        intent.putExtra("user", usr);
+        Parcelable[] usrs = new Parcelable[users.size()];
+        intent.putExtra("users", users.toArray(usrs));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        return true;
     }
 
     protected View getTabIndicator(int labelId, int drawableId) {
-        View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator, null);
-        //View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator, mTabHost.getTabWidget(), false);
-        TextView title = (TextView) tabIndicator.findViewById(R.id.title);
+        View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator_holo, mTabHost.getTabWidget(), false);
+        TextView title = (TextView) tabIndicator.findViewById(android.R.id.title);
         title.setText(getString(labelId));
-        ImageView icon = (ImageView) tabIndicator.findViewById(R.id.icon);
+        ImageView icon = (ImageView) tabIndicator.findViewById(android.R.id.icon);
         icon.setImageResource(drawableId);
 
         return tabIndicator;
@@ -197,98 +228,32 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //getSupportMenuInflater().inflate(R.menu.menu_tab_activity_main, menu);
-
-        LayoutInflater layoutInflater = LayoutInflater.from(TabActivity.this);
-        View view = layoutInflater.inflate(R.layout.menu_users, null);
-        ProfilePictureView picView = (ProfilePictureView) view.findViewById(R.id.header_user_icon);
-        if(user.getProfile()!=null)
-            picView.setProfileId(user.getProfile().getFbProfileId());
-        MenuItem item = menu.add(user.getName())
-                .setActionView(view);
-
-
-
-        int usrsCount = users.size();
-        int i=0;
-        for(; i< usrsCount; i++){
-            User usr = users.get(i);
-            usersMap.put(usr.getId().intValue(), usr);
-            if(usr.getId()==user.getId()){
-                continue;
-            }else{
-                SubMenu subMenu = menu.addSubMenu(usr.getName());
-                subMenu.add(0, usr.getId().intValue(), i, usr.getName())
-                        .setOnMenuItemClickListener(TabActivity.this);
-            }
-
-        }
-
-        SubMenu subMenu = menu.addSubMenu("Logout");
-        subMenu.add(0, 0, i, "Logout")
-                .setOnMenuItemClickListener(TabActivity.this);
-
-        /*menu.add(user.getName())
-                .setActionProvider(new UsersActionProvider(TabActivity.this))
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        menu.add(user.getName())
-                .setActionProvider(new UsersActionProvider(TabActivity.this))
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);*/
-
-        return super.onCreateOptionsMenu(menu);
+        getSupportMenuInflater().inflate(R.menu.tab_group_settings, menu);
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // If this callback does not handle the item click, onPerformDefaultAction
-        // of the ActionProvider is invoked. Hence, the provider encapsulates the
-        // complete functionality of the menu item.
-        Toast.makeText(this, "Handling in onOptionsItemSelected avoided",
-                Toast.LENGTH_SHORT).show();
-        finish();
-        return false;
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        int userId = menuItem.getItemId();
-        if(userId==0){
-            //Logout
+        boolean retVal = super.onOptionsItemSelected(item);
+        if(item.getItemId()==R.id.menu_logout){
             Intent returnIntent = new Intent(TabActivity.this, Home.class);
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(returnIntent);
             return true;
         }
-        User curUser = usersMap.get(userId);
-        Intent intent = new Intent(TabActivity.this, TabActivity.class);
-        intent.putExtra("user", user);
-        Parcelable[] usersList = new Parcelable[users.size()];
-        intent.putExtra("users", users.toArray(usersList));
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        return true;
-    }
 
-    /*    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.tab_group_settings, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.menu_settings){
-            Intent returnIntent = new Intent(TabActivity.this, Home.class);
-            returnIntent.putExtra("logout", true);
-            returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(returnIntent);
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
-        return super.onOptionsItemSelected(item);
-    }*/
+
+        if(item.getItemId() == R.id.menu_invite) {
+            InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application)getApplicationContext());
+            inviteUser.show();
+        }
+        return retVal;
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -296,47 +261,33 @@ public class TabActivity extends SherlockFragmentActivity implements View.OnClic
 
         if(mTabManager.getCurrentSelectedTab().equals("goals")){
             if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
-                //tabHeader.setAlpha(0.4f);
-
-                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
-                params.setMargins(0,0,0,0);
-                tabContent.setLayoutParams(params);
-
-                //tabs.setVisibility(View.GONE);
-                //tabHeader.setAnimation(animationMoveOut);
+                tabs.setVisibility(View.GONE);
                 return;
             }
 
         }
-
-        //tabHeader.setAlpha(1);
-
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tabContent.getLayoutParams();
-        // Get the screen's density scale
-        final float scale = getResources().getDisplayMetrics().density;
-        // Convert the dps to pixels, based on density scale
-        int margin = (int) (HEADER_TOP_MARGIN_DP * scale + 0.5f);
-        params.setMargins(0, margin, 0, 0);
-        tabContent.setLayoutParams(params);
-
-        //tabs.setVisibility(View.VISIBLE);
-        //tabHeader.setAnimation(animationMoveOut);
+        tabs.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onClick(View v) {
         if(mTabManager.getCurrentSelectedTab().equals("goals")){
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-/*                if(headerIsVisible){
+                if(headerIsVisible){
                     //tabHeader.setAnimation(animationMoveOut);
-                    //headerIsVisible = false;
+                    headerIsVisible = false;
                 }
                 else{
                     //tabHeader.setAnimation(animationMoveIn);
-                    //headerIsVisible = true;
-                }*/
+                    headerIsVisible = true;
+                }
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public enum Actions { UploadFiles, SetGoal; }

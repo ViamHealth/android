@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_mode_download"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_download"
+        android:title="Download"/>
+
+    <item
+        android:id="@+id/action_mode_share"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_social_share"
+        android:title="Share"
+        android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider"/>
+
+    <item
+        android:id="@+id/action_mode_delete"
+        android:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_delete"
+        android:title="Delete"/>
+
+</menu>

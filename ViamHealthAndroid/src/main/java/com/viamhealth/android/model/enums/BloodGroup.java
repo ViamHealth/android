@@ -8,6 +8,7 @@ import java.util.Map;
  * Created by naren on 02/10/13.
  */
 public enum BloodGroup {
+    None(0, "select blood group"),
     O_Positive(7, "O +ve"),
     O_Negative(8, "O -ve"),
     A_Positive(1, "A +ve"),

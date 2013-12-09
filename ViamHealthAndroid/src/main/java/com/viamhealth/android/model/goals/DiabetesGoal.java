@@ -24,6 +24,7 @@ public class DiabetesGoal extends Goal {
 
     @Override
     public void setReadings(List<GoalReadings> readings) {
+        this.readings.clear();
         for(GoalReadings reading : readings){
             this.readings.add((DiabetesGoalReading) reading);
         }
@@ -73,7 +74,17 @@ public class DiabetesGoal extends Goal {
         super(in);
         fbs = in.readInt();
         rbs = in.readInt();
-        readings = in.readArrayList(null);
+        int readingsCount = in.readInt();
+        Parcelable[] readArr = in.readParcelableArray(DiabetesGoalReading.class.getClassLoader());//new DiabetesGoalReading[readingsCount];
+        if(readingsCount>0){
+            //in.readTypedArray(readArr, DiabetesGoalReading.CREATOR);
+            this.readings = new ArrayList<GoalReadings>(readingsCount);
+            for(int i=0; i<readingsCount; i++){
+                this.readings.add((DiabetesGoalReading)readArr[i]);
+            }
+        }else{
+            this.readings = new ArrayList<GoalReadings>();
+        }
     }
 
     @Override
@@ -81,7 +92,9 @@ public class DiabetesGoal extends Goal {
         super.writeToParcel(dest, flags);
         dest.writeInt(fbs);
         dest.writeInt(rbs);
-        DiabetesGoalReading[] readArr = new DiabetesGoalReading[this.readings.size()];
+        int readingsCount = this.readings==null?0:this.readings.size();
+        DiabetesGoalReading[] readArr = new DiabetesGoalReading[readingsCount];
+        dest.writeInt(readingsCount);
         dest.writeParcelableArray(this.readings.toArray(readArr), flags);
     }
 
@@ -180,6 +193,16 @@ public class DiabetesGoal extends Goal {
             }
 
             return healthyRangeJSON;
+        }
+
+        @Override
+        public int getMax() {
+            return Math.max(maxFBS, maxRBS);
+        }
+
+        @Override
+        public int getMin() {
+            return Math.min(minFBS, minRBS);
         }
     }
 }

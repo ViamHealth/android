@@ -3,26 +3,31 @@ package com.viamhealth.android.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.facebook.FacebookRequestError;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
 import com.facebook.widget.ProfilePictureView;
@@ -31,22 +36,32 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
+import com.viamhealth.android.dao.rest.endpoints.FileUploader;
+import com.viamhealth.android.dao.rest.endpoints.UserEP;
+import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
+import com.viamhealth.android.tasks.ShareUser;
+import com.viamhealth.android.ui.helper.FileLoader;
+import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import antistatic.spinnerwheel.AbstractWheel;
+import antistatic.spinnerwheel.OnWheelChangedListener;
+import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
+import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
+
 public class NewProfile extends BaseFragmentActivity implements View.OnClickListener,
-        FBLoginFragment.OnSessionStateChangeListener, EditText.OnFocusChangeListener {
+        EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
 
@@ -58,16 +73,25 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     String selecteduserid;
 
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
-    ImageView profile_image;
+    EditText systolic, diastolic, fasting, random, hdl, ldl, tri;
+    TextView totalCholesterol;
+
     Button btnSave, btnCancel;
-    ImageButton imgMale, imgFemale;
+    ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
-    Spinner bloodGroup;
+    Spinner bloodGroup, relation;
 
     User user = null;
     Profile profile = null;
+    ImageView imgView = null;
 
-    private FBLoginFragment fbLoginFragment;
+    boolean isImageSelected = false;
+
+    private final String TAG = "NewProfile";
+
+    private enum UserType {
+        Manual, FB;
+    }
 
     private enum FBRequestType {
         Profile, Family, FamilyProfile;
@@ -77,47 +101,93 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     private RequestStatus familyMemberSelected = RequestStatus.Not_Started;
     private RequestStatus profileDataFetched = RequestStatus.Not_Started;
 
+    private ImageSelector imageSelector;
+
+    private UserType userType;
+
+    private boolean isEditMode = false;
+    private ActionBar actionBar;
+    AbstractWheel wheelFeet, wheelCms;
+    String[] arr= new String[96];
+
+    private OnWheelChangedListener onWheelInchesChangedListener, onWheelCmsChangedListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        if (savedInstanceState == null) {
-            // Add the fragment on initial activity setup
-            fbLoginFragment = new FBLoginFragment();
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fbLoginFragment, fbLoginFragment)
-                    .commit();
-        } else {
-            // Or set the fragment from restored state info
-            fbLoginFragment = (FBLoginFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.fbLoginFragment);
-        }
-
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         setContentView(R.layout.activity_new_profile);
 
         ga=((Global_Application)getApplicationContext());
+        if(ga==null)
+            throw new NullPointerException("Application in itself is null");
+
         appPrefs=new ViamHealthPrefs(this);
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
-        //for get screen height width
-        ScreenDimension();
-
-        profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
-        profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
-
-        Animation anim = AnimationUtils.loadAnimation(NewProfile.this, R.anim.fade_in);
-        profilePic.setAnimation(anim);
-        anim.start();
-
         Intent intent = getIntent();
         int registeredProfileCount = intent.getIntExtra("registeredProfilesCount", 0);
         user = (User) intent.getParcelableExtra("user");
+        isEditMode = intent.getBooleanExtra("isEditMode", false);
+
+        int k=0;
+
+        for(int i=1;i<=8;i++) {
+            for(int j=0;j<=11;j++) {
+                arr[k]=""+i+"' "+j+ "\"";
+                k++;
+            }
+        }
+
+        //String str1[]= new String[]{"val1","val2","val3"};
+
+        wheelFeet = (AbstractWheel) findViewById(R.id.feet);
+        ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
+        wheelFeet.setViewAdapter(adapter);
+        wheelFeet.setCyclic(true);
+
+        wheelCms = (AbstractWheel) findViewById(R.id.cms);
+        wheelCms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
+        wheelCms.setCyclic(true);
+        boolean flag=false;
+
+        onWheelInchesChangedListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                wheelCms.removeChangingListener(onWheelCmsChangedListener);
+                int inchesIndex = wheelFeet.getCurrentItem();
+                int inches = inchesIndex + 12;
+                int curCMS = getCMSfromInches(inches);
+                wheelCms.setCurrentItem(curCMS);
+                wheelCms.addChangingListener(onWheelCmsChangedListener);
+            }
+        };
+
+        onWheelCmsChangedListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                wheelFeet.removeChangingListener(onWheelInchesChangedListener);
+                int curCMS = wheelCms.getCurrentItem();
+                int curInches = getInchesFromCMS(curCMS);
+                int inchesIndex = curInches<11 ? 0 : (curInches-12);
+                wheelFeet.setCurrentItem(inchesIndex);
+                wheelFeet.addChangingListener(onWheelInchesChangedListener);
+            }
+        };
+
+        wheelFeet.addChangingListener(onWheelInchesChangedListener);
+        wheelCms.addChangingListener(onWheelCmsChangedListener);
+
+        profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
+        imgView = (ImageView) findViewById(R.id.profilepiclocal);
+
+        if(user!=null && user.getId()>0)
+            isEditMode = true;
+
+        if(user!=null && user.getProfile()!=null && user.getProfile().getFbProfileId()!=null
+                && !user.getProfile().getFbProfileId().isEmpty())
+            userType = UserType.FB;
+        else
+            userType = userType.Manual;
 
         if(user==null)
             user = new User();
@@ -132,8 +202,19 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         imgMale = (ImageButton) findViewById(R.id.profile_img_male);
         imgFemale = (ImageButton) findViewById(R.id.profile_img_female);
 
-        //by default set the gender as Male
-        updateGender(Gender.Male);
+        imageSelector = new ImageSelector(NewProfile.this);
+
+        imgUpload = (ImageButton) findViewById(R.id.imgBtnUpload);
+        if(userType==UserType.Manual){
+            imgUpload.setVisibility(View.VISIBLE);
+            imgUpload.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "OnCreate::OnClick of ImgUpload:: picking an image");
+                    imageSelector.pickFile(ImageSelector.FileType.Image);
+                }
+            });
+        }
 
         imgMale.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,10 +234,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         btnSave.setTypeface(tf);
         btnSave.setOnClickListener(this);
 
-        btnCancel=(Button)findViewById(R.id.btnCancel_profile);
-        btnCancel.setTypeface(tf);
-        btnCancel.setOnClickListener(this);
-
         firstName = (EditText) findViewById(R.id.profile_first_name);
         lastName = (EditText) findViewById(R.id.profile_last_name);
         dob = (EditText) findViewById(R.id.profile_dob);
@@ -166,80 +243,156 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         mobileNumber = (EditText) findViewById(R.id.profile_phone);
         bloodGroup = (Spinner) findViewById(R.id.profile_blood_group);
         email = (EditText) findViewById(R.id.profile_email);
+        relation = (Spinner) findViewById(R.id.profile_relation);
 
-        height = (EditText) findViewById(R.id.input_height);
         weight = (EditText) findViewById(R.id.input_weight);
+        systolic = (EditText) findViewById(R.id.input_systolic);
+        diastolic = (EditText) findViewById(R.id.input_diastolic);
+        fasting = (EditText) findViewById(R.id.input_fasting);
+        random = (EditText) findViewById(R.id.input_random);
+        hdl = (EditText) findViewById(R.id.input_hdl);
+        ldl = (EditText) findViewById(R.id.input_ldl);
+        tri = (EditText) findViewById(R.id.input_triglycerides);
 
-        profile.setBloodGroup(BloodGroup.O_Positive);
+        totalCholesterol = (TextView) findViewById(R.id.input_total_cholesterol);
 
         profileDataFetched = RequestStatus.Not_Started;
         familyMemberSelected = RequestStatus.Not_Started;
 
-        if(!user.isLoggedInUser()){
+        /*if(!user.isLoggedInUser()){
             String fbid = null;
-            if(ga.getLoggedInUser().getProfile()!=null)
+            Log.i(TAG, ga.getLoggedInUser().toString());
+            if(ga.getLoggedInUser()!=null && ga.getLoggedInUser().getProfile()!=null)
                 fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
-            getDataFromFB(FBRequestType.Family, fbid);
+            if(fbid!=null && !fbid.isEmpty())
+                getDataFromFB(FBRequestType.Family, fbid);
         } else {
-            email.setText(user.getEmail());
+            updateViewFromModel(user);
+            //email.setText(user.getEmail());
+            if(user.isLoggedInUser())
+                email.setEnabled(false);
+            //getDataFromFB(FBRequestType.Profile, null);
+        }*/
+
+        updateViewFromModel(user);
+
+        if(user.isLoggedInUser() && user.getEmail()!=null && !user.getEmail().isEmpty())
             email.setEnabled(false);
-            getDataFromFB(FBRequestType.Profile, null);
+        else{
+            if(isEditMode){
+                email.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ShareUser share = new ShareUser(NewProfile.this, ga, user);
+                        share.show();
+                    }
+                });
+            }
         }
+
+        /*** Action Bar Creation starts here ***/
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        String title = isEditMode ? getString(R.string.edit) + " Profile" : getString(R.string.add_family_member);
+        actionBar.setTitle(title);
+        actionBar.setSubtitle(user.getName());
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        /*** Action bar Creation Ends Here ***/
     }
 
     @Override
-    public void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if(state.isOpened()){
-            if(!user.isLoggedInUser()){
-                String fbid = null;
-                if(ga.getLoggedInUser().getProfile()!=null)
-                    fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
-                getDataFromFB(FBRequestType.Family, fbid);
-            } else {
-                getDataFromFB(FBRequestType.Profile, null);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //User liu = ga.getLoggedInUser();
+        //if(liu.getProfile()!=null && liu.getProfile().getFbProfileId()!=null && !liu.getProfile().getFbProfileId().isEmpty()){
+            getSupportMenuInflater().inflate(R.menu.activity_add_profile, menu);
+            return true;
+        //}
+
+        //return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.fbFamilyMember){
+            String fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
+            createSessionAndGetDataFromFB(FBRequestType.Family, fbid);
+            imgUpload.setVisibility(View.INVISIBLE);
+            return true;
+        }
+
+        if(item.getItemId()== android.R.id.home){
+            Intent returnIntent = new Intent();
+            setResult(RESULT_CANCELED, returnIntent);
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getDataFromFB(Session session, final FBRequestType type, final String profileId){
+        //imgUpload.setVisibility(View.GONE);
+        if(type==FBRequestType.Family){
+            if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
+                return;
+            Intent intent = new Intent(NewProfile.this, FBFamilyListActivity.class);
+            startActivityForResult(intent, 1);
+            familyMemberSelected = RequestStatus.Pending;
+        } else {
+            if(profileDataFetched==RequestStatus.Done || profileDataFetched==RequestStatus.Pending)
+                return;
+            getProfileDataFromFB(session, profileId);
+            profileDataFetched = RequestStatus.Pending;
+            dialog = new ProgressDialog(NewProfile.this);
+            String whose = type==FBRequestType.Profile?"your":"your family members";
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("we are getting "+whose+" data...");
+            dialog.show();
+        }
+    }
+
+    protected class FBSessionCallback implements Session.StatusCallback {
+        private FBRequestType type;
+        private String profileId;
+
+        private FBSessionCallback(FBRequestType type, String profileId) {
+            this.type = type;
+            this.profileId = profileId;
+        }
+
+        @Override
+        public void call(Session sess, SessionState state, Exception exception) {
+            if(sess!=null && sess.isOpened()){
+                getDataFromFB(sess, type, profileId);
+            }else{
+                imgUpload.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private void getDataFromFB(final FBRequestType type, final String profileId) {
-
+    private void createSessionAndGetDataFromFB(final FBRequestType type, final String profileId) {
         Session session = Session.getActiveSession();
-        if (session != null && session.isOpened() ) {
-            if(type==FBRequestType.Family){
-                if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
-                    return;
-                Intent intent = new Intent(NewProfile.this, FBFamilyListActivity.class);
-                startActivityForResult(intent, 1);
-                familyMemberSelected = RequestStatus.Pending;
-            } else {
-                if(profileDataFetched==RequestStatus.Done || profileDataFetched==RequestStatus.Pending)
-                    return;
-                getProfileDataFromFB(session, profileId);
-                profileDataFetched = RequestStatus.Pending;
-                dialog = new ProgressDialog(NewProfile.this);
-                String whose = type==FBRequestType.Profile?"your":"your family members";
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.setMessage("we are getting "+whose+" data...");
-                dialog.show();
-            }
+        if(session == null || session.getState().isClosed()){
+            session = new Session.Builder(this).setApplicationId(getString(R.string.app_id)).build();
+            Session.setActiveSession(session);
+            Session.StatusCallback callback = new FBSessionCallback(type, profileId);
+            Session.OpenRequest request = new Session.OpenRequest(NewProfile.this);
+            request.setCallback(callback);
+            request.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
+            request.setPermissions(FBLoginFragment.fbPermissions);
+            session.openForRead(request);
+        }else{
+            getDataFromFB(session, type, profileId);
         }
-//
-//        // start Facebook Login
-//        Session.openActiveSession(this, true, new Session.StatusCallback() {
-//            // callback when session changes state
-//            @Override
-//            public void call(Session session, SessionState state, Exception exception) {
-//                if (session.isOpened()) {
-//                }
-//            }
-//        });
-
     }
 
     private void getProfileDataFromFB(Session session, String profileId){
         String api = "me";
+
         if(profileId!=null && !profileId.isEmpty())
             api = profileId;
+
         Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
@@ -248,15 +401,22 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 if (graphObject != null) {
                     JSONObject jsonResponse = graphObject.getInnerJSONObject();
                     if (jsonResponse!=null) {
-                        FBUser fbUser = deserialize(jsonResponse);
+                        FBUser fbUser = FBUser.deserialize(jsonResponse);
                         updateViewFromFBData(fbUser);
                         profileDataFetched = RequestStatus.Done;
+                        imgUpload.setVisibility(View.INVISIBLE);
                         dialog.dismiss();
+                    }else{
+                        imgUpload.setVisibility(View.VISIBLE);
                     }
+                }else{
+                    imgUpload.setVisibility(View.VISIBLE);
                 }
 
-                if(error!=null)
+                if(error==null){
                     profileDataFetched = RequestStatus.Failed;
+                    imgUpload.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -264,92 +424,18 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         //Request.executeBatchAsync(request);
     }
 
-    private FBUser deserialize(JSONObject jsonProfile){
-        FBUser fbUser = new FBUser();
-
-        try{
-            fbUser.setProfileId(jsonProfile.getString("id"));
-        } catch (JSONException j){
-            //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setFirstName(jsonProfile.getString("first_name"));
-        } catch (JSONException j){
-            //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setLastName(jsonProfile.getString("last_name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setName(jsonProfile.getString("name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setProfileUsername(jsonProfile.getString("username"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setProfileLink(jsonProfile.getString("link"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            SimpleDateFormat formater = new SimpleDateFormat("MM/dd/yyyy");
-            fbUser.setBirthday(formater.parse(jsonProfile.getString("birthday")));
-        } catch(ParseException p){
-
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            if(jsonProfile.getJSONObject("hometown")!=null)
-                fbUser.setHometown(jsonProfile.getJSONObject("hometown").getString("name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            if(jsonProfile.getJSONObject("location")!=null)
-                fbUser.setLocation(jsonProfile.getJSONObject("location").getString("name"));
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setGender(jsonProfile.getString("gender").toUpperCase());
-        } catch (JSONException j){
-        //jsut eat up the exception
-        }
-
-        try{
-            fbUser.setEmail(jsonProfile.getString("email"));
-        } catch (JSONException j){
-            //jsut eat up the exception
-        }
-
-        return fbUser;
-    }
-
     private void updateGender(Gender gender) {
         int mresId, fresId;
 
         if(gender == Gender.Male){
-            mresId = R.drawable.ic_men_enabled;
-            fresId = R.drawable.ic_woman_disabled;
+            mresId = R.drawable.ic_male;
+            fresId = R.drawable.ic_female_unselected;
+        }else if(gender == Gender.Female) {
+            mresId = R.drawable.ic_male_unselected;
+            fresId = R.drawable.ic_female;
         }else{
-            mresId = R.drawable.ic_man_disabled;
-            fresId = R.drawable.ic_woman_enabled;
+            mresId = R.drawable.ic_male_unselected;
+            fresId = R.drawable.ic_female_unselected;
         }
 
         imgMale.setImageResource(mresId);
@@ -358,8 +444,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     }
 
     private void updateViewFromModel(User user) {
-        if(!user.isLoggedInUser())
-            email.setText(user.getEmail());
+        email.setText(user.getEmail());
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
 
@@ -375,30 +460,71 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 location.setText(user.getProfile().getLocation().toShortString());
 
             profilePic.setProfileId(user.getProfile().getFbProfileId());
-            mobileNumber.setText(user.getProfile().getMobileNumber());
-            organization.setText(user.getProfile().getOrganization());
+            if(user.getProfile().getMobileNumber()!=null)mobileNumber.setText(user.getProfile().getMobileNumber());
+            if(user.getProfile().getOrganization()!=null)organization.setText(user.getProfile().getOrganization());
 
+            if((user.getProfile().getFbProfileId()!=null && !user.getProfile().getFbProfileId().isEmpty())
+                    || (user.getProfile().getProfilePicURL()==null || user.getProfile().getProfilePicURL().isEmpty())){
+                profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
+                imgView.setVisibility(View.GONE);
+                profilePic.setVisibility(View.VISIBLE);
+            }else {
+                FileLoader loader = new FileLoader(NewProfile.this, appPrefs.getToken());
+                loader.LoadFile(user.getProfile().getProfilePicURL(), user.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
+                    @Override
+                    public void OnFileLoaded(File file) {
+                        int size = UIUtility.dpToPx(NewProfile.this, 120);
+                        imgView.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), size, size));
+                        imgView.setVisibility(View.VISIBLE);
+                        profilePic.setVisibility(View.GONE);
+                        }
+                });
+            }
+
+        }
+
+
+        if(user.getBmiProfile()!=null){
+            BMIProfile bmip = user.getBmiProfile();
+            int height = bmip.getHeight();
+            if(height==0){
+                height = 160;
+            }
+            wheelCms.setCurrentItem(height);
+            int inches = getInchesFromCMS(wheelCms.getCurrentItem());
+            int inchesIndex = inches<11?0:(inches-12);
+            wheelFeet.setCurrentItem(inchesIndex);
+
+            //height.setText(bmip.getHeight().toString());
+            if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
+
+            if(bmip.getSystolicPressure()>0) systolic.setText(String.valueOf(bmip.getSystolicPressure()));
+            if(bmip.getDiastolicPressure()>0) diastolic.setText(String.valueOf(bmip.getDiastolicPressure()));
+            if(bmip.getFastingSugar()>0) fasting.setText(String.valueOf(bmip.getFastingSugar()));
+            if(bmip.getRandomSugar()>0) random.setText(String.valueOf(bmip.getRandomSugar()));
+            if(bmip.getHdl()>0) hdl.setText(String.valueOf(bmip.getHdl()));
+            if(bmip.getLdl()>0) ldl.setText(String.valueOf(bmip.getLdl()));
+            if(bmip.getTriglycerides()>0) tri.setText(String.valueOf(bmip.getTriglycerides()));
+
+            if(bmip.getTotalCholesterol()>0){
+                totalCholesterol.setText(getString(R.string.total_cholesterol) + String.valueOf(bmip.getTotalCholesterol()));
+                totalCholesterol.setVisibility(View.VISIBLE);
+            }else{
+                totalCholesterol.setVisibility(View.GONE);
+            }
         }
     }
 
+    private int getCMSfromInches(int inches){
+        return (inches * 254)/100;
+    }
+
+    private int getInchesFromCMS(int cms){
+        return (cms * 100)/254;
+    }
+
     private void updateViewFromFBData(FBUser fbUser){
-        //get first name and last name
-        user.setFirstName(fbUser.getFirstName());
-        user.setLastName(fbUser.getLastName());
-
-        //get DOB
-        profile.setDob(fbUser.getBirthday());
-        //get gender
-        profile.setGender(Gender.get(fbUser.getGender()));
-
-        //get the id
-        profile.setFbProfileId(fbUser.getProfileId());
-        profile.setFbUsername(fbUser.getProfileUsername());
-
-        //get the location
-        Profile.Location location = profile.new Location();
-        profile.setLocation(location);
-        location.setAddress(fbUser.getLocation());
+        user = fbUser.toUser(user);
 
         //get the email
         //user.setEmail(fbUser.getEmail());
@@ -412,12 +538,29 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             if(resultCode==RESULT_OK){
                 familyMemberSelected = RequestStatus.Done;
                 String profileId = data.getStringExtra("profileId");
-                getDataFromFB(FBRequestType.FamilyProfile, profileId);
+                Log.d(TAG, "onActivityResult::ProfileId selected from FB Family list - " + profileId);
+                createSessionAndGetDataFromFB(FBRequestType.FamilyProfile, profileId);
+            }else{
+                imgUpload.setVisibility(View.VISIBLE);
             }
         }else{//this is for facebook login pop-up
-            super.onActivityResult(requestCode, resultCode, data);
-            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            if(!imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
+                @Override
+                public void OnLoad(ImageSelector imageSelector) {
+                    Log.d(TAG, "onActivityResult::ImageSelected - " + imageSelector.getURI().toString());
+                    int size = UIUtility.dpToPx(NewProfile.this, 120);
+                    Bitmap bitmap = imageSelector.getBitmap(size, size);
+                    profilePic.setDefaultProfilePicture(bitmap);
+                    imgView.setImageBitmap(bitmap);
+                    isImageSelected = true;
+                }
+            })){
+                Log.d(TAG, "onActivityResult::else");
+                super.onActivityResult(requestCode, resultCode, data);
+                Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            }
         }
+
     }
 
     private User generateModelFromView() {
@@ -449,14 +592,88 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         /* Get the BMI related data*/
         BMIProfile bmi = new BMIProfile();
-        bmi.setHeight(Integer.parseInt(height.getText().toString()));
-        bmi.setWeight(Double.parseDouble(weight.getText().toString()));
+        String[] strH = String.valueOf(wheelCms.getCurrentItem()).split(" ");
+        //height.getText().toString().split(" ");
+        //Toast.makeText(getApplicationContext(),"stored height="+strH[0],Toast.LENGTH_LONG).show();
+
+        String[] strW = weight.getText().toString().split(" ");
+        bmi.setHeight(Integer.parseInt(strH[0]));
+        bmi.setWeight(Double.parseDouble(strW[0]));
+
+        String str = "";
+        str = systolic.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setSystolicPressure(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = diastolic.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setDiastolicPressure(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = fasting.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setFastingSugar(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = random.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setRandomSugar(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = hdl.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setHdl(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = ldl.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setLdl(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        str = tri.getText().toString();
+        if(str!=null && !str.isEmpty()){
+            try {
+                bmi.setTriglycerides(Integer.parseInt(str));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
 
         user.setBmiProfile(bmi);
 
-        /* TODO set BP, Diabetes and Cholesterol profiles too */
-
         return user;
+    }
+
+    protected void updateUser(User u) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("user", u);
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
@@ -464,11 +681,16 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         Intent returnIntent = new Intent();
 
         if(v == btnSave){
+            Log.d(TAG, "onClick : btnSave clicked - isImageSelected - " + isImageSelected);
             if(validate()){
-                User user = generateModelFromView();
-                returnIntent.putExtra("user", user);
-                setResult(RESULT_OK, returnIntent);
-                finish();
+                if(isImageSelected){
+                    UploadProfilePicTask task = new UploadProfilePicTask();
+                    task.execute();
+                }else{
+                    User newUser = generateModelFromView();
+                    Log.d(TAG, "onClick : generated user from model " + newUser);
+                    updateUser(newUser);
+                }
             }
         }else if(v == btnCancel) {
             setResult(RESULT_CANCELED, returnIntent);
@@ -478,10 +700,12 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     private boolean validate() {
         boolean isValid = true;
-        if(email.getText().length()==0){
-            email.setError(getString(R.string.profile_email_not_present));
-            isValid=false;
-        } else if(!Validator.isEmailValid(email.getText().toString())){
+        //Email is not mandatory so removing this check
+//        if(email.getText().length()==0){
+//            email.setError(getString(R.string.profile_email_not_present));
+//            isValid=false;
+//        } else
+        if(email.getText().length()>0 && !Validator.isEmailValid(email.getText().toString())){
             email.setError(getString(R.string.profile_email_not_valid));
             isValid=false;
         }
@@ -495,10 +719,16 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             isValid = false;
         }
 
+        if(profile.getGender()==Gender.None){
+            Toast.makeText(NewProfile.this, "select the gender to proceed", Toast.LENGTH_LONG).show();
+            isValid = false;
+        }
+/*
         if(height.getText().length()==0){
             height.setError(getString(R.string.profile_height_not_present));
             isValid = false;
         }
+*/
 
         if(weight.getText().length()==0){
             weight.setError(getString(R.string.profile_weight_not_present));
@@ -516,11 +746,53 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         int inputType = text.getInputType();
         if(hasFocus){//when focused in
             if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
-                DialogFragment newFragment = new DatePickerFragment(text);
+                DialogFragment newFragment = new DatePickerFragment(text, null);
                 newFragment.show(this.getSupportFragmentManager(), "datePicker");
             }
         }else{//when focused out
 
+        }
+    }
+
+    public class UploadProfilePicTask extends AsyncTask<Void, Void, FileUploader.Response> {
+
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(NewProfile.this);
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setMessage("uploading your image..");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(FileUploader.Response response) {
+            dialog.dismiss();
+            Log.d(TAG, "AsyncTask : generating user from model");
+            User newUser = generateModelFromView();
+            newUser.getProfile().setProfilePicURL(response.getProfilePicUrl());
+            Log.d(TAG, "AsyncTask : generated user from model " + newUser);
+            updateUser(newUser);
+        }
+
+        @Override
+        protected FileUploader.Response doInBackground(Void... params) {
+            FileUploader uploader = new FileUploader(appPrefs.getToken());
+            long userId = user==null?0:user.getId();
+            if(userId==0){
+                //create user
+                Log.i(TAG, "AsyncTask : Creating a new user as userId = 0 ");
+                UserEP userEP = new UserEP(NewProfile.this, ga);
+                user = userEP.updateUser(user);
+                userId = user.getId();
+                Log.i(TAG, "AsyncTask : Creating a new user - " + user);
+            }
+            Log.i(TAG, "AsyncTask : Uploading the file now");
+            FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getFile(),
+                                                        NewProfile.this, userId, dialog);
+            Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
+            return response;
         }
     }
 

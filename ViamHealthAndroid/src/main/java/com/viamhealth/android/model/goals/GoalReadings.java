@@ -93,7 +93,7 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
         dest.writeValue(isToUpdate);
     }
 
-    public JSONObject parentJSON() {
+    protected JSONObject parentJSON() {
         JSONObject object = new JSONObject();
         try {
             object.put("x", readingDate.getTime());

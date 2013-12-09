@@ -10,6 +10,7 @@ public class ViamHealthPrefs {
 	public SharedPreferences.Editor prefsEditor;
 	
 	public String token = "token";
+    public String fbtoken = "fbtoken";
 	public String menuList = "menuList";
 	public String reloadgraph = "reloadgraph";
 	public String goalname = "goalname";
@@ -35,13 +36,22 @@ public class ViamHealthPrefs {
 	public String profilepic = "profilepic";
 	//public String dateAdded = "dateAdded";
 
+    public int targetCaloriesPerDay;
+
 	public ViamHealthPrefs(Context context) {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();
 	}
 
-	
-	public String getSheight() {
+    public int getTargetCaloriesPerDay() {
+        return appSharedPrefs.getInt("targetCalories", 0);
+    }
+
+    public void setTargetCaloriesPerDay(int targetCaloriesPerDay) {
+        this.prefsEditor.putInt("targetCalories", targetCaloriesPerDay).commit();
+    }
+
+    public String getSheight() {
 		return appSharedPrefs.getString(sheight, "0");
 	}
 
@@ -62,12 +72,19 @@ public class ViamHealthPrefs {
 
 
 	public String getToken() {
-		return appSharedPrefs.getString(token, "null");
+		return appSharedPrefs.getString(token, null);
 	}
 
 	public void setToken(String _token) {
 		this.prefsEditor.putString(token, _token).commit();
 	}
+    public String getFBAccessToken() {
+        return appSharedPrefs.getString(fbtoken, null);
+    }
+
+    public void setFBAccessToken(String _token) {
+        this.prefsEditor.putString(fbtoken, _token).commit();
+    }
 
 	public String getMenuList() {
 		return appSharedPrefs.getString(menuList, "");

@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import com.facebook.model.GraphLocation;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
+import com.viamhealth.android.model.enums.Relation;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -17,13 +19,31 @@ public class Profile implements Parcelable{
     private String organization;
     private String mobileNumber;
     private Location location;
-    private BloodGroup bloodGroup = BloodGroup.O_Positive;
+    private BloodGroup bloodGroup = BloodGroup.None;
     private Date dob;
-    private Gender gender = Gender.Male;
+    private Gender gender = Gender.None;
     private String profilePicURL;
 
     private String fbProfileId;
     private String fbUsername;
+    private Relation relation = Relation.None;
+
+    public int getAge() {
+        Calendar nowCal = Calendar.getInstance();
+        Calendar dobCal = Calendar.getInstance();
+        dobCal.setTime(dob);
+
+        return nowCal.get(Calendar.YEAR) - dobCal.get(Calendar.YEAR);
+        //Long diff = now.getTime() - dob.getTime();
+    }
+
+    public Relation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(Relation relation) {
+        this.relation = relation;
+    }
 
     public String getFbUsername() {
         return fbUsername;
@@ -301,6 +321,7 @@ public class Profile implements Parcelable{
         dest.writeString(profilePicURL);
         dest.writeString(fbProfileId);
         dest.writeString(fbUsername);
+        dest.writeInt(relation.value());
     }
 
     public static final Parcelable.Creator<Profile> CREATOR
@@ -324,5 +345,6 @@ public class Profile implements Parcelable{
         this.profilePicURL = in.readString();
         this.fbProfileId = in.readString();
         this.fbUsername = in.readString();
+        this.relation = Relation.get(in.readInt());
     }
 }

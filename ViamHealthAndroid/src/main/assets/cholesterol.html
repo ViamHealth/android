@@ -114,7 +114,12 @@ console.log(android);
 $(function () {
         $('#container').highcharts({
             chart: {
-                type: 'column'
+                type: 'column',
+                events: {
+                        click: function(e) {
+                            goals.addValue();
+                        }
+                }
             },
             title: {
                 text: 'Cholesterol'
@@ -126,12 +131,11 @@ $(function () {
                 '#000000'
             ],
             xAxis: {
-            //tickInterval: 24 * 3600 * 1000 * 7, // one week
             type: 'datetime',
             title: {
                 text: "Timeline"
             },
-            max: android.goal.targetDate,
+            //max: android.goal.targetDate,
             plotLines: [{
                 value: android.goal.targetDate,
                 width: 2,
@@ -149,7 +153,11 @@ $(function () {
 
             },
             yAxis: {
-                min: 0,
+                title: {
+                    text: ""
+                },
+                min: android.yAxis.min,
+                max: android.yAxis.max,
                 stackLabels: {
                     enabled: true,
                     style: {
@@ -175,6 +183,19 @@ $(function () {
                     dataLabels: {
                         enabled: true,
                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                    }
+                }
+            },
+            plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function() {
+                                //alert ('Category: '+ this.x +', value: '+ this.y);
+                                goals.onItemClick(this.x);
+                            }
+                        }
                     }
                 }
             },
