@@ -183,6 +183,7 @@ public class SnacksListFragment extends BaseListFragment
                     final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
                     final EditText input = new EditText(getSherlockActivity());
                     input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    input.setText(ga.lstResultSnacks.get(selected_position).getQuantity());
                     alert.setMessage("Enter Number of Servings");
                     alert.setView(input);
                     Global_Application.food_item=ga.lstResultSnacks.get(selected_position).getFoodItem();
@@ -201,11 +202,6 @@ public class SnacksListFragment extends BaseListFragment
                         }
                     });
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
                     alert.show();
                     Toast.makeText(getActivity(), "Download", Toast.LENGTH_LONG).show();
                     return true;

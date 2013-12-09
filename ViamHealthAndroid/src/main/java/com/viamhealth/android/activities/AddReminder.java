@@ -347,7 +347,9 @@ public class AddReminder extends BaseFragmentActivity {
                 reminder.setRepeatICounter(Integer.parseInt(etDuration.getText().toString()));
             }
 
-            RepeatMode selectedRepeatMode = (RepeatMode) frequeSpinner.getSelectedItem();
+            final RepeatMode[] modes = RepeatMode.values();
+            int selectedPosition = frequeSpinner.getSelectedItemPosition();
+            RepeatMode selectedRepeatMode = (RepeatMode) modes[selectedPosition+1];
             if(selectedRepeatMode!=RepeatMode.Custom && selectedRepeatMode!=RepeatMode.None){
                 reminder.setRepeatMode(selectedRepeatMode);
                 try {

@@ -12,8 +12,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -45,7 +47,7 @@ import java.util.List;
 /**
  * Created by naren on 19/11/13.
  */
-public class AddFoodActivity extends BaseFragmentActivity implements SearchView.OnQueryTextListener {
+public class AddFoodActivity extends BaseFragmentActivity implements SearchView.OnQueryTextListener, AbsListView.OnScrollListener {
 
     RefreshableListView listFood;
 
@@ -67,6 +69,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     functionClass obj;
     ProgressDialog dialog1;
 
+
+
+    private int currentPage = 0;
+    private int currentFirstVisibleItem, currentVisibleItemCount, currentScrollState, totalItemCount, visibleThreshHold = 5;
+    private boolean isLoading = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +103,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
         /*** Action bar Creation Ends Here ***/
 
         listFood = (RefreshableListView) findViewById(R.id.lstfood);
-
+        listFood.setOnScrollListener(this);
         listFood.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -116,6 +123,39 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
 
             }
         });
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        this.currentScrollState = scrollState;
+        this.isScrollCompleted();
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        this.currentFirstVisibleItem = firstVisibleItem;
+        this.currentVisibleItemCount = visibleItemCount;
+        this.totalItemCount = totalItemCount;
+    }
+
+    private void isScrollCompleted() {
+        if (((this.totalItemCount - this.currentVisibleItemCount) <= (this.currentFirstVisibleItem + this.visibleThreshHold)) && this.currentScrollState == SCROLL_STATE_IDLE){
+            /*** In this way I detect if there's been a scroll which has completed ***/
+            /*** do the work for load more date! ***/
+            if(!isLoading){
+                //isLoading = true;
+                loadMoreData(++currentPage);
+            }
+        }
+    }
+
+    private void loadMoreData(final int pageToFetch){
+        if(Checker.isInternetOn(AddFoodActivity.this)){
+            CallSearchFoodTask task = new CallSearchFoodTask();
+            task.applicationContext = AddFoodActivity.this;
+            task.fetchPageNumber = pageToFetch;
+            task.execute();
+        }
     }
 
     @Override
@@ -157,12 +197,10 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     public boolean onQueryTextSubmit(String s) {
         //TODO get the food data from the API
         searchQuery = s;
+        currentPage = 1;
+        lstResult.clear();
         //hideKeyboard();
-        if(Checker.isInternetOn(AddFoodActivity.this)){
-            CallSearchFoodTask task = new CallSearchFoodTask();
-            task.applicationContext = AddFoodActivity.this;
-            task.execute();
-        }
+        loadMoreData(currentPage);
         return true;
     }
     private void hideKeyboard(){
@@ -182,6 +220,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
     public class CallSearchFoodTask extends AsyncTask<String, Void, String> {
 
         protected Context applicationContext;
+        protected int fetchPageNumber = 1;
 
         @Override
         protected void onPreExecute() {
@@ -195,6 +234,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             dialog.setMessage("Please Wait....");
             dialog.show();
             Log.i("onPreExecute", "onPreExecute");
+            isLoading = true;
         }
 
         protected void onPostExecute(String result){
@@ -205,8 +245,11 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             }
 
             if(lstResult.size()>0){
-                FoodAdapter adapter = new FoodAdapter(AddFoodActivity.this, R.layout.addfoodlist, lstResult);
-                listFood.setAdapter(adapter);
+                FoodAdapter adapter = (FoodAdapter)listFood.getAdapter();
+                if(adapter==null){
+                    adapter = new FoodAdapter(AddFoodActivity.this, R.layout.addfoodlist, lstResult);
+                    listFood.setAdapter(adapter);
+                }
                 adapter.notifyDataSetChanged();
                 listFood.onRefreshComplete();
                 hideKeyboard();
@@ -220,7 +263,7 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
                 //addfood_count.setText("("+lstResult+")");
             }
             //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+            isLoading = false;
         }
 
 
@@ -230,9 +273,8 @@ public class AddFoodActivity extends BaseFragmentActivity implements SearchView.
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
             //ga.lstResult=dao.manageGoal(appPrefs.getGoalname().toString(), type, goalvalue);
-            lstResult.clear();
 
-            lstResult.addAll(dao.SearchFoodItem(searchQuery));
+            lstResult.addAll(dao.SearchFoodItem(searchQuery, fetchPageNumber));
             return null;
         }
 

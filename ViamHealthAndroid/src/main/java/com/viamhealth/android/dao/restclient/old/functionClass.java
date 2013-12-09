@@ -1,6 +1,8 @@
 package com.viamhealth.android.dao.restclient.old;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,7 +47,7 @@ public class functionClass {
 	// seach food item
 	
 	
-		public ArrayList<FoodData> SearchFoodItem(String searchKey){
+		public ArrayList<FoodData> SearchFoodItem(String searchKey, int pageNumber){
 			ga=new Global_Application();
 			ArrayList<FoodData> lstResult = new ArrayList<FoodData>();
 			String responsetxt;
@@ -55,8 +57,13 @@ public class functionClass {
 			}else{
 				val=searchKey;
 			}
-			String baseurlString = Global_Application.url+"food-items/?page_size=100&search="+val;
-			Log.e("TAG","url is : " + baseurlString);
+            try {
+                val = URLEncoder.encode(val, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            String baseurlString = Global_Application.url+"food-items/?page_size=1000&page="+pageNumber+"&search="+val;
+			Log.e("FoodEP","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString.trim());   
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -69,6 +76,7 @@ public class functionClass {
 				e.printStackTrace();
 			}
 
+            Log.i("FoodEP", client.toString());
 			responseString = client.getResponse();
 			
 				try {

@@ -186,13 +186,14 @@ public class BreakfastListFragment extends BaseListFragment
                     final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
                     final EditText input = new EditText(getSherlockActivity());
                     input.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    input.setText(ga.lstResultBreakfast.get(selected_position).getQuantity());
                     alert.setMessage("Enter Number of "+ga.lstResultBreakfast.get(selected_position).getServingUnit());
                     alert.setView(input);
                     Global_Application.food_item=ga.lstResultBreakfast.get(selected_position).getFoodItem();
                     Global_Application.meal_type="BREAKFAST";
                     //ga.setSelectedfoodid(ga.lstResultBreakfast.get(selected_position).getId());
                     food_id=ga.lstResultBreakfast.get(selected_position).getId();
-                    alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             if(isInternetOn()){
                                 Global_Application.food_quantity=input.getText().toString().trim();
@@ -205,8 +206,9 @@ public class BreakfastListFragment extends BaseListFragment
                         }
                     });
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
+                    alert.setOnCancelListener( new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
                             dialog.cancel();
                         }
                     });

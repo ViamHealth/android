@@ -183,12 +183,13 @@ public class LunchListFragment extends BaseListFragment
                     final AlertDialog.Builder alert = new AlertDialog.Builder(getSherlockActivity());
                     final EditText input = new EditText(getSherlockActivity());
                     input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    input.setText(ga.lstResultLunch.get(selected_position).getQuantity());
                     alert.setMessage("Enter Number of Servings");
                     alert.setView(input);
                     Global_Application.food_item=ga.lstResultLunch.get(selected_position).getFoodItem();
                     Global_Application.meal_type="LUNCH";
                     ga.setSelectedfoodid(ga.lstResultLunch.get(selected_position).getId());
-                    alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             if(isInternetOn()){
                                 Global_Application.food_quantity=input.getText().toString().trim();
@@ -201,11 +202,6 @@ public class LunchListFragment extends BaseListFragment
                         }
                     });
 
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            dialog.cancel();
-                        }
-                    });
                     alert.show();
                     return true;
 
