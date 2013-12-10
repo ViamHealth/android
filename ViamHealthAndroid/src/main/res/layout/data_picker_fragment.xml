@@ -16,27 +16,25 @@ android:background="@drawable/app_background">
     android:layout_margin="10dp"
     android:paddingBottom="40dp" />
 
-<LinearLayout 
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <Button
-        android:id="@+id/bCancel"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1.0"
-        android:onClick="buttonCanceDatePickerOnclick"
-        android:text="Cancel" />
+        android:layout_height="match_parent" >
 
-    <Button
-        android:id="@+id/bSave"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_weight="1.0"
-        android:onClick="buttonSaveDatePickerOnclick"
-        android:text="Save" />
+        <Button
+            android:id="@+id/bCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1.0"
+            android:text="Cancel" />
 
- </LinearLayout>
+        <Button
+            android:id="@+id/bSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1.0"
+            android:text="Save" />
+
+     </LinearLayout>
  </FrameLayout>

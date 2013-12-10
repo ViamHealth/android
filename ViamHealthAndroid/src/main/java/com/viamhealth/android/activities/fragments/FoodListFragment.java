@@ -29,7 +29,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.activities.AddMedication;
 import com.viamhealth.android.activities.Downlaod;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.adapters.MedicalDataAdapter1;
@@ -179,18 +178,18 @@ public class FoodListFragment extends BaseListFragment
                 case R.id.action_mode_edit:
                     if(adapter.getCheckedItemCount()>0){
 
-                        edit_med=new Intent(getSherlockActivity(),AddMedication.class);
-                        edit_pos=selected_position;
-                        edit_med.putExtra("iseditMed",true);
-                        edit_med.putExtra("user_id",user.getId().toString());
-                        med_id=listData.get(selected_position).getId();
-                        edit_med.putExtra("id",med_id);
-                        edit_med.putExtra("start_date",listData.get(selected_position).getStart_date());
-                        edit_med.putExtra("name",selected_reminder_name);
-                        edit_med.putExtra("morning",selected_morning_val);
-                        edit_med.putExtra("noon",selected_noon_val);
-                        edit_med.putExtra("night",selected_night_val);
-                        startActivity(edit_med);
+//                        edit_med=new Intent(getSherlockActivity(),AddMedication.class);
+//                        edit_pos=selected_position;
+//                        edit_med.putExtra("iseditMed",true);
+//                        edit_med.putExtra("user_id",user.getId().toString());
+//                        med_id=listData.get(selected_position).getId();
+//                        edit_med.putExtra("id",med_id);
+//                        edit_med.putExtra("start_date",listData.get(selected_position).getStart_date());
+//                        edit_med.putExtra("name",selected_reminder_name);
+//                        edit_med.putExtra("morning",selected_morning_val);
+//                        edit_med.putExtra("noon",selected_noon_val);
+//                        edit_med.putExtra("night",selected_night_val);
+//                        startActivity(edit_med);
 
                     }else{
                         Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();

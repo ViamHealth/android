@@ -93,6 +93,25 @@ public class ReminderEP extends BaseEP {
         return processReminder(responseString);
     }
 
+    public boolean endReminder(Reminder reminder){
+        Params params = new Params();
+
+        RestClient client = getRestClient("reminders/" + reminder.getId() + "/end", params);
+
+        try {
+            client.Execute(RequestMethod.POST);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Log.i(TAG, client.toString());
+
+        if(client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
+            return true;
+
+        return false;
+    }
+
     public Reminder update(Reminder reminder){
         Params params = new Params();
         params.put("user", reminder.getUserId().toString());

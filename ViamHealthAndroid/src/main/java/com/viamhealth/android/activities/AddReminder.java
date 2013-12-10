@@ -55,7 +55,7 @@ public class AddReminder extends BaseFragmentActivity {
     TextView repeatTextView;
     EditText etName, etMorningCount, etNoonCount, etNightCount, etNotes;
     LinearLayout medicineLayout;
-    Button btnSave;
+    Button btnSave, btnEnd;
 
     ReminderType type;
 
@@ -65,6 +65,8 @@ public class AddReminder extends BaseFragmentActivity {
     Date forDate;
 
     SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
+
+    boolean isEditMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +83,18 @@ public class AddReminder extends BaseFragmentActivity {
         user = (User) getIntent().getParcelableExtra("user");
         forDate = (Date) getIntent().getSerializableExtra("date");
 
-        if(reminder==null) reminder = new Reminder();
+
+        if(reminder==null) {
+            reminder = new Reminder();
+            reminder.setStartDate(new Date());
+        }
+
+        if(reminder.getId()>0) isEditMode = true;
 
         repeatBtn = (ImageButton) findViewById(R.id.repeatBtn);
+        if(isEditMode){
+            repeatBtn.setVisibility(View.INVISIBLE);
+        }
         repeatBtn.setOnClickListener(new OnRepeatBtnClickListener(AddReminder.this));
         repeatTextView = (TextView) findViewById(R.id.repeatTextView);
         etName = (EditText) findViewById(R.id.reminder_name);
@@ -103,6 +114,23 @@ public class AddReminder extends BaseFragmentActivity {
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
+            }
+        });
+
+        btnEnd = (Button) findViewById(R.id.btnEnd);
+        if(isEditMode){
+            btnEnd.setVisibility(View.VISIBLE);
+        }else{
+            btnEnd.setVisibility(View.GONE);
+        }
+        btnEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("end", true);
+                returnIntent.putExtra("reminder", reminder);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
             }
         });
 
@@ -174,8 +202,8 @@ public class AddReminder extends BaseFragmentActivity {
         reminder.setDetails(etNotes.getText().toString());
         reminder.setType(type);
 
-        Date today = new Date();
-        reminder.setStartDate(today);
+        //Date today = new Date();
+        //reminder.setStartDate(today);
         if(type!=ReminderType.Medicine){
             return;
         }
