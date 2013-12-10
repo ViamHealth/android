@@ -130,7 +130,7 @@ public class Home extends BaseActivity implements OnClickListener{
         splashScreen.setVisibility(View.VISIBLE);
 
         if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
-            Intent loginIntent = new Intent(Home.this, Login.class);
+            Intent loginIntent = new Intent(Home.this, ViamhealthAccountAuthenticatorActivity.class);
             startActivity(loginIntent);
         }else{
             if(getIntent().getBooleanExtra("logout", false)) {
@@ -730,7 +730,7 @@ public class Home extends BaseActivity implements OnClickListener{
         protected void onPostExecute(Boolean aBoolean) {
             ga.setLoggedInUser(null);
             appPrefs.setToken(null);
-            Intent i = new Intent(Home.this, Login.class);
+            Intent i = new Intent(Home.this, ViamhealthAccountAuthenticatorActivity.class);
             startActivity(i);
             finish();
         }

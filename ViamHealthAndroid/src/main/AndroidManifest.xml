@@ -4,52 +4,25 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
 
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.CAMERA"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.camera"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.camera.autofocus"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.FLASHLIGHT"
-        android:required="false" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.INTERNET" android:required="false" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" android:required="false" />
+    <uses-permission android:name="android.permission.CAMERA" android:required="false" />
+    <uses-permission android:name="android.permission.camera" android:required="false" />
+    <uses-permission android:name="android.permission.camera.autofocus" android:required="false" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" android:required="false" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-feature
-        android:name="android.hardware.camera.autofocus"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.READ_PHONE_STATE"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.CALL_PHONE"
-        android:required="false" />
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"
-        android:required="false" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:required="false" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" android:required="false" />
+    <uses-permission android:name="android.permission.CALL_PHONE" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" android:required="false" />
 
-    <uses-feature
-        android:name="android.hardware.touchscreen"
-        android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
     <application
         android:name="com.viamhealth.android.Global_Application"
@@ -58,65 +31,42 @@
         android:icon="@drawable/ic_launcher"
         android:label="ViamHealth"
         android:theme="@style/Greentheme" >
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
 
-        <activity
-            android:name="com.viamhealth.android.activities.Home"
-            android:theme="@style/Reversetheme" >
+        <activity android:name="com.viamhealth.android.activities.Home" android:theme="@style/Reversetheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.facebook.LoginActivity" />
-        <activity
-            android:name="com.viamhealth.android.activities.Login"
-            android:screenOrientation="portrait"
-            android:theme="@style/Reversetheme" />
-        <activity
-            android:name="com.viamhealth.android.activities.AddExercise"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.Register"
-            android:theme="@style/Reversetheme"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.UploadFile" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.Downlaod"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.AddReminder" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.FoodDetail" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.NewProfile" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.FBFamilyListActivity" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.TabActivity"
-            android:configChanges="orientation|screenSize" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.AddGoalActivity" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.AddGoalValue" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.AddFoodActivity" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.DeleteMedication"
-            android:theme="@android:style/Theme.Dialog" >
-        </activity>
-        <activity
-            android:name="com.viamhealth.android.activities.ForgotPassword"
-            android:theme="@style/Reversetheme">
-        </activity>
+        <activity android:name="com.viamhealth.android.activities.ViamhealthAccountAuthenticatorActivity" android:screenOrientation="portrait" android:theme="@style/Reversetheme" />
+        <activity android:name="com.viamhealth.android.activities.AddExercise" android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity android:name="com.viamhealth.android.activities.Register" android:theme="@style/Reversetheme" android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity android:name="com.viamhealth.android.activities.UploadFile" />
+        <activity android:name="com.viamhealth.android.activities.Downlaod" android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
+        <activity android:name="com.viamhealth.android.activities.AddReminder" />
+        <activity android:name="com.viamhealth.android.activities.FoodDetail" />
+        <activity android:name="com.viamhealth.android.activities.NewProfile" />
+        <activity android:name="com.viamhealth.android.activities.FBFamilyListActivity" />
+        <activity android:name="com.viamhealth.android.activities.TabActivity" android:configChanges="orientation|screenSize" />
+        <activity android:name="com.viamhealth.android.activities.AddGoalActivity" />
+        <activity android:name="com.viamhealth.android.activities.AddGoalValue" />
+        <activity android:name="com.viamhealth.android.activities.AddFoodActivity" />
+        <activity android:name="com.viamhealth.android.activities.DeleteMedication" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="com.viamhealth.android.activities.ForgotPassword" android:theme="@style/Reversetheme"/>
+
+        <service android:name=".services.Authorization">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
+        </service>
+
     </application>
 
 </manifest>

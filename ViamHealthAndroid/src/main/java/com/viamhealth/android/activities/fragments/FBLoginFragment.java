@@ -74,22 +74,6 @@ public class FBLoginFragment extends BaseFragment {
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         scListener.onSessionStateChange(session, state, exception);
-        if (state.isOpened()) {
-            Log.i(TAG, "Logged in...");
-            //getProfileDataFromFB(session);
-            if(Checker.isInternetOn(getActivity())){
-                FBAuthenticateTask task = new FBAuthenticateTask();
-                task.applicationContext = getActivity();
-                task.user = null;
-                task.fbToken = session.getAccessToken();
-                appPrefs.setFBAccessToken(session.getAccessToken());
-                task.execute();
-            }else{
-                Toast.makeText(getActivity(),R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
-            }
-        } else if (state.isClosed()) {
-            Log.i(TAG, "Logged out...");
-        }
     }
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -163,45 +147,45 @@ public class FBLoginFragment extends BaseFragment {
         public void onSessionStateChange(Session session, SessionState state, Exception exception);
     }
 
-    public class FBAuthenticateTask extends AsyncTask<Void, Void, Boolean> {
-        protected Context applicationContext;
-        protected String fbToken;
-        protected User user;
-        protected ProgressDialog dialog;
-
-        @Override
-        protected void onPreExecute() {
-            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(getActivity(), R.style.StyledProgressDialog);
-            dialog.setMessage(getString(R.string.loginMessage));
-            dialog.show();
-        }
-
-        protected void onPostExecute(Boolean hasFailed) {
-            if(hasFailed){
-                dialog.dismiss();
-                Toast.makeText(getActivity(), R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
-            }else{
-                dialog.dismiss();
-                Intent i = new Intent(getActivity(), Home.class);
-                i.putExtra("justRegistered", true);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                getActivity().finish();
-            }
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO Auto-generated method stub
-            Boolean hasFailed = true;
-            user = userEndPoint.AuthenticateThroughFB(fbToken);
-            if(user!=null)
-                hasFailed = false;
-
-            return hasFailed;
-        }
-
-    }
+//    public class FBAuthenticateTask extends AsyncTask<Void, Void, Boolean> {
+//        protected Context applicationContext;
+//        protected String fbToken;
+//        protected User user;
+//        protected ProgressDialog dialog;
+//
+//        @Override
+//        protected void onPreExecute() {
+//            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+//            dialog = new ProgressDialog(getActivity(), R.style.StyledProgressDialog);
+//            dialog.setMessage(getString(R.string.loginMessage));
+//            dialog.show();
+//        }
+//
+//        protected void onPostExecute(Boolean hasFailed) {
+//            if(hasFailed){
+//                dialog.dismiss();
+//                Toast.makeText(getActivity(), R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
+//            }else{
+//                dialog.dismiss();
+//                Intent i = new Intent(getActivity(), Home.class);
+//                i.putExtra("justRegistered", true);
+//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
+//                getActivity().finish();
+//            }
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... params) {
+//            // TODO Auto-generated method stub
+//            Boolean hasFailed = true;
+//            user = userEndPoint.AuthenticateThroughFB(fbToken);
+//            if(user!=null)
+//                hasFailed = false;
+//
+//            return hasFailed;
+//        }
+//
+//    }
 
 }

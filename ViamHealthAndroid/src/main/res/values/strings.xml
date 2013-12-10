@@ -9,6 +9,7 @@
     <string name="email_registered_with_us_is_mandatory">please enter the email-id registered with us</string>
 
 
+    <string name="viamhealth">Viamhealth</string>
     <string name="forgotPasswordTaskMessage">about to mail you auto generated password....</string>
     <string name="forgotPasswordTaskSuccess">mailed you auto generated password</string>
     <string name="forgotPasswordTaskFailure">there was some problem in mailing you, please try again later</string>

@@ -175,18 +175,18 @@ public class UserEP extends BaseEP {
         return false;
     }
 
-    public User AuthenticateThroughFB(String fbAccessToken){
-        return _login(fbAccessToken, null, LoginType.FB);
+    public String AuthenticateThroughFB(String fbAccessToken){
+        return login(fbAccessToken, null, LoginType.FB);
     }
 
-    private enum LoginType {
+    public enum LoginType {
         Email,
         Mobile,
         FB,
         UserName;
     }
 
-    private User _login(String key, String password, LoginType type){
+    public String login(String key, String password, LoginType type){
         String baseurlString = Global_Application.url+"api-token-auth/";
 
         RestClient client = new RestClient(baseurlString);
@@ -228,22 +228,23 @@ public class UserEP extends BaseEP {
             String	responsetxt1 = jObject.getString("token");
             if(responsetxt1.length()>0){
                 Log.e(TAG,"token is " + responsetxt1);
-                appPrefs.setToken(responsetxt1);
+                return responsetxt1;
             }
-            user = getLoggedInUser();
+            //return responsetxt1;
+            //user = getLoggedInUser();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return user;
+        return null;
     }
 
     // function for call login service
-    public String Login(String username,String password) {
+    /*public String Login(String username, String password) {
         String	responsetxt="1";
         _login(username, password, LoginType.Email);
         return responsetxt;
-    }
+    }*/
 
     public User getLoggedInUser() {
 
