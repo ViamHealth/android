@@ -70,6 +70,17 @@
                 android:gravity="center_horizontal|bottom"
                 android:paddingBottom="20dp"
                 >
+
+                     <Button
+                         android:id="@+id/btnCancle"
+                         android:layout_height="wrap_content"
+                         android:layout_width="wrap_content"
+                         android:background="@drawable/btn_cancle_bg_pressed"
+                         android:text="Cancel"
+                         android:textColor="#ffffff"
+                         android:textSize="23sp"
+                         android:gravity="center_vertical|center"/>
+
                       <Button
                           android:id="@+id/btnUpload"
                           android:layout_width="wrap_content"
@@ -79,17 +90,7 @@
                           android:text="Save"
                           android:textColor="#ffffff"
                           android:textSize="23sp" />
-                      
-				      <Button 
-				          android:id="@+id/btnCancle"
-				          android:layout_height="wrap_content"
-	                      android:layout_width="wrap_content"
-	                      android:background="@drawable/btn_cancle_bg_pressed"
-	                      android:text="Cancel"
-	                      android:textColor="#ffffff"
-	                      android:textSize="23sp"
-	                      android:gravity="center_vertical|center"/>
-                
+
             </LinearLayout>
             </LinearLayout>
 </LinearLayout>

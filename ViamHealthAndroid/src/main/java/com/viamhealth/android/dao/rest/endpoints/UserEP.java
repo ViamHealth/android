@@ -487,6 +487,12 @@ public class UserEP extends BaseEP {
         if(profile.getLocation().getAddress()!=null && !profile.getLocation().getAddress().isEmpty())
             client.AddParam("address", profile.getLocation().getAddress());
 
+        if(profile.getFbProfileId()!=null && !profile.getFbProfileId().isEmpty())
+            client.AddParam("fb_profile_id", profile.getFbProfileId());
+
+        if(profile.getFbUsername()!=null && !profile.getFbUsername().isEmpty())
+            client.AddParam("fb_username", profile.getFbUsername());
+
         try{
             client.Execute(RequestMethod.PUT);
         } catch (Exception e) {
