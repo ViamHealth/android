@@ -165,10 +165,16 @@ public class ReminderFragmentNew extends BaseFragment {
         if(resultCode==Activity.RESULT_OK){
             if(requestCode==ADD_REMINDER_REQUEST || requestCode == EDIT_REMINDER_REQUEST){
                 Reminder reminder = data.getParcelableExtra("reminder");
+                Boolean isEnd = data.getBooleanExtra("end", false);
                 if(Checker.isInternetOn(getActivity())){
-                    SaveReminder task = new SaveReminder();
-                    task.reminder = reminder;
-                    task.execute();
+                    if(isEnd){
+                        EndReminder task = new EndReminder();
+                        task.execute(reminder);
+                    }else{
+                        SaveReminder task = new SaveReminder();
+                        task.reminder = reminder;
+                        task.execute();
+                    }
                 }else{
                     Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
                 }
@@ -324,8 +330,10 @@ public class ReminderFragmentNew extends BaseFragment {
 
         @Override
         protected void onPreExecute() {
-            mDialog.setMessage("getting reminders...");
-            mDialog.show();
+            if(!mDialog.isShowing()){
+                mDialog.setMessage("getting reminders...");
+                mDialog.show();
+            }
         }
 
         protected void onPostExecute(String result) {
@@ -354,6 +362,12 @@ public class ReminderFragmentNew extends BaseFragment {
         protected Reminder reminder;
 
         @Override
+        protected void onPreExecute() {
+            mDialog.setMessage("saving reminder...");
+            mDialog.show();
+        }
+
+        @Override
         protected void onPostExecute(Void aVoid) {
             getReadings(null);
         }
@@ -368,9 +382,39 @@ public class ReminderFragmentNew extends BaseFragment {
         }
     }
 
+    public class EndReminder extends AsyncTask<Reminder, Void, Void> {
+
+        protected Activity activity;
+
+        @Override
+        protected void onPreExecute() {
+            mDialog.setMessage("saving reminder...");
+            mDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            getReadings(null);
+        }
+
+        @Override
+        protected Void doInBackground(Reminder... params) {
+            for(Reminder reminder : params ){
+                reminderEP.endReminder(reminder);
+            }
+            return null;
+        }
+    }
+
     public class DeleteReminder extends AsyncTask<Reminder, Void, Void> {
 
         protected Activity activity;
+
+        @Override
+        protected void onPreExecute() {
+            mDialog.setMessage("deleting reminder...");
+            mDialog.show();
+        }
 
         @Override
         protected void onPostExecute(Void aVoid) {

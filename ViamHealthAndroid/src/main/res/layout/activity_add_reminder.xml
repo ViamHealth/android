@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="fill_parent"
@@ -11,7 +11,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:layout_margin="20dp">
+        android:layout_margin="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/btnEnd">
 
         <EditText
             android:layout_width="fill_parent"
@@ -165,13 +167,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/repeat"
+                android:text="@string/schedule"
                 android:id="@+id/textView3"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical|left"
                 android:textAlignment="gravity"
                 android:gravity="center_vertical|left"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="15dp"
+                android:layout_alignParentLeft="true" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -192,9 +195,10 @@
                 android:layout_gravity="center_horizontal|bottom"
                 android:layout_alignParentBottom="false"
                 android:layout_below="@+id/repeatBtn"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="10dp"
-                android:singleLine="false" />
+                android:singleLine="false"
+                android:layout_marginRight="10dp" />
         </RelativeLayout>
 
         <EditText
@@ -211,6 +215,16 @@
         android:layout_height="48dp"
         android:text="@string/save"
         android:id="@+id/btnSave"
-        android:layout_gravity="center_horizontal|bottom"/>
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true" />
 
-</FrameLayout>
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:text="@string/endReminder"
+        android:id="@+id/btnEnd"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_above="@+id/btnSave" />
+
+</RelativeLayout>

@@ -183,7 +183,6 @@ public class Home extends BaseActivity implements OnClickListener{
                 Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
             }
         } else if(moveToTabActivity){//take the user to the goals screen for the loggedInUser\
-
             splashScreen.setVisibility(View.GONE);
             scroller.setVisibility(View.VISIBLE);
 
@@ -561,6 +560,7 @@ public class Home extends BaseActivity implements OnClickListener{
             }
         }
 	}
+
 
     @Override
     public void onBackPressed() {

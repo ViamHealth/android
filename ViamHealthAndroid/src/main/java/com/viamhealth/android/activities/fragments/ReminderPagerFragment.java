@@ -290,7 +290,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
 
             switch (item.getItemId()) {
                 case R.id.action_mode_edit:
-                    Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
                     ReminderReading reading = adapter.getFirstCheckedItem();
                     OnEdit(reading.getReminder());
                     return true;
@@ -302,7 +302,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                         Toast.makeText(getSherlockActivity(), "Please select atlest one reminder..", Toast.LENGTH_SHORT).show();
                     }
 
-                    Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "Delete", Toast.LENGTH_LONG).show();
                     return true;
 
                 default:
