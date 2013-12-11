@@ -126,6 +126,10 @@
             android:name="com.viamhealth.android.activities.ForgotPassword"
             android:theme="@style/Reversetheme">
         </activity>
+        <provider
+            android:authorities="com.viamhealth.android.dao.db"
+            android:name=".db.JournalContentProvider" >
+        </provider>
     </application>
 
 </manifest>
