@@ -1,6 +1,7 @@
 package com.viamhealth.android.activities;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
+import com.viamhealth.android.auth.AccountGeneral;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
@@ -25,10 +27,18 @@ import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -37,6 +47,7 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Parcelable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -94,6 +105,9 @@ public class Home extends BaseActivity implements OnClickListener{
 
     private final String TAG = "Home";
 
+    private AccountManager mAccountManager;
+
+    private static final int LOGIN_ACTIVITY = 10000;
     @Override
     protected void onStart() {
         super.onStart();
@@ -129,24 +143,79 @@ public class Home extends BaseActivity implements OnClickListener{
         scroller.setVisibility(View.GONE);
         splashScreen.setVisibility(View.VISIBLE);
 
-        if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
-            Intent loginIntent = new Intent(Home.this, ViamhealthAccountAuthenticatorActivity.class);
-            startActivity(loginIntent);
+        if(getIntent().getBooleanExtra("logout", false)) {
+            logout();
+            return;
+        }
+
+        login();
+    }
+
+    private AccountManagerCallback<Bundle> loginCallback = new AccountManagerCallback<Bundle>() {
+        @Override
+        public void run(AccountManagerFuture<Bundle> future) {
+            String msg = null;
+            try {
+                Bundle bundle = future.getResult();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        postLogin();
+                    }
+                });
+            } catch (OperationCanceledException e) {
+                e.printStackTrace();
+                msg = e.getMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+                msg = e.getMessage();
+            } catch (AuthenticatorException e) {
+                e.printStackTrace();
+                msg = e.getMessage();
+            }
+            if(!TextUtils.isEmpty(msg)){
+                final String strMsg = msg;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getBaseContext(), strMsg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+    };
+
+    private void login() {
+        Log.i(getClass().getSimpleName(), " uid is " + Binder.getCallingUid());
+        mAccountManager = AccountManager.get(this);
+
+        Account[] accounts = mAccountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
+
+        if(accounts==null || accounts.length==0){
+            final AccountManagerFuture<Bundle> future = mAccountManager.addAccount(AccountGeneral.ACCOUNT_TYPE,
+                                AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, null, Home.this, loginCallback, null);
         }else{
-            if(getIntent().getBooleanExtra("logout", false)) {
-                logout();
-                return;
+            //TODO just for temp fix
+            if(TextUtils.isEmpty(appPrefs.getToken())){
+                String authToken = mAccountManager.peekAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+                //mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, authToken);
+                appPrefs.setToken(authToken);
             }
 
-            main_layout = (LinearLayout)findViewById(R.id.main_layout);
-
-            justRegistered = getIntent().getBooleanExtra("justRegistered", false);
-            lstFamily = getIntent().getParcelableArrayListExtra("family");
-
-            ScreenDimension();
-
-            next();
+            final AccountManagerFuture<Bundle> future = mAccountManager.getAuthToken(accounts[0],
+                                AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, Home.this, loginCallback, null);
         }
+    }
+
+    private void postLogin(){
+        main_layout = (LinearLayout)findViewById(R.id.main_layout);
+
+        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
+        lstFamily = getIntent().getParcelableArrayListExtra("family");
+
+        ScreenDimension();
+
+        next();
     }
 
     private void next() {
@@ -200,6 +269,9 @@ public class Home extends BaseActivity implements OnClickListener{
         scroller.setVisibility(View.GONE);
 
         logoutMessage.setVisibility(View.VISIBLE);
+
+        if(mAccountManager==null)
+            mAccountManager = AccountManager.get(Home.this);
 
         if(ga.getLoggedInUser().getProfile()!=null && ga.getLoggedInUser().getProfile().getFbProfileId()!=null
                 && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
@@ -574,6 +646,16 @@ public class Home extends BaseActivity implements OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
+
+        /* if login activity then */
+        if(requestCode == LOGIN_ACTIVITY){
+            if(resultCode == Activity.RESULT_OK){
+                postLogin();
+            }else{
+                finish();
+            }
+        }
+
         if(resultCode==RESULT_OK){
             if(requestCode < 100) {
                 if(isEditMode && actionMode!=null)
@@ -589,6 +671,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
                 }
             }else{//it is from tabactivity
+
 
             }
         }
@@ -728,9 +811,11 @@ public class Home extends BaseActivity implements OnClickListener{
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, appPrefs.getToken());
             ga.setLoggedInUser(null);
             appPrefs.setToken(null);
-            Intent i = new Intent(Home.this, ViamhealthAccountAuthenticatorActivity.class);
+            Intent i = new Intent(Home.this, Home.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
             finish();
         }

@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -111,7 +112,6 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
             mAccountAuthenticatorResponse.onRequestContinued();
         }
 
-
         mAccountManager = AccountManager.get(getBaseContext());
         String userName = getIntent().getStringExtra(ARG_ACCOUNT_NAME);
         mAuthTokenType = getIntent().getStringExtra(ARG_AUTH_TYPE);
@@ -171,11 +171,13 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
     }
 
     private void submit(UserEP.LoginType type, String token) {
+        Log.i(getClass().getSimpleName(), " submit line 1 uid is " + Binder.getCallingUid());
         if(Checker.isInternetOn(ViamhealthAccountAuthenticatorActivity.this)){
             AuthenticateTask task =
-                    new AuthenticateTask(getBaseContext(), getApplicationContext(), new AuthenticateTask.AuthenticationCompleteListener() {
+                    new AuthenticateTask(getBaseContext(), (Global_Application)getApplicationContext(), new AuthenticateTask.AuthenticationCompleteListener() {
                         @Override
                         public void OnAuthenticated(Intent intent) {
+                            Log.i(getClass().getSimpleName(), " onAuthenticated line 1 uid is " + Binder.getCallingUid());
                             finishLogin(intent);
                         }
                     });
@@ -187,7 +189,7 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
                 task.execute(token, null, type);
             }
         }else{
-            Toast.makeText(Login.this, R.string.networkNotAvailable, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ViamhealthAccountAuthenticatorActivity.this, R.string.networkNotAvailable, Toast.LENGTH_SHORT).show();
         }
     }
     // onclick method of all clikable control
@@ -196,16 +198,16 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
         // TODO Auto-generated method stub
         if(v==login_btn){
             if(validation()){
-                submit(UserEP.LoginType.Email);
+                submit(UserEP.LoginType.Email, null);
             }
         }
         if(v==sign_up){
             //redirect registration activity
-            Intent i = new Intent(Login.this, Register.class);
+            Intent i = new Intent(ViamhealthAccountAuthenticatorActivity.this, Register.class);
             startActivity(i);
         }
         if(v==forgotPassword){
-            Intent i = new Intent(Login.this, ForgotPassword.class);
+            Intent i = new Intent(ViamhealthAccountAuthenticatorActivity.this, ForgotPassword.class);
             i.putExtra("email", user_name.getText().toString());
             startActivity(i);
         }
@@ -240,16 +242,19 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
-            Log.d(TAG + "> finishLogin > addAccountExplicitly");
+            Log.d(TAG, "> finishLogin > addAccountExplicitly");
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             String authtokenType = mAuthTokenType;
 
             // Creating the account on the device and setting the auth token we got
             // (Not setting the auth token will cause another call to the server to authenticate the user)
-            mAccountManager.addAccountExplicitly(account, accountPassword, intent.getParcelableExtra(AccountManager.KEY_USERDATA));
+            Bundle bundle = new Bundle();
+            //bundle.putParcelable(AccountManager.KEY_USERDATA, intent.getParcelableExtra(AccountManager.KEY_USERDATA));
+            mAccountManager.addAccountExplicitly(account, accountPassword, bundle);
             mAccountManager.setAuthToken(account, authtokenType, authtoken);
+            appPrefs.setToken(authtoken);
         } else {
-            Log.d(TAG + "> finishLogin > setPassword");
+            Log.d(TAG, "> finishLogin > setPassword");
             mAccountManager.setPassword(account, accountPassword);
         }
 

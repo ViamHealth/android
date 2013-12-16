@@ -8,7 +8,7 @@ public class AccountGeneral {
     /**
      * Account type id
      */
-    public static final String ACCOUNT_TYPE = "com.viamhealth.android";
+    public static final String ACCOUNT_TYPE = "com.viamhealth.android.accounts";
 
     /**
      * Account name

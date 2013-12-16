@@ -227,7 +227,7 @@ public class UserEP extends BaseEP {
             //TODO::implement proper error handling
             String	responsetxt1 = jObject.getString("token");
             if(responsetxt1.length()>0){
-                Log.e(TAG,"token is " + responsetxt1);
+                Log.i(TAG,"token is " + responsetxt1);
                 return responsetxt1;
             }
             //return responsetxt1;

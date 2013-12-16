@@ -5,9 +5,15 @@ import android.accounts.Account;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 
+import com.viamhealth.android.Global_Application;
+import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.ViamhealthAccountAuthenticatorActivity;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
@@ -17,11 +23,17 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
 
     private Context mContext;
+    private ViamHealthPrefs mPrefs;
+    private Global_Application mApplication;
 
-    public ViamhealthAuthenticator(Context context) {
+    private final String TAG = getClass().getSimpleName();
+
+    public ViamhealthAuthenticator(Context context, Application app) {
         super(context);
 
         mContext = context;
+        mPrefs = new ViamHealthPrefs(context);
+        mApplication = (Global_Application)app;
     }
 
     @Override
@@ -49,7 +61,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        Log.d("udinic", TAG + "> getAuthToken");
+        Log.d(TAG, "> getAuthToken");
 
         // If the caller requested an authToken type we don't support, then
         // return an error
@@ -65,16 +77,22 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
 
         String authToken = am.peekAuthToken(account, authTokenType);
 
-        Log.d("udinic", TAG + "> peekAuthToken returned - " + authToken);
+        Log.d(TAG, "> peekAuthToken returned - " + authToken);
+
+        if(TextUtils.isEmpty(authToken)){
+            authToken = mPrefs.getToken();
+
+        }
 
         // Lets give another try to authenticate the user
         if (TextUtils.isEmpty(authToken)) {
             final String password = am.getPassword(account);
             if (password != null) {
                 try {
-                    Log.d("udinic", TAG + "> re-authenticating with the existing password");
-                    UserEP userEP = new UserEP(mContext, null);
+                    Log.d(TAG, "> re-authenticating with the existing password");
+                    UserEP userEP = new UserEP(mContext, mApplication);
                     authToken = userEP.login(account.name, password, UserEP.LoginType.Email);
+                    mApplication.setLoggedInUser(userEP.getLoggedInUser());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -83,6 +101,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
 
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
+            mPrefs.setToken(authToken);
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
@@ -121,7 +140,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
         final Bundle result = new Bundle();
-        result.putBoolean(KEY_BOOLEAN_RESULT, false);
+        result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
         return result;
     }
 }
