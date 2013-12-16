@@ -30,9 +30,9 @@ public class JournalDietTracker {
             + TABLE_DIET_TRACKER
             + "("
             + COLUMN_ID + " integer primary key autoincrement, "
-            + USER_ID + " int not null,"
-            + FOOD_ITEM_ID + " int not null, "
-            + FOOD_QUANTITY_MULTIPLIER + " int not null,"
+            + USER_ID + " string not null,"
+            + FOOD_ITEM_ID + " string not null, "
+            + FOOD_QUANTITY_MULTIPLIER + " string not null,"
             + MEAL_TYPE + " text not null,"
             + DIET_DATE + " text not null,"
             + CREATED_AT + " text not null,"

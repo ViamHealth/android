@@ -31,16 +31,17 @@ public class JournalContentProvider extends ContentProvider {
     private static final int ITEMS = 30;
     private static final int ITEMS_ID = 40;
 
-    private static final String AUTHORITY = "com.viamhealth.android.dao.db.contentprovider";
+    private static final String AUTHORITY = "com.viamhealth.android.dao.db";
 
-    private static final String BASE_PATH = "todos";
-    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-            + "/" + BASE_PATH);
+    private static final String BASE_PATH_TRACKER = "tbl_diet_tracker";
+    public static final Uri CONTENT_URI_TRACKER = Uri.parse("content://" + AUTHORITY
+            + "/" + BASE_PATH_TRACKER);
 
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE
-            + "/todos";
-    public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE
-            + "/todo";
+    private static final String BASE_PATH_ITEMS = "tbl_food_items";
+    public static final Uri CONTENT_URI_ITEMS = Uri.parse("content://" + AUTHORITY
+            + "/" + BASE_PATH_ITEMS);
+
+
 
     private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
     static {
@@ -103,19 +104,22 @@ public class JournalContentProvider extends ContentProvider {
         int uriType = sURIMatcher.match(uri);
         SQLiteDatabase sqlDB = database.getWritableDatabase();
         int rowsDeleted = 0;
+        String toParse;
         long id = 0;
         switch (uriType) {
             case TRACKER:
                 id = sqlDB.insert(JournalDietTracker.TABLE_DIET_TRACKER, null, values);
+                toParse=BASE_PATH_TRACKER + "/" + id;
                 break;
             case ITEMS:
                 id = sqlDB.insert(JournalFoodItems.TABLE_FOOD_ITEMS, null, values);
+                toParse=BASE_PATH_ITEMS + "/" + id;
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         getContext().getContentResolver().notifyChange(uri, null);
-        return Uri.parse(BASE_PATH + "/" + id);
+        return Uri.parse(toParse);
     }
 
     @Override

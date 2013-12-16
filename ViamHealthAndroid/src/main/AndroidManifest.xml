@@ -119,7 +119,7 @@
         </activity>
         <provider
             android:authorities="com.viamhealth.android.dao.db"
-            android:name=".db.JournalContentProvider" >
+            android:name=".dao.db.JournalContentProvider" >
         </provider>
     </application>
 
