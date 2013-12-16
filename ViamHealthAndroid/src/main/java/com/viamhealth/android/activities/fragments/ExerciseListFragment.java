@@ -220,7 +220,7 @@ public class ExerciseListFragment extends BaseListFragment
                     txt_time=(EditText)view.findViewById(R.id.txt_time);
                     alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(Checker.isInternetOn()){
+                            if(Checker.isInternetOn(getActivity())){
                                 if(txt_calorie.getText()!=null)
                                 {
                                     Global_Application.user_calories=txt_calorie.getText().toString();
@@ -280,7 +280,7 @@ public class ExerciseListFragment extends BaseListFragment
                                     // current activity
                                     //dialog.cancel();
                                     d1=dialog;
-                                    if (Checker.isInternetOn()) {
+                                    if (Checker.isInternetOn(getActivity())) {
                                         CallDeleteTask task = new CallDeleteTask();
                                         task.activity = getSherlockActivity();
                                         task.execute();
@@ -357,7 +357,7 @@ public class ExerciseListFragment extends BaseListFragment
 
             //adapter.clear();
             //adapter.notifyDataSetChanged();
-            //if(Checker.isInternetOn())
+            //if(Checker.isInternetOn(getActivity()))
             //{
              //   CallExerciseListTask t1= new CallExerciseListTask();
                // t1.execute();
@@ -396,7 +396,7 @@ public class ExerciseListFragment extends BaseListFragment
         protected void onPostExecute(String result)
         {
             dialog1.dismiss();
-            if(Checker.isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallExerciseListTask task= new CallExerciseListTask();
                 task.execute();

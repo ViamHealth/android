@@ -190,7 +190,7 @@ public class SnacksListFragment extends BaseListFragment
                     ga.setSelectedfoodid(ga.lstResultSnacks.get(selected_position).getId());
                     alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(Checker.isInternetOn()){
+                            if(Checker.isInternetOn(getActivity())){
                                 Global_Application.food_quantity=input.getText().toString().trim();
                                 CallEditTask task = new CallEditTask();
                                 task.activity =getSherlockActivity();
@@ -227,7 +227,7 @@ public class SnacksListFragment extends BaseListFragment
                                     // if this button is clicked, close
                                     // current activity
                                     dialog.cancel();
-                                    if(Checker.isInternetOn()){
+                                    if(Checker.isInternetOn(getActivity())){
                                         CallDeleteTask task = new CallDeleteTask();
                                         task.activity =getSherlockActivity();
                                         task.execute();
@@ -296,7 +296,7 @@ public class SnacksListFragment extends BaseListFragment
         {
             // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(Checker.isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallSnacksListTask task= new CallSnacksListTask();
                 task.execute();
@@ -342,7 +342,7 @@ public class SnacksListFragment extends BaseListFragment
         protected void onPostExecute(String result)
         {
             dialog1.dismiss();
-            if(Checker.isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallSnacksListTask task= new CallSnacksListTask();
                 task.execute();

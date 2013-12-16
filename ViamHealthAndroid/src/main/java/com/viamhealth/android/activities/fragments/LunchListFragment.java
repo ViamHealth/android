@@ -189,7 +189,7 @@ public class LunchListFragment extends BaseListFragment
                     ga.setSelectedfoodid(ga.lstResultLunch.get(selected_position).getId());
                     alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(Checker.isInternetOn()){
+                            if(Checker.isInternetOn(getActivity())){
                                 Global_Application.food_quantity=input.getText().toString().trim();
                                 CallEditTask task = new CallEditTask();
                                 task.activity =getSherlockActivity();
@@ -225,7 +225,7 @@ public class LunchListFragment extends BaseListFragment
                                     // if this button is clicked, close
                                     // current activity
                                     dialog.cancel();
-                                    if(Checker.isInternetOn()){
+                                    if(Checker.isInternetOn(getActivity())){
                                         CallDeleteTask task = new CallDeleteTask();
                                         task.activity =getSherlockActivity();
                                         task.execute();
@@ -294,7 +294,7 @@ public class LunchListFragment extends BaseListFragment
         {
             // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(Checker.isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallLunchListTask task= new CallLunchListTask();
                 task.execute();
@@ -340,7 +340,7 @@ public class LunchListFragment extends BaseListFragment
         protected void onPostExecute(String result)
         {
             dialog1.dismiss();
-            if(Checker.isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallLunchListTask task= new CallLunchListTask();
                 task.execute();

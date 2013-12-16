@@ -697,7 +697,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
     public void updateData()
     {
-        if(Checker.isInternetOn()){
+        if(Checker.isInternetOn(getActivity())){
             if(getSherlockActivity()!=null)
             {
             CallListTask task = new CallListTask();
@@ -907,7 +907,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                     .append(monthval).append("-")
                     .append(pDay).append(" "));
             ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
-            if(Checker.isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
 
                 CallListTask task = new CallListTask();
                 task.activity = getSherlockActivity();
@@ -1163,7 +1163,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             }
 
-                if(Checker.isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallLunchListTask task = new CallLunchListTask();
@@ -1193,7 +1193,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 //lstViewBreakfast.onRefreshComplete();
                 //Toast.makeText(getSherlockActivity(),"Selected Date="+ga.selected_date,Toast.LENGTH_SHORT).show();
             }
-                if(Checker.isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallLunchListTask task = new CallLunchListTask();
@@ -1290,7 +1290,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             }
 
-                if(Checker.isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallSnaksListTask task = new CallSnaksListTask();
@@ -1313,7 +1313,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 }
 
             }
-                if(Checker.isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallSnaksListTask task = new CallSnaksListTask();
@@ -1411,7 +1411,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             }
 
-                if(Checker.isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     SherlockFragmentActivity f1=getSherlockActivity();
                     if(f1!=null)
                     {
@@ -1437,7 +1437,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 }
 
             }
-                if(Checker.isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     SherlockFragmentActivity f1=getSherlockActivity();
                     if(f1!=null)
                     {
@@ -1560,7 +1560,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 dialog1.dismiss();
             }
 
-            if(Checker.isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 if(getSherlockActivity()!=null)
                 {
                 CallExerciseListTask task = new CallExerciseListTask();
@@ -1636,7 +1636,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
             }
 
 
-            if(Checker.isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = getSherlockActivity();
                 task.execute();
@@ -1653,7 +1653,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         // TODO Auto-generated method stub
         super.onResume();
         Global_Application.total_ideal_calories=0;
-        if(Checker.isInternetOn()){
+        if(Checker.isInternetOn(getActivity())){
            CallListTask task = new CallListTask();
             task.activity = getSherlockActivity();
             task.execute();
@@ -1708,7 +1708,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         {
             dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(Checker.isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = activity;
                 task.execute();
@@ -1753,7 +1753,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         {
             dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(Checker.isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = activity;
                 task.execute();
@@ -1811,7 +1811,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         {
            // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(Checker.isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = activity;
                 task.execute();
