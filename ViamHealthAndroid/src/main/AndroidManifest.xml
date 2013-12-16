@@ -122,6 +122,12 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <service
+            android:name="com.viamhealth.android.services.SyncService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
         <provider
             android:name="com.viamhealth.android.dao.db.providers.GoalProvider"
             android:authorities="com.viamhealth.android.sync"
@@ -129,11 +135,10 @@
             android:exported="true" >
         </provider>
 
-        <service
-            android:name="com.viamhealth.android.services.SyncService"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
+        <provider
+            android:authorities="com.viamhealth.android.dao.db"
+            android:name=".dao.db.JournalContentProvider" >
+        </provider>
     </application>
 
 </manifest>

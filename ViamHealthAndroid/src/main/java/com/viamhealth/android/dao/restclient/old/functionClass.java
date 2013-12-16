@@ -11,6 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.viamhealth.android.dao.db.JournalContentProvider;
+import com.viamhealth.android.dao.db.JournalDietTracker;
+import com.viamhealth.android.dao.db.JournalFoodItems;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.model.BPData;
 import com.viamhealth.android.model.CategoryExercise;
@@ -23,7 +26,11 @@ import com.viamhealth.android.model.GoalData;
 import com.viamhealth.android.model.MedicalData;
 import com.viamhealth.android.model.MedicationData;
 import com.viamhealth.android.model.WeightData;
+
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
@@ -160,42 +167,42 @@ public class functionClass {
 					 for (int i = 0; i < jarray.length(); i++) {
 						 JSONObject c = jarray.getJSONObject(i);
 						 lstResult.add(new FoodData(c.getString("id").toString(),
-								 c.getString("name").toString(),
-								 c.getString("quantity").toString(),
-								 c.getString("quantity_unit").toString(),
-								 c.getString("calories").toString(), 
-								 c.getString("total_fat").toString(), 
-								 c.getString("saturated_fat").toString(),
-								 c.getString("polyunsaturated_fat").toString(), 
-								 c.getString("monounsaturated_fat").toString(), 
-								 c.getString("trans_fat").toString(), 
-								 c.getString("cholesterol").toString(), 
-								 c.getString("sodium").toString(), 
-								 c.getString("potassium").toString(), 
-								 c.getString("total_carbohydrates").toString(), 
-								 c.getString("dietary_fiber").toString(), 
-								 c.getString("sugars").toString(), 
-								 c.getString("protein").toString(), 
-								 c.getString("vitamin_a").toString(), 
-								 c.getString("vitamin_c").toString(), 
-								 c.getString("calcium").toString(), 
-								 c.getString("iron").toString(), 
-								 c.getString("calories_unit").toString(), 
-								 c.getString("total_fat_unit").toString(), 
-								 c.getString("saturated_fat_unit").toString(), 
-								 c.getString("polyunsaturated_fat_unit").toString(),
-								 c.getString("monounsaturated_fat_unit").toString(), 
-								 c.getString("trans_fat_unit").toString(), 
-								 c.getString("cholesterol_unit").toString(),
-								 c.getString("sodium_unit").toString(), 
-								 c.getString("potassium_unit").toString(),
-								 c.getString("total_carbohydrates_unit").toString(),
-								 c.getString("dietary_fiber_unit").toString(), 
-								 c.getString("sugars_unit").toString(), 
-								 c.getString("protein_unit").toString(), 
-								 c.getString("vitamin_a_unit").toString(), 
-								 c.getString("vitamin_c_unit").toString(), 
-								 c.getString("calcium_unit").toString(), c.getString("iron_unit").toString()));
+                                 c.getString("name").toString(),
+                                 c.getString("quantity").toString(),
+                                 c.getString("quantity_unit").toString(),
+                                 c.getString("calories").toString(),
+                                 c.getString("total_fat").toString(),
+                                 c.getString("saturated_fat").toString(),
+                                 c.getString("polyunsaturated_fat").toString(),
+                                 c.getString("monounsaturated_fat").toString(),
+                                 c.getString("trans_fat").toString(),
+                                 c.getString("cholesterol").toString(),
+                                 c.getString("sodium").toString(),
+                                 c.getString("potassium").toString(),
+                                 c.getString("total_carbohydrates").toString(),
+                                 c.getString("dietary_fiber").toString(),
+                                 c.getString("sugars").toString(),
+                                 c.getString("protein").toString(),
+                                 c.getString("vitamin_a").toString(),
+                                 c.getString("vitamin_c").toString(),
+                                 c.getString("calcium").toString(),
+                                 c.getString("iron").toString(),
+                                 c.getString("calories_unit").toString(),
+                                 c.getString("total_fat_unit").toString(),
+                                 c.getString("saturated_fat_unit").toString(),
+                                 c.getString("polyunsaturated_fat_unit").toString(),
+                                 c.getString("monounsaturated_fat_unit").toString(),
+                                 c.getString("trans_fat_unit").toString(),
+                                 c.getString("cholesterol_unit").toString(),
+                                 c.getString("sodium_unit").toString(),
+                                 c.getString("potassium_unit").toString(),
+                                 c.getString("total_carbohydrates_unit").toString(),
+                                 c.getString("dietary_fiber_unit").toString(),
+                                 c.getString("sugars_unit").toString(),
+                                 c.getString("protein_unit").toString(),
+                                 c.getString("vitamin_a_unit").toString(),
+                                 c.getString("vitamin_c_unit").toString(),
+                                 c.getString("calcium_unit").toString(), c.getString("iron_unit").toString()));
 					 }
 					 Log.e("TAG","Data is " + appPrefs.getMenuList().toString());
 				} catch (JSONException e) {
@@ -246,6 +253,7 @@ public class functionClass {
         }
 
 
+    
 		public ArrayList<CategoryFood> FoodListing(String baseurlString,String date,String user){
 			ArrayList<CategoryFood> lstResult = new ArrayList<CategoryFood>();
             baseurlString+="&user="+user+"&diet_date="+date;
@@ -424,6 +432,130 @@ public class functionClass {
     }
 
 
+        public String AddFoodItem(String id,String mealtype,String food_quantity_multiplier,String userid,String date)
+        {
+            String responce="1";
+            String baseurlString = Global_Application.url+"diet-tracker/"+"?user="+userid;
+            RestClient client = new RestClient(baseurlString);
+            client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+            client.AddParam("food_item", id);
+            client.AddParam("meal_type", mealtype);
+            client.AddParam("food_quantity_multiplier", food_quantity_multiplier);
+            //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            //Date date = new Date();
+            client.AddParam("diet_date",date);
+
+            Log.e("TAG","url for add food : " + baseurlString);
+
+            try
+            {
+                client.Execute(RequestMethod.POST);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            responseString = client.getResponse();
+            Log.e("TAG","Response for add food : " + responseString);
+            try {
+                jObject = new JSONObject(responseString);
+                if(responseString.length()>0){
+                    responce="0";
+                }
+                Log.e("TAG","Data is " + appPrefs.getMenuList().toString());
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            ContentValues values = new ContentValues();
+            values.put(JournalDietTracker.USER_ID,userid);
+            values.put(JournalDietTracker.FOOD_ITEM_ID,id);
+            values.put(JournalDietTracker.FOOD_QUANTITY_MULTIPLIER,food_quantity_multiplier);
+            values.put(JournalDietTracker.MEAL_TYPE,mealtype);
+            values.put(JournalDietTracker.DIET_DATE,date);
+            values.put(JournalDietTracker.CREATED_AT,"");
+            values.put(JournalDietTracker.UPDATED_AT,"");
+            values.put(JournalDietTracker.UPDATED_BY,"");
+
+            Uri addFood=context.getContentResolver().insert(JournalContentProvider.CONTENT_URI_TRACKER,values);
+
+            //String[] projection = { TodoTable.COLUMN_SUMMARY,
+                   // TodoTable.COLUMN_DESCRIPTION, TodoTable.COLUMN_CATEGORY };
+
+            Cursor cursor = context.getContentResolver().query(JournalContentProvider.CONTENT_URI_ITEMS,null,JournalFoodItems.COLUMN_ID+"="+id,null,null);
+            //check if the food item s there in the items table
+            if(cursor!=null)
+            {
+                String baseurlString1 = Global_Application.url+"food-items/"+id+"/";
+                Log.e("TAG","inner url add food item : " + baseurlString1);
+                RestClient client1 = new RestClient(baseurlString1);
+                client1.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+
+                try
+                {
+                    client1.Execute(RequestMethod.GET);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                String responseString1 = client1.getResponse();
+
+                try {
+                    JSONObject jObject1 = new JSONObject(responseString1);
+                    ContentValues values_items = new ContentValues();
+                    values_items.put(JournalFoodItems.COLUMN_NAME,jObject1.getString(JournalFoodItems.COLUMN_NAME));
+                    values_items.put(JournalFoodItems.COLUMN_DISPLAY_IMAGE,jObject1.getString(JournalFoodItems.COLUMN_DISPLAY_IMAGE));
+                    values_items.put(JournalFoodItems.COLUMN_QUANTITY,jObject1.getString(JournalFoodItems.COLUMN_QUANTITY));
+                    values_items.put(JournalFoodItems.COLUMN_QUANTITY_UNIT,jObject1.getString(JournalFoodItems.COLUMN_QUANTITY_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_CALORIES,jObject1.getString(JournalFoodItems.COLUMN_CALORIES));
+                    values_items.put(JournalFoodItems.COLUMN_TOTAL_FAT,jObject1.getString(JournalFoodItems.COLUMN_TOTAL_FAT));
+                    values_items.put(JournalFoodItems.COLUMN_SATURATED_FAT,jObject1.getString(JournalFoodItems.COLUMN_SATURATED_FAT));
+                    values_items.put(JournalFoodItems.COLUMN_POLYSATURATED_FAT,jObject1.getString(JournalFoodItems.COLUMN_POLYSATURATED_FAT));
+                    values_items.put(JournalFoodItems.COLUMN_MONOSATURATED_FAT,jObject1.getString(JournalFoodItems.COLUMN_MONOSATURATED_FAT));
+                    values_items.put(JournalFoodItems.COLUMN_TRANS_FAT,jObject1.getString(JournalFoodItems.COLUMN_TRANS_FAT));
+                    values_items.put(JournalFoodItems.COLUMN_CHOLESTEROL,jObject1.getString(JournalFoodItems.COLUMN_CHOLESTEROL));
+                    values_items.put(JournalFoodItems.COLUMN_SODIUM,jObject1.getString(JournalFoodItems.COLUMN_SODIUM));
+                    values_items.put(JournalFoodItems.COLUMN_POTASSIUM,jObject1.getString(JournalFoodItems.COLUMN_POTASSIUM));
+                    values_items.put(JournalFoodItems.COLUMN_TOTAL_CARBOHYDRATES,jObject1.getString(JournalFoodItems.COLUMN_TOTAL_CARBOHYDRATES));
+                    values_items.put(JournalFoodItems.COLUMN_DIETARY_FIBER,jObject1.getString(JournalFoodItems.COLUMN_DIETARY_FIBER));
+                    values_items.put(JournalFoodItems.COLUMN_SUGARS,jObject1.getString(JournalFoodItems.COLUMN_SUGARS));
+                    values_items.put(JournalFoodItems.COLUMN_PROTEIN,jObject1.getString(JournalFoodItems.COLUMN_PROTEIN));
+                    values_items.put(JournalFoodItems.COLUMN_VITAMIN_A,jObject1.getString(JournalFoodItems.COLUMN_VITAMIN_A));
+                    values_items.put(JournalFoodItems.COLUMN_VITAMIN_C,jObject1.getString(JournalFoodItems.COLUMN_VITAMIN_C));
+                    values_items.put(JournalFoodItems.COLUMN_CALCIUM,jObject1.getString(JournalFoodItems.COLUMN_CALCIUM));
+                    values_items.put(JournalFoodItems.COLUMN_IRON,jObject1.getString(JournalFoodItems.COLUMN_IRON));
+                    values_items.put(JournalFoodItems.COLUMN_CALORIES_UNIT,jObject1.getString(JournalFoodItems.COLUMN_CALORIES_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_TOTAL_FAT_UNIT,jObject1.getString(JournalFoodItems.COLUMN_TOTAL_FAT_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_SATURATED_FAT_UNIT,jObject1.getString(JournalFoodItems.COLUMN_SATURATED_FAT_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_POLYSATURATED_FAT_UNIT,jObject1.getString(JournalFoodItems.COLUMN_POLYSATURATED_FAT_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_MONOSATURATED_FAT_UNIT,jObject1.getString(JournalFoodItems.COLUMN_MONOSATURATED_FAT_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_TRANS_FAT_UNIT,jObject1.getString(JournalFoodItems.COLUMN_TRANS_FAT_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_CHOLESTEROL_UNIT,jObject1.getString(JournalFoodItems.COLUMN_CHOLESTEROL_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_SODIUM_UNIT,jObject1.getString(JournalFoodItems.COLUMN_SODIUM_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_POTASSIUM_UNIT,jObject1.getString(JournalFoodItems.COLUMN_POTASSIUM_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_TOTAL_CARBOHYDRATES_UNIT,jObject1.getString(JournalFoodItems.COLUMN_TOTAL_CARBOHYDRATES_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_DIETARY_FIBER_UNIT,jObject1.getString(JournalFoodItems.COLUMN_DIETARY_FIBER_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_SUGARS_UNIT,jObject1.getString(JournalFoodItems.COLUMN_SUGARS_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_PROTEIN_UNIT,jObject1.getString(JournalFoodItems.COLUMN_PROTEIN_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_VITAMIN_A_UNIT,jObject1.getString(JournalFoodItems.COLUMN_VITAMIN_A_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_VITAMIN_C_UNIT,jObject1.getString(JournalFoodItems.COLUMN_VITAMIN_C_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_CALCIUM_UNIT,jObject1.getString(JournalFoodItems.COLUMN_CALCIUM_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_IRON_UNIT,jObject1.getString(JournalFoodItems.COLUMN_IRON_UNIT));
+                    values_items.put(JournalFoodItems.COLUMN_CREATED_AT,jObject1.getString(JournalFoodItems.COLUMN_CREATED_AT));
+                    values_items.put(JournalFoodItems.COLUMN_UPDATED_AT,jObject1.getString(JournalFoodItems.COLUMN_UPDATED_AT));
+                    values_items.put(JournalFoodItems.COLUMN_UPDATED_BY,jObject1.getString(JournalFoodItems.COLUMN_UPDATED_BY));
+                    values_items.put(JournalFoodItems.COLUMN_STATUS,jObject1.getString(JournalFoodItems.COLUMN_STATUS));
+
+                    Uri addFood1=context.getContentResolver().insert(JournalContentProvider.CONTENT_URI_ITEMS,values_items);
+
+                }catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            return responce;
+        }
 
 		public String AddFood(String id,String mealtype,String food_quantity_multiplier,String userid,String date){
         String responce="1";
