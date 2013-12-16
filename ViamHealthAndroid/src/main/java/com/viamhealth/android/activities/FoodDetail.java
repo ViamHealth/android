@@ -16,8 +16,8 @@ import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.utils.Checker;
 
-import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +49,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
+
 
 	Display display;
 	int height,width;
@@ -195,7 +196,7 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 		if(v==addBtn){
             finish();
             /*
-			if(isInternetOn()){
+			if(Checker.isInternetOn()){
 				CallAddFoodTask task = new CallAddFoodTask();
 				 task.activity =FoodDetail.this;
 				 task.execute();
@@ -285,25 +286,4 @@ public class FoodDetail extends BaseFragmentActivity implements OnClickListener{
 			}
 			   
 		}     
-			// function for check internet is available or not
-			public final boolean isInternetOn() {
-
-				  ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-				  if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-				    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-				    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-				    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-				   return true;
-				  }
-
-				  else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-				    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-				   return false;
-				  }
-
-				  return false;
-				 }
-
-		
 }

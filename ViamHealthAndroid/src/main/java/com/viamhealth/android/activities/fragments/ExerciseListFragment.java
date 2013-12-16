@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -221,7 +220,7 @@ public class ExerciseListFragment extends BaseListFragment
                     txt_time=(EditText)view.findViewById(R.id.txt_time);
                     alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(isInternetOn()){
+                            if(Checker.isInternetOn(getActivity())){
                                 if(txt_calorie.getText()!=null)
                                 {
                                     Global_Application.user_calories=txt_calorie.getText().toString();
@@ -281,7 +280,7 @@ public class ExerciseListFragment extends BaseListFragment
                                     // current activity
                                     //dialog.cancel();
                                     d1=dialog;
-                                    if (isInternetOn()) {
+                                    if (Checker.isInternetOn(getActivity())) {
                                         CallDeleteTask task = new CallDeleteTask();
                                         task.activity = getSherlockActivity();
                                         task.execute();
@@ -358,7 +357,7 @@ public class ExerciseListFragment extends BaseListFragment
 
             //adapter.clear();
             //adapter.notifyDataSetChanged();
-            //if(isInternetOn())
+            //if(Checker.isInternetOn(getActivity()))
             //{
              //   CallExerciseListTask t1= new CallExerciseListTask();
                // t1.execute();
@@ -397,7 +396,7 @@ public class ExerciseListFragment extends BaseListFragment
         protected void onPostExecute(String result)
         {
             dialog1.dismiss();
-            if(isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallExerciseListTask task= new CallExerciseListTask();
                 task.execute();
@@ -432,24 +431,6 @@ public class ExerciseListFragment extends BaseListFragment
 
     }
 
-    public final boolean isInternetOn() {
-
-        ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-                || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-            return true;
-        }
-
-        else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-                || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-            return false;
-        }
-
-        return false;
-    }
 
     public class CallExerciseListTask extends AsyncTask <String, Void,String>
     {

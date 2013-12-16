@@ -194,7 +194,7 @@ public class BreakfastListFragment extends BaseListFragment
                     food_id=ga.lstResultBreakfast.get(selected_position).getId();
                     alert.setPositiveButton("save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            if(isInternetOn()){
+                            if(Checker.isInternetOn(getActivity())){
                                 Global_Application.food_quantity=input.getText().toString().trim();
                                 CallEditTask task = new CallEditTask();
                                 task.activity =getSherlockActivity();
@@ -238,7 +238,7 @@ public class BreakfastListFragment extends BaseListFragment
                                     // if this button is clicked, close
                                     // current activity
                                     dialog.cancel();
-                                    if(isInternetOn()){
+                                    if(Checker.isInternetOn(getActivity())){
                                         CallDeleteTask task = new CallDeleteTask();
                                         task.activity =getSherlockActivity();
                                         task.execute();
@@ -345,7 +345,7 @@ public class BreakfastListFragment extends BaseListFragment
         protected void onPostExecute(String result)
         {
             dialog1.dismiss();
-            if(isInternetOn())
+            if(Checker.isInternetOn(getActivity()))
             {
                 CallBreakfastListTask task= new CallBreakfastListTask();
                 task.execute();
@@ -369,25 +369,6 @@ public class BreakfastListFragment extends BaseListFragment
             return obj.EditFood(food_id,Global_Application.food_item,Global_Application.food_quantity,Global_Application.meal_type,user.getId().toString());
         }
 
-    }
-
-    public final boolean isInternetOn() {
-
-        ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-                || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-                || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-            return true;
-        }
-
-        else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-                || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-            return false;
-        }
-
-        return false;
     }
 
     public class CallBreakfastListTask extends AsyncTask <String, Void,String>

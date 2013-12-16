@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -62,6 +61,7 @@ import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.RefreshableListView;
+import com.viamhealth.android.utils.Checker;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -478,7 +478,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 if(!ga.getNextbrekfast().toString().equals("null")){
                     nexturl = ga.getNextbrekfast();
                     frm="b";
-                    if(isInternetOn()){
+                    if(Checker.isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getSherlockActivity();
                         task.execute();
@@ -496,7 +496,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 if(!ga.getNextlunch().toString().equals("null")){
                     nexturl = ga.getNextlunch();
                     frm="l";
-                    if(isInternetOn()){
+                    if(Checker.isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getSherlockActivity();
                         task.execute();
@@ -514,7 +514,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 if(!ga.getNextsnacks().toString().equals("null")){
                     nexturl = ga.getNextsnacks();
                     frm="s";
-                    if(isInternetOn()){
+                    if(Checker.isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getSherlockActivity();
                         task.execute();
@@ -532,7 +532,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 // TODO Auto-generated method stub
 
                     frm="e";
-                    if(isInternetOn()){
+                    if(Checker.isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getSherlockActivity();
                         task.execute();
@@ -554,7 +554,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 if(!ga.getNextdinner().toString().equals("null")){
                     nexturl = ga.getNextdinner();
                     frm="d";
-                    if(isInternetOn()){
+                    if(Checker.isInternetOn()){
                         CallBrkPullToRefreshTask task = new CallBrkPullToRefreshTask();
                         task.activity =getSherlockActivity();
                         task.execute();
@@ -599,7 +599,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                                         // if this button is clicked, close
                                         // current activity
                                         dialog.cancel();
-                                        if(isInternetOn()){
+                                        if(Checker.isInternetOn()){
                                             sub_url="diet-tracker/";
                                             CallDeleteTask task = new CallDeleteTask();
                                             task.activity =getSherlockActivity();
@@ -639,7 +639,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                         Global_Application.meal_type="BREAKFAST";
                         alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
-                                if(isInternetOn()){
+                                if(Checker.isInternetOn()){
                                     Global_Application.food_quantity=input.getText().toString().trim();
                                     CallEditTask task = new CallEditTask();
                                     task.activity =getSherlockActivity();
@@ -697,7 +697,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
     public void updateData()
     {
-        if(isInternetOn()){
+        if(Checker.isInternetOn(getActivity())){
             if(getSherlockActivity()!=null)
             {
             CallListTask task = new CallListTask();
@@ -907,7 +907,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                     .append(monthval).append("-")
                     .append(pDay).append(" "));
             ga.selected_date=""+pYear+"-"+monthval+"-"+pDay;
-            if(isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
 
                 CallListTask task = new CallListTask();
                 task.activity = getSherlockActivity();
@@ -1163,7 +1163,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             }
 
-                if(isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallLunchListTask task = new CallLunchListTask();
@@ -1193,7 +1193,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 //lstViewBreakfast.onRefreshComplete();
                 //Toast.makeText(getSherlockActivity(),"Selected Date="+ga.selected_date,Toast.LENGTH_SHORT).show();
             }
-                if(isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallLunchListTask task = new CallLunchListTask();
@@ -1290,7 +1290,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             }
 
-                if(isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallSnaksListTask task = new CallSnaksListTask();
@@ -1313,7 +1313,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 }
 
             }
-                if(isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     if(getSherlockActivity()!=null)
                     {
                     CallSnaksListTask task = new CallSnaksListTask();
@@ -1411,7 +1411,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
 
             }
 
-                if(isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     SherlockFragmentActivity f1=getSherlockActivity();
                     if(f1!=null)
                     {
@@ -1437,7 +1437,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 }
 
             }
-                if(isInternetOn()){
+                if(Checker.isInternetOn(getActivity())){
                     SherlockFragmentActivity f1=getSherlockActivity();
                     if(f1!=null)
                     {
@@ -1560,7 +1560,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
                 dialog1.dismiss();
             }
 
-            if(isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 if(getSherlockActivity()!=null)
                 {
                 CallExerciseListTask task = new CallExerciseListTask();
@@ -1636,7 +1636,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
             }
 
 
-            if(isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = getSherlockActivity();
                 task.execute();
@@ -1653,7 +1653,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         // TODO Auto-generated method stub
         super.onResume();
         Global_Application.total_ideal_calories=0;
-        if(isInternetOn()){
+        if(Checker.isInternetOn(getActivity())){
            CallListTask task = new CallListTask();
             task.activity = getSherlockActivity();
             task.execute();
@@ -1708,7 +1708,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         {
             dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = activity;
                 task.execute();
@@ -1753,7 +1753,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         {
             dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = activity;
                 task.execute();
@@ -1811,7 +1811,7 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         {
            // dialog1.dismiss();
             Log.i("onPostExecute", "onPostExecute");
-            if(isInternetOn()){
+            if(Checker.isInternetOn(getActivity())){
                 CallListTask task = new CallListTask();
                 task.activity = activity;
                 task.execute();
@@ -1868,31 +1868,4 @@ public class JournalFragment extends BaseFragment implements View.OnClickListene
         }
 
     }
-
-    // function for check internet is available or not
-    public final boolean isInternetOn() {
-
-        SherlockFragmentActivity act=getSherlockActivity();
-        if(act!=null)
-        {
-            ConnectivityManager connec = (ConnectivityManager) getSherlockActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
-                    || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)
-                    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTING)
-                    || (connec.getNetworkInfo(1).getState() == NetworkInfo.State.CONNECTED)) {
-                return true;
-            }
-
-            else if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.DISCONNECTED)
-                    || (connec.getNetworkInfo(1).getState() ==  NetworkInfo.State.DISCONNECTED)) {
-                return false;
-            }
-        }
-
-        return false;
-    }
-
-
-
 }
