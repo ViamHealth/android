@@ -113,11 +113,12 @@ public class SyncHelper {
             }
 
             mContext.sendBroadcast(new Intent(FILTER_USER_SYNC_FINISHED));
+
             batch = new ArrayList<ContentProviderOperation>();
         }
 
         if ((flags & FLAG_SYNC_PUSH) != 0 && Checker.isInternetOn(mContext)) {
-
+            //TODO
         }
 
     }

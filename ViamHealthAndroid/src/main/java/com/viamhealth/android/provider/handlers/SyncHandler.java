@@ -28,8 +28,35 @@ public abstract class SyncHandler {
         mContext = context;
     }
 
+    /**
+     * parse will take in the raw json obtained from the API and construct the ContentproviderOperation to either insert
+     * update or delete records in the local db
+     *
+     * @param json - raw json obtained from the api call
+     * @param type - syncType {PUSH, PULL}
+     * @return ArrayList<ContentProviderOperation> to either insert, update or delete records
+     * @throws IOException
+     */
     public abstract ArrayList<ContentProviderOperation> parse(String json, SyncHelper.SyncType type) throws IOException;
+
+
+    /**
+     *
+     * Returns a raw json from api which has records that needs to be inserted, updated or deleted from the
+     * local db. It takes in lastSynchedTime as a parameter so that we get the data modified from only this
+     * time onwards
+     *
+     * @param lastSynchedTime
+     * @return raw json string
+     * @throws IOException
+     */
     public abstract String fetch(Date lastSynchedTime) throws IOException;
+
+
+    /**
+     * Content Uri
+     * @return
+     */
     public abstract Uri getContentUri();
 
     public final void parseAndApply(String json, SyncHelper.SyncType type) throws IOException {
@@ -100,21 +127,4 @@ public abstract class SyncHandler {
         }
         return null;
     }
-
-//    public abstract <T> List<T> getLocallyInsertedData();
-//    public abstract <T> List<T> getLocallyUpdatedData();
-//    public abstract <T> List<T> getLocallyDeletedData();
-//
-//    public abstract <T> List<T> postData(List<T> items);
-//    public abstract <T> List<T> putData(List<T> items);
-//    public abstract <T> List<T> deleteData(List<T> items);
-//
-//    public updatedRemoteData() {
-//        //get the elements that has been changed locally
-//        //inserted
-//
-//        //updated
-//        //deleted
-//    }
-
 }
