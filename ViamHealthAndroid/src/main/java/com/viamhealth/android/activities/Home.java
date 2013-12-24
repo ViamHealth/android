@@ -20,10 +20,13 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.provider.ScheduleContract;
+import com.viamhealth.android.provider.handlers.UserHandler;
 import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
+import com.viamhealth.android.utils.LogUtils;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
@@ -35,7 +38,13 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Loader;
+import android.content.SyncStats;
+import android.content.SyncStatusObserver;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -73,18 +82,17 @@ import android.widget.Toast;
 
 import com.google.analytics.tracking.android.EasyTracker;
 
-public class Home extends BaseActivity implements OnClickListener{
+public class Home extends BaseActivity implements OnClickListener {
 	Display display;
 	int width,height;
-	
-	LinearLayout main_layout, bottom_layout, core_layout;
+
+
+    /** Parameters expected as part of the intent for Home Screen **/
+    public static final String KEY_FAMILY_LIST = "family";
+
+	LinearLayout main_layout;
 	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
 	List<FrameLayout> frames = new ArrayList<FrameLayout>();
-
-    RelativeLayout splashScreen;
-    ScrollView scroller;
-    ProgressBar bar;
-    TextView logoutMessage;
 
 	ViamHealthPrefs appPrefs;
 	Global_Application ga;
@@ -103,11 +111,8 @@ public class Home extends BaseActivity implements OnClickListener{
 
     private ActionMode actionMode;
 
-    private final String TAG = "Home";
+    private final String TAG = LogUtils.makeLogTag(Home.class);
 
-    private AccountManager mAccountManager;
-
-    private static final int LOGIN_ACTIVITY = 10000;
     @Override
     protected void onStart() {
         super.onStart();
@@ -134,84 +139,13 @@ public class Home extends BaseActivity implements OnClickListener{
         user = ga.getLoggedInUser();
 
         //for generate square
-        scroller = (ScrollView)findViewById(R.id.scroller);
-        splashScreen = (RelativeLayout) findViewById(R.id.splash);
-        bar = (ProgressBar) splashScreen.findViewById(R.id.progressBar);
-        logoutMessage = (TextView) splashScreen.findViewById(R.id.logoutMsg);
-        logoutMessage.setVisibility(View.GONE);
-
-        scroller.setVisibility(View.GONE);
-        splashScreen.setVisibility(View.VISIBLE);
-
-        if(getIntent().getBooleanExtra("logout", false)) {
-            logout();
-            return;
-        }
-
-        login();
-    }
-
-    private AccountManagerCallback<Bundle> loginCallback = new AccountManagerCallback<Bundle>() {
-        @Override
-        public void run(AccountManagerFuture<Bundle> future) {
-            String msg = null;
-            try {
-                Bundle bundle = future.getResult();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        postLogin();
-                    }
-                });
-            } catch (OperationCanceledException e) {
-                e.printStackTrace();
-                msg = e.getMessage();
-            } catch (IOException e) {
-                e.printStackTrace();
-                msg = e.getMessage();
-            } catch (AuthenticatorException e) {
-                e.printStackTrace();
-                msg = e.getMessage();
-            }
-            if(!TextUtils.isEmpty(msg)){
-                final String strMsg = msg;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getBaseContext(), strMsg, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }
-    };
-
-    private void login() {
-        Log.i(getClass().getSimpleName(), " uid is " + Binder.getCallingUid());
-        mAccountManager = AccountManager.get(this);
-
-        Account[] accounts = mAccountManager.getAccountsByType(AccountGeneral.ACCOUNT_TYPE);
-
-        if(accounts==null || accounts.length==0){
-            final AccountManagerFuture<Bundle> future = mAccountManager.addAccount(AccountGeneral.ACCOUNT_TYPE,
-                                AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, null, Home.this, loginCallback, null);
-        }else{
-            //TODO just for temp fix
-            if(TextUtils.isEmpty(appPrefs.getToken())){
-                String authToken = mAccountManager.peekAuthToken(accounts[0], AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-                //mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, authToken);
-                appPrefs.setToken(authToken);
-            }
-
-            final AccountManagerFuture<Bundle> future = mAccountManager.getAuthToken(accounts[0],
-                                AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS, null, Home.this, loginCallback, null);
-        }
-    }
-
-    private void postLogin(){
         main_layout = (LinearLayout)findViewById(R.id.main_layout);
 
-        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
-        lstFamily = getIntent().getParcelableArrayListExtra("family");
+        LogUtils.LOGD(TAG, "oncreate " + getIntent().toString());
+
+        lstFamily = getIntent().getParcelableArrayListExtra(KEY_FAMILY_LIST);
+        if(lstFamily==null || lstFamily.size()<1)
+            throw new IllegalArgumentException("KEY_FAMILY_LIST cannot be null or empty");
 
         ScreenDimension();
 
@@ -223,77 +157,36 @@ public class Home extends BaseActivity implements OnClickListener{
     }
 
     private void next(boolean moveToTabActivity) {
+        LogUtils.LOGD(TAG, "next method called");
         //if the only logged-in user has not yet created the profile than
         //force for profile creation
-        User user = ga.getLoggedInUser();
-        boolean getFamilyData = false;
-        if(user==null || lstFamily==null || lstFamily.size()==0){
-            getFamilyData = true;
-        }
+        User loggedInUser = ga.getLoggedInUser();
 
+//        if(user==null)
+//            throw new Exception("logged in user is null");
+
+        //if any members profile available just generate the view
         if(lstFamily!=null && lstFamily.size()>0){
+            LogUtils.LOGD(TAG, "next: lstFamily is not null so generating the view");
             generateView();
-            splashScreen.setVisibility(View.GONE);
-            scroller.setVisibility(View.VISIBLE);
         }
 
-        if(!getFamilyData && !user.isProfileCreated()){
+        //
+        if(!loggedInUser.isProfileCreated()){
+            LogUtils.LOGD(TAG, "next: going to new profile activity ");
             // logged In User's profile not yet completed then show this
             Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
             addProfileIntent.putExtra("user", user);
             startActivityForResult(addProfileIntent, 0);
-        } else if(getFamilyData) {//fetch the data
-            lstFamily = new ArrayList<User>();
-            if(Checker.isInternetOn(Home.this)){
-                GetFamilyListTask task = new GetFamilyListTask();
-                task.applicationContext = Home.this;
-                task.execute();
-            }else{
-                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
-            }
         } else if(moveToTabActivity){//take the user to the goals screen for the loggedInUser\
-            splashScreen.setVisibility(View.GONE);
-            scroller.setVisibility(View.VISIBLE);
+            LogUtils.LOGD(TAG, "next: move to tab activity");
 
             //Monjyoti:commented
             Intent intent = new Intent(Home.this, TabActivity.class);
-            intent.putExtra("user", user);
+            intent.putExtra("user", loggedInUser);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
             startActivity(intent);
-        }
-    }
-
-    private void logout() {
-        splashScreen.setVisibility(View.VISIBLE);
-        scroller.setVisibility(View.GONE);
-
-        logoutMessage.setVisibility(View.VISIBLE);
-
-        if(mAccountManager==null)
-            mAccountManager = AccountManager.get(Home.this);
-
-        if(ga.getLoggedInUser().getProfile()!=null && ga.getLoggedInUser().getProfile().getFbProfileId()!=null
-                && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
-            callFacebookLogout();
-
-        if(Checker.isInternetOn(Home.this)){
-            LogoutTask task = new LogoutTask();
-            task.execute();
-        }
-    }
-
-    public void callFacebookLogout() {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            if (!session.isClosed()) {
-                session.closeAndClearTokenInformation();
-            }
-        } else {
-            session = new Session(Home.this);
-            Session.setActiveSession(session);
-
-            session.closeAndClearTokenInformation();
         }
     }
 
@@ -307,7 +200,10 @@ public class Home extends BaseActivity implements OnClickListener{
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retVal = super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.menu_logout){
-            logout();
+            Intent intent = new Intent(Home.this, SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(SplashActivity.KEY_SHOULD_LOGOUT, true);
+            startActivity(intent);
             return false;
         }
 
@@ -322,13 +218,7 @@ public class Home extends BaseActivity implements OnClickListener{
         }
 
         if(item.getItemId() == R.id.menu_refresh) {
-            if(Checker.isInternetOn(Home.this)){
-                GetFamilyListTask task = new GetFamilyListTask();
-                task.applicationContext = Home.this;
-                task.execute();
-            }else{
-                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
-            }
+            //getLoaderManager().restartLoader(USERS_LOADER, null, this);
         }
 
         if(item.getItemId()==R.id.menu_change_password){
@@ -388,11 +278,6 @@ public class Home extends BaseActivity implements OnClickListener{
         return retVal;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-	}
-
 	public void ScreenDimension(){
         display = getWindowManager().getDefaultDisplay();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -403,10 +288,12 @@ public class Home extends BaseActivity implements OnClickListener{
     private void generateTile(int position, boolean shouldCreateAddNewProfileTile) throws ImproperArgumentsPassedException {
         LinearLayout horizontalLinearLayout;
         int horizontalPosition = position/2;
+        LogUtils.LOGD(TAG, "Generating tiles for position - " + position + "; shouldCreateAddNewProfileTile - " + shouldCreateAddNewProfileTile);
         if(position%2==0 && main_layout.getChildCount()<=horizontalPosition){
             horizontalLinearLayout = new LinearLayout(Home.this);
             horizontalLinearLayout.setTag("HLL"+horizontalPosition);
             main_layout.addView(horizontalLinearLayout);
+            LogUtils.LOGD(TAG, "generatingTile>> just added the horizontalLinearLayout to mainLayout" );
         }else{
             horizontalLinearLayout = (LinearLayout) main_layout.findViewWithTag("HLL"+horizontalPosition);
         }
@@ -477,7 +364,7 @@ public class Home extends BaseActivity implements OnClickListener{
             imgProfile.setLayoutParams(lp);
             imgProfile.setCropped(true);
             imgProfile.setTag("ppic");
-            Log.d(TAG, "GenerateTile::profilePic- default being set to - social_add_person");
+            LogUtils.LOGD(TAG, "GenerateTile::profilePic- default being set to - social_add_person");
             imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
 
             final ProfilePictureView ppv = imgProfile;
@@ -501,7 +388,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
                     public void OnFileLoaded(File file) {
-                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        LogUtils.LOGD(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
                         iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
                         iv.setVisibility(View.VISIBLE);
                         ppv.setVisibility(View.GONE);
@@ -557,7 +444,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
                     public void OnFileLoaded(File file) {
-                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        LogUtils.LOGD(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
                         iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
                         iv.setVisibility(View.VISIBLE);
                         ppv.setVisibility(View.GONE);
@@ -595,7 +482,7 @@ public class Home extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-        Log.e("TAG", "id is : " + v.getId());
+        LogUtils.LOGD(TAG, "onclick: viewid is : " + v.getId());
         int index = v.getId();
         this.selectedViewPosition = index;
         LinearLayout tr1lay=(LinearLayout)tiles.get(index);
@@ -647,29 +534,14 @@ public class Home extends BaseActivity implements OnClickListener{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
 
-        /* if login activity then */
-        if(requestCode == LOGIN_ACTIVITY){
-            if(resultCode == Activity.RESULT_OK){
-                postLogin();
-            }else{
-                finish();
-            }
-        }
-
         if(resultCode==RESULT_OK){
             if(requestCode < 100) {
                 if(isEditMode && actionMode!=null)
                     actionMode.finish();
 
                 user = (User) data.getParcelableExtra("user");
-                if(Checker.isInternetOn(Home.this)){
-                    CallAddProfileTask task = new CallAddProfileTask();
-                    task.applicationContext = Home.this;
-                    task.execute();
-
-                }else{
-
-                }
+                UserHandler uh = new UserHandler(Home.this);
+                uh.saveUser(user, false);
             }else{//it is from tabactivity
 
 
@@ -760,72 +632,6 @@ public class Home extends BaseActivity implements OnClickListener{
             return isSuccess;
         }
     }
-
-    // async class for calling webservice and get responce message
-    public class GetFamilyListTask extends AsyncTask <String, Void,String>
-    {
-        protected Context applicationContext;
-
-        @Override
-        protected void onPreExecute() {
-            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setMessage("loading your family");
-            //dialog.show();
-            Log.i("onPreExecute", "onPreExecute");
-
-        }
-
-        protected void onPostExecute(String result) {
-            if(lstFamily.isEmpty()){
-                logout();
-                return;
-            }
-            splashScreen.setVisibility(View.GONE);
-            scroller.setVisibility(View.VISIBLE);
-
-            next();
-            //dialog.dismiss();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            lstFamily.clear();
-            if(ga.getLoggedInUser()==null){
-                userEndPoint.getLoggedInUser();
-            }
-            lstFamily.addAll(userEndPoint.GetFamilyMembers());
-            return null;
-        }
-
-    }
-
-    public class LogoutTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            splashScreen.setVisibility(View.VISIBLE);
-            scroller.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            mAccountManager.invalidateAuthToken(AccountGeneral.ACCOUNT_TYPE, appPrefs.getToken());
-            ga.setLoggedInUser(null);
-            appPrefs.setToken(null);
-            Intent i = new Intent(Home.this, Home.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-            finish();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            return userEndPoint.Logout();
-        }
-    }
-
 
     public class ChangePasswordTask extends AsyncTask<String, Void, Boolean> {
 

@@ -310,6 +310,6 @@
     <string name="loggingOutMsg">Logging Out...</string>
     <string name="targetNettCalories">Target Net Calories</string>
     <string name="schedule">schedule</string>
-    <string name="endReminder">end reminder</string>
+    <string name="endReminder">end reminder</string><string name="syncingMessage">Syncing Data</string>
 
 </resources>

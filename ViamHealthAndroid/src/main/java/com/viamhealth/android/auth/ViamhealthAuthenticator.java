@@ -6,8 +6,10 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.app.Application;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SyncResult;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +18,10 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.ViamhealthAccountAuthenticatorActivity;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
+import com.viamhealth.android.provider.ScheduleContract;
+import com.viamhealth.android.sync.SyncHelper;
+
+import java.io.IOException;
 
 /**
  * Created by naren on 10/12/13.
@@ -59,6 +65,20 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
         return null;
     }
 
+    public static void initSync(Account account, Context context) {
+        //TODO uncomment this once syncAdapter API is ready and is fixed
+        ContentResolver.setIsSyncable(account, ScheduleContract.CONTENT_AUTHORITY, 1);
+        ContentResolver.setSyncAutomatically(account, ScheduleContract.CONTENT_AUTHORITY, true);
+        SyncHelper.requestSync(account);
+//        SyncHelper helper = new SyncHelper(context);
+//        SyncResult result = new SyncResult();
+//        try {
+//            helper.performSync(result, SyncHelper.FLAG_SYNC_PULL);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
         Log.d(TAG, "> getAuthToken");
@@ -74,6 +94,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
         // Extract the username and password from the Account Manager, and ask
         // the server for an appropriate AuthToken.
         final AccountManager am = AccountManager.get(mContext);
+
 
         String authToken = am.peekAuthToken(account, authTokenType);
 
@@ -99,8 +120,11 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
             }
         }
 
+
+
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
+            initSync(account, mContext);
             mPrefs.setToken(authToken);
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
@@ -143,4 +167,5 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
         result.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
         return result;
     }
+
 }

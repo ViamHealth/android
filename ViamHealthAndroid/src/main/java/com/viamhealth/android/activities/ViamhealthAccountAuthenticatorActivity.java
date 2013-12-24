@@ -5,6 +5,7 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -28,9 +29,13 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.auth.AccountGeneral;
 import com.viamhealth.android.auth.AuthenticateTask;
+import com.viamhealth.android.auth.ViamhealthAuthenticator;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
+import com.viamhealth.android.provider.ScheduleContract;
+import com.viamhealth.android.sync.SyncHelper;
 import com.viamhealth.android.utils.Checker;
+import com.viamhealth.android.utils.LogUtils;
 import com.viamhealth.android.utils.Validator;
 
 /**
@@ -46,9 +51,9 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
     private TextView sign_up, forgotPassword;
     private UserEP userEndPoint;
 
-    private DataBaseAdapter dbAdapter;
     private FBLoginFragment fbLoginFragment;
     private ViamHealthPrefs appPrefs;
+    private Global_Application mApplication;
 
     private AccountManager mAccountManager;
     private String mAuthTokenType;
@@ -62,7 +67,7 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
 
     public final static String PARAM_USER_PASS = "USER_PASS";
 
-    private final String TAG = this.getClass().getSimpleName();
+    private final String TAG = LogUtils.makeLogTag(ViamhealthAccountAuthenticatorActivity.class);
 
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
@@ -132,6 +137,7 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
         }
 
         appPrefs = new ViamHealthPrefs(ViamhealthAccountAuthenticatorActivity.this);
+        mApplication = (Global_Application)getApplicationContext();
 
         userEndPoint=new UserEP(ViamhealthAccountAuthenticatorActivity.this, (Global_Application)getApplicationContext());
 
@@ -163,21 +169,21 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
     @Override
     public void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
-            Log.i(TAG, "FB Logged in...");
+            LogUtils.LOGI(TAG, "FB Logged in...");
             submit(UserEP.LoginType.FB, session.getAccessToken());
         } else if (state.isClosed()) {
-            Log.i(TAG, "FB Logged out...");
+            LogUtils.LOGI(TAG, "FB Logged out...");
         }
     }
 
     private void submit(UserEP.LoginType type, String token) {
-        Log.i(getClass().getSimpleName(), " submit line 1 uid is " + Binder.getCallingUid());
+        LogUtils.LOGI(getClass().getSimpleName(), " submit line 1 uid is " + Binder.getCallingUid());
         if(Checker.isInternetOn(ViamhealthAccountAuthenticatorActivity.this)){
             AuthenticateTask task =
                     new AuthenticateTask(getBaseContext(), (Global_Application)getApplicationContext(), new AuthenticateTask.AuthenticationCompleteListener() {
                         @Override
                         public void OnAuthenticated(Intent intent) {
-                            Log.i(getClass().getSimpleName(), " onAuthenticated line 1 uid is " + Binder.getCallingUid());
+                            LogUtils.LOGI(getClass().getSimpleName(), " onAuthenticated line 1 uid is " + Binder.getCallingUid());
                             finishLogin(intent);
                         }
                     });
@@ -241,8 +247,11 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
         String accountPassword = intent.getStringExtra(PARAM_USER_PASS);
         final Account account = new Account(accountName, intent.getStringExtra(AccountManager.KEY_ACCOUNT_TYPE));
 
+        /** request Sync **/
+        ViamhealthAuthenticator.initSync(account, ViamhealthAccountAuthenticatorActivity.this);
+
         if (getIntent().getBooleanExtra(ARG_IS_ADDING_NEW_ACCOUNT, false)) {
-            Log.d(TAG, "> finishLogin > addAccountExplicitly");
+            LogUtils.LOGD(TAG, "> finishLogin > addAccountExplicitly");
             String authtoken = intent.getStringExtra(AccountManager.KEY_AUTHTOKEN);
             String authtokenType = mAuthTokenType;
 
@@ -254,10 +263,11 @@ public class ViamhealthAccountAuthenticatorActivity extends BaseFragmentActivity
             mAccountManager.setAuthToken(account, authtokenType, authtoken);
             appPrefs.setToken(authtoken);
         } else {
-            Log.d(TAG, "> finishLogin > setPassword");
+            LogUtils.LOGD(TAG, "> finishLogin > setPassword");
             mAccountManager.setPassword(account, accountPassword);
         }
 
+        LogUtils.LOGD(TAG, "> finishLogin > with result as " + intent.getExtras());
         setAccountAuthenticatorResult(intent.getExtras());
         setResult(RESULT_OK, intent);
         finish();

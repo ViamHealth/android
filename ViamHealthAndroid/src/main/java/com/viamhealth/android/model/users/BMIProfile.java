@@ -36,13 +36,6 @@ public class BMIProfile implements Parcelable {
             return false;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
 
     public int getSystolicPressure() {
         return systolicPressure;

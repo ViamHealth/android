@@ -148,33 +148,6 @@ public class UserEP extends BaseEP {
         return false;
     }
 
-    public boolean Logout(){
-        String url = Global_Application.url + "logout/";
-        Log.e(TAG, "url is : " + url);
-
-        if(appPrefs.getToken()==null)
-            return false;
-
-        /* this will be the first rest call */
-        RestClient client = new RestClient(url);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-
-        try{
-            client.Execute(RequestMethod.GET);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
-
-        if(client.getResponseCode()==HttpStatus.SC_OK ||
-                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
-            return true;
-
-        return false;
-    }
-
     public String AuthenticateThroughFB(String fbAccessToken){
         return login(fbAccessToken, null, LoginType.FB);
     }
@@ -317,34 +290,6 @@ public class UserEP extends BaseEP {
             return true;
 
         return false;
-    }
-
-    // function for get family member list
-    public List<User> GetFamilyMembers() {
-
-        String baseurlString = Global_Application.url+"users/";
-
-        RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-
-        try {
-            client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
-        List<User> users = processUsersResponse(responseString);
-        int usersCount = users==null?0:users.size();
-        for(int i=0; i<usersCount; i++){
-            //TODO investigate why there was an internal server error
-            BMIProfile bmiP = getUserBMIProfile(users.get(i).getId());
-            if(bmiP==null)
-                continue;
-            users.get(i).setBmiProfile(bmiP);
-        }
-        return users;
     }
 
     public User getCompleteUserProfile(Long userId){

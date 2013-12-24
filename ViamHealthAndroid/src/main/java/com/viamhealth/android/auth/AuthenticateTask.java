@@ -33,6 +33,12 @@ public class AuthenticateTask extends AsyncTask<Object, Void, Intent> {
         public void OnAuthenticated(Intent intent);
     }
 
+    private void finishLogin(Intent intent){
+        if(mListener!=null){
+            mListener.OnAuthenticated(intent);
+        }
+    }
+
     public AuthenticateTask(Context context, Application app, AuthenticationCompleteListener listener) {
         mContext = context;
         mDialog = new ProgressDialog(context, R.style.StyledProgressDialog);
@@ -53,15 +59,11 @@ public class AuthenticateTask extends AsyncTask<Object, Void, Intent> {
         if (intent.hasExtra(ViamhealthAccountAuthenticatorActivity.KEY_ERROR_MESSAGE)) {
             Toast.makeText(mContext, intent.getStringExtra(ViamhealthAccountAuthenticatorActivity.KEY_ERROR_MESSAGE), Toast.LENGTH_SHORT).show();
         } else {
+            User user = (User) intent.getParcelableExtra(AccountManager.KEY_USERDATA);
+            mApp.setLoggedInUser(user);
             finishLogin(intent);
         }
 
-    }
-
-    private void finishLogin(Intent intent){
-        if(mListener!=null){
-            mListener.OnAuthenticated(intent);
-        }
     }
 
     @Override
@@ -97,7 +99,7 @@ public class AuthenticateTask extends AsyncTask<Object, Void, Intent> {
         }
 
         final Intent res = new Intent(mContext, Home.class);
-        data.putParcelable(AccountManager.KEY_INTENT, res);
+        //data.putParcelable(AccountManager.KEY_INTENT, res);
         res.putExtras(data);
         return res;
     }

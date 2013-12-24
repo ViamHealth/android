@@ -10,9 +10,9 @@ import android.net.NetworkInfo;
  */
 public class Checker {
 
-    public static final boolean isInternetOn(Activity activity) {
+    public static final boolean isInternetOn(Context context) {
 
-        ConnectivityManager connec = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if ((connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTED)
             || (connec.getNetworkInfo(0).getState() == NetworkInfo.State.CONNECTING)

@@ -12,11 +12,14 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.utils.LogUtils;
 
 /**
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  */
 public abstract class BaseActivity extends SherlockActivity {
+
+    protected final String TAG = LogUtils.makeLogTag(getClass());
 
     Display display;
     int height,width;
