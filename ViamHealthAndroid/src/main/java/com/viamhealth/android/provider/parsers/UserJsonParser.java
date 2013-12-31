@@ -1,5 +1,6 @@
 package com.viamhealth.android.provider.parsers;
 
+import com.viamhealth.android.model.BaseModel;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.users.BMIProfile;
@@ -11,14 +12,16 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by naren on 17/12/13.
  */
-public class UserJsonParser extends JsonParser<User> {
+public class UserJsonParser extends JsonParser {
 
     @Override
-    protected User parse(JSONObject jsonObject) throws JSONException {
+    protected BaseModel parse(JSONObject jsonObject) throws JSONException {
         User user = new User();
 
         try{
@@ -236,5 +239,10 @@ public class UserJsonParser extends JsonParser<User> {
         }
 
         return pd;
+    }
+
+@Override
+    public List<BaseModel> newList() {
+        return new ArrayList<BaseModel>();
     }
 }

@@ -20,6 +20,7 @@ import com.viamhealth.android.activities.ViamhealthAccountAuthenticatorActivity;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.provider.ScheduleContract;
 import com.viamhealth.android.sync.SyncHelper;
+import com.viamhealth.android.utils.LogUtils;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
     private ViamHealthPrefs mPrefs;
     private Global_Application mApplication;
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = LogUtils.makeLogTag(ViamhealthAuthenticator.class);
 
     public ViamhealthAuthenticator(Context context, Application app) {
         super(context);
@@ -66,17 +67,9 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
     }
 
     public static void initSync(Account account, Context context) {
-        //TODO uncomment this once syncAdapter API is ready and is fixed
         ContentResolver.setIsSyncable(account, ScheduleContract.CONTENT_AUTHORITY, 1);
         ContentResolver.setSyncAutomatically(account, ScheduleContract.CONTENT_AUTHORITY, true);
         SyncHelper.requestSync(account);
-//        SyncHelper helper = new SyncHelper(context);
-//        SyncResult result = new SyncResult();
-//        try {
-//            helper.performSync(result, SyncHelper.FLAG_SYNC_PULL);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @Override
@@ -102,7 +95,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
 
         if(TextUtils.isEmpty(authToken)){
             authToken = mPrefs.getToken();
-
+            Log.d(TAG, "> authToken from preferences returned - " + authToken);
         }
 
         // Lets give another try to authenticate the user
@@ -119,8 +112,6 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
                 }
             }
         }
-
-
 
         // If we get an authToken - we return it
         if (!TextUtils.isEmpty(authToken)) {
@@ -145,6 +136,7 @@ public class ViamhealthAuthenticator extends AbstractAccountAuthenticator {
         bundle.putParcelable(AccountManager.KEY_INTENT, intent);
         return bundle;
     }
+
 
     @Override
     public String getAuthTokenLabel(String authTokenType) {

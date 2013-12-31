@@ -50,6 +50,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
+
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         final boolean uploadOnly = extras.getBoolean(ContentResolver.SYNC_EXTRAS_UPLOAD, false);
@@ -78,7 +79,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 " initialize=" + initialize);
 
         try {
-            mSyncHelper.performSync(syncResult, SyncHelper.FLAG_SYNC_PULL);
+            mSyncHelper.performSync(syncResult, SyncHelper.FLAG_SYNC_PULL | SyncHelper.FLAG_SYNC_PUSH);
         } catch (IOException e) {
             e.printStackTrace();
             LogUtils.LOGE(TAG, e.getMessage(), e.getCause());

@@ -2,7 +2,6 @@ package com.viamhealth.android.provider.handlers;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.Context;
@@ -12,6 +11,8 @@ import android.net.Uri;
 import android.os.RemoteException;
 
 import com.viamhealth.android.auth.AccountGeneral;
+import com.viamhealth.android.dao.restclient.old.RequestMethod;
+import com.viamhealth.android.model.BaseModel;
 import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.Relation;
@@ -19,9 +20,10 @@ import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.provider.ScheduleContract;
-import com.viamhealth.android.provider.ScheduleProvider;
+import com.viamhealth.android.provider.parsers.JsonParser;
 import com.viamhealth.android.provider.parsers.UserJsonParser;
 import com.viamhealth.android.sync.SyncHelper;
+import com.viamhealth.android.sync.restclient.BaseEndPoint;
 import com.viamhealth.android.sync.restclient.UserEndPoint;
 import com.viamhealth.android.utils.LogUtils;
 
@@ -43,21 +45,12 @@ public class UserHandler extends SyncHandler {
     }
 
     @Override
-    public ArrayList<ContentProviderOperation> parse(String json, SyncHelper.SyncType type) throws IOException {
-        if(json==null)
-            throw new IOException("response from Server has been null");
+    public ArrayList<ContentProviderOperation> parse(List<BaseModel> items) throws IOException {
         final ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
-        UserJsonParser userJson = new UserJsonParser();
-        List<User> users = userJson.parseArray(json);
-        int usersCounts = users.size();
+        int usersCounts = items.size();
         for(int i=0; i<usersCounts; i++)
-            parseUser(users.get(i), batch, type);
+            parseUser((User)items.get(i), batch);
         return batch;
-    }
-
-    @Override
-    public String fetch(Date lastSynchedTime) throws IOException {
-        return userEndPoint.getFamilyMembers(lastSynchedTime);
     }
 
     @Override
@@ -65,22 +58,86 @@ public class UserHandler extends SyncHandler {
         return ScheduleContract.Users.CONTENT_USER_URI;
     }
 
-    public boolean saveUser(User user, boolean shouldDelete) {
-        boolean shouldUpdate = false;
+    @Override
+    public BaseEndPoint getEndPoint(Context context) {
+        return new UserEndPoint(context);
+    }
+
+    @Override
+    public JsonParser newParser() {
+        return new UserJsonParser();
+    }
+
+    @Override
+    public BaseModel newModel() {
+        return new User();
+    }
+
+    @Override
+    public List<BaseModel> newList() {
+        return new ArrayList<BaseModel>();
+    }
+
+    @Override
+    protected ArrayList<ContentProviderOperation> changeId(BaseModel b, BaseModel a) {
+        User before = (User) b;
+        User after = (User) a;
+
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
+
+        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserUri(before.getId()));
+        userBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
+        batch.add(userBuilder.build());
+
+        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserProfileUri(before.getId(), false));
+        profileBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
+        batch.add(profileBuilder.build());
+
+        ContentProviderOperation.Builder bmiBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserHealthProfileUri(before.getId(), false));
+        bmiBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
+        batch.add(bmiBuilder.build());
+
+        return batch;
+    }
+
+    @Override
+    protected ArrayList<ContentProviderOperation> updateSyncStatus(BaseModel a, ScheduleContract.SyncStatus syncStatus) {
+        User after = (User) a;
+        ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
+
+        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserUri(after.getId()));
+        userBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
+        batch.add(userBuilder.build());
+
+        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserProfileUri(after.getId(), false));
+        profileBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
+        batch.add(profileBuilder.build());
+
+        ContentProviderOperation.Builder bmiBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserHealthProfileUri(after.getId(), false));
+        bmiBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
+        batch.add(bmiBuilder.build());
+
+        return batch;
+    }
+
+    @Override
+    public ArrayList<ContentProviderOperation> save(final BaseModel model, final boolean shouldDelete) {
+        ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
+        User user = (User) model;
+        boolean shouldUpdate = false;
 
         if(user.getId()>0) shouldUpdate = true;
 
         ContentProviderOperation.Builder builder = null, pBuilder = null, bmiBuilder = null, syncBuilder = null;
         if(shouldUpdate){
             builder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserUri(user.getId()));
-            pBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserProfileUri(user.getId()));
-            bmiBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserHealthProfileUri(user.getId()));
+            pBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserProfileUri(user.getId(), false));
+            bmiBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserHealthProfileUri(user.getId(), false));
         }else{
             builder = ContentProviderOperation.newInsert(ScheduleContract.Users.buildUserUri(null));
-            pBuilder = ContentProviderOperation.newInsert(ScheduleContract.Users.buildUserProfileUri(user.getId()));
+            pBuilder = ContentProviderOperation.newInsert(ScheduleContract.Users.buildUserProfileUri(user.getId(), true));
             pBuilder.withValueBackReference(ScheduleContract.UserForeignKeyColumn.USER_ID, 0);
-            bmiBuilder = ContentProviderOperation.newInsert(ScheduleContract.Users.buildUserHealthProfileUri(user.getId()));
+            bmiBuilder = ContentProviderOperation.newInsert(ScheduleContract.Users.buildUserHealthProfileUri(user.getId(), true));
             bmiBuilder.withValueBackReference(ScheduleContract.UserForeignKeyColumn.USER_ID, 0);
         }
 
@@ -101,6 +158,13 @@ public class UserHandler extends SyncHandler {
 
         syncBuilder = getSyncBuilderForUpdate();
         batch.add(syncBuilder.build());
+
+        return batch;
+    }
+
+
+    public boolean saveLocally(final BaseModel model, final boolean shouldDelete) {
+        ArrayList<ContentProviderOperation> batch = save(model, shouldDelete);
 
         try {
             ContentProviderResult[] results = mContext.getContentResolver().applyBatch(ScheduleContract.CONTENT_AUTHORITY, batch);
@@ -184,7 +248,8 @@ public class UserHandler extends SyncHandler {
         return bmiBuilder;
     }
 
-    public static User parseCursor(Cursor cursor){
+    @Override
+    public User parseCursor(Cursor cursor){
         /** Assuming that the cursor is pointing to the user row obtained by the user query **/
         if(cursor==null || cursor.isAfterLast() || cursor.isBeforeFirst() || cursor.isClosed())
             return null;
@@ -199,6 +264,10 @@ public class UserHandler extends SyncHandler {
         user.setLastName(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.LAST_NAME)));
         user.setLoggedInUser(cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.IS_LOGGED_IN_USER)) > 0);
         user.setUsername(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.USER_NAME)));
+        int syncStatus = cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.SYNC_STATUS));
+        user.setSyncStatus(ScheduleContract.SyncStatus.values()[syncStatus]);
+        user.setPulledOn(new Date(cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.SYNCHRONIZED))));
+        user.setPushedOn(new Date(cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.UPDATED))));
 
         Profile profile = new Profile();
         profile.setMobileNumber(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.MOBILE_NUMBER)));
@@ -207,6 +276,10 @@ public class UserHandler extends SyncHandler {
         profile.setProfilePicURL(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.PIC_URL)));
         profile.setOrganization(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.ORGANIZATION)));
         profile.setLocation(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.LOCATION)));
+        //syncStatus = cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.SYNC_STATUS));
+        //profile.setSyncStatus(ScheduleContract.SyncStatus.values()[syncStatus]);
+        //profile.setPulledOn(new Date(cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.SYNCHRONIZED))));
+        //profile.setPushedOn(new Date(cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.UPDATED))));
 
         int relationIndex = cursor.getColumnIndex(ScheduleContract.Users.RELATION);
         if(!cursor.isNull(relationIndex)) profile.setRelation(Relation.get(cursor.getInt(relationIndex)));
@@ -232,13 +305,17 @@ public class UserHandler extends SyncHandler {
         bmiProfile.setLdl(cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.LDL)));
         bmiProfile.setTriglycerides(cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.TRIGLYCERIDES)));
         bmiProfile.setTotalCholesterol(cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.TOTAL_CHOLESTEROL)));
+        //syncStatus = cursor.getInt(cursor.getColumnIndex(ScheduleContract.Users.SYNC_STATUS));
+        //bmiProfile.setSyncStatus(ScheduleContract.SyncStatus.values()[syncStatus]);
+        //bmiProfile.setPulledOn(new Date(cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.SYNCHRONIZED))));
+        //bmiProfile.setPushedOn(new Date(cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.UPDATED))));
         user.setBmiProfile(bmiProfile);
 
         return user;
 
     }
     /** takes care of inserting a new value or updating an existing record **/
-    public static void parseUser(User user, ArrayList<ContentProviderOperation> batch, SyncHelper.SyncType type){
+    public static void parseUser(User user, ArrayList<ContentProviderOperation> batch){
         /** Add user meta data **/
         Uri uri = null;
 
@@ -253,15 +330,9 @@ public class UserHandler extends SyncHandler {
         }
 
         uri = ScheduleContract.Users.buildUserUri(user.getId());
-        if(type!=null)
-            uri = ScheduleContract.addCallerIsSyncAdapterParameter(uri);
+        uri = ScheduleContract.addCallerIsSyncAdapterParameter(uri);
 
-        String syncTimeUpdateColumn = null;
-
-        if(type== SyncHelper.SyncType.PULL)
-            syncTimeUpdateColumn = ScheduleContract.SyncColumns.SYNCHRONIZED;
-        else if(type == SyncHelper.SyncType.PUSH)
-            syncTimeUpdateColumn = ScheduleContract.SyncColumns.UPDATED;
+        String syncTimeUpdateColumn = ScheduleContract.SyncColumns.SYNCHRONIZED;
 
         int index = batch.size();
         //construct the user
@@ -276,7 +347,7 @@ public class UserHandler extends SyncHandler {
         Profile profile = user.getProfile();
         if(profile!=null){
             ContentProviderOperation.Builder profileBuilder = null;
-            Uri profileUri = ScheduleContract.Users.buildUserProfileUri(user.getId());
+            Uri profileUri = ScheduleContract.Users.buildUserProfileUri(user.getId(), false);
             if(syncTimeUpdateColumn!=null)
                 profileUri = ScheduleContract.addCallerIsSyncAdapterParameter(profileUri);
 
@@ -301,7 +372,7 @@ public class UserHandler extends SyncHandler {
         if(bmiProfile!=null){
             ContentProviderOperation.Builder bmiBuilder = null;
 
-            Uri bmiProfileUri = ScheduleContract.Users.buildUserHealthProfileUri(user.getId());
+            Uri bmiProfileUri = ScheduleContract.Users.buildUserHealthProfileUri(user.getId(), false);
             if(syncTimeUpdateColumn!=null)
                 bmiProfileUri = ScheduleContract.addCallerIsSyncAdapterParameter(bmiProfileUri);
 

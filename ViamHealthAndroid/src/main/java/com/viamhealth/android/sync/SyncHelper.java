@@ -98,8 +98,35 @@ public class SyncHelper {
             /** If there are any pending data to be synced to the corresponding tables
              * then just remove those rows or mark them as sync_overriden
              */
+            LogUtils.LOGI(TAG, "PULL Based Sync started...");
             LogUtils.LOGI(TAG, "Syncing users..");
             batch.addAll(new UserHandler(mContext).fetchAndParse(SyncType.PULL));
+
+
+            try {
+                // Apply all queued up batch operations for local data.
+                resolver.applyBatch(ScheduleContract.CONTENT_AUTHORITY, batch);
+                LogUtils.LOGD(TAG, "Local sync took (PULL) " + (System.currentTimeMillis() - startLocal) + "ms");
+            } catch (RemoteException e) {
+                LogUtils.LOGI(TAG, "PULL Based Sync caused some error...");
+                throw new RuntimeException("Problem applying batch operation", e);
+            } catch (OperationApplicationException e) {
+                LogUtils.LOGI(TAG, "PULL Based Sync caused some error...");
+                throw new RuntimeException("Problem applying batch operation", e);
+            }
+
+            batch = new ArrayList<ContentProviderOperation>();
+        }
+
+        if ((flags & FLAG_SYNC_PUSH) != 0 && Checker.isInternetOn(mContext)) {
+            final long startLocal = System.currentTimeMillis();
+
+            /** If there are any pending data to be synced to the corresponding tables
+             * then just remove those rows or mark them as sync_overriden
+             */
+            LogUtils.LOGI(TAG, "PUSH Based Sync started...");
+            LogUtils.LOGI(TAG, "Syncing users..");
+            batch.addAll(new UserHandler(mContext).push());
 
 
             try {
@@ -112,14 +139,10 @@ public class SyncHelper {
                 throw new RuntimeException("Problem applying batch operation", e);
             }
 
-            mContext.sendBroadcast(new Intent(FILTER_USER_SYNC_FINISHED));
-
             batch = new ArrayList<ContentProviderOperation>();
         }
 
-        if ((flags & FLAG_SYNC_PUSH) != 0 && Checker.isInternetOn(mContext)) {
-            //TODO
-        }
+        mContext.sendBroadcast(new Intent(FILTER_USER_SYNC_FINISHED));
 
     }
 }

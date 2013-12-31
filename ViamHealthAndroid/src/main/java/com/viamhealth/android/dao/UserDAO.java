@@ -20,7 +20,7 @@ public class UserDAO {
 
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 
-        UserHandler.parseUser(user, batch, null);
+        UserHandler.parseUser(user, batch);
 
 
     }

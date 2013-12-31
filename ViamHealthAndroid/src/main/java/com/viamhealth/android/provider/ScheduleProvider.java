@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQuery;
 import android.net.Uri;
 
 import com.viamhealth.android.dao.db.helper.SelectionBuilder;
@@ -25,6 +28,7 @@ public class ScheduleProvider extends ContentProvider {
     private static final String TAG = LogUtils.makeLogTag(ScheduleProvider.class);
 
     private ScheduleDatabase mOpenHelper;
+    private final SQLiteCursorFactory mFactory = new SQLiteCursorFactory(true);
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -80,7 +84,7 @@ public class ScheduleProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new ScheduleDatabase(getContext());
+        mOpenHelper = new ScheduleDatabase(getContext(), mFactory);
         return true;
     }
 
@@ -245,7 +249,8 @@ public class ScheduleProvider extends ContentProvider {
             case USERS_ITEM_PROFILE_URI:
             case USERS_ITEM_PROFILE_WN_URI:{
                 Integer userId = ScheduleContract.Users.getUserId(uri);
-                values.put(ScheduleContract.UserForeignKeyColumn.USER_ID, userId);
+                if(userId!=null)
+                    values.put(ScheduleContract.UserForeignKeyColumn.USER_ID, userId);
                 db.insertOrThrow(ScheduleDatabase.TABLES.PROFILE, null, values);
                 notifyChange(uri, syncToNetwork);
                 return ScheduleContract.Users.buildUserUri(values.getAsLong(ScheduleContract.Users.USER_ID));
@@ -253,7 +258,8 @@ public class ScheduleProvider extends ContentProvider {
             case USERS_ITEM_HEALTH_PROFILE_URI:
             case USERS_ITEM_HEALTH_PROFILE_WN_URI: {
                 Integer userId = ScheduleContract.Users.getUserId(uri);
-                values.put(ScheduleContract.UserForeignKeyColumn.USER_ID, userId);
+                if(userId!=null)
+                    values.put(ScheduleContract.UserForeignKeyColumn.USER_ID, userId);
                 db.insertOrThrow(ScheduleDatabase.TABLES.HEALTH_PROFILE, null, values);
                 notifyChange(uri, syncToNetwork);
                 return ScheduleContract.Users.buildUserUri(values.getAsLong(ScheduleContract.Users.USER_ID));
@@ -268,7 +274,7 @@ public class ScheduleProvider extends ContentProvider {
         mOpenHelper.close();
         Context context = getContext();
         ScheduleDatabase.deleteDatabase(context);
-        mOpenHelper = new ScheduleDatabase(getContext());
+        mOpenHelper = new ScheduleDatabase(getContext(), mFactory);
     }
 
     @Override
@@ -306,6 +312,30 @@ public class ScheduleProvider extends ContentProvider {
 
         // Widgets can't register content observers so we refresh widgets separately.
         //context.sendBroadcast(ScheduleWidgetProvider.getRefreshBroadcastIntent(context, false));
+    }
+
+    public class SQLiteCursorFactory implements SQLiteDatabase.CursorFactory {
+
+        private boolean debugQueries = false;
+
+        public SQLiteCursorFactory() {
+            super();
+            this.debugQueries = false;
+        }
+
+        public SQLiteCursorFactory(boolean debugQueries) {
+            super();
+            this.debugQueries = debugQueries;
+        }
+
+        @Override
+        public Cursor newCursor(SQLiteDatabase db, SQLiteCursorDriver masterQuery,
+                                String editTable, SQLiteQuery query) {
+            if (debugQueries) {
+                LogUtils.LOGD(TAG, "SQL:" + query.toString());
+            }
+            return new SQLiteCursor(db, masterQuery, editTable, query);
+        }
     }
 
 }

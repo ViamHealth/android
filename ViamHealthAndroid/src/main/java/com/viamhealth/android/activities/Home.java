@@ -1,53 +1,33 @@
 package com.viamhealth.android.activities;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-import com.viamhealth.android.auth.AccountGeneral;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.provider.ScheduleContract;
 import com.viamhealth.android.provider.handlers.UserHandler;
 import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.LogUtils;
-import com.viamhealth.android.utils.UIUtility;
-import com.viamhealth.android.utils.Validator;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.LoaderManager;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
-import android.content.Loader;
-import android.content.SyncStats;
-import android.content.SyncStatusObserver;
-import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Binder;
 import android.os.Bundle;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -55,32 +35,20 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Parcelable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.analytics.tracking.android.EasyTracker;
 
 public class Home extends BaseActivity implements OnClickListener {
 	Display display;
@@ -161,6 +129,14 @@ public class Home extends BaseActivity implements OnClickListener {
         //if the only logged-in user has not yet created the profile than
         //force for profile creation
         User loggedInUser = ga.getLoggedInUser();
+
+        if(loggedInUser==null){
+            Intent intent = new Intent(Home.this, SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(SplashActivity.KEY_SHOULD_LOGOUT, true);
+            startActivity(intent);
+            return;
+        }
 
 //        if(user==null)
 //            throw new Exception("logged in user is null");
@@ -541,7 +517,7 @@ public class Home extends BaseActivity implements OnClickListener {
 
                 user = (User) data.getParcelableExtra("user");
                 UserHandler uh = new UserHandler(Home.this);
-                uh.saveUser(user, false);
+                uh.saveLocally(user, false);
             }else{//it is from tabactivity
 
 

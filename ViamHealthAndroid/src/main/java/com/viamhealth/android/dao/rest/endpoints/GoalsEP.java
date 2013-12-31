@@ -136,7 +136,6 @@ public abstract class GoalsEP extends BaseEP {
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
         return processGoalReading(responseString);
-
     }
 
     public GoalReadings createGoalReadings(Long userId, GoalReadings readings) {

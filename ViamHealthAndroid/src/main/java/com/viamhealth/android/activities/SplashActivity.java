@@ -101,7 +101,7 @@ public class SplashActivity extends BaseActivity implements LoaderManager.Loader
         if(cursor!=null && cursor.moveToFirst()){
             familyMembers.clear();
             while(!cursor.isAfterLast()){
-                User u = UserHandler.parseCursor(cursor);
+                User u = new UserHandler(SplashActivity.this).parseCursor(cursor);
                 if(u.isLoggedInUser())
                     ga.setLoggedInUser(u);
                 familyMembers.add(u);

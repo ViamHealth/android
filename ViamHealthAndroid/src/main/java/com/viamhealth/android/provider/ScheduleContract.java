@@ -31,6 +31,7 @@ public class ScheduleContract {
     public static final long UPDATED_UNKNOWN = -1;
 
     public enum SyncStatus {
+        None,
         PENDING_UPDATE,
         POST_INITIATED,
         PUT_INITIATED,
@@ -128,20 +129,29 @@ public class ScheduleContract {
             return CONTENT_USER_URI.buildUpon().appendPath(userId.toString()).build();
         }
 
-        public static Uri buildUserProfileUri(Long userId) {
+        public static Uri buildUserProfileUri(Long userId, boolean isNegative) {
+            String str = "#";
+            if(isNegative)
+                str = "-" + str;
             if(userId==0)
-                return CONTENT_USER_URI.buildUpon().appendPath("#").appendPath(PATH_PROFILE).build();
+                return CONTENT_USER_URI.buildUpon().appendPath(str).appendPath(PATH_PROFILE).build();
             return buildUserUri(userId).buildUpon().appendPath(PATH_PROFILE).build();
         }
 
-        public static Uri buildUserHealthProfileUri(Long userId) {
+        public static Uri buildUserHealthProfileUri(Long userId, boolean isNegative) {
+            String str = "#";
+            if(isNegative)
+                str = "-" + str;
             if(userId==0)
-                return CONTENT_USER_URI.buildUpon().appendPath("#").appendPath(PATH_HEALTH_PROFILE).build();
+                return CONTENT_USER_URI.buildUpon().appendPath(str).appendPath(PATH_HEALTH_PROFILE).build();
             return buildUserUri(userId).buildUpon().appendPath(PATH_HEALTH_PROFILE).build();
         }
 
         public static Integer getUserId(Uri uri) {
-            return Integer.parseInt(uri.getPathSegments().get(1));
+            String str = uri.getPathSegments().get(1);
+            if(str.contains("#"))
+                return null;
+            return Integer.parseInt(str);
         }
 
     }

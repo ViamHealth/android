@@ -1,8 +1,12 @@
 package com.viamhealth.android.provider;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
+import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQuery;
 import android.provider.BaseColumns;
 
 import com.viamhealth.android.provider.ScheduleContract.UserColumns;
@@ -130,8 +134,8 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
     }
 
-    public ScheduleDatabase(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    public ScheduleDatabase(Context context, ScheduleProvider.SQLiteCursorFactory factory) {
+        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
         mContext = context;
     }
 
