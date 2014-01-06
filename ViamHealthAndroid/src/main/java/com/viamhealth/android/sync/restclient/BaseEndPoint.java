@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -226,7 +227,15 @@ public abstract class BaseEndPoint {
     }
 
     protected List<BaseModel> saveData(BaseModel model, RequestMethod method) throws IOException {
-        RestClient client = getRestClient(getQueryParams(), getPathSegments());
+        String[] ps = getPathSegments();
+        String[] pathSegments = null;
+        if(method==RequestMethod.PUT){
+            pathSegments = Arrays.copyOf(ps, ps.length + 1);
+            pathSegments[ps.length] = model.getId().toString();
+        }else{
+            pathSegments = ps;
+        }
+        RestClient client = getRestClient(getQueryParams(), pathSegments);
         addParams(client, model);
         try {
             client.Execute(method);
@@ -235,9 +244,9 @@ public abstract class BaseEndPoint {
             LogUtils.LOGW(TAG, "response of save data failed", e.getCause());
         }
 
+        Log.i(TAG, client.toString());
         if(client.getResponseCode() == HttpStatus.SC_CREATED ||
                 client.getResponseCode() == HttpStatus.SC_OK) {
-            Log.i(TAG, client.toString());
             return getJsonParser().parseArray(client.getResponse());
         }
 

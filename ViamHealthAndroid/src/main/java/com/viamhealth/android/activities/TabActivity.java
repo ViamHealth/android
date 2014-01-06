@@ -114,6 +114,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
         /* Create Tabs */
+
+
         mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
                 mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
                 GoalFragment.class, bundle);

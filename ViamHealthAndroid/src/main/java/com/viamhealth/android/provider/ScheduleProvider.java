@@ -102,7 +102,7 @@ public class ScheduleProvider extends ContentProvider {
         switch(match){
             case USERS_UPDATABLE_DATA_URI://get all the data that needs to be updated
                 builder = new SelectionBuilder();
-                c = builder.table(ScheduleDatabase.TABLES.USERS).where(ScheduleContract.Users.SYNC_STATUS + "=?", new String[]{String.valueOf(ScheduleContract.SyncStatus.PENDING_UPDATE.ordinal())})
+                c = builder.table(ScheduleDatabase.TABLES.USERS_COMPLETE_JOIN).where(ScheduleContract.Users.TABLE_ALIAS + "." +ScheduleContract.Users.SYNC_STATUS + "=?", new String[]{String.valueOf(ScheduleContract.SyncStatus.PENDING_UPDATE.ordinal())})
                         .query(db, projection, null);
                     //select * from users where sync_status=pending_update;
                 break;

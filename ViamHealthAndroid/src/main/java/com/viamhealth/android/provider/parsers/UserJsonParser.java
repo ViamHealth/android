@@ -45,7 +45,7 @@ public class UserJsonParser extends JsonParser {
     }
 
 
-    private Profile processProfileResponse(JSONObject jsonProfile){
+    public Profile processProfileResponse(JSONObject jsonProfile){
 
         Profile pd = new Profile();
         Profile.Location location = pd.new Location();
@@ -170,7 +170,7 @@ public class UserJsonParser extends JsonParser {
         return pd;
     }
 
-    private BMIProfile processBMIProfileResponse(JSONObject jsonProfile){
+    public BMIProfile processBMIProfileResponse(JSONObject jsonProfile){
 
         BMIProfile pd = new BMIProfile();
 

@@ -117,7 +117,7 @@ public class AuthHelper {
         }
 
         //TODO:: All the bottom tasks should be removed
-        if(mApplication.getLoggedInUser().getProfile()!=null && mApplication.getLoggedInUser().getProfile().getFbProfileId()!=null
+        if(mApplication.getLoggedInUser()!=null && mApplication.getLoggedInUser().getProfile()!=null && mApplication.getLoggedInUser().getProfile().getFbProfileId()!=null
                 && !mApplication.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
             callFacebookLogout();
 
