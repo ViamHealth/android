@@ -281,5 +281,6 @@ public abstract class BaseEndPoint {
         public static String GET_TOKEN = "api-token-auth";
         public static String USERS = "users";
         public static String LOGGED_IN_USER = "me";
+        public static String REMINDERS = "reminders";
     }
 }

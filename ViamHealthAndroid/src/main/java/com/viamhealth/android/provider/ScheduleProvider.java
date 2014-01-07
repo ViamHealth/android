@@ -42,6 +42,14 @@ public class ScheduleProvider extends ContentProvider {
     private static final int USERS_ITEM_HEALTH_PROFILE_WN_URI = 106;
     private static final int USERS_LAST_SYNC_TIME_URI = 107;
     private static final int USERS_UPDATABLE_DATA_URI = 108;
+
+    private static final int REMINDERS_URI=109;
+    private static final int REMINDERS_WN_URI=110;
+    private static final int REMINDERS_READINGS_URI=111;
+    private static final int REMINDERS_READINGS_WN_URI=112;
+    private static final int REMINDERS_LAST_SYNC_TIME_URI=113;
+    private static final int REMINDERS_UPDATABLE_DATA_URI=114;
+
     private static final int SYNC_URI = 1;
 
     /** Matching Uri Patterns **/
@@ -56,6 +64,13 @@ public class ScheduleProvider extends ContentProvider {
     private static final String USER_HEALTH_PROFILE_WN_PATTERN = ScheduleContract.PATH_USERS + "/-"+ ANY_INTEGER +"/" + ScheduleContract.PATH_HEALTH_PROFILE;
     private static final String USER_LAST_SYNC_TIME_PATTERN = ScheduleContract.PATH_USERS + "/" + ScheduleContract.PATH_LAST_SYNC_TIME;
     private static final String USER_UPDATABLE_DATA_PATTERN = ScheduleContract.PATH_USERS + "/" + ScheduleContract.PATH_DATA_TO_BE_UPDATED;
+
+    private static final String REMINDERS_PATTERN=ScheduleContract.PATH_REMINDERS;
+    private static final String REMINDERS_WN_PATTERN=ScheduleContract.PATH_REMINDERS;
+    private static final String REMINDERS_READINGS_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
+    private static final String REMINDERS_READINGS_WN_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
+    private static final String REMINDERS_LAST_SYNC_TIME_PATTERN=ScheduleContract.PATH_REMINDERS+"/"+ScheduleContract.PATH_LAST_SYNC_TIME;
+    private static final String REMINDERS_UPDATABLE_DATA_PATTERN=ScheduleContract.PATH_REMINDERS+"/"+ScheduleContract.PATH_DATA_TO_BE_UPDATED;;
 
     /** Min IDS **/
     private static Integer USER_ID_MIN = -1;
@@ -78,6 +93,13 @@ public class ScheduleProvider extends ContentProvider {
         matcher.addURI(authority, USER_HEALTH_PROFILE_WN_PATTERN, USERS_ITEM_HEALTH_PROFILE_WN_URI);
         //matcher.addURI(authority, USER_LAST_SYNC_TIME_PATTERN, USERS_LAST_SYNC_TIME_URI);
         matcher.addURI(authority, USER_UPDATABLE_DATA_PATTERN, USERS_UPDATABLE_DATA_URI);
+
+        matcher.addURI(authority, REMINDERS_PATTERN, REMINDERS_URI);
+        matcher.addURI(authority, REMINDERS_WN_PATTERN, REMINDERS_WN_URI);
+        matcher.addURI(authority, REMINDERS_READINGS_PATTERN, REMINDERS_READINGS_URI);
+        matcher.addURI(authority, REMINDERS_READINGS_WN_PATTERN, REMINDERS_READINGS_WN_URI);
+        matcher.addURI(authority, REMINDERS_LAST_SYNC_TIME_PATTERN, REMINDERS_LAST_SYNC_TIME_URI);
+        matcher.addURI(authority, REMINDERS_UPDATABLE_DATA_PATTERN, REMINDERS_UPDATABLE_DATA_URI);
 
         return matcher;
     }
@@ -105,6 +127,13 @@ public class ScheduleProvider extends ContentProvider {
                 c = builder.table(ScheduleDatabase.TABLES.USERS_COMPLETE_JOIN).where(ScheduleContract.Users.TABLE_ALIAS + "." +ScheduleContract.Users.SYNC_STATUS + "=?", new String[]{String.valueOf(ScheduleContract.SyncStatus.PENDING_UPDATE.ordinal())})
                         .query(db, projection, null);
                     //select * from users where sync_status=pending_update;
+                break;
+
+            case REMINDERS_UPDATABLE_DATA_URI://get all the data that needs to be updated
+                builder = new SelectionBuilder();
+                c = builder.table(ScheduleDatabase.TABLES.REMINDERS).where(ScheduleContract.Reminders.SYNC_STATUS + "=?", new String[]{String.valueOf(ScheduleContract.SyncStatus.PENDING_UPDATE.ordinal())})
+                        .query(db, projection, null);
+                //select * from users where sync_status=pending_update;
                 break;
 
             default:
@@ -152,6 +181,18 @@ public class ScheduleProvider extends ContentProvider {
                 builder.where(ScheduleContract.Users.IS_DELETED + "=0");//get only active ones
                 builder.table(ScheduleDatabase.TABLES.HEALTH_PROFILE);
                 return builder;
+
+            case REMINDERS_URI:
+            case REMINDERS_WN_URI:
+                builder.where(ScheduleContract.Reminders.IS_DELETED + "=0");//get only active ones
+                builder.table(ScheduleDatabase.TABLES.REMINDERS);
+
+            case REMINDERS_READINGS_URI:
+            case REMINDERS_READINGS_WN_URI:
+                builder.where(ScheduleContract.Reminders.IS_DELETED + "=0");//get only active ones
+                builder.table(ScheduleDatabase.TABLES.REMINDER_READINGS);
+
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -188,6 +229,17 @@ public class ScheduleProvider extends ContentProvider {
                 builder.where(ScheduleContract.UserForeignKeyColumn.USER_ID + "=?", userId.toString());
                 builder.table(ScheduleDatabase.TABLES.HEALTH_PROFILE);
                 return builder;
+
+            case REMINDERS_URI:
+            case REMINDERS_WN_URI:
+                builder.table(ScheduleDatabase.TABLES.REMINDERS);
+                return builder;
+
+            case REMINDERS_READINGS_URI:
+            case REMINDERS_READINGS_WN_URI:
+                builder.table(ScheduleDatabase.TABLES.REMINDER_READINGS);
+                return builder;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -203,6 +255,12 @@ public class ScheduleProvider extends ContentProvider {
             case USERS_ITEM_URI:
             case USERS_ITEM_WN_URI:
                 return ScheduleContract.Users.CONTENT_ITEM_TYPE;
+
+            case REMINDERS_URI:
+            case REMINDERS_WN_URI:
+            case REMINDERS_READINGS_URI:
+            case REMINDERS_READINGS_WN_URI:
+                return ScheduleContract.Reminders.CONTENT_ITEM_TYPE;
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -264,6 +322,23 @@ public class ScheduleProvider extends ContentProvider {
                 notifyChange(uri, syncToNetwork);
                 return ScheduleContract.Users.buildUserUri(values.getAsLong(ScheduleContract.Users.USER_ID));
             }
+
+            case REMINDERS_URI:
+            case REMINDERS_WN_URI:{
+                db.insertOrThrow(ScheduleDatabase.TABLES.REMINDERS, null, values);
+                notifyChange(uri, syncToNetwork);
+                return ScheduleContract.Reminders.buildReminderUri();
+            }
+
+            case REMINDERS_READINGS_URI:
+            case REMINDERS_READINGS_WN_URI:{
+                db.insertOrThrow(ScheduleDatabase.TABLES.REMINDER_READINGS, null, values);
+                notifyChange(uri, syncToNetwork);
+                return ScheduleContract.Reminders.buildReminderReadingsUri();
+            }
+
+
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

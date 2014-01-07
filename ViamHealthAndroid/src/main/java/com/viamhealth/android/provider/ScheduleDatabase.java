@@ -14,6 +14,9 @@ import com.viamhealth.android.provider.ScheduleContract.UserHealthProfileColumns
 import com.viamhealth.android.provider.ScheduleContract.UserProfileColumns;
 import com.viamhealth.android.provider.ScheduleContract.UserForeignKeyColumn;
 import com.viamhealth.android.provider.ScheduleContract.SyncColumns;
+import com.viamhealth.android.provider.ScheduleContract.RemindersColumns;
+import com.viamhealth.android.provider.ScheduleContract.ReminderReadingsColumns;
+import com.viamhealth.android.provider.ScheduleContract.ReminderForeignKeyColumn;
 import com.viamhealth.android.utils.LogUtils;
 
 /**
@@ -42,17 +45,28 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
         String USERS_COMPLETE_JOIN = USERS + " " + ScheduleContract.Users.TABLE_ALIAS +" LEFT OUTER JOIN "+ PROFILE +" ON "+ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID+" = "+PROFILE+"."+ScheduleContract.Users.USER_ID+
                                     " LEFT OUTER JOIN "+ HEALTH_PROFILE +" ON "+ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID+" = "+HEALTH_PROFILE+"."+ScheduleContract.Users.USER_ID;
 
+        String REMINDERS="reminders";
+        String REMINDER_READINGS="reminder_readings";
+
     }
 
     interface TRIGGERS {
         String USER_PROFILE_DELETE = "user_profile_delete";
         String USER_HEALTH_PROFILE_DELETE = "user_health_profile_delete";
+        String REMINDERS_DELETE = "reminders_delete";
+        String REMINDER_READINGS_DELETE = "reminder_readings_delete";
+
     }
 
     interface FOREIGN_KEYS {
         String USER_ID_FOREIGN_KEY = new StringBuilder("FOREIGN KEY (").append(UserForeignKeyColumn.USER_ID)
-                            .append(") REFERENCES ").append(TABLES.USERS).append("(")
+                            .append(") REFERENCE ").append(TABLES.USERS).append("(")
                             .append(UserForeignKeyColumn.USER_ID).append(")").toString();
+
+        String REMINDER_ID_FOREIGN_KEY = new StringBuilder("FOREIGN KEY (").append(ReminderForeignKeyColumn.USER_ID)
+                .append(") REFERENCE ").append(TABLES.REMINDERS).append("(")
+                .append(UserForeignKeyColumn.USER_ID).append(")").toString();
+
     }
 
     interface CREATE_TABLES {
@@ -118,6 +132,51 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 .append(UserHealthProfileColumns.BMR).append(" INTEGER,")
                 .append(UserHealthProfileColumns.BMI_CLASSIFIER).append(" INTEGER,")
                 .append(FOREIGN_KEYS.USER_ID_FOREIGN_KEY).append(")").toString();
+
+        String REMINDERS = new StringBuilder(CREATE_TABLE).append(TABLES.REMINDERS).append("(")
+                .append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,")
+                .append(SyncColumns.UPDATED).append(" NUMERIC ,")
+                .append(SyncColumns.SYNCHRONIZED).append(" NUMERIC ,")
+                .append(SyncColumns.SYNC_STATUS).append(" INTEGER ,")
+                .append(SyncColumns.IS_DELETED).append(" INTEGER,")
+                .append(ReminderForeignKeyColumn.USER_ID).append(" INTEGER,")
+                .append(RemindersColumns.TYPE).append(" INTEGER,")
+                .append(RemindersColumns.NAME).append(" REAL,")
+                .append(RemindersColumns.DETAILS).append(" INTEGER,")
+                .append(RemindersColumns.MORNING_COUNT).append(" INTEGER,")
+                .append(RemindersColumns.AFTERNOON_COUNT).append(" INTEGER,")
+                .append(RemindersColumns.EVENING_COUNT).append(" INTEGER,")
+                .append(RemindersColumns.NIGHT_COUNT).append(" INTEGER,")
+                .append(RemindersColumns.START_DATE).append(" INTEGER,")
+                .append(RemindersColumns.END_DATE).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_MODE).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_DAY).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_HOUR).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_MIN).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_WEEKDAY).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_EVERY_X).append(" INTEGER,")
+                .append(RemindersColumns.REPEAT_I_COUNTER).append(" INTEGER,")
+                .append(RemindersColumns.CREATED_AT).append(" INTEGER,")
+                .append(RemindersColumns.UPDATED_AT).append(" INTEGER,")
+                .append(FOREIGN_KEYS.REMINDER_ID_FOREIGN_KEY).append(")").toString();
+
+        String REMINDER_READINGS = new StringBuilder(CREATE_TABLE).append(TABLES.REMINDERS).append("(")
+                .append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,")
+                .append(SyncColumns.UPDATED).append(" NUMERIC ,")
+                .append(SyncColumns.SYNCHRONIZED).append(" NUMERIC ,")
+                .append(SyncColumns.SYNC_STATUS).append(" INTEGER ,")
+                .append(SyncColumns.IS_DELETED).append(" INTEGER,")
+                .append(ReminderForeignKeyColumn.USER_ID).append(" INTEGER,")
+                .append(ReminderReadingsColumns.REMINDER_ID).append(" INTEGER,")
+                .append(ReminderReadingsColumns.MORNING_CHECK).append(" REAL,")
+                .append(ReminderReadingsColumns.AFTERNOON_CHECK).append(" INTEGER,")
+                .append(ReminderReadingsColumns.EVENING_CHECK).append(" INTEGER,")
+                .append(ReminderReadingsColumns.NIGHT_CHECK).append(" INTEGER,")
+                .append(ReminderReadingsColumns.COMPLETE_CHECK).append(" INTEGER,")
+                .append(ReminderReadingsColumns.UPDATED_BY).append(" INTEGER,")
+                .append(ReminderReadingsColumns.READING_DATE).append(" INTEGER,")
+                .append(FOREIGN_KEYS.REMINDER_ID_FOREIGN_KEY).append(")").toString();
+
     }
 
     interface CREATE_TRIGGERS {
@@ -131,6 +190,12 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 .append(TABLES.USERS).append(" BEGIN DELETE FROM ").append(TABLES.HEALTH_PROFILE).append(" WHERE ")
                 .append(TABLES.HEALTH_PROFILE).append(".").append(UserForeignKeyColumn.USER_ID).append(" = old.")
                 .append(TABLES.USERS).append(".").append(UserForeignKeyColumn.USER_ID).append(";").append("END").toString();
+/*
+        String REMINDERS_DELETE = new StringBuilder(CREATE_TRIGGER).append(TRIGGERS.REMINDERS_DELETE).append(" AFTER DELETE ON ")
+                .append(TABLES.REMINDERS).append(" BEGIN DELETE FROM ").append(TABLES.HEALTH_PROFILE).append(" WHERE ")
+                .append(TABLES.HEALTH_PROFILE).append(".").append(UserForeignKeyColumn.USER_ID).append(" = old.")
+                .append(TABLES.USERS).append(".").append(UserForeignKeyColumn.USER_ID).append(";").append("END").toString();
+*/
 
     }
 
@@ -154,6 +219,12 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLES.PROFILE);
         LogUtils.LOGD(TAG, CREATE_TABLES.HEALTH_PROFILE);
         db.execSQL(CREATE_TABLES.HEALTH_PROFILE);
+
+        LogUtils.LOGD(TAG, CREATE_TABLES.REMINDERS);
+        db.execSQL(CREATE_TABLES.REMINDERS);
+
+        LogUtils.LOGD(TAG, CREATE_TABLES.REMINDER_READINGS);
+        db.execSQL(CREATE_TABLES.REMINDER_READINGS);
 
         LogUtils.LOGD(TAG, "creating triggers...");
         /** Create Triggers **/
