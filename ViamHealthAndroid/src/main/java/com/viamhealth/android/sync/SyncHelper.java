@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.viamhealth.android.provider.ScheduleContract;
+import com.viamhealth.android.provider.handlers.ReminderHandler;
 import com.viamhealth.android.provider.handlers.UserHandler;
 import com.viamhealth.android.sync.restclient.UserEndPoint;
 import com.viamhealth.android.utils.Checker;
@@ -101,6 +102,8 @@ public class SyncHelper {
             LogUtils.LOGI(TAG, "PULL Based Sync started...");
             LogUtils.LOGI(TAG, "Syncing users..");
             batch.addAll(new UserHandler(mContext).fetchAndParse(SyncType.PULL));
+            LogUtils.LOGI(TAG, "Syncing reminders PULL..");
+            batch.addAll(new ReminderHandler(mContext).fetchAndParse(SyncType.PULL));
 
 
             try {
@@ -127,6 +130,8 @@ public class SyncHelper {
             LogUtils.LOGI(TAG, "PUSH Based Sync started...");
             LogUtils.LOGI(TAG, "Syncing users..");
             batch.addAll(new UserHandler(mContext).push());
+            LogUtils.LOGI(TAG, "Syncing reminders PUSH..");
+            batch.addAll(new ReminderHandler(mContext).push());
 
 
             try {

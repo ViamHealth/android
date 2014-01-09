@@ -168,14 +168,14 @@ public class ScheduleContract {
 
         public static Uri buildReminderUri() {
 
-            return CONTENT_REMINDER_URI.buildUpon().appendPath(PATH_REMINDERS).build();
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER).build();
         }
 
         public static Uri buildReminderReadingsUri() {
-            return CONTENT_REMINDER_URI.buildUpon().appendPath(PATH_REMINDER_READINGS).build();
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER_READINGS).build();
         }
 
-        public static Integer getReminderId(Uri uri) {
+        public static Integer getUserId(Uri uri) {
             String str = uri.getPathSegments().get(1);
             if(str.contains("#"))
                 return null;

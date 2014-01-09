@@ -65,8 +65,8 @@ public class ScheduleProvider extends ContentProvider {
     private static final String USER_LAST_SYNC_TIME_PATTERN = ScheduleContract.PATH_USERS + "/" + ScheduleContract.PATH_LAST_SYNC_TIME;
     private static final String USER_UPDATABLE_DATA_PATTERN = ScheduleContract.PATH_USERS + "/" + ScheduleContract.PATH_DATA_TO_BE_UPDATED;
 
-    private static final String REMINDERS_PATTERN=ScheduleContract.PATH_REMINDERS;
-    private static final String REMINDERS_WN_PATTERN=ScheduleContract.PATH_REMINDERS;
+    private static final String REMINDERS_PATTERN=ScheduleContract.PATH_REMINDER;
+    private static final String REMINDERS_WN_PATTERN=ScheduleContract.PATH_REMINDER;
     private static final String REMINDERS_READINGS_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
     private static final String REMINDERS_READINGS_WN_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
     private static final String REMINDERS_LAST_SYNC_TIME_PATTERN=ScheduleContract.PATH_REMINDERS+"/"+ScheduleContract.PATH_LAST_SYNC_TIME;

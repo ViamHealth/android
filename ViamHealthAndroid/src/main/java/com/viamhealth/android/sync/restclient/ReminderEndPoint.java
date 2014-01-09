@@ -28,7 +28,7 @@ import java.util.List;
 public class ReminderEndPoint extends BaseEndPoint {
 
 private final Global_Application mApplication;
-private final UserJsonParser parser = new UserJsonParser();
+private final ReminderJasonParser parser = new ReminderJasonParser();
 
         public ReminderEndPoint(Context context) {
             super(context);
@@ -44,8 +44,15 @@ private final UserJsonParser parser = new UserJsonParser();
 
         @Override
         protected Params getQueryParams() {
+            if(mApplication.getSelectedUser()!=null)
+            {
+                Params params = new Params();
+                params.put("user",mApplication.getSelectedUser().getId().toString());
+                return params;
+            }
             return null;
         }
+
 
         @Override
         protected String[] getPathSegments() {

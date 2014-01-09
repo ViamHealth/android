@@ -44,7 +44,6 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
         String USERS_COMPLETE_JOIN = USERS + " " + ScheduleContract.Users.TABLE_ALIAS +" LEFT OUTER JOIN "+ PROFILE +" ON "+ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID+" = "+PROFILE+"."+ScheduleContract.Users.USER_ID+
                                     " LEFT OUTER JOIN "+ HEALTH_PROFILE +" ON "+ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID+" = "+HEALTH_PROFILE+"."+ScheduleContract.Users.USER_ID;
-
         String REMINDERS="reminders";
         String REMINDER_READINGS="reminder_readings";
 

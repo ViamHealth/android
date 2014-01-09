@@ -29,8 +29,10 @@ import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.provider.ScheduleContract;
 import com.viamhealth.android.provider.parsers.JsonParser;
+import com.viamhealth.android.provider.parsers.ReminderJasonParser;
 import com.viamhealth.android.provider.parsers.UserJsonParser;
 import com.viamhealth.android.sync.restclient.BaseEndPoint;
+import com.viamhealth.android.sync.restclient.ReminderEndPoint;
 import com.viamhealth.android.sync.restclient.UserEndPoint;
 import com.viamhealth.android.utils.LogUtils;
 
@@ -48,11 +50,11 @@ import java.util.List;
  */
 public class ReminderHandler extends SyncHandler{
 
-    private final UserEndPoint userEndPoint;
+    private final ReminderEndPoint reminderEndPoint;
 
     public ReminderHandler(Context context) {
         super(context);
-        userEndPoint = new UserEndPoint(context);
+        reminderEndPoint = new ReminderEndPoint(context);
     }
 
     @Override
@@ -66,22 +68,22 @@ public class ReminderHandler extends SyncHandler{
 
     @Override
     public Uri getContentUri() {
-        return ScheduleContract.Users.CONTENT_USER_URI;
+        return ScheduleContract.Reminders.CONTENT_REMINDER_URI;
     }
 
     @Override
     public BaseEndPoint getEndPoint(Context context) {
-        return new UserEndPoint(context);
+        return new ReminderEndPoint(context);
     }
 
     @Override
     public JsonParser newParser() {
-        return new UserJsonParser();
+        return new ReminderJasonParser();
     }
 
     @Override
     public BaseModel newModel() {
-        return new User();
+        return new Reminder();
     }
 
     @Override
@@ -93,22 +95,19 @@ public class ReminderHandler extends SyncHandler{
 
     @Override
     protected ArrayList<ContentProviderOperation> changeId(BaseModel b, BaseModel a) {
-        User before = (User) b;
-        User after = (User) a;
+        Reminder before = (Reminder) b;
+        Reminder after = (Reminder) a;
 
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 
-        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserUri(before.getId()));
+        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri());
         userBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
         batch.add(userBuilder.build());
 
-        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserProfileUri(before.getId(), false));
+        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri());
         profileBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
         batch.add(profileBuilder.build());
 
-        ContentProviderOperation.Builder bmiBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserHealthProfileUri(before.getId(), false));
-        bmiBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
-        batch.add(bmiBuilder.build());
 
         return batch;
     }
@@ -118,17 +117,14 @@ public class ReminderHandler extends SyncHandler{
         User after = (User) a;
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 
-        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserUri(after.getId()));
+        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri());
         userBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
         batch.add(userBuilder.build());
 
-        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserProfileUri(after.getId(), false));
+        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri());
         profileBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
         batch.add(profileBuilder.build());
 
-        ContentProviderOperation.Builder bmiBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Users.buildUserHealthProfileUri(after.getId(), false));
-        bmiBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
-        batch.add(bmiBuilder.build());
 
         return batch;
     }
@@ -441,7 +437,7 @@ public class ReminderHandler extends SyncHandler{
             if(syncTimeUpdateColumn!=null)
                 reminderBuilder.withValue(syncTimeUpdateColumn, System.currentTimeMillis());
 
-            reminderBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, ScheduleContract.SyncStatus.SUCCESS.ordinal());
+            reminderBuilder.withValue(ScheduleContract.Reminders.SYNC_STATUS, ScheduleContract.SyncStatus.SUCCESS.ordinal());
             reminderBuilder = constructReminder(reminderBuilder, reminder);
 
             batch.add(reminderBuilder.build());

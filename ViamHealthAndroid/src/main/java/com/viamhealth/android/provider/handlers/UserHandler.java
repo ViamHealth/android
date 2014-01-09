@@ -254,8 +254,9 @@ public class UserHandler extends SyncHandler {
         if(cursor==null || cursor.isAfterLast() || cursor.isBeforeFirst() || cursor.isClosed())
             return null;
 
-        long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID));
+        //long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID));
 
+        long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.USER_ID));
         User user = new User();
         user.setId(userId);
         user.setEmail(cursor.getString(cursor.getColumnIndex(ScheduleContract.Users.EMAIL)));

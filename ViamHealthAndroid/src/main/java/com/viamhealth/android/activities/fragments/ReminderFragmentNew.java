@@ -3,10 +3,13 @@ package com.viamhealth.android.activities.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +18,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +51,13 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.PagerContainer;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.DateUtils;
+import com.viamhealth.android.provider.ScheduleContract;
+import com.viamhealth.android.utils.LogUtils;
+
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.CursorAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +69,7 @@ import java.util.Map;
 /**
  * Created by naren on 20/11/13.
  */
-public class ReminderFragmentNew extends BaseFragment {
+public class ReminderFragmentNew extends BaseFragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     View mView;
     PagerContainer mContainer;
@@ -104,9 +115,18 @@ public class ReminderFragmentNew extends BaseFragment {
         mDialog = new ProgressDialog(getSherlockActivity());
         mDialog.setCanceledOnTouchOutside(false);
 
+        //Uri uri =ScheduleContract.Reminders.buildReminderUri();
+        //Cursor c= getSherlockActivity().getContentResolver().query(uri,null,null,null,null);
+        //Log.e("Reminder db","number of rows = "+c.getCount());
+        //Toast.makeText(getSherlockActivity(), "number of reminder rows = "+ c.getCount() , Toast.LENGTH_SHORT).show();
+
+
+
+
         setHasOptionsMenu(true);
 
         getReadings(null);
+        getLoaderManager().initLoader(0, null,ReminderFragmentNew.this);
 
         return mView;
     }
@@ -322,6 +342,22 @@ public class ReminderFragmentNew extends BaseFragment {
                 return 1;
             return count;
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader cursorLoader = new CursorLoader(getSherlockActivity(),ScheduleContract.Reminders.CONTENT_REMINDER_URI,null, null, null, null);
+        return cursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Toast.makeText(getSherlockActivity(),"cursor count"+data.getColumnCount(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        LogUtils.LOGD(" ", "onLoadReset: " + loader.getId());
     }
 
     public class RetrieveReminderReading extends AsyncTask <Date, Void, String> {
