@@ -17,6 +17,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 //import com.viamhealth.android.activities.listrows.OptionsSelectorCard;
+import com.viamhealth.android.activities.cardrows.PickGoal;
 import com.viamhealth.android.model.enums.PriorityCardType;
 //import com.viamhealth.android.activities.listrows.SimpleListCard;
 //import com.viamhealth.android.activities.listrows.TrackerYNCard;
@@ -93,7 +94,10 @@ public class PriorityListFragment extends  BaseListFragment {
             rows = new ArrayList<CardRow>();
             if (cards != null){
             for ( PriorityCard card : cards ){
-                if(card.getType() == PriorityCardType.TRACKER_YN_CARD){
+                if(card.getType() == PriorityCardType.PICK_GOAL){
+                    rows.add(new PickGoal(LayoutInflater.from(getActivity()),card));
+                }
+                else if(card.getType() == PriorityCardType.TRACKER_YN_CARD){
                     //rows.add(new TrackerYNCard(LayoutInflater.from(getActivity()),card));
                 } else if ( card.getType() == PriorityCardType.OPTIONS_SELECTOR_CARD){
                     //rows.add(new OptionsSelectorCard(LayoutInflater.from(getActivity()),card));
