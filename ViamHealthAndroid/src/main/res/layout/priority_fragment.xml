@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="TODAY'S IMPORTANT TASKS"
+        android:id="@+id/textView"
+        android:padding="@dimen/default_title_indicator_title_padding"
+        android:background="#b8eaff" />
+
+    <FrameLayout
+        android:id="@+id/priorityScreenList"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        />
+
+</LinearLayout>

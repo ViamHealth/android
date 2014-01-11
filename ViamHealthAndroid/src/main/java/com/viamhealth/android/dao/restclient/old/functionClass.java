@@ -35,6 +35,8 @@ import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.cards.PriorityCard;
+import com.viamhealth.android.model.enums.PriorityCardType;
 
 public class functionClass {
 	Context context;
@@ -2034,5 +2036,13 @@ public class functionClass {
 						}
 					return medicationdt;
 				}
+
+				public ArrayList<PriorityCard> getCard(Long userId){
+                    PriorityCard data = new PriorityCard();
+                    data.setType(PriorityCardType.PICK_GOAL);
+                    ArrayList<PriorityCard> lstData = new ArrayList<PriorityCard>();
+                    lstData.add(data);
+                    return lstData;
+                }
 				
 }
