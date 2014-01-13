@@ -358,7 +358,7 @@ public class ReminderFragmentNew extends BaseFragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Toast.makeText(getSherlockActivity(),"cursor count"+data.getColumnCount(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getSherlockActivity(),"cursor count"+data.getColumnCount(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
