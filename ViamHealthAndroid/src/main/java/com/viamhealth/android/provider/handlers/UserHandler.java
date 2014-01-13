@@ -44,7 +44,7 @@ public class UserHandler extends SyncHandler {
         userEndPoint = new UserEndPoint(context);
     }
 
-    @Override
+    @Override()
     public ArrayList<ContentProviderOperation> parse(List<BaseModel> items) throws IOException {
         final ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
         int usersCounts = items.size();

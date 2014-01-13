@@ -45,6 +45,13 @@ public class UserJsonParser extends JsonParser {
     }
 
 
+    @Override
+    protected String getJsonArray(String jsonArray)
+    {
+        return jsonArray;
+    }
+
+
     public Profile processProfileResponse(JSONObject jsonProfile){
 
         Profile pd = new Profile();

@@ -31,7 +31,7 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
     // NOTE: carefully update onUpgrade() when bumping database versions to make
     // sure user data is saved.
 
-    private static final int VER_2013_ALPHA_LAUNCH = 1;  // 1.0
+    private static final int VER_2013_ALPHA_LAUNCH = 6;  // 1.0
     private static final int DATABASE_VERSION = VER_2013_ALPHA_LAUNCH;
 
     private final Context mContext;
@@ -59,11 +59,11 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
 
     interface FOREIGN_KEYS {
         String USER_ID_FOREIGN_KEY = new StringBuilder("FOREIGN KEY (").append(UserForeignKeyColumn.USER_ID)
-                            .append(") REFERENCE ").append(TABLES.USERS).append("(")
+                            .append(") REFERENCES ").append(TABLES.USERS).append("(")
                             .append(UserForeignKeyColumn.USER_ID).append(")").toString();
 
         String REMINDER_ID_FOREIGN_KEY = new StringBuilder("FOREIGN KEY (").append(ReminderForeignKeyColumn.USER_ID)
-                .append(") REFERENCE ").append(TABLES.REMINDERS).append("(")
+                .append(") REFERENCES ").append(TABLES.REMINDERS).append("(")
                 .append(UserForeignKeyColumn.USER_ID).append(")").toString();
 
     }
@@ -140,14 +140,14 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 .append(SyncColumns.IS_DELETED).append(" INTEGER,")
                 .append(ReminderForeignKeyColumn.USER_ID).append(" INTEGER,")
                 .append(RemindersColumns.TYPE).append(" INTEGER,")
-                .append(RemindersColumns.NAME).append(" REAL,")
-                .append(RemindersColumns.DETAILS).append(" INTEGER,")
+                .append(RemindersColumns.NAME).append(" TEXT,")
+                .append(RemindersColumns.DETAILS).append(" TEXT,")
                 .append(RemindersColumns.MORNING_COUNT).append(" INTEGER,")
                 .append(RemindersColumns.AFTERNOON_COUNT).append(" INTEGER,")
                 .append(RemindersColumns.EVENING_COUNT).append(" INTEGER,")
                 .append(RemindersColumns.NIGHT_COUNT).append(" INTEGER,")
-                .append(RemindersColumns.START_DATE).append(" INTEGER,")
-                .append(RemindersColumns.END_DATE).append(" INTEGER,")
+                .append(RemindersColumns.START_DATE).append(" TEXT,")
+                .append(RemindersColumns.END_DATE).append(" TEXT,")
                 .append(RemindersColumns.REPEAT_MODE).append(" INTEGER,")
                 .append(RemindersColumns.REPEAT_DAY).append(" INTEGER,")
                 .append(RemindersColumns.REPEAT_HOUR).append(" INTEGER,")
@@ -155,11 +155,11 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 .append(RemindersColumns.REPEAT_WEEKDAY).append(" INTEGER,")
                 .append(RemindersColumns.REPEAT_EVERY_X).append(" INTEGER,")
                 .append(RemindersColumns.REPEAT_I_COUNTER).append(" INTEGER,")
-                .append(RemindersColumns.CREATED_AT).append(" INTEGER,")
-                .append(RemindersColumns.UPDATED_AT).append(" INTEGER,")
+                .append(RemindersColumns.CREATED_AT).append(" NUMERIC,")
+                .append(RemindersColumns.UPDATED_AT).append(" NUMERIC,")
                 .append(FOREIGN_KEYS.REMINDER_ID_FOREIGN_KEY).append(")").toString();
 
-        String REMINDER_READINGS = new StringBuilder(CREATE_TABLE).append(TABLES.REMINDERS).append("(")
+        String REMINDER_READINGS = new StringBuilder(CREATE_TABLE).append(TABLES.REMINDER_READINGS).append("(")
                 .append(BaseColumns._ID).append(" INTEGER PRIMARY KEY AUTOINCREMENT,")
                 .append(SyncColumns.UPDATED).append(" NUMERIC ,")
                 .append(SyncColumns.SYNCHRONIZED).append(" NUMERIC ,")
@@ -238,6 +238,13 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //TODO will worry for next release
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.SYNCHRONIZE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.PROFILE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.HEALTH_PROFILE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.REMINDERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.REMINDER_READINGS);
+        onCreate(db);
     }
 
     public static void deleteDatabase(Context context) {

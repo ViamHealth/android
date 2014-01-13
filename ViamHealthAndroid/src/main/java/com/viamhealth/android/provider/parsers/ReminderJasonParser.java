@@ -132,6 +132,23 @@ public class ReminderJasonParser extends JsonParser {
 
     //need to write code for parsing reminderreading
 
+    @Override
+    protected String getJsonArray(String jsonArray)
+    {
+        JSONObject response = null;
+        JSONArray array=null;
+        try {
+            response = new JSONObject(jsonArray);
+            array= response.getJSONArray("results");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(array!=null)
+        {
+            return array.toString();
+        }
+        return jsonArray;
+    }
 
     @Override
     public List<BaseModel> newList() {

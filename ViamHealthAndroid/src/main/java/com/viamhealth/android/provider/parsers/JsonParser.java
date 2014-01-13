@@ -23,6 +23,8 @@ public abstract class JsonParser {
      */
     protected abstract BaseModel parse(JSONObject jsonObject) throws JSONException;
 
+    protected abstract String getJsonArray(String jsonArray);
+
     public BaseModel parseObject(String json) {
         BaseModel obj = null;
         try{
@@ -45,7 +47,7 @@ public abstract class JsonParser {
 
     public List<BaseModel> parseArray(String jsonArray) {
         List<BaseModel> objs = newList();
-
+        jsonArray=getJsonArray(jsonArray);
         try{
             JSONArray jsonObjs = new JSONArray(jsonArray);
             for(int i=0; i<jsonObjs.length(); i++){
