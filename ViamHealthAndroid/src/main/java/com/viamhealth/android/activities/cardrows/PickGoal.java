@@ -44,12 +44,10 @@ public class PickGoal implements CardRow {
         }
 
         //actually setup the view
-        holder.cardMessage.setText(card.getMessage());
-        holder.goal1Text.setText(card.getGoal1Text());
+        //holder.cardMessage.setText(card.getMessage());
+        //holder.goal1Text.setText(card.getGoal1Text());
 
         return view;
-
-        return null;
     }
 
     @Override

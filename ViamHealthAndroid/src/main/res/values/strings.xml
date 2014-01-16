@@ -160,6 +160,7 @@
     <string name="profile_height_not_present">height is mandatory to create a new profile</string>
     <string name="profile_weight_not_present">weight is mandatory to create a new profile</string>
     <string name="tab_label_goal">Goals</string>
+    <string name="tab_label_priority">Home</string>
     <string name="tab_label_journal">Journal</string>
     <string name="tab_label_reminder">Reminders</string>
     <string name="tab_label_file">Files</string>

@@ -29,6 +29,7 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.activities.fragments.JournalFragment;
+import com.viamhealth.android.activities.fragments.PriorityScreenFragment;
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
@@ -120,8 +121,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                 mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
                 GoalFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
-                mTabHost.newTabSpec("journal").setIndicator(getTabIndicator(R.string.tab_label_journal, R.drawable.ic_action_log)),
-                JournalFragment.class, bundle);
+                mTabHost.newTabSpec("priority").setIndicator(getTabIndicator(R.string.tab_label_priority, R.drawable.ic_action_log)),
+                PriorityScreenFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                 ReminderFragmentNew.class, bundle);
