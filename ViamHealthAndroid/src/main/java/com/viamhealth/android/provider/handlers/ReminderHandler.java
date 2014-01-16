@@ -188,9 +188,9 @@ public class ReminderHandler extends SyncHandler{
         return true;
     }
 
-    private boolean deleteReminder(User user) {
+    private boolean deleteReminder(Reminder reminder) {
         try {
-            LogUtils.LOGD(TAG, "deleting user " + user);
+            LogUtils.LOGD(TAG, "deleting reminder " + reminder.getName());
             mContext.getContentResolver().delete(ScheduleContract.Reminders.buildReminderUri(), null, null);
             LogUtils.LOGD(TAG, "deleted");
         } catch (Exception e) {
@@ -201,21 +201,29 @@ public class ReminderHandler extends SyncHandler{
         return true;
     }
 
+
+
     public static ContentProviderOperation.Builder constructReminder(ContentProviderOperation.Builder builder, Reminder reminder){
         builder.withValue(ScheduleContract.Reminders.USER_ID, reminder.getId());
-        builder.withValue(ScheduleContract.Reminders.TYPE, reminder.getType());
+        builder.withValue(ScheduleContract.Reminders.TYPE, reminder.getType().ordinal());
         builder.withValue(ScheduleContract.Reminders.NAME, reminder.getName());
         builder.withValue(ScheduleContract.Reminders.DETAILS, reminder.getDetails());
-        builder.withValue(ScheduleContract.Reminders.MORNING_COUNT, reminder.getReminderTimeData(ReminderTime.Morning));
-        builder.withValue(ScheduleContract.Reminders.AFTERNOON_COUNT, reminder.getReminderTimeData(ReminderTime.Noon));
-        builder.withValue(ScheduleContract.Reminders.NIGHT_COUNT, reminder.getReminderTimeData(ReminderTime.Night));
-        builder.withValue(ScheduleContract.Reminders.START_DATE, reminder.getStartDate());
-        builder.withValue(ScheduleContract.Reminders.END_DATE, reminder.getEndDate());
-        builder.withValue(ScheduleContract.Reminders.REPEAT_MODE, reminder.getRepeatMode());
+        builder.withValue(ScheduleContract.Reminders.MORNING_COUNT, reminder.getReminderTimeData(ReminderTime.Morning).getCount());
+        builder.withValue(ScheduleContract.Reminders.AFTERNOON_COUNT, reminder.getReminderTimeData(ReminderTime.Noon).getCount());
+        builder.withValue(ScheduleContract.Reminders.NIGHT_COUNT, reminder.getReminderTimeData(ReminderTime.Night).getCount());
+        if(reminder.getStartDate()!=null)
+        {
+            builder.withValue(ScheduleContract.Reminders.START_DATE, reminder.getStartDate().toString());
+        }
+        if(reminder.getEndDate()!=null)
+        {
+            builder.withValue(ScheduleContract.Reminders.END_DATE, reminder.getEndDate().toString());
+        }
+        builder.withValue(ScheduleContract.Reminders.REPEAT_MODE, reminder.getRepeatMode().ordinal());
         builder.withValue(ScheduleContract.Reminders.REPEAT_DAY, reminder.getRepeatDay());
         builder.withValue(ScheduleContract.Reminders.REPEAT_HOUR, reminder.getRepeatHour());
         builder.withValue(ScheduleContract.Reminders.REPEAT_MIN, reminder.getRepeatMin());
-        builder.withValue(ScheduleContract.Reminders.REPEAT_WEEKDAY, reminder.getRepeatWeekDay());
+        builder.withValue(ScheduleContract.Reminders.REPEAT_WEEKDAY, reminder.getRepeatWeekDay().ordinal());
         builder.withValue(ScheduleContract.Reminders.REPEAT_EVERY_X, reminder.getRepeatEveryX());
         builder.withValue(ScheduleContract.Reminders.REPEAT_I_COUNTER, reminder.getRepeatICounter());
         builder.withValue(ScheduleContract.Reminders.CREATED_AT,"");
@@ -223,6 +231,8 @@ public class ReminderHandler extends SyncHandler{
         builder.withValue(ScheduleContract.Reminders.IS_DELETED, false);
         return builder;
     }
+
+
 
     public static ContentProviderOperation.Builder constructReminderReadings(ContentProviderOperation.Builder builder,
                                                                         ReminderReading reminderreading){

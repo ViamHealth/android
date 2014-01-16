@@ -120,6 +120,12 @@ public class ReminderFragmentNew extends BaseFragment implements LoaderManager.L
         //Log.e("Reminder db","number of rows = "+c.getCount());
         //Toast.makeText(getSherlockActivity(), "number of reminder rows = "+ c.getCount() , Toast.LENGTH_SHORT).show();
 
+        //c.moveToFirst();
+
+        //for(;!c.isAfterLast();c.moveToNext())
+        //{
+          //  Log.e("Reminder db table reminders ","number of rows,rem name,morning count,afternoon count,evening count,isdeleted,sync status"+c.getCount()+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.NAME))+ " "+c.getInt(c.getColumnIndex(ScheduleContract.Reminders.MORNING_COUNT))+" "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.AFTERNOON_COUNT))+ " "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.NIGHT_COUNT))+" "+ c.getString(c.getColumnIndex(ScheduleContract.Reminders.IS_DELETED))+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.SYNC_STATUS)) );
+        //}
 
 
 
@@ -352,7 +358,7 @@ public class ReminderFragmentNew extends BaseFragment implements LoaderManager.L
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Toast.makeText(getSherlockActivity(),"cursor count"+data.getColumnCount(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getSherlockActivity(),"cursor count"+data.getColumnCount(),Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -69,8 +69,8 @@ public class ScheduleProvider extends ContentProvider {
     private static final String REMINDERS_WN_PATTERN=ScheduleContract.PATH_REMINDER;
     private static final String REMINDERS_READINGS_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
     private static final String REMINDERS_READINGS_WN_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
-    private static final String REMINDERS_LAST_SYNC_TIME_PATTERN=ScheduleContract.PATH_REMINDERS+"/"+ScheduleContract.PATH_LAST_SYNC_TIME;
-    private static final String REMINDERS_UPDATABLE_DATA_PATTERN=ScheduleContract.PATH_REMINDERS+"/"+ScheduleContract.PATH_DATA_TO_BE_UPDATED;;
+    private static final String REMINDERS_LAST_SYNC_TIME_PATTERN=ScheduleContract.PATH_REMINDER+"/"+ScheduleContract.PATH_LAST_SYNC_TIME;
+    private static final String REMINDERS_UPDATABLE_DATA_PATTERN=ScheduleContract.PATH_REMINDER+"/"+ScheduleContract.PATH_DATA_TO_BE_UPDATED;;
 
     /** Min IDS **/
     private static Integer USER_ID_MIN = -1;
@@ -186,11 +186,13 @@ public class ScheduleProvider extends ContentProvider {
             case REMINDERS_WN_URI:
                 builder.where(ScheduleContract.Reminders.IS_DELETED + "=0");//get only active ones
                 builder.table(ScheduleDatabase.TABLES.REMINDERS);
+                return builder;
 
             case REMINDERS_READINGS_URI:
             case REMINDERS_READINGS_WN_URI:
                 builder.where(ScheduleContract.Reminders.IS_DELETED + "=0");//get only active ones
                 builder.table(ScheduleDatabase.TABLES.REMINDER_READINGS);
+                return builder;
 
 
             default:
