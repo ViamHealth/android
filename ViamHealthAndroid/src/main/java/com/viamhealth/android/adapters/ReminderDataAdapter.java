@@ -76,7 +76,8 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         if(data!=null && data.getCount()>0){
             if(action!=null && action.isCheck()){
                 check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
-            }else{
+            }else
+            {
                 if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
                     check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
                 }else{

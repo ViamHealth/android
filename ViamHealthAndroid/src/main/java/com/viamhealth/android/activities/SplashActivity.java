@@ -177,6 +177,7 @@ public class SplashActivity extends BaseActivity implements LoaderManager.Loader
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL,true);
         extras.putBoolean(ContentResolver.SYNC_EXTRAS_INITIALIZE,false);
 
+        //getApplicationContext().getContentResolver().setSyncAutomatically(null, "com.viamhealth.android.schedule", true);
         getApplicationContext().getContentResolver().requestSync(null, "com.viamhealth.android.schedule",extras);
 
     }

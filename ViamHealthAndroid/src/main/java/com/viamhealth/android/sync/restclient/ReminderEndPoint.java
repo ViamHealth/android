@@ -44,10 +44,11 @@ private final ReminderJasonParser parser = new ReminderJasonParser();
 
         @Override
         protected Params getQueryParams() {
-            if(mApplication.getSelectedUser()!=null)
+            if(mApplication.getLoggedInUser()!=null)
             {
                 Params params = new Params();
-                params.put("user",mApplication.getSelectedUser().getId().toString());
+                params.put("user",mApplication.getLoggedInUser().getId().toString());
+                params.put("page_size", "100");
                 return params;
             }
             return null;

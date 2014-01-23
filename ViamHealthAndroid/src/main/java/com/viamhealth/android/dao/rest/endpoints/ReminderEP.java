@@ -2,10 +2,14 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
+import com.viamhealth.android.model.ReminderReadings;
 import com.viamhealth.android.model.enums.ReminderTime;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.enums.RepeatMode;
@@ -14,6 +18,7 @@ import com.viamhealth.android.model.reminder.Action;
 import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.reminder.ReminderTimeData;
+import com.viamhealth.android.provider.ScheduleContract;
 import com.viamhealth.android.utils.DateUtils;
 
 import org.apache.http.HttpStatus;
@@ -36,9 +41,11 @@ public class ReminderEP extends BaseEP {
 
     protected SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
     private static String TAG = "ReminderEP";
+    private Context contxt=null;
 
-    public ReminderEP(Context context, Application app) {
+    public ReminderEP(Context context,Application app) {
         super(context, app);
+        contxt=context;
     }
 
     protected RestClient addParams(RestClient client, Reminder reminder) {
@@ -175,7 +182,8 @@ public class ReminderEP extends BaseEP {
         return true;
     }
 
-    public Map<Date, List<ReminderReading>> getReadings(List<Date> dates, Long userId){
+    /*
+    public Map<Date, List<ReminderReading>> getReadingsLocal(List<Date> dates, Long userId){
         Params params = new Params();
         params.put("user", userId.toString());
 
@@ -191,6 +199,42 @@ public class ReminderEP extends BaseEP {
         }
 
         List<ReminderReading> readings = getReadings(params);
+        int count = readings==null ? 0 : readings.size();
+        Map<Date, List<ReminderReading>> mapResult = new HashMap<Date, List<ReminderReading>>();
+        Date today = new Date();
+        int dayInMilliSecs = 24 * 60 * 60 * 1000;
+        for(int i=0; i<count; i++){
+            ReminderReading r = readings.get(i);
+            //TODO need to just do r.getReadingDate once the server sid ebug is fixed
+            Date midnightDate = DateUtils.getToday(r.getReadingDate());
+            List<ReminderReading> rs = mapResult.get(midnightDate);
+            if(rs == null){
+                rs = new ArrayList<ReminderReading>();
+            }
+            rs.add(r);
+            mapResult.put(DateUtils.getToday(midnightDate), rs);
+        }
+        return mapResult;
+
+    }
+*/
+    public Map<Date, List<ReminderReading>> getReadings(List<Date> dates, Long userId){
+        Params params = new Params();
+        params.put("user", userId.toString());
+
+        if(dates!=null){
+            int count = dates.size();
+            StringBuilder builder = new StringBuilder();
+            for(int i=0; i<count; i++){
+                builder.append(formater.format(dates.get(i)));
+                if(i!=count-1)
+                    builder.append(",");
+            }
+            params.put("reading_date", builder.toString());
+        }
+
+        //List<ReminderReading> readings = getReadings(params);
+        List<ReminderReading> readings = getReadingsLocal(dates,userId);
         int count = readings==null ? 0 : readings.size();
         Map<Date, List<ReminderReading>> mapResult = new HashMap<Date, List<ReminderReading>>();
         Date today = new Date();
@@ -255,6 +299,7 @@ public class ReminderEP extends BaseEP {
         return processReminderReading(responseString);
     }
 
+
     protected List<ReminderReading> getReadings(Params params){
         params.put("page_size", "100");
         RestClient client = getRestClient("reminderreadings", params);
@@ -272,6 +317,96 @@ public class ReminderEP extends BaseEP {
 
         return processReminderReadings(responseString);
     }
+
+    protected List<ReminderReading> getReadingsLocal(List<Date> dates, Long userId){
+
+
+        ArrayList<ReminderReading> rr = new ArrayList<ReminderReading>();
+
+        StringBuilder whereClause=new StringBuilder();
+        whereClause.append(ScheduleContract.Reminders.READING_DATE+" = '"+formater.format(dates.get(0)) +"'");
+                //"ScheduleContract.Reminders.READING_DATE="+dates.get(0);
+
+        int i;
+        for(i=1;i<dates.size();i++)
+        {
+            whereClause.append(" OR " + ScheduleContract.Reminders.READING_DATE+" = '"+formater.format(dates.get(i))+"'");
+        }
+
+        Uri uri = ScheduleContract.Reminders.buildReminderUri();
+        Cursor c= contxt.getContentResolver().query(uri, null, ScheduleContract.ReminderForeignKeyColumn.USER_ID + " = '" + userId.toString() + "'"/*+ " and "+whereClause.toString()*/, null, null);
+        Log.e("Reminder db","number of rows = "+c.getCount());
+       // Toast.makeText(contxt, "number of reminder rows and user id = " + c.getCount() + " " + userId, Toast.LENGTH_SHORT).show();
+
+        c.moveToFirst();
+
+        for(;!c.isAfterLast();c.moveToNext())
+        {
+            Log.e("Reminder db table reminders ","number of rows,rem name,morning count,afternoon count,evening count,isdeleted,sync status,user id "+c.getCount()+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.NAME))+ " "+c.getInt(c.getColumnIndex(ScheduleContract.Reminders.MORNING_COUNT))+" "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.AFTERNOON_COUNT))+ " "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.NIGHT_COUNT))+" "+ c.getString(c.getColumnIndex(ScheduleContract.Reminders.IS_DELETED))+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.SYNC_STATUS)) + " " + c.getString(c.getColumnIndex(ScheduleContract.ReminderForeignKeyColumn.USER_ID)));
+            ReminderReading r= new ReminderReading();
+
+            Date dt= new Date();
+            r.setUserId(userId);
+            r.setId(c.getLong(c.getColumnIndex(ScheduleContract.Reminders._ID)));
+            //r.setReadingDate(formater.parse(c.getString(c.getColumnIndex(ScheduleContract.Reminders.DETAILS))));
+            r.setReadingDate(dt);
+
+
+            r.setCompleteCheck(false);
+            Action morningAction = new Action();
+            morningAction.setCheck(false);
+            r.putAction(ReminderTime.Morning, morningAction);
+
+            Action noonAction = new Action();
+            noonAction.setCheck(false);
+            r.putAction(ReminderTime.Noon, noonAction);
+
+            Action eveningCheck = new Action();
+            eveningCheck.setCheck(false);
+            r.putAction(ReminderTime.Evening, eveningCheck);
+
+            Action nightCheck = new Action();
+            nightCheck.setCheck(false);
+            r.putAction(ReminderTime.Night, nightCheck);
+
+            Reminder reminder = new Reminder();
+            reminder.setId(c.getLong(c.getColumnIndex(ScheduleContract.Reminders._ID)));
+            reminder.setUserId(userId);
+            reminder.setName(c.getString(c.getColumnIndex(ScheduleContract.Reminders.NAME)));
+            //reminder.setType(ReminderType.get(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.TYPE)))); //MJ
+            reminder.setType(ReminderType.Medicine);
+            reminder.setDetails(c.getString(c.getColumnIndex(ScheduleContract.Reminders.DETAILS)));
+            try {
+              reminder.setStartDate(formater.parse(c.getString(c.getColumnIndex(ScheduleContract.Reminders.START_DATE))));
+              reminder.setEndDate(formater.parse(c.getString(c.getColumnIndex(ScheduleContract.Reminders.END_DATE))));
+            } catch (ParseException e) {
+             e.printStackTrace();
+            }
+            ReminderTimeData morningData = new ReminderTimeData();
+            morningData.setCount(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.MORNING_COUNT)));
+            reminder.putReminderTimeData(ReminderTime.Morning, morningData);
+            ReminderTimeData noonData = new ReminderTimeData();
+            noonData.setCount(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.AFTERNOON_COUNT)));
+            reminder.putReminderTimeData(ReminderTime.Noon, noonData);
+            ReminderTimeData eveningData = new ReminderTimeData();
+            eveningData.setCount(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.EVENING_COUNT)));
+            reminder.putReminderTimeData(ReminderTime.Evening, eveningData);
+            ReminderTimeData nightData = new ReminderTimeData();
+            nightData.setCount(0);
+            reminder.putReminderTimeData(ReminderTime.Night, nightData);
+            reminder.setRepeatDay(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.REPEAT_DAY)));
+            reminder.setRepeatHour(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.REPEAT_HOUR)));
+            reminder.setRepeatICounter(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.REPEAT_I_COUNTER)));
+            reminder.setRepeatMode(RepeatMode.get(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.REPEAT_MODE))));
+            reminder.setRepeatWeekDay(RepeatWeekDay.get(c.getInt(c.getColumnIndex(ScheduleContract.Reminders.REPEAT_WEEKDAY))));
+
+            r.setReminder(reminder);
+            rr.add(r);
+
+        }
+        return rr;
+    }
+
 
     public List<ReminderReading> getReadings(Date date, Long userId){
         Params params = new Params();

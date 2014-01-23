@@ -115,17 +115,17 @@ public class ReminderFragmentNew extends BaseFragment implements LoaderManager.L
         mDialog = new ProgressDialog(getSherlockActivity());
         mDialog.setCanceledOnTouchOutside(false);
 
-        //Uri uri =ScheduleContract.Reminders.buildReminderUri();
-        //Cursor c= getSherlockActivity().getContentResolver().query(uri,null,null,null,null);
-        //Log.e("Reminder db","number of rows = "+c.getCount());
-        //Toast.makeText(getSherlockActivity(), "number of reminder rows = "+ c.getCount() , Toast.LENGTH_SHORT).show();
+        Uri uri =ScheduleContract.Reminders.buildReminderUri();
+        Cursor c= getSherlockActivity().getContentResolver().query(uri,null, ScheduleContract.ReminderForeignKeyColumn.USER_ID+" = '"+user.getId()+"'",null,null);
+        Log.e("Reminder db","number of rows = "+c.getCount());
+        Toast.makeText(getSherlockActivity(), "number of reminder rows and user id = "+ c.getCount()+" "+user.getId() , Toast.LENGTH_SHORT).show();
 
-        //c.moveToFirst();
+        c.moveToFirst();
 
-        //for(;!c.isAfterLast();c.moveToNext())
-        //{
-          //  Log.e("Reminder db table reminders ","number of rows,rem name,morning count,afternoon count,evening count,isdeleted,sync status"+c.getCount()+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.NAME))+ " "+c.getInt(c.getColumnIndex(ScheduleContract.Reminders.MORNING_COUNT))+" "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.AFTERNOON_COUNT))+ " "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.NIGHT_COUNT))+" "+ c.getString(c.getColumnIndex(ScheduleContract.Reminders.IS_DELETED))+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.SYNC_STATUS)) );
-        //}
+        for(;!c.isAfterLast();c.moveToNext())
+        {
+            Log.e("Reminder db table reminders ","number of rows,rem name,morning count,afternoon count,evening count,isdeleted,sync status,user id "+c.getCount()+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.NAME))+ " "+c.getInt(c.getColumnIndex(ScheduleContract.Reminders.MORNING_COUNT))+" "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.AFTERNOON_COUNT))+ " "+ c.getInt(c.getColumnIndex(ScheduleContract.Reminders.NIGHT_COUNT))+" "+ c.getString(c.getColumnIndex(ScheduleContract.Reminders.IS_DELETED))+ " " + c.getString(c.getColumnIndex(ScheduleContract.Reminders.SYNC_STATUS)) + " " + c.getString(c.getColumnIndex(ScheduleContract.ReminderForeignKeyColumn.USER_ID)));
+        }
 
 
 
