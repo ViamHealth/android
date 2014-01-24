@@ -34,6 +34,8 @@ public class ViamHealthPrefs {
 	public String lastname = "lastname";
 	public String bornon = "bornon";
 	public String profilepic = "profilepic";
+    public String priority_cards_json = "priority_cards_json";
+
 	//public String dateAdded = "dateAdded";
 
     public int targetCaloriesPerDay;
@@ -42,6 +44,14 @@ public class ViamHealthPrefs {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();
 	}
+
+    public String getPriorityCardsJson(){
+        return appSharedPrefs.getString(priority_cards_json, "0");
+    }
+
+    public void setPriorityCardsJson(String jsonString){
+        this.prefsEditor.putString(priority_cards_json,jsonString).commit();
+    }
 
     public int getTargetCaloriesPerDay() {
         return appSharedPrefs.getInt("targetCalories", 0);

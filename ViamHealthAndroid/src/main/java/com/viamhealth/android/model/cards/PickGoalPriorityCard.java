@@ -9,11 +9,50 @@ public class PickGoalPriorityCard extends PriorityCard {
 
     private String weightGoalMessage;
     private String bpGoalMessage;
+    private String glucoseGoalMessage;
+    private String cholesterolGoalMessage;
 
     //Y, N or blank.
     //@TODO: Use enums
     private String weightGoalCheck;
     private String bpGoalCheck;
+    private String glucoseGoalCheck;
+    private String cholesterolGoalCheck;
+
+
+    public String getGlucoseGoalMessage() {
+        return glucoseGoalMessage;
+    }
+
+    public void setGlucoseGoalMessage(String glucoseGoalMessage) {
+        this.glucoseGoalMessage = glucoseGoalMessage;
+    }
+
+    public String getCholesterolGoalMessage() {
+        return cholesterolGoalMessage;
+    }
+
+    public void setCholesterolGoalMessage(String cholesterolGoalMessage) {
+        this.cholesterolGoalMessage = cholesterolGoalMessage;
+    }
+
+    public String getGlucoseGoalCheck() {
+        return glucoseGoalCheck;
+    }
+
+    public void setGlucoseGoalCheck(String glucoseGoalCheck) {
+        this.glucoseGoalCheck = glucoseGoalCheck;
+    }
+
+    public String getCholesterolGoalCheck() {
+        return cholesterolGoalCheck;
+    }
+
+    public void setCholesterolGoalCheck(String cholesterolGoalCheck) {
+        this.cholesterolGoalCheck = cholesterolGoalCheck;
+    }
+
+
 
     @Override
     public PriorityCardType getType() {
@@ -61,7 +100,15 @@ public class PickGoalPriorityCard extends PriorityCard {
             return getWeightGoalCheck();
         } else if (type == "bpGoalCheck") {
             return getBpGoalCheck();
-        } else {
+        } else if (type == "cholesterolGoalMessage") {
+            return getCholesterolGoalMessage();
+        } else if (type == "glucoseGoalMessage") {
+            return getGlucoseGoalMessage();
+        } else if (type == "cholesterolGoalCheck") {
+            return getCholesterolGoalCheck();
+        } else if (type == "glucoseGoalCheck") {
+            return getGlucoseGoalCheck();
+        }else {
             throw new IllegalArgumentException("incorrect custom data type");
         }
 
@@ -76,8 +123,16 @@ public class PickGoalPriorityCard extends PriorityCard {
             setWeightGoalCheck(value);
         } else if (type == "bpGoalCheck") {
             setBpGoalCheck(value);
+        } else if (type == "cholesterolGoalMessage") {
+            setCholesterolGoalMessage(value);
+        } else if (type == "glucoseGoalMessage") {
+            setGlucoseGoalMessage(value);
+        } else if (type == "cholesterolGoalCheck") {
+            setCholesterolGoalCheck(value);
+        } else if (type == "glucoseGoalCheck") {
+            setGlucoseGoalCheck(value);
         } else {
-            throw new IllegalArgumentException("incorrect custom data type");
+            throw new IllegalArgumentException("incorrect custom data type :- " + type);
         }
     }
 

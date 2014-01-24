@@ -2041,10 +2041,13 @@ public class functionClass {
 
 				public ArrayList<PriorityCard> getCard(Long userId){
                     ArrayList<PriorityCard> lstData = new ArrayList<PriorityCard>();
-                    System.out.println("here00");
+
 
                         String responseString = "{\"count\": 1, \"next\": null, \"previous\": null, \"results\": " +
-                                "[{\"id\": 1, \"type\": \"1\",\"message\": \"card mesasge\", \"weight_goal_check\": \"Y\", \"weight_goal_message\": \"his is weighgt goal message\"," +
+                                "[{\"id\": 1, \"type\": \"1\",\"message\": \"card mesasge\"," +
+                                " \"weight_goal_check\": \"Y\", \"weight_goal_message\": \"his is weighgt goal message\"," +
+                                " \"cholesterol_goal_check\": \"Y\", \"cholesterol_goal_message\": \"his is cholesterol goal message\"," +
+                                " \"glucose_goal_check\": \"Y\", \"glucose_goal_message\": \"his is glucose goal message\"," +
                                 " \"bp_goal_check\": \"\", \"bp_goal_message\": \"This is BP wqala message\"  }]}";
                     try {
                         System.out.println("here1010");
@@ -2069,10 +2072,15 @@ public class functionClass {
                                 pc.setCustomData("weightGoalCheck",c.getString("weight_goal_check").toString());
                                 pc.setCustomData("bpGoalMessage",c.getString("bp_goal_message").toString());
                                 pc.setCustomData("bpGoalCheck",c.getString("bp_goal_check").toString());
+                                pc.setCustomData("glucoseGoalMessage",c.getString("glucose_goal_message").toString());
+                                pc.setCustomData("glucoseGoalCheck",c.getString("glucose_goal_check").toString());
+                                pc.setCustomData("cholesterolGoalCheck",c.getString("cholesterol_goal_check").toString());
                                 lstData.add(pc);
                             //}
 
                         }
+                        appPrefs.setPriorityCardsJson(responseString);
+                        appPrefs.setPriorityCardFetchDate()
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
