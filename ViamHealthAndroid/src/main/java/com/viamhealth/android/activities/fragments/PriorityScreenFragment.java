@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -58,5 +59,6 @@ public class PriorityScreenFragment extends BaseFragment {
         return v;
 
     }
+
 
 }

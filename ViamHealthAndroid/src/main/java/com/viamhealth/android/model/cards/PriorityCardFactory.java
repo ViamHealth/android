@@ -5,11 +5,11 @@ package com.viamhealth.android.model.cards;
  */
 public class PriorityCardFactory {
 
-    public PriorityCard getCard(String type){
+    /*public PriorityCard getCard(String type){
         if(type=="1"){
             return new PickGoalPriorityCard();
         } else {
             throw new RuntimeException("unknown priority card type");
         }
-    }
+    }*/
 }

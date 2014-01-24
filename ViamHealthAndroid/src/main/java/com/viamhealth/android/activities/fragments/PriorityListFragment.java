@@ -71,18 +71,24 @@ public class PriorityListFragment extends  BaseListFragment {
         }
 
         this.list.setAdapter(new PriorityCardListAdapter(null));
+        System.out.println(this.cards.size());
+
 
         return view;
     }
 
     private void initListView()
     {
+        System.out.println(this.cards.size());
         if(cards.size()==0){
             Toast.makeText(getSherlockActivity(), "No more tasks for today ...", Toast.LENGTH_SHORT).show();
             return;
         }
-
         this.list.setAdapter(new PriorityCardListAdapter(cards));
+
+    }
+
+    public void notifyRowActionComplete(){
 
     }
 
@@ -93,21 +99,22 @@ public class PriorityListFragment extends  BaseListFragment {
         PriorityCardListAdapter(List<PriorityCard> cards){
             rows = new ArrayList<CardRow>();
             if (cards != null){
-            for ( PriorityCard card : cards ){
-                if(card.getType() == PriorityCardType.PICK_GOAL){
-                    rows.add(new PickGoal(LayoutInflater.from(getActivity()),card));
-                }
-                else if(card.getType() == PriorityCardType.TRACKER_YN_CARD){
-                    //rows.add(new TrackerYNCard(LayoutInflater.from(getActivity()),card));
-                } else if ( card.getType() == PriorityCardType.OPTIONS_SELECTOR_CARD){
-                    //rows.add(new OptionsSelectorCard(LayoutInflater.from(getActivity()),card));
-                }
-                else {
-                    //rows.add(new SimpleListCard(LayoutInflater.from(getActivity()), card));
+                for ( PriorityCard card : cards ){
+                    System.out.println(card.getType());
+                    if(card.getType() == PriorityCardType.PICK_GOAL){
+                        rows.add(new PickGoal(LayoutInflater.from(getActivity()),card));
+                    }
+                    else if(card.getType() == PriorityCardType.TRACKER_YN_CARD){
+                        //rows.add(new TrackerYNCard(LayoutInflater.from(getActivity()),card));
+                    } else if ( card.getType() == PriorityCardType.OPTIONS_SELECTOR_CARD){
+                        //rows.add(new OptionsSelectorCard(LayoutInflater.from(getActivity()),card));
+                    }
+                    else {
+                        //rows.add(new PickGoal(LayoutInflater.from(getActivity()),card));
+                        //rows.add(new SimpleListCard(LayoutInflater.from(getActivity()), card));
+                    }
                 }
             }
-            }
-
         }
 
         @Override

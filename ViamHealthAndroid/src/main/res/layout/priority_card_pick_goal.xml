@@ -7,112 +7,121 @@
     android:orientation="vertical" >
 
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pick_goal_card_selector"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-    <TextView android:id="@+id/card_message"
+        <TextView android:id="@+id/pick_goal_card_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             />
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView android:id="@+id/weight_pick_goal_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/weight_pick_goal_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right" >
+                <RadioButton android:id="@+id/weight_pick_goal_Y"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <RadioButton android:id="@+id/weight_pick_goal_N"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView android:id="@+id/bp_pick_goal_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/bp_pick_goal_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right" >
+                <RadioButton android:id="@+id/bp_pick_goal_Y"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+                <RadioButton android:id="@+id/bp_pick_goal_N"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </RadioGroup>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/weight_pick_goal_create_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView android:id="@+id/weight_pick_goal_create_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create a weight goal to monitor your weight"
+            />
+        <Button
+            android:id="@+id/weight_pick_goal_create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go"
+
+        />
+    </LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/bp_pick_goal_create_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView android:id="@+id/bp_pick_goal_create_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create a weight goal to monitor your weight"
+            />
+        <Button
+            android:id="@+id/bp_pick_goal_create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Go"
+
+            />
+    </LinearLayout>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="" />
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView android:id="@+id/goal_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="right" >
-            <RadioButton android:id="@+id/goal_1_Y"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPickGoalRadioButtonClicked"/>
-            <RadioButton android:id="@+id/goal_1_N"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPickGoalRadioButtonClicked"/>
-        </RadioGroup>
-    </LinearLayout>
-<!--
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView android:id="@+id/goal_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="right" >
-            <RadioButton android:id="@+id/goal_2_Y"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPickGoalRadioButtonClicked"/>
-            <RadioButton android:id="@+id/goal_2_N"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onPickGoalRadioButtonClicked"/>
-        </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView android:id="@+id/goal_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="right" >
-            <RadioButton android:id="@+id/goal_3_Y"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/goal_3_N"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"/>
-        </RadioGroup>
-    </LinearLayout>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView android:id="@+id/goal_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="right" >
-            <RadioButton android:id="@+id/goal_4_Y"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"/>
-            <RadioButton android:id="@+id/goal_4_N"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"/>
-        </RadioGroup>
-    </LinearLayout>
--->
-
+        android:text="Create a weight goal to monitor your weight"
+        />
 
 </LinearLayout>

@@ -35,6 +35,7 @@ import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.model.cards.PickGoalPriorityCard;
 import com.viamhealth.android.model.cards.PriorityCard;
 import com.viamhealth.android.model.cards.PriorityCardFactory;
 import com.viamhealth.android.model.enums.PriorityCardType;
@@ -2039,10 +2040,44 @@ public class functionClass {
 				}
 
 				public ArrayList<PriorityCard> getCard(Long userId){
-                    PriorityCard data = new PriorityCardFactory().getCard("1");
-                    //data.setType(PriorityCardType.PICK_GOAL);
                     ArrayList<PriorityCard> lstData = new ArrayList<PriorityCard>();
-                    lstData.add(data);
+                    System.out.println("here00");
+
+                        String responseString = "{\"count\": 1, \"next\": null, \"previous\": null, \"results\": " +
+                                "[{\"id\": 1, \"type\": \"1\",\"message\": \"card mesasge\", \"weight_goal_check\": \"Y\", \"weight_goal_message\": \"his is weighgt goal message\"," +
+                                " \"bp_goal_check\": \"\", \"bp_goal_message\": \"This is BP wqala message\"  }]}";
+                    try {
+                        System.out.println("here1010");
+                        jObject = new JSONObject(responseString);
+                        jarray = jObject.getJSONArray("results");
+                        System.out.println(jarray.toString());
+                        System.out.println(jarray.length());
+                        PriorityCard pc;
+                        for (int i = 0; i < jarray.length(); i++) {
+                            System.out.println("here11");
+                            JSONObject c = jarray.getJSONObject(i);
+                            System.out.println(c.getString("type"));
+
+                            //if(c.getString("type") == "1"){
+                                System.out.println("here22");
+                                pc = new PickGoalPriorityCard();
+
+
+                                pc.setId(c.getString("id"));
+                                pc.setMessage(c.getString("message"));
+                                pc.setCustomData("weightGoalMessage",c.getString("weight_goal_message").toString());
+                                pc.setCustomData("weightGoalCheck",c.getString("weight_goal_check").toString());
+                                pc.setCustomData("bpGoalMessage",c.getString("bp_goal_message").toString());
+                                pc.setCustomData("bpGoalCheck",c.getString("bp_goal_check").toString());
+                                lstData.add(pc);
+                            //}
+
+                        }
+                    } catch (JSONException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
                     return lstData;
                 }
 				
