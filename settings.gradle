@@ -1,1 +1,1 @@
-include ':ViamHealthAndroid', ':facebook', ':spinwheel'
+include ':ViamHealthAndroid', ':facebook', ':spinwheel', ':robodemo-lib'

@@ -3,7 +3,9 @@ package com.viamhealth.android.model.reminder;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.viamhealth.android.R;
 import com.viamhealth.android.model.enums.ReminderTime;
+import com.viamhealth.android.notification.NotificationObject;
 import com.viamhealth.android.utils.ParcelableUtils;
 
 import java.util.Date;
@@ -13,7 +15,7 @@ import java.util.Map;
 /**
  * Created by naren on 21/11/13.
  */
-public class ReminderReading implements Parcelable {
+public class ReminderReading implements NotificationObject, Parcelable {
 
     Long id;
     Long userId;
@@ -22,6 +24,16 @@ public class ReminderReading implements Parcelable {
     Map<Integer, Action> mapAction = new HashMap<Integer, Action>();
     boolean completeCheck = false;
 
+
+    @Override
+    public int getIcon() {
+        return reminder.getType().iconId();
+    }
+
+    @Override
+    public String getTitle() {
+        return reminder.getName();
+    }
 
     public void putAction(ReminderTime time, Action data) {
         mapAction.put(time.ordinal(), data);
@@ -86,8 +98,8 @@ public class ReminderReading implements Parcelable {
         id = in.readLong();
         userId = in.readLong();
         readingDate = new Date(in.readLong());
-        reminder = (Reminder) in.readParcelable(null);
         completeCheck = (Boolean) in.readValue(null);
+        reminder = new Reminder(in);
         mapAction = ParcelableUtils.readMap(in, Action.class);
     }
 
@@ -101,8 +113,8 @@ public class ReminderReading implements Parcelable {
         dest.writeLong(id);
         dest.writeLong(userId);
         dest.writeLong(readingDate.getTime());
-        dest.writeParcelable(reminder, flags);
         dest.writeValue(completeCheck);
+        reminder.writeToParcel(dest, flags);
         ParcelableUtils.writeMap(mapAction, dest);
     }
 }

@@ -221,18 +221,18 @@ public class ReminderFragmentNew extends BaseFragment {
         if(mPagerAdapter==null){
             mPagerAdapter = new ReminderPagerAdapter(getChildFragmentManager());
         }
-            mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.setAdapter(mPagerAdapter);
 
-            //Necessary or the pager will only have one extra page to show
-            //make this at least however many pages you can see
-            mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
-            //A little space between pages
-            mViewPager.setPageMargin(20);
+        //Necessary or the pager will only have one extra page to show
+        //make this at least however many pages you can see
+        mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount());
+        //A little space between pages
+        mViewPager.setPageMargin(20);
 
-            //If hardware acceleration is enabled, you should also remove
-            //clipping on the pager for its children.
-            mViewPager.setClipChildren(false);
-            mViewPager.setCurrentItem(currentDayPosition, true);
+        //If hardware acceleration is enabled, you should also remove
+        //clipping on the pager for its children.
+        mViewPager.setClipChildren(false);
+        mViewPager.setCurrentItem(currentDayPosition, true);
 
 
         if(listenerMap!=null){
