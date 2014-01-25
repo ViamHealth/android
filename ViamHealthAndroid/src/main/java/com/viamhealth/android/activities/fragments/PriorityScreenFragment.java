@@ -1,18 +1,25 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.TabHost;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
+import com.viamhealth.android.activities.TabActivity;
 import com.viamhealth.android.dao.restclient.old.functionClass;
+import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 
 
@@ -56,9 +63,12 @@ public class PriorityScreenFragment extends BaseFragment {
 
         fm.commit();
 
+
         return v;
 
     }
+
+
 
 
 }

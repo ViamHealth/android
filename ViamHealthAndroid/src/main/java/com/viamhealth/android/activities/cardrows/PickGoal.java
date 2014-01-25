@@ -1,15 +1,30 @@
 package com.viamhealth.android.activities.cardrows;
 
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
+
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.viamhealth.android.R;
+import com.viamhealth.android.ViamHealthPrefs;
+
+import com.viamhealth.android.activities.AddGoalActivity;
+import com.viamhealth.android.activities.Home;
+import com.viamhealth.android.activities.SplashActivity;
+import com.viamhealth.android.activities.TabActivity;
+import com.viamhealth.android.activities.fragments.GoalFragment;
+import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.cards.PriorityCard;
 
 import java.util.ArrayList;
@@ -22,16 +37,19 @@ public class PickGoal implements CardRow {
 
     private final PriorityCard card;
     private final LayoutInflater inflater;
+    private ViamHealthPrefs appPrefs;
 
     public PickGoal(LayoutInflater inflater,PriorityCard card) {
         this.card = card;
         this.inflater = inflater;
+        this.appPrefs = new ViamHealthPrefs(this.inflater.getContext());
     }
 
     @Override
     public View getView(View convertView) {
         ViewHolder holder;
         View view;
+
         //we have a don't have a convertView so we'll have to create a new one
 
         if (convertView == null) {
@@ -39,6 +57,8 @@ public class PickGoal implements CardRow {
 
             //use the view holder pattern to save of already looked up subviews
             holder = new ViewHolder(
+                    appPrefs,
+                    inflater,
                     (LinearLayout)viewGroup.findViewById(R.id.pick_goal_card_selector),
                     (TextView)viewGroup.findViewById(R.id.pick_goal_card_message),
                     (TextView)viewGroup.findViewById(R.id.weight_pick_goal_message),
@@ -61,7 +81,12 @@ public class PickGoal implements CardRow {
                     (RadioButton)viewGroup.findViewById(R.id.cholesterol_pick_goal_Y),
                     (RadioButton)viewGroup.findViewById(R.id.cholesterol_pick_goal_N),
                     (RadioGroup)viewGroup.findViewById(R.id.cholesterol_pick_goal_check),
-                    (LinearLayout)viewGroup.findViewById(R.id.cholesterol_pick_goal_create_layout)
+                    (LinearLayout)viewGroup.findViewById(R.id.cholesterol_pick_goal_create_layout),
+
+                    (Button)viewGroup.findViewById(R.id.weight_pick_goal_create_button),
+                    (Button)viewGroup.findViewById(R.id.cholesterol_pick_goal_create_button),
+                    (Button)viewGroup.findViewById(R.id.bp_pick_goal_create_button),
+                    (Button)viewGroup.findViewById(R.id.glucose_pick_goal_create_button)
             );
 
             viewGroup.setTag(holder);
@@ -109,6 +134,19 @@ public class PickGoal implements CardRow {
         holder.cholesterolCheck.setOnCheckedChangeListener(holder.onPickGoalRadioButtonClicked());
 
 
+        Button glucose_pick_goal_create_button = (Button)view.findViewById(R.id.glucose_pick_goal_create_button);
+        View.OnClickListener create_goal_listerner = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context c = view.getContext();
+                FragmentTransaction ft = ((Activity) c).get .getSupportFragmentManager().beginTransaction();
+                ft.add(R.layout.priority_fragment, new GoalFragment());
+
+            }
+        };
+        glucose_pick_goal_create_button.setOnClickListener(create_goal_listerner);
+
+        //holder.weightPickGoalCreateButton.setOnClickListener(create_goal_listerner);
         return view;
     }
 
@@ -121,6 +159,7 @@ public class PickGoal implements CardRow {
 
 
     private static class ViewHolder {
+        private final LayoutInflater inflater;
         final LinearLayout pickGoalCardSelector;
         final TextView cardMessage;
         final TextView weightGoalMessage;
@@ -149,7 +188,15 @@ public class PickGoal implements CardRow {
         final LinearLayout cholesterolGoalCreate;
         private Character cholesterolCheckVal = null;
 
-        private ViewHolder( LinearLayout pickGoalCardSelector, TextView cardMessage,
+        private final Button weightPickGoalCreateButton;
+        private final Button bpPickGoalCreateButton;
+        private final Button glucosePickGoalCreateButton;
+        private final Button cholesterolPickGoalCreateButton;
+
+        private ViamHealthPrefs appPrefs;
+
+        private ViewHolder( ViamHealthPrefs appPrefs,LayoutInflater inflater,
+                LinearLayout pickGoalCardSelector, TextView cardMessage,
                             TextView weightGoalMessage, RadioButton weightGoalY, RadioButton weightGoalN, RadioGroup weightCheck,
                             LinearLayout weightGoalCreate,
                             TextView bpGoalMessage, RadioButton bpGoalY, RadioButton bpGoalN, RadioGroup bpCheck,
@@ -157,7 +204,11 @@ public class PickGoal implements CardRow {
                             TextView glucoseGoalMessage, RadioButton glucoseGoalY, RadioButton glucoseGoalN, RadioGroup glucoseCheck,
                             LinearLayout glucoseGoalCreate,
                             TextView cholesterolGoalMessage, RadioButton cholesterolGoalY, RadioButton cholesterolGoalN, RadioGroup cholesterolCheck,
-                            LinearLayout cholesterolGoalCreate) {
+                            LinearLayout cholesterolGoalCreate,
+                            Button weight_pick_goal_create_button, Button cholesterol_pick_goal_create_button, Button bp_pick_goal_create_button, Button glucose_pick_goal_create_button
+                            ) {
+            this.inflater = inflater;
+            this.appPrefs = appPrefs;
             this.cardMessage = cardMessage;
             this.weightGoalMessage = weightGoalMessage;
             this.weightGoalY = weightGoalY;
@@ -181,6 +232,11 @@ public class PickGoal implements CardRow {
             this.cholesterolCheck = cholesterolCheck;
             this.cholesterolGoalCreate = cholesterolGoalCreate;
             this.pickGoalCardSelector =  pickGoalCardSelector;
+            this.weightPickGoalCreateButton = weight_pick_goal_create_button;
+            this.bpPickGoalCreateButton = bp_pick_goal_create_button;
+            this.cholesterolPickGoalCreateButton = cholesterol_pick_goal_create_button;
+            this.glucosePickGoalCreateButton = glucose_pick_goal_create_button;
+
         }
 
         public RadioGroup.OnCheckedChangeListener onPickGoalRadioButtonClicked(){
@@ -216,6 +272,7 @@ public class PickGoal implements CardRow {
                         default:
                             break;
                     }
+
                     checkComplete();
                 }
                 private void checkComplete(){
@@ -232,17 +289,41 @@ public class PickGoal implements CardRow {
 
             System.out.println("Weight check complete");
             System.out.println(WeightCheckVal);
-            if(  WeightCheckVal =='Y' && cholesterolCheckVal =='Y'  && glucoseCheckVal =='Y' && bpCheckVal =='Y'){
+            if(  WeightCheckVal =='Y' ){
+                this.appPrefs.setSSPCWGC("Y");
                 this.weightGoalCreate.setVisibility(View.VISIBLE);
+            }
+            else {
+                this.appPrefs.setSSPCWGC("N");
+            }
+            if(  cholesterolCheckVal =='Y' ){
+                this.appPrefs.setSSPCCGC("Y");
                 this.cholesterolGoalCreate.setVisibility(View.VISIBLE);
+            }
+            else {
+                this.appPrefs.setSSPCCGC("N");
+            }
+            if(  glucoseCheckVal =='Y' ){
+                this.appPrefs.setSSPCGGC("Y");
                 this.glucoseGoalCreate.setVisibility(View.VISIBLE);
+            }
+            else {
+                this.appPrefs.setSSPCGGC("N");
+            }
+            if(  bpCheckVal =='Y' ){
+                this.appPrefs.setSSPCBGC("Y");
                 this.bpGoalCreate.setVisibility(View.VISIBLE);
-                this.pickGoalCardSelector.setVisibility(View.GONE);
-            } else {
-                System.out.println("making invisible");
+            }
+            else {
+                this.appPrefs.setSSPCBGC("N");
+            }
+
+            this.pickGoalCardSelector.setVisibility(View.GONE);
+
+                //System.out.println("making invisible");
                 //this.weightGoalCreate.setVisibility(View.GONE);
                 //this.bpGoalCreate.setVisibility(View.GONE);
-            }
+
 
 
         }

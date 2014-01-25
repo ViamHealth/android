@@ -2041,12 +2041,30 @@ public class functionClass {
 
 				public ArrayList<PriorityCard> getCard(Long userId){
                     ArrayList<PriorityCard> lstData = new ArrayList<PriorityCard>();
+                    PriorityCard pc;
+                    Date lastSyncDate = new Date(appPrefs.getSSPCSyncedDate());
+
+                    if ( lastSyncDate == new Date() ){
+                        pc = new PickGoalPriorityCard();
+                        pc.setId(appPrefs.getSSPCId());
+                        pc.setMessage(appPrefs.getSSPCMessage());
+                        pc.setCustomData("weightGoalMessage",appPrefs.getSSPCWGM());
+                        pc.setCustomData("weightGoalCheck",appPrefs.getSSPCWGC());
+                        pc.setCustomData("bpGoalMessage",appPrefs.getSSPCBGM());
+                        pc.setCustomData("bpGoalCheck",appPrefs.getSSPCBGC());
+                        pc.setCustomData("glucoseGoalMessage",appPrefs.getSSPCGGM());
+                        pc.setCustomData("glucoseGoalCheck",appPrefs.getSSPCGGC());
+                        pc.setCustomData("cholesterolGoalMessage",appPrefs.getSSPCCGM());
+                        pc.setCustomData("cholesterolGoalCheck",appPrefs.getSSPCCGC());
+                        lstData.add(pc);
+
+                    } else {
 
 
                         String responseString = "{\"count\": 1, \"next\": null, \"previous\": null, \"results\": " +
                                 "[{\"id\": 1, \"type\": \"1\",\"message\": \"card mesasge\"," +
                                 " \"weight_goal_check\": \"Y\", \"weight_goal_message\": \"his is weighgt goal message\"," +
-                                " \"cholesterol_goal_check\": \"Y\", \"cholesterol_goal_message\": \"his is cholesterol goal message\"," +
+                                " \"cholesterol_goal_check\": \"N\", \"cholesterol_goal_message\": \"his is cholesterol goal message\"," +
                                 " \"glucose_goal_check\": \"Y\", \"glucose_goal_message\": \"his is glucose goal message\"," +
                                 " \"bp_goal_check\": \"\", \"bp_goal_message\": \"This is BP wqala message\"  }]}";
                     try {
@@ -2055,11 +2073,11 @@ public class functionClass {
                         jarray = jObject.getJSONArray("results");
                         System.out.println(jarray.toString());
                         System.out.println(jarray.length());
-                        PriorityCard pc;
+
                         for (int i = 0; i < jarray.length(); i++) {
                             System.out.println("here11");
                             JSONObject c = jarray.getJSONObject(i);
-                            System.out.println(c.getString("type"));
+                            System.out.println("a"+c.getString("type")+"b");
 
                             //if(c.getString("type") == "1"){
                                 System.out.println("here22");
@@ -2074,16 +2092,32 @@ public class functionClass {
                                 pc.setCustomData("bpGoalCheck",c.getString("bp_goal_check").toString());
                                 pc.setCustomData("glucoseGoalMessage",c.getString("glucose_goal_message").toString());
                                 pc.setCustomData("glucoseGoalCheck",c.getString("glucose_goal_check").toString());
+                                pc.setCustomData("cholesterolGoalMessage",c.getString("cholesterol_goal_message").toString());
                                 pc.setCustomData("cholesterolGoalCheck",c.getString("cholesterol_goal_check").toString());
                                 lstData.add(pc);
+                            appPrefs.setSSPCMessage(c.getString("message"));
+                            appPrefs.setSSPCId(c.getString("id"));
+                            appPrefs.setSSPCWGM(c.getString("weight_goal_message"));
+                            appPrefs.setSSPCWGC(c.getString("weight_goal_check"));
+                            appPrefs.setSSPCBGM(c.getString("bp_goal_message"));
+                            appPrefs.setSSPCBGC(c.getString("bp_goal_check"));
+                            appPrefs.setSSPCGGM(c.getString("glucose_goal_message"));
+                            appPrefs.setSSPCGGC(c.getString("glucose_goal_check"));
+                            appPrefs.setSSPCCGC(c.getString("cholesterol_goal_check"));
+                            appPrefs.setSSPCCGM(c.getString("cholesterol_goal_message"));
+
+                            Date currentDate=new Date();
+                            appPrefs.setSSPCSyncedDate(currentDate.getTime());
+
                             //}
 
                         }
-                        appPrefs.setPriorityCardsJson(responseString);
-                        appPrefs.setPriorityCardFetchDate()
+
+
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
+                    }
                     }
 
                     return lstData;

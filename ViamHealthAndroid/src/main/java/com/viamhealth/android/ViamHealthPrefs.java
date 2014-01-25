@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Date;
+
 public class ViamHealthPrefs {
 	public static final String USER_PREFS = "USER_PREFS";
 	public SharedPreferences appSharedPrefs;
@@ -34,7 +36,93 @@ public class ViamHealthPrefs {
 	public String lastname = "lastname";
 	public String bornon = "bornon";
 	public String profilepic = "profilepic";
-    public String priority_cards_json = "priority_cards_json";
+
+    // Sudo sync to experiment with MVP starts
+    // ss = sudo_sync , pc = priority card
+    //@TODO: move to sync
+    public String ss_pc_sycned_date = "ss_pc_sycned_date";
+    public String ss_pc_weight_goal_message = "ss_pc_weight_goal_message";
+    public String ss_pc_weight_goal_check = "ss_pc_weight_goal_check";
+    public String ss_pc_bp_goal_message = "ss_pc_bp_goal_message";
+    public String ss_pc_bp_goal_check = "ss_pc_bp_goal_check";
+    public String ss_pc_glucose_goal_message = "ss_pc_glucose_goal_message";
+    public String ss_pc_glucose_goal_check = "ss_pc_glucose_goal_check";
+    public String ss_pc_cholesterol_goal_check = "ss_pc_cholesterol_goal_check";
+    public String ss_pc_cholesterol_goal_message = "ss_pc_cholesterol_goal_message";
+    public String ss_pc_id = "ss_pc_id";
+    public String ss_pc_message = "ss_pc_message";
+
+
+    public Long getSSPCSyncedDate(){
+        long MILLIS_IN_A_DAY = 1000*60*60*24;
+        Date currentDate=new Date();
+        return appSharedPrefs.getLong(ss_pc_sycned_date, currentDate.getTime() - MILLIS_IN_A_DAY);
+    }
+    public void setSSPCSyncedDate(Long str){
+        this.prefsEditor.putLong(ss_pc_sycned_date, str).commit();
+    }
+    public String getSSPCId(){
+        return appSharedPrefs.getString(ss_pc_id, "");
+    }
+    public void setSSPCId(String str){
+        this.prefsEditor.putString(ss_pc_id,str).commit();
+    }
+    public String getSSPCMessage(){
+        return appSharedPrefs.getString(ss_pc_message, "");
+    }
+    public void setSSPCMessage(String str){
+        this.prefsEditor.putString(ss_pc_message,str).commit();
+    }
+    public String getSSPCCGM(){
+        return appSharedPrefs.getString(ss_pc_cholesterol_goal_message, "");
+    }
+    public void setSSPCCGM(String str){
+        this.prefsEditor.putString(ss_pc_cholesterol_goal_message,str).commit();
+    }
+    public String getSSPCWGM(){
+        return appSharedPrefs.getString(ss_pc_weight_goal_message, "");
+    }
+    public void setSSPCWGM(String str){
+        this.prefsEditor.putString(ss_pc_weight_goal_message,str).commit();
+    }
+    public String getSSPCWGC(){
+        return appSharedPrefs.getString(ss_pc_weight_goal_check, "");
+    }
+    public void setSSPCWGC(String str){
+        this.prefsEditor.putString(ss_pc_weight_goal_check,str).commit();
+    }
+    public String getSSPCBGM(){
+        return appSharedPrefs.getString(ss_pc_bp_goal_message, "");
+    }
+    public void setSSPCBGM(String str){
+        this.prefsEditor.putString(ss_pc_bp_goal_message,str).commit();
+    }
+    public String getSSPCBGC(){
+        return appSharedPrefs.getString(ss_pc_bp_goal_check, "");
+    }
+    public void setSSPCBGC(String str){
+        this.prefsEditor.putString(ss_pc_bp_goal_check,str).commit();
+    }
+    public String getSSPCGGM(){
+        return appSharedPrefs.getString(ss_pc_glucose_goal_message, "");
+    }
+    public void setSSPCGGM(String str){
+        this.prefsEditor.putString(ss_pc_glucose_goal_message,str).commit();
+    }
+    public String getSSPCGGC(){
+        return appSharedPrefs.getString(ss_pc_glucose_goal_check, "");
+    }
+    public void setSSPCGGC(String str){
+        this.prefsEditor.putString(ss_pc_glucose_goal_check,str).commit();
+    }
+    public String getSSPCCGC(){
+        return appSharedPrefs.getString(ss_pc_cholesterol_goal_check, "");
+    }
+    public void setSSPCCGC(String str){
+        this.prefsEditor.putString(ss_pc_cholesterol_goal_check,str).commit();
+    }
+
+    //sudo sync ends
 
 	//public String dateAdded = "dateAdded";
 
@@ -44,14 +132,6 @@ public class ViamHealthPrefs {
 		this.appSharedPrefs = context.getSharedPreferences(USER_PREFS, Activity.MODE_PRIVATE);
 		this.prefsEditor = appSharedPrefs.edit();
 	}
-
-    public String getPriorityCardsJson(){
-        return appSharedPrefs.getString(priority_cards_json, "0");
-    }
-
-    public void setPriorityCardsJson(String jsonString){
-        this.prefsEditor.putString(priority_cards_json,jsonString).commit();
-    }
 
     public int getTargetCaloriesPerDay() {
         return appSharedPrefs.getInt("targetCalories", 0);
