@@ -96,6 +96,45 @@ public class ScheduleContract {
         String TOTAL_CHOLESTEROL = "total_cholesterol";
     }
 
+    public interface RemindersColumns {
+        String TYPE = "type";
+        String NAME = "name";
+        String DETAILS = "details";
+        String MORNING_COUNT = "morning_count";
+        String AFTERNOON_COUNT = "afternoon_count";
+        String EVENING_COUNT = "evening_count";
+        String NIGHT_COUNT = "night_count";
+        String START_DATE = "start_date";
+        String END_DATE = "end_date";
+        String REPEAT_MODE = "repeat_mode";
+        String REPEAT_DAY = "repeat_day";
+        String REPEAT_HOUR = "repeat_hour";
+        String REPEAT_MIN = "repeat_min";
+        String REPEAT_WEEKDAY = "repeat_weekday";
+        String REPEAT_EVERY_X = "repeat_every_x";
+        String REPEAT_I_COUNTER = "repeat_i_counter";
+        String CREATED_AT = "created_at";
+        String UPDATED_AT = "updated_at";
+    }
+
+    public interface ReminderForeignKeyColumn {
+        String USER_ID = "user_id";
+    }
+
+    public interface ReminderReadingsColumns {
+        String REMINDER_ID= "reminder_id";
+        String MORNING_CHECK = "morning_check";
+        String AFTERNOON_CHECK = "afternoon_check";
+        String EVENING_CHECK = "evening_check";
+        String NIGHT_CHECK = "night_check";
+        String COMPLETE_CHECK = "complete_check";
+        String UPDATED_BY = "updated_by";
+        String READING_DATE = "reading_date";
+    }
+
+
+
+
     public static final String CONTENT_AUTHORITY = "com.viamhealth.android.schedule";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
@@ -108,14 +147,46 @@ public class ScheduleContract {
     public static final String PATH_PROFILE = "profile";
     public static final String PATH_HEALTH_PROFILE = "healthprofile";
 
+    public static final String PATH_REMINDER = "reminder";
+    public static final String PATH_REMINDERS = "reminders";
+    public static final String PATH_REMINDER_READINGS = "reminderreadings";
+
     public static class Synchronize implements BaseColumns, SyncColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SYNCHRONIZED).build();
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.viamhealth.sync";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.viamhealth.sync";
     }
 
-    public static class Users implements UserColumns, UserProfileColumns, UserHealthProfileColumns, UserForeignKeyColumn, SyncColumns,
-            BaseColumns {
+
+    public static class Reminders implements RemindersColumns, ReminderReadingsColumns, SyncColumns,
+            BaseColumns,ReminderForeignKeyColumn {
+        public static final Uri CONTENT_REMINDER_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER).build();
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.viamhealth.reminders";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.viamhealth.reminders";
+
+        public static final String TABLE_ALIAS = "r";
+
+        public static Uri buildReminderUri() {
+
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER).build();
+        }
+
+        public static Uri buildReminderReadingsUri() {
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER_READINGS).build();
+        }
+
+        public static Integer getUserId(Uri uri) {
+            String str = uri.getPathSegments().get(1);
+            if(str.contains("#"))
+                return null;
+            return Integer.parseInt(str);
+        }
+
+    }
+
+
+
+    public static class Users implements UserColumns, UserProfileColumns, UserHealthProfileColumns, UserForeignKeyColumn, SyncColumns,BaseColumns {
         public static final Uri CONTENT_USER_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_USERS).build();
         public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.viamhealth.user";
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.viamhealth.user";

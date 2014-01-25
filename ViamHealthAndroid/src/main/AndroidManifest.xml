@@ -63,6 +63,7 @@
         android:name="com.viamhealth.android.Global_Application"
         android:allowBackup="true"
         android:debuggable="true"
+        android:screenOrientation="portrait"
         android:icon="@drawable/ic_launcher"
         android:label="ViamHealth"
         android:theme="@style/Greentheme" >
@@ -104,7 +105,9 @@
         <activity android:name="com.viamhealth.android.activities.FBFamilyListActivity" />
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
         <activity android:name="com.viamhealth.android.activities.AddGoalActivity" />
         <activity android:name="com.viamhealth.android.activities.AddGoalValue" />
         <activity android:name="com.viamhealth.android.activities.AddFoodActivity" />

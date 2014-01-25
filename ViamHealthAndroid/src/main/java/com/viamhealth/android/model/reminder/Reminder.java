@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.viamhealth.android.model.BaseModel;
 import com.viamhealth.android.model.enums.ReminderTime;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.enums.RepeatMode;
@@ -18,7 +19,7 @@ import java.util.Map;
 /**
  * Created by naren on 21/11/13.
  */
-public class Reminder implements Parcelable {
+public class Reminder extends BaseModel implements Parcelable {
 
     Long id = 0L;
     Long userId = 0L;

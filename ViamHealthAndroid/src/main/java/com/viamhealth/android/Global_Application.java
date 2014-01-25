@@ -71,7 +71,7 @@ public class Global_Application extends Application
     public static ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
     public static ArrayList<MedicationData> otherData = new ArrayList<MedicationData>();
 
-    private User loggedInUser;
+    private User loggedInUser,selectedUser;
 
 
 	@Override
@@ -110,6 +110,17 @@ public class Global_Application extends Application
         this.loggedInUser = loggedInUser;
         if(this.loggedInUser!=null)
             this.loggedInUser.setLoggedInUser(true);
+    }
+
+    public void setSelectedUser(User selectedUser)
+    {
+        this.selectedUser=selectedUser;
+
+    }
+
+    public User getSelectedUser()
+    {
+        return selectedUser;
     }
 
     public boolean isCalcelflg() {

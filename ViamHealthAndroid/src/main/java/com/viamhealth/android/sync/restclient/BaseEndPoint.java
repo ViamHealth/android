@@ -69,7 +69,10 @@ public abstract class BaseEndPoint {
             }
         }
 
+
         RestClient client = new RestClient(uriBuilder.build().toString());
+
+        LogUtils.LOGE(TAG+" Sync Pull URL", uriBuilder.build().toString());
 
         if(needAuth){
             AccountManager manager = AccountManager.get(context);
@@ -178,9 +181,9 @@ public abstract class BaseEndPoint {
         }
 
         int responseCode = client.getResponseCode();
-        LogUtils.LOGD(TAG, client.toString());
+        LogUtils.LOGD(TAG+"Reminders Sync", client.toString());
 
-        if(responseCode == HttpStatus.SC_UNAUTHORIZED){
+        if(responseCode ==HttpStatus.SC_UNAUTHORIZED){
             if(!hasReauthCalled && reAuthorize())
                 return getData(lastUpdatedTime);
             else
@@ -281,5 +284,6 @@ public abstract class BaseEndPoint {
         public static String GET_TOKEN = "api-token-auth";
         public static String USERS = "users";
         public static String LOGGED_IN_USER = "me";
+        public static String REMINDERS = "reminders";
     }
 }

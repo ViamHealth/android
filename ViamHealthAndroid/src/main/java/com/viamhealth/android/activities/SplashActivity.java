@@ -2,6 +2,7 @@ package com.viamhealth.android.activities;
 
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.viamhealth.android.auth.AuthHelper;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.provider.ScheduleContract;
+import com.viamhealth.android.provider.handlers.ReminderHandler;
 import com.viamhealth.android.provider.handlers.UserHandler;
 import com.viamhealth.android.sync.SyncHelper;
 import com.viamhealth.android.utils.LogUtils;
@@ -36,9 +38,10 @@ import java.util.Date;
  * Home Screen is the place where all authentication, initial sync and load the users data
  *
  * The intent for this activity expects the following optional parameters
- * @param boolean logout (optional)
+ * @param  logout (optional)
  *
  */
+
 public class SplashActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
@@ -169,6 +172,14 @@ public class SplashActivity extends BaseActivity implements LoaderManager.Loader
             logoutMessage.setText(R.string.loggingOutMsg);
             mAuthHelper.logout(llobserver);
         }
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_UPLOAD,false);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL,true);
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_INITIALIZE,false);
+
+        //getApplicationContext().getContentResolver().setSyncAutomatically(null, "com.viamhealth.android.schedule", true);
+        getApplicationContext().getContentResolver().requestSync(null, "com.viamhealth.android.schedule",extras);
+
     }
 
     @Override
@@ -227,11 +238,14 @@ public class SplashActivity extends BaseActivity implements LoaderManager.Loader
             postLogin();
             //check if the data has been synched in between period, if so just proceed further
             LogUtils.LOGD(TAG, "resume>> login happened some time back, checking if sync completed during then");
-            UserHandler uh = new UserHandler(SplashActivity.this);
+            //UserHandler uh = new UserHandler(SplashActivity.this);
+            //ReminderHandler rm = new ReminderHandler(SplashActivity.this);
+            /*
             if(uh.hasSynched(userSyncStartTime, new Date()))
                 loadFamilyData();
             else
                 userSyncStartTime = new Date();
+                */
         }
         super.onResume();
     }
