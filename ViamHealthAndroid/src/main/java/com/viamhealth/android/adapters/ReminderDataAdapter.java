@@ -1,7 +1,10 @@
 package com.viamhealth.android.adapters;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +21,11 @@ import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.Action;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.reminder.ReminderTimeData;
+import com.viamhealth.android.services.NotifyService;
 import com.viamhealth.android.utils.DateUtils;
+import com.viamhealth.android.utils.LogUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +40,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
     Typeface tf;
     Date currDate;
 
-    final String TAG = "ReminderDataAdapter";
+    final String TAG = LogUtils.makeLogTag(ReminderDataAdapter.class);
 
     public interface OnSaveReminderAction {
         public void OnSave(ReminderReading reading);
@@ -121,6 +127,35 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                 }
             }
         });
+
+//        Intent myIntent = new Intent(activity , NotifyService.class);
+//        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(activity.ALARM_SERVICE);
+//        PendingIntent pendingIntent = PendingIntent.getService(activity, 0, myIntent, 0);
+//
+//        Calendar calendar1 = Calendar.getInstance();
+//        calendar1.set(Calendar.SECOND, 0);
+//        calendar1.set(Calendar.MINUTE, 0);
+//        calendar1.set(Calendar.HOUR, 9);
+//        calendar1.set(Calendar.AM_PM, Calendar.AM);
+//
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar1.getTimeInMillis(), 1000 * 60 * 60 * 24, pendingIntent);
+//
+//        Calendar calendar2 = Calendar.getInstance();
+//        calendar2.set(Calendar.SECOND, 0);
+//        calendar2.set(Calendar.MINUTE, 0);
+//        calendar2.set(Calendar.HOUR, 3);
+//        calendar2.set(Calendar.AM_PM, Calendar.PM);
+//
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar2.getTimeInMillis(), 1000 * 60 * 60 * 24, pendingIntent);
+//
+//        Calendar calendar3 = Calendar.getInstance();
+//        calendar3.set(Calendar.SECOND, 0);
+//        calendar3.set(Calendar.MINUTE, 0);
+//        calendar3.set(Calendar.HOUR, 9);
+//        calendar3.set(Calendar.AM_PM, Calendar.PM);
+//
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar3.getTimeInMillis(), 1000 * 60 * 60 * 24, pendingIntent);
+
     }
 
     private void completeCheckViewInit(final View row, final int position) {
@@ -156,6 +191,18 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
                 onSaveReminderAction(reading);
             }
         });
+
+//        Intent myIntent = new Intent(activity , NotifyService.class);
+//        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(activity.ALARM_SERVICE);
+//        PendingIntent pendingIntent = PendingIntent.getService(activity, 0, myIntent, 0);
+//
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.set(Calendar.SECOND, 0);
+//        calendar.set(Calendar.MINUTE, 0);
+//        calendar.set(Calendar.HOUR, 6);
+//        calendar.set(Calendar.AM_PM, Calendar.PM);
+//
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, pendingIntent);
     }
 
     @Override

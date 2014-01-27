@@ -251,7 +251,7 @@ public class UserHandler extends SyncHandler {
     @Override
     public User parseCursor(Cursor cursor){
         /** Assuming that the cursor is pointing to the user row obtained by the user query **/
-        if(cursor==null || cursor.isAfterLast() || cursor.isBeforeFirst() || cursor.isClosed())
+        if(cursor==null || cursor.isAfterLast() || cursor.isBeforeFirst() || cursor.isClosed() || cursor.getCount()==0)
             return null;
 
         //long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Users.TABLE_ALIAS+"."+ScheduleContract.Users.USER_ID));
