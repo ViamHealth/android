@@ -115,14 +115,15 @@ public class ScheduleContract {
         String REPEAT_I_COUNTER = "repeat_i_counter";
         String CREATED_AT = "created_at";
         String UPDATED_AT = "updated_at";
-    }
-
-    public interface ReminderForeignKeyColumn {
         String USER_ID = "user_id";
     }
 
+    public interface ReminderForeignKeyColumn {
+        String REMINDER_ID="reminder_id";
+    }
+
     public interface ReminderReadingsColumns {
-        String REMINDER_ID= "reminder_id";
+        String USER_ID = "user_id";
         String MORNING_CHECK = "morning_check";
         String AFTERNOON_CHECK = "afternoon_check";
         String EVENING_CHECK = "evening_check";
@@ -130,6 +131,7 @@ public class ScheduleContract {
         String COMPLETE_CHECK = "complete_check";
         String UPDATED_BY = "updated_by";
         String READING_DATE = "reading_date";
+        String READING_ID="reading_id";
     }
 
 
@@ -166,13 +168,13 @@ public class ScheduleContract {
 
         public static final String TABLE_ALIAS = "r";
 
-        public static Uri buildReminderUri() {
+        public static Uri buildReminderUri(Long reminderid) {
 
-            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER).build();
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER).appendPath(reminderid.toString()).build();
         }
 
-        public static Uri buildReminderReadingsUri() {
-            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER_READINGS).build();
+        public static Uri buildReminderReadingsUri(Long reminderid) {
+            return BASE_CONTENT_URI.buildUpon().appendPath(PATH_REMINDER_READINGS).appendPath(reminderid.toString()).build();
         }
 
         public static Integer getUserId(Uri uri) {

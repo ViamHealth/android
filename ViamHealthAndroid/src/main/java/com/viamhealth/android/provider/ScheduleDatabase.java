@@ -31,7 +31,7 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
     // NOTE: carefully update onUpgrade() when bumping database versions to make
     // sure user data is saved.
 
-    private static final int VER_2013_ALPHA_LAUNCH = 6;  // 1.0
+    private static final int VER_2013_ALPHA_LAUNCH = 8;  // 1.0
     private static final int DATABASE_VERSION = VER_2013_ALPHA_LAUNCH;
 
     private final Context mContext;
@@ -62,7 +62,7 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                             .append(") REFERENCES ").append(TABLES.USERS).append("(")
                             .append(UserForeignKeyColumn.USER_ID).append(")").toString();
 
-        String REMINDER_ID_FOREIGN_KEY = new StringBuilder("FOREIGN KEY (").append(ReminderForeignKeyColumn.USER_ID)
+        String REMINDER_ID_FOREIGN_KEY = new StringBuilder("FOREIGN KEY (").append(ReminderForeignKeyColumn.REMINDER_ID)
                 .append(") REFERENCES ").append(TABLES.REMINDERS).append("(")
                 .append(UserForeignKeyColumn.USER_ID).append(")").toString();
 
@@ -138,7 +138,8 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 .append(SyncColumns.SYNCHRONIZED).append(" NUMERIC ,")
                 .append(SyncColumns.SYNC_STATUS).append(" INTEGER ,")
                 .append(SyncColumns.IS_DELETED).append(" INTEGER,")
-                .append(ReminderForeignKeyColumn.USER_ID).append(" INTEGER,")
+                .append(ReminderForeignKeyColumn.REMINDER_ID).append(" INTEGER,")
+                .append(RemindersColumns.USER_ID).append(" INTEGER,")
                 .append(RemindersColumns.TYPE).append(" INTEGER,")
                 .append(RemindersColumns.NAME).append(" TEXT,")
                 .append(RemindersColumns.DETAILS).append(" TEXT,")
@@ -165,8 +166,9 @@ public class ScheduleDatabase extends SQLiteOpenHelper {
                 .append(SyncColumns.SYNCHRONIZED).append(" NUMERIC ,")
                 .append(SyncColumns.SYNC_STATUS).append(" INTEGER ,")
                 .append(SyncColumns.IS_DELETED).append(" INTEGER,")
-                .append(ReminderForeignKeyColumn.USER_ID).append(" INTEGER,")
-                .append(ReminderReadingsColumns.REMINDER_ID).append(" INTEGER,")
+                .append(RemindersColumns.USER_ID).append(" INTEGER,")
+                .append(ReminderForeignKeyColumn.REMINDER_ID).append(" INTEGER,")
+                .append(ReminderReadingsColumns.READING_ID).append(" REAL,")
                 .append(ReminderReadingsColumns.MORNING_CHECK).append(" REAL,")
                 .append(ReminderReadingsColumns.AFTERNOON_CHECK).append(" INTEGER,")
                 .append(ReminderReadingsColumns.EVENING_CHECK).append(" INTEGER,")

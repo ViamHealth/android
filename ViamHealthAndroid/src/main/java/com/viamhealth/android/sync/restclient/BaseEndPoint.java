@@ -285,5 +285,6 @@ public abstract class BaseEndPoint {
         public static String USERS = "users";
         public static String LOGGED_IN_USER = "me";
         public static String REMINDERS = "reminders";
+        public static String REMINDER_READINGS="reminderreadings";
     }
 }

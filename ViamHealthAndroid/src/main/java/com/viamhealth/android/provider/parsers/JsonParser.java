@@ -1,6 +1,7 @@
 package com.viamhealth.android.provider.parsers;
 
 import com.viamhealth.android.model.BaseModel;
+import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.users.User;
 
 import org.json.JSONArray;
@@ -46,12 +47,14 @@ public abstract class JsonParser {
     public abstract List<BaseModel> newList();
 
     public List<BaseModel> parseArray(String jsonArray) {
+
         List<BaseModel> objs = newList();
-        jsonArray=getJsonArray(jsonArray);
         try{
-            JSONArray jsonObjs = new JSONArray(jsonArray);
-            for(int i=0; i<jsonObjs.length(); i++){
-                BaseModel obj = parse(jsonObjs.getJSONObject(i));
+            //JSONArray jsonObjs = new JSONArray(jsonArray);
+            JSONObject response = new JSONObject(jsonArray);
+            JSONArray array = response.getJSONArray("results");
+            for(int i=0; i<array.length(); i++){
+                BaseModel obj = parse(array.getJSONObject(i));
                 objs.add(obj);
             }
         }catch (JSONException e){

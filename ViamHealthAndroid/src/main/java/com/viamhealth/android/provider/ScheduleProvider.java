@@ -67,8 +67,8 @@ public class ScheduleProvider extends ContentProvider {
 
     private static final String REMINDERS_PATTERN=ScheduleContract.PATH_REMINDER;
     private static final String REMINDERS_WN_PATTERN=ScheduleContract.PATH_REMINDER;
-    private static final String REMINDERS_READINGS_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
-    private static final String REMINDERS_READINGS_WN_PATTERN=ScheduleContract.PATH_REMINDER_READINGS;
+    private static final String REMINDERS_READINGS_PATTERN=ScheduleContract.PATH_REMINDER_READINGS+"/"+ ANY_INTEGER;;
+    private static final String REMINDERS_READINGS_WN_PATTERN=ScheduleContract.PATH_REMINDER_READINGS+"/"+ ANY_INTEGER;;
     private static final String REMINDERS_LAST_SYNC_TIME_PATTERN=ScheduleContract.PATH_REMINDER+"/"+ScheduleContract.PATH_LAST_SYNC_TIME;
     private static final String REMINDERS_UPDATABLE_DATA_PATTERN=ScheduleContract.PATH_REMINDER+"/"+ScheduleContract.PATH_DATA_TO_BE_UPDATED;;
 
@@ -336,7 +336,7 @@ public class ScheduleProvider extends ContentProvider {
             case REMINDERS_READINGS_WN_URI:{
                 db.insertOrThrow(ScheduleDatabase.TABLES.REMINDER_READINGS, null, values);
                 notifyChange(uri, syncToNetwork);
-                return ScheduleContract.Reminders.buildReminderReadingsUri();
+                return ScheduleContract.Reminders.buildReminderReadingsUri(values.getAsLong(ScheduleContract.Reminders.REMINDER_ID));
             }
 
 

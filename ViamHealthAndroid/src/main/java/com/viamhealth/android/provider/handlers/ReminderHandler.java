@@ -51,6 +51,7 @@ import java.util.List;
 public class ReminderHandler extends SyncHandler{
 
     private final ReminderEndPoint reminderEndPoint;
+    protected static SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 
     public ReminderHandler(Context context) {
         super(context);
@@ -62,7 +63,7 @@ public class ReminderHandler extends SyncHandler{
         final ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
         int usersCounts = items.size();
         for(int i=0; i<usersCounts; i++)
-            parseReminder((Reminder) items.get(i), batch);
+            parseReminderReadings((ReminderReading)items.get(i), batch);
         return batch;
     }
 
@@ -95,18 +96,18 @@ public class ReminderHandler extends SyncHandler{
 
     @Override
     protected ArrayList<ContentProviderOperation> changeId(BaseModel b, BaseModel a) {
-        Reminder before = (Reminder) b;
-        Reminder after = (Reminder) a;
+        ReminderReading before = (ReminderReading) b;
+        ReminderReading after = (ReminderReading) a;
 
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 
-        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri());
-        userBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
-        batch.add(userBuilder.build());
+        ContentProviderOperation.Builder reminderBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri(after.getReminder().getId()));
+        reminderBuilder.withValue(ScheduleContract.RemindersColumns.USER_ID, after.getUserId());
+        batch.add(reminderBuilder.build());
 
-        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri());
-        profileBuilder.withValue(ScheduleContract.Users.USER_ID, after.getId());
-        batch.add(profileBuilder.build());
+        ContentProviderOperation.Builder reminderReadingBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri(after.getReminder().getId()));
+        reminderReadingBuilder.withValue(ScheduleContract.RemindersColumns.USER_ID, after.getUserId());
+        batch.add(reminderReadingBuilder.build());
 
 
         return batch;
@@ -114,16 +115,16 @@ public class ReminderHandler extends SyncHandler{
 
     @Override
     protected ArrayList<ContentProviderOperation> updateSyncStatus(BaseModel a, ScheduleContract.SyncStatus syncStatus) {
-        User after = (User) a;
+        ReminderReading after = (ReminderReading) a;
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
 
-        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri());
-        userBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
-        batch.add(userBuilder.build());
-
-        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri());
-        profileBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, syncStatus.ordinal());
+        ContentProviderOperation.Builder profileBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri(after.getId()));
+        profileBuilder.withValue(ScheduleContract.Reminders.SYNC_STATUS, syncStatus.ordinal());
         batch.add(profileBuilder.build());
+
+        ContentProviderOperation.Builder userBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri(after.getReminder().getId()));
+        userBuilder.withValue(ScheduleContract.Reminders.SYNC_STATUS, syncStatus.ordinal());
+        batch.add(userBuilder.build());
 
 
         return batch;
@@ -132,8 +133,9 @@ public class ReminderHandler extends SyncHandler{
     @Override
     public ArrayList<ContentProviderOperation> save(final BaseModel model1, final boolean shouldDelete) {
         ArrayList<ContentProviderOperation> batch = new ArrayList<ContentProviderOperation>();
-        Reminder reminder = (Reminder) model1;
+        ReminderReading reminder = (ReminderReading) model1;
 
+        Reminder reminder1=reminder.getReminder();
         boolean shouldUpdate = false;
 
         if(reminder.getId()>0) shouldUpdate = true;
@@ -141,7 +143,7 @@ public class ReminderHandler extends SyncHandler{
         ContentProviderOperation.Builder builder = null, pBuilder = null, bmiBuilder = null, syncBuilder = null;
         //if(shouldUpdate){
             builder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderUri());
-            pBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri());
+            pBuilder = ContentProviderOperation.newUpdate(ScheduleContract.Reminders.buildReminderReadingsUri(reminder.getId()));
     /*
     }else{
             builder = ContentProviderOperation.newInsert(ScheduleContract.Users.buildUserUri(null));
@@ -154,14 +156,14 @@ public class ReminderHandler extends SyncHandler{
         builder.withValue(ScheduleContract.Reminders.UPDATED, System.currentTimeMillis());
         builder.withValue(ScheduleContract.Reminders.SYNC_STATUS, ScheduleContract.SyncStatus.PENDING_UPDATE.ordinal());
         if(shouldDelete) builder.withValue(ScheduleContract.Reminders.IS_DELETED, true);
-        batch.add(constructReminder(builder, reminder).build());
-/*
+        batch.add(constructReminderReadings(builder, reminder).build());
+
 
         pBuilder.withValue(ScheduleContract.Users.UPDATED, System.currentTimeMillis());
         pBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, ScheduleContract.SyncStatus.PENDING_UPDATE.ordinal());
         if(shouldDelete) builder.withValue(ScheduleContract.Reminders.IS_DELETED, true);
-        batch.add(constructReminderReadings(pBuilder,reminderReading).build());
-*/
+        batch.add(constructReminder(pBuilder,reminder1).build());
+
         syncBuilder = getSyncBuilderForUpdate();
         batch.add(syncBuilder.build());
 
@@ -204,7 +206,7 @@ public class ReminderHandler extends SyncHandler{
 
 
     public static ContentProviderOperation.Builder constructReminder(ContentProviderOperation.Builder builder, Reminder reminder){
-        builder.withValue(ScheduleContract.Reminders.USER_ID, reminder.getId());
+        builder.withValue(ScheduleContract.RemindersColumns.USER_ID, reminder.getId());
         builder.withValue(ScheduleContract.Reminders.TYPE, reminder.getType().ordinal());
         builder.withValue(ScheduleContract.Reminders.NAME, reminder.getName());
         builder.withValue(ScheduleContract.Reminders.DETAILS, reminder.getDetails());
@@ -236,14 +238,15 @@ public class ReminderHandler extends SyncHandler{
 
     public static ContentProviderOperation.Builder constructReminderReadings(ContentProviderOperation.Builder builder,
                                                                         ReminderReading reminderreading){
+        builder.withValue(ScheduleContract.RemindersColumns.USER_ID,reminderreading.getUserId());
         builder.withValue(ScheduleContract.Reminders.REMINDER_ID, reminderreading.getId());
-        builder.withValue(ScheduleContract.Reminders.MORNING_CHECK, reminderreading.getAction(ReminderTime.Morning).isCheck());
-        builder.withValue(ScheduleContract.Reminders.AFTERNOON_CHECK, reminderreading.getAction(ReminderTime.Noon).isCheck());
-        builder.withValue(ScheduleContract.Reminders.EVENING_CHECK, reminderreading.getAction(ReminderTime.Evening).isCheck());
-        builder.withValue(ScheduleContract.Reminders.NIGHT_CHECK, reminderreading.getAction(ReminderTime.Night).isCheck());
-        builder.withValue(ScheduleContract.Reminders.COMPLETE_CHECK, " ");
+        builder.withValue(ScheduleContract.Reminders.MORNING_CHECK, (reminderreading.getAction(ReminderTime.Morning).isCheck())?1:0);
+        builder.withValue(ScheduleContract.Reminders.AFTERNOON_CHECK, (reminderreading.getAction(ReminderTime.Noon).isCheck())?1:0);
+        builder.withValue(ScheduleContract.Reminders.EVENING_CHECK, (reminderreading.getAction(ReminderTime.Evening).isCheck()?1:0));
+        builder.withValue(ScheduleContract.Reminders.NIGHT_CHECK, (reminderreading.getAction(ReminderTime.Night).isCheck())?1:0);
+        builder.withValue(ScheduleContract.Reminders.COMPLETE_CHECK,(reminderreading.isCompleteCheck())?1:0);
         builder.withValue(ScheduleContract.Reminders.UPDATED_BY, " ");
-        builder.withValue(ScheduleContract.Reminders.READING_DATE, " ");
+        builder.withValue(ScheduleContract.Reminders.READING_DATE, formater.format(reminderreading.getReadingDate()));
         builder.withValue(ScheduleContract.Reminders.IS_DELETED, false);
         return builder;
     }
@@ -254,7 +257,7 @@ public class ReminderHandler extends SyncHandler{
         if(cursor==null || cursor.isAfterLast() || cursor.isBeforeFirst() || cursor.isClosed())
             return null;
 
-        long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Reminders.TABLE_ALIAS+"."+ScheduleContract.Reminders.USER_ID));
+        long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Reminders.TABLE_ALIAS+"."+ScheduleContract.RemindersColumns.USER_ID));
 
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
         ReminderReading reminderReading=new ReminderReading();
@@ -296,7 +299,7 @@ public class ReminderHandler extends SyncHandler{
         if(cursor==null || cursor.isAfterLast() || cursor.isBeforeFirst() || cursor.isClosed())
             return null;
 
-        long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Reminders.TABLE_ALIAS+"."+ScheduleContract.Reminders.USER_ID));
+        long userId = cursor.getLong(cursor.getColumnIndex(ScheduleContract.Reminders.TABLE_ALIAS+"."+ScheduleContract.RemindersColumns.USER_ID));
 
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
         Reminder reminder = new Reminder();
@@ -362,8 +365,9 @@ public class ReminderHandler extends SyncHandler{
         boolean isUpdate = false;
 
 
-        uri = ScheduleContract.Reminders.buildReminderUri();
-        uri = ScheduleContract.addCallerIsSyncAdapterParameter(uri);
+        uri = ScheduleContract.Reminders.buildReminderReadingsUri(reminderReading.getReminder().getId());
+        //uri.
+        //uri = ScheduleContract.addCallerIsSyncAdapterParameter(uri);
 
         String syncTimeUpdateColumn = ScheduleContract.SyncColumns.SYNCHRONIZED;
 
@@ -376,27 +380,28 @@ public class ReminderHandler extends SyncHandler{
         builder.withValue(ScheduleContract.Reminders.SYNC_STATUS, ScheduleContract.SyncStatus.SUCCESS.ordinal());
         batch.add(constructReminderReadings(builder, reminderReading).build());
 
-        //construct the profile
-        if(reminderReading!=null){
-            ContentProviderOperation.Builder reminderReadingBuilder = null;
-            Uri reminderReadingUri = ScheduleContract.Reminders.buildReminderReadingsUri();
+        //construct the reminder
+        Reminder reminder = reminderReading.getReminder();
+        if(reminder!=null){
+            ContentProviderOperation.Builder reminderBuilder = null;
+            Uri reminderUri = ScheduleContract.Reminders.buildReminderUri(reminder.getId());
             if(syncTimeUpdateColumn!=null)
-                reminderReadingUri = ScheduleContract.addCallerIsSyncAdapterParameter(reminderReadingUri);
+                reminderUri = ScheduleContract.addCallerIsSyncAdapterParameter(reminderUri);
 
             if(isUpdate){
-                reminderReadingBuilder = ContentProviderOperation.newUpdate(reminderReadingUri);
+                reminderBuilder = ContentProviderOperation.newUpdate(reminderUri);
             }else{
-                reminderReadingBuilder = ContentProviderOperation.newInsert(reminderReadingUri);
-                reminderReadingBuilder.withValueBackReference(ScheduleContract.ReminderForeignKeyColumn.USER_ID, index);
+                reminderBuilder = ContentProviderOperation.newInsert(reminderUri);
+                reminderBuilder.withValueBackReference(ScheduleContract.ReminderForeignKeyColumn.REMINDER_ID, index);
             }
 
             if(syncTimeUpdateColumn!=null)
-                reminderReadingBuilder.withValue(syncTimeUpdateColumn, System.currentTimeMillis());
+                reminderBuilder.withValue(syncTimeUpdateColumn, System.currentTimeMillis());
 
-            reminderReadingBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, ScheduleContract.SyncStatus.SUCCESS.ordinal());
-            reminderReadingBuilder = constructReminderReadings(reminderReadingBuilder, reminderReading);
+            reminderBuilder.withValue(ScheduleContract.Users.SYNC_STATUS, ScheduleContract.SyncStatus.SUCCESS.ordinal());
+            reminderBuilder = constructReminder(reminderBuilder, reminder);
 
-            batch.add(reminderReadingBuilder.build());
+            batch.add(reminderBuilder.build());
         }
 
     }

@@ -57,7 +57,7 @@ private final ReminderJasonParser parser = new ReminderJasonParser();
 
         @Override
         protected String[] getPathSegments() {
-            return new String[]{Paths.REMINDERS};
+            return new String[]{Paths.REMINDER_READINGS};
         }
 
         @Override
