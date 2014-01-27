@@ -3,8 +3,6 @@ package com.viamhealth.android.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 
@@ -14,9 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -33,7 +29,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
-import com.viamhealth.android.activities.fragments.JournalFragment;
+
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
@@ -49,19 +45,14 @@ import java.util.List;
 public class TabActivity extends BaseFragmentActivity implements View.OnClickListener, ActionBar.OnNavigationListener {
 
     TabHost mTabHost;
-    //TabManager mTabManager;
-    ActionBarTabManager mTabManager;
 
-    private final Map<TabTypes, SherlockFragment> mTabs = new HashMap<TabTypes, SherlockFragment>();
-    private final Map<Integer, User> usersMap = new HashMap<Integer, User>();
+    TabManager mTabManager;
 
     Animation animationMoveIn, animationMoveOut;
     FrameLayout tabContent;//, tabHeader;
     TabWidget tabs;
 
     ActionBar actionBar;
-    User user;
-    final List<User> users = new ArrayList<User>();
 
     boolean headerIsVisible = true;
 
@@ -110,11 +101,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         actionBar.setTitle(user.getName());
 
 
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        getActionBarTab(TabTypes.Goals, bundle);
-        getActionBarTab(TabTypes.Journal, bundle);
-        getActionBarTab(TabTypes.Reminder, bundle);
-        getActionBarTab(TabTypes.Files, bundle);
 
 
         //TODO use Action Bar to create the Header
@@ -149,15 +135,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
         /* Create Tabs */
-        mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
-                GoalFragment.class, bundle);
-        mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
-                mTabHost.newTabSpec("journal").setIndicator(getTabIndicator(R.string.tab_label_journal, R.drawable.ic_action_log)),
-                JournalFragment.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                 ReminderFragmentNew.class, bundle);
+        mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
+                GoalFragment.class, bundle);
+
         //NewReminders.class, bundle);
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
@@ -179,17 +163,17 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
 
         if(action == Actions.UploadFiles){
-            //mTabHost.setCurrentTabByTag("files");
-            mTabManager.selectTab(TabTypes.Files.name());
+            mTabHost.setCurrentTabByTag("files");
+            //mTabManager.selectTab(TabTypes.Files.name());
             FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
             fragment.pickFile();
         } else if(action == Actions.SetGoal){
-            //mTabHost.setCurrentTabByTag("goals");
-            mTabManager.selectTab(TabTypes.Goals.name());
-        }
+            mTabHost.setCurrentTabByTag("goals");
+            //mTabManager.selectTab(TabTypes.Goals.name());
+        //}
 
-        if (savedInstanceState != null) {
-            mTabManager.selectTab(savedInstanceState.getString("tab"));
+        //if (savedInstanceState != null) {
+            //mTabManager.selectTab(savedInstanceState.getString("tab"));
             //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
     }
@@ -292,115 +276,5 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     public enum Actions { UploadFiles, SetGoal; }
 
-    public enum TabTypes {
-        Goals(1, R.string.tab_label_goal, R.drawable.ic_action_goal, GoalFragment.class),
-        Journal(2, R.string.tab_label_journal, R.drawable.ic_action_log, JournalFragment.class),
-        Reminder(3, R.string.tab_label_reminder, R.drawable.ic_action_reminders, ReminderFragment.class),
-        Files(4, R.string.tab_label_file, R.drawable.ic_action_files, FileFragment.class);
 
-        private final int value;
-        private final int resId;
-        private final int iconId;
-        private final Class className;
-
-        TabTypes(int value, int resId, int iconId, Class className){
-            this.value = value;
-            this.resId = resId;
-            this.iconId = iconId;
-            this.className = className;
-        }
-
-
-        public int value() {return value;}
-        public int res() {return resId;}
-        public int icon() {return iconId;}
-        public Class clss() {return className;}
-
-        // Lookup table
-        private static final Map<Integer, TabTypes> valuelookup = new HashMap<Integer, TabTypes>();
-        private static final Map<Integer, TabTypes> keylookup = new HashMap<Integer, TabTypes>();
-
-        // Populate the lookup table on loading time
-        static {
-            for (TabTypes mc : EnumSet.allOf(TabTypes.class)){
-                valuelookup.put(mc.value(), mc);
-                keylookup.put(mc.res(), mc);
-            }
-        }
-
-        // This method can be used for reverse lookup purpose
-        public static TabTypes constructEnumByValue(int value) {
-            return valuelookup.get(value);
-        }
-
-        public static TabTypes constructEnumByKey(int key) {
-            return keylookup.get(key);
-        }
-
-    }
-
-
-    public class UsersActionProvider extends ActionProvider implements MenuItem.OnMenuItemClickListener {
-
-        /** Context for accessing resources. */
-        private final Context mContext;
-        private ProfilePictureView picView;
-        private final Map<Integer, User> usersMap = new HashMap<Integer, User>();
-
-        public UsersActionProvider(Context context) {
-            super(context);
-            this.mContext = context;
-        }
-
-
-        @Override
-        public View onCreateActionView() {
-            // Inflate the action view to be shown on the action bar.
-            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-            View view = layoutInflater.inflate(R.layout.menu_users, null);
-            picView = (ProfilePictureView) view.findViewById(R.id.header_user_icon);
-            if(user.getProfile()!=null)
-                picView.setProfileId(user.getProfile().getFbProfileId());
-            return view;
-        }
-
-        @Override
-        public boolean hasSubMenu() {
-            return true;
-        }
-
-        @Override
-        public boolean onPerformDefaultAction() {
-            return super.onPerformDefaultAction();
-        }
-
-        @Override
-        public void onPrepareSubMenu(SubMenu subMenu) {
-            subMenu.clear();
-
-
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            int userId = menuItem.getItemId();
-            if(userId==0){
-                //Logout
-                Intent returnIntent = new Intent(mContext, Home.class);
-                returnIntent.putExtra("logout", true);
-                returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(returnIntent);
-                return true;
-            }
-            User curUser = usersMap.get(userId);
-            Intent intent = new Intent(mContext, TabActivity.class);
-            intent.putExtra("user", user);
-            Parcelable[] usersList = new Parcelable[users.size()];
-            intent.putExtra("users", users.toArray(usersList));
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            return true;
-        }
-
-    }
 }

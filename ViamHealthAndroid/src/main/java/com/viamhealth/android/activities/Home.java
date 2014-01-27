@@ -25,6 +25,7 @@ import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
 import com.viamhealth.android.utils.Validator;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
@@ -94,6 +95,8 @@ public class Home extends BaseActivity implements OnClickListener{
 
     private final String TAG = "Home";
 
+    private static final int LOGIN_ACTIVITY = 10000;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -153,6 +156,13 @@ public class Home extends BaseActivity implements OnClickListener{
         next(false);
     }
 
+    private void postLogin(){
+        main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
+        lstFamily = getIntent().getParcelableArrayListExtra("family");
+        ScreenDimension();
+        next();
+    }
     private void next(boolean moveToTabActivity) {
         //if the only logged-in user has not yet created the profile than
         //force for profile creation
@@ -574,6 +584,13 @@ public class Home extends BaseActivity implements OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
+        if(requestCode == LOGIN_ACTIVITY){
+            if(resultCode == Activity.RESULT_OK){
+                postLogin();
+            } else{
+                finish();
+            }
+        }
         if(resultCode==RESULT_OK){
             if(requestCode < 100) {
                 if(isEditMode && actionMode!=null)

@@ -97,6 +97,10 @@ public class Profile implements Parcelable{
         return location;
     }
 
+    public void setLocation(String address) {
+        this.location.setAddress(address);
+    }
+
     public void setLocation(Location location) {
         this.location = location;
     }

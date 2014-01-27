@@ -9,8 +9,8 @@ import android.net.NetworkInfo;
  * Created by naren on 16/10/13.
  */
 public class Checker {
-    public static final boolean isInternetOn(Activity activity) {
-        ConnectivityManager connMgr = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static final boolean isInternetOn(Context context) {
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         return (networkInfo != null && networkInfo.isConnected());
     }

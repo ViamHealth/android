@@ -206,7 +206,7 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
 
             User createdUser = obj.SignUp(username, password);
             if(createdUser!=null) {
-                result = obj.Login(username, password);
+                //result = obj.Login(username, password);
             }
             return result;
         }

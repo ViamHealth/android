@@ -77,10 +77,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Reversetheme" />
         <activity
-            android:name="com.viamhealth.android.activities.AddExercise"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
-        <activity
             android:name="com.viamhealth.android.activities.Register"
             android:theme="@style/Reversetheme"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
@@ -93,8 +89,6 @@
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddReminder" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.FoodDetail" >
-        </activity>
         <activity android:name="com.viamhealth.android.activities.NewProfile" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.FBFamilyListActivity" >
@@ -106,8 +100,6 @@
         <activity android:name="com.viamhealth.android.activities.AddGoalActivity" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddGoalValue" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.AddFoodActivity" >
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"

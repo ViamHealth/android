@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.facebook.FacebookRequestError;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -21,7 +20,6 @@ import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
-import com.viamhealth.android.model.FoodData;
 import com.viamhealth.android.model.GoalData;
 
 import android.app.Application;
@@ -39,7 +37,7 @@ public class Global_Application extends Application
 	public static String nextbrekfast,nextlunch,nextsnacks,nextdinner,nextExercise,nextfile,nextmedical,nextmedication,watchupdate,update="0";
 	int foodPos;
 	ArrayList<GoalData> lstResult = new ArrayList<GoalData>();
-	ArrayList<FoodData> lstFood = new ArrayList<FoodData>();
+
 	public static String selectedfoodid,selectedexerciseid,food_item,food_quantity,meal_type,weight,user_calories,time_spent,exercise_value;
 	public static double totalcal=0;
 	public String path;
@@ -291,109 +289,6 @@ public class Global_Application extends Application
 		this.path = path;
 	}
 
-	public String getSelectedfoodid() {
-		return selectedfoodid;
-	}
-
-	public void setSelectedfoodid(String selectedfoodid) {
-		this.selectedfoodid = selectedfoodid;
-	}
-
-    public String getSelectedexerciseid() {
-        return selectedexerciseid;
-    }
-
-    public void setSelectedExerciseid(String selectedexerciseid) {
-        this.selectedexerciseid = selectedexerciseid;
-    }
-
-	public static String getNextfile() {
-		return nextfile;
-	}
-
-	public static void setNextfile(String nextfile) {
-		Global_Application.nextfile = nextfile;
-	}
-
-	public static String getNextlunch() {
-		return nextlunch;
-	}
-
-	public static void setNextlunch(String nextlunch) {
-		Global_Application.nextlunch = nextlunch;
-	}
-
-	public static String getNextsnacks() {
-		return nextsnacks;
-	}
-
-	public static void setNextsnacks(String nextsnacks) {
-		Global_Application.nextsnacks = nextsnacks;
-	}
-
-	public static String getNextdinner() {
-		return nextdinner;
-	}
-
-	public static void setNextdinner(String nextdinner) {
-		Global_Application.nextdinner = nextdinner;
-	}
-
-    public static String getNextexercise() {
-        return nextExercise;
-    }
-
-    public static void setNextExercise(String nextExercise) {
-        Global_Application.nextExercise = nextExercise;
-    }
-
-
-	public static String getNextbrekfast() {
-		return nextbrekfast;
-	}
-
-	public static void setNextbrekfast(String nextbrekfast) {
-		Global_Application.nextbrekfast = nextbrekfast;
-	}
-
-	public String getNextfood() {
-		return nextfood;
-	}
-
-	public void setNextfood(String nextfood) {
-		this.nextfood = nextfood;
-	}
-
-	public String getPrevfood() {
-		return prevfood;
-	}
-
-	public void setPrevfood(String prevfood) {
-		this.prevfood = prevfood;
-	}
-
-	public int getFoodPos() {
-		return foodPos;
-	}
-
-	public void setFoodPos(int foodPos) {
-		this.foodPos = foodPos;
-	}
-
-	public ArrayList<FoodData> getLstFood() {
-		return lstFood;
-	}
-
-	public void setLstFood(ArrayList<FoodData> lstFood) {
-		this.lstFood = lstFood;
-	}
-	public String getFoodType() {
-		return foodType;
-	}
-
-	public void setFoodType(String foodType) {
-		this.foodType = foodType;
-	}
 
 	public void setlstResult(int i,GoalData val)
 	 {

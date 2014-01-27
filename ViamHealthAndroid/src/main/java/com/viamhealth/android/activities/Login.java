@@ -258,7 +258,9 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			return userEndPoint.Login(username, password);
+			//return userEndPoint.Login(username, password);
+            userEndPoint.Login(username, password);
+            return "0";
 		}
 		   
 	}     
