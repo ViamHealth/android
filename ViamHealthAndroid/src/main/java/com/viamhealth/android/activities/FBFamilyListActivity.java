@@ -49,50 +49,6 @@ public class FBFamilyListActivity extends BaseActivity {
     }
 
 
-    private void setOtherMemberDataFromFb(Session session){
-        dialog = new ProgressDialog(FBFamilyListActivity.this);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setMessage("we are searching for your friends...");
-        dialog.show();
-
-        Request request = Request.newGraphPathRequest(session, "me/friends", new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject graphObject = response.getGraphObject();
-                FacebookRequestError error = response.getError();
-                if (graphObject != null) {
-                    try{
-                        JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                        if (jsonResponse!=null) {
-                            JSONArray jsonData = jsonResponse.getJSONArray("data");
-                            int friendSize = jsonData.length();
-                            //if ( friendSize > 30 ) friendSize = 30;
-                            for(int i=0; i<friendSize; i++){
-                                FbFamily familyMember = new FbFamily();
-                                familyMember.setName(jsonData.getJSONObject(i).getString("name"));
-                                //familyMember.setRelationship(jsonData.getJSONObject(i).getString("relationship"));
-                                familyMember.setId(jsonData.getJSONObject(i).getString("id"));
-                                families.add(familyMember);
-                            }
-                            dialog.dismiss();
-                            if(families.isEmpty())
-                                finish();
-
-                            constructView();
-
-                        }
-                    } catch (JSONException e) {
-                        onBackPressed();
-                    }
-                }
-            }
-        });
-
-
-        request.executeAsync();
-    }
-
-
     private void getFamilyMembersDatafromFB(final Session session){
         dialog = new ProgressDialog(FBFamilyListActivity.this);
         dialog.setCanceledOnTouchOutside(false);
@@ -118,7 +74,8 @@ public class FBFamilyListActivity extends BaseActivity {
                             }
                             dialog.dismiss();
                             if(families.isEmpty()){
-                                setOtherMemberDataFromFb(session);
+                                finish();
+                                
                             }else{
                                 constructView();
                             }

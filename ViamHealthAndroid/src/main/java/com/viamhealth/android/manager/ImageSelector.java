@@ -79,7 +79,7 @@ public class ImageSelector {
                     File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/myImage.jpg");
                     uri = Uri.fromFile(file);
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
+                    //camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                     if(mFragment!=null)
                         mFragment.startActivityForResult(camera, CAMERA_PIC_REQUEST);
