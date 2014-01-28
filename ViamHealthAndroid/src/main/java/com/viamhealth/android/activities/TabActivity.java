@@ -76,18 +76,12 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         Intent intent = getIntent();
         user = (User) intent.getParcelableExtra("user");
         Parcelable[] pUsers = intent.getParcelableArrayExtra("users");
+        users.clear();
         for(int i=0; i<pUsers.length; i++){
             users.add((User) pUsers[i]);
         }
 
         Actions action = (Actions) intent.getSerializableExtra("action");
-
-        user = (User) intent.getParcelableExtra("user");
-        Parcelable[] usrs = intent.getParcelableArrayExtra("users");
-        for(int i=0; i<usrs.length; i++){
-            User usr = (User)usrs[i];
-            users.add(usr);
-        }
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", user);

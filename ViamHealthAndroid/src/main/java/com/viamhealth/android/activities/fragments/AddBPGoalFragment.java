@@ -58,9 +58,9 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
         if(goal!=null){
             isGoalConfigured = true;
-            tSP.setText(goal.getSystolicPressure());
-            tDP.setText(goal.getDiastolicPressure());
-            tPR.setText(goal.getPulseRate());
+            tSP.setText(String.valueOf(goal.getSystolicPressure()));
+            tDP.setText(String.valueOf(goal.getDiastolicPressure()));
+            tPR.setText(String.valueOf(goal.getPulseRate()));
             targetDate.setText(formater.format(goal.getTargetDate()));
             ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         }else{

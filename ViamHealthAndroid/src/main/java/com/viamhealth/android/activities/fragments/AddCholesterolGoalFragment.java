@@ -61,12 +61,12 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
 
         if(goal!=null){
             isGoalConfigured = true;
-            tHDL.setText(goal.getHdl());
-            tLDL.setText(goal.getLdl());
-            tTG.setText(goal.getTriglycerides());
+            tHDL.setText(String.valueOf(goal.getHdl()));
+            tLDL.setText(String.valueOf(goal.getLdl()));
+            tTG.setText(String.valueOf(goal.getTriglycerides()));
             if(goal.getTotal()>0){
                 tTotal.setVisibility(View.VISIBLE);
-                tTotal.setText(getString(R.string.total_cholesterol) + goal.getTotal());
+                tTotal.setText(getString(R.string.total_cholesterol) + String.valueOf(goal.getTotal()));
             }else{
                 tTotal.setVisibility(View.GONE);
             }
@@ -79,7 +79,7 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
             if(profile.getTriglycerides()>0) pTG.setText(String.valueOf(profile.getTriglycerides()));
             if(profile.getTotalCholesterol()>0) {
                 tTotal.setVisibility(View.VISIBLE);
-                tTotal.setText(getString(R.string.total_cholesterol) + profile.getTotalCholesterol());
+                tTotal.setText(getString(R.string.total_cholesterol) + String.valueOf(profile.getTotalCholesterol()));
             }else{
                 tTotal.setVisibility(View.GONE);
             }

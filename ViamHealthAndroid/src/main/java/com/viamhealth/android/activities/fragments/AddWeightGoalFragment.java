@@ -90,7 +90,8 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
             isGoalConfigured = true;
             tWeight.setText(goal.getWeight().toString());
             targetDate.setText(formater.format(goal.getTargetDate()));
-            pHeight.setText(user.getBmiProfile().getHeight());
+
+            pHeight.setText(String.valueOf(user.getBmiProfile().getHeight()));
             pWeight.setVisibility(View.GONE);
             pHeight.setEnabled(false);
         } else {//if goal is not yet configured
