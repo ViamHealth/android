@@ -120,7 +120,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     private void initListView()
     {
         if(files.size()==0){
-            Toast.makeText(getSherlockActivity(), "No goals found...",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getSherlockActivity(), "No files found...",Toast.LENGTH_SHORT).show();
             return;
         }
         //goal_count.setText("("+files.size()+")");
@@ -213,7 +213,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             shareIntent.setType("*/*");
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-        }else{
+        }else if (mapSelectedUris.size() == 1){
             Uri uri = uris.get(0);
             String extension = UIUtility.getFileExtension(uri.getLastPathSegment());
             String mimeType = MimeTypeMap.getSingleton().hasMimeType(extension) ?
