@@ -81,8 +81,6 @@
             android:theme="@style/Reversetheme"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.UploadFile" >
-        </activity>
         <activity
             android:name="com.viamhealth.android.activities.Downlaod"
             android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
