@@ -164,7 +164,7 @@ public class AddGoalValue extends BaseFragmentActivity {
             builder.setTitle("Are you sure?");
             builder.setMessage("value for the date exists, change it?")
                     .setCancelable(false)
-                    .setPositiveButton("Sure..", new DialogInterface.OnClickListener() {
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             shouldUpdate = true;
@@ -172,7 +172,7 @@ public class AddGoalValue extends BaseFragmentActivity {
                             dialog.dismiss();
                         }
                     })
-                    .setNegativeButton("Nope..", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
