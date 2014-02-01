@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddGoalActivity;
 import com.viamhealth.android.activities.AddGoalValue;
+import com.viamhealth.android.activities.CommonConstants;
+import com.viamhealth.android.activities.PingService;
 import com.viamhealth.android.activities.TabActivity;
 import com.viamhealth.android.dao.rest.endpoints.GoalsEPHelper;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
@@ -87,11 +90,32 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     TabActivity.Actions action = null;
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+         Intent mServiceIntent;
         super.onCreate(savedInstanceState);
         action = (TabActivity.Actions) getArguments().getSerializable("action");
         selectedUser = getArguments().getParcelable("user");
+
+        mServiceIntent = new Intent(getActivity().getApplicationContext(), PingService.class);
+        int seconds;
+
+        // Gets the reminder text the user entered.
+
+        String message = "abcdedcggkjashdkja dkahsd akshd kasjdh akjdha ksdhakjsdh akjsdh hhhhhh";
+
+        mServiceIntent.putExtra(CommonConstants.EXTRA_MESSAGE, message);
+        mServiceIntent.setAction(CommonConstants.ACTION_PING);
+        Toast.makeText(this.getActivity(), R.string.timer_start, Toast.LENGTH_SHORT).show();
+
+        seconds = 10;
+        int milliseconds = (seconds * 1000);
+        mServiceIntent.putExtra(CommonConstants.EXTRA_TIMER, milliseconds);
+        // Launches IntentService "PingService" to set timer.
+        getSherlockActivity().startService(mServiceIntent);
     }
 
     @Override

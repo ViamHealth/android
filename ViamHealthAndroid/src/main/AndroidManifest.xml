@@ -107,6 +107,31 @@
             android:name="com.viamhealth.android.activities.ForgotPassword"
             android:theme="@style/Reversetheme">
         </activity>
+        <service
+            android:name="com.viamhealth.android.activities.PingService"
+            android:label="PingServiceLabel" android:enabled="true">
+        </service>
+        <activity
+            android:name="com.viamhealth.android.activities.ResultActivity"
+            android:label="Take Action"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"/>
+
+        <service
+            android:name="com.viamhealth.android.services.ReminderNotification"
+            android:label="ViamHealth" android:enabled="true">
+        </service>
+
+        <!--
+        <activity
+            android:name="com.viamhealth.android.activities.notifications.reminders.Medicine"
+
+            android:label="ViamHealth"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"/>
+            -->
     </application>
 
 </manifest>

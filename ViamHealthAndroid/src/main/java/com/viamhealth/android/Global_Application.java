@@ -50,7 +50,6 @@ public class Global_Application extends Application
 	public boolean calcelflg;
     public String selected_date;
 
-
     public static Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
 
 

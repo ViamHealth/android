@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <TextView
+        android:id="@+id/confirmMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Are you sure you want to delete?"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_margin="20dp" />
+<!--
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/notification_result_message"
+        android:layout_centerInParent="true" >
+
+        <Button
+            android:id="@+id/notification_taken_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onDismissClick"
+             />
+
+        <Button
+            android:id="@+id/notification_remind_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/notification_taken_button"
+            android:layout_toRightOf="@+id/notification_taken_button"
+            android:onClick="onRemindClick"
+             />
+    </RelativeLayout>
+    -->
+</RelativeLayout>
+

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="notification">Ping Notification</string>
+
+
+    <!--  Buttons -->
+    <string name="ping">Ping!</string>
+    <string name="snooze">Snooze</string>
+    <string name="dismiss">Dismiss</string>
+
+    <!--  Text Views -->
+
+    <string name="ping_text">Set Seconds Until Ping</string>
+    <string name="done_snoozing">Done Snoozing.</string>
+    <string name="seconds_default">10</string>
+    <string name="reminder_label">Reminder Text</string>
+    <string name="reminder_text">Don\'t forget!</string>
+
+
+    <string name="snoozing">Snoozing!</string>
+    <string name="timer_start">Setting the timer</string>
+    <string name="sleep_error">Sleep failure</string>
+    <string name="timer_finished">Timer finished.</string>
+
     <!-- All Toast Messages -->
     <string name="loginMessage">we are validating your identity....</string>
     <string name="loginFailureMessage">wrong credentials were given</string>
