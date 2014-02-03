@@ -41,7 +41,7 @@ public class UserEP extends BaseEP {
 
     public Boolean InviteUser(String email){
         String baseurlString = Global_Application.url+"invite/";
-        Log.e(TAG, "url is : " + baseurlString);
+        Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -73,7 +73,7 @@ public class UserEP extends BaseEP {
     public User SignUp(String username,String password) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"signup/";
-        Log.e(TAG, "url is : " + baseurlString);
+        Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
 
@@ -98,7 +98,7 @@ public class UserEP extends BaseEP {
 
     public boolean ChangePassword(String oldPassword, String newPassword){
         String baseurlString = Global_Application.url+"users/change-password/";
-        Log.e(TAG, "url is : " + baseurlString);
+        Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -123,7 +123,7 @@ public class UserEP extends BaseEP {
     }
     public boolean ForgotPassword(String email){
         String baseurlString = Global_Application.url+"forgot-password-email/";
-        Log.e(TAG, "url is : " + baseurlString);
+        Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
 
@@ -150,7 +150,7 @@ public class UserEP extends BaseEP {
 
     public boolean Logout(){
         String url = Global_Application.url + "logout/";
-        Log.e(TAG, "url is : " + url);
+        Log.i(TAG, "url is : " + url);
 
         if(appPrefs.getToken()==null)
             return false;
@@ -355,7 +355,7 @@ public class UserEP extends BaseEP {
     public User getUserProfile(Long userId) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"users/"+userId+"/";
-        Log.e(TAG,"url is : " + baseurlString);
+        Log.i(TAG,"url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -377,7 +377,7 @@ public class UserEP extends BaseEP {
 
     public BMIProfile getUserBMIProfile(Long userId) {
         String baseurlString = Global_Application.url+"users/"+userId+"/bmi-profile/";
-        Log.e(TAG,"url is : " + baseurlString);
+        Log.i(TAG,"url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());

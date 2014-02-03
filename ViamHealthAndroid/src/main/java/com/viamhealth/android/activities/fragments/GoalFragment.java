@@ -140,14 +140,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(Menu.NONE, R.drawable.ic_action_goal, 10, "New Goal")
-                .setIcon(R.drawable.ic_action_goal)
+        menu.add(Menu.NONE, R.drawable.addicon, 10, "New Goal")
+                .setIcon(R.drawable.addicon)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.ic_action_goal){
+        if(item.getItemId()==R.drawable.addicon){
             addNewGoal();
             return false;
         }
@@ -559,7 +559,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            Toast.makeText(getSherlockActivity(), "Calories Per Day - " + appPrefs.getTargetCaloriesPerDay(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(getSherlockActivity(), "Calories Per Day - " + appPrefs.getTargetCaloriesPerDay(), Toast.LENGTH_LONG).show();
 
             onGoalDataChanged(null);
 
