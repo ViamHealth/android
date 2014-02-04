@@ -119,6 +119,7 @@
     <string name="organization">organization</string>
 
     <string-array name="blood_groups">
+        <item>Select Blood Group..</item>
         <item>O+</item>
         <item>A+</item>
         <item>B+</item>
