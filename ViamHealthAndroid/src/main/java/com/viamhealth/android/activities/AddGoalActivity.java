@@ -47,7 +47,7 @@ import java.util.Map;
 
 public class AddGoalActivity extends BaseFragmentActivity implements View.OnClickListener {
 
-    Button btnSave;
+    Button btnSave,btnSkip,btnAddReminder;
     TextView btnCancel;
 
     AddGoalFragmentManager fm;
@@ -97,6 +97,33 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
                 }
             }
         });
+
+        btnSkip = (Button) findViewById(R.id.btnSkip);
+        btnSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddGoalFragment activeFragment = fm.getActiveGoalFragment();
+                if(activeFragment.isValid()){
+                    //setSkip
+                    finish();
+                }
+            }
+        });
+
+
+        btnAddReminder = (Button) findViewById(R.id.btnReminder);
+        btnAddReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddGoalFragment activeFragment = fm.getActiveGoalFragment();
+                if(activeFragment.isValid()){
+                    //set Remind me later notification MJ
+                    finish();
+                }
+            }
+        });
+
+
 
         /*** Action Bar Creation starts here ***/
         actionBar = getSupportActionBar();

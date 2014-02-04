@@ -2,10 +2,12 @@ package com.viamhealth.android.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -76,6 +79,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         Intent intent = getIntent();
         user = (User) intent.getParcelableExtra("user");
         Parcelable[] pUsers = intent.getParcelableArrayExtra("users");
+        Boolean isTab=intent.getBooleanExtra("isTab",false);
         users.clear();
         for(int i=0; i<pUsers.length; i++){
             users.add((User) pUsers[i]);
@@ -86,6 +90,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", user);
         bundle.putSerializable("action", action);
+        bundle.putParcelableArray("users",pUsers);
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayUseLogoEnabled(true);
@@ -128,6 +133,32 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         /* Create the Tab Header */
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
+
+
+        SharedPreferences pref = getSharedPreferences("User"+user.getId(), Context.MODE_PRIVATE);
+ // To comment
+
+        SharedPreferences.Editor edit1=pref.edit();
+        if(isTab==true)
+        {
+            edit1.putBoolean("isTest",true); //MJ:set to true
+            edit1.putBoolean("isGoal",true);
+        }
+        edit1.commit();
+ //To comment
+
+
+
+        if(pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false)
+        {
+            FragmentTransaction fm = TabActivity.this.getSupportFragmentManager().beginTransaction();
+            GoalFragment fragment = (GoalFragment) SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
+            fm.add(R.id.realtabcontent, fragment, "goals");
+            fm.commit();
+            TabActivity.this.getSupportFragmentManager().executePendingTransactions();
+        }
+        else
+        {
         /* Create Tabs */
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
@@ -142,6 +173,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                 //FileFragment.class, bundle);
                 FileFragment.class, bundle);
 
+        }
 
         animationMoveIn = new TranslateAnimation(0, 0, -29, 29);
         animationMoveIn.setDuration(2000);
@@ -156,6 +188,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         tabs = (TabWidget) findViewById(android.R.id.tabs);
 
 
+
         if(action == Actions.UploadFiles){
             mTabHost.setCurrentTabByTag("files");
             //mTabManager.selectTab(TabTypes.Files.name());
@@ -163,6 +196,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             fragment.pickFile();
         } else if(action == Actions.SetGoal){
             mTabHost.setCurrentTabByTag("goals");
+
             //mTabManager.selectTab(TabTypes.Goals.name());
         //}
 
