@@ -13,6 +13,7 @@
     <color name="header_color">#f6f6f6</color>
     <color name="header_border_shadow">#ffffff</color>
     <color name="section_color">#f0f0f0</color>
+    <color name="section_color_white">#ffffff</color>
 
     <color name="pressed_green">#CCFFFFFF</color>
     <color name="pressed_greentheme">#CC37AA4F</color>

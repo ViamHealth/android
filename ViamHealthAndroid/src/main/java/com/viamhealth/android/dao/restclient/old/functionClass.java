@@ -59,7 +59,7 @@ public class functionClass {
         }
 
         responseString = client.getResponse();
-        Log.e("TAG","Response : " + responseString);
+        Log.i("TAG","Response : " + responseString);
         return responce;
     }
 
@@ -69,7 +69,7 @@ public class functionClass {
 	public WeightData getWeightGoal(){
 		WeightData weight = new WeightData();
 		String baseurlString = Global_Application.url+"weight-goals/?user="+appPrefs.getUserid();    
-		Log.e("TAG","url is : " + baseurlString);
+		Log.i("TAG","url is : " + baseurlString);
 		
 		RestClient client = new RestClient(baseurlString);   
 		client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -83,7 +83,7 @@ public class functionClass {
 		}
 
 		responseString = client.getResponse();
-		Log.e("TAG","Response string " + responseString);
+		Log.i("TAG","Response string " + responseString);
 		
 			try {
 				 jObject = new JSONObject(responseString);
@@ -116,7 +116,7 @@ public class functionClass {
 		public CholesterolData getCholesterolGoal(){
 			CholesterolData cholesterol = new CholesterolData();
 			String baseurlString = Global_Application.url+"cholesterol-goals/?user="+appPrefs.getUserid();    
-			Log.e("TAG","url is : " + baseurlString);
+			Log.i("TAG","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString);   
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -130,7 +130,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
-			Log.e("TAG","Response string " + responseString);
+			Log.i("TAG","Response string " + responseString);
 			
 				try {
 					 jObject = new JSONObject(responseString);
@@ -150,7 +150,7 @@ public class functionClass {
 						 lstReadings.add(c1.getString("id") + "," + c1.getString("user_cholesterol_goal")+"," + c1.getString("hdl") +"," + c1.getString("ldl") +"," + c1.getString("triglycerides") +"," + c1.getString("total_cholesterol") +","+  c1.getString("reading_date"));
 					 }
 					 for(int i = 0;i<lstReadings.size();i++){
-						 Log.e("TAG","lst reading : " +i + " ::: " + lstReadings.get(i));
+						 Log.i("TAG","lst reading : " +i + " ::: " + lstReadings.get(i));
 					 }
 					 cholesterol.setReadings(lstReadings);
 					 cholesterol.setTarget_date(c.getString("target_date"));
@@ -168,7 +168,7 @@ public class functionClass {
 	public GlucoseData getGlucoseGoal(){
 		GlucoseData gluscose = new GlucoseData();
 		String baseurlString = Global_Application.url+"glucose-goals/?user="+appPrefs.getUserid();    
-		Log.e("TAG","url is : " + baseurlString);
+		Log.i("TAG","url is : " + baseurlString);
 					
 		RestClient client = new RestClient(baseurlString);   
 		client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -182,7 +182,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
-			Log.e("TAG","Response string " + responseString);
+			Log.i("TAG","Response string " + responseString);
 					
 			try {
 				jObject = new JSONObject(responseString);
@@ -214,7 +214,7 @@ public class functionClass {
 	public BPData getBPGoal(){
 		BPData bloodpresure = new BPData();
 		String baseurlString = Global_Application.url+"blood-pressure-goals/?user="+appPrefs.getUserid();    
-		Log.e("TAG","url is : " + baseurlString);
+		Log.i("TAG","url is : " + baseurlString);
 					
 		RestClient client = new RestClient(baseurlString);   
 		client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -228,7 +228,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
-			Log.e("TAG","Response string " + responseString);
+			Log.i("TAG","Response string " + responseString);
 					
 			try {
 				jObject = new JSONObject(responseString);
@@ -266,10 +266,10 @@ public class functionClass {
 			String resstr="1";
 			ArrayList<GoalData>	lstData = new ArrayList<GoalData>();
 			String baseurlString = Global_Application.url+"weight-goals/?user="+appPrefs.getUserid();    
-			Log.e("TAG","url is : " + baseurlString);
+			Log.i("TAG","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString); 
-			Log.e("TAG","token " + appPrefs.getToken().toString());
+			Log.i("TAG","token " + appPrefs.getToken().toString());
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 			client.AddParam("weight",weight.toString());
 			client.AddParam("weight_measure",measure.toString());
@@ -279,7 +279,7 @@ public class functionClass {
 				client.AddParam("interval_num",intervalnum.toString());
 				client.AddParam("interval_unit",intervalunit.toString());
 			}
-			Log.e("TAG",weight.toString() +" : " + measure.toString() + " : " + intervalnum.toString() + " : " + intervalunit.toString());
+			Log.i("TAG",weight.toString() +" : " + measure.toString() + " : " + intervalnum.toString() + " : " + intervalunit.toString());
 			try
 			{
 				client.Execute(RequestMethod.POST);
@@ -289,7 +289,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
-			Log.e("TAG","res : " + responseString);
+			Log.i("TAG","res : " + responseString);
 				try {
 					 jObject = new JSONObject(responseString);
 					 jarray = jObject.getJSONArray("results");
@@ -308,18 +308,18 @@ public class functionClass {
 		
 		// function for add goal data
 		public String addWeightReading(String weight,String measure, String readingdate,String id){
-			Log.e("TAG","Weight Reading : " + id);
+			Log.i("TAG","Weight Reading : " + id);
 			String resstr="1";
 		    String baseurlString = Global_Application.url+"weight-goals/"+id+"/set-reading/?user="+appPrefs.getUserid();   
-			Log.e("TAG","url is : " + baseurlString);
+			Log.i("TAG","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString); 
-			Log.e("TAG","token " + appPrefs.getToken().toString());
+			Log.i("TAG","token " + appPrefs.getToken().toString());
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 			client.AddParam("weight",weight.toString());
 			client.AddParam("weight_measure",measure.toString());
 			client.AddParam("reading_date",readingdate);
-			Log.e("TAG","data : " + weight + ", " + measure + ", " +readingdate );
+			Log.i("TAG","data : " + weight + ", " + measure + ", " +readingdate );
 			try
 			{
 				client.Execute(RequestMethod.POST);
@@ -329,7 +329,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
-			Log.e("TAG","res : " + responseString);
+			Log.i("TAG","res : " + responseString);
 				try {
 					 jObject = new JSONObject(responseString);
 					 jarray = jObject.getJSONArray("results");
@@ -348,10 +348,10 @@ public class functionClass {
 				public String addGlucoseReading(String random,String fasting, String readingdate,String id){
 					String resstr="1";
 				    String baseurlString = Global_Application.url+"glucose-goals/"+id+"/set-reading/?user="+appPrefs.getUserid();   
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString); 
-					Log.e("TAG","token " + appPrefs.getToken().toString());
+					Log.i("TAG","token " + appPrefs.getToken().toString());
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 					client.AddParam("random",fasting.toString());
 					client.AddParam("fasting",random.toString());
@@ -366,7 +366,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","res : " + responseString);
+					Log.i("TAG","res : " + responseString);
 						try {
 							 jObject = new JSONObject(responseString);
 							 jarray = jObject.getJSONArray("results");
@@ -385,10 +385,10 @@ public class functionClass {
 				public String addCholesterolReading(String hdl,String ldl,String triglycerides,String total_cholesterol, String readingdate,String id){
 					String resstr="1";
 				    String baseurlString = Global_Application.url+"cholesterol-goals/"+id+"/set-reading/?user="+appPrefs.getUserid();   
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString); 
-					Log.e("TAG","token " + appPrefs.getToken().toString());
+					Log.i("TAG","token " + appPrefs.getToken().toString());
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 					client.AddParam("hdl",hdl.toString());
 					client.AddParam("ldl",ldl.toString());
@@ -405,7 +405,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","res : " + responseString);
+					Log.i("TAG","res : " + responseString);
 						try {
 							 jObject = new JSONObject(responseString);
 							 jarray = jObject.getJSONArray("results");
@@ -425,10 +425,10 @@ public class functionClass {
 				public String addBPReading(String systolic,String diastolic,String plusrate, String readingdate,String id){
 					String resstr="1";
 				    String baseurlString = Global_Application.url+"blood-pressure-goals/"+id+"/set-reading/?user="+appPrefs.getUserid();   
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString); 
-					Log.e("TAG","token " + appPrefs.getToken().toString());
+					Log.i("TAG","token " + appPrefs.getToken().toString());
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 					client.AddParam("systolic_pressure",systolic.toString());
 					client.AddParam("diastolic_pressure",diastolic.toString());
@@ -444,7 +444,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","res : " + responseString);
+					Log.i("TAG","res : " + responseString);
 						try {
 							 jObject = new JSONObject(responseString);
 							 jarray = jObject.getJSONArray("results");
@@ -464,7 +464,7 @@ public class functionClass {
 			String resstr="1";
 			ArrayList<GoalData>	lstData = new ArrayList<GoalData>();
 			String baseurlString = Global_Application.url+"glucose-goals/?user="+appPrefs.getUserid();    
-			Log.e("TAG","url is : " + baseurlString);
+			Log.i("TAG","url is : " + baseurlString);
 			
 			RestClient client = new RestClient(baseurlString); 
 			client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -485,7 +485,7 @@ public class functionClass {
 			}
 
 			responseString = client.getResponse();
-			Log.e("TAG","res : " + responseString);
+			Log.i("TAG","res : " + responseString);
 				try {  
 					 jObject = new JSONObject(responseString);
 					 jarray = jObject.getJSONArray("results");
@@ -505,7 +505,7 @@ public class functionClass {
 				public String addBPGoal(String systolic,String diastolic, String plusrate,String targetdate,String intervalnum,String intervalunit){
 					String resstr="0";
 					String baseurlString = Global_Application.url+"blood-pressure-goals/?user="+appPrefs.getUserid();    
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString); 
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -527,7 +527,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","res : " + responseString);
+					Log.i("TAG","res : " + responseString);
 						try {
 							 jObject = new JSONObject(responseString);
 							 jarray = jObject.getJSONArray("results");
@@ -546,7 +546,7 @@ public class functionClass {
 					String resstr="0";
 					ArrayList<GoalData>	lstData = new ArrayList<GoalData>();
 					String baseurlString = Global_Application.url+"cholesterol-goals/?user="+appPrefs.getUserid();    
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString); 
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -569,7 +569,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","res : " + responseString);
+					Log.i("TAG","res : " + responseString);
 						try {
 							 jObject = new JSONObject(responseString);
 							 jarray = jObject.getJSONArray("results");
@@ -587,7 +587,7 @@ public class functionClass {
 							
 				// function for get file data
 				public String ReadingDelete(String baseurlString){
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -611,7 +611,7 @@ public class functionClass {
                     if(searchString!=null && !searchString.isEmpty())
                         baseurlString += "&search=" + searchString;
 					ArrayList<FileData>	lstData = new ArrayList<FileData>();
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -629,12 +629,12 @@ public class functionClass {
                         return null;
                     }
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 Global_Application.nextfile = jObject.getString("next");
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
@@ -649,7 +649,7 @@ public class functionClass {
 				                      lstData.add(data);
 				  				 }
 
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -660,7 +660,7 @@ public class functionClass {
 				
 				// function for get file data
 				public String FileDelete(String baseurlString){
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -675,7 +675,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-                    Log.e("TAG","response string delete  : " + baseurlString);
+                    Log.i("TAG","response string delete  : " + baseurlString);
 					
 					return "0";
 				}
@@ -686,7 +686,7 @@ public class functionClass {
 														 String repeat_weekday,String repeat_day_interval){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"medicaltests/?user="+appPrefs.getUserid();  
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -709,12 +709,12 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
@@ -731,7 +731,7 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -754,7 +754,7 @@ public class functionClass {
             e.printStackTrace();
         }
         responseString = client.getResponse();
-        Log.e("TAG","get exercise list Response string " + responseString);
+        Log.i("TAG","get exercise list Response string " + responseString);
         JSONObject jObject = null;
         try {
             jObject = new JSONObject(responseString);
@@ -781,7 +781,7 @@ public class functionClass {
 				public ArrayList<MedicalData> getMedical(){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"medicaltests/?user="+appPrefs.getUserid();  
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -795,19 +795,19 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 Global_Application.nextmedical = jObject.getString("next");
 								 jarray = jObject.getJSONArray("results");
-								 Log.e("TAG","json array size : " + jarray.length());
+								 Log.i("TAG","json array size : " + jarray.length());
 									 for (int i = 0; i < jarray.length(); i++) {
-										 Log.e("TAG","inside for loop");
+										 Log.i("TAG","inside for loop");
 										 JSONObject c = jarray.getJSONObject(i);
-										 Log.e("TAG","name is : " + c.getString("name"));
+										 Log.i("TAG","name is : " + c.getString("name"));
 										 lstData.add(new MedicalData(c.getString("id").toString(), 
 												 					 c.getString("name").toString(), 
 												 					 c.getString("details").toString(), 
@@ -821,20 +821,20 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-							Log.e("TAG","SIZE : " + lstData.size());
+							Log.i("TAG","SIZE : " + lstData.size());
 					return lstData;
 				}
 				
 				// function for add medicates data
 				public ArrayList<MedicalData> getMedical(String baseurlString){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -848,12 +848,12 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 Global_Application.nextmedical = jObject.getString("next");
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
@@ -871,7 +871,7 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -888,7 +888,7 @@ public class functionClass {
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					//String baseurlString = Global_Application.url+"medications/?user="+appPrefs.getUserid();
                     String baseurlString = Global_Application.url+"reminders/"+"?user="+id.toString(); //MJ:api add
-                    Log.e("TAG","url is : " + baseurlString);
+                    Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -923,11 +923,11 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
+								 Log.i("TAG","res : " + responseString);
           						 if((jarray = jObject.getJSONArray("results"))!= null)  //MJ
 								 {
 									 for (int i = 0; i < jarray.length(); i++) {
@@ -946,7 +946,7 @@ public class functionClass {
                                      }
                                      }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -960,7 +960,7 @@ public class functionClass {
                     ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
                     String baseurlString = Global_Application.url+"reminderreadings/"+"?user="+user_id+"&"+"type=2"+"&reading_date=2013-10-21";
                     //String baseurlString = Global_Application.url+"reminderreadings/"+reminder_id + "/?user="+user_id;
-                    Log.e("TAG","url is : " + baseurlString);
+                    Log.i("TAG","url is : " + baseurlString);
 
                     RestClient client = new RestClient(baseurlString);
                     client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -979,7 +979,7 @@ public class functionClass {
                     }
 
                     responseString = client.getResponse();
-                    Log.e("TAG","Response string " + responseString);
+                    Log.i("TAG","Response string " + responseString);
 
                 }
 
@@ -990,7 +990,7 @@ public class functionClass {
         //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
         String baseurlString = Global_Application.url+"reminders/?user="+user_id+"&"+"type="+remindertype;
 
-        Log.e("TAG","url is : " + baseurlString);
+        Log.i("TAG","url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1004,12 +1004,12 @@ public class functionClass {
         }
 
         responseString = client.getResponse();
-        Log.e("TAG","Response string " + responseString);
+        Log.i("TAG","Response string " + responseString);
 
         try {
             jObject = new JSONObject(responseString);
-            Log.e("TAG","res : " + responseString);
-            Log.e("TAG",jObject.getString("next"));
+            Log.i("TAG","res : " + responseString);
+            Log.i("TAG",jObject.getString("next"));
             jarray = jObject.getJSONArray("results");
             for (int i = 0; i < jarray.length(); i++)
             {
@@ -1033,7 +1033,7 @@ public class functionClass {
                         "null",c.getString("start_date").toString(),c.getString("end_date").toString(),false,false,false,false,false));
 
             }
-            Log.e("TAG","lstdata count is " + lstData.size());
+            Log.i("TAG","lstdata count is " + lstData.size());
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -1053,7 +1053,7 @@ public class functionClass {
                     //String baseurlString = Global_Application.url+"reminders/?user="+appPrefs.getUserid()+"&"+"type=MEDICATION";
                     String baseurlString = Global_Application.url+"reminderreadings/?user="+user_id+"&"+"type="+remindertype+"&reading_date=2013-10-21";
 
-                    Log.e("TAG","url is : " + baseurlString);
+                    Log.i("TAG","url is : " + baseurlString);
 
                     RestClient client = new RestClient(baseurlString);
                     client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1067,12 +1067,12 @@ public class functionClass {
                     }
 
                     responseString = client.getResponse();
-                    Log.e("TAG","Response string " + responseString);
+                    Log.i("TAG","Response string " + responseString);
 
                     try {
                         jObject = new JSONObject(responseString);
-                        Log.e("TAG","res : " + responseString);
-                        Log.e("TAG",jObject.getString("next"));
+                        Log.i("TAG","res : " + responseString);
+                        Log.i("TAG",jObject.getString("next"));
                         jarray = jObject.getJSONArray("results");
                         for (int i = 0; i < jarray.length(); i++)
                         {
@@ -1095,7 +1095,7 @@ public class functionClass {
                             "null",
                             "null",c.getJSONObject("reminder").getString("start_date").toString(),c.getJSONObject("reminder").getString("end_date").toString(),Boolean.parseBoolean("morning_check"),Boolean.parseBoolean("noon_check"),Boolean.parseBoolean("evening_check"),Boolean.parseBoolean("night_check"),Boolean.parseBoolean("complete_check")));
                         }
-                        Log.e("TAG","lstdata count is " + lstData.size());
+                        Log.i("TAG","lstdata count is " + lstData.size());
 
                     } catch (JSONException e) {
                         // TODO Auto-generated catch block
@@ -1111,7 +1111,7 @@ public class functionClass {
 				public ArrayList<MedicalData> getMedication(){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"medications/?user="+appPrefs.getUserid();  
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1125,19 +1125,19 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 Global_Application.nextmedication = jObject.getString("next");
 								 jarray = jObject.getJSONArray("results");
-								 Log.e("TAG","json array size : " + jarray.length());
+								 Log.i("TAG","json array size : " + jarray.length());
 									 for (int i = 0; i < jarray.length(); i++) {
-										 Log.e("TAG","inside for loop");
+										 Log.i("TAG","inside for loop");
 										 JSONObject c = jarray.getJSONObject(i);
-										 Log.e("TAG","name is : " + c.getString("name"));
+										 Log.i("TAG","name is : " + c.getString("name"));
 										 lstData.add(new MedicalData(c.getString("id").toString(), 
 												 					 c.getString("name").toString(), 
 												 					 c.getString("details").toString(), 
@@ -1151,20 +1151,20 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-							Log.e("TAG","SIZE : " + lstData.size());
+							Log.i("TAG","SIZE : " + lstData.size());
 					return lstData;
 				}
 				
 				// function for add medicates data
 				public ArrayList<MedicalData> getMedication(String baseurlString){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1178,12 +1178,12 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 Global_Application.nextmedication = jObject.getString("next");
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
@@ -1201,7 +1201,7 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -1211,7 +1211,7 @@ public class functionClass {
 				}
 				//delete medical
 				public String DeleteMedical(String baseurlString){
-					Log.e("TAG","url for delete" + baseurlString);
+					Log.i("TAG","url for delete" + baseurlString);
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 				  
@@ -1229,7 +1229,7 @@ public class functionClass {
 				}
 				//delete medication
 				public String DeleteMedication(String baseurlString){
-					Log.e("TAG","url for delete" + baseurlString);
+					Log.i("TAG","url for delete" + baseurlString);
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
 				  
@@ -1242,7 +1242,7 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-                    Log.e("TAG","Response string " + responseString);
+                    Log.i("TAG","Response string " + responseString);
 					
 					return responseString;
 				}
@@ -1252,7 +1252,7 @@ public class functionClass {
 				public MedicationData getMedicationByID(String id){
 					String baseurlString = Global_Application.url + "medications/"+id;
 					MedicationData medicationdt = new MedicationData();
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1266,11 +1266,11 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
+								 Log.i("TAG","res : " + responseString);
 								 medicationdt.setId(jObject.getString("id").toString());
 								 medicationdt.setName(jObject.getString("name").toString());
 								 medicationdt.setDetails(jObject.getString("details").toString());
@@ -1306,7 +1306,7 @@ public class functionClass {
 														    String repeat_weekday,String repeat_day_interval,String start_date,String end_date){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"reminders/"+id+"/"+"?type="+type;  //?user="+user_id;
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1340,12 +1340,12 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
@@ -1362,7 +1362,7 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -1378,7 +1378,7 @@ public class functionClass {
 														    String repeat_weekday,String repeat_day_interval){
 					ArrayList<MedicalData>	lstData = new ArrayList<MedicalData>();
 					String baseurlString = Global_Application.url+"medicaltests/"+id+"/?user="+appPrefs.getUserid();  
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1401,12 +1401,12 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
-								 Log.e("TAG",jObject.getString("next"));
+								 Log.i("TAG","res : " + responseString);
+								 Log.i("TAG",jObject.getString("next"));
 								 jarray = jObject.getJSONArray("results");
 									 for (int i = 0; i < jarray.length(); i++) {
 										 JSONObject c = jarray.getJSONObject(i);
@@ -1423,7 +1423,7 @@ public class functionClass {
 				                     
 				  				 }
 				              
-							 Log.e("TAG","lstdata count is " + lstData.size());
+							 Log.i("TAG","lstdata count is " + lstData.size());
 							 
 					   } catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -1437,7 +1437,7 @@ public class functionClass {
 				public MedicalData getMedicalByID(String id){
 					String baseurlString = Global_Application.url + "medicaltests/"+id;
 					MedicalData medicationdt = new MedicalData();
-					Log.e("TAG","url is : " + baseurlString);
+					Log.i("TAG","url is : " + baseurlString);
 					
 					RestClient client = new RestClient(baseurlString);   
 					client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -1451,11 +1451,11 @@ public class functionClass {
 					}
 
 					responseString = client.getResponse();
-					Log.e("TAG","Response string " + responseString);
+					Log.i("TAG","Response string " + responseString);
 					
 							try {
 								 jObject = new JSONObject(responseString);
-								 Log.e("TAG","res : " + responseString);
+								 Log.i("TAG","res : " + responseString);
 								 medicationdt.setId(jObject.getString("id").toString());
 								 medicationdt.setName(jObject.getString("name").toString());
 								 medicationdt.setDetail(jObject.getString("details").toString());

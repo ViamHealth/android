@@ -119,6 +119,7 @@
     <string name="organization">organization</string>
 
     <string-array name="blood_groups">
+        <item>Select Blood Group..</item>
         <item>O+</item>
         <item>A+</item>
         <item>B+</item>
@@ -221,7 +222,7 @@
     <string name="set_reminders">set reminders</string>
     <string name="set_others_reminders">set reminders for rest everything</string>
     <string name="morning">morning</string>
-    <string name="noon">noon</string>
+    <string name="noon">afternoon</string>
     <string name="night">night</string>
     <string name="repeat">repeat</string>
     <string name="repeat_part">repeat for</string>

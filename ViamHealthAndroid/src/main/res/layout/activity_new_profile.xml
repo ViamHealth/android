@@ -56,14 +56,17 @@
         <FrameLayout
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:background="@drawable/layout_border"
-            android:layout_marginLeft="10dp"
+
+
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp"
+
             android:layout_gravity="center"
             android:foregroundGravity="center_vertical|center_horizontal">
-
+<!--
+android:background="@drawable/layout_border"
+android:layout_marginLeft="10dp"
+android:layout_marginRight="10dp" -->
             <com.facebook.widget.ProfilePictureView
                 android:id="@+id/profilepic"
                 android:layout_height="120dp"
@@ -240,7 +243,7 @@
                        android:layout_height="wrap_content"
                        android:layout_width="fill_parent"
                        android:orientation="horizontal"
-                       android:background="#efefef">
+                       android:background="#ffffff">
 
                        <ImageView
                            android:layout_width="0dp"
@@ -265,7 +268,8 @@
                            <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/feet"
                                android:layout_height="wrap_content"
                                android:layout_width="fill_parent"
-                               android:background="@drawable/spinner_background"/>
+                                />
+                           <!--android:background="@drawable/spinner_background"-->
                        </LinearLayout>
                        <LinearLayout
                            android:layout_width="0dp"
@@ -280,7 +284,8 @@
                            <antistatic.spinnerwheel.WheelVerticalView android:id="@+id/cms"
                                android:layout_height="wrap_content"
                                android:layout_width="fill_parent"
-                               android:background="@drawable/spinner_background"/>
+                               />
+                           <!--android:background="@drawable/spinner_background"-->
                         </LinearLayout>
                    </LinearLayout>
 
@@ -301,14 +306,15 @@
             <LinearLayout android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="fill_parent"
                     android:layout_height="48dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -339,7 +345,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="48dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -369,7 +377,8 @@
 
             <LinearLayout android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -431,7 +440,8 @@
 
             <LinearLayout android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <EditText
                     android:layout_width="fill_parent"

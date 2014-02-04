@@ -142,14 +142,14 @@ public class ReminderFragmentNew extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(Menu.NONE, R.drawable.ic_action_reminders, 10, "New Reminder")
-                .setIcon(R.drawable.ic_action_reminders)
+        menu.add(Menu.NONE, R.drawable.addicon, 10, "New Reminder")
+                .setIcon(R.drawable.addicon)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.ic_action_reminders){
+        if(item.getItemId()==R.drawable.addicon){
             addNewReminder();
             return false;
         }

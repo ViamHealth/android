@@ -68,7 +68,7 @@ public void startdownload(){
 	//List<String> lst = Arrays.asList(ga.getDownload().split("\\s*,\\s*"));
     List<String> lst = Arrays.asList(ga.getDownload().split(","));
 	for(int i=0;i<lst.size();i++){
-	   Log.e("TAG","url is : " + lst.get(i).toString()+"?user="+user_id);
+	   Log.i("TAG","url is : " + lst.get(i).toString()+"?user="+user_id);
 	   downloadManager = (DownloadManager)getSystemService(Context.DOWNLOAD_SERVICE);
 	   //Uri Download_Uri = Uri.parse("http://api.viamhealth.com/healthfiles/download/69/");
        Uri Download_Uri = Uri.parse(lst.get(i).toString()+"?user="+user_id);
