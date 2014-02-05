@@ -107,6 +107,12 @@
             android:name="com.viamhealth.android.activities.ForgotPassword"
             android:theme="@style/Reversetheme">
         </activity>
+        <service
+        android:name="com.viamhealth.android.services.NotifyService"
+        android:enabled="true"
+        android:exported="true" >
+
+    </service>
     </application>
 
 </manifest>

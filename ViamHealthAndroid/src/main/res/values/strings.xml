@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <string name="local_service_started">Service Started</string>
+    <string name="local_service_stopped">Service Stopped</string>
+    <string name="local_service_label">Service Label</string>
+
     <!-- All Toast Messages -->
     <string name="loginMessage">we are validating your identity....</string>
     <string name="loginFailureMessage">wrong credentials were given</string>
