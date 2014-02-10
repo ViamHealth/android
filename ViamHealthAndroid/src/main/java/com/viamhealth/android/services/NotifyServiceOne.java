@@ -23,16 +23,16 @@ import java.util.List;
 /**
  * Created by kunal on 6/2/14.
  */
-public class NotifyService extends IntentService{
-    public NotifyService(){
+public class NotifyServiceOne extends IntentService{
+    public NotifyServiceOne(){
         super("com.viamhealth.android");
     }
 
     private NotificationManager mNM;
     Global_Application ga;
-    private final static Class selfClass = NotifyService.class;
+    private final static Class selfClass = NotifyServiceOne.class;
     private static final String TAG = LogUtils.makeLogTag(selfClass);
-    private static int NOTIFICATION = 1;
+    private static int NOTIFICATION = 11;
 
     @Override
     protected void onHandleIntent(Intent intent) {

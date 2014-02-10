@@ -204,7 +204,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     //Nothing to be done for single click
                 }
             });
-            NotifyManager.getInstance().addReminders(user, getActivity(), readings);
+            NotifyManager.getInstance().addReminders(user, getActivity(), readings, currentDate);
         }
 
         return view;

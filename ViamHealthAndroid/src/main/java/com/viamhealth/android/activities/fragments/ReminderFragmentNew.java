@@ -1,7 +1,9 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +17,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +47,22 @@ import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.reminder.ReminderTimeData;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.services.NotifyMedicineThreeAfternoon;
+import com.viamhealth.android.services.NotifyMedicineThreeMorning;
+import com.viamhealth.android.services.NotifyMedicineThreeNight;
+import com.viamhealth.android.services.NotifyMedicineTodayAfternoon;
+import com.viamhealth.android.services.NotifyMedicineTodayMorning;
+import com.viamhealth.android.services.NotifyMedicineTodayNight;
+import com.viamhealth.android.services.NotifyMedicineTomorrowAfternoon;
+import com.viamhealth.android.services.NotifyMedicineTomorrowMorning;
+import com.viamhealth.android.services.NotifyMedicineTomorrowNight;
+import com.viamhealth.android.services.NotifyMedicineTwoAfternoon;
+import com.viamhealth.android.services.NotifyMedicineTwoMorning;
+import com.viamhealth.android.services.NotifyMedicineTwoNight;
+import com.viamhealth.android.services.NotifyService;
+import com.viamhealth.android.services.NotifyServiceOne;
+import com.viamhealth.android.services.NotifyServiceThree;
+import com.viamhealth.android.services.NotifyServiceTwo;
 import com.viamhealth.android.ui.PagerContainer;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.DateUtils;
@@ -108,7 +127,37 @@ public class ReminderFragmentNew extends BaseFragment {
 
         getReadings(null);
 
+        //Clear all previous alarms to send notifications
+
+        System.out.println(" cancelling previous alarms");
+        cancelAlarms(NotifyService.class);
+        cancelAlarms(NotifyServiceOne.class);
+        cancelAlarms(NotifyServiceTwo.class);
+        cancelAlarms(NotifyServiceThree.class);
+        cancelAlarms(NotifyMedicineTodayMorning.class);
+        cancelAlarms(NotifyMedicineTodayAfternoon.class);
+        cancelAlarms(NotifyMedicineTodayNight.class);
+        cancelAlarms(NotifyMedicineTomorrowMorning.class);
+        cancelAlarms(NotifyMedicineTomorrowAfternoon.class);
+        cancelAlarms(NotifyMedicineTomorrowNight.class);
+        cancelAlarms(NotifyMedicineTwoMorning.class);
+        cancelAlarms(NotifyMedicineTwoAfternoon.class);
+        cancelAlarms(NotifyMedicineTwoNight.class);
+        cancelAlarms(NotifyMedicineThreeMorning.class);
+        cancelAlarms(NotifyMedicineThreeAfternoon.class);
+        cancelAlarms(NotifyMedicineThreeNight.class);
         return mView;
+    }
+
+    private void cancelAlarms(Class serviceClass){
+        Intent myIntent  = new Intent(getSherlockActivity() , serviceClass);
+        AlarmManager alarmManager = (AlarmManager) getSherlockActivity().getSystemService(getSherlockActivity().ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(getSherlockActivity(), 0, myIntent, 0);
+        try {
+            alarmManager.cancel(pendingIntent);
+        } catch (Exception e) {
+            Log.e("Alarm Cancellations", "AlarmManager update was not canceled. " + e.toString());
+        }
     }
 
     private void getReadings(Date date) {
