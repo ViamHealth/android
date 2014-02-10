@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.enums.ReminderTime;
+import com.viamhealth.android.notification.NotificationObject;
 import com.viamhealth.android.utils.ParcelableUtils;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Map;
 /**
  * Created by naren on 21/11/13.
  */
-public class ReminderReading implements Parcelable {
+public class ReminderReading implements NotificationObject, Parcelable {
 
     Long id;
     Long userId;
@@ -86,7 +87,7 @@ public class ReminderReading implements Parcelable {
         id = in.readLong();
         userId = in.readLong();
         readingDate = new Date(in.readLong());
-        reminder = (Reminder) in.readParcelable(null);
+        reminder = (Reminder) in.readParcelable(Reminder.class.getClassLoader());
         completeCheck = (Boolean) in.readValue(null);
         mapAction = ParcelableUtils.readMap(in, Action.class);
     }
@@ -98,11 +99,35 @@ public class ReminderReading implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+
         dest.writeLong(id);
         dest.writeLong(userId);
         dest.writeLong(readingDate.getTime());
         dest.writeParcelable(reminder, flags);
         dest.writeValue(completeCheck);
         ParcelableUtils.writeMap(mapAction, dest);
+    }
+
+    public String toString(){
+        return "ReminderReading{" +
+                "id=" + id +
+                ", readingdate=" + readingDate.toString() +
+                ", reminder=" + reminder.getName() ;
+    }
+    /**
+     * @return returns the id of the icon that needs
+     * to be show in the notification bar, if nothing then return {@link NO_IMAGE}
+     */
+    @Override
+    public int getIcon() {
+        return reminder.getType().iconId();
+    }
+
+    /**
+     * @return title string resource
+     */
+    @Override
+    public String getTitle() {
+        return reminder.getName();
     }
 }

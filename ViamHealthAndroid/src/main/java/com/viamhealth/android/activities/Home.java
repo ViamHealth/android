@@ -19,6 +19,7 @@ import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.services.ServicesCommon;
 import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
@@ -28,6 +29,7 @@ import com.viamhealth.android.utils.Validator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -132,6 +134,11 @@ public class Home extends BaseActivity implements OnClickListener{
 
         scroller.setVisibility(View.GONE);
         splashScreen.setVisibility(View.VISIBLE);
+
+        if(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0) != 0 ){
+            NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            mNM.cancel(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0));
+        }
 
         if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
             Intent loginIntent = new Intent(Home.this, Login.class);

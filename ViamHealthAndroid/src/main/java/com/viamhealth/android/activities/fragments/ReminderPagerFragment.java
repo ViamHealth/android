@@ -39,6 +39,7 @@ import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.notification.NotifyManager;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.DateUtils;
@@ -203,6 +204,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     //Nothing to be done for single click
                 }
             });
+            NotifyManager.getInstance().addReminders(user, getActivity(), readings, currentDate);
         }
 
         return view;

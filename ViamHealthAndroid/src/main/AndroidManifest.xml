@@ -64,6 +64,7 @@
 
         <activity
             android:name="com.viamhealth.android.activities.Home"
+
             android:theme="@style/Reversetheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -117,7 +118,91 @@
             android:theme="@style/Reversetheme">
         </activity>
 
+
         <service android:name="com.viamhealth.android.services.ReminderBackground" >
+
+        <service
+            android:name="com.viamhealth.android.services.NotifyService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyServiceOne"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyServiceTwo"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyServiceThree"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTodayAfternoon"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTomorrowAfternoon"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTwoAfternoon"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineThreeAfternoon"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTodayMorning"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTomorrowMorning"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTwoMorning"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineThreeMorning"
+            android:enabled="true"
+            android:exported="true" >
+
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTodayNight"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTomorrowNight"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineTwoNight"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name="com.viamhealth.android.services.NotifyMedicineThreeNight"
+            android:enabled="true"
+            android:exported="true" >
         </service>
 
     </application>

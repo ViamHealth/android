@@ -15,7 +15,7 @@ public enum ReminderType {
     LabTests(3, R.string.labtest, R.string.hint_reminder_labTests_name, R.drawable.selector_icon_lab_test),
 //    Meals(5, R.string.meals, R.string.hint_reminder_meals_name),
 //    Activities(6, R.string.activities, R.string.hint_reminder_activities_name),
-    Other(1, R.string.other, R.string.hint_reminder_other_name, 0);
+    Other(1, R.string.other, R.string.hint_reminder_other_name, R.drawable.selector_icon_lab_test);
 
     private int value;
     private int resId;
