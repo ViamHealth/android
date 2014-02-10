@@ -111,4 +111,9 @@ public class AddDiabetesGoalFragment_New extends AddGoalFragment {
         }
         return null;
     }
+
+    @Override
+    public boolean isValid() {
+        return false;
+    }
 }

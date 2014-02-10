@@ -56,6 +56,7 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
         pTotal = (TextView) view.findViewById(R.id.add_goal_present_total);
         tTotal = (TextView) view.findViewById(R.id.add_goal_target_total);
 
+
         if(user==null)
             return null;
 
@@ -165,5 +166,49 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
             return readings;
         }
         return null;
+    }
+
+    @Override
+    public boolean isValid() {
+
+        boolean isValid=true;
+
+        if(pHDL.getText().length()==0){
+            pHDL.setError("Please fill the value for present HDL");
+            isValid=false;
+        }
+
+        if(pLDL.getText().length()==0){
+            pLDL.setError("Please fill the value for present LDL");
+            isValid=false;
+        }
+
+        if(pTG.getText().length()==0){
+            pTG.setError("Please fill present triglycerides");
+            isValid=false;
+        }
+
+        if(tHDL.getText().length()==0){
+            tHDL.setError("Please fill the value for target HDL");
+            isValid=false;
+        }
+
+        if(tLDL.getText().length()==0){
+            tLDL.setError("Please fill target LDL");
+            isValid=false;
+        }
+
+        if(tTG.getText().length()==0){
+            tTG.setError("Please fill target triglycerides");
+            isValid=false;
+        }
+
+        if(targetDate.getText().length()==0){
+            targetDate.setError("Please fill target date");
+            isValid=false;
+        }
+
+
+        return isValid;
     }
 }

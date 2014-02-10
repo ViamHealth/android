@@ -94,7 +94,8 @@
         </activity>
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTask">
 
         </activity>
         <activity android:name="com.viamhealth.android.activities.AddGoalActivity" >
@@ -116,6 +117,10 @@
             android:name="com.viamhealth.android.activities.ForgotPassword"
             android:theme="@style/Reversetheme">
         </activity>
+
+
+        <service android:name="com.viamhealth.android.services.ReminderBackground" >
+
         <service
             android:name="com.viamhealth.android.services.NotifyService"
             android:enabled="true"
@@ -201,5 +206,6 @@
         </service>
 
     </application>
+
 
 </manifest>

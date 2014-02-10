@@ -165,4 +165,9 @@ public class AddCholesterolGoalFragment_New extends AddGoalFragment implements V
         }
         return null;
     }
+
+    @Override
+    public boolean isValid() {
+        return false;
+    }
 }

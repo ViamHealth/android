@@ -105,4 +105,9 @@ public class AddBpGoalFragment_New extends AddGoalFragment {
         }
         return null;
     }
+
+    @Override
+    public boolean isValid() {
+        return false;
+    }
 }

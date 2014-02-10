@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -34,12 +35,17 @@ import com.viamhealth.android.adapters.MedicalConditionsAdapter;
 import com.viamhealth.android.manager.AddGoalFragmentManager;
 import com.viamhealth.android.manager.OrFragmentManager;
 import com.viamhealth.android.model.enums.MedicalConditions;
+import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
+import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.services.ReminderBackground;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -95,6 +101,10 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
                     setResult(RESULT_OK, intent);
                     finish();
                 }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Looks like you left one or more fields empty",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -102,11 +112,10 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddGoalFragment activeFragment = fm.getActiveGoalFragment();
-                if(activeFragment.isValid()){
-                    //setSkip
-                    finish();
-                }
+                Intent intent = new Intent();
+                intent.putExtra("type", fm.getType());
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
 
@@ -115,13 +124,54 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         btnAddReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddGoalFragment activeFragment = fm.getActiveGoalFragment();
-                if(activeFragment.isValid()){
-                    //set Remind me later notification MJ
-                    finish();
+                ArrayList<Reminder> rem1= new ArrayList<Reminder>();
+                Intent intentservice = new Intent(AddGoalActivity.this, ReminderBackground.class);
+                Reminder reminder = new Reminder();
+                String name ="";
+                if(type==MedicalConditions.Obese)
+                {
+                    name="Weight";
                 }
+                else if(type==MedicalConditions.BloodPressure)
+                {
+                    name="Blood Pressure";
+                }
+                else if(type==MedicalConditions.Cholesterol)
+                {
+                    name="Cholesterol";
+                }
+                else if(type==MedicalConditions.Diabetes)
+                {
+                    name="Diabetes";
+                }
+
+                reminder.setName(name+" Goals");
+                reminder.setType(ReminderType.DrAppointments);
+                reminder.setUserId(user.getId());
+                Date dt = new Date();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(dt);
+                if(cal.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY)
+                {
+                    cal.add(Calendar.DATE,1);
+                }
+                else
+                {
+                    cal.add(Calendar.DATE,2);
+                }
+                reminder.setStartDate(cal.getTime());
+                reminder.setEndDate(cal.getTime());
+                rem1.add(reminder);
+                intentservice.putParcelableArrayListExtra("reminder", rem1);
+                intentservice.putExtra("user",user);
+                startService(intentservice);
+                Intent intent = new Intent();
+                intent.putExtra("type", fm.getType());
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
+
 
 
 
@@ -138,6 +188,13 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         fm.changeFragment(type);
 
     }
+
+    public void setReminder()
+    {
+
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
