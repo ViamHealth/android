@@ -154,14 +154,17 @@
             android:name="com.viamhealth.android.services.NotifyMedicineTodayMorning"
             android:enabled="true"
             android:exported="true" >
+        </service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTomorrowMorning"
             android:enabled="true"
             android:exported="true" >
+        </service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTwoMorning"
             android:enabled="true"
             android:exported="true" >
+        </service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineThreeMorning"
             android:enabled="true"
