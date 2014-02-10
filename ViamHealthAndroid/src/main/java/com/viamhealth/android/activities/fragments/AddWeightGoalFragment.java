@@ -115,6 +115,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
             }
         });
 
+        pHeight.requestFocus();
         return view;
     }
 

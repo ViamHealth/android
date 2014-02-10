@@ -95,6 +95,7 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);
         date.setOnFocusChangeListener(mManager);
 
+        pHDL.requestFocus();
         return view;
     }
 

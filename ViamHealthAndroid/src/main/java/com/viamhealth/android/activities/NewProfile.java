@@ -299,6 +299,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         actionBar.setHomeButtonEnabled(true);
         actionBar.setLogo(R.drawable.ic_action_white_brand);
         /*** Action bar Creation Ends Here ***/
+
+        email.requestFocus();
     }
 
     @Override
