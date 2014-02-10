@@ -36,14 +36,10 @@ public class ServicesCommon {
     public final static String ACTION_ACTED = "com.viamhealth.android.ACTION_ACTED";
     public final static String ACTION_DISMISS = "com.viamhealth.android.ACTION_DISMISS";
     public final static String NOTIFICATION = "NOTIFICATION";
-    /*public final static int OTHERS_HOUR = 9;
+    public final static int OTHERS_HOUR = 9;
     public final static int MEDICINE_MORNING_HOUR = 8;
     public final static int MEDICINE_NOON_HOUR = 2;
-    public final static int MEDICINE_EVENING_HOUR = 9;*/
-    public final static int OTHERS_HOUR = 4;
-    public final static int MEDICINE_MORNING_HOUR = 8;
-    public final static int MEDICINE_NOON_HOUR = 4;
-    public final static int MEDICINE_EVENING_HOUR = 5;
+    public final static int MEDICINE_EVENING_HOUR = 9;
 
 
 
