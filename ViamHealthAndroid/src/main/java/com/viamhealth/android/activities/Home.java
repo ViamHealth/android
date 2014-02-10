@@ -14,6 +14,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
+import com.viamhealth.android.activities.fragments.GoalFragment;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
@@ -205,6 +206,9 @@ public class Home extends BaseActivity implements OnClickListener{
 
             //Monjyoti:commented
             Intent intent = new Intent(Home.this, TabActivity.class);
+            //Intent intent = new Intent(Home.this, SelectGoals.class);
+            //MJ:condition if first time,goalfragment else tabactivity
+            //Intent intent = new Intent(Home.this, GoalFragment.class);
             intent.putExtra("user", user);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
@@ -570,6 +574,9 @@ public class Home extends BaseActivity implements OnClickListener{
                 startActivityForResult(addProfileIntent, index);
             }else{
                 Intent intent = new Intent(Home.this, TabActivity.class);
+                //Intent intent = new Intent(Home.this, SelectGoals.class);
+                //MJ:condition if first time then goalfragment,otherwise tabactivity
+                //Intent intent = new Intent(Home.this, GoalFragment.class);
                 intent.putExtra("user", selectedUser);
                 Parcelable[] users = new Parcelable[lstFamily.size()];
                 intent.putExtra("users", lstFamily.toArray(users));

@@ -140,7 +140,9 @@
     </string-array>
 
     <string name="app_id">603777449653645</string>
-    <string name="save">save</string>
+    <string name="skip">Skip</string>
+    <string name="addReminder">Remind Later</string>
+    <string name="save">Save</string>
     <string name="title_activity_new_home">NewHome</string>
     <string name="reminder_type_prompt">Type</string>
     <string name="duration_type_prompt">Duration</string>
