@@ -88,6 +88,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     ViamHealthPrefs appPrefs;
     Global_Application ga=null;
+    String[] items=null;
 
     ActionBar actionBar;
 
@@ -229,118 +230,131 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-
+    public void setGoalFlag(String[] items,int position)
+    {
+        if(position < items.length)
+        {
+            if(items[position].equalsIgnoreCase("weight"))
+            {
+                isWeight = true ? (isWeight == false) : false;
+            }
+            else if(items[position].equalsIgnoreCase("blood pressure"))
+            {
+                isBp = true ? (isBp == false) : false;
+            }
+            else if(items[position].equalsIgnoreCase("diabetes"))
+            {
+                isSugar = true ? (isSugar == false) : false;
+            }
+            else if(items[position].equalsIgnoreCase("cholesterol"))
+            {
+                isCholesterol = true ? (isCholesterol == false) : false;
+            }
+        }
+    }
 
     public void addNewGoalFirstTime() {
-        String[] items={"Weight","Blood Pressure","Diabetes","Cholesterol"};
+        items = getMedicalConditions(getBundleFromMap(goalsConfiguredMap));
+        if(items!=null && items.length>0)
+        {
+            final Dialog dialog = new Dialog(getSherlockActivity(),R.style.Greentheme);
+            dialog.setContentView(R.layout.select_goals);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            ListView lv= (ListView)dialog.findViewById(R.id.mylist);
+            lv.setAdapter(new ArrayAdapter<String>(getSherlockActivity(), android.R.layout.simple_list_item_multiple_choice, items));
+            lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
-        final Dialog dialog = new Dialog(getSherlockActivity(),R.style.Greentheme);
-        dialog.setContentView(R.layout.select_goals);
-        dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ListView lv= (ListView)dialog.findViewById(R.id.mylist);
-        lv.setAdapter(new ArrayAdapter<String>(getSherlockActivity(), android.R.layout.simple_list_item_multiple_choice, items));
-        lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-
-        Button btnSkip = (Button)dialog.findViewById(R.id.btn_skip);
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
-                inFileTest.putExtra("user", selectedUser);
-                inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
-                startActivity(inFileTest);
-            }
-        });
-
-        Button btnSave=(Button)dialog.findViewById(R.id.btn_next);
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    SharedPreferences.Editor edit = userPref.edit();
-                    edit.putBoolean("isGoal",true);
-                    edit.commit();
-                    Intent in = new Intent(getSherlockActivity(), AddGoalActivity.class);
-                    in.putExtra("user", selectedUser);
-                    in.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
-                    if(isCholesterol==true)
-                    {
-                        lastSelected= MedicalConditions.Cholesterol;
-                    }
-                    else if(isSugar == true)
-                    {
-                        lastSelected= MedicalConditions.Diabetes;
-                    }
-                    else if(isBp==true)
-                    {
-                        lastSelected=MedicalConditions.BloodPressure;
-                    }
-                    else if(isWeight == true)
-                    {
-                        lastSelected=MedicalConditions.Obese;
-                    }
-
+            Button btnSkip = (Button)dialog.findViewById(R.id.btn_skip);
+            btnSkip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
                     inFileTest.putExtra("user", selectedUser);
                     inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
                     startActivity(inFileTest);
-
-                    if(isCholesterol==true)
-                    {
-                        isCholesterolActivity=true;
-                        in.putExtra("type", MedicalConditions.Cholesterol);
-                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                    }
-                    if(isSugar==true)
-                    {
-                        isSugarActivity=true;
-                        in.putExtra("type", MedicalConditions.Diabetes);
-                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                    }
-                    if(isBp==true)
-                    {
-                        isBpActivity=true;
-                        in.putExtra("type", MedicalConditions.BloodPressure);
-                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                    }
-                    if(isWeight== true)
-                    {
-                        isWeightActivity=true;
-                        in.putExtra("type", MedicalConditions.Obese);
-                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                    }
-
-
-
-            }
-        });
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
-                //final CheckBox cb = (CheckBox) view.findViewById(R.id.checkBox1);
-                //Toast.makeText(getApplicationContext(),"checkbox "+position + " ticked",Toast.LENGTH_LONG).show();
-                if (position == 0) {
-                    isWeight = true ? (isWeight == false) : false;
-                    Toast.makeText(getSherlockActivity(), "isWeight " + isWeight, Toast.LENGTH_LONG).show();
-                    selectedMC = MedicalConditions.Obese;
-                } else if (position == 1) {
-                    isBp = true ? (isBp == false) : false;
-                    Toast.makeText(getSherlockActivity(), "isBp " + isBp, Toast.LENGTH_LONG).show();
-                    selectedMC = MedicalConditions.BloodPressure;
-                } else if (position == 2) {
-                    isSugar = true ? (isSugar == false) : false;
-                    Toast.makeText(getSherlockActivity(), "isSugar " + isSugar, Toast.LENGTH_LONG).show();
-                    selectedMC = MedicalConditions.Diabetes;
-                } else if (position == 3) {
-                    isCholesterol = true ? (isCholesterol == false) : false;
-                    Toast.makeText(getSherlockActivity(), "isCholesterol " + isCholesterol, Toast.LENGTH_LONG).show();
-                    selectedMC = MedicalConditions.Cholesterol;
+                    getActivity().finish();
                 }
-            }
-        });
-        dialog.show();
+            });
+
+            Button btnSave=(Button)dialog.findViewById(R.id.btn_next);
+
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                        SharedPreferences.Editor edit = userPref.edit();
+                        edit.putBoolean("isGoal",true);
+                        edit.commit();
+                        Intent in = new Intent(getSherlockActivity(), AddGoalActivity.class);
+                        in.putExtra("user", selectedUser);
+                        in.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+                        if(isCholesterol==true)
+                        {
+                            lastSelected= MedicalConditions.Cholesterol;
+                        }
+                        else if(isSugar == true)
+                        {
+                            lastSelected= MedicalConditions.Diabetes;
+                        }
+                        else if(isBp==true)
+                        {
+                            lastSelected=MedicalConditions.BloodPressure;
+                        }
+                        else if(isWeight == true)
+                        {
+                            lastSelected=MedicalConditions.Obese;
+                        }
+
+                        Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
+                        inFileTest.putExtra("user", selectedUser);
+                        inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+                        startActivity(inFileTest);
+
+                        if(isCholesterol==true)
+                        {
+                            isCholesterolActivity=true;
+                            in.putExtra("type", MedicalConditions.Cholesterol);
+                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                        }
+                        if(isSugar==true)
+                        {
+                            isSugarActivity=true;
+                            in.putExtra("type", MedicalConditions.Diabetes);
+                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                        }
+                        if(isBp==true)
+                        {
+                            isBpActivity=true;
+                            in.putExtra("type", MedicalConditions.BloodPressure);
+                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                        }
+                        if(isWeight== true)
+                        {
+                            isWeightActivity=true;
+                            in.putExtra("type", MedicalConditions.Obese);
+                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                        }
+
+
+
+                }
+            });
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    setGoalFlag(items,position);
+                }
+            });
+            dialog.show();
+        }
+        else
+        {
+            Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
+            inFileTest.putExtra("user", selectedUser);
+            inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+            startActivity(inFileTest);
+            getActivity().finish();
+        }
     }
 
 
@@ -445,10 +459,13 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
                 if(selectedCondition==lastSelected)
                 {
-                    Intent intent = new Intent(getSherlockActivity(), TabActivity.class);
-                    intent.putExtra("user", selectedUser);
-                    intent.putExtra("users",getArguments().getParcelableArray("users"));
+                    //Intent intent = new Intent(getSherlockActivity(), TabActivity.class);
+                    //intent.putExtra("user", selectedUser);
+                    //intent.putExtra("users",getArguments().getParcelableArray("users"));
+                    //intent.putExtra("isTab", true);
+                    Intent intent=getActivity().getIntent();
                     intent.putExtra("isTab", true);
+                    getActivity().finish();
                     startActivity(intent);
                 }
 
@@ -634,8 +651,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         protected void onPreExecute() {
-            dialog.setMessage("saving the new value...");
-            dialog.show();
+            //dialog.setMessage("saving the new value...");
+            //dialog.show();
         }
 
         @Override
@@ -643,7 +660,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             //TODO need to fix this - onGoalReadingAdded(type, reading);
             //for temporary fix
             onGoalDataChanged(type);
-            dialog.dismiss();
+            //dialog.dismiss();
         }
     }
 
@@ -676,13 +693,13 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         protected void onPreExecute() {
-            dialog.setMessage("saving the new goal...");
-            dialog.show();
+            //dialog.setMessage("saving the new goal...");
+            //dialog.show();
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            dialog.dismiss();
+            //dialog.dismiss();
             if(reading!=null && !isUpdate){
                 SaveGoalReading task = new SaveGoalReading();
                 task.type = type;
@@ -715,8 +732,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         protected void onPreExecute() {
-            dialog.setMessage("getting all your goals...");
-            dialog.show();
+            //dialog.setMessage("getting all your goals...");
+            //dialog.show();
         }
 
         @Override
@@ -740,7 +757,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 final_layout.setVisibility(View.VISIBLE);
             }
 
-            dialog.dismiss();
+            //dialog.dismiss();
             //if MJ:condition
             //addNewGoal();
            if(userPref.getBoolean("isGoal",false)==false)

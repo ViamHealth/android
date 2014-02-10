@@ -1,5 +1,6 @@
 package com.viamhealth.android.activities.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -10,7 +11,14 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Window;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.BaseFragmentActivity;
+import com.viamhealth.android.model.enums.ReminderType;
+import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.services.ReminderBackground;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by monj on 31/1/14.
@@ -18,6 +26,7 @@ import com.viamhealth.android.model.users.User;
 public class FileShowcaseActivity extends BaseFragmentActivity {
 
     User selectedUser;
+    ArrayList<Reminder> rem1 = new ArrayList<Reminder>();
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -63,6 +72,28 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
 
     void setReminder()
     {
-
+        Intent intentservice = new Intent(FileShowcaseActivity.this, ReminderBackground.class);
+        Reminder reminder = new Reminder();
+        reminder.setName(getIntent().getStringExtra("testName")+" Lab Test");
+        reminder.setType(ReminderType.LabTests);
+        reminder.setUserId(selectedUser.getId());
+        Date dt = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dt);
+        if(cal.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY)
+        {
+            cal.add(Calendar.DATE,1);
+        }
+        else
+        {
+            cal.add(Calendar.DATE,2);
+        }
+        reminder.setStartDate(cal.getTime());
+        reminder.setEndDate(cal.getTime());
+        rem1.add(reminder);
+        intentservice.putParcelableArrayListExtra("reminder", rem1);
+        intentservice.putExtra("user",selectedUser);
+        startService(intentservice);
+        finish();
     }
 }

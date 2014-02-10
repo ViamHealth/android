@@ -23,9 +23,16 @@ import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.FileListFragment;
 import com.viamhealth.android.activities.fragments.FileShowcaseActivity;
 import com.viamhealth.android.adapters.CheckboxGoalListAdapter;
+import com.viamhealth.android.model.enums.ReminderType;
+import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.services.ReminderBackground;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -35,12 +42,13 @@ public class SelectFiles extends ListActivity {
 
     Boolean isWeight=false,isBp=false,isSugar=false,isCholesterol=false;
     //private static final String[] items={"Blood Test","Sugar Test","Thyroid Test","Cholesterol Test","Master Checkup"};
-    private static final ArrayList<String> items= new ArrayList<String>();
+    private final ArrayList<String> items= new ArrayList<String>();
     private HashMap mymap = new HashMap();
     User selectedUser;
     private Boolean[] checkList;
     ArrayList<String> displayList;
     SharedPreferences userPref;
+    ArrayList<Reminder> rem1 = new ArrayList<Reminder>();
     //private static Boolean[] values = new Boolean();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +86,26 @@ public class SelectFiles extends ListActivity {
                         intent1.putExtra("testName",displayList.get(i));
                         startActivity(intent1);
                     }
+                    else
+                    {
+                        Reminder reminder = new Reminder();
+                        reminder.setName(displayList.get(i));
+                        reminder.setType(ReminderType.LabTests);
+                        reminder.setUserId(selectedUser.getId());
+                        Date dt = new Date();
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(dt);
+                        cal.add(Calendar.DATE, 1);
+                        dt=cal.getTime();
+                        reminder.setStartDate(dt);
+                        reminder.setEndDate(dt);
+                        rem1.add(reminder);
+                    }
                 }
-
+                Intent intentservice = new Intent(SelectFiles.this, ReminderBackground.class);
+                intentservice.putParcelableArrayListExtra("reminder",rem1);
+                intentservice.putExtra("user",selectedUser);
+                startService(intentservice);
                 finish();
             }
         });

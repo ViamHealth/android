@@ -42,9 +42,8 @@ public abstract class AddGoalFragment extends BaseFragment {
     public abstract Goal getGoal();
     public abstract GoalReadings getGoalReadings();
 
-    public boolean isValid(){
-        return true;
-    }
+
+    public abstract boolean isValid();
 
     public void onTargetDateChange () {
 

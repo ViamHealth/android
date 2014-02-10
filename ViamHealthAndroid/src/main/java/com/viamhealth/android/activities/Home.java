@@ -651,6 +651,15 @@ public class Home extends BaseActivity implements OnClickListener{
                 dialog.dismiss();
                 Toast.makeText(Home.this, "Not able to add a new profile...", Toast.LENGTH_SHORT).show();
             }
+
+            Intent intent = new Intent(Home.this, TabActivity.class);
+            //Intent intent = new Intent(Home.this, SelectGoals.class);
+            //MJ:condition if first time then goalfragment,otherwise tabactivity
+            //Intent intent = new Intent(Home.this, GoalFragment.class);
+            intent.putExtra("user", user);
+            Parcelable[] users = new Parcelable[lstFamily.size()];
+            intent.putExtra("users", lstFamily.toArray(users));
+            startActivity(intent);
         }
 
         @Override

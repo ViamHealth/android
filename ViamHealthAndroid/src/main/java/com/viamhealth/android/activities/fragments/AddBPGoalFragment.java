@@ -97,6 +97,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
     public GoalReadings getGoalReadings() {
         if(!isGoalConfigured) {
             BPGoalReading readings = new BPGoalReading();
+
             readings.setSystolicPressure(Integer.parseInt(pSP.getText().toString()));
             readings.setDiastolicPressure(Integer.parseInt(pDP.getText().toString()));
             //readings.setPulseRate(Integer.parseInt(pPR.getText().toString()));
@@ -104,5 +105,34 @@ public class AddBPGoalFragment extends AddGoalFragment {
             return readings;
         }
         return null;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean isValid=true;
+
+
+        if(pSP.getText().length()==0){
+            pSP.setError("Please fill the value for systolic pressure");
+            isValid=false;
+        }
+        if(pDP.getText().length()==0){
+            pDP.setError("Please fill the value for diastolic pressure");
+            isValid=false;
+        }
+        if(tSP.getText().length()==0){
+            tSP.setError("Please fill the value for target systolic pressure");
+            isValid=false;
+        }
+        if(tDP.getText().length()==0){
+            tDP.setError("Please fill the value for target diastolic pressure");
+            isValid=false;
+        }
+        if(targetDate.getText().length()==0){
+            targetDate.setError("Please fill the value for target date");
+            isValid=false;
+        }
+
+        return isValid;
     }
 }

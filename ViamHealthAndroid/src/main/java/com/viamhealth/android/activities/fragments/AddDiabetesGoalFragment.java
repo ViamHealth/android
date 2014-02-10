@@ -54,6 +54,7 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
         dialog = new ProgressDialog(getActivity());
 
+
         targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
         targetDate.setOnFocusChangeListener(mManager);
 
@@ -110,5 +111,35 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
             return readings;
         }
         return null;
+    }
+
+    @Override
+    public boolean isValid() {
+        boolean isValid=true;
+
+
+        if(pFBS.getText().length()==0){
+            pFBS.setError("Please fill the value for fasting blood sugar");
+            isValid=false;
+        }
+        if(pRBS.getText().length()==0){
+            pRBS.setError("Please fill the value for random blood sugar");
+            isValid=false;
+        }
+        if(tFBS.getText().length()==0){
+            tFBS.setError("Please fill the value for target fasting  blood sugar");
+            isValid=false;
+        }
+        if(tRBS.getText().length()==0){
+            tRBS.setError("Please fill the value for target random blood sugar");
+            isValid=false;
+        }
+
+        if(targetDate.getText().length()==0){
+            targetDate.setError("Please fill the value for target date");
+            isValid=false;
+        }
+
+        return isValid;
     }
 }
