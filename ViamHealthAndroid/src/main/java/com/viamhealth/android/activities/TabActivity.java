@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -145,11 +146,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             edit1.putBoolean("isTest",true); //MJ:set to true
             edit1.putBoolean("isGoal",true);
         }
+        /*
         else
         {
             edit1.putBoolean("isTest",false); //MJ:set to true
             edit1.putBoolean("isGoal",false);
         }
+        */
 
         edit1.commit();
         //To comment
@@ -159,9 +162,12 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         if(pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false)
         {
             FragmentTransaction fm = TabActivity.this.getSupportFragmentManager().beginTransaction();
-            GoalFragment fragment = (GoalFragment) SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
-            fm.add(R.id.realtabcontent, fragment, "goals");
+            GoalFragment fragment = (GoalFragment)SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
+            //GoalFragment fragment=new GoalFragment();
+            fragment.setArguments(bundle);
+            fm.replace(R.id.realtabcontent,fragment,"goals");
             fm.commit();
+            //fm.addToBackStack("goals");
             TabActivity.this.getSupportFragmentManager().executePendingTransactions();
         }
         else
@@ -223,6 +229,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
 
     }
+
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
@@ -296,15 +303,18 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if(mTabManager.getCurrentSelectedTab().equals("goals")){
-            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                if(headerIsVisible){
-                    //tabHeader.setAnimation(animationMoveOut);
-                    headerIsVisible = false;
-                }
-                else{
-                    //tabHeader.setAnimation(animationMoveIn);
-                    headerIsVisible = true;
+        if(mTabManager.getCurrentSelectedTab()!=null)
+        {
+            if(mTabManager.getCurrentSelectedTab().equals("goals")){
+                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                    if(headerIsVisible){
+                        //tabHeader.setAnimation(animationMoveOut);
+                        headerIsVisible = false;
+                    }
+                    else{
+                        //tabHeader.setAnimation(animationMoveIn);
+                        headerIsVisible = true;
+                    }
                 }
             }
         }
@@ -316,6 +326,9 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     }
 
     public enum Actions { UploadFiles, SetGoal; }
+
+
+
 
 
 }
