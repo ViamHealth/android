@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by naren on 24/11/13.
  */
-public class ReminderDataAdapter extends SingleSelectionAdapter<ReminderReading> {
+public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> {
 
     Activity activity;
     int layoutResourceId;
