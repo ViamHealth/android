@@ -58,7 +58,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     ActionBar actionBar;
 
     boolean headerIsVisible = true;
-
+    Global_Application ga;
     private User user = null;
     private Parcelable[] pUsers=null;
     private final List<User> users = new ArrayList<User>();
@@ -70,7 +70,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.tab_main_activity);
-
+        ga=((Global_Application)getApplicationContext());
         mTabHost = (TabHost)findViewById(R.id.tabHost);
         mTabHost.setup();
         mTabHost.setOnClickListener(this);
@@ -261,6 +261,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retVal = super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.menu_logout){
+            ga.GA_eventButtonPress("tab_menu_logout");
             Intent returnIntent = new Intent(TabActivity.this, Home.class);
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -269,11 +270,20 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         }
 
         if(item.getItemId() == android.R.id.home) {
+            ga.GA_eventButtonPress("tab_home");
             finish();
             return true;
         }
 
+        if(item.getItemId() == R.id.menu_toc) {
+            ga.GA_eventButtonPress("tab_menu_terms_n_conditions");
+            Intent returnIntent = new Intent(TabActivity.this, TermsActivity.class);
+            startActivity(returnIntent);
+            return true;
+        }
+
         if(item.getItemId() == R.id.menu_invite) {
+            ga.GA_eventButtonPress("tab_menu_invite");
             InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application)getApplicationContext());
             inviteUser.show();
         }

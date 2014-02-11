@@ -98,6 +98,8 @@
             android:launchMode="singleTask">
 
         </activity>
+        <activity android:name="com.viamhealth.android.activities.TermsActivity" >
+        </activity>
         <activity android:name="com.viamhealth.android.activities.AddGoalActivity" >
         </activity>
         <activity android:name="com.viamhealth.android.activities.SelectGoals" >
