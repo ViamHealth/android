@@ -26,7 +26,7 @@ public class ForgotPassword extends BaseFragmentActivity {
 
     EditText etEmail;
     Button btnMailMe;
-
+    Global_Application ga;
     UserEP userEndPoint;
 
     @Override
@@ -36,6 +36,7 @@ public class ForgotPassword extends BaseFragmentActivity {
         setContentView(R.layout.forgot_password);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        ga=((Global_Application)getApplicationContext());
         userEndPoint=new UserEP(ForgotPassword.this, (Global_Application)getApplicationContext());
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
@@ -51,6 +52,7 @@ public class ForgotPassword extends BaseFragmentActivity {
             @Override
             public void onClick(View v) {
                 if(Checker.isInternetOn(ForgotPassword.this)){
+                    ga.GA_eventButtonPress("forgot_password_mail_me");
                     if(isValid()){
                         ForgotPasswordTask task = new ForgotPasswordTask();
                         task.execute(etEmail.getText().toString());

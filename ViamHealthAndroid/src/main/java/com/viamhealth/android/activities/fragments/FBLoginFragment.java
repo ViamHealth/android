@@ -51,6 +51,7 @@ public class FBLoginFragment extends BaseFragment {
 
     boolean isPaused = false;
 
+    Global_Application ga;
     UserEP userEndPoint;
 
     public static List<String> fbPermissions = Arrays.asList("user_birthday", "user_hometown", "user_location", "email",
@@ -62,6 +63,7 @@ public class FBLoginFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fb_login_fragment, container, false);
 
+        ga=((Global_Application)getActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
         LoginButton login = (LoginButton) view.findViewById(R.id.authButton);
         login.setFragment(this);
@@ -179,9 +181,11 @@ public class FBLoginFragment extends BaseFragment {
 
         protected void onPostExecute(Boolean hasFailed) {
             if(hasFailed){
+                ga.GA_eventGeneral("login_fb","failure");
                 dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
             }else{
+                ga.GA_eventGeneral("login_fb","success");
                 dialog.dismiss();
                 Intent i = new Intent(getActivity(), Home.class);
                 i.putExtra("justRegistered", true);

@@ -683,6 +683,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         Intent returnIntent = new Intent();
 
         if(v == btnSave){
+            ga.GA_eventButtonPress("save_profile");
             Log.d(TAG, "onClick : btnSave clicked - isImageSelected - " + isImageSelected);
             if(validate()){
                 if(isImageSelected){
@@ -697,6 +698,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 }
             }
         }else if(v == btnCancel) {
+            ga.GA_eventButtonPress("cancel_save_profile");
             setResult(RESULT_CANCELED, returnIntent);
             finish();
         }

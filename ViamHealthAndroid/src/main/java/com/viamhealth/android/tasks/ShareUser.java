@@ -17,6 +17,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.model.users.User;
@@ -51,6 +53,12 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
         chkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                EasyTracker.getInstance(mContext).send(MapBuilder
+                        .createEvent("ui_action",
+                                "button_press",
+                                "share_self",
+                                null)
+                        .build());
                 if(isChecked && (shareTo.getText().toString()==null || shareTo.getText().toString().isEmpty())) {
                     if(mUserToShare.getEmail()!=null && !mUserToShare.getEmail().isEmpty()){
                         shareTo.setText(mUserToShare.getEmail());
@@ -98,6 +106,12 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
         inviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EasyTracker.getInstance(mContext).send(MapBuilder
+                        .createEvent("ui_action",
+                                "button_press",
+                                "share_invite",
+                                null)
+                        .build());
                 email = shareTo.getText().toString();
                 if(email==null || email.isEmpty()){
                     shareTo.setError("email is mandatory");
