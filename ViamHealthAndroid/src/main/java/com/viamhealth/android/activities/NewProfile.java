@@ -686,12 +686,14 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             Log.d(TAG, "onClick : btnSave clicked - isImageSelected - " + isImageSelected);
             if(validate()){
                 if(isImageSelected){
+                    User newUser = generateModelFromView();
                     UploadProfilePicTask task = new UploadProfilePicTask();
                     task.execute();
                 }else{
                     User newUser = generateModelFromView();
                     Log.d(TAG, "onClick : generated user from model " + newUser);
                     updateUser(newUser);
+
                 }
             }
         }else if(v == btnCancel) {
@@ -781,7 +783,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         @Override
         protected FileUploader.Response doInBackground(Void... params) {
             FileUploader uploader = new FileUploader(appPrefs.getToken());
-            long userId = user==null?0:user.getId();
+            long userId = 0 ;
+            if(user != null && user.getId() != null) {
+                userId = user.getId();
+            }
             if(userId==0){
                 //create user
                 Log.i(TAG, "AsyncTask : Creating a new user as userId = 0 ");

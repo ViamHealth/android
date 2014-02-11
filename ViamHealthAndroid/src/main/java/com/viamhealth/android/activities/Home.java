@@ -630,6 +630,7 @@ public class Home extends BaseActivity implements OnClickListener{
     {
         protected Context applicationContext;
         protected boolean isBeingUpdated;
+        protected boolean profilPicBugIsBugUpdated;
 
         @Override
         protected void onPreExecute()
@@ -643,7 +644,7 @@ public class Home extends BaseActivity implements OnClickListener{
         {
             if(result.toString().equals("0")){
                 try{
-                    if(isBeingUpdated){
+                    if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
                         generateTile(selectedViewPosition, false);
                     }else{
                         generateTile(lstFamily.size()-1, false);
@@ -672,10 +673,19 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
+
             isBeingUpdated = (user.getId()>0)? true: false;
+            profilPicBugIsBugUpdated = Boolean.FALSE;
+            for(User uu : lstFamily){
+                if(uu.getId() == user.getId()){
+                    profilPicBugIsBugUpdated = Boolean.TRUE;
+                    isBeingUpdated = false;
+                }
+            }
             user = userEP.updateUser(user);
-            if(isBeingUpdated)
+            if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
                 lstFamily.set(selectedViewPosition, user);
+            }
             else
                 lstFamily.add(user);
             return "0";
