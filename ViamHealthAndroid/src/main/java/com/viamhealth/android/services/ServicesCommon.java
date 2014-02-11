@@ -27,7 +27,7 @@ import java.util.List;
 public class ServicesCommon {
     private ServicesCommon(){
     }
-    public final static int REMIND_AGAIN_TIME = 900000;//millisec = 15 min
+    public final static int REMIND_AGAIN_TIME = 90000;//millisec = 15 min
     public final static String PARAM_USER = "user";
     public final static String PARAM_TYPE = "type";
     public final static String PARAM_DATA = "data";
