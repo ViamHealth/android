@@ -15,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,6 +132,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.tab_fragment_goal, container, false);
 
+
+
         goalHelper = new GoalsEPHelper(getSherlockActivity(), (Global_Application)getSherlockActivity().getApplicationContext());
         userEP = new UserEP(getSherlockActivity(), (Global_Application)getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
@@ -171,6 +174,9 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         return view;
     }
 
+
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(Menu.NONE, R.drawable.addicon, 10, "New Goal")
@@ -196,6 +202,9 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
      * @param
      * @return
      */
+
+
+
     public String getDataForGraph(MedicalConditions mc) {
 
         if(!goalsConfiguredMap.containsKey(mc))
@@ -263,6 +272,21 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             ListView lv= (ListView)dialog.findViewById(R.id.mylist);
             lv.setAdapter(new ArrayAdapter<String>(getSherlockActivity(), android.R.layout.simple_list_item_multiple_choice, items));
             lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
+
+            dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                @Override
+                public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                    //Toast.makeText(getSherlockActivity(),"key pressed in fragment and key pressed is"+i,Toast.LENGTH_LONG).show();
+                    if(keyEvent.getAction()==KeyEvent.ACTION_DOWN)
+
+                        if(i==KeyEvent.KEYCODE_BACK){
+                            getActivity().finish();
+                        }
+                    return false;
+                }
+            });
+
 
             Button btnSkip = (Button)dialog.findViewById(R.id.btn_skip);
             btnSkip.setOnClickListener(new View.OnClickListener() {
@@ -717,6 +741,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+
+
     public class GetALLGoals extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -768,6 +794,9 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
 
     }
+
+
+
 
 
 }

@@ -74,7 +74,7 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
     {
         Intent intentservice = new Intent(FileShowcaseActivity.this, ReminderBackground.class);
         Reminder reminder = new Reminder();
-        reminder.setName(getIntent().getStringExtra("testName")+" Lab Test");
+        reminder.setName(getIntent().getStringExtra("testName"));
         reminder.setType(ReminderType.LabTests);
         reminder.setUserId(selectedUser.getId());
         Date dt = new Date();

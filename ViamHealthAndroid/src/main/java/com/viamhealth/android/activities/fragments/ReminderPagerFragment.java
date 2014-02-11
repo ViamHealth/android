@@ -197,11 +197,11 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     if (actionMode != null) {
                         actionMode.invalidate();
                         // if action mode, toggle checked state of item
-                        adapter.toggleChecked(position);
-                        if(adapter.isChecked(position))
-                            view.setActivated(true);
-                        else
-                            view.setActivated(false);
+                        //adapter.toggleChecked(position);
+                        //if(adapter.isChecked(position))
+                           // view.setActivated(true);
+                        //else
+                            //view.setActivated(false);
 
                     }
                     //Nothing to be done for single click
