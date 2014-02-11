@@ -29,7 +29,7 @@ import java.util.Date;
 /**
  * Created by naren on 10/10/13.
  */
-public class AddDiabetesGoalFragment extends AddGoalFragment {
+public class AddDiabetesGoalFragment_New extends AddGoalFragment {
 
     User user;
     boolean isGoalConfigured;
@@ -44,7 +44,7 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_diabetes_goal, container, false);
+        view = inflater.inflate(R.layout.fragment_add_diabetes_goal_new, container, false);
 
         user = getArguments().getParcelable("user");
         Bundle bundle = getArguments().getBundle("goals");
@@ -53,7 +53,6 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
 
         dialog = new ProgressDialog(getActivity());
-
 
         targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
         targetDate.setOnFocusChangeListener(mManager);
@@ -115,31 +114,6 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
     @Override
     public boolean isValid() {
-        boolean isValid=true;
-
-
-        if(pFBS.getText().length()==0){
-            pFBS.setError("Please fill the value for fasting blood sugar");
-            isValid=false;
-        }
-        if(pRBS.getText().length()==0){
-            pRBS.setError("Please fill the value for random blood sugar");
-            isValid=false;
-        }
-        if(tFBS.getText().length()==0){
-            tFBS.setError("Please fill the value for target fasting  blood sugar");
-            isValid=false;
-        }
-        if(tRBS.getText().length()==0){
-            tRBS.setError("Please fill the value for target random blood sugar");
-            isValid=false;
-        }
-
-        if(targetDate.getText().length()==0){
-            targetDate.setError("Please fill the value for target date");
-            isValid=false;
-        }
-
-        return isValid;
+        return false;
     }
 }

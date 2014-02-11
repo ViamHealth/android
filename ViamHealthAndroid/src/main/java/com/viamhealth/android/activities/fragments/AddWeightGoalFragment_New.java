@@ -43,7 +43,7 @@ import java.util.Map;
 /**
  * Created by naren on 10/10/13.
  */
-public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFocusChangeListener {
+public class AddWeightGoalFragment_New extends AddGoalFragment implements View.OnFocusChangeListener {
 
     EditText pHeight, pWeight, tWeight, targetDate;
     User user = null;
@@ -64,7 +64,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_add_weight_goal, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_weight_goal_new, container, false);
 
         user = getArguments().getParcelable("user");
         Bundle bundle = getArguments().getBundle("goals");
@@ -75,7 +75,6 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
         targetDate = (EditText) view.findViewById(R.id.add_goal_target_date);
         targetDate.setOnFocusChangeListener(mManager);
-
 
         pHeight = (EditText) view.findViewById(R.id.add_goal_height_input);
         pWeight = (EditText) view.findViewById(R.id.add_goal_weight_input);
@@ -122,14 +121,14 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
     @Override
     public void onTargetDateChange() {
-        /*double targetWeight = Double.parseDouble(tWeight.getText().toString());
+        double targetWeight = Double.parseDouble(tWeight.getText().toString());
         double presentWeight = user.getBmiProfile().getWeight();
         if(presentWeight-targetWeight<=1){
             warningImage.setVisibility(View.GONE);
             warningText.setVisibility(View.GONE);
             return;
-        }*/
-        /*double weightDiffPerWeek = getWeightDiffPerWeek();
+        }
+        double weightDiffPerWeek = getWeightDiffPerWeek();
         if(weightDiffPerWeek > 1.0){
             warningImage.setVisibility(View.VISIBLE);
             warningText.setText(String.format(getString(R.string.weightGoalUnhealthyWarning), weightDiffPerWeek));
@@ -139,7 +138,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         }else{
             warningImage.setVisibility(View.GONE);
             warningText.setText(String.format(getString(R.string.weightGoalIdealTargetYourDate), weightDiffPerWeek));
-        }*/
+        }
     }
 
     public void onFocusChange(View v, boolean hasFocus) {
@@ -194,32 +193,51 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         }
     }
 
-
     @Override
     public boolean isValid() {
-        boolean isValid=true;
+//        try {
+//            //get the weight to be reduced per week
+//            DateTime start = new DateTime();
+//            DateTime end = new DateTime(formater.parse(targetDate.getText().toString()).getTime());
+//            int weeksForTarget = Weeks.weeksBetween(start, end).getWeeks();
+//            weeksForTarget = Math.abs(weeksForTarget);
+//
+//            double targetWeight = Double.parseDouble(tWeight.getText().toString());
+//            double presentWeight = user.getBmiProfile().getWeight();
+//            double weightDiff = Math.abs(targetWeight - presentWeight);
+//
+//            double weightDiffPerWeek = weightDiff/weeksForTarget;
+//            Double idealTWD = Math.ceil(weightDiff / idealWeightPerWeek);
+//            int idealTargetWeeks = idealTWD.intValue();
+//
+//            DateTime idealTD = start.plusWeeks(idealTargetWeeks);
+//
+//            final Date idealTargDate = new Date(idealTD.getMillis());
+//            if(weightDiffPerWeek>1.0){
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
+//                builder.setMessage("Its possible to reach this target only if you fast! \n On a aggressive mode its healthy to reduce 0.5 kgs per week. It takes "+idealTargetWeeks+" weeks to reach your target weight. Do you want me to set target date based on this?");
+//                builder.setPositiveButton("sure", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        targetDate.setText(formater.format(idealTargDate));
+//                    }
+//                });
+//                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+//                    @Override
+//                    public void onCancel(DialogInterface dialog) {
+//                        targetDate.setText("");
+//                    }
+//                });
+//                builder.show();
+//                return false;
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
 
-        if(pHeight.getText().length()==0){
-            pHeight.setError("Please fill the value for present height");
-            isValid=false;
-        }
-        if(pWeight.getText().length()==0){
-            tWeight.setError("Please fill the value for present weight");
-            isValid=false;
-        }
-        if(tWeight.getText().length()==0){
-            tWeight.setError("Please fill the value for target weight");
-            isValid=false;
-        }
-        if(targetDate.getText().length()==0){
-            targetDate.setError("Please fill the value for target date");
-            isValid=false;
-        }
-
-        return isValid;
+        return true;
     }
-
-
 
     @Override
     public Goal getGoal() {

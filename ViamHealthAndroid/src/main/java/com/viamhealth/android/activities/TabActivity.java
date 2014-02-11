@@ -2,10 +2,12 @@ package com.viamhealth.android.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -57,6 +60,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     boolean headerIsVisible = true;
 
     private User user = null;
+    private Parcelable[] pUsers=null;
     private final List<User> users = new ArrayList<User>();
 
     private static final float HEADER_TOP_MARGIN_DP = 58.0f;
@@ -75,17 +79,14 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
         user = (User) intent.getParcelableExtra("user");
-        Parcelable[] pUsers = intent.getParcelableArrayExtra("users");
+        pUsers = intent.getParcelableArrayExtra("users");
+
         users.clear();
         for(int i=0; i<pUsers.length; i++){
             users.add((User) pUsers[i]);
         }
 
-        Actions action = (Actions) intent.getSerializableExtra("action");
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("user", user);
-        bundle.putSerializable("action", action);
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayUseLogoEnabled(true);
@@ -128,20 +129,58 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         /* Create the Tab Header */
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
+        SharedPreferences pref = getSharedPreferences("User"+user.getId(), Context.MODE_PRIVATE);
+        // To comment
+
+        Boolean isTab=getIntent().getBooleanExtra("isTab", false);
+        Actions action = (Actions)getIntent().getSerializableExtra("action");
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("user", user);
+        bundle.putSerializable("action", action);
+        bundle.putParcelableArray("users",pUsers);
+        SharedPreferences.Editor edit1=pref.edit();
+        if(isTab==true)
+        {
+            edit1.putBoolean("isTest",true); //MJ:set to true
+            edit1.putBoolean("isGoal",true);
+        }
+        else
+        {
+            edit1.putBoolean("isTest",false); //MJ:set to true
+            edit1.putBoolean("isGoal",false);
+        }
+
+        edit1.commit();
+        //To comment
+
+
+
+        if(pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false)
+        {
+            FragmentTransaction fm = TabActivity.this.getSupportFragmentManager().beginTransaction();
+            GoalFragment fragment = (GoalFragment) SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
+            fm.add(R.id.realtabcontent, fragment, "goals");
+            fm.commit();
+            TabActivity.this.getSupportFragmentManager().executePendingTransactions();
+        }
+        else
+        {
         /* Create Tabs */
-        mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
-                mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
-                ReminderFragmentNew.class, bundle);
-        mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
-                GoalFragment.class, bundle);
+            mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
+                    mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
+                    ReminderFragmentNew.class, bundle);
+            mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                    mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
+                    GoalFragment.class, bundle);
 
-        //NewReminders.class, bundle);
-        mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
-                mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
-                //FileFragment.class, bundle);
-                FileFragment.class, bundle);
+            //NewReminders.class, bundle);
+            mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
+                    mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
+                    //FileFragment.class, bundle);
+                    FileFragment.class, bundle);
 
+        }
 
         animationMoveIn = new TranslateAnimation(0, 0, -29, 29);
         animationMoveIn.setDuration(2000);
@@ -156,6 +195,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         tabs = (TabWidget) findViewById(android.R.id.tabs);
 
 
+
         if(action == Actions.UploadFiles){
             mTabHost.setCurrentTabByTag("files");
             //mTabManager.selectTab(TabTypes.Files.name());
@@ -163,18 +203,25 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             fragment.pickFile();
         } else if(action == Actions.SetGoal){
             mTabHost.setCurrentTabByTag("goals");
-            //mTabManager.selectTab(TabTypes.Goals.name());
-        //}
 
-        //if (savedInstanceState != null) {
+            //mTabManager.selectTab(TabTypes.Goals.name());
+            //}
+
+            //if (savedInstanceState != null) {
             //mTabManager.selectTab(savedInstanceState.getString("tab"));
             //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
+
+
+
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
+
     }
 
     @Override

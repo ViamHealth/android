@@ -26,7 +26,7 @@ import java.util.Date;
 /**
  * Created by naren on 10/10/13.
  */
-public class AddBPGoalFragment extends AddGoalFragment {
+public class AddBpGoalFragment_New extends AddGoalFragment {
 
     BPGoal goal;
 
@@ -34,7 +34,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_bp_goal, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_bp_goal_new, container, false);
 
         user = getArguments().getParcelable("user");
         Bundle bundle = getArguments().getBundle("goals");
@@ -97,7 +97,6 @@ public class AddBPGoalFragment extends AddGoalFragment {
     public GoalReadings getGoalReadings() {
         if(!isGoalConfigured) {
             BPGoalReading readings = new BPGoalReading();
-
             readings.setSystolicPressure(Integer.parseInt(pSP.getText().toString()));
             readings.setDiastolicPressure(Integer.parseInt(pDP.getText().toString()));
             //readings.setPulseRate(Integer.parseInt(pPR.getText().toString()));
@@ -109,30 +108,6 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
     @Override
     public boolean isValid() {
-        boolean isValid=true;
-
-
-        if(pSP.getText().length()==0){
-            pSP.setError("Please fill the value for systolic pressure");
-            isValid=false;
-        }
-        if(pDP.getText().length()==0){
-            pDP.setError("Please fill the value for diastolic pressure");
-            isValid=false;
-        }
-        if(tSP.getText().length()==0){
-            tSP.setError("Please fill the value for target systolic pressure");
-            isValid=false;
-        }
-        if(tDP.getText().length()==0){
-            tDP.setError("Please fill the value for target diastolic pressure");
-            isValid=false;
-        }
-        if(targetDate.getText().length()==0){
-            targetDate.setError("Please fill the value for target date");
-            isValid=false;
-        }
-
-        return isValid;
+        return false;
     }
 }
