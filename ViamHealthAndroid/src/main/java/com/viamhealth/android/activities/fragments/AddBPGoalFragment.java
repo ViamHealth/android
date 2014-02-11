@@ -71,6 +71,8 @@ public class AddBPGoalFragment extends AddGoalFragment {
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);
         date.setOnFocusChangeListener(mManager);
 
+        pSP.requestFocus();
+
         return view;
     }
 

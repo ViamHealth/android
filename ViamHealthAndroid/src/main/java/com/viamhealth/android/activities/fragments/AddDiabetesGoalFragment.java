@@ -79,7 +79,7 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
             if(user.getBmiProfile().getRandomSugar()>0) pRBS.setText(String.valueOf(user.getBmiProfile().getRandomSugar()));
         }
 
-
+        pFBS.requestFocus();
         return view;
     }
 
