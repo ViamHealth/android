@@ -289,6 +289,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             return true;
         }
 
+        if(item.getItemId() == R.id.menu_wizard) {
+            ga.GA_eventButtonPress("tab_menu_terms_n_conditions");
+            Intent returnIntent = new Intent(TabActivity.this, TaskBoard.class);
+            startActivity(returnIntent);
+            return true;
+        }
+
         if(item.getItemId() == R.id.menu_invite) {
             ga.GA_eventButtonPress("tab_menu_invite");
             InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application)getApplicationContext());

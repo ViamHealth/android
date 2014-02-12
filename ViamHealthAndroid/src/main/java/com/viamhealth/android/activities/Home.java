@@ -575,14 +575,22 @@ public class Home extends BaseActivity implements OnClickListener{
                 }
                 startActivityForResult(addProfileIntent, index);
             }else{
-                Intent intent = new Intent(Home.this, TabActivity.class);
-                //Intent intent = new Intent(Home.this, SelectGoals.class);
-                //MJ:condition if first time then goalfragment,otherwise tabactivity
-                //Intent intent = new Intent(Home.this, GoalFragment.class);
-                intent.putExtra("user", selectedUser);
-                Parcelable[] users = new Parcelable[lstFamily.size()];
-                intent.putExtra("users", lstFamily.toArray(users));
-                startActivity(intent);
+                if(v.getId() == 0){
+                    Intent intent = new Intent(Home.this, TaskBoard.class);
+                    intent.putExtra("user", selectedUser);
+                    Parcelable[] users = new Parcelable[lstFamily.size()];
+                    intent.putExtra("users", lstFamily.toArray(users));
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(Home.this, TabActivity.class);
+                    //Intent intent = new Intent(Home.this, SelectGoals.class);
+                    //MJ:condition if first time then goalfragment,otherwise tabactivity
+                    //Intent intent = new Intent(Home.this, GoalFragment.class);
+                    intent.putExtra("user", selectedUser);
+                    Parcelable[] users = new Parcelable[lstFamily.size()];
+                    intent.putExtra("users", lstFamily.toArray(users));
+                    startActivity(intent);
+                }
             }
         }
 	}

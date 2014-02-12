@@ -108,6 +108,10 @@
 
         <activity android:name="com.viamhealth.android.activities.TermsActivity" >
         </activity>
+        <activity android:name="com.viamhealth.android.activities.WizardActivity" >
+        </activity>
+        <activity android:name="com.viamhealth.android.activities.TaskBoard" >
+        </activity>
 
         <activity android:name="com.viamhealth.android.activities.AddGoalActivity"
             android:screenOrientation="portrait">
