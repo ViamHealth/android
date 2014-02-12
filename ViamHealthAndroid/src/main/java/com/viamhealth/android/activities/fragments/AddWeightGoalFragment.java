@@ -104,6 +104,11 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
                 DecimalFormat d=new DecimalFormat("0.0");
                 tWeight.setText(d.format(getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())));
                 targetDate.setText(formater.format(getIdealTargetDate()));
+                if(getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())>=user.getBmiProfile().getWeight())
+                {
+                    warningText.setText("");
+                }
+
             }
         }
 

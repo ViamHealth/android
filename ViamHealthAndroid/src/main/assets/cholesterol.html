@@ -172,7 +172,7 @@ $(function () {
             },
             tooltip: {
                 formatter: function() {
-                    return '<b>'+ new Date(this.x) +'</b><br/>'+
+                    return '<b>'+ (new Date()).toDateString() +'</b><br/>'+
                         this.series.name +': '+ this.y +'<br/>'+
                         'Total: '+ this.point.stackTotal;
                 }

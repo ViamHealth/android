@@ -125,6 +125,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             inFileTest.putExtra("user", selectedUser);
             inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
             startActivity(inFileTest);
+            getActivity().finish();
         }
     }
 
