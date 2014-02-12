@@ -6,9 +6,9 @@
     <string name="local_service_stopped">Service Stopped</string>
     <string name="local_service_label">Service Label</string>
 
-    <string name="notification_medicine_taken">Taken?</string>
+    <string name="notification_medicine_taken">Taken</string>
     <string name="notification_remind">Remind in 15</string>
-    <string name="notification_upload_results">Archive</string>
+    <string name="notification_upload_results">Save Doc</string>
     <string name="notification_completed_others">Completed</string>
     <!-- All Toast Messages -->
     <string name="loginMessage">we are validating your identity....</string>
@@ -56,6 +56,7 @@
     <string name="medical_conidtion_cholesterol">Cholesterol</string>
     <string name="selected">selected</string>
     <string name="inviteUser">Invite User</string>
+    <string name="toc">Terms of Use</string>
 
     <string-array name="goal_name_array">
         <item>Blood Glucose</item>

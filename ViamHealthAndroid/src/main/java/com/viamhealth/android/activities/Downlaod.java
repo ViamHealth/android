@@ -49,6 +49,7 @@ public class Downlaod extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+                ga.GA_eventButtonPress("file_download_start");
 				startdownload();
 				finish();
 			}
@@ -58,6 +59,7 @@ public class Downlaod extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+                ga.GA_eventButtonPress("file_download_cancel");
 				finish();  
 			}
 		});

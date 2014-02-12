@@ -68,7 +68,7 @@ public class NotifyServiceTwo extends IntentService{
 
     private void buildNotification(Intent intent){
         NotificationCompat.Builder notification = ServicesCommon.getNotification(intent, this, NOTIFICATION);
-        notification.addAction(R.drawable.btn_check_holo_light,getString(R.string.notification_completed_others),getActedPendingIntent(intent));
+        notification.addAction(R.drawable.right,getString(R.string.notification_completed_others),getActedPendingIntent(intent));
         notification.addAction(R.drawable.ic_action_upload,getString(R.string.notification_upload_results),getDismissPendingIntent(intent));
         Notification not = notification.build();
         mNM.notify(NOTIFICATION, not);

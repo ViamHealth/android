@@ -106,8 +106,12 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <activity android:name="com.viamhealth.android.activities.TermsActivity" >
+        </activity>
+
         <activity android:name="com.viamhealth.android.activities.AddGoalActivity"
             android:screenOrientation="portrait">
+
         </activity>
 
         <activity android:name="com.viamhealth.android.activities.SelectGoals"

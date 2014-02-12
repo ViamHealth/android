@@ -66,7 +66,7 @@ public class NotifyMedicineTomorrowAfternoon extends IntentService {
 
     private void buildNotification(Intent intent){
         NotificationCompat.Builder notification = ServicesCommon.getNotification(intent, this, NOTIFICATION);
-        notification.addAction(R.drawable.btn_check_holo_light,getString(R.string.notification_medicine_taken),getActedPendingIntent(intent));
+        notification.addAction(R.drawable.right,getString(R.string.notification_medicine_taken),getActedPendingIntent(intent));
         notification.addAction(R.drawable.ic_action_reminders,getString(R.string.notification_remind),getDismissPendingIntent(intent));
         Notification not = notification.build();
         mNM.notify(NOTIFICATION, not);

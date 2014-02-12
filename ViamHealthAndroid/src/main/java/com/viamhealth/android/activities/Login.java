@@ -6,6 +6,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphObject;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
@@ -61,7 +63,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 	private static ProgressDialog dialog;
 	
 	Button login_btn;
-	
+	Global_Application ga;
 	EditText user_name, user_password;
 	TextView sign_up, forgotPassword;
 	UserEP userEndPoint;
@@ -73,6 +75,8 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        ga=((Global_Application)getApplicationContext());
+
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		setContentView(R.layout.login_new);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -186,13 +190,16 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		// TODO Auto-generated method stub
 		if(v==login_btn){
 			if(Checker.isInternetOn(Login.this)){
+                ga.GA_eventButtonPress("login_email_button");
 				if(validation()){
 					CallLoginTask task = new CallLoginTask();
 					task.applicationContext = Login.this;
                     task.username = user_name.getText().toString();
                     task.password = user_password.getText().toString();
 					task.execute();
-				}
+				} else {
+                    ga.GA_eventGeneral("login_email","failure","invalid input");
+                }
 			}else{
 				Toast.makeText(Login.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
 			}
@@ -203,6 +210,8 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 			startActivity(i);
 		}
         if(v==forgotPassword){
+            ga.GA_eventButtonPress("forgot_password_button");
+
             Intent i = new Intent(Login.this, ForgotPassword.class);
             i.putExtra("email", user_name.getText().toString());
             startActivity(i);
@@ -243,9 +252,11 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 		 
 		protected void onPostExecute(String response) {
 			if(!response.equals("0")){
+                ga.GA_eventGeneral("login_email","failure","wrong credentials");
                 dialog.dismiss();
                 Toast.makeText(Login.this, R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
 			}else{
+                ga.GA_eventGeneral("login_email","success");
                 dialog.dismiss();
                 //appPrefs.setUsername(user_name.getText().toString().trim());
                 Intent i=new Intent(Login.this, Home.class);

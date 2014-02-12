@@ -156,6 +156,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
             {
+                ga.GA_eventButtonPress("files_list_long_click");
                 if (actionMode != null) {
                     // if already in action mode - do nothing
                     return false;
@@ -172,7 +173,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
             {
-
+                ga.GA_eventButtonPress("files_list_click");
                 if (actionMode != null) {
                     actionMode.invalidate();
                     // if action mode, toggle checked state of item
@@ -325,6 +326,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
             switch (item.getItemId()) {
                 case R.id.action_mode_download:
+                    ga.GA_eventButtonPress("files_download");
                     String url = null;
                     if(adapter.getCheckedItemCount()>0){
                         AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
@@ -334,15 +336,17 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                         }
                         builder.setTitle("Downloading files...");
                         builder.setMessage(strBuilder.toString());
-                        builder.setPositiveButton("Sure...", new DialogInterface.OnClickListener() {
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                ga.GA_eventButtonPress("files_download_confirm");
                                 downloadFiles(files);
                             }
                         });
-                        builder.setNegativeButton("Nope...", new DialogInterface.OnClickListener() {
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                ga.GA_eventButtonPress("files_download_cancel");
                                 dialog.dismiss();
                             }
                         });
@@ -368,6 +372,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                             fileIds[i++] = file.getId();
                         }
                         if(Checker.isInternetOn(getSherlockActivity())){
+                            ga.GA_eventButtonPress("files_delete");
                             DeleteFileTask task = new DeleteFileTask();
                             task.activity = getSherlockActivity();
                             task.execute(fileIds);
@@ -391,6 +396,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                 case R.id.action_mode_share:
 
                     if(files.size()>0){
+                        ga.GA_eventButtonPress("files_share");
                         Intent sharingIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                         sharingIntent.setType("*/*");
                         sharingIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);

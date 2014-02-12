@@ -107,6 +107,7 @@ public class AddReminder extends BaseFragmentActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ga.GA_eventButtonPress("reminder_save");
                 updateModelFromView();
                 if(isValid()){
                     Intent returnIntent = new Intent();
@@ -126,6 +127,7 @@ public class AddReminder extends BaseFragmentActivity {
         btnEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ga.GA_eventButtonPress("reminder_end");
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("end", true);
                 returnIntent.putExtra("reminder", reminder);

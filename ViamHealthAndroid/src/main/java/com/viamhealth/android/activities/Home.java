@@ -322,6 +322,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 public void onClick(DialogInterface dialog, int which) {
                     if(Checker.isInternetOn(Home.this)){
                         if(isValid()){
+                            ga.GA_eventButtonPress("home_change_password");
                             ChangePasswordTask task = new ChangePasswordTask();
                             task.execute(old.getText().toString(), newP.getText().toString());
                         }
@@ -411,6 +412,7 @@ public class Home extends BaseActivity implements OnClickListener{
             frm.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
+                    ga.GA_eventButtonPress("home_long_click");
                     int index = v.getId();
                     selectedViewPosition = index;
                     if(lstFamily.size() > index) {
@@ -630,6 +632,7 @@ public class Home extends BaseActivity implements OnClickListener{
     {
         protected Context applicationContext;
         protected boolean isBeingUpdated;
+        protected boolean profilPicBugIsBugUpdated;
 
         @Override
         protected void onPreExecute()
@@ -643,7 +646,7 @@ public class Home extends BaseActivity implements OnClickListener{
         {
             if(result.toString().equals("0")){
                 try{
-                    if(isBeingUpdated){
+                    if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
                         generateTile(selectedViewPosition, false);
                     }else{
                         generateTile(lstFamily.size()-1, false);
@@ -672,10 +675,19 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
+
             isBeingUpdated = (user.getId()>0)? true: false;
+            profilPicBugIsBugUpdated = Boolean.FALSE;
+            for(User uu : lstFamily){
+                if(uu.getId() == user.getId()){
+                    profilPicBugIsBugUpdated = Boolean.TRUE;
+                    isBeingUpdated = false;
+                }
+            }
             user = userEP.updateUser(user);
-            if(isBeingUpdated)
+            if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
                 lstFamily.set(selectedViewPosition, user);
+            }
             else
                 lstFamily.add(user);
             return "0";
@@ -852,6 +864,7 @@ public class Home extends BaseActivity implements OnClickListener{
         }
 
         private void deleteUser() {
+            ga.GA_eventButtonPress("home_delete_user");
             View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.delete_confirmation, null);
 
             TextView message = (TextView) dialogView.findViewById(R.id.confirmMessage);
@@ -863,6 +876,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     if (Checker.isInternetOn(Home.this)) {
+                        ga.GA_eventButtonPress("home_delete_user_confirm");
                         CallDeleteProfileTask task = new CallDeleteProfileTask();
                         task.applicationContext = Home.this;
                         task.execute();
@@ -874,12 +888,14 @@ public class Home extends BaseActivity implements OnClickListener{
         }
 
         private void shareUser() {
+            ga.GA_eventButtonPress("home_share_user");
             ShareUser share = new ShareUser(Home.this, ga, selectedUser);
             share.show();
             actionMode.finish();
         }
 
         private void editUser() {
+            ga.GA_eventButtonPress("home_share_user");
             Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
             addProfileIntent.putExtra("user", selectedUser);
             addProfileIntent.putExtra("isEditMode", true);

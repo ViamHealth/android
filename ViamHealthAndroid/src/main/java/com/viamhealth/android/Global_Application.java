@@ -7,6 +7,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -86,7 +88,51 @@ public class Global_Application extends Application
 	}
 
 
+    /* Refactor GA integration before next launch */
 
+    public void GA_eventButtonPress(String label){
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent("ui_action",
+                        "button_press",
+                        label,
+                        null)
+                .build());
+    }
+    public void GA_eventButtonPress(String label, long value){
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent("ui_action",
+                        "button_press",
+                        label,
+                        value)
+                .build());
+    }
+
+    public void GA_eventGeneral(String category, String action, String label, long value){
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent(category,
+                        action,
+                        label,
+                        value)
+                .build());
+    }
+    public void GA_eventGeneral(String category, String action, String label){
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent(category,
+                        action,
+                        label,
+                        null)
+                .build());
+    }
+    public void GA_eventGeneral(String category, String action){
+        EasyTracker.getInstance(this).send(MapBuilder
+                .createEvent(category,
+                        action,
+                        null,
+                        null)
+                .build());
+    }
+
+    /* GA Integration ends */
 
     public User getLoggedInUser() {
         return loggedInUser;

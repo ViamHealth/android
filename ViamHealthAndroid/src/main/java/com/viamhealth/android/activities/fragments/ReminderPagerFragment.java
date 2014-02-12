@@ -146,6 +146,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ga.GA_eventButtonPress("reminders_add_reminder");
                 OnAdd(null);
             }
         });
@@ -172,6 +173,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
                 {
+                    ga.GA_eventButtonPress("reminders_list_long_click");
                     if (actionMode != null) {
                         // if already in action mode - do nothing
                         return false;
@@ -191,6 +193,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
             list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                    ga.GA_eventButtonPress("files_list_click");
                     if (actionMode != null) {
                         actionMode.invalidate();
                         // if action mode, toggle checked state of item
@@ -292,12 +295,14 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
 
             switch (item.getItemId()) {
                 case R.id.action_mode_edit:
+                    ga.GA_eventButtonPress("reminders_edit");
                     //Toast.makeText(getActivity(), "Edit", Toast.LENGTH_LONG).show();
                     ReminderReading reading = adapter.getFirstCheckedItem();
                     OnEdit(reading.getReminder());
                     return true;
 
                 case R.id.action_mode_delete:
+                    ga.GA_eventButtonPress("reminders_delete");
                     if(adapter.getCheckedItemCount()>0){
                         OnDelete(reminders);
                     }else{
