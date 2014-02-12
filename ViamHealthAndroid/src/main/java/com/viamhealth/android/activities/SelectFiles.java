@@ -23,6 +23,7 @@ import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.FileListFragment;
 import com.viamhealth.android.activities.fragments.FileShowcaseActivity;
 import com.viamhealth.android.adapters.CheckboxGoalListAdapter;
+import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.users.User;
@@ -123,12 +124,53 @@ public class SelectFiles extends ListActivity {
             }
         });
 
+        if(selectedUser.getProfile()!=null)
+        {
+            if(selectedUser.getProfile().getAge()>=18)
+            {
+                items.add("Blood pressure test");
+                items.add("Cholesterol test");
+                items.add("Blood Glucose");
+                items.add("Complete eye exam");
+                items.add("Hearing test");
+                items.add("Skin Health");
+                items.add("Dental exam");
+                items.add("Full checkup, including weight and height.");
+                items.add("Colonoscopy");
+            }
 
+            if(selectedUser.getProfile().getAge()>=20 && selectedUser.getProfile().getGender()== Gender.Female)
+            {
+                items.add("Pap Smear");
+                items.add("Mammogram");
+                items.add("Breast Exam");
+            }
+
+            if(selectedUser.getProfile().getAge()>=20 && selectedUser.getProfile().getGender()== Gender.Male)
+            {
+                items.add("Prostate Exam");
+                items.add("Rectal Exam");
+                items.add("Testicular Exam");
+            }
+        }
+        else
+        {
+            Intent intent = new Intent(SelectFiles.this, TabActivity.class);
+            intent.putExtra("user", selectedUser);
+            intent.putExtra("users",getIntent().getParcelableArrayExtra("users"));
+            intent.putExtra("isTab", true);
+            startActivity(intent);
+            finish();
+        }
+
+
+        /*
         items.add("Blood Test");
         items.add("Sugar Test");
         items.add("Thyroid Test");
         items.add("Cholesterol Test");
         items.add("Master Checkup");
+*/
 
 
 
