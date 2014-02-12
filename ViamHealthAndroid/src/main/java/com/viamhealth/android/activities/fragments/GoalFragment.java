@@ -666,6 +666,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 rds = new ArrayList<GoalReadings>();
             for(int i=0; i<readings.length; i++){
                 reading = goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId());
+                if(reading == null)
+                    continue;
                 if(readings[i].isToUpdate()){
                     rds.remove(i);
                 }
