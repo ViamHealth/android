@@ -180,10 +180,6 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     }
                     // set checked selected item and enter multi selection mode
                     adapter.toggleChecked(position);
-                    if(adapter.isChecked(position))
-                        view.setActivated(true);
-                    else
-                        view.setActivated(false);
                     getSherlockActivity().startActionMode(new ReminderListActionMode());
                     actionMode.invalidate();
                     return true;
@@ -195,14 +191,9 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                     ga.GA_eventButtonPress("files_list_click");
                     if (actionMode != null) {
-                        actionMode.invalidate();
                         // if action mode, toggle checked state of item
-                        //adapter.toggleChecked(position);
-                        //if(adapter.isChecked(position))
-                           // view.setActivated(true);
-                        //else
-                            //view.setActivated(false);
-
+                        adapter.toggleChecked(position);
+                        actionMode.invalidate();
                     }
                     //Nothing to be done for single click
                 }

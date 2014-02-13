@@ -92,9 +92,9 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     @Override
     public void onPause() {
         super.onPause();
-        //if (this.actionMode != null) {
-        //    this.actionMode.finish();
-        //}
+        if (this.actionMode != null) {
+            this.actionMode.finish();
+        }
     }
 
     @Override
@@ -108,7 +108,11 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             return;
         }
         //goal_count.setText("("+files.size()+")");
-        this.adapter = new FileDataAdapter(getSherlockActivity(), R.layout.filelist, files);
+        if(this.adapter==null)
+            this.adapter = new FileDataAdapter(getSherlockActivity(), R.layout.filelist, files);
+        else
+            this.adapter.notifyDataSetChanged();
+
         adapter.setOnItemToggledListener(new MultiSelectionAdapter.OnItemToggledListener() {
             @Override
             public void onItemToggled(Object item, boolean isChecked, boolean isMultiMode) {
@@ -305,6 +309,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                 String extension = mime.getExtensionFromMimeType(files.get(i).getMimeType());
                 download(downloaUri.toString(), files.get(i).getName(), extension);
             }
+            actionMode.finish();
         }
 
 
@@ -396,6 +401,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                         sharingIntent.setType("*/*");
                         sharingIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
                         startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                        actionMode.finish();
                     }
 
                     return true;
@@ -460,6 +466,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
+            files.clear();
             files.addAll(obj.getFile(selectedUser.getId(), null));
 
             return null;
@@ -495,6 +502,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                 CallFileNavigationTask task = new CallFileNavigationTask();
                 task.activity = getSherlockActivity();
                 task.execute();
+                actionMode.finish();
                 //appPrefs.setReloadgraph("0");
             }else{
                 Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
