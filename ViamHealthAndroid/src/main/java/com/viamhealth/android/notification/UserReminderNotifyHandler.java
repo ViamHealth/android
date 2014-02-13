@@ -110,7 +110,7 @@ public class UserReminderNotifyHandler extends NotificationHandler {
                         .bigText(contentTitle))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentTitle(contentText)
-                .setSmallIcon(R.drawable.ic_action_reminders)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentText(contentTitle)
                 .setContentIntent(contentIntent);
 
