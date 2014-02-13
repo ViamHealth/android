@@ -57,29 +57,29 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
     }
 
     private void setBackground(int pos, boolean selected){
-        int version = android.os.Build.VERSION.SDK_INT;
-        View convertView = views.get(pos);
-        if(version < 11){
-            int value = selected ? 1 : -1;
-            value = value * android.R.attr.state_checked;
-            convertView.getBackground().setState(
-                    new int[] { android.R.attr.state_checked });
-        }else{
-            convertView.setSelected(selected);
-        }
+//        int version = android.os.Build.VERSION.SDK_INT;
+//        View convertView = views.get(pos);
+//        if(version < 11){
+//            int value = selected ? 1 : -1;
+//            value = value * android.R.attr.state_checked;
+//            convertView.getBackground().setState(
+//                    new int[] { android.R.attr.state_checked });
+//        }else{
+//            convertView.setActivated(selected);
+//        }
     }
 
     public void setChecked(int pos, boolean checked)
     {
 
-        //this.setBackground(pos, checked);
+        this.setBackground(pos, checked);
         if (checked) {
             this.checkedItems.add(Integer.valueOf(pos));
         } else {
             this.checkedItems.remove(Integer.valueOf(pos));
         }
         if(this.onItemToggledListener!=null){
-            this.onItemToggledListener.onItemToggled(items.get(pos), checked);
+            this.onItemToggledListener.onItemToggled(items.get(pos), checked, this.multiMode);
         }
         if (this.multiMode) {
             this.notifyDataSetChanged();
@@ -102,20 +102,19 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
             this.checkedItems.add(v);
             checked = true;
         }
+        this.setBackground(pos, checked);
         if(this.onItemToggledListener!=null){
-            this.onItemToggledListener.onItemToggled(items.get(pos), checked);
+            this.onItemToggledListener.onItemToggled(items.get(pos), checked, this.multiMode);
         }
         this.notifyDataSetChanged();
     }
 
-    public int getCheckedItemCount()
-    {
+    public int getCheckedItemCount() {
         return this.checkedItems.size();
     }
 
     // we use this convinience method for rename thingie.
-    public T getFirstCheckedItem()
-    {
+    public T getFirstCheckedItem() {
         for (Integer i : this.checkedItems) {
             return this.items.get(i.intValue());
         }
@@ -127,16 +126,14 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
         return this.checkedItems;
     }
 
-    public void clear()
-    {
+    public void clear() {
         this.items.clear();
     }
 
-    public void updateData(T[] data)
-    {
+    public void updateData(T[] data) {
         if(this.onItemToggledListener!=null){
             for(Integer ci : this.checkedItems){
-                this.onItemToggledListener.onItemToggled(items.get(ci), false);
+                this.onItemToggledListener.onItemToggled(items.get(ci), false, this.multiMode);
             }
         }
         this.checkedItems.clear();
@@ -200,7 +197,6 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
                         new int[] { -android.R.attr.state_checked });
             }
         }else{
-
             if (checkedItems.contains(Integer.valueOf(position))) {
                 convertView.setActivated(true);
             } else {
@@ -208,13 +204,14 @@ public abstract class MultiSelectionAdapter<T> extends BaseAdapter {
             }
         }
 
-        views.put(position, convertView);
+
+        //views.put(position, convertView);
         return convertView;
     }
 
 
     public interface OnItemToggledListener {
-        public void onItemToggled(Object item, boolean isChecked);
+        public void onItemToggled(Object item, boolean isChecked, boolean isMultiMode);
     }
 
 }

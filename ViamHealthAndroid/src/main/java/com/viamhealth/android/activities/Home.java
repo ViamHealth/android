@@ -678,11 +678,15 @@ public class Home extends BaseActivity implements OnClickListener{
 
             isBeingUpdated = (user.getId()>0)? true: false;
             profilPicBugIsBugUpdated = Boolean.FALSE;
+            if(isBeingUpdated == true){
+                profilPicBugIsBugUpdated = Boolean.TRUE;
+            } else {
             for(User uu : lstFamily){
                 if(uu.getId() == user.getId()){
                     profilPicBugIsBugUpdated = Boolean.TRUE;
-                    isBeingUpdated = false;
+                    //isBeingUpdated = false;
                 }
+            }
             }
             user = userEP.updateUser(user);
             if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
