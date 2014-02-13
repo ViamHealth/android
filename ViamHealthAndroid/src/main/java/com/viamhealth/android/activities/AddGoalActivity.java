@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
+import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.AddBPGoalFragment;
 import com.viamhealth.android.activities.fragments.AddCholesterolGoalFragment;
@@ -62,7 +63,8 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
     ActionBar actionBar;
     User user;
     MedicalConditions type;
-
+    Boolean isButtonVisible;
+    Global_Application ga;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +77,11 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
 
         user = intent.getParcelableExtra("user");
         type = (MedicalConditions)intent.getSerializableExtra("type");
+        isButtonVisible=intent.getBooleanExtra("isButtonVisible",false);
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", user);
         bundle.putBundle("goals", goalsConfigured);
-
+        ga=(Global_Application)getApplicationContext();
 
         fm = new AddGoalFragmentManager(this, R.id.add_goal_data_layout);
         fm.addFragment(MedicalConditions.Diabetes, AddDiabetesGoalFragment.class, bundle);
@@ -91,6 +94,23 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 AddGoalFragment activeFragment = fm.getActiveGoalFragment();
+                if(type==MedicalConditions.Diabetes)
+                {
+                    ga.GA_eventButtonPress("wizard_diabetes_goal_screen_save");
+                }
+                else if(type==MedicalConditions.Obese)
+                {
+                    ga.GA_eventButtonPress("wizard_weight_goal_screen_save");
+                }
+                else if(type==MedicalConditions.Cholesterol)
+                {
+                    ga.GA_eventButtonPress("wizard_cholesterol_goal_screen_save");
+                }
+                else if(type==MedicalConditions.BloodPressure)
+                {
+                    ga.GA_eventButtonPress("wizard_bloodPressure_goal_screen_save");
+                }
+
                 if(activeFragment.isValid()){
                     Goal goal = activeFragment.getGoal();
                     GoalReadings goalReading = activeFragment.getGoalReadings();
@@ -112,6 +132,24 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(type==MedicalConditions.Diabetes)
+                {
+                    ga.GA_eventButtonPress("wizard_diabetes_goal_screen_skip");
+                }
+                else if(type==MedicalConditions.Obese)
+                {
+                    ga.GA_eventButtonPress("wizard_weight_goal_screen_skip");
+                }
+                else if(type==MedicalConditions.Cholesterol)
+                {
+                    ga.GA_eventButtonPress("wizard_cholesterol_goal_screen_skip");
+                }
+                else if(type==MedicalConditions.BloodPressure)
+                {
+                    ga.GA_eventButtonPress("wizard_bloodPressure_goal_screen_skip");
+                }
+
                 Intent intent = new Intent();
                 intent.putExtra("type", fm.getType());
                 setResult(RESULT_OK, intent);
@@ -124,6 +162,24 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
         btnAddReminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(type==MedicalConditions.Diabetes)
+                {
+                    ga.GA_eventButtonPress("wizard_diabetes_goal_screen_remind_later");
+                }
+                else if(type==MedicalConditions.Obese)
+                {
+                    ga.GA_eventButtonPress("wizard_weight_goal_screen_remind_later");
+                }
+                else if(type==MedicalConditions.Cholesterol)
+                {
+                    ga.GA_eventButtonPress("wizard_cholesterol_goal_screen_remind_later");
+                }
+                else if(type==MedicalConditions.BloodPressure)
+                {
+                    ga.GA_eventButtonPress("wizard_bloodPressure_goal_screen_remind_later");
+                }
+
                 ArrayList<Reminder> rem1= new ArrayList<Reminder>();
                 Intent intentservice = new Intent(AddGoalActivity.this, ReminderBackground.class);
                 Reminder reminder = new Reminder();
@@ -145,7 +201,7 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
                     name="Diabetes";
                 }
 
-                reminder.setName(name+" Goals");
+                reminder.setName("Set "+name+" Goals");
                 reminder.setType(ReminderType.DrAppointments);
                 reminder.setUserId(user.getId());
                 Date dt = new Date();
@@ -172,7 +228,11 @@ public class AddGoalActivity extends BaseFragmentActivity implements View.OnClic
             }
         });
 
-
+        if(isButtonVisible==true)
+        {
+            btnSkip.setVisibility(View.VISIBLE);
+            btnAddReminder.setVisibility(View.VISIBLE);
+        }
 
 
         /*** Action Bar Creation starts here ***/

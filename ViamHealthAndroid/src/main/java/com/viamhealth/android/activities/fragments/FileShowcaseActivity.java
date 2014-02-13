@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Window;
+import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.BaseFragmentActivity;
 import com.viamhealth.android.model.enums.ReminderType;
@@ -27,6 +28,8 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
 
     User selectedUser;
     ArrayList<Reminder> rem1 = new ArrayList<Reminder>();
+    Global_Application ga;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -39,9 +42,11 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         tv.setText(tv.getText().toString()+getIntent().getStringExtra("testName"));
         //args.putString("testName",getIntent().getStringExtra("testName"));
         Button skip= (Button)findViewById(R.id.btn_skip);
+        ga=(Global_Application)getApplicationContext();
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ga.GA_eventButtonPress("wizard_upload_file_skip");
                 finish();
             }
         });
@@ -50,6 +55,7 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         remind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ga.GA_eventButtonPress("wizard_upload_file_remind");
                 setReminder();
                 finish();
             }
@@ -59,6 +65,7 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ga.GA_eventButtonPress("wizard_upload_file_next");
                 finish();
             }
         });
@@ -67,6 +74,7 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         FileFragment fragment = (FileFragment)SherlockFragment.instantiate(FileShowcaseActivity.this, FileFragment.class.getName(), args);
         fm.add(R.id.realfilecontent, fragment, "file-list");
         fm.commit();
+        ga.GA_eventGeneral("ui_action","launch_screen","wizard_upload_file_next");
     }
 
 
