@@ -20,7 +20,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -28,31 +27,18 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.activities.Downlaod;
 import com.viamhealth.android.adapters.FileDataAdapter;
 import com.viamhealth.android.adapters.MultiSelectionAdapter;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.FileData;
-import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.UIUtility;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -81,8 +67,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     private static final int LIBRARY_FILE_VIEW = 1000;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_sherlock_list, null);
 
         selectedUser = getArguments().getParcelable("user");
@@ -107,9 +92,9 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     @Override
     public void onPause() {
         super.onPause();
-        if (this.actionMode != null) {
-            this.actionMode.finish();
-        }
+        //if (this.actionMode != null) {
+        //    this.actionMode.finish();
+        //}
     }
 
     @Override
@@ -117,8 +102,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
         super.onResume();
     }
 
-    private void initListView()
-    {
+    private void initListView() {
         if(files.size()==0){
             Toast.makeText(getSherlockActivity(), "No files found...",Toast.LENGTH_SHORT).show();
             return;
@@ -127,8 +111,18 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
         this.adapter = new FileDataAdapter(getSherlockActivity(), R.layout.filelist, files);
         adapter.setOnItemToggledListener(new MultiSelectionAdapter.OnItemToggledListener() {
             @Override
-            public void onItemToggled(Object item, boolean isChecked) {
+            public void onItemToggled(Object item, boolean isChecked, boolean isMultiMode) {
                 final FileData data = (FileData) item;
+                if(isMultiMode) { //change the title
+//                    final String selected = getActivity().getString(R.string.selected);
+//                    if(adapter.getCheckedItemCount()==0){
+//                        actionMode.finish();
+//                        return;
+//                    }
+//                    if(actionMode!=null)
+//                        actionMode.setTitle(adapter.getCheckedItemCount() + " " + selected);
+                    return;
+                }
                 if(isChecked){
                     FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
                     String fileName = data.getName();
@@ -162,6 +156,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                     return false;
                 }
                 // set checked selected item and enter multi selection mode
+                adapter.enterMultiMode();
                 adapter.toggleChecked(position);
                 getSherlockActivity().startActionMode(new ActionModeCallback());
                 actionMode.invalidate();
@@ -175,9 +170,9 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             {
                 ga.GA_eventButtonPress("files_list_click");
                 if (actionMode != null) {
-                    actionMode.invalidate();
                     // if action mode, toggle checked state of item
                     adapter.toggleChecked(position);
+                    actionMode.invalidate();
                 }else{
                     FileData data = files.get(position);
                     FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
@@ -231,7 +226,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     private final class ActionModeCallback implements ActionMode.Callback {
 
         // " selected" string resource to update ActionBar text
-        private String selected = getActivity().getString(R.string.selected);
+        private final String selected = getActivity().getString(R.string.selected);
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
