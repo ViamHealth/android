@@ -227,7 +227,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         if(mc==MedicalConditions.Cholesterol){
             builder.write("seriesC", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
-            //builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
+            builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
         }
 
         builder.writeYAxisExtras(goal);
