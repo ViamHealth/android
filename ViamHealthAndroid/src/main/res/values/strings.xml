@@ -9,6 +9,7 @@
     <string name="notification_medicine_taken">Taken</string>
     <string name="notification_remind">Remind Later</string>
     <string name="notification_upload_results">Save Doc</string>
+    <string name="notification_dismiss">Dismiss</string>
     <string name="notification_completed_others">Completed</string>
     <!-- All Toast Messages -->
     <string name="loginMessage">we are validating your identity....</string>

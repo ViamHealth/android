@@ -55,21 +55,16 @@ public class NotifyService extends IntentService{
                 rep.updateReading(rr);
             }
         }
-        /*else if(action.equals(ServicesCommon.ACTION_DISMISS)) {
+        else if(action.equals(ServicesCommon.ACTION_DISMISS)) {
             mNM.cancel(NOTIFICATION);
-            try {
-                Thread.sleep(ServicesCommon.REMIND_AGAIN_TIME);
-            } catch (InterruptedException e) {
-            }
-            buildNotification(intent);
-        }*/
+        }
     }
 
 
     private void buildNotification(Intent intent){
         NotificationCompat.Builder notification = ServicesCommon.getNotification(intent, this, NOTIFICATION);
         notification.addAction(R.drawable.right,getString(R.string.notification_completed_others),getActedPendingIntent(intent));
-        notification.addAction(R.drawable.ic_action_upload,getString(R.string.notification_upload_results),getDismissPendingIntent(intent));
+        notification.addAction(0,getString(R.string.notification_dismiss),getDismissPendingIntent(intent));
         Notification not = notification.build();
         mNM.notify(NOTIFICATION, not);
     }
@@ -96,13 +91,14 @@ public class NotifyService extends IntentService{
         Parcel parcel_user = ServicesCommon.getUserParcel(user);
         Parcel parcel = ServicesCommon.getReminderNOParcel(objects);
 
-        Intent intent = new Intent(this, Home.class);
+        //Intent intent = new Intent(this, Home.class);
+        Intent intent = new Intent(this, selfClass);
         intent.putExtra(ServicesCommon.PARAM_TYPE, NotificationType.UserReminder.ordinal());
         intent.putExtra(ServicesCommon.PARAM_USER, parcel_user.marshall());
         intent.putExtra(ServicesCommon.PARAM_DATA, parcel.marshall());
         intent.setAction(ServicesCommon.ACTION_DISMISS);
         intent.putExtra(ServicesCommon.NOTIFICATION, NOTIFICATION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pi = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pi;
     }
