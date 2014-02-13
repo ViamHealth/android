@@ -67,12 +67,16 @@ public class CholesterolGoalEP extends GoalsEP {
         JSONObject hHDLR = jsonHRange.getJSONObject("hdl");
         JSONObject hLDLR = jsonHRange.getJSONObject("ldl");
         JSONObject hTGR = jsonHRange.getJSONObject("triglycerides");
+        JSONObject hTTR = jsonHRange.getJSONObject("total_cholesterol");
         ((CholesterolGoal.HealthyRange) range).setMinHDL(hHDLR.getInt("min"));
         ((CholesterolGoal.HealthyRange) range).setMaxHDL(hHDLR.getInt("max"));
         ((CholesterolGoal.HealthyRange) range).setMinLDL(hLDLR.getInt("min"));
         ((CholesterolGoal.HealthyRange) range).setMaxLDL(hLDLR.getInt("max"));
         ((CholesterolGoal.HealthyRange) range).setMinTG(hTGR.getInt("min"));
         ((CholesterolGoal.HealthyRange) range).setMaxTG(hTGR.getInt("max"));
+        ((CholesterolGoal.HealthyRange) range).setMaxTotal(hTTR.getInt("max"));
+        ((CholesterolGoal.HealthyRange) range).setMinTotal(hTTR.getInt("min"));
+
     }
 
     @Override
@@ -80,6 +84,7 @@ public class CholesterolGoalEP extends GoalsEP {
         ((CholesterolGoalReading) reading).setHdl(jsonReading.getInt("hdl"));
         ((CholesterolGoalReading) reading).setLdl(jsonReading.getInt("ldl"));
         ((CholesterolGoalReading) reading).setTriglycerides(jsonReading.getInt("triglycerides"));
+        ((CholesterolGoalReading) reading).setTotal(jsonReading.getInt("total_cholesterol"));
     }
 
     @Override
@@ -87,6 +92,7 @@ public class CholesterolGoalEP extends GoalsEP {
         ((CholesterolGoal) goal).setHdl(jsonGoal.getInt("hdl"));
         ((CholesterolGoal) goal).setLdl(jsonGoal.getInt("ldl"));
         ((CholesterolGoal) goal).setTriglycerides(jsonGoal.getInt("triglycerides"));
+        ((CholesterolGoal) goal).setTotal(jsonGoal.getInt("total_cholesterol"));
     }
 
     @Override
