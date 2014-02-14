@@ -830,8 +830,12 @@ public class UserEP extends BaseEP {
         if(updatedUser==null)
             return null;
 
+        Log.e(TAG, "user is : " +user);
+        Log.e(TAG, "updatedUser is : " +updatedUser);
+        Log.e(TAG, "user is : " +user);
+
         //Update profile data
-        if(user!=null )
+        if(user!=null &&  user.getProfile()!=null && user.getBmiProfile()!=null)
         {
             user.setId(updatedUser.getId());
             user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));

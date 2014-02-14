@@ -65,7 +65,7 @@ public class SelectFiles extends ListActivity {
         Button btn = (Button)findViewById(R.id.btn_next);
         Button btn_skip=(Button)findViewById(R.id.btn_skip);
         selectedUser = getIntent().getParcelableExtra("user");
-        userPref=getSharedPreferences("User" + selectedUser.getId(), Context.MODE_PRIVATE);
+        userPref=getSharedPreferences("User" + selectedUser.getName()+selectedUser.getId(), Context.MODE_PRIVATE);
         mymap.put(20,items);
         displayList=(ArrayList<String>)mymap.get(20);
         ga=(Global_Application)getApplicationContext();
@@ -156,8 +156,17 @@ public class SelectFiles extends ListActivity {
             }
         });
 
+
         if(selectedUser.getProfile()!=null)
         {
+            if(items!=null)
+            {
+                if(items.size()>0)
+                {
+                    items.clear();
+                }
+            }
+
             if(selectedUser.getProfile().getAge()>=18)
             {
                 items.add("Blood Pressure Test");

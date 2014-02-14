@@ -120,7 +120,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         action = (TabActivity.Actions) getArguments().getSerializable("action");
         selectedUser = getArguments().getParcelable("user");
-        userPref=getSherlockActivity().getSharedPreferences("User"+selectedUser.getId(), Context.MODE_PRIVATE);
+        userPref=getSherlockActivity().getSharedPreferences("User"+selectedUser.getName()+selectedUser.getId(), Context.MODE_PRIVATE);
         if((userPref.getBoolean("isGoal",false)==true) && (userPref.getBoolean("isTest",false)==false))
         {
             Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
