@@ -130,7 +130,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         /* Create the Tab Header */
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
-        SharedPreferences pref = getSharedPreferences("User"+user.getId(), Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("User"+user.getName()+user.getId(), Context.MODE_PRIVATE);
         // To comment
 
         Boolean isTab=getIntent().getBooleanExtra("isTab", false);
@@ -159,7 +159,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
 
 
-        if(pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false)
+        if((pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false) && user.getProfile().getAge()>=18)
         {
             FragmentTransaction fm = TabActivity.this.getSupportFragmentManager().beginTransaction();
             GoalFragment fragment = (GoalFragment)SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
