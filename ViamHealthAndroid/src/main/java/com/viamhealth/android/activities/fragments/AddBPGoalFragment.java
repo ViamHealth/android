@@ -37,9 +37,10 @@ public class AddBPGoalFragment extends AddGoalFragment {
         View view = inflater.inflate(R.layout.fragment_add_bp_goal, container, false);
 
         user = getArguments().getParcelable("user");
-        Bundle bundle = getArguments().getBundle("goals");
-        if(!bundle.isEmpty())
-            goal = (BPGoal) bundle.getParcelable(MedicalConditions.BloodPressure.name());
+        //Commenting this losing the edit ability. But doing it, as both create and edit are not working
+//        Bundle bundle = getArguments().getBundle("goals");
+        //if(!bundle.isEmpty())
+        //    goal = (BPGoal) bundle.getParcelable(MedicalConditions.BloodPressure.name());
 
         dialog = new ProgressDialog(getActivity());
 

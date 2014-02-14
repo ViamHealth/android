@@ -112,7 +112,7 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
     @Override
     public boolean onLongClick(View v) {
         //enable the action mode
-        getSherlockActivity().startActionMode(new GraphActionModeCallback());
+        //getSherlockActivity().startActionMode(new GraphActionModeCallback());
         return false;
     }
 

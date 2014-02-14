@@ -67,9 +67,10 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         View view = inflater.inflate(R.layout.fragment_add_weight_goal, container, false);
 
         user = getArguments().getParcelable("user");
-        Bundle bundle = getArguments().getBundle("goals");
-        if(!bundle.isEmpty())
-            goal = (WeightGoal) bundle.getParcelable(MedicalConditions.Obese.name());
+//Commenting this losing the edit ability. But doing it, as both create and edit are not working
+//        Bundle bundle = getArguments().getBundle("goals");
+//        if(!bundle.isEmpty())
+//            goal = (WeightGoal) bundle.getParcelable(MedicalConditions.Obese.name());
 
         dialog = new ProgressDialog(getActivity());
 
