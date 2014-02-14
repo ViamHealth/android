@@ -21,8 +21,20 @@
     <script type='text/javascript'>//<![CDATA[
 var str = goals.getData();
 var android = JSON.parse(str);
+
+android.seriesA =
+    $.grep(android.seriesA, function(value) {
+        return typeof(value.y) != "undefined";
+    });
+android.seriesB =
+    $.grep(android.seriesB, function(value) {
+        return typeof(value.y) != "undefined";
+    });
 $(function () {
     $('#container').highcharts({
+        global: {
+            useUTC: false
+        },
         chart: {
             type: "spline",
             events: {

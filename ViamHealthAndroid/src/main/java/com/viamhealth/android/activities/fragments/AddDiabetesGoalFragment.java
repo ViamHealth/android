@@ -47,9 +47,10 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
         view = inflater.inflate(R.layout.fragment_add_diabetes_goal, container, false);
 
         user = getArguments().getParcelable("user");
-        Bundle bundle = getArguments().getBundle("goals");
-        if(!bundle.isEmpty())
-            goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
+        //Commenting this losing the edit ability. But doing it, as both create and edit are not working
+        //Bundle bundle = getArguments().getBundle("goals");
+        //if(!bundle.isEmpty())
+        //    goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
 
 
         dialog = new ProgressDialog(getActivity());

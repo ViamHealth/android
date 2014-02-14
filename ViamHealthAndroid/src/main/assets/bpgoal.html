@@ -22,6 +22,9 @@ var str = goals.getData();
 var android = JSON.parse(str);
 $(function () {
     $('#container').highcharts({
+        global: {
+            useUTC: false
+        },
         chart: {
             type: "spline",
             events: {
