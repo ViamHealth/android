@@ -64,7 +64,8 @@ public class AddDiabetesValue extends AddValueBaseFragment {
         fasting = (EditText) view.findViewById(R.id.input_fasting);
         fasting.setVisibility(View.GONE);
         random = (EditText) view.findViewById(R.id.input_random);
-        random.setVisibility(View.GONE);
+        //random.setVisibility(View.GONE);
+        isRandom = true;
 
         cbfasting = (CheckBox) view.findViewById(R.id.cbFasting);
         cbrandom = (CheckBox) view.findViewById(R.id.cbRandom);
@@ -118,15 +119,20 @@ public class AddDiabetesValue extends AddValueBaseFragment {
 
     @Override
     public boolean doesExist(Date date) {
-        if(!readingsMap.containsKey(date))
+        return readingsMap.containsKey(date);
+        /*
+        if(!readingsMap.containsKey(date)){
+            isUpdate = false;
             return false;
+        }
 
         DiabetesGoalReading reading = readingsMap.get(date);
 
         if(reading.getRbs()>0 && reading.getFbs()>0){
             //isUpdate = false;
             return true;
-        }
+        }*/
+
 
 //        if(reading.getRbs()==0 && reading.getFbs()==0)
 //            isUpdate = false;
@@ -134,6 +140,6 @@ public class AddDiabetesValue extends AddValueBaseFragment {
 //        if(reading.getRbs()==0 || reading.getFbs()==0)
 //            isUpdate = true;
 
-        return false;
+        //return false;
     }
 }
