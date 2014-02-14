@@ -657,19 +657,26 @@ public class Home extends BaseActivity implements OnClickListener{
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
+                Intent intent = new Intent(Home.this, TabActivity.class);
+                intent.putExtra("user", user);
+                Parcelable[] users = new Parcelable[lstFamily.size()];
+                intent.putExtra("users", lstFamily.toArray(users));
+                startActivity(intent);
             }else{
                 dialog.dismiss();
-                Toast.makeText(Home.this, "Not able to add a new profile...", Toast.LENGTH_SHORT).show();
+                if(result.toString().equals("1")){
+                    Toast.makeText(Home.this, "Please check email/mobile number provided and edit details for "+user.getFirstName() + ".", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(Home.this, "Not able to add a new profile.", Toast.LENGTH_SHORT).show();
+                }
+                Intent intent = new Intent(Home.this, Home.class);
+                ArrayList<User> families = (ArrayList<User>) lstFamily;
+                intent.putParcelableArrayListExtra("family", families);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
 
-            Intent intent = new Intent(Home.this, TabActivity.class);
-            //Intent intent = new Intent(Home.this, SelectGoals.class);
-            //MJ:condition if first time then goalfragment,otherwise tabactivity
-            //Intent intent = new Intent(Home.this, GoalFragment.class);
-            intent.putExtra("user", user);
-            Parcelable[] users = new Parcelable[lstFamily.size()];
-            intent.putExtra("users", lstFamily.toArray(users));
-            startActivity(intent);
+
         }
 
         @Override
@@ -688,13 +695,21 @@ public class Home extends BaseActivity implements OnClickListener{
                 }
             }
             }
-            user = userEP.updateUser(user);
-            if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
-                lstFamily.set(selectedViewPosition, user);
+            try{
+                user = userEP.updateUser(user);
+                if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                    lstFamily.set(selectedViewPosition, user);
+                }
+                else
+                    lstFamily.add(user);
+                return "0";
+            } catch ( IllegalArgumentException e){
+                e.printStackTrace();
+                return "1";
             }
-            else
-                lstFamily.add(user);
-            return "0";
+
+
+
         }
     }
 
