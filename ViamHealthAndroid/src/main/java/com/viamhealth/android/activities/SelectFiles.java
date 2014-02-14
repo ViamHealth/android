@@ -102,14 +102,15 @@ public class SelectFiles extends ListActivity {
                     {
                         if(reminderList==null)
                         {
-                            reminderList=displayList.get(i);
+                            reminderList="Upload test results for future reference ( "+ displayList.get(i);
                         }
                         else
                         {
-                            reminderList=reminderList+","+displayList.get(i);
+                            reminderList=reminderList+", "+displayList.get(i);
                         }
                     }
                 }
+                reminderList = reminderList + " )";
 
                 if(fileUploadTest!=null)
                 {
