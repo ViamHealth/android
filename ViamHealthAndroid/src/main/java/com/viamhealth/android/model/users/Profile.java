@@ -31,6 +31,10 @@ public class Profile implements Parcelable{
     public int getAge() {
         Calendar nowCal = Calendar.getInstance();
         Calendar dobCal = Calendar.getInstance();
+        if(dob == null)
+        {
+            return 0;
+        }
         dobCal.setTime(dob);
 
         return nowCal.get(Calendar.YEAR) - dobCal.get(Calendar.YEAR);

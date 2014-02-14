@@ -192,7 +192,10 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                             newIntent.setDataAndType(Uri.fromFile(file), mimeType);
                             newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
                             try {
-                                getSherlockActivity().startActivity(newIntent);
+                                if(getSherlockActivity()!=null)
+                                {
+                                    getSherlockActivity().startActivity(newIntent);
+                                }
                             } catch (android.content.ActivityNotFoundException e) {
                                 Toast.makeText(getSherlockActivity(), "No handler for this type of file.", 4000).show();
                             }

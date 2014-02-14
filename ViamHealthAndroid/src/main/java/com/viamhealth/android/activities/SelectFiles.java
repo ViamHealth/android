@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.FileListFragment;
@@ -50,6 +51,9 @@ public class SelectFiles extends ListActivity {
     ArrayList<String> displayList;
     SharedPreferences userPref;
     ArrayList<Reminder> rem1 = new ArrayList<Reminder>();
+    String reminderList=null;
+    String fileUploadTest=null;
+    Global_Application ga=null;
     //private static Boolean[] values = new Boolean();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +68,14 @@ public class SelectFiles extends ListActivity {
         userPref=getSharedPreferences("User" + selectedUser.getId(), Context.MODE_PRIVATE);
         mymap.put(20,items);
         displayList=(ArrayList<String>)mymap.get(20);
+        ga=(Global_Application)getApplicationContext();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Intent intent= new Intent(SelectFiles.this,TabActivity.class);
+
+                ga.GA_eventButtonPress("wizard_select_tests_screen_next");
                 SharedPreferences.Editor edit1=userPref.edit();
 
                 edit1.putBoolean("isTest",true); //MJ:set to true
@@ -82,31 +89,55 @@ public class SelectFiles extends ListActivity {
                 {
                     if(checkList[i]==true)
                     {
-                        intent1= new Intent(SelectFiles.this,FileShowcaseActivity.class);
-                        intent1.putExtra("user", selectedUser);
-                        intent1.putExtra("testName",displayList.get(i));
-                        startActivity(intent1);
+                        if(fileUploadTest==null)
+                        {
+                            fileUploadTest=displayList.get(i);
+                        }
+                        else
+                        {
+                            fileUploadTest=fileUploadTest+","+displayList.get(i);
+                        }
                     }
                     else
                     {
-                        Reminder reminder = new Reminder();
-                        reminder.setName(displayList.get(i));
-                        reminder.setType(ReminderType.LabTests);
-                        reminder.setUserId(selectedUser.getId());
-                        Date dt = new Date();
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(dt);
-                        cal.add(Calendar.DATE, 1);
-                        dt=cal.getTime();
-                        reminder.setStartDate(dt);
-                        reminder.setEndDate(dt);
-                        rem1.add(reminder);
+                        if(reminderList==null)
+                        {
+                            reminderList=displayList.get(i);
+                        }
+                        else
+                        {
+                            reminderList=reminderList+","+displayList.get(i);
+                        }
                     }
                 }
-                Intent intentservice = new Intent(SelectFiles.this, ReminderBackground.class);
-                intentservice.putParcelableArrayListExtra("reminder",rem1);
-                intentservice.putExtra("user",selectedUser);
-                startService(intentservice);
+
+                if(fileUploadTest!=null)
+                {
+                    intent1= new Intent(SelectFiles.this,FileShowcaseActivity.class);
+                    intent1.putExtra("user", selectedUser);
+                    intent1.putExtra("testName",fileUploadTest);
+                    startActivity(intent1);
+                }
+
+                if(reminderList!=null)
+                {
+                    Reminder reminder = new Reminder();
+                    reminder.setName(reminderList);
+                    reminder.setType(ReminderType.LabTests);
+                    reminder.setUserId(selectedUser.getId());
+                    Date dt = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(dt);
+                    cal.add(Calendar.DATE, 1);
+                    dt=cal.getTime();
+                    reminder.setStartDate(dt);
+                    reminder.setEndDate(dt);
+                    rem1.add(reminder);
+                    Intent intentservice = new Intent(SelectFiles.this, ReminderBackground.class);
+                    intentservice.putParcelableArrayListExtra("reminder",rem1);
+                    intentservice.putExtra("user",selectedUser);
+                    startService(intentservice);
+                }
                 finish();
             }
         });
@@ -115,6 +146,7 @@ public class SelectFiles extends ListActivity {
             @Override
             public void onClick(View view) {
 
+                    ga.GA_eventButtonPress("wizard_select_tests_screen_skip");
                     Intent intent = new Intent(SelectFiles.this, TabActivity.class);
                     intent.putExtra("user", selectedUser);
                     intent.putExtra("users",getIntent().getParcelableArrayExtra("users"));
@@ -128,15 +160,9 @@ public class SelectFiles extends ListActivity {
         {
             if(selectedUser.getProfile().getAge()>=18)
             {
-                items.add("Blood pressure test");
-                items.add("Cholesterol test");
+                items.add("Blood Pressure Test");
+                items.add("Cholesterol Test");
                 items.add("Blood Glucose");
-                items.add("Complete eye exam");
-                items.add("Hearing test");
-                items.add("Skin Health");
-                items.add("Dental exam");
-                items.add("Full checkup, including weight and height.");
-                items.add("Colonoscopy");
             }
 
             if(selectedUser.getProfile().getAge()>=20 && selectedUser.getProfile().getGender()== Gender.Female)
@@ -153,7 +179,7 @@ public class SelectFiles extends ListActivity {
                 items.add("Testicular Exam");
             }
         }
-        else
+        if(items.size()==0)
         {
             Intent intent = new Intent(SelectFiles.this, TabActivity.class);
             intent.putExtra("user", selectedUser);
@@ -161,6 +187,10 @@ public class SelectFiles extends ListActivity {
             intent.putExtra("isTab", true);
             startActivity(intent);
             finish();
+        }
+        else
+        {
+            ga.GA_eventGeneral("ui_action","launch_screen","wizard_select_tests_screen");
         }
 
 

@@ -295,6 +295,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             btnSkip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ga.GA_eventButtonPress("wizard_select_goals_skip");
                     Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
                     inFileTest.putExtra("user", selectedUser);
                     inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
@@ -308,12 +309,19 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ga.GA_eventButtonPress("wizard_select_goals_save");
                         SharedPreferences.Editor edit = userPref.edit();
                         edit.putBoolean("isGoal",true);
                         edit.commit();
                         Intent in = new Intent(getSherlockActivity(), AddGoalActivity.class);
                         in.putExtra("user", selectedUser);
+                        in.putExtra("isButtonVisible",true);
                         in.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+                        Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
+                        inFileTest.putExtra("user", selectedUser);
+                        inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+                        startActivity(inFileTest);
+
                         if(isCholesterol==true)
                         {
                             lastSelected= MedicalConditions.Cholesterol;
@@ -330,11 +338,12 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                         {
                             lastSelected=MedicalConditions.Obese;
                         }
+                        else
+                        {
+                           getActivity().finish();
+                        }
 
-                        Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
-                        inFileTest.putExtra("user", selectedUser);
-                        inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
-                        startActivity(inFileTest);
+
 
                         if(isCholesterol==true)
                         {
@@ -361,8 +370,6 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                             startActivityForResult(in, ACTION_CONFIGURE_GOAL);
                         }
 
-
-
                 }
             });
 
@@ -373,12 +380,13 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 }
             });
             dialog.show();
+            ga.GA_eventGeneral("ui_action","launch_screen","wizard_select_goals_screen");
         }
         else
         {
             Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
             inFileTest.putExtra("user", selectedUser);
-            inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+            inFileTest.putExtra("users", getArguments().getParcelableArray("users"));
             startActivity(inFileTest);
             getActivity().finish();
         }

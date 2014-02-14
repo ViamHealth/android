@@ -831,9 +831,12 @@ public class UserEP extends BaseEP {
             return null;
 
         //Update profile data
-        user.setId(updatedUser.getId());
-        user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));
-        user.setBmiProfile(updateBMIProfile(updatedUser.getId(), user.getBmiProfile()));
+        if(user!=null )
+        {
+            user.setId(updatedUser.getId());
+            user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));
+            user.setBmiProfile(updateBMIProfile(updatedUser.getId(), user.getBmiProfile()));
+        }
 
         User loggedInUser = ga.getLoggedInUser();
         if(loggedInUser.getId()==user.getId())
