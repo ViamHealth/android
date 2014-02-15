@@ -665,7 +665,28 @@ public class Home extends BaseActivity implements OnClickListener{
             }else{
                 dialog.dismiss();
                 if(result.toString().equals("1")){
-                    Toast.makeText(Home.this, "Please check email/mobile number provided and edit details for "+user.getFirstName() + ".", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Home.this,
+                            "Email/Mobile No. already registered. Edit details for "+user.getFirstName() + ".",
+                            Toast.LENGTH_LONG).show();
+                    try{
+
+                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                            lstFamily.set(selectedViewPosition, user);
+                        }
+                        else
+                            lstFamily.add(user);
+                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                            generateTile(selectedViewPosition, false);
+                        }else{
+                            generateTile(lstFamily.size()-1, false);
+                            generateTile(lstFamily.size(), true);
+                        }
+
+
+                    } catch (ImproperArgumentsPassedException ime) {
+                        Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
                     Toast.makeText(Home.this, "Not able to add a new profile.", Toast.LENGTH_SHORT).show();
                 }
@@ -674,6 +695,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 intent.putParcelableArrayListExtra("family", families);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
             }
 
 
@@ -887,10 +909,10 @@ public class Home extends BaseActivity implements OnClickListener{
             View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.delete_confirmation, null);
 
             TextView message = (TextView) dialogView.findViewById(R.id.confirmMessage);
-            message.setText("delete " + selectedUser.getName() + "?");
+            message.setText("Are you sure?");// + selectedUser.getName() + "?");
             AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.StyledProgressDialog);
             builder.setView(dialogView);
-            builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

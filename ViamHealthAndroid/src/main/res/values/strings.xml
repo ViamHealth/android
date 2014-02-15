@@ -60,7 +60,7 @@
     <string name="toc">Terms of Use</string>
 
     <string-array name="goal_name_array">
-        <item>Blood Glucose</item>
+        <item>Blood Sugar</item>
         <item>Blood Presure</item>
         <item>Weight</item>
         <item>Cholestrol</item>

@@ -91,18 +91,18 @@ public class SelectFiles extends ListActivity {
                     {
                         if(fileUploadTest==null)
                         {
-                            fileUploadTest=displayList.get(i);
+                            fileUploadTest="Upload test results for future reference ("  + displayList.get(i);
                         }
                         else
                         {
-                            fileUploadTest=fileUploadTest+","+displayList.get(i);
+                            fileUploadTest=fileUploadTest+", "+displayList.get(i);
                         }
                     }
                     else
                     {
                         if(reminderList==null)
                         {
-                            reminderList="Upload test results for future reference ( "+ displayList.get(i);
+                            reminderList="Schedule the following ("+ displayList.get(i);
                         }
                         else
                         {
@@ -110,7 +110,10 @@ public class SelectFiles extends ListActivity {
                         }
                     }
                 }
-                reminderList = reminderList + " )";
+                if(reminderList != null)
+                    reminderList = reminderList + " )";
+                if(fileUploadTest != null)
+                    fileUploadTest = fileUploadTest + " )";
 
                 if(fileUploadTest!=null)
                 {
@@ -170,9 +173,9 @@ public class SelectFiles extends ListActivity {
 
             if(selectedUser.getProfile().getAge()>=18)
             {
-                items.add("Blood Pressure Test");
-                items.add("Cholesterol Test");
-                items.add("Blood Glucose");
+                items.add("Blood Pressure");
+                items.add("Cholesterol");
+                items.add("Blood Sugar");
             }
 
             if(selectedUser.getProfile().getAge()>=20 && selectedUser.getProfile().getGender()== Gender.Female)
@@ -185,8 +188,8 @@ public class SelectFiles extends ListActivity {
             if(selectedUser.getProfile().getAge()>=20 && selectedUser.getProfile().getGender()== Gender.Male)
             {
                 items.add("Prostate Exam");
-                items.add("Rectal Exam");
-                items.add("Testicular Exam");
+                //items.add("Rectal Exam");
+                //items.add("Testicular Exam");
             }
         }
         if(items.size()==0)
