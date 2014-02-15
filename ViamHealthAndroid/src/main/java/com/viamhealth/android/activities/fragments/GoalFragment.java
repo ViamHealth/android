@@ -309,7 +309,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ga.GA_eventButtonPress("wizard_select_goals_save");
+                    ga.GA_eventButtonPress("wizard_select_goals_next");
                         SharedPreferences.Editor edit = userPref.edit();
                         edit.putBoolean("isGoal",true);
                         edit.commit();

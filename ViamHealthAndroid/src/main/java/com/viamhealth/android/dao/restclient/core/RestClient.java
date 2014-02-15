@@ -36,13 +36,17 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
 
 // Code from: http://lukencode.com/2010/04/27/calling-web-services-in-android-using-httpclient/
 public class RestClient {
 
+    private static final boolean isDebug = false;
 	private boolean authentication;
 	private ArrayList<NameValuePair> headers;
 	
@@ -200,7 +204,7 @@ public class RestClient {
 		jsonBody = data;
 	}
 
-	private void executeRequest(HttpUriRequest request, String url) throws Exception {
+        private void executeRequest(HttpUriRequest request, String url) throws Exception {
 
 		DefaultHttpClient client = new DefaultHttpClient();
 		HttpParams params = client.getParams();
@@ -221,12 +225,18 @@ public class RestClient {
         });
 		HttpResponse httpResponse;
 
+
+
+
+        long startTime = System.currentTimeMillis();
 		try {
-            Log.i("RestClient", "Before Request " + request.toString());
+            if(isDebug)
+                Log.i("RestClient", "Before Request " + request.toString());
             httpResponse = client.execute(request);
             responseCode = httpResponse.getStatusLine().getStatusCode();
 			message = httpResponse.getStatusLine().getReasonPhrase();
-            Log.i("RestClient", "After Request " + httpResponse.toString());
+            if(isDebug)
+                Log.i("RestClient", "After Request " + httpResponse.toString());
 			HttpEntity entity = httpResponse.getEntity();
 			
 			if (entity != null) {
@@ -247,13 +257,35 @@ public class RestClient {
                     Execute(mMethod, newUrl);
                 }
                 //TODO is this a error that needs to be handled?
+                //No
             }
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            EasyTracker.getInstance(this.context).send(MapBuilder
+                    .createEvent("rest-calls",
+                            request.getMethod(),
+                            Integer.toString(responseCode),
+                            elapsedTime / 1000)
+                    .build());
 		} catch (ClientProtocolException e) {
 			client.getConnectionManager().shutdown();
 			e.printStackTrace();
+            EasyTracker.getInstance(this.context).send(MapBuilder
+                    .createEvent("rest-exceptions-clientprotocol",
+                            request.getMethod(),
+                            e.getMessage(),
+                            null
+                            )
+                    .build());
 		} catch (IOException e) {
 			client.getConnectionManager().shutdown();
 			e.printStackTrace();
+            EasyTracker.getInstance(this.context).send(MapBuilder
+                    .createEvent("rest-exceptions-io",
+                            request.getMethod(),
+                            e.getMessage(),
+                            null
+                    )
+                    .build());
 		}
 	}
 
