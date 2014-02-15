@@ -808,6 +808,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             //addNewGoal();
            if(userPref.getBoolean("isGoal",false)==false)
            {
+               dialog.dismiss();
                addNewGoalFirstTime();
            }
         }
