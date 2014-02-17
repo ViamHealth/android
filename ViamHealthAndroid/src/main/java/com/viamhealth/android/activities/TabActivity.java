@@ -292,6 +292,10 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         if(item.getItemId() == R.id.menu_wizard) {
             ga.GA_eventButtonPress("tab_menu_terms_n_conditions");
             Intent returnIntent = new Intent(TabActivity.this, TaskBoard.class);
+            returnIntent.putExtra("user", user);
+            Parcelable[] usrs = new Parcelable[users.size()];
+            returnIntent.putExtra("users", users.toArray(usrs));
+            returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(returnIntent);
             return true;
         }
