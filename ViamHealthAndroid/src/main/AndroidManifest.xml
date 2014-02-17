@@ -54,7 +54,7 @@
     <application
         android:name="com.viamhealth.android.Global_Application"
         android:allowBackup="true"
-        android:debuggable="false"
+        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="ViamHealth"
         android:theme="@style/Greentheme" >
