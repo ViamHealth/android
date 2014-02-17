@@ -138,6 +138,8 @@ public class Home extends BaseActivity implements OnClickListener{
         if(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0) != 0 ){
             NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
             mNM.cancel(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0));
+            ga.GA_eventGeneral("notification",Integer.toString(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0)),"LAUNCH");
+
         }
 
         if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){

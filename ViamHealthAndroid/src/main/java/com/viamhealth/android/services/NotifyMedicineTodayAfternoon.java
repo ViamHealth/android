@@ -41,6 +41,7 @@ public class NotifyMedicineTodayAfternoon extends IntentService{
         ga = ((Global_Application)getApplicationContext());
 
         String action = intent.getAction();
+        ga.GA_eventGeneral("notification",Integer.toString(NOTIFICATION),action);
 
         if(action.equals(ServicesCommon.ACTION_CREATE)) {
             buildNotification(intent);
