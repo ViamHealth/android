@@ -665,19 +665,48 @@ public class Home extends BaseActivity implements OnClickListener{
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
+                Intent intent = new Intent(Home.this, TabActivity.class);
+                intent.putExtra("user", user);
+                Parcelable[] users = new Parcelable[lstFamily.size()];
+                intent.putExtra("users", lstFamily.toArray(users));
+                startActivity(intent);
             }else{
                 dialog.dismiss();
-                Toast.makeText(Home.this, "Not able to add a new profile...", Toast.LENGTH_SHORT).show();
+                if(result.toString().equals("1")){
+                    Toast.makeText(Home.this,
+                            "Email/Mobile No. already registered. Edit details for "+user.getFirstName() + ".",
+                            Toast.LENGTH_LONG).show();
+                    try{
+
+                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                            lstFamily.set(selectedViewPosition, user);
+                        }
+                        else
+                            lstFamily.add(user);
+                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                            generateTile(selectedViewPosition, false);
+                        }else{
+                            generateTile(lstFamily.size()-1, false);
+                            generateTile(lstFamily.size(), true);
+                        }
+
+
+                    } catch (ImproperArgumentsPassedException ime) {
+                        Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    Toast.makeText(Home.this, "Not able to add a new profile.", Toast.LENGTH_SHORT).show();
+                }
+                Intent intent = new Intent(Home.this, Home.class);
+                ArrayList<User> families = (ArrayList<User>) lstFamily;
+                intent.putParcelableArrayListExtra("family", families);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
             }
 
-            Intent intent = new Intent(Home.this, TabActivity.class);
-            //Intent intent = new Intent(Home.this, SelectGoals.class);
-            //MJ:condition if first time then goalfragment,otherwise tabactivity
-            //Intent intent = new Intent(Home.this, GoalFragment.class);
-            intent.putExtra("user", user);
-            Parcelable[] users = new Parcelable[lstFamily.size()];
-            intent.putExtra("users", lstFamily.toArray(users));
-            startActivity(intent);
+
         }
 
         @Override
@@ -686,19 +715,31 @@ public class Home extends BaseActivity implements OnClickListener{
 
             isBeingUpdated = (user.getId()>0)? true: false;
             profilPicBugIsBugUpdated = Boolean.FALSE;
+            if(isBeingUpdated == true){
+                profilPicBugIsBugUpdated = Boolean.TRUE;
+            } else {
             for(User uu : lstFamily){
                 if(uu.getId() == user.getId()){
                     profilPicBugIsBugUpdated = Boolean.TRUE;
-                    isBeingUpdated = false;
+                    //isBeingUpdated = false;
                 }
             }
-            user = userEP.updateUser(user);
-            if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
-                lstFamily.set(selectedViewPosition, user);
             }
-            else
-                lstFamily.add(user);
-            return "0";
+            try{
+                user = userEP.updateUser(user);
+                if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                    lstFamily.set(selectedViewPosition, user);
+                }
+                else
+                    lstFamily.add(user);
+                return "0";
+            } catch ( IllegalArgumentException e){
+                e.printStackTrace();
+                return "1";
+            }
+
+
+
         }
     }
 
@@ -876,10 +917,10 @@ public class Home extends BaseActivity implements OnClickListener{
             View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.delete_confirmation, null);
 
             TextView message = (TextView) dialogView.findViewById(R.id.confirmMessage);
-            message.setText("delete " + selectedUser.getName() + "?");
+            message.setText("Are you sure?");// + selectedUser.getName() + "?");
             AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.StyledProgressDialog);
             builder.setView(dialogView);
-            builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

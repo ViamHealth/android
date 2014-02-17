@@ -3,13 +3,13 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script type='text/javascript' src='js/jquery.min.js'></script>
 
     <script type="text/javascript">
         function addPoint(data) {
-            console.log(data);
+            //why is this function needed?
+            return;
             data = JSON.parse(data);
-            console.log(data);
             var chart = $('#container').highcharts();
             var seriesA = chart.get("seriesA");
             seriesA.addPoint(data.seriesA);
@@ -19,11 +19,15 @@
 
     <script type='text/javascript'>//<![CDATA[
 var str = goals.getData();
-console.log(str);
+
 var android = JSON.parse(str);
-console.log(android);
+
+
 $(function () {
     $('#container').highcharts({
+        global: {
+            useUTC: false
+        },
         chart: {
             type: "spline",
             events: {
@@ -36,12 +40,19 @@ $(function () {
             text: "Weight"
         },
         legend: {
-            enabled: false
+            enabled: true,
+            floating: true,
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top'
         },
+        /*tooltip: {
+                valueSuffix: 'Kg'
+            },*/
         xAxis: {        
             type: 'datetime',
             title: {
-                text: "Timeline"
+                text: "Date"
             },
             //max: android.goal.targetDate,
             plotLines: [{
@@ -91,7 +102,7 @@ $(function () {
                 zIndex: 2
             }],
             type: 'linear',
-            min: android.yAxis.min,
+            min: android.yAxis.min>0?android.yAxis.min:0,
             max: android.yAxis.max
         },
         plotOptions: {
@@ -108,6 +119,7 @@ $(function () {
             }
         },
         series: [{
+            name : "Weight (Kgs)",
             id: "seriesA",
             data: android.seriesA
         }]
@@ -120,9 +132,9 @@ $(function () {
 
 </head>
 <body>
-<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="js/highcharts/highcharts.js"></script>
 
-<div id="container" ></div>
+<div id="container" style="height: 360px; margin: 0 auto" ></div>
 
 </body>
 

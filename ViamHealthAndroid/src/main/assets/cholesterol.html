@@ -3,10 +3,11 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script type='text/javascript' src='js/jquery.min.js'></script>
 
     <script type="text/javascript">
         function addPoint(data) {
+            return;
             data = JSON.parse(data);
             var chart = $('#container').highcharts();
             var seriesA = chart.get("seriesA");
@@ -21,100 +22,14 @@
 
     <script type='text/javascript'>//<![CDATA[
 var str = goals.getData();
-console.log(str);
 var android = JSON.parse(str);
-console.log(android);
-/*var android = { "seriesA": [
-        {
-        "y": 50,
-        "x": 1382293800000
-        },
-        {
-        "y": 45,
-        "x": 1382955119000
-        },
-        {
-        "y": 48,
-        "x": 1384769519000
-        }
-],
-        "seriesB": [
-        {
-        "y": 120,
-        "x": 1382293800000
-        },
-        {
-        "y": 140,
-        "x": 1382955119000
-        },
-        {
-        "y": 150,
-        "x": 1384769519000
-        }
-
-
-        ],
-        "goal": {
-        "targetHDL": 65,
-        "healthyRange": {
-        "total": {
-        "to": 0,
-        "from": 0
-        },
-        "tg": {
-        "to": 100,
-        "from": 0
-        },
-        "hdl": {
-        "tp": 70,
-        "from": 50
-        },
-        "ldl": {
-        "to": 100,
-        "from": 0
-        }
-        },
-        "targetTotal": 0,
-        "targetLDL": 100,
-        "targetTri": 100,
-        "targetDate": 1384972200000
-        },
-        "seriesC": [
-        {
-        "y": 200,
-        "x": 1382293800000
-        },
-        {
-        "y": 220,
-        "x": 1382955119000
-        },
-        {
-        "y": 150,
-        "x": 1384769519000
-        }
-
-        ],
-        "seriesD": [
-        {
-        "y": 210,
-        "x": 1382293800000
-        },
-        {
-        "y": 229,
-        "x": 1382955119000
-        },
-        {
-        "y": 228,
-        "x": 1384769519000
-        }
-
-        ]
-
-        };*/
 $(function () {
         $('#container').highcharts({
+            global: {
+                useUTC: false
+            },
             chart: {
-                type: 'column',
+                //type: 'column',
                 events: {
                         click: function(e) {
                             goals.addValue();
@@ -131,32 +46,31 @@ $(function () {
                 '#000000'
             ],
             xAxis: {
-            type: 'datetime',
-            title: {
-                text: "Timeline"
-            },
-            //max: android.goal.targetDate,
-            plotLines: [{
-                value: android.goal.targetDate,
-                width: 2,
-                color: '#37AA4F',
-                label: {
-                    text: 'Target Date',
-                    textAlign: 'top',
-                    align: 'top',
-                    x: -15,
-                    y: 0
+                type: 'datetime',
+                title: {
+                    text: "Date"
                 },
-                dashStyle: "ShortDash",
-                zIndex: 2
-            }]
-
+                //max: android.goal.targetDate,
+                plotLines: [{
+                    value: android.goal.targetDate,
+                    width: 2,
+                    color: '#37AA4F',
+                    label: {
+                        text: 'Target Date',
+                        textAlign: 'top',
+                        align: 'top',
+                        x: -15,
+                        y: 0
+                    },
+                    dashStyle: "ShortDash",
+                    zIndex: 2
+                }]
             },
             yAxis: {
                 title: {
                     text: ""
                 },
-                min: android.yAxis.min,
+                min: android.yAxis.min>0?android.yAxis.min:0,
                 max: android.yAxis.max,
                 stackLabels: {
                     enabled: true,
@@ -168,18 +82,22 @@ $(function () {
 
             },
             legend: {
-                enabled: false
+                enabled: true,
+                floating: true,
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top'
             },
-            tooltip: {
+            /*tooltip: {
                 formatter: function() {
-                    return '<b>'+ new Date(this.x) +'</b><br/>'+
-                        this.series.name +': '+ this.y +'<br/>'+
-                        'Total: '+ this.point.stackTotal;
+                    return '<b>'+ (new Date()).toDateString() +'</b><br/>'+
+                        this.series.name +': '+ this.y;
+                         //+'<br/>'+'Total: '+ this.point.stackTotal;
                 }
-            },
+            },*/
             plotOptions: {
                 column: {
-                    stacking: 'normal',
+                    //stacking: 'normal',
                     dataLabels: {
                         enabled: true,
                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
@@ -200,14 +118,29 @@ $(function () {
                 }
             },
             series: [{
+                type: 'column',
                 name: 'HDL',
+                color: '#2f7ed8',
                 data: android.seriesA
             }, {
+                type: 'column',
                 name: 'LDL',
+                color: '#d9a41f',
                 data: android.seriesB
             }, {
+                type: 'column',
                 name: 'Triglycerides',
+                color: '#8bbc21',
                 data: android.seriesC
+            }, {
+                type: 'spline',
+                name: 'Total Cholesterol',
+                data: android.seriesD,
+                marker: {
+                	lineWidth: 2,
+                	lineColor: Highcharts.getOptions().colors[3],
+                	fillColor: 'white'
+                }
             }]
         });
     });
@@ -218,9 +151,9 @@ $(function () {
 
 </head>
 <body>
-<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="js/highcharts/highcharts.js"></script>
 
-<div id="container"></div>
+<div id="container" style="height: 360px; margin: 0 auto" ></div>
 
 </body>
 

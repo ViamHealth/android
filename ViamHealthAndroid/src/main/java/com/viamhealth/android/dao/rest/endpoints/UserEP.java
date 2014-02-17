@@ -3,6 +3,7 @@ package com.viamhealth.android.dao.rest.endpoints;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.dao.restclient.core.RestClient;
@@ -500,6 +501,13 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        if(client.getResponseCode() == 400){
+            if(client.getResponse() == "{\"mobile\": [\"User profile with this Mobile already exists.\"]}"){
+                throw new IllegalArgumentException("mobile number already exists");
+            } else {
+                throw new IllegalArgumentException("unknown validation error");
+            }
+        }
         Log.i(TAG, client.toString());
         return processProfileResponse(responseString);
     }
@@ -830,10 +838,22 @@ public class UserEP extends BaseEP {
         if(updatedUser==null)
             return null;
 
+        Log.e(TAG, "user is : " +user);
+        Log.e(TAG, "updatedUser is : " +updatedUser);
+        Log.e(TAG, "user is : " +user);
+
         //Update profile data
-        user.setId(updatedUser.getId());
-        user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));
-        user.setBmiProfile(updateBMIProfile(updatedUser.getId(), user.getBmiProfile()));
+        if(user!=null &&  user.getProfile()!=null && user.getBmiProfile()!=null)
+        {
+            user.setId(updatedUser.getId());
+            try{
+                user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));
+                user.setBmiProfile(updateBMIProfile(updatedUser.getId(), user.getBmiProfile()));
+            } catch (IllegalArgumentException e){
+                e.printStackTrace();
+                throw new IllegalArgumentException(e.getMessage());
+            }
+        }
 
         User loggedInUser = ga.getLoggedInUser();
         if(loggedInUser.getId()==user.getId())

@@ -210,6 +210,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             imgUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ga.GA_eventButtonPress("upload_pic_profile");
                     Log.d(TAG, "OnCreate::OnClick of ImgUpload:: picking an image");
                     imageSelector.pickFile(ImageSelector.FileType.Image);
                 }

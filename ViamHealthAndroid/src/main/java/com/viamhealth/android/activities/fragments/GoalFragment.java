@@ -55,6 +55,8 @@ import com.viamhealth.android.utils.JsonGraphDataBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -118,13 +120,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         action = (TabActivity.Actions) getArguments().getSerializable("action");
         selectedUser = getArguments().getParcelable("user");
-        userPref=getSherlockActivity().getSharedPreferences("User"+selectedUser.getId(), Context.MODE_PRIVATE);
+        userPref=getSherlockActivity().getSharedPreferences("User"+selectedUser.getName()+selectedUser.getId(), Context.MODE_PRIVATE);
         if((userPref.getBoolean("isGoal",false)==true) && (userPref.getBoolean("isTest",false)==false))
         {
             Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
             inFileTest.putExtra("user", selectedUser);
             inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
             startActivity(inFileTest);
+            getActivity().finish();
         }
     }
 
@@ -224,7 +227,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         if(mc==MedicalConditions.Cholesterol){
             builder.write("seriesC", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
-            //builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
+            builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
         }
 
         builder.writeYAxisExtras(goal);
@@ -292,6 +295,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             btnSkip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ga.GA_eventButtonPress("wizard_select_goals_skip");
                     Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
                     inFileTest.putExtra("user", selectedUser);
                     inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
@@ -305,12 +309,19 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    ga.GA_eventButtonPress("wizard_select_goals_next");
                         SharedPreferences.Editor edit = userPref.edit();
                         edit.putBoolean("isGoal",true);
                         edit.commit();
                         Intent in = new Intent(getSherlockActivity(), AddGoalActivity.class);
                         in.putExtra("user", selectedUser);
+                        in.putExtra("isButtonVisible",true);
                         in.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+                        Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
+                        inFileTest.putExtra("user", selectedUser);
+                        inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+                        startActivity(inFileTest);
+
                         if(isCholesterol==true)
                         {
                             lastSelected= MedicalConditions.Cholesterol;
@@ -327,11 +338,12 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                         {
                             lastSelected=MedicalConditions.Obese;
                         }
+                        else
+                        {
+                           getActivity().finish();
+                        }
 
-                        Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
-                        inFileTest.putExtra("user", selectedUser);
-                        inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
-                        startActivity(inFileTest);
+
 
                         if(isCholesterol==true)
                         {
@@ -358,8 +370,6 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                             startActivityForResult(in, ACTION_CONFIGURE_GOAL);
                         }
 
-
-
                 }
             });
 
@@ -370,12 +380,13 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 }
             });
             dialog.show();
+            ga.GA_eventGeneral("ui_action","launch_screen","wizard_select_goals_screen");
         }
         else
         {
             Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
             inFileTest.putExtra("user", selectedUser);
-            inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+            inFileTest.putExtra("users", getArguments().getParcelableArray("users"));
             startActivity(inFileTest);
             getActivity().finish();
         }
@@ -663,11 +674,20 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 rds = new ArrayList<GoalReadings>();
             for(int i=0; i<readings.length; i++){
                 reading = goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId());
+                if(reading == null)
+                    continue;
                 if(readings[i].isToUpdate()){
                     rds.remove(i);
                 }
                 rds.add(reading);
             }
+            Collections.sort(rds, new Comparator<GoalReadings>() {
+                @Override
+                public int compare(GoalReadings p1, GoalReadings p2) {
+                    return p1.getReadingDate().compareTo(p2.getReadingDate());
+                }
+
+            });
             //goal.setReadings(rds);
             goalsConfiguredMap.put(type, goal);
             return reading;
@@ -788,6 +808,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             //addNewGoal();
            if(userPref.getBoolean("isGoal",false)==false)
            {
+               dialog.dismiss();
                addNewGoalFirstTime();
            }
         }

@@ -137,8 +137,8 @@ public class FileFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        menu.add(Menu.NONE, R.drawable.addicon, 1, "Upload")
-            .setIcon(R.drawable.addicon)
+        menu.add(Menu.NONE, R.drawable.ic_action_upload, 1, "Upload")
+            .setIcon(R.drawable.ic_action_upload)
 //            .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 //                @Override
 //                public boolean onMenuItemClick(MenuItem menuItem) {
@@ -152,7 +152,7 @@ public class FileFragment extends BaseFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.addicon){
+        if(item.getItemId()==R.drawable.ic_action_upload){
             pickFile();
             return false;
         }
