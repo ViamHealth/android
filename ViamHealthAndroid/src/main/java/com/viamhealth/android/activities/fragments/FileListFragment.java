@@ -125,7 +125,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 //                    }
 //                    if(actionMode!=null)
 //                        actionMode.setTitle(adapter.getCheckedItemCount() + " " + selected);
-                    return;
+                    //return;
                 }
                 if(isChecked){
                     FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
@@ -176,7 +176,8 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                 if (actionMode != null) {
                     // if action mode, toggle checked state of item
                     adapter.toggleChecked(position);
-                    actionMode.invalidate();
+                    if(actionMode != null)
+                        actionMode.invalidate();
                 }else{
                     FileData data = files.get(position);
                     FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
