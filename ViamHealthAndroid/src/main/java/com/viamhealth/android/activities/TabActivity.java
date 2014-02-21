@@ -31,6 +31,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
+import com.viamhealth.android.activities.fragments.BabyGoalFragment;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
 
@@ -173,18 +174,36 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         else
         {
         /* Create Tabs */
+            /*mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
+                    mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
+                    //FileFragment.class, bundle);
+                    TaskScreen.class, bundle);*/
+
             mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                     mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                     ReminderFragmentNew.class, bundle);
-            mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                    mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
-                    GoalFragment.class, bundle);
+            try{
+                if(user.getProfile().getAge() < 18 &&  user.getProfile().getAge() > 0 )
+                    mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                        mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
+                            BabyGoalFragment.class, bundle);
+                else{
+                    mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                            mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
+                            GoalFragment.class, bundle);
+                }
+            } catch(Exception e){
+                mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                        mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
+                        GoalFragment.class, bundle);
+            }
 
             //NewReminders.class, bundle);
             mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                     mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
                     //FileFragment.class, bundle);
                     FileFragment.class, bundle);
+
 
         }
 
