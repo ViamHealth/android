@@ -1,10 +1,6 @@
 package com.viamhealth.android.activities.fragments;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +24,7 @@ import java.util.List;
  */
 public class BabyGoalFragment extends BaseFragment {
 
-    private WebView mWebview;
+    public WebView mWebview;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +42,10 @@ public class BabyGoalFragment extends BaseFragment {
     private void init() {
 
         //load HTML File in webview
-        mWebview.loadUrl("file:///android_asset/baby_growth.html");
+        mWebview.loadUrl("file:///android_asset/www/baby_growth.html");
 
         //add the JavaScriptInterface so that JavaScript is able to use BabyGrowthJavaScriptInterface's methods when calling "LocalStorage"
-        mWebview.addJavascriptInterface(new BabyGrowthJavaScriptInterface(getActivity().getApplicationContext()), "LocalStorage");
+        mWebview.addJavascriptInterface(new BabyGrowthJavaScriptInterface(getActivity().getApplicationContext()), "BabyGrowthStorage");
 
         WebSettings webSettings = mWebview.getSettings();
         //enable JavaScript in webview

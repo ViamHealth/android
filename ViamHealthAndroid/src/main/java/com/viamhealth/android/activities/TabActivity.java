@@ -7,8 +7,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,11 +23,9 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
-import com.google.analytics.tracking.android.EasyTracker;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -39,7 +37,6 @@ import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
-import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,7 +182,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             try{
                 if(user.getProfile().getAge() < 18 &&  user.getProfile().getAge() > 0 )
                     mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                        mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
+                        mTabHost.newTabSpec("baby_growth").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
                             BabyGoalFragment.class, bundle);
                 else{
                     mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
@@ -249,6 +246,20 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if(mTabManager.getCurrentSelectedTab().equals("baby_growth")){
+            Fragment webview =  getSupportFragmentManager().findFragmentByTag("baby_growth");
+            if(((BabyGoalFragment)webview).mWebview.canGoBack()){
+                ((BabyGoalFragment)webview).mWebview.goBack();
+            }else {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {

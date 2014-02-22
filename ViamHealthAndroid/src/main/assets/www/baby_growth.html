@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+
+    <link rel="stylesheet" type="text/css" href="lib/topcoat/css/topcoat-mobile-light.css"/>
+    <link rel="stylesheet" type="text/css" href="css/baby_growth.css"/>
+    <link rel="stylesheet" type="text/css" href="lib/pageslider.css"/>
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/handlebars.js"></script>
+    <script type="text/javascript" src="lib/pageslider.js"></script>
+
+</head>
+<body>
+
+<script id="baby-growth-home-tpl" type="text/x-handlebars-template">
+    <div class="topcoat-list">
+        <ul class="topcoat-list__container">
+            <li class="topcoat-list__item">
+                <a href="#immunization_list">
+                    <p>Immunization Schedules</p>
+                    <span class="chevron"></span>
+                </a>
+            </li>
+            <li class="topcoat-list__item">
+                <p>Track Growth</p>
+                <span class="chevron"></span>
+            </li>
+
+        </ul>
+    </div>
+</script>
+
+
+
+
+<script id="immunization-tpl" type="text/x-handlebars-template">
+    <div class="topcoat-list">
+        <ul class="topcoat-list__container immunization_list_id">
+        </ul>
+    </div>
+</script>
+<script id="immunization-li-tpl" type="text/x-handlebars-template">
+    {{#each this}}
+    <li class="topcoat-list__item">
+        <p class="name">{{title}}</p>
+        <label class="topcoat-switch" >
+            <input type="checkbox" class="topcoat-switch__input">
+            <div class="topcoat-switch__toggle immunization_task"></div>
+        </label>
+    </li>
+    {{/each}}
+</script>
+
+<script id="ask-health-problems" type="text/x-handlebars-template">
+
+</script>
+
+<script type="text/javascript" src="js/baby_growth/data.js"></script>
+<script type="text/javascript" src="js/baby_growth/immunization.js"></script>
+<script type="text/javascript" src="js/baby_growth/home.js"></script>
+<script type="text/javascript" src="js/baby_growth/app.js"></script>
+
+</body>
+</html>

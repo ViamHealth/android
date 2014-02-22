@@ -1,0 +1,46 @@
+a {
+    color: #454545;
+    text-decoration: none;
+}
+
+.chevron {
+    background: transparent url(../lib/topcoat/img/next_blue.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 12px;
+    top: 22px;
+    height: 50px;
+    width: 28px;
+}
+
+
+
+.topcoat-list li {
+    position: relative;
+    text-align: left;
+    clear: both;
+    /*padding: 12px 60px 16px 8px !important;*/
+}
+
+.topcoat-list__container {
+    /*border-bottom: none;*/
+    clear: both;
+}
+
+.immunization_task.topcoat-switch__toggle:before {
+content: 'Taken';
+}
+.immunization_task.topcoat-switch__toggle:after {
+content: 'Pending';
+}
+.topcoat-switch {
+    z-index:2;
+    font-size: 12px;
+     background-size: contain;
+    position: absolute;
+    right: 12px;
+    top: 22px;
+}
