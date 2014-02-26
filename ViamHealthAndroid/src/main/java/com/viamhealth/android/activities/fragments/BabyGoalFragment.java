@@ -8,16 +8,23 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
+import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.Immunization;
-import com.viamhealth.android.provider.dal.ImmunizationDal;
+import com.viamhealth.android.dao.rest.endpoints.ImmunizationEP;
+import com.viamhealth.android.model.immunization.Immunization;
+import com.viamhealth.android.model.immunization.UserImmunization;
+import com.viamhealth.android.model.users.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by kunal on 19/2/14.
@@ -25,14 +32,19 @@ import java.util.List;
 public class BabyGoalFragment extends BaseFragment {
 
     public WebView mWebview;
+    private User selectedUser;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        selectedUser = getArguments().getParcelable("user");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_baby_growth, container,false);
-
         mWebview = (WebView) view.findViewById(R.id.webViewBabyGrowth);
-
         init();
 
         return view;
@@ -45,7 +57,7 @@ public class BabyGoalFragment extends BaseFragment {
         mWebview.loadUrl("file:///android_asset/www/baby_growth.html");
 
         //add the JavaScriptInterface so that JavaScript is able to use BabyGrowthJavaScriptInterface's methods when calling "LocalStorage"
-        mWebview.addJavascriptInterface(new BabyGrowthJavaScriptInterface(getActivity().getApplicationContext()), "BabyGrowthStorage");
+        mWebview.addJavascriptInterface(new BabyGrowthJavaScriptInterface(getActivity().getApplicationContext(), selectedUser), "BabyGrowthStorage");
 
         WebSettings webSettings = mWebview.getSettings();
         //enable JavaScript in webview
@@ -66,37 +78,69 @@ public class BabyGoalFragment extends BaseFragment {
      */
     private class BabyGrowthJavaScriptInterface {
         private Context mContext;
-        private ImmunizationDal immunizationDal;
-        //private LocalStorage localStorageDBHelper;
-        //private SQLiteDatabase database;
+        private User selectedUser;
 
-        BabyGrowthJavaScriptInterface(Context c) {
+        //Sudo Sync
+        private Map<Long, Immunization> immunizationMap = new HashMap<Long, Immunization>();
+        private boolean immunization_data_updated = true;
+
+        BabyGrowthJavaScriptInterface(Context c, User selectedUser) {
             mContext = c;
-            immunizationDal = new ImmunizationDal(c);
-            immunizationDal.open();
-            Immunization model = new Immunization();
-            model.setId(1);
-            model.setTitle("Hahahha");
-            model.setRecommendedAge(28L);
-
-            //immunizationDal.create(model);
-            immunizationDal.close();
-            //localStorageDBHelper = LocalStorage.getInstance(mContext);
+            this.selectedUser = selectedUser;
+        }
+        @JavascriptInterface
+        public void showToast(String message){
+            final String msg = message;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(mContext,msg, Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        @JavascriptInterface
+        public String getUserAgeInMonths(){
+            int age = selectedUser.getProfile().getAgeInMonths();
+            System.out.println(age);
+            if(age == 0)
+                Toast.makeText(mContext,"Age not specified",Toast.LENGTH_LONG);
+            return String.valueOf(age);
         }
 
         @JavascriptInterface
         public String getImmunizationData(){
-            immunizationDal.open();
-            List<Immunization> data = immunizationDal.getAll(null,null);
-            immunizationDal.close();
+            List<Immunization>  data = new ArrayList<Immunization>();
+            if(immunization_data_updated == false ){
+                for (Map.Entry<Long, Immunization> entry : immunizationMap.entrySet()){
+                    data.add(entry.getValue());
+                }
+            } else {
+                ImmunizationEP iep = new ImmunizationEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+                data  = iep.list();
+                for(Immunization entry : data ){
+                    immunizationMap.put(entry.getId(), entry);
+                }
+                immunization_data_updated = false;
+            }
+
             JSONArray listData = new JSONArray();
             int j = 0;
             for(Immunization i : data){
                 JSONObject object = new JSONObject();
                 try {
-                    object.put("id", i.getId());
-                    object.put("title", i.getTitle());
-                    object.put("recommendedAge", i.getRecommendedAge());
+                    object.put("immunization_id", i.getId());
+                    object.put("title", i.getLabel());
+                    object.put("recommended_age", i.getRecommendedAge());
+                    if(i.getUserImmunization() != null){
+                        object.put("user", i.getUserImmunization().getUserId());
+                        object.put("is_completed", i.getUserImmunization().isCompleted());
+                        object.put("user_immunization_id", i.getUserImmunization().getId());
+                    }
+                    else{
+                        object.put("user", null);
+                        object.put("is_completed", null);
+                        object.put("user_immunization_id", null);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -108,6 +152,57 @@ public class BabyGoalFragment extends BaseFragment {
                 }
             }
             return listData.toString();
+        }
+
+        @JavascriptInterface
+        public boolean updateIsCompleted( String immunization_id_string, String is_completed){
+            Long user_immunization_id = 0L;
+            Long immunization_id = Long.parseLong(immunization_id_string);
+
+            ImmunizationEP iep = new ImmunizationEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+
+            Immunization old_immunization_object = immunizationMap.get(immunization_id);
+
+            if(old_immunization_object == null){
+                //Something went wrong, or race condition achieved
+                System.out.println("Race condition for updating immunization object ? ");
+                return false;
+            }
+
+            if(old_immunization_object.getUserImmunization() != null && old_immunization_object.getUserImmunization().getId() != null ){
+                user_immunization_id = old_immunization_object.getUserImmunization().getId();
+            }
+            if(user_immunization_id == 0L){
+                UserImmunization obj = new UserImmunization();
+                obj.setCompleted(true);
+                obj.setUserId(this.selectedUser.getId());
+                obj.setImmunization(immunization_id);
+                try {
+                    UserImmunization ui = iep.create(obj);
+                    immunization_data_updated = true;
+                    old_immunization_object.setUserImmunization(ui);
+                    immunizationMap.put(immunization_id, old_immunization_object);
+                } catch(Exception e){
+                    e.printStackTrace();
+                    return false;
+                }
+            } else {
+                UserImmunization obj = new UserImmunization();
+                obj.setId(user_immunization_id);
+                obj.setCompleted(Boolean.parseBoolean(is_completed));
+                obj.setUserId(this.selectedUser.getId());
+                obj.setImmunization(immunization_id);
+                try {
+                    UserImmunization ui = iep.update(obj);
+                    immunization_data_updated = true;
+                    old_immunization_object.setUserImmunization(ui);
+                    immunizationMap.put(immunization_id, old_immunization_object);
+                } catch(Exception e){
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return true;
         }
 
     }

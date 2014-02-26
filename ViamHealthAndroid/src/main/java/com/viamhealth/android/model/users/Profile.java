@@ -41,6 +41,41 @@ public class Profile implements Parcelable{
         //Long diff = now.getTime() - dob.getTime();
     }
 
+    public int getAgeInMonths(){
+        Calendar nowCal = Calendar.getInstance();
+        Calendar dobCal = Calendar.getInstance();
+        if(dob == null)
+        {
+            return 0;
+        }
+        dobCal.setTime(dob);
+
+        int years =  nowCal.get(Calendar.YEAR) - dobCal.get(Calendar.YEAR);
+        int currMonth = nowCal.get(Calendar.MONTH) + 1;
+        int birthMonth = dobCal.get(Calendar.MONTH) + 1;
+        int months = currMonth - birthMonth;
+        //if month difference is in negative then reduce years by one and calculate the number of months.
+        if(months < 0)
+        {
+            years--;
+            months = 12 - birthMonth + currMonth;
+
+            if(nowCal.get(Calendar.DATE)<dobCal.get(Calendar.DATE))
+                months--;
+
+        }else if(months == 0 && nowCal.get(Calendar.DATE) < dobCal.get(Calendar.DATE)){
+            years--;
+            months = 11;
+        }
+        if(months == 12){
+            years++;
+            months = 0;
+        }
+
+        int total_months = years * 12 + months;
+        return total_months;
+    }
+
     public Relation getRelation() {
         return relation;
     }

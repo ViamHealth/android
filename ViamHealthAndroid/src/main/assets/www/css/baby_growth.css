@@ -16,7 +16,10 @@ a {
     width: 28px;
 }
 
-
+.topcoat-list {
+border-top: none;
+border-bottom: none;
+}
 
 .topcoat-list li {
     position: relative;
@@ -39,7 +42,9 @@ content: 'Pending';
 .topcoat-switch {
     z-index:2;
     font-size: 12px;
-     background-size: contain;
+}
+.float-right-in-list {
+    background-size: contain;
     position: absolute;
     right: 12px;
     top: 22px;

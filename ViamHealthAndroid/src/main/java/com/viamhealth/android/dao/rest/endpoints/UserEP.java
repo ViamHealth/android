@@ -42,7 +42,7 @@ public class UserEP extends BaseEP {
 
     public Boolean InviteUser(String email){
         String baseurlString = Global_Application.url+"invite/";
-        Log.i(TAG, "url is : " + baseurlString);
+        //Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -56,7 +56,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+       // Log.i(TAG, client.toString());
 
         if(client.getResponseCode()==HttpStatus.SC_OK ||
                 client.getResponseCode()==HttpStatus.SC_CREATED ||
@@ -74,7 +74,7 @@ public class UserEP extends BaseEP {
     public User SignUp(String username,String password) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"signup/";
-        Log.i(TAG, "url is : " + baseurlString);
+      //  Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
 
@@ -90,7 +90,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+       // Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         user.setLoggedInUser(true);
         ga.setLoggedInUser(user);
@@ -99,7 +99,7 @@ public class UserEP extends BaseEP {
 
     public boolean ChangePassword(String oldPassword, String newPassword){
         String baseurlString = Global_Application.url+"users/change-password/";
-        Log.i(TAG, "url is : " + baseurlString);
+      //  Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -113,7 +113,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+       // Log.i(TAG, client.toString());
 
         if(client.getResponseCode()==HttpStatus.SC_OK ||
                 client.getResponseCode()==HttpStatus.SC_CREATED ||
@@ -124,7 +124,7 @@ public class UserEP extends BaseEP {
     }
     public boolean ForgotPassword(String email){
         String baseurlString = Global_Application.url+"forgot-password-email/";
-        Log.i(TAG, "url is : " + baseurlString);
+      //  Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
 
@@ -139,7 +139,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+      //  Log.i(TAG, client.toString());
 
         if(client.getResponseCode()==HttpStatus.SC_OK ||
                 client.getResponseCode()==HttpStatus.SC_CREATED ||
@@ -151,7 +151,7 @@ public class UserEP extends BaseEP {
 
     public boolean Logout(){
         String url = Global_Application.url + "logout/";
-        Log.i(TAG, "url is : " + url);
+       // Log.i(TAG, "url is : " + url);
 
         if(appPrefs.getToken()==null)
             return false;
@@ -167,7 +167,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+       // Log.i(TAG, client.toString());
 
         if(client.getResponseCode()==HttpStatus.SC_OK ||
                 client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
@@ -221,14 +221,14 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, "login:" + client.toString());
+       // Log.i(TAG, "login:" + client.toString());
         User user = null;
         try {
             JSONObject jObject = new JSONObject(responseString);
             //TODO::implement proper error handling
             String	responsetxt1 = jObject.getString("token");
             if(responsetxt1.length()>0){
-                Log.i(TAG,"token is " + responsetxt1);
+               // Log.i(TAG,"token is " + responsetxt1);
                 appPrefs.setToken(responsetxt1);
             }
             user = getLoggedInUser();
@@ -265,7 +265,7 @@ public class UserEP extends BaseEP {
             }
 
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+          //  Log.i(TAG, client.toString());
             user = processUserResponse(responseString);
             user.setLoggedInUser(true);
             user.setBmiProfile(getUserBMIProfile(user.getId()));
@@ -290,7 +290,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, "shareUser:" + client.toString());
+      //  Log.i(TAG, "shareUser:" + client.toString());
         if(client.getResponseCode()== HttpStatus.SC_CREATED
                 || client.getResponseCode() == HttpStatus.SC_OK
                 || client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
@@ -312,7 +312,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, "deleteUser:" + client.toString());
+     //   Log.i(TAG, "deleteUser:" + client.toString());
         if(client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
@@ -334,7 +334,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+     //   Log.i(TAG, client.toString());
         List<User> users = processUsersResponse(responseString);
         int usersCount = users==null?0:users.size();
         for(int i=0; i<usersCount; i++){
@@ -356,7 +356,7 @@ public class UserEP extends BaseEP {
     public User getUserProfile(Long userId) {
         String	responsetxt="1";
         String baseurlString = Global_Application.url+"users/"+userId+"/";
-        Log.i(TAG,"url is : " + baseurlString);
+     //   Log.i(TAG,"url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -368,7 +368,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+    //    Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         if(user.getId() == getLoggedInUser().getId()){
             user.setLoggedInUser(true);
@@ -378,7 +378,7 @@ public class UserEP extends BaseEP {
 
     public BMIProfile getUserBMIProfile(Long userId) {
         String baseurlString = Global_Application.url+"users/"+userId+"/bmi-profile/";
-        Log.i(TAG,"url is : " + baseurlString);
+     //   Log.i(TAG,"url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
         client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
@@ -390,7 +390,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+     //   Log.i(TAG, client.toString());
         return processBMIProfileResponse(responseString);
     }
 
@@ -434,7 +434,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+     //   Log.i(TAG, client.toString());
         return processBMIProfileResponse(responseString);
     }
 
@@ -508,7 +508,7 @@ public class UserEP extends BaseEP {
                 throw new IllegalArgumentException("unknown validation error");
             }
         }
-        Log.i(TAG, client.toString());
+    //    Log.i(TAG, client.toString());
         return processProfileResponse(responseString);
     }
 
@@ -538,7 +538,8 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+    //
+    //    Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         if(user.getId() == getLoggedInUser().getId()){
             user.setLoggedInUser(true);
@@ -584,7 +585,7 @@ public class UserEP extends BaseEP {
             user.setMobile(user.getProfile().getMobileNumber());
             //user.setMobile(jsonUser.getString("mobile"));
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         return user;
@@ -629,64 +630,64 @@ public class UserEP extends BaseEP {
         try {
             pd.setHeight(jsonProfile.getInt("height"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         try {
             pd.setWeight(jsonProfile.getDouble("weight"));
         } catch (JSONException e) {
-            e.printStackTrace();
+        //    e.printStackTrace();
         }
         try {
             pd.setBmr(jsonProfile.getInt("bmr"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         //pd.setBmiClassifier();
         //pd.setLifeStyle();
         try {
             pd.setSystolicPressure(jsonProfile.getInt("systolic_pressure"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         try {
             pd.setDiastolicPressure(jsonProfile.getInt("diastolic_pressure"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         try {
             pd.setPulseRate(jsonProfile.getInt("pulse_rate"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         try {
             pd.setFastingSugar(jsonProfile.getInt("fasting"));
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         try {
             pd.setRandomSugar(jsonProfile.getInt("random"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         try {
             pd.setHdl(jsonProfile.getInt("hdl"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
         try {
             pd.setLdl(jsonProfile.getInt("ldl"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
         try {
             pd.setTriglycerides(jsonProfile.getInt("triglycerides"));
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         try {
             pd.setTotalCholesterol(jsonProfile.getInt("total_cholesterol"));
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         return pd;
@@ -701,7 +702,7 @@ public class UserEP extends BaseEP {
         try {
             pd.setGender(Gender.get(jsonProfile.getString("gender")));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
 
         try {
@@ -711,103 +712,103 @@ public class UserEP extends BaseEP {
         } catch (ParseException e) {
             e.printStackTrace();
         } catch (JSONException e) {
-            e.printStackTrace();
+        //    e.printStackTrace();
         }
 
         try {
             pd.setBloodGroup(BloodGroup.get(jsonProfile.getInt("blood_group")));
         } catch (JSONException e) {
             pd.setBloodGroup(BloodGroup.None);
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("fb_profile_id"))
                 pd.setFbProfileId(jsonProfile.getString("fb_profile_id"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("fb_username"))
                 pd.setFbUsername(jsonProfile.getString("fb_username"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("organization"))
                 pd.setOrganization(jsonProfile.getString("organization"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("profile_picture_url"))
                 pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("mobile"))
                 pd.setMobileNumber(jsonProfile.getString("mobile"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("state"))
                 location.setState(jsonProfile.getString("state"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("street"))
                 location.setStreet(jsonProfile.getString("street"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("country"))
                 location.setCountry(jsonProfile.getString("country"));
         } catch (JSONException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("city"))
                 location.setCity(jsonProfile.getString("city"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("zip_code"))
                 location.setZip(jsonProfile.getString("zip_code"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
 
         try {
             location.setLattitude(jsonProfile.getDouble("longitude"));
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         try {
             location.setLongitude(jsonProfile.getDouble("longitude"));
         } catch (JSONException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         try {
             if(!jsonProfile.isNull("address"))
                 location.setAddress(jsonProfile.getString("address"));
         } catch (JSONException e) {
-            e.printStackTrace();
+         //   e.printStackTrace();
         }
 
 
@@ -838,9 +839,9 @@ public class UserEP extends BaseEP {
         if(updatedUser==null)
             return null;
 
-        Log.e(TAG, "user is : " +user);
-        Log.e(TAG, "updatedUser is : " +updatedUser);
-        Log.e(TAG, "user is : " +user);
+        //Log.e(TAG, "user is : " +user);
+        //Log.e(TAG, "updatedUser is : " +updatedUser);
+        //Log.e(TAG, "user is : " +user);
 
         //Update profile data
         if(user!=null &&  user.getProfile()!=null && user.getBmiProfile()!=null)

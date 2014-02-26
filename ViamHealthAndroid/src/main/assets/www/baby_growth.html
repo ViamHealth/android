@@ -17,15 +17,13 @@
 <script id="baby-growth-home-tpl" type="text/x-handlebars-template">
     <div class="topcoat-list">
         <ul class="topcoat-list__container">
-            <li class="topcoat-list__item">
-                <a href="#immunization_list">
-                    <p>Immunization Schedules</p>
-                    <span class="chevron"></span>
-                </a>
-            </li>
-            <li class="topcoat-list__item">
-                <p>Track Growth</p>
+            <li class="topcoat-list__item take_to_immunization_list">
+                <p>Immunization Schedules</p>
                 <span class="chevron"></span>
+            </li>
+            <li class="topcoat-list__item take_to_track_growth">
+                <p>Track Growth</p>
+                <span class="chevron float-right-in-list"></span>
             </li>
 
         </ul>
@@ -37,7 +35,18 @@
 
 <script id="immunization-tpl" type="text/x-handlebars-template">
     <div class="topcoat-list">
-        <ul class="topcoat-list__container immunization_list_id">
+        <h3 class="topcoat-list__header">To do</h3>
+        <ul class="topcoat-list__container immunization_list_to_do">
+        </ul>
+    </div>
+    <div class="topcoat-list">
+        <h3 class="topcoat-list__header">Past</h3>
+        <ul class="topcoat-list__container immunization_list_past">
+        </ul>
+    </div>
+    <div class="topcoat-list">
+        <h3 class="topcoat-list__header">Future</h3>
+        <ul class="topcoat-list__container immunization_list_future">
         </ul>
     </div>
 </script>
@@ -45,9 +54,14 @@
     {{#each this}}
     <li class="topcoat-list__item">
         <p class="name">{{title}}</p>
-        <label class="topcoat-switch" >
-            <input type="checkbox" class="topcoat-switch__input">
-            <div class="topcoat-switch__toggle immunization_task"></div>
+        <label class="topcoat-checkbox float-right-in-list">
+            <input type="checkbox"
+                   class="immunization-is-completed"
+                   data-immunization-id="{{immunization_id}}"
+                   data-user-immunization-id="{{user_immunization_id}}"
+                   {{#if is_completed}} checked  {{/if}}
+            >
+            <div class="topcoat-checkbox__checkmark"></div>
         </label>
     </li>
     {{/each}}

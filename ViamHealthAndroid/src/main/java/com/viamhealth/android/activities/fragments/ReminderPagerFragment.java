@@ -207,24 +207,24 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i(TAG, "onAttach");
+        //Log.i(TAG, "onAttach");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.i(TAG, "onDetach");
+        //Log.i(TAG, "onDetach");
     }
 
     @Override
     public void onResume() {
-        Log.i(TAG, "onResume - " + currentDate);
+        //Log.i(TAG, "onResume - " + currentDate);
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        Log.i(TAG, "onPause - " + currentDate);
+     //   Log.i(TAG, "onPause - " + currentDate);
         super.onPause();
         if (this.actionMode != null) {
             this.actionMode.finish();
