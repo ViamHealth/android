@@ -101,7 +101,6 @@ public class BabyGoalFragment extends BaseFragment {
         @JavascriptInterface
         public String getUserAgeInMonths(){
             int age = selectedUser.getProfile().getAgeInMonths();
-            System.out.println(age);
             if(age == 0)
                 Toast.makeText(mContext,"Age not specified",Toast.LENGTH_LONG);
             return String.valueOf(age);
@@ -116,7 +115,7 @@ public class BabyGoalFragment extends BaseFragment {
                 }
             } else {
                 ImmunizationEP iep = new ImmunizationEP(mContext, ((Global_Application) mContext.getApplicationContext()));
-                data  = iep.list();
+                data  = iep.list(selectedUser.getId());
                 for(Immunization entry : data ){
                     immunizationMap.put(entry.getId(), entry);
                 }
@@ -172,6 +171,7 @@ public class BabyGoalFragment extends BaseFragment {
             if(old_immunization_object.getUserImmunization() != null && old_immunization_object.getUserImmunization().getId() != null ){
                 user_immunization_id = old_immunization_object.getUserImmunization().getId();
             }
+
             if(user_immunization_id == 0L){
                 UserImmunization obj = new UserImmunization();
                 obj.setCompleted(true);

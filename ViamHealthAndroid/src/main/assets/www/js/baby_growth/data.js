@@ -28,7 +28,6 @@ var BabyGrowthData = function () {
     }
 
     this.showToast = function(message){
-        console.log('hohahaha');
         BabyGrowthStorage.showToast(message);
     }
 }

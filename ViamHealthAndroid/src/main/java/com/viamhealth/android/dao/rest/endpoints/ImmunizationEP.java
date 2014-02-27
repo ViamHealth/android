@@ -32,8 +32,10 @@ public class ImmunizationEP extends BaseEP {
         super(context, app);
     }
 
-    public List<Immunization> list(){
-        RestClient client = getRestClient(API_RESOURCE, null);
+    public List<Immunization> list(long userId){
+        Params params = new Params();
+        params.put("user",String.valueOf(userId));
+        RestClient client = getRestClient(API_RESOURCE, params);
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
