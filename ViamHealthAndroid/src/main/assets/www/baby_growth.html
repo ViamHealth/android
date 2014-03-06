@@ -10,6 +10,7 @@
     <script type="text/javascript" src="lib/jquery.min.js"></script>
     <script type="text/javascript" src="lib/handlebars.js"></script>
     <script type="text/javascript" src="lib/pageslider.js"></script>
+    <script type="text/javascript" src="lib/date.js"></script>
 
 </head>
 <body>
@@ -32,6 +33,20 @@
 
 
 
+
+<script id="track-growth-tpl" type="text/x-handlebars-template">
+    <h3 class="topcoat-list__header">Add data</h3>
+    <div id="track-growth-form">
+        Entry date :- <input type="text" class="topcoat-text-input track-growth-form-date" placeholder="type date.Eg. 7 feb">
+        <br/>
+        Height :- <input type="text" class="topcoat-text-input" value="" placeholder="Enter Height">
+        <br/>
+        Weight :- <input type="text" class="topcoat-text-input" value="" placeholder="Enter Weight">
+        <br/>
+        <button class="topcoat-button--large--cta" >Save</button>
+    </div>
+    <h3 class="topcoat-list__header">Graph</h3>
+</script>
 
 <script id="immunization-tpl" type="text/x-handlebars-template">
     <div class="topcoat-list">
@@ -67,14 +82,14 @@
     {{/each}}
 </script>
 
-<script id="ask-health-problems" type="text/x-handlebars-template">
 
-</script>
 
 <script type="text/javascript" src="js/baby_growth/data.js"></script>
 <script type="text/javascript" src="js/baby_growth/immunization.js"></script>
 <script type="text/javascript" src="js/baby_growth/home.js"></script>
+<script type="text/javascript" src="js/baby_growth/track_growth.js"></script>
 <script type="text/javascript" src="js/baby_growth/app.js"></script>
+
 
 </body>
 </html>

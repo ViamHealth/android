@@ -31,10 +31,12 @@
     var homeTpl = Handlebars.compile($("#baby-growth-home-tpl").html());
     var immunizationTpl = Handlebars.compile($("#immunization-tpl").html());
     var immunizationLiTpl = Handlebars.compile($("#immunization-li-tpl").html());
+    var trackGrowthTpl = Handlebars.compile($("#track-growth-tpl").html());
 
     var slider = new PageSlider($('body'));
 
     var detailsURL = /^#immunization_list/;
+    var trackGrowthUrl = /^#track_growth/;
 
     $(window).on('hashchange', route);
 
@@ -70,6 +72,10 @@
         var match = hash.match(detailsURL);
         if (match) {
             slider.slidePage(new ImmunizationView(adapter, immunizationTpl, immunizationLiTpl).render().el);
+        } else if (hash.match(trackGrowthUrl)) {
+            slider.slidePage(new TrackGrowthView(adapter, trackGrowthTpl).render().el);
         }
+        return;
     }
+
 }());

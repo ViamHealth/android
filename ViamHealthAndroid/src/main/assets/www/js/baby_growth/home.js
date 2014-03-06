@@ -16,10 +16,7 @@ var HomeView = function (adapter, template) {
     };
     this.loadTrackGrowth = function(event){
         event.preventDefault();
-        console.log('in here');
-        adapter.showToast("Coming soon");
-        //alert('coming soon');
-        //location.hash = '#' + 'track_growth';
+        location.hash = '#' + 'track_growth';
     }
     this.initialize();
 }
