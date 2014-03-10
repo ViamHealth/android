@@ -15,8 +15,14 @@ var TrackGrowthGraphView = function (adapter, template) {
         var that = this;
 
         adapter.getGrowthChartData().done(function(data){
+        console.log(data);
+        console.log(data.track_growth);
             var track_growth_length = data.track_growth.length;
-            var user_track_growth_length = data.user_track_growth.length;
+
+             if(data.user_track_growth)
+                var user_track_growth_length = data.user_track_growth.length;
+            else
+                var user_track_growth_length = 0;
 
             var tg_h_data=[];
             var tg_w_data=[];

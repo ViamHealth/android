@@ -13,8 +13,12 @@ import android.widget.Toast;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.ImmunizationEP;
+import com.viamhealth.android.dao.rest.endpoints.UserTrackGrowthEP;
 import com.viamhealth.android.model.immunization.Immunization;
 import com.viamhealth.android.model.immunization.UserImmunization;
+import com.viamhealth.android.model.trackgrowth.TrackGrowth;
+import com.viamhealth.android.model.trackgrowth.TrackGrowthData;
+import com.viamhealth.android.model.trackgrowth.UserTrackGrowthData;
 import com.viamhealth.android.model.users.User;
 
 import org.json.JSONArray;
@@ -83,6 +87,8 @@ public class BabyGoalFragment extends BaseFragment {
         //Sudo Sync
         private Map<Long, Immunization> immunizationMap = new HashMap<Long, Immunization>();
         private boolean immunization_data_updated = true;
+        private Map<String, List<TrackGrowth>> trackGrowthMap = new HashMap<String, List<TrackGrowth>>();
+        private boolean trackGrowthDataUpdated = true;
 
         BabyGrowthJavaScriptInterface(Context c, User selectedUser) {
             mContext = c;
@@ -104,6 +110,53 @@ public class BabyGoalFragment extends BaseFragment {
             if(age == 0)
                 Toast.makeText(mContext,"Age not specified",Toast.LENGTH_LONG);
             return String.valueOf(age);
+        }
+
+        @JavascriptInterface
+        public String getGrowthChartData(){
+
+            if(trackGrowthDataUpdated == true){
+                UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+                trackGrowthMap = ep.list(selectedUser.getId());
+            }
+
+
+            JSONObject object = new JSONObject();
+            try {
+                List<TrackGrowth> trackGrowthList = trackGrowthMap.get("track_growth");
+                JSONArray trackGrowthDataJsonList = new JSONArray();
+                for( TrackGrowth trackGrowth : trackGrowthList){
+                    TrackGrowthData trackGrowthData = (TrackGrowthData) trackGrowth;
+                    JSONObject tgdObject = new JSONObject();
+                    tgdObject.put("id",trackGrowthData.getId());
+                    tgdObject.put("label",trackGrowthData.getLabel());
+                    tgdObject.put("age",trackGrowthData.getAge());
+                    tgdObject.put("height",trackGrowthData.getHeight());
+                    tgdObject.put("weight",trackGrowthData.getWeight());
+                    trackGrowthDataJsonList.put(tgdObject);
+                }
+
+                List<TrackGrowth> trackGrowthList1 = trackGrowthMap.get("user_track_growth");
+                JSONArray userTrackGrowthDataJsonList = new JSONArray();
+                for( TrackGrowth trackGrowth : trackGrowthList1){
+                    UserTrackGrowthData userTrackGrowthData = (UserTrackGrowthData) trackGrowth;
+                    JSONObject tgdObject = new JSONObject();
+                    tgdObject.put("id",userTrackGrowthData.getId());
+                    tgdObject.put("user",userTrackGrowthData.getUserId());
+                    tgdObject.put("age",userTrackGrowthData.getAge());
+                    tgdObject.put("height",userTrackGrowthData.getHeight());
+                    tgdObject.put("weight",userTrackGrowthData.getWeight());
+                    tgdObject.put("entry_date",userTrackGrowthData.getEntryDate());
+                    userTrackGrowthDataJsonList.put(tgdObject);
+                }
+                object.put("track_growth", trackGrowthDataJsonList);
+                object.put("user_track_growth", userTrackGrowthDataJsonList);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            System.out.println(object.toString());
+            return object.toString();
         }
 
         @JavascriptInterface
