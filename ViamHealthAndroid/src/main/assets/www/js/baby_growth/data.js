@@ -30,4 +30,11 @@ var BabyGrowthData = function () {
     this.showToast = function(message){
         BabyGrowthStorage.showToast(message);
     }
+
+    this.getGrowthChartData = function(){
+        var deferred = $.Deferred(),
+            data = JSON.parse(BabyGrowthStorage.getGrowthChartData());
+        deferred.resolve(data);
+        return deferred.promise();
+    }
 }

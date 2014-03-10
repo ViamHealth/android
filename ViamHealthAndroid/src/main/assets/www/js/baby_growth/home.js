@@ -17,6 +17,6 @@ var HomeView = function (adapter, template) {
     this.loadTrackGrowth = function(event){
         event.preventDefault();
         location.hash = '#' + 'track_growth';
-    }
+    };
     this.initialize();
 }

@@ -1,7 +1,7 @@
 // We use an "Immediate Function" to initialize the application to avoid leaving anything behind in the global scope
 (function () {
 
-    /*
+/*
     BabyGrowthStorage =  {
         getImmunizationData: function(){
             var b = [
@@ -20,9 +20,15 @@
         },
         showToast: function(message){
             alert(message);
+        },
+        getGrowthChartData: function(){
+
+        var b=
+'{"user_track_growth": [{"user": 1, "age": 1037, "height": 111.0, "id": 1, "entry_date": "2014-01-10"}, {"weight": 35.0, "age": 1095, "height": 110.0, "user": 1, "id": 2, "entry_date": "2014-03-09"}], "track_growth": [{"age": 0, "label": "Birth", "weight": 89.0, "height": 45.0}, {"age": 90, "label": "3 months", "weight": 45.0, "height": 112.0}, {"age": 356, "label": "1 year", "weight": 23.0, "height": 112.0}]}';
+        return b;
         }
     };
-    */
+*/
 
 
 
@@ -32,11 +38,15 @@
     var immunizationTpl = Handlebars.compile($("#immunization-tpl").html());
     var immunizationLiTpl = Handlebars.compile($("#immunization-li-tpl").html());
     var trackGrowthTpl = Handlebars.compile($("#track-growth-tpl").html());
+    var addTrackGrowthTpl = Handlebars.compile($("#add-track-growth-tpl").html());
+    var trackGrowthGraphTpl = Handlebars.compile($("#track-growth-graph-tpl").html());
 
     var slider = new PageSlider($('body'));
 
     var detailsURL = /^#immunization_list/;
-    var trackGrowthUrl = /^#track_growth/;
+    var trackGrowthUrl = /^#track_growth$/;
+    var addTrackGrowthUrl = /^#add_track_growth$/;
+    var trackGrowthGraphUrl = /^#track_growth_graph$/;
 
     $(window).on('hashchange', route);
 
@@ -74,6 +84,11 @@
             slider.slidePage(new ImmunizationView(adapter, immunizationTpl, immunizationLiTpl).render().el);
         } else if (hash.match(trackGrowthUrl)) {
             slider.slidePage(new TrackGrowthView(adapter, trackGrowthTpl).render().el);
+        } else if (hash.match(addTrackGrowthUrl)) {
+            slider.slidePage(new AddTrackGrowthView(adapter, addTrackGrowthTpl).render().el);
+        }else if (hash.match(trackGrowthGraphUrl)) {
+            console.log('here');
+            slider.slidePage(new TrackGrowthGraphView(adapter, trackGrowthGraphTpl).render().el);
         }
         return;
     }
