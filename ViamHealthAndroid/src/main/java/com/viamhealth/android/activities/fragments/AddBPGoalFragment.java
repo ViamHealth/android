@@ -38,9 +38,9 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
         user = getArguments().getParcelable("user");
         //Commenting this losing the edit ability. But doing it, as both create and edit are not working
-//        Bundle bundle = getArguments().getBundle("goals");
-        //if(!bundle.isEmpty())
-        //    goal = (BPGoal) bundle.getParcelable(MedicalConditions.BloodPressure.name());
+        Bundle bundle = getArguments().getBundle("goals");
+        if(!bundle.isEmpty())
+            goal = (BPGoal) bundle.getParcelable(MedicalConditions.BloodPressure.name());
 
         dialog = new ProgressDialog(getActivity());
 
@@ -59,11 +59,12 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
         if(goal!=null){
             isGoalConfigured = true;
+            //pSP.setText(goal.getReadings().get);
             tSP.setText(String.valueOf(goal.getSystolicPressure()));
             tDP.setText(String.valueOf(goal.getDiastolicPressure()));
             tPR.setText(String.valueOf(goal.getPulseRate()));
             targetDate.setText(formater.format(goal.getTargetDate()));
-            ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+            //((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         }else{
             if(user.getBmiProfile().getSystolicPressure()>0) pSP.setText(String.valueOf(user.getBmiProfile().getSystolicPressure()));
             if(user.getBmiProfile().getDiastolicPressure()>0) pDP.setText(String.valueOf(user.getBmiProfile().getDiastolicPressure()));

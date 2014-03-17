@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <RadioGroup
-        android:id="@+id/radioSex"
+        android:id="@+id/radioGoals"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
@@ -14,22 +14,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Weight"
+            android:visibility="gone"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/radioBp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="Blood Pressure" />
+
         <RadioButton
             android:id="@+id/radioDiabetes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="Diabetes" />
+
         <RadioButton
             android:id="@+id/radioCholesterol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="Cholesterol" />
 
     </RadioGroup>

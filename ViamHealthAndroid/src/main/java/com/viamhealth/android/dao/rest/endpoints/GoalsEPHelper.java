@@ -228,6 +228,13 @@ public class GoalsEPHelper extends BaseEP {
         return reading;
     }
 
+    public void deleteGoalReading(MedicalConditions mc, Goal goal, Long userId)
+    {
+        GoalsEP ep = getEndPoint(mc);
+        ep.deleteGoal(userId,goal);
+
+    }
+
     private GoalsEP getEndPoint(MedicalConditions mc) {
         switch(mc){
             case Obese:

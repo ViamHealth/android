@@ -48,9 +48,9 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
         user = getArguments().getParcelable("user");
         //Commenting this losing the edit ability. But doing it, as both create and edit are not working
-        //Bundle bundle = getArguments().getBundle("goals");
-        //if(!bundle.isEmpty())
-        //    goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
+        Bundle bundle = getArguments().getBundle("goals");
+        if(!bundle.isEmpty())
+            goal = (DiabetesGoal) bundle.getParcelable(MedicalConditions.Diabetes.name());
 
 
         dialog = new ProgressDialog(getActivity());
@@ -69,10 +69,12 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
         if(goal!=null){
             isGoalConfigured = true;
+            if(user.getBmiProfile().getFastingSugar()>0) pFBS.setText(String.valueOf(user.getBmiProfile().getFastingSugar()));
+            if(user.getBmiProfile().getRandomSugar()>0) pRBS.setText(String.valueOf(user.getBmiProfile().getRandomSugar()));
             tRBS.setText(String.valueOf(goal.getRbs()));
             tFBS.setText(String.valueOf(goal.getFbs()));
             targetDate.setText(formater.format(goal.getTargetDate()));
-            ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+            //((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         } else {
             //tRBS.setText(String.valueOf(140));
             //tFBS.setText(String.valueOf(100));

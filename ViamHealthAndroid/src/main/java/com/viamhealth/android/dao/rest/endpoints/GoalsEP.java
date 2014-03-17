@@ -159,6 +159,21 @@ public abstract class GoalsEP extends BaseEP {
         return processGoalReading(responseString);
     }
 
+    public void deleteGoal(Long userId,Goal goal)
+    {
+        RestClient client = getRestClient(getReadingsURL() + "/", userId);
+
+
+        addParams(client, goal);
+
+        try {
+               client.Execute(RequestMethod.DELETE);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public Goal saveGoalForUser(Long userId, Goal goal) {
 
         String url = getGoalURL();

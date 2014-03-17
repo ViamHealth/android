@@ -39,8 +39,11 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.activities.AddGoalActivity;
 import com.viamhealth.android.activities.AddGoalValue;
+import com.viamhealth.android.activities.EditGoals;
+import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.activities.SelectFiles;
 import com.viamhealth.android.activities.TabActivity;
+import com.viamhealth.android.activities.TermsActivity;
 import com.viamhealth.android.dao.rest.endpoints.GoalsEPHelper;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.model.enums.MedicalConditions;
@@ -48,6 +51,7 @@ import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoal;
 import com.viamhealth.android.model.users.User;
+import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.ui.viewpagerindicator.CirclePageIndicator;
 import com.viamhealth.android.utils.BMRCalculator;
 import com.viamhealth.android.utils.Checker;
@@ -109,10 +113,12 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     Boolean isSugarActivity=false;
     Boolean isCholesterolActivity=false;
 
+    MedicalConditions type=MedicalConditions.None;
     int CODE_WEIGHT=101;
     int CODE_BP=102;
     int CODE_SUGAR=103;
     int CODE_CHOLESTEROL=104;
+
 
 
     @Override
@@ -193,6 +199,28 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             addNewGoal();
             return false;
         }
+
+        if(item.getItemId() == R.id.menu_edit){
+            //GoalFragment fm1= (GoalFragment)getSupportFragmentManager().findFragmentByTag("goals");
+            // if(fm1.isVisible())
+            //{
+
+            Intent editIntent = new Intent(getSherlockActivity(), AddGoalActivity.class);
+            editIntent.putExtra("user", selectedUser);
+            editIntent.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+            editIntent.putExtra("type",(MedicalConditions)goalsConfiguredMap.keySet().toArray()[mPager.getCurrentItem()] );
+            startActivityForResult(editIntent, ACTION_CONFIGURE_GOAL);
+            //}
+        }
+
+        if(item.getItemId() == R.id.menu_delete){
+            //GoalFragment fm1= (GoalFragment)getSupportFragmentManager().findFragmentByTag("goals");
+            // if(fm1.isVisible())
+            //{
+            deleteGoal(goalsConfiguredMap.get((MedicalConditions) goalsConfiguredMap.keySet().toArray()[mPager.getCurrentItem()]), (MedicalConditions) goalsConfiguredMap.keySet().toArray()[mPager.getCurrentItem()]);
+            //}
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -214,6 +242,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             return null;
 
         Goal goal = goalsConfiguredMap.get(mc);
+        if(goal!=null)
+        {
         List<GoalReadings> readings = goal.getReadings();
 
 
@@ -233,6 +263,11 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         builder.writeYAxisExtras(goal);
 
         return builder.toString();
+        }
+        else
+        {
+            return null;
+        }
 
     }
 
@@ -559,7 +594,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
         OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
 
-        if(listener != null){
+        if(listener != null && goalsConfiguredMap.get(mc)!=null){
             listener.onChange(getDataForGraph(mc), goalsConfiguredMap.get(mc));
         }
         else
@@ -572,6 +607,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         //public void onUpdate(String json);
     }
 
+
+
     private void editGoal(Goal goal, MedicalConditions type){
         Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
         i.putExtra("user", selectedUser);
@@ -580,14 +617,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         startActivityForResult(i, ACTION_CONFIGURE_GOAL);
     }
 
-    private void deleteGoal(Goal goal, MedicalConditions type){
+    private void deleteGoal(final Goal goal, final MedicalConditions type){
         AlertDialog.Builder buildr = new AlertDialog.Builder(getSherlockActivity());
         buildr.setTitle("Delete " + getString(type.key()) + " Goal");
         buildr.setMessage("Are you sure?");
         buildr.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+            public void onClick(DialogInterface dialog, int which){
+                goalHelper.deleteGoalReading(type,goal,selectedUser.getId());
             }
         });
         buildr.show();
@@ -608,7 +645,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             GraphFragment fragment = graphFragments.get(position);
             if(fragment == null) {
                 Bundle args = new Bundle();
-                final MedicalConditions mc = (MedicalConditions) goalsConfiguredMap.keySet().toArray()[position];
+                final MedicalConditions mc = (MedicalConditions)goalsConfiguredMap.keySet().toArray()[position];
+                type=mc;
                 Goal goal = goalsConfiguredMap.get(mc);
                 args.putSerializable("type", mc);
                 args.putString("json", getDataForGraph(mc));

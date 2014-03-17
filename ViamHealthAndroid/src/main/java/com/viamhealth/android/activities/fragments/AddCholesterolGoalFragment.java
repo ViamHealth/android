@@ -39,9 +39,9 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
 
         user = getArguments().getParcelable("user");
         //Commenting this losing the edit ability. But doing it, as both create and edit are not working
-        //Bundle bundle = getArguments().getBundle("goals");
-        //if(bundle!=null && !bundle.isEmpty())
-        //    goal = (CholesterolGoal) bundle.getParcelable(MedicalConditions.Cholesterol.name());
+        Bundle bundle = getArguments().getBundle("goals");
+        if(bundle!=null && !bundle.isEmpty())
+            goal = (CholesterolGoal) bundle.getParcelable(MedicalConditions.Cholesterol.name());
 
         dialog = new ProgressDialog(getActivity());
 
@@ -63,6 +63,9 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
 
         if(goal!=null){
             isGoalConfigured = true;
+            BMIProfile profile = user.getBmiProfile();
+            if(profile.getHdl()>0) pHDL.setText(String.valueOf(profile.getHdl()));
+            if(profile.getLdl()>0) pLDL.setText(String.valueOf(profile.getLdl()));
             tHDL.setText(String.valueOf(goal.getHdl()));
             tLDL.setText(String.valueOf(goal.getLdl()));
             tTG.setText(String.valueOf(goal.getTriglycerides()));
@@ -73,7 +76,7 @@ public class AddCholesterolGoalFragment extends AddGoalFragment implements View.
                 tTotal.setVisibility(View.GONE);
             }
             targetDate.setText(formater.format(goal.getTargetDate()));
-            ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+            //((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         }else{
             BMIProfile profile = user.getBmiProfile();
             if(profile.getHdl()>0) pHDL.setText(String.valueOf(profile.getHdl()));

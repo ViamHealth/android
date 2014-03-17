@@ -68,9 +68,9 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
         user = getArguments().getParcelable("user");
 //Commenting this losing the edit ability. But doing it, as both create and edit are not working
-//        Bundle bundle = getArguments().getBundle("goals");
-//        if(!bundle.isEmpty())
-//            goal = (WeightGoal) bundle.getParcelable(MedicalConditions.Obese.name());
+        Bundle bundle = getArguments().getBundle("goals");
+        if(!bundle.isEmpty())
+            goal = (WeightGoal) bundle.getParcelable(MedicalConditions.Obese.name());
 
         dialog = new ProgressDialog(getActivity());
 
@@ -94,7 +94,8 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
             targetDate.setText(formater.format(goal.getTargetDate()));
 
             pHeight.setText(String.valueOf(user.getBmiProfile().getHeight()));
-            pWeight.setVisibility(View.GONE);
+            //pWeight.setVisibility(View.GONE);
+            pWeight.setText(user.getBmiProfile().getWeight().toString());
             pHeight.setEnabled(false);
         } else {//if goal is not yet configured
             if(user.getBmiProfile().getHeight()>0){

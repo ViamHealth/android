@@ -289,15 +289,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             return true;
         }
 
-        if(item.getItemId() == R.id.menu_edit){
-            //GoalFragment fm1= (GoalFragment)getSupportFragmentManager().findFragmentByTag("goals");
-           // if(fm1.isVisible())
-            //{
-                Intent editIntent = new Intent(TabActivity.this, EditGoals.class);
-                startActivity(editIntent);
-            //}
-        }
-
         if(item.getItemId() == R.id.menu_invite) {
             ga.GA_eventButtonPress("tab_menu_invite");
             InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application)getApplicationContext());
