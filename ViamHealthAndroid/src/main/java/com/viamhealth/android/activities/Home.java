@@ -9,6 +9,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -621,12 +623,23 @@ public class Home extends BaseActivity implements OnClickListener{
                     task.execute();
 
                 }else{
-
+                    //TODO: save detail in db if network is not available.
+                    String jsonStr = toJson(user, User.class);
+                    System.out.println("JSON USER ======== " + jsonStr);
                 }
             }else{//it is from tabactivity
 
             }
         }
+    }
+
+    private static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+    public static <T> T fromJson(String json, Class<T> clazz) {
+        return gson.fromJson(json, clazz);
+    }
+
+    public static <T> String toJson(T src, Class<T> clazz) {
+        return gson.toJson(src, clazz);
     }
 
     // async class for calling webservice and get responce message
