@@ -10,7 +10,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
-import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.dao.rest.endpoints.ReminderEP;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.users.User;
@@ -23,54 +22,53 @@ import java.util.List;
 /**
  * Created by kunal on 6/2/14.
  */
-public class NotifyServiceTwo extends IntentService{
-    public NotifyServiceTwo(){
-        super("com.viamhealth.android");
-    }
-
-    private NotificationManager mNM;
-    Global_Application ga;
+public class NotifyServiceTwo extends IntentService {
     private final static Class selfClass = NotifyServiceTwo.class;
     private static final String TAG = LogUtils.makeLogTag(selfClass);
     private static int NOTIFICATION = 21;
+    Global_Application ga;
+    private NotificationManager mNM;
+
+    public NotifyServiceTwo() {
+        super("com.viamhealth.android");
+    }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        ga = ((Global_Application)getApplicationContext());
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        ga = ((Global_Application) getApplicationContext());
 
         String action = intent.getAction();
-        ga.GA_eventGeneral("notification",Integer.toString(NOTIFICATION),action);
+        ga.GA_eventGeneral("notification", Integer.toString(NOTIFICATION), action);
 
-        if(action.equals(ServicesCommon.ACTION_CREATE)) {
+        if (action.equals(ServicesCommon.ACTION_CREATE)) {
             buildNotification(intent);
-        } else if(action.equals(ServicesCommon.ACTION_ACTED)) {
+        } else if (action.equals(ServicesCommon.ACTION_ACTED)) {
             mNM.cancel(NOTIFICATION);
             List<ReminderReading> objects = ServicesCommon.getListReminderReadingFromIntent(intent);
-            for(ReminderReading rr : objects){
-                if(rr.isCompleteCheck() == Boolean.TRUE){
+            for (ReminderReading rr : objects) {
+                if (rr.isCompleteCheck() == Boolean.TRUE) {
                     continue;
                 }
                 rr.setCompleteCheck(Boolean.TRUE);
-                ReminderEP rep = new ReminderEP(this,ga);
+                ReminderEP rep = new ReminderEP(this, ga);
                 rep.updateReading(rr);
             }
-        }
-        else if(action.equals(ServicesCommon.ACTION_DISMISS)) {
+        } else if (action.equals(ServicesCommon.ACTION_DISMISS)) {
             mNM.cancel(NOTIFICATION);
         }
     }
 
 
-    private void buildNotification(Intent intent){
+    private void buildNotification(Intent intent) {
         NotificationCompat.Builder notification = ServicesCommon.getNotification(intent, this, NOTIFICATION);
-        notification.addAction(R.drawable.right,getString(R.string.notification_completed_others),getActedPendingIntent(intent));
-        notification.addAction(0,getString(R.string.notification_dismiss),getDismissPendingIntent(intent));
+        notification.addAction(R.drawable.right, getString(R.string.notification_completed_others), getActedPendingIntent(intent));
+        notification.addAction(0, getString(R.string.notification_dismiss), getDismissPendingIntent(intent));
         Notification not = notification.build();
         mNM.notify(NOTIFICATION, not);
     }
 
-    private PendingIntent getActedPendingIntent(Intent recievedIntent){
+    private PendingIntent getActedPendingIntent(Intent recievedIntent) {
         User user = ServicesCommon.getUserFromIntent(recievedIntent);
         List<ReminderReading> objects = ServicesCommon.getListReminderReadingFromIntent(recievedIntent);
         Parcel parcel_user = ServicesCommon.getUserParcel(user);
@@ -86,7 +84,7 @@ public class NotifyServiceTwo extends IntentService{
         return pi;
     }
 
-    private PendingIntent getDismissPendingIntent(Intent recievedIntent){
+    private PendingIntent getDismissPendingIntent(Intent recievedIntent) {
         User user = ServicesCommon.getUserFromIntent(recievedIntent);
         List<ReminderReading> objects = ServicesCommon.getListReminderReadingFromIntent(recievedIntent);
         Parcel parcel_user = ServicesCommon.getUserParcel(user);

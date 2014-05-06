@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -11,23 +12,23 @@
         android:orientation="horizontal">
 
         <CheckBox
+            android:id="@+id/cbFasting"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:text="@string/fasting"
-            android:id="@+id/cbFasting"
+            android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_marginLeft="20dp" />
+            android:text="@string/fasting"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <CheckBox
+            android:id="@+id/cbRandom"
             android:layout_width="0dip"
             android:layout_height="fill_parent"
-            android:text="@string/random"
-            android:id="@+id/cbRandom"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_marginLeft="20dp"
-            android:checked="true" />
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/random"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,25 +39,25 @@
         android:orientation="vertical">
 
         <EditText
+            android:id="@+id/input_fasting"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:inputType="numberSigned"
             android:ems="10"
-            android:id="@+id/input_fasting"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center_vertical|center_horizontal"
-            android:hint="@string/fasting_sugar" />
+            android:hint="@string/fasting_sugar"
+            android:inputType="numberSigned"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
+            android:id="@+id/input_random"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:inputType="numberSigned"
+            android:layout_marginTop="10dp"
             android:ems="10"
-            android:id="@+id/input_random"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:gravity="center_vertical|center_horizontal"
             android:hint="@string/random_sugar"
-            android:layout_marginTop="10dp" />
+            android:inputType="numberSigned"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
 </LinearLayout>

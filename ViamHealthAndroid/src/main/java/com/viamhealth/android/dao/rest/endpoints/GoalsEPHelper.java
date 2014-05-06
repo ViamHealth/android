@@ -16,7 +16,6 @@ import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoal;
 
 import org.apache.http.HttpStatus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,12 +30,11 @@ import java.util.Map;
 public class GoalsEPHelper extends BaseEP {
 
 
+    final static String TAG = "GoalsEPHelper";
     protected WeightGoalEP weight;
     protected DiabetesGoalEP sugar;
     protected BPGoalEP bp;
     protected CholesterolGoalEP cholesterol;
-
-    final static String TAG = "GoalsEPHelper";
 
     public GoalsEPHelper(Context context, Application app) {
         super(context, app);
@@ -47,10 +45,10 @@ public class GoalsEPHelper extends BaseEP {
     }
 
     private RestClient getRestClient(String url, Long userId) {
-        String baseurlString = Global_Application.url+ url + "/?user=" + userId;
+        String baseurlString = Global_Application.url + url + "/?user=" + userId;
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         return client;
     }
@@ -60,7 +58,7 @@ public class GoalsEPHelper extends BaseEP {
 
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -69,34 +67,34 @@ public class GoalsEPHelper extends BaseEP {
 
         Map<MedicalConditions, Goal> mapGoals = null;
         //Map<MedicalConditions, List<GoalReadings>> mapReadings = null;
-        if(client.getResponseCode()== HttpStatus.SC_OK)
+        if (client.getResponseCode() == HttpStatus.SC_OK)
             mapGoals = processGoalsResponse(responseString);
 
         return mapGoals;
     }
 
-    private Map<MedicalConditions, Goal> processGoalsResponse(String jsonResponse){
+    private Map<MedicalConditions, Goal> processGoalsResponse(String jsonResponse) {
         Map<MedicalConditions, Goal> map = new HashMap<MedicalConditions, Goal>();
 
         try {
             JSONObject object = new JSONObject(jsonResponse);
 
-            if(object.has(weight.getGoalURL())){
+            if (object.has(weight.getGoalURL())) {
                 WeightGoal goal = (WeightGoal) weight.processGoalResponse(object.getJSONObject(weight.getGoalURL()));
                 map.put(MedicalConditions.Obese, goal);
             }
 
-            if(object.has(sugar.getGoalURL())){
+            if (object.has(sugar.getGoalURL())) {
                 DiabetesGoal goal = (DiabetesGoal) sugar.processGoalResponse(object.getJSONObject(sugar.getGoalURL()));
                 map.put(MedicalConditions.Diabetes, goal);
             }
 
-            if(object.has(bp.getGoalURL())){
+            if (object.has(bp.getGoalURL())) {
                 BPGoal goal = (BPGoal) bp.processGoalResponse(object.getJSONObject(bp.getGoalURL()));
                 map.put(MedicalConditions.BloodPressure, goal);
             }
 
-            if(object.has(cholesterol.getGoalURL())){
+            if (object.has(cholesterol.getGoalURL())) {
                 CholesterolGoal goal = (CholesterolGoal) cholesterol.processGoalResponse(object.getJSONObject(cholesterol.getGoalURL()));
                 map.put(MedicalConditions.Cholesterol, goal);
             }
@@ -114,7 +112,7 @@ public class GoalsEPHelper extends BaseEP {
 
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -129,13 +127,13 @@ public class GoalsEPHelper extends BaseEP {
         Goal cGoal = null;
         JSONObject response = new JSONObject();
 
-        if(client.getResponseCode()==HttpStatus.SC_OK){
+        if (client.getResponseCode() == HttpStatus.SC_OK) {
 
             try {
                 response = new JSONObject(responseString);
 
-                try{
-                    if(response.getJSONObject("weight-goals") != null){
+                try {
+                    if (response.getJSONObject("weight-goals") != null) {
                         JSONObject jsonGoal = response.getJSONObject("weight-goals");
                         weightGoal = weight.processGoalResponse(jsonGoal);
                     }
@@ -143,7 +141,7 @@ public class GoalsEPHelper extends BaseEP {
                     e.printStackTrace();
                 }
                 try {
-                    if(response.getJSONObject("cholesterol-goals") != null){
+                    if (response.getJSONObject("cholesterol-goals") != null) {
                         JSONObject jsonGoal = response.getJSONObject("cholesterol-goals");
                         cGoal = cholesterol.processGoalResponse(jsonGoal);
                     }
@@ -151,7 +149,7 @@ public class GoalsEPHelper extends BaseEP {
                     e.printStackTrace();
                 }
                 try {
-                    if(response.getJSONObject("glucose-goals") != null){
+                    if (response.getJSONObject("glucose-goals") != null) {
                         JSONObject jsonGoal = response.getJSONObject("glucose-goals");
                         dGoal = sugar.processGoalResponse(jsonGoal);
                     }
@@ -159,7 +157,7 @@ public class GoalsEPHelper extends BaseEP {
                     e.printStackTrace();
                 }
                 try {
-                    if(response.getJSONObject("blood-pressure-goals") != null){
+                    if (response.getJSONObject("blood-pressure-goals") != null) {
                         JSONObject jsonGoal = response.getJSONObject("blood-pressure-goals");
                         bpGoal = bp.processGoalResponse(jsonGoal);
                     }
@@ -175,20 +173,20 @@ public class GoalsEPHelper extends BaseEP {
 
 
         //WeightGoal weightGoal = (WeightGoal)weight.getGoalsForUser(userId);
-        if(weightGoal != null){
+        if (weightGoal != null) {
             map.put(MedicalConditions.Obese, weightGoal);
         }
 
         //DiabetesGoal dGoal = (DiabetesGoal) sugar.getGoalsForUser(userId);
-        if(dGoal != null)
+        if (dGoal != null)
             map.put(MedicalConditions.Diabetes, dGoal);
 
         //BPGoal bpGoal = (BPGoal) bp.getGoalsForUser(userId);
-        if(bpGoal != null)
+        if (bpGoal != null)
             map.put(MedicalConditions.BloodPressure, bpGoal);
 
         //CholesterolGoal cGoal = (CholesterolGoal) cholesterol.getGoalsForUser(userId);
-        if(cGoal != null)
+        if (cGoal != null)
             map.put(MedicalConditions.Cholesterol, cGoal);
 
         /* TODO get other goals too */
@@ -220,7 +218,7 @@ public class GoalsEPHelper extends BaseEP {
 
     public GoalReadings saveGoalReadings(MedicalConditions mc, GoalReadings reading, Long userId) {
         GoalsEP ep = getEndPoint(mc);
-        if(reading.isToUpdate())
+        if (reading.isToUpdate())
             reading = ep.updateGoalReadings(userId, reading);
         else
             reading = ep.createGoalReadings(userId, reading);
@@ -229,7 +227,7 @@ public class GoalsEPHelper extends BaseEP {
     }
 
     private GoalsEP getEndPoint(MedicalConditions mc) {
-        switch(mc){
+        switch (mc) {
             case Obese:
                 return weight;
 

@@ -34,10 +34,10 @@ public abstract class GoalsEP extends BaseEP {
     }
 
     private RestClient getRestClient(String url, Long userId) {
-        String baseurlString = Global_Application.url+ url + "/?user=" + userId + "&page_size=1000";
+        String baseurlString = Global_Application.url + url + "/?user=" + userId + "&page_size=1000";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         return client;
     }
@@ -48,7 +48,7 @@ public abstract class GoalsEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -56,7 +56,7 @@ public abstract class GoalsEP extends BaseEP {
         Log.i(TAG, client.toString());
 
         Goal goal = null;
-        if(client.getResponseCode()==HttpStatus.SC_OK)
+        if (client.getResponseCode() == HttpStatus.SC_OK)
             goal = processGoalsResponse(responseString);
 
         return goal;
@@ -67,7 +67,7 @@ public abstract class GoalsEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -75,7 +75,7 @@ public abstract class GoalsEP extends BaseEP {
         Log.i(TAG, client.toString());
 
         List<GoalReadings> readings = null;
-        if(client.getResponseCode()==HttpStatus.SC_OK)
+        if (client.getResponseCode() == HttpStatus.SC_OK)
             readings = processGoalReadings(responseString);
 
         return readings;
@@ -86,11 +86,11 @@ public abstract class GoalsEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() == HttpStatus.SC_NOT_FOUND){
+        if (client.getResponseCode() == HttpStatus.SC_NOT_FOUND) {
             return null;
         }
 
@@ -98,7 +98,7 @@ public abstract class GoalsEP extends BaseEP {
         Log.i(TAG, client.toString());
 
         GoalReadings reading = null;
-        if(client.getResponseCode()==HttpStatus.SC_OK)
+        if (client.getResponseCode() == HttpStatus.SC_OK)
             reading = processGoalReading(responseString);
 
         return reading;
@@ -106,15 +106,25 @@ public abstract class GoalsEP extends BaseEP {
     }
 
     abstract public boolean updateReading(final GoalReadings reading);
+
     abstract protected String getReadingsURL();
+
     abstract protected String getGoalURL();
+
     abstract protected Goal newGoal();
+
     abstract protected GoalReadings newGoalReading();
+
     abstract protected Goal.HealthyRange newHealthyRange(Goal goal);
+
     abstract protected void addParams(final RestClient client, final GoalReadings readings);
+
     abstract protected void addParams(final RestClient client, final Goal goal);
+
     abstract protected void processParams(final Goal.HealthyRange range, final JSONObject jsonHRange) throws JSONException;
+
     abstract protected void processParams(final GoalReadings reading, final JSONObject jsonReading) throws JSONException;
+
     abstract protected void processParams(final Goal goal, final JSONObject jsonGoal) throws JSONException;
 
     public GoalReadings updateGoalReadings(Long userId, GoalReadings readings) {
@@ -126,11 +136,11 @@ public abstract class GoalsEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.PUT);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_OK)
+        if (client.getResponseCode() != HttpStatus.SC_OK)
             return null;
 
         String responseString = client.getResponse();
@@ -147,11 +157,11 @@ public abstract class GoalsEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.POST);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_CREATED)
+        if (client.getResponseCode() != HttpStatus.SC_CREATED)
             return null;
 
         String responseString = client.getResponse();
@@ -162,7 +172,7 @@ public abstract class GoalsEP extends BaseEP {
     public Goal saveGoalForUser(Long userId, Goal goal) {
 
         String url = getGoalURL();
-        if(goal.getId()>0)
+        if (goal.getId() > 0)
             url += "/" + goal.getId();
         RestClient client = getRestClient(url, userId);
         client.AddParam("target_date", formater.format(goal.getTargetDate()));
@@ -170,17 +180,17 @@ public abstract class GoalsEP extends BaseEP {
         addParams(client, goal);
 
         try {
-            if(goal.getId()>0)
+            if (goal.getId() > 0)
                 client.Execute(RequestMethod.PUT);
             else
                 client.Execute(RequestMethod.POST);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         Goal returnGoal = null;
         Log.i(TAG, client.toString());
-        if(client.getResponseCode()==HttpStatus.SC_CREATED || client.getResponseCode()==HttpStatus.SC_OK) {
+        if (client.getResponseCode() == HttpStatus.SC_CREATED || client.getResponseCode() == HttpStatus.SC_OK) {
             String responseString = client.getResponse();
             returnGoal = processGoalResponse(responseString);
         }
@@ -232,13 +242,13 @@ public abstract class GoalsEP extends BaseEP {
         return reading;
     }
 
-    private List<GoalReadings> processGoalReadings(JSONArray jsonReadings){
+    private List<GoalReadings> processGoalReadings(JSONArray jsonReadings) {
         List<GoalReadings> readings = new ArrayList<GoalReadings>();
-        try{
-            for(int i=0; i<jsonReadings.length(); i++){
+        try {
+            for (int i = 0; i < jsonReadings.length(); i++) {
                 GoalReadings reading = processGoalReading(jsonReadings.getJSONObject(i));
-                if(reading!=null)
-                readings.add(reading);
+                if (reading != null)
+                    readings.add(reading);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -247,9 +257,9 @@ public abstract class GoalsEP extends BaseEP {
         return readings;
     }
 
-    public Goal processGoalResponse(JSONObject jsonGoal){
+    public Goal processGoalResponse(JSONObject jsonGoal) {
         Goal goal = newGoal();
-        try{
+        try {
             goal.setId(jsonGoal.getLong("id"));
             goal.setUserId(jsonGoal.getLong("user"));
             goal.setTargetDate(formater.parse(jsonGoal.getString("target_date")));
@@ -276,9 +286,9 @@ public abstract class GoalsEP extends BaseEP {
         return hRange;
     }
 
-    public Goal processGoalResponse(String jsonResponse){
+    public Goal processGoalResponse(String jsonResponse) {
         Goal goal = null;
-        try{
+        try {
             JSONObject jsonGoal = new JSONObject(jsonResponse);
             goal = processGoalResponse(jsonGoal);
         } catch (JSONException e) {
@@ -288,11 +298,11 @@ public abstract class GoalsEP extends BaseEP {
         return goal;
     }
 
-    private Goal processGoalsResponse(String jsonResponse){
+    private Goal processGoalsResponse(String jsonResponse) {
         Goal goal = null;
-        try{
+        try {
             JSONObject response = new JSONObject(jsonResponse);
-            if(response.getInt("count")>0){
+            if (response.getInt("count") > 0) {
                 JSONArray results = response.getJSONArray("results");
                 JSONObject jsonGoal = results.getJSONObject(0);
                 goal = processGoalResponse(jsonGoal);

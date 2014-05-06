@@ -8,17 +8,12 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Switch;
 
-import com.facebook.internal.Utility;
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.goals.BPGoalReading;
 import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.utils.UIUtility;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,10 +40,10 @@ public class AddDiabetesValue extends AddValueBaseFragment {
         super.onCreate(savedInstanceState);
 
         List<Parcelable> readings = Arrays.asList(getArguments().getParcelableArray("readings"));
-        if(readings!=null){
+        if (readings != null) {
             int count = readings.size();
             readingsMap = new HashMap<Date, DiabetesGoalReading>(count);
-            for(int i=0; i<count; i++){
+            for (int i = 0; i < count; i++) {
                 DiabetesGoalReading reading = (DiabetesGoalReading) readings.get(i);
                 readingsMap.put(reading.getReadingDate(), reading);
             }
@@ -74,7 +69,7 @@ public class AddDiabetesValue extends AddValueBaseFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isFasting = isChecked;
-                if(isFasting) fasting.setVisibility(View.VISIBLE);
+                if (isFasting) fasting.setVisibility(View.VISIBLE);
                 else fasting.setVisibility(View.GONE);
             }
         });
@@ -82,7 +77,7 @@ public class AddDiabetesValue extends AddValueBaseFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isRandom = isChecked;
-                if(isRandom) random.setVisibility(View.VISIBLE);
+                if (isRandom) random.setVisibility(View.VISIBLE);
                 else random.setVisibility(View.GONE);
             }
         });
@@ -99,17 +94,17 @@ public class AddDiabetesValue extends AddValueBaseFragment {
         cal.setTime(date);
         cal = UIUtility.getDate(cal);
 
-        if(readingsMap!=null)
+        if (readingsMap != null)
             origReading = readingsMap.get(cal.getTime());
 
-        if(isFasting)
+        if (isFasting)
             reading.setFbs(Integer.parseInt(fasting.getText().toString()));
-        if(isRandom)
+        if (isRandom)
             reading.setRbs(Integer.parseInt(random.getText().toString()));
 
-        if(origReading!=null){
-            if(reading.getFbs()==0) reading.setFbs(origReading.getFbs());
-            if(reading.getRbs()==0) reading.setRbs(origReading.getRbs());
+        if (origReading != null) {
+            if (reading.getFbs() == 0) reading.setFbs(origReading.getFbs());
+            if (reading.getRbs() == 0) reading.setRbs(origReading.getRbs());
         }
 
         reading.setIsToUpdate(isUpdate);

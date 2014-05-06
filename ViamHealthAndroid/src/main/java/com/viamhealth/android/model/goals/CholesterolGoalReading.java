@@ -3,22 +3,38 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.viamhealth.android.utils.JsonGraphDataBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by naren on 20/10/13.
  */
 public class CholesterolGoalReading extends GoalReadings {
 
+    public static final Parcelable.Creator<CholesterolGoalReading> CREATOR = new Parcelable.Creator<CholesterolGoalReading>() {
+        public CholesterolGoalReading createFromParcel(Parcel in) {
+            return new CholesterolGoalReading(in);
+        }
+
+        public CholesterolGoalReading[] newArray(int size) {
+            return new CholesterolGoalReading[size];
+        }
+    };
     int hdl;
     int ldl;
     int triglycerides;
     int total;
+
+    public CholesterolGoalReading() {
+    }
+
+    public CholesterolGoalReading(Parcel in) {
+        super(in);
+        hdl = in.readInt();
+        ldl = in.readInt();
+        triglycerides = in.readInt();
+        total = in.readInt();
+    }
 
     public int getHdl() {
         return hdl;
@@ -52,17 +68,6 @@ public class CholesterolGoalReading extends GoalReadings {
         this.total = total;
     }
 
-    public CholesterolGoalReading() {
-    }
-
-    public CholesterolGoalReading(Parcel in) {
-        super(in);
-        hdl = in.readInt();
-        ldl = in.readInt();
-        triglycerides = in.readInt();
-        total = in.readInt();
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
@@ -76,16 +81,6 @@ public class CholesterolGoalReading extends GoalReadings {
     public int describeContents() {
         return super.describeContents();
     }
-
-    public static final Parcelable.Creator<CholesterolGoalReading> CREATOR = new Parcelable.Creator<CholesterolGoalReading>() {
-        public CholesterolGoalReading createFromParcel(Parcel in) {
-            return new CholesterolGoalReading(in);
-        }
-
-        public CholesterolGoalReading[] newArray(int size) {
-            return new CholesterolGoalReading[size];
-        }
-    };
 
     @Override
     public String toString() {
@@ -101,11 +96,11 @@ public class CholesterolGoalReading extends GoalReadings {
         JSONObject object = parentJSON();
 
         try {
-            if(series == GraphSeries.A)
+            if (series == GraphSeries.A)
                 object.put("y", this.hdl);
-            else if(series == GraphSeries.B)
+            else if (series == GraphSeries.B)
                 object.put("y", this.ldl);
-            else if(series == GraphSeries.C)
+            else if (series == GraphSeries.C)
                 object.put("y", this.triglycerides);
             else
                 object.put("y", this.total);

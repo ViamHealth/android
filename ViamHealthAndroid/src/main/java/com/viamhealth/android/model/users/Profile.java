@@ -14,8 +14,18 @@ import java.util.Date;
 /**
  * Created by naren on 02/10/13.
  */
-public class Profile implements Parcelable{
+public class Profile implements Parcelable {
 
+    public static final Parcelable.Creator<Profile> CREATOR
+            = new Parcelable.Creator<Profile>() {
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
     private String organization;
     private String mobileNumber;
     private Location location;
@@ -23,16 +33,31 @@ public class Profile implements Parcelable{
     private Date dob;
     private Gender gender = Gender.None;
     private String profilePicURL;
-
     private String fbProfileId;
     private String fbUsername;
     private Relation relation = Relation.None;
 
+    public Profile() {
+        this.location = new Location();
+    }
+
+    public Profile(Parcel in) {
+        this.location = new Location(in);
+        this.organization = in.readString();
+        this.mobileNumber = in.readString();
+        this.bloodGroup = BloodGroup.get(in.readInt());
+        this.gender = Gender.get(in.readInt());
+        this.dob = (Date) in.readValue(null);
+        this.profilePicURL = in.readString();
+        this.fbProfileId = in.readString();
+        this.fbUsername = in.readString();
+        this.relation = Relation.get(in.readInt());
+    }
+
     public int getAge() {
         Calendar nowCal = Calendar.getInstance();
         Calendar dobCal = Calendar.getInstance();
-        if(dob == null)
-        {
+        if (dob == null) {
             return 0;
         }
         dobCal.setTime(dob);
@@ -101,17 +126,8 @@ public class Profile implements Parcelable{
         return location;
     }
 
-    public void setLocation(String address) {
-        this.location.setAddress(address);
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-
     public void setLocation(GraphLocation location) {
-        if(this.location == null)
+        if (this.location == null)
             this.location = new Location(location);
 
         this.location.setStreet(location.getStreet());
@@ -122,6 +138,14 @@ public class Profile implements Parcelable{
 
         this.location.setLattitude(location.getLatitude());
         this.location.setLongitude(location.getLongitude());
+    }
+
+    public void setLocation(String address) {
+        this.location.setAddress(address);
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public BloodGroup getBloodGroup() {
@@ -140,11 +164,44 @@ public class Profile implements Parcelable{
         this.dob = dob;
     }
 
-    public Profile() {
-        this.location = new Location();
+    @Override
+    public String toString() {
+        return "Profile{" +
+                "organization='" + organization + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", location=" + location +
+                ", bloodGroup=" + bloodGroup +
+                ", dob=" + dob +
+                ", gender=" + gender +
+                ", profilePicURL='" + profilePicURL + '\'' +
+                ", fbProfileId='" + fbProfileId + '\'' +
+                ", fbUsername='" + fbUsername + '\'' +
+                "} ";
     }
 
-    public class Location implements Parcelable{
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        location.writeToParcel(dest, flags);
+
+        dest.writeString(organization);
+        dest.writeString(mobileNumber);
+        Integer bg = bloodGroup == null ? null : bloodGroup.value();
+        dest.writeInt(bg);
+        Integer g = gender == null ? Gender.Male.value() : gender.value();
+        dest.writeInt(g);
+        dest.writeValue(dob);
+        dest.writeString(profilePicURL);
+        dest.writeString(fbProfileId);
+        dest.writeString(fbUsername);
+        dest.writeInt(relation.value());
+    }
+
+    public class Location implements Parcelable {
         String street;
         String city;
         String state;
@@ -156,6 +213,32 @@ public class Profile implements Parcelable{
 
         //free text for now
         String address;
+
+        public Location() {
+
+        }
+
+        public Location(GraphLocation location) {
+            this.street = location.getStreet();
+            this.city = location.getCity();
+            this.state = location.getState();
+            this.country = location.getCountry();
+            this.zip = location.getZip();
+
+            this.lattitude = location.getLatitude();
+            this.longitude = location.getLongitude();
+        }
+
+        public Location(Parcel in) {
+            this.street = in.readString();
+            this.city = in.readString();
+            this.state = in.readString();
+            this.country = in.readString();
+            this.zip = in.readString();
+            this.address = in.readString();
+            this.lattitude = in.readDouble();
+            this.longitude = in.readDouble();
+        }
 
         public String getAddress() {
             return address;
@@ -221,31 +304,16 @@ public class Profile implements Parcelable{
             this.longitude = longitude;
         }
 
-        public Location() {
-
-        }
-
-        public Location(GraphLocation location) {
-            this.street = location.getStreet();
-            this.city = location.getCity();
-            this.state = location.getState();
-            this.country = location.getCountry();
-            this.zip = location.getZip();
-
-            this.lattitude = location.getLatitude();
-            this.longitude = location.getLongitude();
-        }
-
         public String toShortString() {
             String ss = this.city;
 
-            if(ss==null || ss.isEmpty()) ss = this.state;
+            if (ss == null || ss.isEmpty()) ss = this.state;
             else ss += "," + this.state;
 
-            if(ss==null || ss.isEmpty()) ss = this.country;
+            if (ss == null || ss.isEmpty()) ss = this.country;
             else ss += "," + this.country;
 
-            if(ss==null || ss.isEmpty())
+            if (ss == null || ss.isEmpty())
                 ss = this.address;
 
             return ss;
@@ -282,77 +350,5 @@ public class Profile implements Parcelable{
             dest.writeDouble(longitude);
         }
 
-        public Location(Parcel in) {
-            this.street = in.readString();
-            this.city = in.readString();
-            this.state = in.readString();
-            this.country = in.readString();
-            this.zip = in.readString();
-            this.address = in.readString();
-            this.lattitude = in.readDouble();
-            this.longitude = in.readDouble();
-        }
-
-    }
-
-    @Override
-    public String toString() {
-        return "Profile{" +
-                "organization='" + organization + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
-                ", location=" + location +
-                ", bloodGroup=" + bloodGroup +
-                ", dob=" + dob +
-                ", gender=" + gender +
-                ", profilePicURL='" + profilePicURL + '\'' +
-                ", fbProfileId='" + fbProfileId + '\'' +
-                ", fbUsername='" + fbUsername + '\'' +
-                "} ";
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        location.writeToParcel(dest, flags);
-
-        dest.writeString(organization);
-        dest.writeString(mobileNumber);
-        Integer bg = bloodGroup==null?null:bloodGroup.value();
-        dest.writeInt(bg);
-        Integer g = gender==null?Gender.Male.value():gender.value();
-        dest.writeInt(g);
-        dest.writeValue(dob);
-        dest.writeString(profilePicURL);
-        dest.writeString(fbProfileId);
-        dest.writeString(fbUsername);
-        dest.writeInt(relation.value());
-    }
-
-    public static final Parcelable.Creator<Profile> CREATOR
-            = new Parcelable.Creator<Profile>() {
-        public Profile createFromParcel(Parcel in) {
-            return new Profile(in);
-        }
-
-        public Profile[] newArray(int size) {
-            return new Profile[size];
-        }
-    };
-
-    public Profile(Parcel in) {
-        this.location = new Location(in);
-        this.organization = in.readString();
-        this.mobileNumber = in.readString();
-        this.bloodGroup = BloodGroup.get(in.readInt());
-        this.gender = Gender.get(in.readInt());
-        this.dob = (Date) in.readValue(null);
-        this.profilePicURL = in.readString();
-        this.fbProfileId = in.readString();
-        this.fbUsername = in.readString();
-        this.relation = Relation.get(in.readInt());
     }
 }

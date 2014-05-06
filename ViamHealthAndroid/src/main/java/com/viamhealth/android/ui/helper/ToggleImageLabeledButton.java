@@ -49,7 +49,7 @@ public class ToggleImageLabeledButton extends ImageView {
                 on.set(newState);
                 handleNewState(newState);
                 l.onClick(v);
-                }
+            }
 
         };
 

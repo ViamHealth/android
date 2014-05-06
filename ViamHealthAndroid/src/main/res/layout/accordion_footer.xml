@@ -6,14 +6,13 @@
     android:visibility="gone">
 
     <RelativeLayout
-        android:minHeight="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
         android:background="@drawable/footer_bg"
         android:gravity="center_horizontal"
-        android:orientation="horizontal" >
-    </RelativeLayout>
+        android:minHeight="10dp"
+        android:orientation="horizontal"></RelativeLayout>
 
 </LinearLayout>

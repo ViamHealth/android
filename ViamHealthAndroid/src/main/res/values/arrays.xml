@@ -4,15 +4,15 @@
     <string-array name="entries_list_preference">
         <item>Alpha Option 01</item>
         <item>Beta Option 02</item>
-        <item>Charlie Option 03</item>  
+        <item>Charlie Option 03</item>
     </string-array>
 
     <string-array name="entryvalues_list_preference">
         <item>alpha</item>
         <item>beta</item>
-        <item>charlie</item>  
+        <item>charlie</item>
     </string-array>
-    
+
     <string-array name="locations">
         <item>Home</item>
         <item>Email</item>
@@ -20,20 +20,20 @@
         <item>Browser</item>
         <item>Clock</item>
     </string-array>
-      <string-array name="weight_measure">
+    <string-array name="weight_measure">
         <item>METRIC</item>
         <item>STANDARD</item>
-        
+
     </string-array>
-     <string-array name="Interval_unit">
+    <string-array name="Interval_unit">
         <item>--Select Interval Unit--</item>
         <item>DAY</item>
         <item>WEEK</item>
         <item>MONTH</item>
         <item>YEAR</item>
     </string-array>
-     <string-array name="Interval_num">
-          <item>--Select Interval Number--</item>
+    <string-array name="Interval_num">
+        <item>--Select Interval Number--</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -68,15 +68,15 @@
     </string-array>
 
     <string-array name="time_type">
-    <item>Minutes</item>
-    <item>Hours</item>
+        <item>Minutes</item>
+        <item>Hours</item>
     </string-array>
 
     <string-array name="exercise_list">
-    <item>Choose Exercise</item>
-    <item>Aerobic Dance (Casual)</item>
-    <item>Aerobic Dance (Moderate)</item>
-    <item>Aerobic Dance (Intense)</item>
+        <item>Choose Exercise</item>
+        <item>Aerobic Dance (Casual)</item>
+        <item>Aerobic Dance (Moderate)</item>
+        <item>Aerobic Dance (Intense)</item>
         <item>Basketball (Full court)</item>
         <item>Basketball (Half court)</item>
         <item>Calisthenics</item>

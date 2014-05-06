@@ -18,29 +18,33 @@ public enum RepeatWeekDay {
     Thursday(5, R.string.thursday),
     Friday(6, R.string.friday),
     Saturday(7, R.string.saturday);
-
-    private int value;
-    private int resId;
-
-    RepeatWeekDay(int value, int resId){
-        this.value = value;
-        this.resId = resId;
-    }
-
-    public int resId() {return resId;}
-    public int value() {return value;}
-
     private static final Map<Integer, RepeatWeekDay> valuelookup = new HashMap<Integer, RepeatWeekDay>();
 
     // Populate the lookup table on loading time
     static {
-        for (RepeatWeekDay g : EnumSet.allOf(RepeatWeekDay.class)){
+        for (RepeatWeekDay g : EnumSet.allOf(RepeatWeekDay.class)) {
             valuelookup.put(g.value(), g);
         }
+    }
+
+    private int value;
+    private int resId;
+
+    RepeatWeekDay(int value, int resId) {
+        this.value = value;
+        this.resId = resId;
     }
 
     // This method can be used for reverse lookup purpose
     public static RepeatWeekDay get(int value) {
         return valuelookup.get(value);
+    }
+
+    public int resId() {
+        return resId;
+    }
+
+    public int value() {
+        return value;
     }
 }

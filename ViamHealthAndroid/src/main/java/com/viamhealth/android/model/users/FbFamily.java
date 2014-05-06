@@ -3,7 +3,7 @@ package com.viamhealth.android.model.users;
 /**
  * Created by naren on 04/10/13.
  */
-public class FbFamily{
+public class FbFamily {
 
     String name;
     String relationship;

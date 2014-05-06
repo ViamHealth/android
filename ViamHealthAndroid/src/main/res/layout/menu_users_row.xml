@@ -10,7 +10,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
-        facebook:is_cropped="true"/>
+        facebook:is_cropped="true" />
 
     <TextView
         android:id="@+id/menu_row_proile_relation"
@@ -19,11 +19,11 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/menu_row_profile_pic"
+        android:clickable="true"
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="Description"
-        android:textSize="12sp"
-        android:clickable="true" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/menu_row_profile_name"

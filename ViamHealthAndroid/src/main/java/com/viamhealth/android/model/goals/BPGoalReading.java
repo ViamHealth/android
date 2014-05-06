@@ -3,18 +3,23 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.viamhealth.android.utils.JsonGraphDataBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Created by naren on 20/10/13.
  */
 public class BPGoalReading extends GoalReadings {
 
+    public static final Parcelable.Creator<BPGoalReading> CREATOR = new Parcelable.Creator<BPGoalReading>() {
+        public BPGoalReading createFromParcel(Parcel in) {
+            return new BPGoalReading(in);
+        }
+
+        public BPGoalReading[] newArray(int size) {
+            return new BPGoalReading[size];
+        }
+    };
     int systolicPressure;
     int diastolicPressure;
     int pulseRate;
@@ -58,9 +63,9 @@ public class BPGoalReading extends GoalReadings {
         JSONObject object = parentJSON();
 
         try {
-            if(series == GraphSeries.A)
+            if (series == GraphSeries.A)
                 object.put("y", this.systolicPressure);
-            else if(series == GraphSeries.B)
+            else if (series == GraphSeries.B)
                 object.put("y", this.diastolicPressure);
             else
                 object.put("y", this.pulseRate);
@@ -80,16 +85,6 @@ public class BPGoalReading extends GoalReadings {
     public int getMin() {
         return Math.min(systolicPressure, diastolicPressure);
     }
-
-    public static final Parcelable.Creator<BPGoalReading> CREATOR = new Parcelable.Creator<BPGoalReading>() {
-        public BPGoalReading createFromParcel(Parcel in) {
-            return new BPGoalReading(in);
-        }
-
-        public BPGoalReading[] newArray(int size) {
-            return new BPGoalReading[size];
-        }
-    };
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {

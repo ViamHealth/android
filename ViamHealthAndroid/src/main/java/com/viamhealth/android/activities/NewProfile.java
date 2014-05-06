@@ -39,11 +39,11 @@ import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.rest.endpoints.FileUploader;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
+import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.UIUtility;
@@ -64,52 +64,30 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         EditText.OnFocusChangeListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
-
+    private final String TAG = "NewProfile";
     ViamHealthPrefs appPrefs;
     Global_Application ga;
-
     ProgressDialog dialog;
-
     String selecteduserid;
-
     EditText firstName, lastName, dob, location, organization, mobileNumber, email, height, weight;
     EditText systolic, diastolic, fasting, random, hdl, ldl, tri;
     TextView totalCholesterol;
-
     Button btnSave, btnCancel;
     ImageButton imgMale, imgFemale, imgUpload;
     ProfilePictureView profilePic;
     Spinner bloodGroup, relation;
-
     User user = null;
     Profile profile = null;
     ImageView imgView = null;
-
     boolean isImageSelected = false;
-
-    private final String TAG = "NewProfile";
-
-    private enum UserType {
-        Manual, FB;
-    }
-
-    private enum FBRequestType {
-        Profile, Family, FamilyProfile;
-    }
-
-    private enum RequestStatus { Not_Started, Pending, Done, Failed; }
+    AbstractWheel wheelFeet, wheelCms;
+    String[] arr = new String[96];
     private RequestStatus familyMemberSelected = RequestStatus.Not_Started;
     private RequestStatus profileDataFetched = RequestStatus.Not_Started;
-
     private ImageSelector imageSelector;
-
     private UserType userType;
-
     private boolean isEditMode = false;
     private ActionBar actionBar;
-    AbstractWheel wheelFeet, wheelCms;
-    String[] arr= new String[96];
-
     private OnWheelChangedListener onWheelInchesChangedListener, onWheelCmsChangedListener;
 
     @Override
@@ -118,11 +96,11 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_new_profile);
 
-        ga=((Global_Application)getApplicationContext());
-        if(ga==null)
+        ga = ((Global_Application) getApplicationContext());
+        if (ga == null)
             throw new NullPointerException("Application in itself is null");
 
-        appPrefs=new ViamHealthPrefs(this);
+        appPrefs = new ViamHealthPrefs(this);
 
         Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
@@ -131,11 +109,11 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         user = (User) intent.getParcelableExtra("user");
         isEditMode = intent.getBooleanExtra("isEditMode", false);
 
-        int k=0;
+        int k = 0;
 
-        for(int i=1;i<=8;i++) {
-            for(int j=0;j<=11;j++) {
-                arr[k]=""+i+"' "+j+ "\"";
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 0; j <= 11; j++) {
+                arr[k] = "" + i + "' " + j + "\"";
                 k++;
             }
         }
@@ -143,14 +121,14 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         //String str1[]= new String[]{"val1","val2","val3"};
 
         wheelFeet = (AbstractWheel) findViewById(R.id.feet);
-        ArrayWheelAdapter<String> adapter =  new ArrayWheelAdapter<String>(this, arr);
+        ArrayWheelAdapter<String> adapter = new ArrayWheelAdapter<String>(this, arr);
         wheelFeet.setViewAdapter(adapter);
         wheelFeet.setCyclic(true);
 
         wheelCms = (AbstractWheel) findViewById(R.id.cms);
         wheelCms.setViewAdapter(new NumericWheelAdapter(this, 0, 300));
         wheelCms.setCyclic(true);
-        boolean flag=false;
+        boolean flag = false;
 
         onWheelInchesChangedListener = new OnWheelChangedListener() {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
@@ -168,7 +146,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 wheelFeet.removeChangingListener(onWheelInchesChangedListener);
                 int curCMS = wheelCms.getCurrentItem();
                 int curInches = getInchesFromCMS(curCMS);
-                int inchesIndex = curInches<11 ? 0 : (curInches-12);
+                int inchesIndex = curInches < 11 ? 0 : (curInches - 12);
                 wheelFeet.setCurrentItem(inchesIndex);
                 wheelFeet.addChangingListener(onWheelInchesChangedListener);
             }
@@ -180,21 +158,21 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         profilePic = (ProfilePictureView) findViewById(R.id.profilepic);
         imgView = (ImageView) findViewById(R.id.profilepiclocal);
 
-        if(user!=null && user.getId()>0)
+        if (user != null && user.getId() > 0)
             isEditMode = true;
 
-        if(user!=null && user.getProfile()!=null && user.getProfile().getFbProfileId()!=null
+        if (user != null && user.getProfile() != null && user.getProfile().getFbProfileId() != null
                 && !user.getProfile().getFbProfileId().isEmpty())
             userType = UserType.FB;
         else
             userType = userType.Manual;
 
-        if(user==null)
+        if (user == null)
             user = new User();
 
         profile = user.getProfile();
 
-        if(profile==null){
+        if (profile == null) {
             profile = new Profile();
             user.setProfile(profile);
         }
@@ -205,7 +183,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         imageSelector = new ImageSelector(NewProfile.this);
 
         imgUpload = (ImageButton) findViewById(R.id.imgBtnUpload);
-        if(userType==UserType.Manual){
+        if (userType == UserType.Manual) {
             imgUpload.setVisibility(View.VISIBLE);
             imgUpload.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -231,7 +209,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             }
         });
 
-        btnSave = (Button)findViewById(R.id.btnSave_profile);
+        btnSave = (Button) findViewById(R.id.btnSave_profile);
         btnSave.setTypeface(tf);
         btnSave.setOnClickListener(this);
 
@@ -277,10 +255,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         updateViewFromModel(user);
 
-        if(user.isLoggedInUser() && user.getEmail()!=null && !user.getEmail().isEmpty())
+        if (user.isLoggedInUser() && user.getEmail() != null && !user.getEmail().isEmpty())
             email.setEnabled(false);
-        else{
-            if(isEditMode){
+        else {
+            if (isEditMode) {
                 email.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -308,8 +286,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     public boolean onCreateOptionsMenu(Menu menu) {
         //User liu = ga.getLoggedInUser();
         //if(liu.getProfile()!=null && liu.getProfile().getFbProfileId()!=null && !liu.getProfile().getFbProfileId().isEmpty()){
-            getSupportMenuInflater().inflate(R.menu.activity_add_profile, menu);
-            return true;
+        getSupportMenuInflater().inflate(R.menu.activity_add_profile, menu);
+        return true;
         //}
 
         //return super.onCreateOptionsMenu(menu);
@@ -317,14 +295,14 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.fbFamilyMember){
+        if (item.getItemId() == R.id.fbFamilyMember) {
             String fbid = ga.getLoggedInUser().getProfile().getFbProfileId();
             createSessionAndGetDataFromFB(FBRequestType.Family, fbid);
             imgUpload.setVisibility(View.INVISIBLE);
             return true;
         }
 
-        if(item.getItemId()== android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             Intent returnIntent = new Intent();
             setResult(RESULT_CANCELED, returnIntent);
             finish();
@@ -334,49 +312,30 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-    private void getDataFromFB(Session session, final FBRequestType type, final String profileId){
+    private void getDataFromFB(Session session, final FBRequestType type, final String profileId) {
         //imgUpload.setVisibility(View.GONE);
-        if(type==FBRequestType.Family){
-            if(familyMemberSelected==RequestStatus.Pending || familyMemberSelected==RequestStatus.Done)
+        if (type == FBRequestType.Family) {
+            if (familyMemberSelected == RequestStatus.Pending || familyMemberSelected == RequestStatus.Done)
                 return;
             Intent intent = new Intent(NewProfile.this, FBFamilyListActivity.class);
             startActivityForResult(intent, 1);
             familyMemberSelected = RequestStatus.Pending;
         } else {
-            if(profileDataFetched==RequestStatus.Done || profileDataFetched==RequestStatus.Pending)
+            if (profileDataFetched == RequestStatus.Done || profileDataFetched == RequestStatus.Pending)
                 return;
             getProfileDataFromFB(session, profileId);
             profileDataFetched = RequestStatus.Pending;
             dialog = new ProgressDialog(NewProfile.this);
-            String whose = type==FBRequestType.Profile?"your":"your family members";
+            String whose = type == FBRequestType.Profile ? "your" : "your family members";
             dialog.setCanceledOnTouchOutside(false);
-            dialog.setMessage("we are getting "+whose+" data...");
+            dialog.setMessage("we are getting " + whose + " data...");
             dialog.show();
-        }
-    }
-
-    protected class FBSessionCallback implements Session.StatusCallback {
-        private FBRequestType type;
-        private String profileId;
-
-        private FBSessionCallback(FBRequestType type, String profileId) {
-            this.type = type;
-            this.profileId = profileId;
-        }
-
-        @Override
-        public void call(Session sess, SessionState state, Exception exception) {
-            if(sess!=null && sess.isOpened()){
-                getDataFromFB(sess, type, profileId);
-            }else{
-                imgUpload.setVisibility(View.VISIBLE);
-            }
         }
     }
 
     private void createSessionAndGetDataFromFB(final FBRequestType type, final String profileId) {
         Session session = Session.getActiveSession();
-        if(session == null || session.getState().isClosed()){
+        if (session == null || session.getState().isClosed()) {
             session = new Session.Builder(this).setApplicationId(getString(R.string.app_id)).build();
             Session.setActiveSession(session);
             Session.StatusCallback callback = new FBSessionCallback(type, profileId);
@@ -385,15 +344,15 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             request.setLoginBehavior(SessionLoginBehavior.SSO_WITH_FALLBACK);
             request.setPermissions(FBLoginFragment.fbPermissions);
             session.openForRead(request);
-        }else{
+        } else {
             getDataFromFB(session, type, profileId);
         }
     }
 
-    private void getProfileDataFromFB(Session session, String profileId){
+    private void getProfileDataFromFB(Session session, String profileId) {
         String api = "me";
 
-        if(profileId!=null && !profileId.isEmpty())
+        if (profileId != null && !profileId.isEmpty())
             api = profileId;
 
         Request request = Request.newGraphPathRequest(session, api, new Request.Callback() {
@@ -403,20 +362,20 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 FacebookRequestError error = response.getError();
                 if (graphObject != null) {
                     JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                    if (jsonResponse!=null) {
+                    if (jsonResponse != null) {
                         FBUser fbUser = FBUser.deserialize(jsonResponse);
                         updateViewFromFBData(fbUser);
                         profileDataFetched = RequestStatus.Done;
                         imgUpload.setVisibility(View.INVISIBLE);
                         dialog.dismiss();
-                    }else{
+                    } else {
                         imgUpload.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     imgUpload.setVisibility(View.VISIBLE);
                 }
 
-                if(error==null){
+                if (error == null) {
                     profileDataFetched = RequestStatus.Failed;
                     imgUpload.setVisibility(View.VISIBLE);
                 }
@@ -430,13 +389,13 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     private void updateGender(Gender gender) {
         int mresId, fresId;
 
-        if(gender == Gender.Male){
+        if (gender == Gender.Male) {
             mresId = R.drawable.ic_male;
             fresId = R.drawable.ic_female_unselected;
-        }else if(gender == Gender.Female) {
+        } else if (gender == Gender.Female) {
             mresId = R.drawable.ic_male_unselected;
             fresId = R.drawable.ic_female;
-        }else{
+        } else {
             mresId = R.drawable.ic_male_unselected;
             fresId = R.drawable.ic_female_unselected;
         }
@@ -451,27 +410,29 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         firstName.setText(user.getFirstName());
         lastName.setText(user.getLastName());
 
-        if(user.getProfile()!=null) {
-            if(user.getProfile().getDob()!=null) {
+        if (user.getProfile() != null) {
+            if (user.getProfile().getDob() != null) {
                 SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
                 dob.setText(formater.format(user.getProfile().getDob()));
             }
 
             updateGender(user.getProfile().getGender());
 
-            if(user.getProfile().getLocation()!=null)
+            if (user.getProfile().getLocation() != null)
                 location.setText(user.getProfile().getLocation().toShortString());
 
             profilePic.setProfileId(user.getProfile().getFbProfileId());
-            if(user.getProfile().getMobileNumber()!=null)mobileNumber.setText(user.getProfile().getMobileNumber());
-            if(user.getProfile().getOrganization()!=null)organization.setText(user.getProfile().getOrganization());
+            if (user.getProfile().getMobileNumber() != null)
+                mobileNumber.setText(user.getProfile().getMobileNumber());
+            if (user.getProfile().getOrganization() != null)
+                organization.setText(user.getProfile().getOrganization());
 
-            if((user.getProfile().getFbProfileId()!=null && !user.getProfile().getFbProfileId().isEmpty())
-                    || (user.getProfile().getProfilePicURL()==null || user.getProfile().getProfilePicURL().isEmpty())){
+            if ((user.getProfile().getFbProfileId() != null && !user.getProfile().getFbProfileId().isEmpty())
+                    || (user.getProfile().getProfilePicURL() == null || user.getProfile().getProfilePicURL().isEmpty())) {
                 profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
                 imgView.setVisibility(View.GONE);
                 profilePic.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 FileLoader loader = new FileLoader(NewProfile.this, appPrefs.getToken());
                 loader.LoadFile(user.getProfile().getProfilePicURL(), user.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
@@ -480,53 +441,55 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                         imgView.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), size, size));
                         imgView.setVisibility(View.VISIBLE);
                         profilePic.setVisibility(View.GONE);
-                        }
+                    }
                 });
             }
 
         }
 
 
-        if(user.getBmiProfile()!=null){
+        if (user.getBmiProfile() != null) {
             BMIProfile bmip = user.getBmiProfile();
             int height = bmip.getHeight();
-            if(height==0){
+            if (height == 0) {
                 height = 160;
             }
             wheelCms.setCurrentItem(height);
             int inches = getInchesFromCMS(wheelCms.getCurrentItem());
-            int inchesIndex = inches<11?0:(inches-12);
+            int inchesIndex = inches < 11 ? 0 : (inches - 12);
             wheelFeet.setCurrentItem(inchesIndex);
 
             //height.setText(bmip.getHeight().toString());
-            if(bmip.getWeight()>0) weight.setText(bmip.getWeight().toString());
+            if (bmip.getWeight() > 0) weight.setText(bmip.getWeight().toString());
 
-            if(bmip.getSystolicPressure()>0) systolic.setText(String.valueOf(bmip.getSystolicPressure()));
-            if(bmip.getDiastolicPressure()>0) diastolic.setText(String.valueOf(bmip.getDiastolicPressure()));
-            if(bmip.getFastingSugar()>0) fasting.setText(String.valueOf(bmip.getFastingSugar()));
-            if(bmip.getRandomSugar()>0) random.setText(String.valueOf(bmip.getRandomSugar()));
-            if(bmip.getHdl()>0) hdl.setText(String.valueOf(bmip.getHdl()));
-            if(bmip.getLdl()>0) ldl.setText(String.valueOf(bmip.getLdl()));
-            if(bmip.getTriglycerides()>0) tri.setText(String.valueOf(bmip.getTriglycerides()));
+            if (bmip.getSystolicPressure() > 0)
+                systolic.setText(String.valueOf(bmip.getSystolicPressure()));
+            if (bmip.getDiastolicPressure() > 0)
+                diastolic.setText(String.valueOf(bmip.getDiastolicPressure()));
+            if (bmip.getFastingSugar() > 0) fasting.setText(String.valueOf(bmip.getFastingSugar()));
+            if (bmip.getRandomSugar() > 0) random.setText(String.valueOf(bmip.getRandomSugar()));
+            if (bmip.getHdl() > 0) hdl.setText(String.valueOf(bmip.getHdl()));
+            if (bmip.getLdl() > 0) ldl.setText(String.valueOf(bmip.getLdl()));
+            if (bmip.getTriglycerides() > 0) tri.setText(String.valueOf(bmip.getTriglycerides()));
 
-            if(bmip.getTotalCholesterol()>0){
+            if (bmip.getTotalCholesterol() > 0) {
                 totalCholesterol.setText(getString(R.string.total_cholesterol) + String.valueOf(bmip.getTotalCholesterol()));
                 totalCholesterol.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 totalCholesterol.setVisibility(View.GONE);
             }
         }
     }
 
-    private int getCMSfromInches(int inches){
-        return (inches * 254)/100;
+    private int getCMSfromInches(int inches) {
+        return (inches * 254) / 100;
     }
 
-    private int getInchesFromCMS(int cms){
-        return (cms * 100)/254;
+    private int getInchesFromCMS(int cms) {
+        return (cms * 100) / 254;
     }
 
-    private void updateViewFromFBData(FBUser fbUser){
+    private void updateViewFromFBData(FBUser fbUser) {
         user = fbUser.toUser(user);
 
         //get the email
@@ -537,17 +500,17 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==1){
-            if(resultCode==RESULT_OK){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
                 familyMemberSelected = RequestStatus.Done;
                 String profileId = data.getStringExtra("profileId");
                 Log.d(TAG, "onActivityResult::ProfileId selected from FB Family list - " + profileId);
                 createSessionAndGetDataFromFB(FBRequestType.FamilyProfile, profileId);
-            }else{
+            } else {
                 imgUpload.setVisibility(View.VISIBLE);
             }
-        }else{//this is for facebook login pop-up
-            if(!imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
+        } else {//this is for facebook login pop-up
+            if (!imageSelector.onActivityResult(requestCode, resultCode, data, new ImageSelector.OnImageLoadedListener() {
                 @Override
                 public void OnLoad(ImageSelector imageSelector) {
                     Log.d(TAG, "onActivityResult::ImageSelected - " + imageSelector.getURI().toString());
@@ -557,7 +520,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                     imgView.setImageBitmap(bitmap);
                     isImageSelected = true;
                 }
-            })){
+            })) {
                 Log.d(TAG, "onActivityResult::else");
                 super.onActivityResult(requestCode, resultCode, data);
                 Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
@@ -575,10 +538,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         profile.getLocation().setAddress(location.getText().toString());
         //Gender is updated in updateGender profile.setGender();
         String strDOB = dob.getText().toString();
-        try{
+        try {
             SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
             profile.setDob(formater.parse(strDOB));
-        }catch(ParseException e){
+        } catch (ParseException e) {
             //just eat it up
             Log.e("NewProfileActivity", "Parse error of date in generateModelFromView");
         }
@@ -605,7 +568,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         String str = "";
         str = systolic.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setSystolicPressure(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -614,7 +577,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         str = diastolic.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setDiastolicPressure(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -623,7 +586,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         str = fasting.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setFastingSugar(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -632,7 +595,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         str = random.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setRandomSugar(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -641,7 +604,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         str = hdl.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setHdl(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -650,7 +613,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         str = ldl.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setLdl(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -659,7 +622,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         str = tri.getText().toString();
-        if(str!=null && !str.isEmpty()){
+        if (str != null && !str.isEmpty()) {
             try {
                 bmi.setTriglycerides(Integer.parseInt(str));
             } catch (NumberFormatException e) {
@@ -683,22 +646,22 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     public void onClick(View v) {
         Intent returnIntent = new Intent();
 
-        if(v == btnSave){
+        if (v == btnSave) {
             ga.GA_eventButtonPress("save_profile");
             Log.d(TAG, "onClick : btnSave clicked - isImageSelected - " + isImageSelected);
-            if(validate()){
-                if(isImageSelected){
+            if (validate()) {
+                if (isImageSelected) {
                     User newUser = generateModelFromView();
                     UploadProfilePicTask task = new UploadProfilePicTask();
                     task.execute();
-                }else{
+                } else {
                     User newUser = generateModelFromView();
                     Log.d(TAG, "onClick : generated user from model " + newUser);
                     updateUser(newUser);
 
                 }
             }
-        }else if(v == btnCancel) {
+        } else if (v == btnCancel) {
             ga.GA_eventButtonPress("cancel_save_profile");
             setResult(RESULT_CANCELED, returnIntent);
             finish();
@@ -712,21 +675,21 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 //            email.setError(getString(R.string.profile_email_not_present));
 //            isValid=false;
 //        } else
-        if(email.getText().length()>0 && !Validator.isEmailValid(email.getText().toString())){
+        if (email.getText().length() > 0 && !Validator.isEmailValid(email.getText().toString())) {
             email.setError(getString(R.string.profile_email_not_valid));
-            isValid=false;
+            isValid = false;
         }
-        if(firstName.getText().length()==0 && lastName.getText().length()==0){
+        if (firstName.getText().length() == 0 && lastName.getText().length() == 0) {
             firstName.setError(getString(R.string.profile_first_name_not_present));
-            isValid=false;
+            isValid = false;
         }
 
-        if(dob.getText().length()==0){
+        if (dob.getText().length() == 0) {
             dob.setError(getString(R.string.profile_dob_not_present));
             isValid = false;
         }
 
-        if(profile.getGender()==Gender.None){
+        if (profile.getGender() == Gender.None) {
             Toast.makeText(NewProfile.this, "select the gender to proceed", Toast.LENGTH_LONG).show();
             isValid = false;
         }
@@ -737,7 +700,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 */
 
-        if(weight.getText().length()==0){
+        if (weight.getText().length() == 0) {
             weight.setError(getString(R.string.profile_weight_not_present));
             isValid = false;
         }
@@ -746,18 +709,46 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
     }
 
-
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         EditText text = (EditText) v;
         int inputType = text.getInputType();
-        if(hasFocus){//when focused in
-            if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
+        if (hasFocus) {//when focused in
+            if (inputType == (InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE)) {//if the editText is a dateTime filed then showTheDatePicker
                 DialogFragment newFragment = new DatePickerFragment(text, null);
                 newFragment.show(this.getSupportFragmentManager(), "datePicker");
             }
-        }else{//when focused out
+        } else {//when focused out
 
+        }
+    }
+
+    private enum UserType {
+        Manual, FB;
+    }
+
+    private enum FBRequestType {
+        Profile, Family, FamilyProfile;
+    }
+
+    private enum RequestStatus {Not_Started, Pending, Done, Failed;}
+
+    protected class FBSessionCallback implements Session.StatusCallback {
+        private FBRequestType type;
+        private String profileId;
+
+        private FBSessionCallback(FBRequestType type, String profileId) {
+            this.type = type;
+            this.profileId = profileId;
+        }
+
+        @Override
+        public void call(Session sess, SessionState state, Exception exception) {
+            if (sess != null && sess.isOpened()) {
+                getDataFromFB(sess, type, profileId);
+            } else {
+                imgUpload.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -786,11 +777,11 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         @Override
         protected FileUploader.Response doInBackground(Void... params) {
             FileUploader uploader = new FileUploader(appPrefs.getToken());
-            long userId = 0 ;
-            if(user != null && user.getId() != null) {
+            long userId = 0;
+            if (user != null && user.getId() != null) {
                 userId = user.getId();
             }
-            if(userId==0){
+            if (userId == 0) {
                 //create user
                 Log.i(TAG, "AsyncTask : Creating a new user as userId = 0 ");
                 UserEP userEP = new UserEP(NewProfile.this, ga);
@@ -800,7 +791,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             }
             Log.i(TAG, "AsyncTask : Uploading the file now");
             FileUploader.Response response = uploader.uploadProfilePicture(imageSelector.getFile(),
-                                                        NewProfile.this, userId, dialog);
+                    NewProfile.this, userId, dialog);
             Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
             return response;
         }

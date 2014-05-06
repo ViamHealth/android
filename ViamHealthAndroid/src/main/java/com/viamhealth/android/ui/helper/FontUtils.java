@@ -57,7 +57,7 @@ public class FontUtils {
                 return;
             }
         }
-        if(normal != null) {
+        if (normal != null) {
             c.setTypeface(normal);
         }
     }
@@ -87,7 +87,7 @@ public class FontUtils {
     private static Typeface loadTypeface(AssetManager assetsManager, String path) {
         try {
             return Typeface.createFromAsset(assetsManager, "fonts/roboto/Roboto-Regular.ttf");
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             // May occur rarely, on a few devices
             Log.d("SentacaAccordionView", "Unable to load Typeface from " + path, e);
         }

@@ -16,32 +16,26 @@ public enum MedicalConditions implements OrFragmentManager.FragmentSpinnerElemen
     BloodPressure(2, R.string.medical_conidtion_bp, "bpgoal.html"),
     Diabetes(3, R.string.medical_conidtion_diabetes, "sugargoal.html"),
     Cholesterol(4, R.string.medical_conidtion_cholesterol, "cholesterol.html");
-
-    private final int value;
-    private final int key;
-    private final String assetName;
-
-    MedicalConditions(int value, int key, String assetName){
-        this.value = value;
-        this.key = key;
-        this.assetName = assetName;
-    }
-
-
-    public int value() {return value;}
-    public int key() {return key;}
-    public String assetName() {return assetName;}
-
     // Lookup table
     private static final Map<Integer, MedicalConditions> valuelookup = new HashMap<Integer, MedicalConditions>();
     private static final Map<Integer, MedicalConditions> keylookup = new HashMap<Integer, MedicalConditions>();
 
     // Populate the lookup table on loading time
     static {
-        for (MedicalConditions mc : EnumSet.allOf(MedicalConditions.class)){
+        for (MedicalConditions mc : EnumSet.allOf(MedicalConditions.class)) {
             valuelookup.put(mc.value(), mc);
             keylookup.put(mc.key(), mc);
         }
+    }
+
+    private final int value;
+    private final int key;
+    private final String assetName;
+
+    MedicalConditions(int value, int key, String assetName) {
+        this.value = value;
+        this.key = key;
+        this.assetName = assetName;
     }
 
     // This method can be used for reverse lookup purpose
@@ -51,6 +45,18 @@ public enum MedicalConditions implements OrFragmentManager.FragmentSpinnerElemen
 
     public static MedicalConditions constructEnumByKey(int key) {
         return keylookup.get(key);
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public int key() {
+        return key;
+    }
+
+    public String assetName() {
+        return assetName;
     }
 
     @Override

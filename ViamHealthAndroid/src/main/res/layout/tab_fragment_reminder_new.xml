@@ -6,18 +6,18 @@
     android:orientation="vertical">
 
     <com.viamhealth.android.ui.PagerContainer
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:id="@+id/container"
         android:background="#cccccc">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="300dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp" />
 
-   </com.viamhealth.android.ui.PagerContainer>
+    </com.viamhealth.android.ui.PagerContainer>
 </LinearLayout>

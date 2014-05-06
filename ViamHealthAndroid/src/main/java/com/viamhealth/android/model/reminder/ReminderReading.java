@@ -16,6 +16,15 @@ import java.util.Map;
  */
 public class ReminderReading implements NotificationObject, Parcelable {
 
+    public static final Parcelable.Creator<ReminderReading> CREATOR = new Parcelable.Creator<ReminderReading>() {
+        public ReminderReading createFromParcel(Parcel in) {
+            return new ReminderReading(in);
+        }
+
+        public ReminderReading[] newArray(int size) {
+            return new ReminderReading[size];
+        }
+    };
     Long id;
     Long userId;
     Date readingDate;
@@ -23,6 +32,17 @@ public class ReminderReading implements NotificationObject, Parcelable {
     Map<Integer, Action> mapAction = new HashMap<Integer, Action>();
     boolean completeCheck = false;
 
+    public ReminderReading() {
+    }
+
+    public ReminderReading(Parcel in) {
+        id = in.readLong();
+        userId = in.readLong();
+        readingDate = new Date(in.readLong());
+        reminder = (Reminder) in.readParcelable(Reminder.class.getClassLoader());
+        completeCheck = (Boolean) in.readValue(null);
+        mapAction = ParcelableUtils.readMap(in, Action.class);
+    }
 
     public void putAction(ReminderTime time, Action data) {
         mapAction.put(time.ordinal(), data);
@@ -72,26 +92,6 @@ public class ReminderReading implements NotificationObject, Parcelable {
         this.reminder = reminder;
     }
 
-    public static final Parcelable.Creator<ReminderReading> CREATOR = new Parcelable.Creator<ReminderReading>() {
-        public ReminderReading createFromParcel(Parcel in) {
-            return new ReminderReading(in);
-        }
-
-        public ReminderReading[] newArray(int size) {
-            return new ReminderReading[size];
-        }
-    };
-
-    public ReminderReading() {}
-    public ReminderReading(Parcel in) {
-        id = in.readLong();
-        userId = in.readLong();
-        readingDate = new Date(in.readLong());
-        reminder = (Reminder) in.readParcelable(Reminder.class.getClassLoader());
-        completeCheck = (Boolean) in.readValue(null);
-        mapAction = ParcelableUtils.readMap(in, Action.class);
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -108,12 +108,13 @@ public class ReminderReading implements NotificationObject, Parcelable {
         ParcelableUtils.writeMap(mapAction, dest);
     }
 
-    public String toString(){
+    public String toString() {
         return "ReminderReading{" +
                 "id=" + id +
                 ", readingdate=" + readingDate.toString() +
-                ", reminder=" + reminder.getName() ;
+                ", reminder=" + reminder.getName();
     }
+
     /**
      * @return returns the id of the icon that needs
      * to be show in the notification bar, if nothing then return {@link NO_IMAGE}

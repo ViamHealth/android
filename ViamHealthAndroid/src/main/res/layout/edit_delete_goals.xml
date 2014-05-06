@@ -2,30 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <RadioGroup
         android:id="@+id/radioSex"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <RadioButton
             android:id="@+id/radioWeight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Weight"
-            android:checked="true" />
+            android:checked="true"
+            android:text="Weight" />
 
         <RadioButton
             android:id="@+id/radioBp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Blood Pressure" />
+
         <RadioButton
             android:id="@+id/radioDiabetes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Diabetes" />
+
         <RadioButton
             android:id="@+id/radioCholesterol"
             android:layout_width="wrap_content"
@@ -34,24 +36,24 @@
 
     </RadioGroup>
 
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
 
-     <Button
-         android:id="@+id/btnEdit"
-         android:layout_width="0dp"
-         android:layout_weight="1"
-         android:layout_height="wrap_content"
-         android:text="edit" />
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="edit" />
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text="delete" />
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="delete" />
 
 
     </LinearLayout>

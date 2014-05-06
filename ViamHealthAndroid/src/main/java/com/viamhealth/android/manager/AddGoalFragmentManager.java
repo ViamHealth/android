@@ -7,11 +7,9 @@ import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.SeekBar;
 
 import com.viamhealth.android.activities.fragments.AddGoalFragment;
 import com.viamhealth.android.activities.fragments.DatePickerFragment;
-import com.viamhealth.android.listeners.OnFragmentEditTextListener;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
@@ -21,21 +19,21 @@ import com.viamhealth.android.model.goals.GoalReadings;
  */
 public class AddGoalFragmentManager extends OrFragmentManager implements EditText.OnFocusChangeListener {
 
+    public AddGoalFragmentManager(FragmentActivity activity, int containerId) {
+        super(activity, containerId);
+    }
+
     @Override
     public void addFragment(Enum key, Class fragmentClass, Bundle args) {
         super.addFragment(key, fragmentClass, args);
-    }
-
-    public AddGoalFragmentManager(FragmentActivity activity, int containerId) {
-        super(activity, containerId);
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         EditText text = (EditText) v;
         int inputType = text.getInputType();
-        if(hasFocus){//when focused in
-            if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
+        if (hasFocus) {//when focused in
+            if (inputType == (InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE)) {//if the editText is a dateTime filed then showTheDatePicker
                 DialogFragment newFragment = new DatePickerFragment(text, new DatePickerFragment.OnDateChangeListener() {
                     @Override
                     public void OnDateChange() {
@@ -45,7 +43,7 @@ public class AddGoalFragmentManager extends OrFragmentManager implements EditTex
                 });
                 newFragment.show(mActivity.getSupportFragmentManager(), "datePicker");
             }
-        }else{//when focused out
+        } else {//when focused out
             AddGoalFragment fragment = (AddGoalFragment) mLastShownFragment.fragment;
             fragment.onTargetDateChange();
         }
@@ -71,7 +69,7 @@ public class AddGoalFragmentManager extends OrFragmentManager implements EditTex
         return (MedicalConditions) this.mLastShownFragment.key;
     }
 
-    public AddGoalFragment getActiveGoalFragment () {
+    public AddGoalFragment getActiveGoalFragment() {
         return (AddGoalFragment) this.mLastShownFragment.fragment;
     }
 }

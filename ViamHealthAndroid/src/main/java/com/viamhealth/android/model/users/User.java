@@ -9,18 +9,43 @@ import com.viamhealth.android.model.BaseModel;
  * Created by naren on 03/10/13.
  */
 public class User extends BaseModel implements Parcelable {
+    public static final Parcelable.Creator<User> CREATOR
+            = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
     String username;
     String email;
     String mobile;
     String firstName;
     String lastName;
-
     String name;
     Boolean isLoggedInUser = false;
-
     Profile profile;
     BMIProfile bmiProfile;
 
+    public User(Parcel in) {
+        super(in);
+        this.username = in.readString();
+        this.email = in.readString();
+        this.mobile = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.name = in.readString();
+        this.isLoggedInUser = (Boolean) in.readValue(null);
+        this.profile = new Profile(in);
+        this.bmiProfile = new BMIProfile(in);
+    }
+
+    public User() {
+        this.profile = new Profile();
+        this.bmiProfile = new BMIProfile();
+    }
 
     public BMIProfile getBmiProfile() {
         return bmiProfile;
@@ -35,16 +60,16 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public boolean isProfileCreated() {
-        if((firstName==null || firstName.isEmpty()) && (lastName==null || lastName.isEmpty()))
+        if ((firstName == null || firstName.isEmpty()) && (lastName == null || lastName.isEmpty()))
             return false;
 
-        if(profile==null || bmiProfile==null)
+        if (profile == null || bmiProfile == null)
             return false;
 
-        if(profile.getDob()==null || bmiProfile.getHeight()==null || bmiProfile.getHeight()==0 || bmiProfile.getWeight()==null
-                || bmiProfile.getWeight()==0)
+        if (profile.getDob() == null || bmiProfile.getHeight() == null || bmiProfile.getHeight() == 0 || bmiProfile.getWeight() == null
+                || bmiProfile.getWeight() == 0)
             return false;
-        
+
         return true;
     }
 
@@ -61,10 +86,10 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getUsername() {
-        if((username==null || username.isEmpty()) && (email!=null && email.isEmpty()))
+        if ((username == null || username.isEmpty()) && (email != null && email.isEmpty()))
             return email;
 
-        if((username==null || username.isEmpty()) && (mobile!=null && mobile.isEmpty()))
+        if ((username == null || username.isEmpty()) && (mobile != null && mobile.isEmpty()))
             return mobile;
 
         return username;
@@ -91,23 +116,23 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getName() {
-        if(name!=null && !name.isEmpty()){
+        if (name != null && !name.isEmpty()) {
             return name;
         }
 
-        if((firstName!=null && !firstName.isEmpty()) && (lastName!=null || !lastName.isEmpty()))
+        if ((firstName != null && !firstName.isEmpty()) && (lastName != null || !lastName.isEmpty()))
             return firstName + " " + lastName;
 
-        if(this.firstName!=null && !this.firstName.isEmpty())
+        if (this.firstName != null && !this.firstName.isEmpty())
             return firstName;
 
-        if(this.lastName!=null && !this.lastName.isEmpty())
+        if (this.lastName != null && !this.lastName.isEmpty())
             return lastName;
 
-        if(this.email!=null && !this.email.isEmpty() )
+        if (this.email != null && !this.email.isEmpty())
             return email;
 
-        if(username!=null && !username.isEmpty())
+        if (username != null && !username.isEmpty())
             return username;
 
         return name;
@@ -158,34 +183,5 @@ public class User extends BaseModel implements Parcelable {
 
         this.profile.writeToParcel(dest, flags);
         this.bmiProfile.writeToParcel(dest, flags);
-    }
-
-    public User(Parcel in) {
-        super(in);
-        this.username = in.readString();
-        this.email = in.readString();
-        this.mobile = in.readString();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
-        this.name = in.readString();
-        this.isLoggedInUser = (Boolean) in.readValue(null);
-        this.profile = new Profile(in);
-        this.bmiProfile = new BMIProfile(in);
-    }
-
-    public static final Parcelable.Creator<User> CREATOR
-            = new Parcelable.Creator<User>() {
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
-    public User() {
-        this.profile = new Profile();
-        this.bmiProfile = new BMIProfile();
     }
 }

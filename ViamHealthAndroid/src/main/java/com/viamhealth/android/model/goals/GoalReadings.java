@@ -8,7 +8,6 @@ import com.viamhealth.android.utils.JsonGraphDataBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.util.Date;
 
@@ -23,6 +22,18 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
 
     private Boolean isToUpdate = false;
 
+    public GoalReadings() {
+        super();
+    }
+
+    public GoalReadings(Parcel in) {
+        super(in);
+        this.goalId = in.readLong();
+        this.readingDate = new Date(in.readLong());
+        this.comments = in.readString();
+        this.isToUpdate = (Boolean) in.readValue(null);
+    }
+
     public boolean isToUpdate() {
         return isToUpdate;
     }
@@ -36,7 +47,7 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
     }
 
     public void setGoalId(Long goalId) {
-        if(goalId != null)
+        if (goalId != null)
             this.goalId = goalId;
         else
             this.goalId = 0L;
@@ -67,18 +78,6 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
                 "} " + super.toString();
     }
 
-    public GoalReadings() {
-        super();
-    }
-
-    public GoalReadings(Parcel in) {
-        super(in);
-        this.goalId = in.readLong();
-        this.readingDate = new Date(in.readLong());
-        this.comments = in.readString();
-        this.isToUpdate = (Boolean) in.readValue(null);
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -88,7 +87,7 @@ public abstract class GoalReadings extends BaseModel implements Parcelable, Json
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeLong(this.goalId);
-        dest.writeLong(this.readingDate==null?0:this.readingDate.getTime());
+        dest.writeLong(this.readingDate == null ? 0 : this.readingDate.getTime());
         dest.writeString(this.comments);
         dest.writeValue(isToUpdate);
     }

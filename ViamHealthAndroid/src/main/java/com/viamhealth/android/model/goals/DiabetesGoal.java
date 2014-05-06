@@ -14,8 +14,38 @@ import java.util.List;
  */
 public class DiabetesGoal extends Goal {
 
+    public static final Parcelable.Creator<DiabetesGoal> CREATOR = new Parcelable.Creator<DiabetesGoal>() {
+        public DiabetesGoal createFromParcel(Parcel in) {
+            return new DiabetesGoal(in);
+        }
+
+        public DiabetesGoal[] newArray(int size) {
+            return new DiabetesGoal[size];
+        }
+    };
     private int fbs;
     private int rbs;
+
+    public DiabetesGoal() {
+        super();
+    }
+
+    public DiabetesGoal(Parcel in) {
+        super(in);
+        fbs = in.readInt();
+        rbs = in.readInt();
+        int readingsCount = in.readInt();
+        Parcelable[] readArr = in.readParcelableArray(DiabetesGoalReading.class.getClassLoader());//new DiabetesGoalReading[readingsCount];
+        if (readingsCount > 0) {
+            //in.readTypedArray(readArr, DiabetesGoalReading.CREATOR);
+            this.readings = new ArrayList<GoalReadings>(readingsCount);
+            for (int i = 0; i < readingsCount; i++) {
+                this.readings.add((DiabetesGoalReading) readArr[i]);
+            }
+        } else {
+            this.readings = new ArrayList<GoalReadings>();
+        }
+    }
 
     @Override
     public List<GoalReadings> getReadings() {
@@ -25,7 +55,7 @@ public class DiabetesGoal extends Goal {
     @Override
     public void setReadings(List<GoalReadings> readings) {
         this.readings.clear();
-        for(GoalReadings reading : readings){
+        for (GoalReadings reading : readings) {
             this.readings.add((DiabetesGoalReading) reading);
         }
     }
@@ -56,43 +86,12 @@ public class DiabetesGoal extends Goal {
         this.healthyRange = (HealthyRange) healthyRange;
     }
 
-    public DiabetesGoal() {
-        super();
-    }
-
-    public static final Parcelable.Creator<DiabetesGoal> CREATOR = new Parcelable.Creator<DiabetesGoal>() {
-        public DiabetesGoal createFromParcel(Parcel in) {
-            return new DiabetesGoal(in);
-        }
-
-        public DiabetesGoal[] newArray(int size) {
-            return new DiabetesGoal[size];
-        }
-    };
-
-    public DiabetesGoal(Parcel in) {
-        super(in);
-        fbs = in.readInt();
-        rbs = in.readInt();
-        int readingsCount = in.readInt();
-        Parcelable[] readArr = in.readParcelableArray(DiabetesGoalReading.class.getClassLoader());//new DiabetesGoalReading[readingsCount];
-        if(readingsCount>0){
-            //in.readTypedArray(readArr, DiabetesGoalReading.CREATOR);
-            this.readings = new ArrayList<GoalReadings>(readingsCount);
-            for(int i=0; i<readingsCount; i++){
-                this.readings.add((DiabetesGoalReading)readArr[i]);
-            }
-        }else{
-            this.readings = new ArrayList<GoalReadings>();
-        }
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeInt(fbs);
         dest.writeInt(rbs);
-        int readingsCount = this.readings==null?0:this.readings.size();
+        int readingsCount = this.readings == null ? 0 : this.readings.size();
         DiabetesGoalReading[] readArr = new DiabetesGoalReading[readingsCount];
         dest.writeInt(readingsCount);
         dest.writeParcelableArray(this.readings.toArray(readArr), flags);

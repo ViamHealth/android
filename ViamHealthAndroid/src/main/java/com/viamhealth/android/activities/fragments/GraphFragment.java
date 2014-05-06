@@ -1,9 +1,5 @@
 package com.viamhealth.android.activities.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,11 +18,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.viamhealth.android.R;
-import com.viamhealth.android.activities.AddGoalActivity;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
-import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoal;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -39,32 +32,19 @@ import java.util.Date;
 public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDataChangeListener, View.OnLongClickListener {
 
     private static final String TAG = "GraphFragment";
-    private Date selectedDateForEdit = null;
-
-    public interface OnClickAddValueListener {
-        public void onClick(MedicalConditions medicalCondition);
-    }
-
-    public interface OnClickAddGoalListener {
-        public void onClick();
-    }
-
     View view;
     WebView webView;
-
     String json = "";
     OnClickAddValueListener onClickAddValueListener;
     OnClickAddGoalListener onClickAddGoalListener;
-
     MedicalConditions type;
     ActionMode actionMode;
     ActionBar actionBar;
-
-
     Date startDate, endDate, currentDate;
     ProgressBar timeLinePB;
-
     Goal goal;
+    private Date selectedDateForEdit = null;
+    private OnGoalModifyListener onGoalModifyListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -118,26 +98,30 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
 
     @Override
     public void onPause() {
-        if(actionMode!=null)
+        if (actionMode != null)
             actionMode.finish();
         super.onPause();
     }
 
     @Override
     public void onResume() {
-        if(actionMode!=null)
+        if (actionMode != null)
             actionMode.finish();
         super.onResume();
     }
 
     @Override
     public String getScreenName() {
-        if(type!=null){
-            switch (type){
-                case Obese: return "Weight Graph";
-                case BloodPressure: return "Blood Pressure Graph";
-                case Diabetes: return "Blood Sugar Graph";
-                case Cholesterol: return "Cholesterol Graph";
+        if (type != null) {
+            switch (type) {
+                case Obese:
+                    return "Weight Graph";
+                case BloodPressure:
+                    return "Blood Pressure Graph";
+                case Diabetes:
+                    return "Blood Sugar Graph";
+                case Cholesterol:
+                    return "Cholesterol Graph";
             }
         }
         return super.getScreenName();
@@ -153,8 +137,8 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.ic_content_new){
-            if(onClickAddValueListener != null){
+        if (item.getItemId() == R.drawable.ic_content_new) {
+            if (onClickAddValueListener != null) {
                 onClickAddValueListener.onClick(type);
             }
             return false;
@@ -180,7 +164,7 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
         timeLinePB.setProgress(daysPassedBy);
 
         //reload the webView
-        webView.loadUrl( "javascript:window.location.reload( true )" );
+        webView.loadUrl("javascript:window.location.reload( true )");
     }
 
     @Override
@@ -198,32 +182,25 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
     }
 
     @JavascriptInterface
-    public void addValue(){
-        if(onClickAddValueListener != null){
+    public void addValue() {
+        if (onClickAddValueListener != null) {
             onClickAddValueListener.onClick(type);
         }
     }
-
-    public interface OnGoalModifyListener {
-        public void OnEdit(Goal goal, MedicalConditions type);
-        public void OnDelete(Goal goal, MedicalConditions type);
-    }
-
-    private OnGoalModifyListener onGoalModifyListener;
 
     public void setOnGoalModifyListener(OnGoalModifyListener listener) {
         this.onGoalModifyListener = listener;
     }
 
     private void editGoal() {
-        if(this.onGoalModifyListener!=null){
+        if (this.onGoalModifyListener != null) {
             this.onGoalModifyListener.OnEdit(goal, type);
         }
         actionMode.finish();
     }
 
     private void deleteGoal() {
-        if(this.onGoalModifyListener!=null){
+        if (this.onGoalModifyListener != null) {
             this.onGoalModifyListener.OnDelete(goal, type);
         }
         actionMode.finish();
@@ -235,6 +212,20 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
 
     public void setOnClickAddGoalListener(OnClickAddGoalListener listener) {
         this.onClickAddGoalListener = listener;
+    }
+
+    public interface OnClickAddValueListener {
+        public void onClick(MedicalConditions medicalCondition);
+    }
+
+    public interface OnClickAddGoalListener {
+        public void onClick();
+    }
+
+    public interface OnGoalModifyListener {
+        public void OnEdit(Goal goal, MedicalConditions type);
+
+        public void OnDelete(Goal goal, MedicalConditions type);
     }
 
     // all our ActionMode stuff here :)
@@ -251,8 +242,7 @@ public class GraphFragment extends BaseFragment implements GoalFragment.OnGoalDa
 
 
         @Override
-        public boolean onPrepareActionMode(ActionMode mode, com.actionbarsherlock.view.Menu menu)
-        {
+        public boolean onPrepareActionMode(ActionMode mode, com.actionbarsherlock.view.Menu menu) {
             // remove previous items
             menu.clear();
             //final int checked = adapter.getCheckedItemCount();

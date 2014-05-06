@@ -4,10 +4,26 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
-* Created by naren on 22/11/13.
-*/
+ * Created by naren on 22/11/13.
+ */
 public class ReminderTimeData implements Parcelable {
+    public static final Parcelable.Creator<ReminderTimeData> CREATOR = new Parcelable.Creator<ReminderTimeData>() {
+        public ReminderTimeData createFromParcel(Parcel in) {
+            return new ReminderTimeData(in);
+        }
+
+        public ReminderTimeData[] newArray(int size) {
+            return new ReminderTimeData[size];
+        }
+    };
     Integer count;
+
+    public ReminderTimeData() {
+    }
+
+    public ReminderTimeData(Parcel in) {
+        count = in.readInt();
+    }
 
     public Integer getCount() {
         return count;
@@ -15,12 +31,6 @@ public class ReminderTimeData implements Parcelable {
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public ReminderTimeData() {}
-
-    public ReminderTimeData(Parcel in) {
-        count = in.readInt();
     }
 
     @Override
@@ -32,16 +42,6 @@ public class ReminderTimeData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(count);
     }
-
-    public static final Parcelable.Creator<ReminderTimeData> CREATOR = new Parcelable.Creator<ReminderTimeData>() {
-        public ReminderTimeData createFromParcel(Parcel in) {
-            return new ReminderTimeData(in);
-        }
-
-        public ReminderTimeData[] newArray(int size) {
-            return new ReminderTimeData[size];
-        }
-    };
 
     @Override
     public String toString() {

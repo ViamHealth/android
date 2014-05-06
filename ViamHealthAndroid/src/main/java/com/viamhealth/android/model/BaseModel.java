@@ -18,6 +18,13 @@ public abstract class BaseModel implements Parcelable {
     protected BaseModel() {
     }
 
+    public BaseModel(Parcel in) {
+        this.id = in.readLong();
+        this.created = (Date) in.readValue(null);
+        this.updated = (Date) in.readValue(null);
+        this.updatedBy = in.readString();
+    }
+
     public Long getId() {
         return id;
     }
@@ -67,18 +74,11 @@ public abstract class BaseModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if(id==null)
-            id=0L;
+        if (id == null)
+            id = 0L;
         dest.writeLong(id);
         dest.writeValue(created);
         dest.writeValue(updated);
         dest.writeString(updatedBy);
-    }
-
-    public BaseModel(Parcel in) {
-        this.id = in.readLong();
-        this.created = (Date) in.readValue(null);
-        this.updated = (Date) in.readValue(null);
-        this.updatedBy = in.readString();
     }
 }

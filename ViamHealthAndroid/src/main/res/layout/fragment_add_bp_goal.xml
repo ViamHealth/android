@@ -1,214 +1,218 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#ffffff">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/section_present"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="visible"
-        android:id="@+id/section_present">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/systolic"
-                android:id="@+id/textView"
-                android:gravity="bottom" />
-
-            <EditText
-                android:id="@+id/add_goal_present_sp"
-                android:hint="@string/systolicHint"
-                android:inputType="numberSigned"
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/diastolic"
-                android:id="@+id/textView"
-                android:gravity="bottom" />
-
-            <EditText
-                android:id="@+id/add_goal_present_dp"
-                android:hint="@string/diastolicHint"
-                android:inputType="numberSigned"
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/targetWeight"
-                android:id="@+id/textView"
-                android:gravity="bottom" />
-            <EditText
-                android:id="@+id/add_goal_present_pr"
-                android:hint="@string/present_pulse_rate"
-                android:inputType="numberSigned"
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:visibility="visible">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/target_systolic"
-                android:id="@+id/textView"
-                android:gravity="bottom" />
-
-            <EditText
-                android:id="@+id/add_goal_target_sp"
-                android:inputType="numberSigned"
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/target_diastolic"
-                android:id="@+id/textView"
-                android:gravity="bottom" />
-
-            <EditText
-                android:id="@+id/add_goal_target_dp"
-                android:inputType="numberSigned"
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="bottom"
+                android:text="@string/systolic"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/add_goal_present_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/systolicHint"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="bottom"
+                android:text="@string/diastolic"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/add_goal_present_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/diastolicHint"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:gravity="bottom"
                 android:text="@string/targetWeight"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/add_goal_present_pr"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/present_pulse_rate"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
                 android:id="@+id/textView"
-                android:gravity="bottom" />
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="bottom"
+                android:text="@string/target_systolic"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/add_goal_target_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="bottom"
+                android:text="@string/target_diastolic"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/add_goal_target_dp"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="bottom"
+                android:text="@string/targetWeight"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/add_goal_target_pr"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical|center_horizontal"
                 android:hint="@string/target_pulse_rate"
                 android:inputType="numberSigned"
-                android:layout_height="fill_parent"
-                android:layout_width="wrap_content"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
                 android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp" />
+                android:singleLine="true"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <EditText
             android:id="@+id/add_goal_target_date"
-            android:hint="target date"
-            android:inputType="date"
-            android:layout_height="48dp"
             android:layout_width="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:singleLine="false"
-            android:padding="5dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:hint="target date"
+            android:inputType="date"
+            android:padding="5dp"
+            android:singleLine="false"
             android:textSize="18sp" />
 
     </LinearLayout>

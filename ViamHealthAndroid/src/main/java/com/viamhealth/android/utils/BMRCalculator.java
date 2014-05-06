@@ -15,9 +15,9 @@ import java.util.Date;
  */
 public class BMRCalculator {
 
-    public static int calculateBMR(double weight, int height, int age, Gender gender){
-        Double p = 10*weight + 6.25*height - 5*age;
-        if(gender==Gender.Male)
+    public static int calculateBMR(double weight, int height, int age, Gender gender) {
+        Double p = 10 * weight + 6.25 * height - 5 * age;
+        if (gender == Gender.Male)
             p += 5;
         else
             p -= 161;
@@ -26,10 +26,10 @@ public class BMRCalculator {
     }
 
     public static Date getIdealTargetDate(User user, WeightGoal goal) {
-        if(user==null || goal==null)
+        if (user == null || goal == null)
             return null;
 
-        int idealCaloriesPerDay = user.getProfile().getGender()==Gender.Male?1500:1200;
+        int idealCaloriesPerDay = user.getProfile().getGender() == Gender.Male ? 1500 : 1200;
 
         int totalCalories = calculateBMR(user.getBmiProfile().getWeight(), user.getBmiProfile().getHeight(),
                 user.getProfile().getAge(), user.getProfile().getGender());

@@ -20,6 +20,15 @@ import java.util.Map;
  */
 public class Reminder implements Parcelable {
 
+    public static final Parcelable.Creator<Reminder> CREATOR = new Parcelable.Creator<Reminder>() {
+        public Reminder createFromParcel(Parcel in) {
+            return new Reminder(in);
+        }
+
+        public Reminder[] newArray(int size) {
+            return new Reminder[size];
+        }
+    };
     Long id = 0L;
     Long userId = 0L;
     ReminderType type = ReminderType.Other;
@@ -37,6 +46,24 @@ public class Reminder implements Parcelable {
     RepeatWeekDay repeatWeekDay = RepeatWeekDay.None;
 
     public Reminder() {
+    }
+
+    public Reminder(Parcel in) {
+        id = in.readLong();
+        userId = in.readLong();
+        type = ReminderType.get(in.readInt());
+        name = in.readString();
+        details = in.readString();
+        startDate = (Date) in.readValue(null);
+        endDate = (Date) in.readValue(null);
+        repeatMode = RepeatMode.get(in.readInt());
+        repeatDay = in.readInt();
+        repeatHour = in.readInt();
+        repeatMin = in.readInt();
+        repeatEveryX = in.readInt();
+        repeatICounter = in.readInt();
+        repeatWeekDay = RepeatWeekDay.get(in.readInt());
+        mapReminderTimeData = ParcelableUtils.readMap(in, ReminderTimeData.class);
     }
 
     public Long getId() {
@@ -161,20 +188,20 @@ public class Reminder implements Parcelable {
 
     public String getRepeatString(Context context) {
 
-        if(startDate==null || repeatMode==RepeatMode.None || repeatEveryX<1)
+        if (startDate == null || repeatMode == RepeatMode.None || repeatEveryX < 1)
             return "";
 
         //once every <2> <week> from <stDate>, <x> times
         StringBuilder builder = new StringBuilder();
         builder = builder.append("once every ");
 
-        if(repeatEveryX>1)
-                builder = builder.append(repeatEveryX).append(" ");
+        if (repeatEveryX > 1)
+            builder = builder.append(repeatEveryX).append(" ");
 
-        builder = builder.append(context.getString(repeatMode.resId())).append(repeatEveryX>1?"s ":" ")
-                    .append("from").append(" ")
-                    .append(DateUtils.getDisplayText(startDate)).append(", ")
-                    .append(repeatICounter).append(" times");
+        builder = builder.append(context.getString(repeatMode.resId())).append(repeatEveryX > 1 ? "s " : " ")
+                .append("from").append(" ")
+                .append(DateUtils.getDisplayText(startDate)).append(", ")
+                .append(repeatICounter).append(" times");
 
         return builder.toString();
     }
@@ -198,34 +225,6 @@ public class Reminder implements Parcelable {
                 ", repeatICounter=" + repeatICounter +
                 ", repeatWeekDay=" + repeatWeekDay +
                 "} " + super.toString();
-    }
-
-    public static final Parcelable.Creator<Reminder> CREATOR = new Parcelable.Creator<Reminder>() {
-        public Reminder createFromParcel(Parcel in) {
-            return new Reminder(in);
-        }
-
-        public Reminder[] newArray(int size) {
-            return new Reminder[size];
-        }
-    };
-
-    public Reminder(Parcel in) {
-        id = in.readLong();
-        userId = in.readLong();
-        type = ReminderType.get(in.readInt());
-        name = in.readString();
-        details = in.readString();
-        startDate = (Date) in.readValue(null);
-        endDate = (Date) in.readValue(null);
-        repeatMode = RepeatMode.get(in.readInt());
-        repeatDay = in.readInt();
-        repeatHour = in.readInt();
-        repeatMin = in.readInt();
-        repeatEveryX = in.readInt();
-        repeatICounter = in.readInt();
-        repeatWeekDay = RepeatWeekDay.get(in.readInt());
-        mapReminderTimeData = ParcelableUtils.readMap(in, ReminderTimeData.class);
     }
 
     @Override

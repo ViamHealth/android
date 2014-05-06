@@ -16,34 +16,28 @@ public enum BMIClassifier {
     ModeratelyObese(6, "Moderately Obese", 30.0, 34.99),
     SeverelyObese(7, "Severyl Obese", 35.0, 39.99),
     VSeverelyObese(8, "Very Severely Obese", 40.0, 100);
-
-    private final int value;
-    private final String key;
-    private final double min;
-    private final double max;
-
-    BMIClassifier(int value, String key, double min, double max){
-        this.value = value;
-        this.key = key;
-        this.min = min;
-        this.max = max;
-    }
-
-    public int value() {return value;}
-    public String key() {return key;}
-    public double min() {return min;}
-    public double max() {return max;}
-
     // Lookup table
     private static final Map<Integer, BMIClassifier> valuelookup = new HashMap<Integer, BMIClassifier>();
     private static final Map<String, BMIClassifier> keylookup = new HashMap<String, BMIClassifier>();
 
     // Populate the lookup table on loading time
     static {
-        for (BMIClassifier bmi : EnumSet.allOf(BMIClassifier.class)){
+        for (BMIClassifier bmi : EnumSet.allOf(BMIClassifier.class)) {
             valuelookup.put(bmi.value(), bmi);
             keylookup.put(bmi.key(), bmi);
         }
+    }
+
+    private final int value;
+    private final String key;
+    private final double min;
+    private final double max;
+
+    BMIClassifier(int value, String key, double min, double max) {
+        this.value = value;
+        this.key = key;
+        this.min = min;
+        this.max = max;
     }
 
     // This method can be used for reverse lookup purpose
@@ -53,6 +47,22 @@ public enum BMIClassifier {
 
     public static BMIClassifier get(String key) {
         return keylookup.get(key);
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
+
+    public double min() {
+        return min;
+    }
+
+    public double max() {
+        return max;
     }
 
 }

@@ -6,13 +6,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.viamhealth.android.R;
 import com.viamhealth.android.model.CheckboxGoalData;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.viamhealth.android.R;
 
 /**
  * Created by monj on 28/1/14.
@@ -21,7 +20,9 @@ public class CheckboxGoalListAdapter extends BaseAdapter implements View.OnClick
 
     private LayoutInflater inflator;
 
-    /** A list containing some sample data to show. */
+    /**
+     * A list containing some sample data to show.
+     */
     private List dataList;
 
     public CheckboxGoalListAdapter(LayoutInflater inflator) {

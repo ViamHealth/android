@@ -8,7 +8,7 @@ import android.content.Context;
 public class NotifyHandlerFactory {
 
     public static NotificationHandler getHandler(NotificationType type, Context context) {
-        switch (type){
+        switch (type) {
             case UserReminder:
                 return new UserReminderNotifyHandler(context);
 

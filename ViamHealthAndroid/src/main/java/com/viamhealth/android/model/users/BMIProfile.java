@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.enums.BMIClassifier;
-import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.LifeStyle;
 
 /**
@@ -28,8 +27,29 @@ public class BMIProfile implements Parcelable {
     int triglycerides;
     int totalCholesterol;
 
+    public BMIProfile(Parcel in) {
+        this.height = in.readInt();
+        this.weight = in.readDouble();
+        this.bmr = in.readInt();
+        //this.bmiClassifier = (BMIClassifier) in.readValue(null);
+        //this.lifeStyle = (LifeStyle) in.readValue(null);
+        systolicPressure = in.readInt();
+        diastolicPressure = in.readInt();
+        pulseRate = in.readInt();
+        fastingSugar = in.readInt();
+        randomSugar = in.readInt();
+        hdl = in.readInt();
+        ldl = in.readInt();
+        triglycerides = in.readInt();
+        totalCholesterol = in.readInt();
+    }
+
+    public BMIProfile() {
+
+    }
+
     public boolean isEmpty() {
-        if(height==0)
+        if (height == 0)
             return true;
 
         else
@@ -132,7 +152,6 @@ public class BMIProfile implements Parcelable {
         this.height = height;
     }
 
-
     public LifeStyle getLifeStyle() {
         return lifeStyle;
     }
@@ -198,26 +217,5 @@ public class BMIProfile implements Parcelable {
         dest.writeInt(ldl);
         dest.writeInt(triglycerides);
         dest.writeInt(totalCholesterol);
-    }
-
-    public BMIProfile(Parcel in) {
-        this.height = in.readInt();
-        this.weight = in.readDouble();
-        this.bmr = in.readInt();
-        //this.bmiClassifier = (BMIClassifier) in.readValue(null);
-        //this.lifeStyle = (LifeStyle) in.readValue(null);
-        systolicPressure = in.readInt();
-        diastolicPressure = in.readInt();
-        pulseRate = in.readInt();
-        fastingSugar = in.readInt();
-        randomSugar = in.readInt();
-        hdl = in.readInt();
-        ldl = in.readInt();
-        triglycerides = in.readInt();
-        totalCholesterol = in.readInt();
-    }
-
-    public BMIProfile() {
-
     }
 }

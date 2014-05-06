@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,22 +41,19 @@ import java.util.Set;
 
 public class FileFragment extends BaseFragment {
 
+    private final String TAG = "FileFragment";
     private Global_Application ga;
     private ViamHealthPrefs appPrefs;
-
     private User selectedUser;
     private Set<OnNewFileUploadedListener> onNewFileUploadedListener = new HashSet<OnNewFileUploadedListener>();
-
     private ActionBar actionBar;
     private ImageSelector imageSelector;
-
-    private final String TAG = "FileFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_file_new, container, false);
 
-        ga = ((Global_Application)getSherlockActivity().getApplicationContext());
+        ga = ((Global_Application) getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
         selectedUser = getArguments().getParcelable("user");
 
@@ -79,7 +75,7 @@ public class FileFragment extends BaseFragment {
         return view;
     }
 
-    public void addOnNewFileUploadedListener(OnNewFileUploadedListener listener){
+    public void addOnNewFileUploadedListener(OnNewFileUploadedListener listener) {
         onNewFileUploadedListener.add(listener);
     }
 
@@ -107,15 +103,15 @@ public class FileFragment extends BaseFragment {
 
         View dialogView = LayoutInflater.from(getSherlockActivity()).inflate(R.layout.upload_file, null);
         ImageView img_display = (ImageView) dialogView.findViewById(R.id.img_display);
-        if(imgBitmap!=null){
+        if (imgBitmap != null) {
             img_display.setImageBitmap(imgBitmap);
-        }else{
+        } else {
             String fn = imageSelector.getFileName();
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(UIUtility.getFileExtension(fn));
             img_display.setImageDrawable(getResources().getDrawable(FileUploader.getFileIcon(mimeType)));
         }
         final TextView txtViewFileName = (TextView) dialogView.findViewById(R.id.file_name);
-        filename = fileExtension!=null ? filename.substring(0, filename.lastIndexOf(".")) : filename;
+        filename = fileExtension != null ? filename.substring(0, filename.lastIndexOf(".")) : filename;
         txtViewFileName.setText(filename);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity(), R.style.StyledProgressDialog);
@@ -138,7 +134,7 @@ public class FileFragment extends BaseFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(Menu.NONE, R.drawable.ic_action_upload, 1, "Upload")
-            .setIcon(R.drawable.ic_action_upload)
+                .setIcon(R.drawable.ic_action_upload)
 //            .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 //                @Override
 //                public boolean onMenuItemClick(MenuItem menuItem) {
@@ -146,13 +142,13 @@ public class FileFragment extends BaseFragment {
 //                    return false;
 //                }
 //            })
-            .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         //menu.add("Menu 1b").setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.ic_action_upload){
+        if (item.getItemId() == R.drawable.ic_action_upload) {
             pickFile();
             return false;
         }
@@ -164,19 +160,18 @@ public class FileFragment extends BaseFragment {
         imageSelector.pickFile(ImageSelector.FileType.All);
     }
 
-    public interface OnNewFileUploadedListener {
-        public void onNewFileUploaded(FileData fileData);
-    }
-
     private void onFileUploadedToServer(FileData fileData) {
-        for(OnNewFileUploadedListener listener : this.onNewFileUploadedListener){
+        for (OnNewFileUploadedListener listener : this.onNewFileUploadedListener) {
             listener.onNewFileUploaded(fileData);
         }
 
     }
 
-    public class UploadFiletoServer extends AsyncTask <String, Void, FileUploader.Response>
-    {
+    public interface OnNewFileUploadedListener {
+        public void onNewFileUploaded(FileData fileData);
+    }
+
+    public class UploadFiletoServer extends AsyncTask<String, Void, FileUploader.Response> {
         protected Context applicationContext;
         protected ProgressDialog dialog;
         protected Integer fileId = 0;
@@ -185,7 +180,7 @@ public class FileFragment extends BaseFragment {
         protected String downloadUrl;
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             dialog = new ProgressDialog(getSherlockActivity());
             dialog.setMessage("uploading the file....");
             dialog.setCanceledOnTouchOutside(false);

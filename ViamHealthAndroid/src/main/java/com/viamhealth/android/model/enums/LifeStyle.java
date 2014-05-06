@@ -14,28 +14,24 @@ public enum LifeStyle {
     ModeratelyActive(3, "Moderately Active"),
     VeryActive(4, "Very Active"),
     ExtremelyActive(5, "Extremenly Active");
-
-    private final int value;
-    private final String key;
-
-    LifeStyle(int value, String key){
-        this.value = value;
-        this.key = key;
-    }
-
-    public int value() {return value;}
-    public String key() {return key;}
-
     // Lookup table
     private static final Map<Integer, LifeStyle> valuelookup = new HashMap<Integer, LifeStyle>();
     private static final Map<String, LifeStyle> keylookup = new HashMap<String, LifeStyle>();
 
     // Populate the lookup table on loading time
     static {
-        for (LifeStyle bmi : EnumSet.allOf(LifeStyle.class)){
+        for (LifeStyle bmi : EnumSet.allOf(LifeStyle.class)) {
             valuelookup.put(bmi.value(), bmi);
             keylookup.put(bmi.key(), bmi);
         }
+    }
+
+    private final int value;
+    private final String key;
+
+    LifeStyle(int value, String key) {
+        this.value = value;
+        this.key = key;
     }
 
     // This method can be used for reverse lookup purpose
@@ -45,5 +41,13 @@ public enum LifeStyle {
 
     public static LifeStyle get(String key) {
         return keylookup.get(key);
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
     }
 }

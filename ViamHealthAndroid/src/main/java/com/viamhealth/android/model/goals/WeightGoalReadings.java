@@ -5,13 +5,21 @@ import android.os.Parcelable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 /**
  * Created by naren on 11/10/13.
  */
 public class WeightGoalReadings extends GoalReadings implements Parcelable {
 
+    public static final Parcelable.Creator<WeightGoalReadings> CREATOR = new Parcelable.Creator<WeightGoalReadings>() {
+        public WeightGoalReadings createFromParcel(Parcel in) {
+            return new WeightGoalReadings(in);
+        }
+
+        public WeightGoalReadings[] newArray(int size) {
+            return new WeightGoalReadings[size];
+        }
+    };
     double weight;
     double height;
 
@@ -19,12 +27,17 @@ public class WeightGoalReadings extends GoalReadings implements Parcelable {
         super();
     }
 
+    public WeightGoalReadings(Parcel in) {
+        super(in);
+        this.weight = in.readDouble();
+    }
+
     public Double getWeight() {
         return weight;
     }
 
     public void setWeight(Double weight) {
-        if(weight!=null)
+        if (weight != null)
             this.weight = weight;
         else
             this.weight = 0.0;
@@ -45,11 +58,6 @@ public class WeightGoalReadings extends GoalReadings implements Parcelable {
                 "} " + super.toString();
     }
 
-    public WeightGoalReadings(Parcel in) {
-        super(in);
-        this.weight = in.readDouble();
-    }
-
     @Override
     public int describeContents() {
         return super.describeContents();
@@ -60,16 +68,6 @@ public class WeightGoalReadings extends GoalReadings implements Parcelable {
         super.writeToParcel(dest, flags);
         dest.writeDouble(this.weight);
     }
-
-    public static final Parcelable.Creator<WeightGoalReadings> CREATOR = new Parcelable.Creator<WeightGoalReadings>() {
-        public WeightGoalReadings createFromParcel(Parcel in) {
-            return new WeightGoalReadings(in);
-        }
-
-        public WeightGoalReadings[] newArray(int size) {
-            return new WeightGoalReadings[size];
-        }
-    };
 
     @Override
     public JSONObject toJSON(GraphSeries series) {

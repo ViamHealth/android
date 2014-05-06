@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/action_mode_edit"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_edit_white"
-        android:title="Edit"/>
+        android:showAsAction="ifRoom"
+        android:title="Edit" />
 
     <item
         android:id="@+id/action_mode_delete"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_delete"
-        android:title="Delete"/>
+        android:showAsAction="ifRoom"
+        android:title="Delete" />
 
 </menu>

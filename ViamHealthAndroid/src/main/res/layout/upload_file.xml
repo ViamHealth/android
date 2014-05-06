@@ -2,101 +2,112 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".UploadFile"
-    android:orientation="vertical">
-  <FrameLayout 
-    android:id="@+id/main_layout"
-    android:layout_height="fill_parent"
-    android:layout_width="fill_parent">
-    <!-- Action Bar Start -->
-    <LinearLayout 
-        android:id="@+id/actionbarlayot"
-        android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".UploadFile">
+
+    <FrameLayout
+        android:id="@+id/main_layout"
         android:layout_width="fill_parent"
-        android:orientation="vertical">
-        <!-- Action Bar End -->
-	 
-   <LinearLayout 
-            android:id="@+id/profile_submid_layout"
-            android:layout_height="fill_parent"
+        android:layout_height="fill_parent">
+        <!-- Action Bar Start -->
+        <LinearLayout
+            android:id="@+id/actionbarlayot"
             android:layout_width="fill_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
-            <LinearLayout android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <!-- Action Bar End -->
+
+            <LinearLayout
+                android:id="@+id/profile_submid_layout"
                 android:layout_width="fill_parent"
-                android:orientation="horizontal">
-            	<FrameLayout android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:id="@+id/l1"
-                >
-
-                    <ImageView android:layout_height="198dp"
-                        android:layout_width="198dp"
-                        android:src="@drawable/ic_collections_collection"
-                        android:id="@+id/img_display"
-                        android:layout_gravity="center" />
-
-                    <TextView android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
-                        android:text="Upload Photo"
-                        android:paddingLeft="10dp"
-                        android:textSize="18dp"
-                        android:layout_gravity="center_horizontal|bottom"
-                        android:textStyle="bold"
-                        android:id="@+id/txtViewUpload"
-                        android:visibility="gone" />
-
-                </FrameLayout>
-            </LinearLayout>
-            
-   <LinearLayout android:layout_height="wrap_content"
-       android:layout_width="fill_parent"
-       android:orientation="vertical"
-       android:paddingLeft="20dp"
-       android:paddingRight="20dp"
-       android:paddingTop="30dp">
-
-       <EditText
-           android:layout_width="fill_parent"
-           android:layout_height="fill_parent"
-           android:id="@+id/file_name"
-           android:hint="@string/file_name"
-           android:gravity="center_horizontal" />
-
-       <EditText android:layout_height="wrap_content"
-           android:layout_width="fill_parent"
-           android:id="@+id/file_desc"
-           android:hint="@string/file_title"
-           android:textAlignment="center"
-           android:gravity="center_vertical|center_horizontal"
-           android:visibility="gone" />
-   </LinearLayout>
- <LinearLayout android:id="@+id/newval_btn_layout"
                 android:layout_height="fill_parent"
-                android:layout_width="fill_parent"
                 android:orientation="vertical"
-                android:gravity="center_horizontal|bottom"
-                android:paddingBottom="20dp"
-     android:visibility="gone">
-                      <Button
-                          android:id="@+id/btnUpload"
-                          android:layout_width="fill_parent"
-                          android:layout_height="wrap_content"
-                          android:gravity="center_vertical|center"
-                          android:text="Save"
-                          android:textSize="23sp"/>
+                android:padding="10dp">
 
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textAppearance="?android:attr/textAppearanceLarge"
-         android:text="Cancel"
-         android:id="@+id/btnCancle"
-         android:layout_gravity="center" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
- </LinearLayout>
+                    <FrameLayout
+                        android:id="@+id/l1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/img_display"
+                            android:layout_width="198dp"
+                            android:layout_height="198dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_collections_collection" />
+
+                        <TextView
+                            android:id="@+id/txtViewUpload"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:paddingLeft="10dp"
+                            android:text="Upload Photo"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="30dp">
+
+                    <EditText
+                        android:id="@+id/file_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:gravity="center_horizontal"
+                        android:hint="@string/file_name" />
+
+                    <EditText
+                        android:id="@+id/file_desc"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:hint="@string/file_title"
+                        android:textAlignment="center"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/newval_btn_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center_horizontal|bottom"
+                    android:orientation="vertical"
+                    android:paddingBottom="20dp"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/btnUpload"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical|center"
+                        android:text="Save"
+                        android:textSize="23sp" />
+
+                    <TextView
+                        android:id="@+id/btnCancle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Cancel"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                </LinearLayout>
             </LinearLayout>
-             </LinearLayout>
-  </FrameLayout>
-            
+        </LinearLayout>
+    </FrameLayout>
+
 </LinearLayout>

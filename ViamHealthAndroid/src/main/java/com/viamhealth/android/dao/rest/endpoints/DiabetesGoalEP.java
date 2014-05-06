@@ -8,7 +8,6 @@ import com.viamhealth.android.model.goals.DiabetesGoal;
 import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoalReadings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +15,7 @@ import org.json.JSONObject;
 /**
  * Created by naren on 18/10/13.
  */
-public class DiabetesGoalEP extends GoalsEP{
+public class DiabetesGoalEP extends GoalsEP {
 
     public DiabetesGoalEP(Context context, Application app) {
         super(context, app);
@@ -44,25 +43,25 @@ public class DiabetesGoalEP extends GoalsEP{
 
     @Override
     protected Goal.HealthyRange newHealthyRange(Goal goal) {
-        return ((DiabetesGoal)goal).new HealthyRange();
+        return ((DiabetesGoal) goal).new HealthyRange();
     }
 
     @Override
     protected void addParams(RestClient client, GoalReadings readings) {
-        int fasting = ((DiabetesGoalReading)readings).getFbs();
-        int random = ((DiabetesGoalReading)readings).getRbs();
+        int fasting = ((DiabetesGoalReading) readings).getFbs();
+        int random = ((DiabetesGoalReading) readings).getRbs();
 
-        if(fasting>0)
+        if (fasting > 0)
             client.AddParam("fasting", fasting);
 
-        if(random>0)
+        if (random > 0)
             client.AddParam("random", random);
     }
 
     @Override
     protected void addParams(RestClient client, Goal goal) {
-        client.AddParam("fasting", ((DiabetesGoal)goal).getFbs());
-        client.AddParam("random", ((DiabetesGoal)goal).getRbs());
+        client.AddParam("fasting", ((DiabetesGoal) goal).getFbs());
+        client.AddParam("random", ((DiabetesGoal) goal).getRbs());
     }
 
     @Override
@@ -77,14 +76,14 @@ public class DiabetesGoalEP extends GoalsEP{
 
     @Override
     protected void processParams(GoalReadings reading, JSONObject jsonReading) throws JSONException {
-        ((DiabetesGoalReading)reading).setFbs(jsonReading.getInt("fasting"));
-        ((DiabetesGoalReading)reading).setRbs(jsonReading.getInt("random"));
+        ((DiabetesGoalReading) reading).setFbs(jsonReading.getInt("fasting"));
+        ((DiabetesGoalReading) reading).setRbs(jsonReading.getInt("random"));
     }
 
     @Override
     protected void processParams(Goal goal, JSONObject jsonGoal) throws JSONException {
-        ((DiabetesGoal)goal).setFbs(jsonGoal.getInt("fasting"));
-        ((DiabetesGoal)goal).setRbs(jsonGoal.getInt("random"));
+        ((DiabetesGoal) goal).setFbs(jsonGoal.getInt("fasting"));
+        ((DiabetesGoal) goal).setRbs(jsonGoal.getInt("random"));
     }
 
     @Override

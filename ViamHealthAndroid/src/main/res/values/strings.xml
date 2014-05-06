@@ -307,7 +307,8 @@
     <string name="weightGoalAggressiveWarning">You are planning to lose %.1fKg per week. It is an aggressive target. Consider revising your weight loss goal to 0.5Kg per week.</string>
     <string name="weightGoalIdealTarget">It is healthy and ideal to lose upto 0.5Kg per week.</string>
     <string name="weightGoalIdealTargetYourDate">You are planning to lose %.1fKg per week. That\'s a healthy amount to lose every week. </string>
-    <string name="targetDate">target date</string><string name="repeatFor">eg: 2</string>
+    <string name="targetDate">target date</string>
+    <string name="repeatFor">eg: 2</string>
     <string name="onceEvery">eg: 3</string>
     <string name="fromdate">eg: 21/03/2013</string>
     <string name="currentHeight">height</string>

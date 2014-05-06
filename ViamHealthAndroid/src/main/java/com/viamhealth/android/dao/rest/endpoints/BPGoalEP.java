@@ -6,8 +6,6 @@ import android.content.Context;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.model.goals.BPGoal;
 import com.viamhealth.android.model.goals.BPGoalReading;
-import com.viamhealth.android.model.goals.DiabetesGoal;
-import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 
@@ -45,7 +43,7 @@ public class BPGoalEP extends GoalsEP {
 
     @Override
     protected Goal.HealthyRange newHealthyRange(Goal goal) {
-        return ((BPGoal)goal).new HealthyRange();
+        return ((BPGoal) goal).new HealthyRange();
     }
 
     @Override

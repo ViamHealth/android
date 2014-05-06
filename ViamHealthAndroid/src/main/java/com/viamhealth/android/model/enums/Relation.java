@@ -24,30 +24,35 @@ public enum Relation {
     DaughterInLaw(11, R.string.daughter_in_law),
     Cousin(12, R.string.cousin),
     Other(13, R.string.others);
-
-    private final int value;
-    private final int resId;
-    Relation(int value, int resId){
-        this.value = value;
-        this.resId = resId;
-    }
-
-    public int value() {return value;}
-    public int resId() {return resId;}
-
     // Lookup table
     private static final Map<Integer, Relation> valuelookup = new HashMap<Integer, Relation>();
 
     // Populate the lookup table on loading time
     static {
-        for (Relation bg : EnumSet.allOf(Relation.class)){
+        for (Relation bg : EnumSet.allOf(Relation.class)) {
             valuelookup.put(bg.value(), bg);
         }
+    }
+
+    private final int value;
+    private final int resId;
+
+    Relation(int value, int resId) {
+        this.value = value;
+        this.resId = resId;
     }
 
     // This method can be used for reverse lookup purpose
     public static Relation get(int value) {
         return valuelookup.get(value);
+    }
+
+    public int value() {
+        return value;
+    }
+
+    public int resId() {
+        return resId;
     }
 
 }

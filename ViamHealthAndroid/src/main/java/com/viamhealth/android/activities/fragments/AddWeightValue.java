@@ -2,15 +2,12 @@ package com.viamhealth.android.activities.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.goals.BPGoalReading;
-import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoalReadings;
 
@@ -36,10 +33,10 @@ public class AddWeightValue extends AddValueBaseFragment {
         super.onCreate(savedInstanceState);
 
         List<Parcelable> readings = Arrays.asList(getArguments().getParcelableArray("readings"));
-        if(readings!=null){
+        if (readings != null) {
             int count = readings.size();
             readingsMap = new HashMap<Date, WeightGoalReadings>(count);
-            for(int i=0; i<count; i++){
+            for (int i = 0; i < count; i++) {
                 WeightGoalReadings reading = (WeightGoalReadings) readings.get(i);
                 readingsMap.put(reading.getReadingDate(), reading);
             }

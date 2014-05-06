@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-   <selector xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_focused="true">
-    <shape>
-        <solid android:color="#ffdfc9" />
-    </shape>
-</item>
+        <shape>
+            <solid android:color="#ffdfc9" />
+        </shape>
+    </item>
     <item>
-    <shape>
-        <solid android:color="#10666666" />
-    </shape>
-</item>
+        <shape>
+            <solid android:color="#10666666" />
+        </shape>
+    </item>
 
 </selector>

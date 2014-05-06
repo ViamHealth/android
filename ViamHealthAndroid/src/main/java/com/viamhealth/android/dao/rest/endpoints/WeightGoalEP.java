@@ -43,27 +43,27 @@ public class WeightGoalEP extends GoalsEP {
 
     @Override
     protected void addParams(final RestClient client, final GoalReadings readings) {
-        client.AddParam("weight", ((WeightGoalReadings)readings).getWeight());
+        client.AddParam("weight", ((WeightGoalReadings) readings).getWeight());
     }
 
     @Override
     protected void addParams(final RestClient client, final Goal goal) {
-        client.AddParam("weight", ((WeightGoal)goal).getWeight());
+        client.AddParam("weight", ((WeightGoal) goal).getWeight());
     }
 
     @Override
     protected void processParams(final GoalReadings reading, final JSONObject jsonReading) throws JSONException {
-        ((WeightGoalReadings)reading).setWeight(jsonReading.getDouble("weight"));
+        ((WeightGoalReadings) reading).setWeight(jsonReading.getDouble("weight"));
     }
 
     @Override
     protected void processParams(final Goal goal, final JSONObject jsonGoal) throws JSONException {
-        ((WeightGoal)goal).setWeight(jsonGoal.getDouble("weight"));
+        ((WeightGoal) goal).setWeight(jsonGoal.getDouble("weight"));
     }
 
     @Override
     protected Goal.HealthyRange newHealthyRange(Goal goal) {
-        return ((WeightGoal)goal).new HealthyRange();
+        return ((WeightGoal) goal).new HealthyRange();
     }
 
     @Override

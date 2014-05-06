@@ -3,23 +3,17 @@ package com.viamhealth.android.activities.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.DiabetesGoal;
 import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoal;
-import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 
 import java.text.ParseException;
@@ -64,20 +58,22 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
         tFBS = (EditText) view.findViewById(R.id.add_goal_target_fbs);
         tRBS = (EditText) view.findViewById(R.id.add_goal_target_rbs);
 
-        if(user==null)
+        if (user == null)
             return null;
 
-        if(goal!=null){
+        if (goal != null) {
             isGoalConfigured = true;
             tRBS.setText(String.valueOf(goal.getRbs()));
             tFBS.setText(String.valueOf(goal.getFbs()));
             targetDate.setText(formater.format(goal.getTargetDate()));
-            ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+            ((LinearLayout) view.findViewById(R.id.section_present)).setVisibility(View.GONE);
         } else {
             //tRBS.setText(String.valueOf(140));
             //tFBS.setText(String.valueOf(100));
-            if(user.getBmiProfile().getFastingSugar()>0) pFBS.setText(String.valueOf(user.getBmiProfile().getFastingSugar()));
-            if(user.getBmiProfile().getRandomSugar()>0) pRBS.setText(String.valueOf(user.getBmiProfile().getRandomSugar()));
+            if (user.getBmiProfile().getFastingSugar() > 0)
+                pFBS.setText(String.valueOf(user.getBmiProfile().getFastingSugar()));
+            if (user.getBmiProfile().getRandomSugar() > 0)
+                pRBS.setText(String.valueOf(user.getBmiProfile().getRandomSugar()));
         }
 
         pFBS.requestFocus();
@@ -94,9 +90,9 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
         setDefaultGoalAttributes(goal, dbgoal);
         dbgoal.setFbs(Integer.parseInt(tFBS.getText().toString()));
         dbgoal.setRbs(Integer.parseInt(tRBS.getText().toString()));
-        try{
+        try {
             dbgoal.setTargetDate(formater.parse(targetDate.getText().toString()));
-        } catch(ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return dbgoal;
@@ -104,7 +100,7 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
     @Override
     public GoalReadings getGoalReadings() {
-        if(!isGoalConfigured) {
+        if (!isGoalConfigured) {
             DiabetesGoalReading readings = new DiabetesGoalReading();
             readings.setRbs(Integer.parseInt(pRBS.getText().toString()));
             readings.setFbs(Integer.parseInt(pFBS.getText().toString()));
@@ -116,29 +112,29 @@ public class AddDiabetesGoalFragment extends AddGoalFragment {
 
     @Override
     public boolean isValid() {
-        boolean isValid=true;
+        boolean isValid = true;
 
 
-        if(pFBS.getText().length()==0){
+        if (pFBS.getText().length() == 0) {
             pFBS.setError("Please fill the value for fasting blood sugar");
-            isValid=false;
+            isValid = false;
         }
-        if(pRBS.getText().length()==0){
+        if (pRBS.getText().length() == 0) {
             pRBS.setError("Please fill the value for random blood sugar");
-            isValid=false;
+            isValid = false;
         }
-        if(tFBS.getText().length()==0){
+        if (tFBS.getText().length() == 0) {
             tFBS.setError("Please fill the value for target fasting  blood sugar");
-            isValid=false;
+            isValid = false;
         }
-        if(tRBS.getText().length()==0){
+        if (tRBS.getText().length() == 0) {
             tRBS.setError("Please fill the value for target random blood sugar");
-            isValid=false;
+            isValid = false;
         }
 
-        if(targetDate.getText().length()==0){
+        if (targetDate.getText().length() == 0) {
             targetDate.setError("Please fill the value for target date");
-            isValid=false;
+            isValid = false;
         }
 
         return isValid;

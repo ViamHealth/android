@@ -2,7 +2,6 @@ package com.viamhealth.android.activities.fragments;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +9,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.BPGoal;
 import com.viamhealth.android.model.goals.BPGoalReading;
-import com.viamhealth.android.model.goals.DiabetesGoal;
-import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.users.User;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -54,19 +48,21 @@ public class AddBPGoalFragment extends AddGoalFragment {
         tDP = (EditText) view.findViewById(R.id.add_goal_target_dp);
         tPR = (EditText) view.findViewById(R.id.add_goal_target_pr);
 
-        if(user==null)
+        if (user == null)
             return null;
 
-        if(goal!=null){
+        if (goal != null) {
             isGoalConfigured = true;
             tSP.setText(String.valueOf(goal.getSystolicPressure()));
             tDP.setText(String.valueOf(goal.getDiastolicPressure()));
             tPR.setText(String.valueOf(goal.getPulseRate()));
             targetDate.setText(formater.format(goal.getTargetDate()));
-            ((LinearLayout)view.findViewById(R.id.section_present)).setVisibility(View.GONE);
-        }else{
-            if(user.getBmiProfile().getSystolicPressure()>0) pSP.setText(String.valueOf(user.getBmiProfile().getSystolicPressure()));
-            if(user.getBmiProfile().getDiastolicPressure()>0) pDP.setText(String.valueOf(user.getBmiProfile().getDiastolicPressure()));
+            ((LinearLayout) view.findViewById(R.id.section_present)).setVisibility(View.GONE);
+        } else {
+            if (user.getBmiProfile().getSystolicPressure() > 0)
+                pSP.setText(String.valueOf(user.getBmiProfile().getSystolicPressure()));
+            if (user.getBmiProfile().getDiastolicPressure() > 0)
+                pDP.setText(String.valueOf(user.getBmiProfile().getDiastolicPressure()));
         }
 
         EditText date = (EditText) view.findViewById(R.id.add_goal_target_date);
@@ -88,9 +84,9 @@ public class AddBPGoalFragment extends AddGoalFragment {
         bpGoal.setSystolicPressure(Integer.parseInt(tSP.getText().toString()));
         bpGoal.setDiastolicPressure(Integer.parseInt(tDP.getText().toString()));
         //goal.setPulseRate(Integer.parseInt(tPR.getText().toString()));
-        try{
+        try {
             bpGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
-        } catch(ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return bpGoal;
@@ -98,7 +94,7 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
     @Override
     public GoalReadings getGoalReadings() {
-        if(!isGoalConfigured) {
+        if (!isGoalConfigured) {
             BPGoalReading readings = new BPGoalReading();
 
             readings.setSystolicPressure(Integer.parseInt(pSP.getText().toString()));
@@ -112,28 +108,28 @@ public class AddBPGoalFragment extends AddGoalFragment {
 
     @Override
     public boolean isValid() {
-        boolean isValid=true;
+        boolean isValid = true;
 
 
-        if(pSP.getText().length()==0){
+        if (pSP.getText().length() == 0) {
             pSP.setError("Please fill the value for systolic pressure");
-            isValid=false;
+            isValid = false;
         }
-        if(pDP.getText().length()==0){
+        if (pDP.getText().length() == 0) {
             pDP.setError("Please fill the value for diastolic pressure");
-            isValid=false;
+            isValid = false;
         }
-        if(tSP.getText().length()==0){
+        if (tSP.getText().length() == 0) {
             tSP.setError("Please fill the value for target systolic pressure");
-            isValid=false;
+            isValid = false;
         }
-        if(tDP.getText().length()==0){
+        if (tDP.getText().length() == 0) {
             tDP.setError("Please fill the value for target diastolic pressure");
-            isValid=false;
+            isValid = false;
         }
-        if(targetDate.getText().length()==0){
+        if (targetDate.getText().length() == 0) {
             targetDate.setError("Please fill the value for target date");
-            isValid=false;
+            isValid = false;
         }
 
         return isValid;

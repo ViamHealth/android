@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.viamhealth.android"
     android:versionCode="3"
-    android:versionName="1.3" >
+    android:versionName="1.3">
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -37,12 +37,14 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:required="false" />
+
     <uses-feature
         android:name="android.permission.READ_PHONE_STATE"
         android:required="false" />
     <uses-feature
         android:name="android.permission.CALL_PHONE"
         android:required="false" />
+
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE"
         android:required="false" />
@@ -57,7 +59,7 @@
         android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="ViamHealth"
-        android:theme="@style/Greentheme" >
+        android:theme="@style/Greentheme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
@@ -65,7 +67,7 @@
         <activity
             android:name="com.viamhealth.android.activities.Home"
             android:screenOrientation="portrait"
-            android:theme="@style/Reversetheme" >
+            android:theme="@style/Reversetheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,161 +81,139 @@
             android:theme="@style/Reversetheme" />
         <activity
             android:name="com.viamhealth.android.activities.Register"
-            android:theme="@style/Reversetheme"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
+            android:theme="@style/Reversetheme"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"></activity>
         <activity
             android:name="com.viamhealth.android.activities.Downlaod"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.AddReminder"
-            android:screenOrientation="portrait">
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"></activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddReminder"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name="com.viamhealth.android.activities.NewProfile"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.NewProfile"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name="com.viamhealth.android.activities.FBFamilyListActivity" android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.FBFamilyListActivity"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name="com.viamhealth.android.activities.TabActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name="com.viamhealth.android.activities.TermsActivity" >
-        </activity>
-        <activity android:name="com.viamhealth.android.activities.EditGoals" >
-        </activity>
+        <activity android:name="com.viamhealth.android.activities.TermsActivity"></activity>
+        <activity android:name="com.viamhealth.android.activities.EditGoals"></activity>
 
 
-        <activity android:name="com.viamhealth.android.activities.AddGoalActivity"
+        <activity
+            android:name="com.viamhealth.android.activities.AddGoalActivity"
             android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name="com.viamhealth.android.activities.SelectGoals"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.SelectGoals"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name="com.viamhealth.android.activities.SelectFiles"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.SelectFiles"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name="com.viamhealth.android.activities.fragments.FileShowcaseActivity"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.fragments.FileShowcaseActivity"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name="com.viamhealth.android.activities.AddGoalValue"
-            android:screenOrientation="portrait">
-        </activity>
+        <activity
+            android:name="com.viamhealth.android.activities.AddGoalValue"
+            android:screenOrientation="portrait"></activity>
 
         <activity
             android:name="com.viamhealth.android.activities.DeleteMedication"
-            android:theme="@android:style/Theme.Dialog"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog"></activity>
 
         <activity
             android:name="com.viamhealth.android.activities.ForgotPassword"
-            android:theme="@style/Reversetheme"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Reversetheme"></activity>
 
 
-        <service android:name="com.viamhealth.android.services.ReminderBackground" >
-        </service>
+        <service android:name="com.viamhealth.android.services.ReminderBackground"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyService"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyServiceOne"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyServiceTwo"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyServiceThree"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
 
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTodayAfternoon"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTomorrowAfternoon"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTwoAfternoon"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineThreeAfternoon"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
 
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTodayMorning"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTomorrowMorning"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTwoMorning"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineThreeMorning"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
 
         </service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTodayNight"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTomorrowNight"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineTwoNight"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
         <service
             android:name="com.viamhealth.android.services.NotifyMedicineThreeNight"
             android:enabled="true"
-            android:exported="true" >
-        </service>
+            android:exported="true"></service>
 
-        <receiver
-            android:name="com.viamhealth.android.broadcast.ConnectionBroadcast">
+        <receiver android:name="com.viamhealth.android.broadcast.ConnectionBroadcast">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />

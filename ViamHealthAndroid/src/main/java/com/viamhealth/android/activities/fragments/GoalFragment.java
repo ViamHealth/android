@@ -19,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -64,55 +63,49 @@ import java.util.Map;
 import java.util.Set;
 
 //import com.viewpagerindicator.CirclePageIndicator;
+
 /**
  * Created by naren on 07/10/13.
  */
 public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
+    final int ACTION_CONFIGURE_GOAL = 100;
+    final int ACTION_ADD_GOAL_VALUE = 200;
     //Map<MedicalConditions, List<GoalReadings>> goalReadingsMap = new HashMap<MedicalConditions, List<GoalReadings>>();
     Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
     Map<MedicalConditions, List<JsonGraphDataBuilder.JsonOutput.GraphSeries>> supportedSeries = new HashMap<MedicalConditions, List<JsonGraphDataBuilder.JsonOutput.GraphSeries>>();
     Map<Integer, GraphFragment> graphFragments = new HashMap<Integer, GraphFragment>();
     Map<MedicalConditions, OnGoalDataChangeListener> listenersSubscribed = new HashMap<MedicalConditions, OnGoalDataChangeListener>();
-    MedicalConditions lastSelected=MedicalConditions.None;
-
-    SharedPreferences userPref=null;
+    MedicalConditions lastSelected = MedicalConditions.None;
+    SharedPreferences userPref = null;
     GoalsEPHelper goalHelper = null;
     UserEP userEP = null;
     User selectedUser = null;
-
     View view;
     ProgressDialog dialog;
     ViewPager mPager;
     WebViewFragmentPagerAdapter mPagerAdapter;
-
     FrameLayout initial_layout;
     RelativeLayout final_layout;
-
     ViamHealthPrefs appPrefs;
-    Global_Application ga=null;
-    String[] items=null;
-
-    ActionBar actionBar;
+    Global_Application ga = null;
 
     //WebView webView;
     //ImageButton addValue;
-
-    final int ACTION_CONFIGURE_GOAL = 100;
-    final int ACTION_ADD_GOAL_VALUE = 200;
-
+    String[] items = null;
+    ActionBar actionBar;
     TabActivity.Actions action = null;
-    Boolean isWeight=false,isBp=false,isSugar=false,isCholesterol=false;
+    Boolean isWeight = false, isBp = false, isSugar = false, isCholesterol = false;
     MedicalConditions selectedMC = MedicalConditions.None;
-    Boolean isWeightActivity=false;
-    Boolean isBpActivity=false;
-    Boolean isSugarActivity=false;
-    Boolean isCholesterolActivity=false;
+    Boolean isWeightActivity = false;
+    Boolean isBpActivity = false;
+    Boolean isSugarActivity = false;
+    Boolean isCholesterolActivity = false;
 
-    int CODE_WEIGHT=101;
-    int CODE_BP=102;
-    int CODE_SUGAR=103;
-    int CODE_CHOLESTEROL=104;
+    int CODE_WEIGHT = 101;
+    int CODE_BP = 102;
+    int CODE_SUGAR = 103;
+    int CODE_CHOLESTEROL = 104;
 
 
     @Override
@@ -120,12 +113,11 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         action = (TabActivity.Actions) getArguments().getSerializable("action");
         selectedUser = getArguments().getParcelable("user");
-        userPref=getSherlockActivity().getSharedPreferences("User"+selectedUser.getName()+selectedUser.getId(), Context.MODE_PRIVATE);
-        if((userPref.getBoolean("isGoal",false)==true) && (userPref.getBoolean("isTest",false)==false))
-        {
+        userPref = getSherlockActivity().getSharedPreferences("User" + selectedUser.getName() + selectedUser.getId(), Context.MODE_PRIVATE);
+        if ((userPref.getBoolean("isGoal", false) == true) && (userPref.getBoolean("isTest", false) == false)) {
             Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
             inFileTest.putExtra("user", selectedUser);
-            inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+            inFileTest.putExtra("users", getArguments().getParcelableArray("users"));
             startActivity(inFileTest);
             getActivity().finish();
         }
@@ -136,9 +128,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.tab_fragment_goal, container, false);
 
 
-
-        goalHelper = new GoalsEPHelper(getSherlockActivity(), (Global_Application)getSherlockActivity().getApplicationContext());
-        userEP = new UserEP(getSherlockActivity(), (Global_Application)getSherlockActivity().getApplicationContext());
+        goalHelper = new GoalsEPHelper(getSherlockActivity(), (Global_Application) getSherlockActivity().getApplicationContext());
+        userEP = new UserEP(getSherlockActivity(), (Global_Application) getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
 
         actionBar = getSherlockActivity().getSupportActionBar();
@@ -155,16 +146,16 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         mPager = (ViewPager) final_layout.findViewById(R.id.pager);
         mPagerAdapter = new WebViewFragmentPagerAdapter(getChildFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-        ga=((Global_Application)getSherlockActivity().getApplicationContext());
+        ga = ((Global_Application) getSherlockActivity().getApplicationContext());
 
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator) final_layout.findViewById(R.id.titles);
         circlePageIndicator.setViewPager(mPager);
 
-        if(action == TabActivity.Actions.SetGoal){
+        if (action == TabActivity.Actions.SetGoal) {
             addNewGoal();
             action = null;
-        }else{
-            if(Checker.isInternetOn(getSherlockActivity())){
+        } else {
+            if (Checker.isInternetOn(getSherlockActivity())) {
                 GetALLGoals task = new GetALLGoals();
                 task.execute();
             } else {
@@ -178,8 +169,6 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.add(Menu.NONE, R.drawable.addicon, 10, "New Goal")
@@ -189,7 +178,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.drawable.addicon){
+        if (item.getItemId() == R.drawable.addicon) {
             addNewGoal();
             return false;
         }
@@ -207,10 +196,9 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
      */
 
 
-
     public String getDataForGraph(MedicalConditions mc) {
 
-        if(!goalsConfiguredMap.containsKey(mc))
+        if (!goalsConfiguredMap.containsKey(mc))
             return null;
 
         Goal goal = goalsConfiguredMap.get(mc);
@@ -220,12 +208,12 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
 
         builder.write("goal", goal, null)
-               .write("seriesA", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
+                .write("seriesA", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
 
-        if(mc!=MedicalConditions.Obese)
+        if (mc != MedicalConditions.Obese)
             builder.write("seriesB", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.B);
 
-        if(mc==MedicalConditions.Cholesterol){
+        if (mc == MedicalConditions.Cholesterol) {
             builder.write("seriesC", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
             builder.write("seriesD", readings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
         }
@@ -242,24 +230,15 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    public void setGoalFlag(String[] items,int position)
-    {
-        if(position < items.length)
-        {
-            if(items[position].equalsIgnoreCase("weight"))
-            {
+    public void setGoalFlag(String[] items, int position) {
+        if (position < items.length) {
+            if (items[position].equalsIgnoreCase("weight")) {
                 isWeight = true ? (isWeight == false) : false;
-            }
-            else if(items[position].equalsIgnoreCase("blood pressure"))
-            {
+            } else if (items[position].equalsIgnoreCase("blood pressure")) {
                 isBp = true ? (isBp == false) : false;
-            }
-            else if(items[position].equalsIgnoreCase("diabetes"))
-            {
+            } else if (items[position].equalsIgnoreCase("diabetes")) {
                 isSugar = true ? (isSugar == false) : false;
-            }
-            else if(items[position].equalsIgnoreCase("cholesterol"))
-            {
+            } else if (items[position].equalsIgnoreCase("cholesterol")) {
                 isCholesterol = true ? (isCholesterol == false) : false;
             }
         }
@@ -267,12 +246,11 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     public void addNewGoalFirstTime() {
         items = getMedicalConditions(getBundleFromMap(goalsConfiguredMap));
-        if(items!=null && items.length>0)
-        {
-            final Dialog dialog = new Dialog(getSherlockActivity(),R.style.Greentheme);
+        if (items != null && items.length > 0) {
+            final Dialog dialog = new Dialog(getSherlockActivity(), R.style.Greentheme);
             dialog.setContentView(R.layout.select_goals);
             dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            ListView lv= (ListView)dialog.findViewById(R.id.mylist);
+            ListView lv = (ListView) dialog.findViewById(R.id.mylist);
             lv.setAdapter(new ArrayAdapter<String>(getSherlockActivity(), android.R.layout.simple_list_item_multiple_choice, items));
             lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
@@ -281,9 +259,9 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                 @Override
                 public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                     //Toast.makeText(getSherlockActivity(),"key pressed in fragment and key pressed is"+i,Toast.LENGTH_LONG).show();
-                    if(keyEvent.getAction()==KeyEvent.ACTION_DOWN)
+                    if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
 
-                        if(i==KeyEvent.KEYCODE_BACK){
+                        if (i == KeyEvent.KEYCODE_BACK) {
                             getActivity().finish();
                         }
                     return false;
@@ -291,84 +269,70 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             });
 
 
-            Button btnSkip = (Button)dialog.findViewById(R.id.btn_skip);
+            Button btnSkip = (Button) dialog.findViewById(R.id.btn_skip);
             btnSkip.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ga.GA_eventButtonPress("wizard_select_goals_skip");
                     Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
                     inFileTest.putExtra("user", selectedUser);
-                    inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
+                    inFileTest.putExtra("users", getArguments().getParcelableArray("users"));
                     startActivity(inFileTest);
                     getActivity().finish();
                 }
             });
 
-            Button btnSave=(Button)dialog.findViewById(R.id.btn_next);
+            Button btnSave = (Button) dialog.findViewById(R.id.btn_next);
 
             btnSave.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ga.GA_eventButtonPress("wizard_select_goals_next");
-                        SharedPreferences.Editor edit = userPref.edit();
-                        edit.putBoolean("isGoal",true);
-                        edit.commit();
-                        Intent in = new Intent(getSherlockActivity(), AddGoalActivity.class);
-                        in.putExtra("user", selectedUser);
-                        in.putExtra("isButtonVisible",true);
-                        in.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
-                        Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
-                        inFileTest.putExtra("user", selectedUser);
-                        inFileTest.putExtra("users",getArguments().getParcelableArray("users"));
-                        startActivity(inFileTest);
+                    SharedPreferences.Editor edit = userPref.edit();
+                    edit.putBoolean("isGoal", true);
+                    edit.commit();
+                    Intent in = new Intent(getSherlockActivity(), AddGoalActivity.class);
+                    in.putExtra("user", selectedUser);
+                    in.putExtra("isButtonVisible", true);
+                    in.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
+                    Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
+                    inFileTest.putExtra("user", selectedUser);
+                    inFileTest.putExtra("users", getArguments().getParcelableArray("users"));
+                    startActivity(inFileTest);
 
-                        if(isCholesterol==true)
-                        {
-                            lastSelected= MedicalConditions.Cholesterol;
-                        }
-                        else if(isSugar == true)
-                        {
-                            lastSelected= MedicalConditions.Diabetes;
-                        }
-                        else if(isBp==true)
-                        {
-                            lastSelected=MedicalConditions.BloodPressure;
-                        }
-                        else if(isWeight == true)
-                        {
-                            lastSelected=MedicalConditions.Obese;
-                        }
-                        else
-                        {
-                           getActivity().finish();
-                        }
+                    if (isCholesterol == true) {
+                        lastSelected = MedicalConditions.Cholesterol;
+                    } else if (isSugar == true) {
+                        lastSelected = MedicalConditions.Diabetes;
+                    } else if (isBp == true) {
+                        lastSelected = MedicalConditions.BloodPressure;
+                    } else if (isWeight == true) {
+                        lastSelected = MedicalConditions.Obese;
+                    } else {
+                        getActivity().finish();
+                    }
 
 
-
-                        if(isCholesterol==true)
-                        {
-                            isCholesterolActivity=true;
-                            in.putExtra("type", MedicalConditions.Cholesterol);
-                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                        }
-                        if(isSugar==true)
-                        {
-                            isSugarActivity=true;
-                            in.putExtra("type", MedicalConditions.Diabetes);
-                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                        }
-                        if(isBp==true)
-                        {
-                            isBpActivity=true;
-                            in.putExtra("type", MedicalConditions.BloodPressure);
-                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                        }
-                        if(isWeight== true)
-                        {
-                            isWeightActivity=true;
-                            in.putExtra("type", MedicalConditions.Obese);
-                            startActivityForResult(in, ACTION_CONFIGURE_GOAL);
-                        }
+                    if (isCholesterol == true) {
+                        isCholesterolActivity = true;
+                        in.putExtra("type", MedicalConditions.Cholesterol);
+                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                    }
+                    if (isSugar == true) {
+                        isSugarActivity = true;
+                        in.putExtra("type", MedicalConditions.Diabetes);
+                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                    }
+                    if (isBp == true) {
+                        isBpActivity = true;
+                        in.putExtra("type", MedicalConditions.BloodPressure);
+                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                    }
+                    if (isWeight == true) {
+                        isWeightActivity = true;
+                        in.putExtra("type", MedicalConditions.Obese);
+                        startActivityForResult(in, ACTION_CONFIGURE_GOAL);
+                    }
 
                 }
             });
@@ -376,14 +340,12 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                    setGoalFlag(items,position);
+                    setGoalFlag(items, position);
                 }
             });
             dialog.show();
-            ga.GA_eventGeneral("ui_action","launch_screen","wizard_select_goals_screen");
-        }
-        else
-        {
+            ga.GA_eventGeneral("ui_action", "launch_screen", "wizard_select_goals_screen");
+        } else {
             Intent inFileTest = new Intent(getSherlockActivity(), SelectFiles.class);
             inFileTest.putExtra("user", selectedUser);
             inFileTest.putExtra("users", getArguments().getParcelableArray("users"));
@@ -397,7 +359,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
         builder.setTitle("Set Goals for...");
         String[] mcs = getMedicalConditions(getBundleFromMap(goalsConfiguredMap));
-        if(mcs==null || mcs.length==0){
+        if (mcs == null || mcs.length == 0) {
             builder.setMessage("There are no more goals to configure. Lets wait for some to be completed!");
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -405,7 +367,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                     dialog.dismiss();
                 }
             });
-        }else{
+        } else {
             final String[] items = Arrays.copyOf(mcs, mcs.length);
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 @Override
@@ -444,8 +406,8 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         MedicalConditions[] mcs = MedicalConditions.values();
         String[] items = new String[mcs.length];
         int actualSize = 0;
-        for (int i=0; i<mcs.length; i++){
-            if(mcs[i] == MedicalConditions.None || goalsConfigued.containsKey(mcs[i].name()))
+        for (int i = 0; i < mcs.length; i++) {
+            if (mcs[i] == MedicalConditions.None || goalsConfigued.containsKey(mcs[i].name()))
                 continue;
             items[actualSize++] = getString(mcs[i].key());
         }
@@ -455,18 +417,18 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btnAddGoal){
+        if (v.getId() == R.id.btnAddGoal) {
             addNewGoal();
         }
     }
 
     private Bundle getBundleFromMap(Map<MedicalConditions, Goal> map) {
-        if(map==null)
+        if (map == null)
             return new Bundle();
 
         Set<MedicalConditions> keySet = map.keySet();
         Bundle bundle = new Bundle();
-        for(MedicalConditions key: keySet) {
+        for (MedicalConditions key : keySet) {
             bundle.putParcelable(key.name(), map.get(key));
         }
         return bundle;
@@ -474,15 +436,15 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==getSherlockActivity().RESULT_OK) {
-            if(requestCode==ACTION_CONFIGURE_GOAL){
+        if (resultCode == getSherlockActivity().RESULT_OK) {
+            if (requestCode == ACTION_CONFIGURE_GOAL) {
                 //save the goal and goalReadings
 
                 Goal goal = data.getParcelableExtra("goal");
                 GoalReadings readings = data.getParcelableExtra("reading");
-                MedicalConditions selectedCondition = (MedicalConditions)data.getSerializableExtra("type");
-                if(goal!=null){
-                    if(Checker.isInternetOn(getSherlockActivity())) {
+                MedicalConditions selectedCondition = (MedicalConditions) data.getSerializableExtra("type");
+                if (goal != null) {
+                    if (Checker.isInternetOn(getSherlockActivity())) {
                         SaveGoal task = new SaveGoal();
                         task.type = selectedCondition;
                         task.reading = readings;
@@ -492,13 +454,12 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
                     }
                 }
 
-                if(selectedCondition==lastSelected)
-                {
+                if (selectedCondition == lastSelected) {
                     //Intent intent = new Intent(getSherlockActivity(), TabActivity.class);
                     //intent.putExtra("user", selectedUser);
                     //intent.putExtra("users",getArguments().getParcelableArray("users"));
                     //intent.putExtra("isTab", true);
-                    Intent intent=getActivity().getIntent();
+                    Intent intent = getActivity().getIntent();
                     intent.putExtra("isTab", true);
                     getActivity().finish();
                     startActivity(intent);
@@ -506,15 +467,15 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
 
             }
 
-            if(requestCode == ACTION_ADD_GOAL_VALUE) {
+            if (requestCode == ACTION_ADD_GOAL_VALUE) {
                 GoalReadings reading = data.getParcelableExtra("reading");
                 MedicalConditions selectedCondition = (MedicalConditions) data.getSerializableExtra("type");
-                if(reading!=null){
-                    if(Checker.isInternetOn(getSherlockActivity())) {
+                if (reading != null) {
+                    if (Checker.isInternetOn(getSherlockActivity())) {
                         SaveGoalReading task = new SaveGoalReading();
                         task.type = selectedCondition;
                         task.execute(reading);
-                    }else{
+                    } else {
                         Toast.makeText(getSherlockActivity(), "Internet is not on..", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -532,10 +493,10 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         JsonGraphDataBuilder builder = new JsonGraphDataBuilder();
         builder.write("seriesA", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.A);
 
-        if(mc!=MedicalConditions.Obese)
+        if (mc != MedicalConditions.Obese)
             builder.write("seriesB", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.B);
 
-        if(mc==MedicalConditions.Cholesterol){
+        if (mc == MedicalConditions.Cholesterol) {
             builder.write("seriesC", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.C);
             builder.write("seriesD", newReadings, JsonGraphDataBuilder.JsonOutput.GraphSeries.D);
         }
@@ -545,34 +506,26 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     private void onGoalReadingAdded(MedicalConditions mc, GoalReadings newReading) {
         OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
 
-        if(listener != null){
+        if (listener != null) {
             listener.onAdd(getReadingJSON(mc, newReading));
-        }
-        else
+        } else
             mPagerAdapter.notifyDataSetChanged();
 
     }
 
-    private void onGoalDataChanged(MedicalConditions mc){
-        if(mc==null)
+    private void onGoalDataChanged(MedicalConditions mc) {
+        if (mc == null)
             mPagerAdapter.notifyDataSetChanged();
 
         OnGoalDataChangeListener listener = listenersSubscribed.get(mc);
 
-        if(listener != null){
+        if (listener != null) {
             listener.onChange(getDataForGraph(mc), goalsConfiguredMap.get(mc));
-        }
-        else
+        } else
             mPagerAdapter.notifyDataSetChanged();
     }
 
-    public interface OnGoalDataChangeListener {
-        public void onChange(String json, Goal goal);
-        public void onAdd(String json);
-        //public void onUpdate(String json);
-    }
-
-    private void editGoal(Goal goal, MedicalConditions type){
+    private void editGoal(Goal goal, MedicalConditions type) {
         Intent i = new Intent(getSherlockActivity(), AddGoalActivity.class);
         i.putExtra("user", selectedUser);
         i.putExtra("goals", getBundleFromMap(goalsConfiguredMap));
@@ -580,7 +533,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         startActivityForResult(i, ACTION_CONFIGURE_GOAL);
     }
 
-    private void deleteGoal(Goal goal, MedicalConditions type){
+    private void deleteGoal(Goal goal, MedicalConditions type) {
         AlertDialog.Builder buildr = new AlertDialog.Builder(getSherlockActivity());
         buildr.setTitle("Delete " + getString(type.key()) + " Goal");
         buildr.setMessage("Are you sure?");
@@ -592,6 +545,26 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         });
         buildr.show();
     }
+
+    private void updateTargetCalories(User user, WeightGoal goal) {
+        if (user == null || goal == null)
+            return;
+
+        int calories = BMRCalculator.getCaloriesToBeReducedPerDay(user.getBmiProfile().getWeight() - goal.getWeight(), goal.getTargetDate());
+        int totalCalories = BMRCalculator.calculateBMR(user.getBmiProfile().getWeight(), user.getBmiProfile().getHeight(),
+                user.getProfile().getAge(), user.getProfile().getGender());
+
+        int targetCaloriesPerDay = totalCalories - calories;
+        appPrefs.setTargetCaloriesPerDay(targetCaloriesPerDay);
+    }
+
+    public interface OnGoalDataChangeListener {
+        public void onChange(String json, Goal goal);
+
+        public void onAdd(String json);
+        //public void onUpdate(String json);
+    }
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
@@ -606,14 +579,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public Fragment getItem(int position) {
             GraphFragment fragment = graphFragments.get(position);
-            if(fragment == null) {
+            if (fragment == null) {
                 Bundle args = new Bundle();
                 final MedicalConditions mc = (MedicalConditions) goalsConfiguredMap.keySet().toArray()[position];
                 Goal goal = goalsConfiguredMap.get(mc);
                 args.putSerializable("type", mc);
                 args.putString("json", getDataForGraph(mc));
                 args.putParcelable("goal", goal);
-                fragment = (GraphFragment)Fragment.instantiate(getActivity(), GraphFragment.class.getName(), args);
+                fragment = (GraphFragment) Fragment.instantiate(getActivity(), GraphFragment.class.getName(), args);
                 setOnGoalDataChangeListener(mc, fragment);
                 fragment.setOnGoalModifyListener(new GraphFragment.OnGoalModifyListener() {
                     @Override
@@ -649,18 +622,6 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-    private void updateTargetCalories(User user, WeightGoal goal) {
-        if(user==null || goal==null)
-            return;
-
-        int calories = BMRCalculator.getCaloriesToBeReducedPerDay(user.getBmiProfile().getWeight()-goal.getWeight(), goal.getTargetDate());
-        int totalCalories = BMRCalculator.calculateBMR(user.getBmiProfile().getWeight(), user.getBmiProfile().getHeight(),
-                user.getProfile().getAge(), user.getProfile().getGender());
-
-        int targetCaloriesPerDay = totalCalories - calories;
-        appPrefs.setTargetCaloriesPerDay(targetCaloriesPerDay);
-    }
-
     public class SaveGoalReading extends AsyncTask<GoalReadings, Void, GoalReadings> {
 
         MedicalConditions type;
@@ -670,13 +631,13 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             Goal goal = goalsConfiguredMap.get(type);
             List<GoalReadings> rds = goal.getReadings();
             GoalReadings reading = null;
-            if(rds==null)
+            if (rds == null)
                 rds = new ArrayList<GoalReadings>();
-            for(int i=0; i<readings.length; i++){
+            for (int i = 0; i < readings.length; i++) {
                 reading = goalHelper.saveGoalReadings(type, readings[i], selectedUser.getId());
-                if(reading == null)
+                if (reading == null)
                     continue;
-                if(readings[i].isToUpdate()){
+                if (readings[i].isToUpdate()) {
                     rds.remove(i);
                 }
                 rds.add(reading);
@@ -708,7 +669,7 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
-//    public class DeleteGoal extends AsyncTask<Integer, Void, Void> {
+    //    public class DeleteGoal extends AsyncTask<Integer, Void, Void> {
 //        @Override
 //        protected Void doInBackground(Integer... params) {
 //            //goalHelper.
@@ -724,14 +685,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         protected Void doInBackground(Goal... goals) {
             //TODO support multiple goals saving if required later
             Goal goal = goals[0];
-            if(goal.getId()>0){
+            if (goal.getId() > 0) {
                 isUpdate = true;
-            }else{
+            } else {
                 isUpdate = false;
             }
             goalsConfiguredMap.put(type, goalHelper.saveGoal(type, goal, selectedUser.getId()));
-            if(type==MedicalConditions.Obese)
-                updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
+            if (type == MedicalConditions.Obese)
+                updateTargetCalories(selectedUser, (WeightGoal) goalsConfiguredMap.get(MedicalConditions.Obese));
             return null;
         }
 
@@ -744,15 +705,15 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(Void aVoid) {
             //dialog.dismiss();
-            if(reading!=null && !isUpdate){
+            if (reading != null && !isUpdate) {
                 SaveGoalReading task = new SaveGoalReading();
                 task.type = type;
                 task.execute(reading);
             }
-            if(goalsConfiguredMap==null || goalsConfiguredMap.isEmpty() || goalsConfiguredMap.values().isEmpty()) {
+            if (goalsConfiguredMap == null || goalsConfiguredMap.isEmpty() || goalsConfiguredMap.values().isEmpty()) {
                 final_layout.setVisibility(View.GONE);
                 initial_layout.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 initial_layout.setVisibility(View.GONE);
                 final_layout.setVisibility(View.VISIBLE);
             }
@@ -762,16 +723,15 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-
     public class GetALLGoals extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             goalsConfiguredMap = goalHelper.getAllGoalsConfigured(selectedUser.getId());
-            ga.goalsConfiguredMap=goalsConfiguredMap;
+            ga.goalsConfiguredMap = goalsConfiguredMap;
             //goalReadingsMap = goalHelper.getAllGoalReadings(selectedUser.getId());
-            updateTargetCalories(selectedUser, (WeightGoal)goalsConfiguredMap.get(MedicalConditions.Obese));
-            if(selectedUser.getBmiProfile().isEmpty())
+            updateTargetCalories(selectedUser, (WeightGoal) goalsConfiguredMap.get(MedicalConditions.Obese));
+            if (selectedUser.getBmiProfile().isEmpty())
                 selectedUser.setBmiProfile(userEP.getUserBMIProfile(selectedUser.getId()));
             return null;
         }
@@ -795,10 +755,10 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             Button btnAddG = (Button) initial_layout.findViewById(R.id.btnAddGoal);
             btnAddG.setOnClickListener(GoalFragment.this);
 
-            if(goalsConfiguredMap==null || goalsConfiguredMap.isEmpty() || goalsConfiguredMap.values().isEmpty()) {
+            if (goalsConfiguredMap == null || goalsConfiguredMap.isEmpty() || goalsConfiguredMap.values().isEmpty()) {
                 final_layout.setVisibility(View.GONE);
                 initial_layout.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 initial_layout.setVisibility(View.GONE);
                 final_layout.setVisibility(View.VISIBLE);
             }
@@ -806,18 +766,14 @@ public class GoalFragment extends BaseFragment implements View.OnClickListener {
             //dialog.dismiss();
             //if MJ:condition
             //addNewGoal();
-           if(userPref.getBoolean("isGoal",false)==false)
-           {
-               dialog.dismiss();
-               addNewGoalFirstTime();
-           }
+            if (userPref.getBoolean("isGoal", false) == false) {
+                dialog.dismiss();
+                addNewGoalFirstTime();
+            }
         }
 
 
     }
-
-
-
 
 
 }

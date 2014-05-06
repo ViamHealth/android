@@ -1,6 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -13,22 +11,22 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
             android:text="@string/sp_add"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:layout_width="0dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_height="fill_parent"
-            android:inputType="numberDecimal"
-            android:ems="10"
             android:id="@+id/input_systolic_pressure"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+            android:ems="10"
+            android:gravity="center_vertical|center_horizontal"
+            android:inputType="numberDecimal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
 
@@ -40,22 +38,22 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
             android:text="@string/dp_add"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:layout_width="0dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_height="fill_parent"
-            android:inputType="numberDecimal"
-            android:ems="10"
             android:id="@+id/input_diastolic_pressure"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+            android:ems="10"
+            android:gravity="center_vertical|center_horizontal"
+            android:inputType="numberDecimal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <LinearLayout
@@ -66,22 +64,22 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/pr_add"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/pr_add"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:layout_width="0dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_height="fill_parent"
-            android:inputType="numberDecimal"
-            android:ems="10"
             android:id="@+id/input_pulse_rate"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center_vertical|center_horizontal" />
+            android:ems="10"
+            android:gravity="center_vertical|center_horizontal"
+            android:inputType="numberDecimal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
 </LinearLayout>

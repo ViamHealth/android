@@ -1,7 +1,6 @@
 package com.viamhealth.android.manager;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,43 +19,12 @@ public class TabManager implements TabHost.OnTabChangeListener {
     private final FragmentActivity mActivity;
     private final TabHost mTabHost;
     private final int mContainerId;
+    private final Map<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
+    TabInfo mLastTab;
     private int mHeaderContainerId;
     private boolean mShouldExecuteTransaction;
     private TabInfo mTabHeader;
     private boolean isHeaderAdded = false;
-    private final Map<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
-    TabInfo mLastTab;
-
-    static final class TabInfo {
-        private final String tag;
-        private final Class clss;
-        private final Bundle args;
-        private Fragment fragment;
-
-        TabInfo(String _tag, Class _class, Bundle _args) {
-            tag = _tag;
-            clss = _class;
-            args = _args;
-        }
-
-    }
-
-    static class DummyTabFactory implements TabHost.TabContentFactory {
-
-        Context mContext;
-
-        DummyTabFactory(Context context) {
-            mContext = context;
-        }
-
-        @Override
-        public View createTabContent(String tag) {
-            View v = new View(mContext);
-            v.setMinimumWidth(0);
-            v.setMinimumHeight(0);
-            return v;
-        }
-    }
 
     public TabManager(FragmentActivity activity, TabHost tabHost, int containerId, boolean shouldExecuteTransaction) {
         mActivity = activity;
@@ -107,8 +75,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
             FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
 
             //add header if not present in the trasaction
-            if(mTabHeader != null && !isHeaderAdded){
-                if(mTabHeader.fragment == null){
+            if (mTabHeader != null && !isHeaderAdded) {
+                if (mTabHeader.fragment == null) {
                     mTabHeader.fragment = Fragment.instantiate(mActivity, mTabHeader.clss.getName(), mTabHeader.args);
                     ft.add(mHeaderContainerId, mTabHeader.fragment, mTabHeader.tag);
                     isHeaderAdded = true;
@@ -122,7 +90,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
             }
             if (newTab != null) {
                 if (newTab.fragment == null) {
-                    newTab.fragment = Fragment.instantiate(mActivity,newTab.clss.getName(),newTab.args);
+                    newTab.fragment = Fragment.instantiate(mActivity, newTab.clss.getName(), newTab.args);
                     ft.add(mContainerId, newTab.fragment, newTab.tag);
                 } else {
                     ft.attach(newTab.fragment);
@@ -130,7 +98,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
             }
             mLastTab = newTab;
             ft.commit();
-            if(mShouldExecuteTransaction)
+            if (mShouldExecuteTransaction)
                 mActivity.getSupportFragmentManager().executePendingTransactions();
         }
     }
@@ -141,6 +109,37 @@ public class TabManager implements TabHost.OnTabChangeListener {
 
     public Fragment getCurrentSelectedTabFragment() {
         return mLastTab.fragment;
+    }
+
+    static final class TabInfo {
+        private final String tag;
+        private final Class clss;
+        private final Bundle args;
+        private Fragment fragment;
+
+        TabInfo(String _tag, Class _class, Bundle _args) {
+            tag = _tag;
+            clss = _class;
+            args = _args;
+        }
+
+    }
+
+    static class DummyTabFactory implements TabHost.TabContentFactory {
+
+        Context mContext;
+
+        DummyTabFactory(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public View createTabContent(String tag) {
+            View v = new View(mContext);
+            v.setMinimumWidth(0);
+            v.setMinimumHeight(0);
+            return v;
+        }
     }
 
 }

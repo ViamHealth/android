@@ -2,15 +2,11 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.facebook.HttpMethod;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
-import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.FileData;
 
 import org.apache.http.HttpStatus;
@@ -35,137 +31,27 @@ public class FileUploader {
     private String uploadURL = "";
     private String token = "";
     private Long userId;
-
-    public class Response {
-        private int serverResponseCode;
-        private String serverResponseMessage;
-        private String response;
-
-        private Integer fileId;
-        private String downloadURL;
-
-        public int getServerResponseCode() {
-            return serverResponseCode;
-        }
-
-        public String getServerResponseMessage() {
-            return serverResponseMessage;
-        }
-
-        public String getResponse() {
-            return response;
-        }
-
-        public Integer getFileId() {
-            if(response==null || response.isEmpty())
-                return 0;
-            try {
-                JSONObject object = new JSONObject(response);
-                return object.getInt("id");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return 0;
-        }
-
-        public FileData getFileDate() {
-            if(response==null || response.isEmpty())
-                return null;
-
-            FileData data = null;
-            JSONObject object = null;
-            try {
-                data = new FileData();
-                object = new JSONObject(response);
-                data.setId(object.getString("id"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setUser(object.getString("user"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setName(object.getString("name"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setDescription(object.getString("description"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setMimeType(object.getString("mime_type"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setDownload_url(object.getString("download_url"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setUpdatedBy(object.getLong("updated_by"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                data.setUpdatedOn(object.getLong("updated_at")*1000);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return data;
-        }
-
-        public String getDownloadURL() {
-            if(response==null || response.isEmpty())
-                return null;
-            try {
-                JSONObject object = new JSONObject(response);
-                return object.getString("download_url");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        public String getProfilePicUrl() {
-            if(response==null || response.isEmpty())
-                return null;
-            try {
-                JSONObject object = new JSONObject(response);
-                return object.getString("profile_picture_url");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        public String toString() {
-            return "Response{" +
-                    "serverResponseCode=" + serverResponseCode +
-                    ", serverResponseMessage='" + serverResponseMessage + '\'' +
-                    ", response='" + response + '\'' +
-                    "} " + super.toString();
-        }
-    }
+    private String method = "POST";
 
     public FileUploader(String token) {
         this.token = token;
     }
 
-    private String method = "POST";
+    public static int getFileIcon(String mimeType) {
+        if (mimeType.contains("pdf")) {
+            return R.drawable.selector_icon_pdf;
+        }
+        if (mimeType.contains("jpeg")) {
+            return R.drawable.selector_icon_jpeg;
+        }
+        if (mimeType.startsWith("image/")) {
+            return R.drawable.selector_icon_image_file_type;
+        }
+        if (mimeType.startsWith("text/")) {
+            return R.drawable.selector_icon_text_file_type;
+        }
+        return R.drawable.selector_icon_unknown_file_type;
+    }
 
     public Response uploadProfilePicture(final File sourceFile, Activity activity, Long userId, Dialog dialog) {
         formValueName = "profile_picture";
@@ -191,7 +77,7 @@ public class FileUploader {
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
         String justFileName = sourceFile.getName();
-        final String fileName = filename==null?sourceFile.getName():filename;
+        final String fileName = filename == null ? sourceFile.getName() : filename;
 
         if (!sourceFile.isFile()) {
             dialog.dismiss();
@@ -203,8 +89,7 @@ public class FileUploader {
                 }
             });
             return null;
-        }
-        else {
+        } else {
             try {
                 // open a URL connection to the Servlet
                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
@@ -218,7 +103,7 @@ public class FileUploader {
                 conn.setRequestMethod(method);
                 conn.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
                 //conn.setRequestProperty("Accept-Encoding", "gzip,deflate,sdch");
-                conn.setRequestProperty("Authorization","Token " + token);
+                conn.setRequestProperty("Authorization", "Token " + token);
                 conn.setRequestProperty("Connection", "Keep-Alive");
                 conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
@@ -226,8 +111,8 @@ public class FileUploader {
 
                 dos.writeBytes(twoHyphens + boundary + lineEnd);
                 Log.i("FileUploader", twoHyphens + boundary + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + fileName + "\"" + lineEnd);
-                Log.i("FileUploader", "Content-Disposition: form-data; name=\""+formValueName+"\"; filename=\"" + fileName + "\"" + lineEnd);
+                dos.writeBytes("Content-Disposition: form-data; name=\"" + formValueName + "\"; filename=\"" + fileName + "\"" + lineEnd);
+                Log.i("FileUploader", "Content-Disposition: form-data; name=\"" + formValueName + "\"; filename=\"" + fileName + "\"" + lineEnd);
                 dos.writeBytes(lineEnd);
 
                 // create a buffer of  maximum size
@@ -258,13 +143,13 @@ public class FileUploader {
                 Log.i("uploadFile", "HTTP Response is : "
                         + response.serverResponseMessage + ": " + response.serverResponseCode);
 
-                if(response.serverResponseCode == HttpStatus.SC_OK || response.serverResponseCode == HttpStatus.SC_CREATED){
+                if (response.serverResponseCode == HttpStatus.SC_OK || response.serverResponseCode == HttpStatus.SC_CREATED) {
 
                     InputStream is = conn.getInputStream();
                     int ch;
                     StringBuffer b = new StringBuffer();
-                    while( ( ch = is.read() ) != -1 ){
-                        b.append( (char)ch );
+                    while ((ch = is.read()) != -1) {
+                        b.append((char) ch);
                     }
 
                     //getSherlockActivity().setSupportProgress(progress*multiplier);
@@ -325,20 +210,129 @@ public class FileUploader {
         } // End else block
     }
 
-    public static int getFileIcon(String mimeType) {
-        if(mimeType.contains("pdf")){
-            return R.drawable.selector_icon_pdf;
+    public class Response {
+        private int serverResponseCode;
+        private String serverResponseMessage;
+        private String response;
+
+        private Integer fileId;
+        private String downloadURL;
+
+        public int getServerResponseCode() {
+            return serverResponseCode;
         }
-        if(mimeType.contains("jpeg")){
-            return R.drawable.selector_icon_jpeg;
+
+        public String getServerResponseMessage() {
+            return serverResponseMessage;
         }
-        if(mimeType.startsWith("image/")){
-            return R.drawable.selector_icon_image_file_type;
+
+        public String getResponse() {
+            return response;
         }
-        if(mimeType.startsWith("text/")){
-            return R.drawable.selector_icon_text_file_type;
+
+        public Integer getFileId() {
+            if (response == null || response.isEmpty())
+                return 0;
+            try {
+                JSONObject object = new JSONObject(response);
+                return object.getInt("id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return 0;
         }
-        return R.drawable.selector_icon_unknown_file_type;
+
+        public FileData getFileDate() {
+            if (response == null || response.isEmpty())
+                return null;
+
+            FileData data = null;
+            JSONObject object = null;
+            try {
+                data = new FileData();
+                object = new JSONObject(response);
+                data.setId(object.getString("id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setUser(object.getString("user"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setName(object.getString("name"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setDescription(object.getString("description"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setMimeType(object.getString("mime_type"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setDownload_url(object.getString("download_url"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setUpdatedBy(object.getLong("updated_by"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                data.setUpdatedOn(object.getLong("updated_at") * 1000);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return data;
+        }
+
+        public String getDownloadURL() {
+            if (response == null || response.isEmpty())
+                return null;
+            try {
+                JSONObject object = new JSONObject(response);
+                return object.getString("download_url");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public String getProfilePicUrl() {
+            if (response == null || response.isEmpty())
+                return null;
+            try {
+                JSONObject object = new JSONObject(response);
+                return object.getString("profile_picture_url");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "serverResponseCode=" + serverResponseCode +
+                    ", serverResponseMessage='" + serverResponseMessage + '\'' +
+                    ", response='" + response + '\'' +
+                    "} " + super.toString();
+        }
     }
 
 }

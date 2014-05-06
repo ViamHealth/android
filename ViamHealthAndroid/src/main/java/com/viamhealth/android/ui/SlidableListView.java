@@ -3,21 +3,15 @@ package com.viamhealth.android.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 /**
  * Created by naren on 22/10/13.
  */
 public class SlidableListView extends RefreshableListView {
 
+    static final int TRIGGER_DELTA = 50;
     OnSlideEventListener listener;
     float historicX = Float.NaN, historicY = Float.NaN;
-    static final int TRIGGER_DELTA = 50;
-
-    public void setOnSlideEventListener(OnSlideEventListener listener) {
-        this.listener = listener;
-    }
 
     public SlidableListView(Context context) {
         super(context);
@@ -31,9 +25,13 @@ public class SlidableListView extends RefreshableListView {
         super(context, attrs, defStyle);
     }
 
+    public void setOnSlideEventListener(OnSlideEventListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        if(listener!=null) {
+        if (listener != null) {
             switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     historicX = e.getX();
@@ -43,11 +41,11 @@ public class SlidableListView extends RefreshableListView {
                     if (e.getX() - historicX > -TRIGGER_DELTA) {
                         listener.onSlideComplete(Direction.LEFT);
                         return true;
-                    }
-                    else if (e.getX() - historicX > TRIGGER_DELTA)  {
+                    } else if (e.getX() - historicX > TRIGGER_DELTA) {
                         listener.onSlideComplete(Direction.RIGHT);
                         return true;
-                    } break;
+                    }
+                    break;
                 default:
                     return super.onTouchEvent(e);
             }
@@ -55,7 +53,7 @@ public class SlidableListView extends RefreshableListView {
         return true;//super.onTouchEvent(e);
     }
 
-    public enum Direction { RIGHT, LEFT; }
+    public enum Direction {RIGHT, LEFT;}
 
     public interface OnSlideEventListener {
 

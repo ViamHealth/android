@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- File created by the Android Action Bar Style Generator
+<?xml version="1.0" encoding="utf-8"?><!-- File created by the Android Action Bar Style Generator
 
      Copyright (C) 2011 The Android Open Source Project
      Copyright (C) 2012 readyState Software Ltd
@@ -20,15 +19,18 @@
 <resources>
 
     <style name="Theme.Viamhealth" parent="@style/Theme.Sherlock.Light.DarkActionBar">
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_viamhealth</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_viamhealth
+        </item>
         <item name="android:popupMenuStyle">@style/PopupMenu.Viamhealth</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Viamhealth</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Viamhealth</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Viamhealth</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Viamhealth</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_viamhealth</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_viamhealth</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Viamhealth</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_viamhealth
+        </item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Viamhealth
+        </item>
         <item name="android:titleTextStyle">@style/ActionBar.TitleTextStyle</item>
         <item name="android:subtitleTextStyle">@style/ActionBar.SubTitleTextStyle</item>
     </style>
@@ -52,7 +54,7 @@
         <item name="android:background">@drawable/ab_transparent_viamhealth</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Viamhealth</item>
     </style>
-    
+
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Viamhealth.Widget" parent="@style/Theme.Sherlock">
         <item name="android:popupMenuStyle">@style/PopupMenu.Viamhealth</item>

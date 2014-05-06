@@ -6,8 +6,6 @@ import android.content.Context;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.model.goals.CholesterolGoal;
 import com.viamhealth.android.model.goals.CholesterolGoalReading;
-import com.viamhealth.android.model.goals.CholesterolGoal;
-import com.viamhealth.android.model.goals.CholesterolGoalReading;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 
@@ -45,7 +43,7 @@ public class CholesterolGoalEP extends GoalsEP {
 
     @Override
     protected Goal.HealthyRange newHealthyRange(Goal goal) {
-        return ((CholesterolGoal)goal).new HealthyRange();
+        return ((CholesterolGoal) goal).new HealthyRange();
     }
 
     @Override

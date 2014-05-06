@@ -1,14 +1,7 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.viamhealth.android.manager.AddGoalFragmentManager;
@@ -40,17 +33,18 @@ public abstract class AddGoalFragment extends BaseFragment {
     }
 
     public abstract Goal getGoal();
+
     public abstract GoalReadings getGoalReadings();
 
 
     public abstract boolean isValid();
 
-    public void onTargetDateChange () {
+    public void onTargetDateChange() {
 
     }
 
-    public void setDefaultGoalAttributes(Goal from, Goal to){
-        if(from!=null && from.getId()!=null && from.getId()>0){
+    public void setDefaultGoalAttributes(Goal from, Goal to) {
+        if (from != null && from.getId() != null && from.getId() > 0) {
             to.setId(from.getId());
             to.setUserId(from.getUserId());
             to.setCreated(from.getCreated());

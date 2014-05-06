@@ -1,8 +1,7 @@
-<TabHost
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabHost"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tabHost">
+    android:layout_height="fill_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -18,17 +17,17 @@
         <FrameLayout
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:layout_weight="1">
 
-            <FrameLayout android:id="@+id/realtabcontent"
+            <FrameLayout
+                android:id="@+id/realtabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:focusable="false"
                 android:layout_below="@+id/tabHeader"
                 android:background="#ffffff"
-                android:clickable="false">
-            </FrameLayout>
+                android:clickable="false"
+                android:focusable="false"></FrameLayout>
 
             <!--<FrameLayout android:id="@+id/tabHeader"
                 android:layout_width="match_parent"

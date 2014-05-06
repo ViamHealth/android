@@ -6,15 +6,11 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -30,26 +26,42 @@ import com.viamhealth.android.activities.fragments.AddValueBaseFragment;
 import com.viamhealth.android.activities.fragments.AddWeightValue;
 import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.UIUtility;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class AddGoalValue extends BaseFragmentActivity {
 
     TextView date, time;
     Calendar cal = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener d = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            cal.set(year, monthOfYear, dayOfMonth);
 
+            Calendar dayCal = UIUtility.getDate(cal);
+
+            if (fragment.doesExist(dayCal.getTime()))
+                Toast.makeText(AddGoalValue.this, "value exists for this date..", Toast.LENGTH_SHORT).show();
+            else
+                setDate();
+        }
+    };
     AddValueBaseFragment fragment;
     MedicalConditions type;
-
     boolean shouldUpdate = false;
-
     User user;
     ActionBar actionBar;
+    TimePickerDialog.OnTimeSetListener t = new TimePickerDialog.OnTimeSetListener() {
+        public void onTimeSet(TimePicker view, int hourOfDay,
+                              int minute) {
+            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            cal.set(Calendar.MINUTE, minute);
+            setTime();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +72,8 @@ public class AddGoalValue extends BaseFragmentActivity {
         time = (TextView) findViewById(R.id.lbl_time);
 
         //set current date and time
-        setDate();setTime();
+        setDate();
+        setTime();
 
         LinearLayout timePicker = (LinearLayout) findViewById(R.id.btn_time_picker);
         //TODO this is for time being
@@ -124,7 +137,7 @@ public class AddGoalValue extends BaseFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()== android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -133,17 +146,25 @@ public class AddGoalValue extends BaseFragmentActivity {
 
     private Fragment getFragment(MedicalConditions mc, Bundle bundle) {
         Class fragmentClass = null;
-        switch(mc){
-            case Obese: fragmentClass = AddWeightValue.class; break;
-            case BloodPressure: fragmentClass = AddBPValue.class; break;
-            case Diabetes: fragmentClass = AddDiabetesValue.class; break;
-            case Cholesterol: fragmentClass = AddCholesterolValue.class; break;
+        switch (mc) {
+            case Obese:
+                fragmentClass = AddWeightValue.class;
+                break;
+            case BloodPressure:
+                fragmentClass = AddBPValue.class;
+                break;
+            case Diabetes:
+                fragmentClass = AddDiabetesValue.class;
+                break;
+            case Cholesterol:
+                fragmentClass = AddCholesterolValue.class;
+                break;
         }
         return Fragment.instantiate(this, fragmentClass.getName(), bundle);
     }
 
     private void save() {
-        if(isValid()){
+        if (isValid()) {
             Intent intent = new Intent();
             GoalReadings reading = fragment.getReadings(cal.getTime());
             reading.setReadingDate(cal.getTime());
@@ -159,7 +180,7 @@ public class AddGoalValue extends BaseFragmentActivity {
 
         Calendar dayCal = UIUtility.getDate(cal);
 
-        if(fragment.doesExist(dayCal.getTime())){
+        if (fragment.doesExist(dayCal.getTime())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(AddGoalValue.this);
             builder.setTitle("Are you sure?");
             builder.setMessage("value for the date exists, change it?")
@@ -183,7 +204,7 @@ public class AddGoalValue extends BaseFragmentActivity {
             AlertDialog dialog = builder.create();
             dialog.show();
 
-        }else{
+        } else {
             save();
         }
     }
@@ -205,28 +226,4 @@ public class AddGoalValue extends BaseFragmentActivity {
                 .append(cal.getDisplayName(Calendar.MINUTE, Calendar.LONG, Locale.US)).append(":")
                 .append(cal.getDisplayName(Calendar.AM_PM, Calendar.SHORT, Locale.US)));
     }
-
-    TimePickerDialog.OnTimeSetListener t=new TimePickerDialog.OnTimeSetListener() {
-        public void onTimeSet(TimePicker view, int hourOfDay,
-                              int minute) {
-            cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            cal.set(Calendar.MINUTE, minute);
-            setTime();
-        }
-    };
-
-
-    DatePickerDialog.OnDateSetListener d=new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            cal.set(year, monthOfYear, dayOfMonth);
-
-            Calendar dayCal = UIUtility.getDate(cal);
-
-            if(fragment.doesExist(dayCal.getTime()))
-                Toast.makeText(AddGoalValue.this, "value exists for this date..", Toast.LENGTH_SHORT).show();
-            else
-                setDate();
-        }
-    };
 }

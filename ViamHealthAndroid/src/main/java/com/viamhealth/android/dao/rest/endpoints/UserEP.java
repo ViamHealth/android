@@ -3,27 +3,21 @@ package com.viamhealth.android.dao.rest.endpoints;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
+import com.viamhealth.android.model.enums.BloodGroup;
+import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.model.enums.BloodGroup;
-import com.viamhealth.android.model.enums.Gender;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.ProtocolException;
-import org.apache.http.impl.client.DefaultRedirectHandler;
-import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,27 +34,26 @@ public class UserEP extends BaseEP {
         super(context, app);
     }
 
-    public Boolean InviteUser(String email){
-        String baseurlString = Global_Application.url+"invite/";
+    public Boolean InviteUser(String email) {
+        String baseurlString = Global_Application.url + "invite/";
         Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
-        client.AddParam("email",email);
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
+        client.AddParam("email", email);
 
-        try{
+        try {
             client.Execute(RequestMethod.POST);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
 
-        if(client.getResponseCode()==HttpStatus.SC_OK ||
-                client.getResponseCode()==HttpStatus.SC_CREATED ||
-                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() == HttpStatus.SC_OK ||
+                client.getResponseCode() == HttpStatus.SC_CREATED ||
+                client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
         return false;
@@ -71,21 +64,19 @@ public class UserEP extends BaseEP {
     }
 
     // function for call signup service
-    public User SignUp(String username,String password) {
-        String	responsetxt="1";
-        String baseurlString = Global_Application.url+"signup/";
+    public User SignUp(String username, String password) {
+        String responsetxt = "1";
+        String baseurlString = Global_Application.url + "signup/";
         Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
 
-        client.AddParam("email",username);
-        client.AddParam("password",password);
+        client.AddParam("email", username);
+        client.AddParam("password", password);
 
-        try
-        {
+        try {
             client.Execute(RequestMethod.POST);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -97,70 +88,69 @@ public class UserEP extends BaseEP {
         return user;
     }
 
-    public boolean ChangePassword(String oldPassword, String newPassword){
-        String baseurlString = Global_Application.url+"users/change-password/";
+    public boolean ChangePassword(String oldPassword, String newPassword) {
+        String baseurlString = Global_Application.url + "users/change-password/";
         Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
         client.AddParam("old_password", oldPassword);
         client.AddParam("password", newPassword);
 
-        try{
+        try {
             client.Execute(RequestMethod.POST);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
 
-        if(client.getResponseCode()==HttpStatus.SC_OK ||
-                client.getResponseCode()==HttpStatus.SC_CREATED ||
-                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() == HttpStatus.SC_OK ||
+                client.getResponseCode() == HttpStatus.SC_CREATED ||
+                client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
         return false;
     }
-    public boolean ForgotPassword(String email){
-        String baseurlString = Global_Application.url+"forgot-password-email/";
+
+    public boolean ForgotPassword(String email) {
+        String baseurlString = Global_Application.url + "forgot-password-email/";
         Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
 
-        client.AddParam("email",email);
+        client.AddParam("email", email);
 
-        try
-        {
+        try {
             client.Execute(RequestMethod.POST);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
 
-        if(client.getResponseCode()==HttpStatus.SC_OK ||
-                client.getResponseCode()==HttpStatus.SC_CREATED ||
-                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() == HttpStatus.SC_OK ||
+                client.getResponseCode() == HttpStatus.SC_CREATED ||
+                client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
         return false;
     }
 
-    public boolean Logout(){
+    public boolean Logout() {
         String url = Global_Application.url + "logout/";
         Log.i(TAG, "url is : " + url);
 
-        if(appPrefs.getToken()==null)
+        if (appPrefs.getToken() == null)
             return false;
 
         /* this will be the first rest call */
         RestClient client = new RestClient(url);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
-        try{
+        try {
             client.Execute(RequestMethod.GET);
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,52 +159,45 @@ public class UserEP extends BaseEP {
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
 
-        if(client.getResponseCode()==HttpStatus.SC_OK ||
-                client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() == HttpStatus.SC_OK ||
+                client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
         return false;
     }
 
-    public User AuthenticateThroughFB(String fbAccessToken){
+    public User AuthenticateThroughFB(String fbAccessToken) {
         return _login(fbAccessToken, null, LoginType.FB);
     }
 
-    private enum LoginType {
-        Email,
-        Mobile,
-        FB,
-        UserName;
-    }
-
-    private User _login(String key, String password, LoginType type){
-        String baseurlString = Global_Application.url+"api-token-auth/";
+    private User _login(String key, String password, LoginType type) {
+        String baseurlString = Global_Application.url + "api-token-auth/";
 
         RestClient client = new RestClient(baseurlString);
 
-        switch(type){
+        switch (type) {
             case FB:
                 client.AddParam("access_token", key);
                 break;
 
             case Email:
-                client.AddParam("email",key);
-                client.AddParam("password",password);
+                client.AddParam("email", key);
+                client.AddParam("password", password);
                 break;
 
             case Mobile:
-                client.AddParam("mobile",key);
-                client.AddParam("password",password);
+                client.AddParam("mobile", key);
+                client.AddParam("password", password);
                 break;
 
             case UserName:
-                client.AddParam("username",key);
-                client.AddParam("password",password);
+                client.AddParam("username", key);
+                client.AddParam("password", password);
                 break;
 
         }
 
-        try{
+        try {
             client.Execute(RequestMethod.POST);
         } catch (Exception e) {
             e.printStackTrace();
@@ -226,9 +209,9 @@ public class UserEP extends BaseEP {
         try {
             JSONObject jObject = new JSONObject(responseString);
             //TODO::implement proper error handling
-            String	responsetxt1 = jObject.getString("token");
-            if(responsetxt1.length()>0){
-                Log.i(TAG,"token is " + responsetxt1);
+            String responsetxt1 = jObject.getString("token");
+            if (responsetxt1.length() > 0) {
+                Log.i(TAG, "token is " + responsetxt1);
                 appPrefs.setToken(responsetxt1);
             }
             user = getLoggedInUser();
@@ -240,25 +223,25 @@ public class UserEP extends BaseEP {
     }
 
     // function for call login service
-    public String Login(String username,String password) {
-        String	responsetxt="1";
+    public String Login(String username, String password) {
+        String responsetxt = "1";
         _login(username, password, LoginType.Email);
         return responsetxt;
     }
 
     public User getLoggedInUser() {
 
-        if(ga.getLoggedInUser()!=null)
+        if (ga.getLoggedInUser() != null)
             return ga.getLoggedInUser();
-        User user=null;
+        User user = null;
 
-        String baseurlString = Global_Application.url+"users/me/";
+        String baseurlString = Global_Application.url + "users/me/";
 
         RestClient client = new RestClient(baseurlString);
-        if(appPrefs.getToken()!=null){
-            client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        if (appPrefs.getToken() != null) {
+            client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
-            try{
+            try {
                 client.Execute(RequestMethod.GET);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -275,23 +258,23 @@ public class UserEP extends BaseEP {
     }
 
     public boolean shareUser(User userToShare, String email, Boolean isSelf) {
-        String baseurlString = Global_Application.url+"share/";
+        String baseurlString = Global_Application.url + "share/";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
         client.AddParam("email", email);
         client.AddParam("share_user_id", userToShare.getId());
         client.AddParam("is_self", isSelf.toString());
 
         try {
             client.Execute(RequestMethod.POST);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
         Log.i(TAG, "shareUser:" + client.toString());
-        if(client.getResponseCode()== HttpStatus.SC_CREATED
+        if (client.getResponseCode() == HttpStatus.SC_CREATED
                 || client.getResponseCode() == HttpStatus.SC_OK
                 || client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
@@ -300,20 +283,20 @@ public class UserEP extends BaseEP {
     }
 
     public boolean deleteUser(User user) {
-        String baseurlString = Global_Application.url+"users/"+user.getId().toString()+"/";
+        String baseurlString = Global_Application.url + "users/" + user.getId().toString() + "/";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         try {
             client.Execute(RequestMethod.DELETE);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
         Log.i(TAG, "deleteUser:" + client.toString());
-        if(client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
         return false;
@@ -322,44 +305,45 @@ public class UserEP extends BaseEP {
     // function for get family member list
     public List<User> GetFamilyMembers() {
 
-        String baseurlString = Global_Application.url+"users/";
+        String baseurlString = Global_Application.url + "users/";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
         List<User> users = processUsersResponse(responseString);
-        int usersCount = users==null?0:users.size();
-        for(int i=0; i<usersCount; i++){
+        int usersCount = users == null ? 0 : users.size();
+        for (int i = 0; i < usersCount; i++) {
             //TODO investigate why there was an internal server error
             BMIProfile bmiP = getUserBMIProfile(users.get(i).getId());
-            if(bmiP==null)
+            if (bmiP == null)
                 continue;
             users.get(i).setBmiProfile(bmiP);
         }
         return users;
     }
 
-    public User getCompleteUserProfile(Long userId){
+    public User getCompleteUserProfile(Long userId) {
         User user = getUserProfile(userId);
         user.setBmiProfile(getUserBMIProfile(userId));
         return user;
     }
+
     // function for get family member list
     public User getUserProfile(Long userId) {
-        String	responsetxt="1";
-        String baseurlString = Global_Application.url+"users/"+userId+"/";
-        Log.i(TAG,"url is : " + baseurlString);
+        String responsetxt = "1";
+        String baseurlString = Global_Application.url + "users/" + userId + "/";
+        Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         try {
             client.Execute(RequestMethod.GET);
@@ -370,18 +354,18 @@ public class UserEP extends BaseEP {
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
-        if(user.getId() == getLoggedInUser().getId()){
+        if (user.getId() == getLoggedInUser().getId()) {
             user.setLoggedInUser(true);
         }
         return user;
     }
 
     public BMIProfile getUserBMIProfile(Long userId) {
-        String baseurlString = Global_Application.url+"users/"+userId+"/bmi-profile/";
-        Log.i(TAG,"url is : " + baseurlString);
+        String baseurlString = Global_Application.url + "users/" + userId + "/bmi-profile/";
+        Log.i(TAG, "url is : " + baseurlString);
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         try {
             client.Execute(RequestMethod.GET);
@@ -395,39 +379,39 @@ public class UserEP extends BaseEP {
     }
 
     public BMIProfile updateBMIProfile(Long userId, BMIProfile profile) {
-        String baseurlString = Global_Application.url+"users/" + userId + "/bmi-profile/";
+        String baseurlString = Global_Application.url + "users/" + userId + "/bmi-profile/";
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         client.AddParam("height", profile.getHeight());
         client.AddParam("weight", profile.getWeight());
         //TODO::lifestyle
 
-        if(profile.getSystolicPressure()>0)
+        if (profile.getSystolicPressure() > 0)
             client.AddParam("systolic_pressure", profile.getSystolicPressure());
 
-        if(profile.getDiastolicPressure()>0)
+        if (profile.getDiastolicPressure() > 0)
             client.AddParam("diastolic_pressure", profile.getDiastolicPressure());
 
-        if(profile.getPulseRate()>0)
+        if (profile.getPulseRate() > 0)
             client.AddParam("pulse_rate", profile.getPulseRate());
 
-        if(profile.getFastingSugar()>0)
+        if (profile.getFastingSugar() > 0)
             client.AddParam("fasting", profile.getFastingSugar());
 
-        if(profile.getRandomSugar()>0)
+        if (profile.getRandomSugar() > 0)
             client.AddParam("random", profile.getRandomSugar());
 
-        if(profile.getHdl()>0)
+        if (profile.getHdl() > 0)
             client.AddParam("hdl", profile.getHdl());
 
-        if(profile.getLdl()>0)
+        if (profile.getLdl() > 0)
             client.AddParam("ldl", profile.getLdl());
 
-        if(profile.getTriglycerides()>0)
+        if (profile.getTriglycerides() > 0)
             client.AddParam("triglycerides", profile.getTriglycerides());
 
-        try{
+        try {
             client.Execute(RequestMethod.PUT);
         } catch (Exception e) {
             e.printStackTrace();
@@ -439,70 +423,70 @@ public class UserEP extends BaseEP {
     }
 
     public Profile updateProfile(long userId, Profile profile) {
-        String responce="1";
-        String baseurlString = Global_Application.url+"users/" + userId + "/profile/";
+        String responce = "1";
+        String baseurlString = Global_Application.url + "users/" + userId + "/profile/";
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         client.AddParam("gender", profile.getGender().key());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-        if(profile.getDob()!=null && profile.getDob().getTime()>0)
+        if (profile.getDob() != null && profile.getDob().getTime() > 0)
             client.AddParam("date_of_birth", formatter.format(profile.getDob()));
 
-        if(profile.getProfilePicURL()!=null && !profile.getProfilePicURL().isEmpty())
+        if (profile.getProfilePicURL() != null && !profile.getProfilePicURL().isEmpty())
             client.AddParam("profile_picture_url", profile.getProfilePicURL());
 
-        if(profile.getMobileNumber()!=null && !profile.getMobileNumber().isEmpty())
+        if (profile.getMobileNumber() != null && !profile.getMobileNumber().isEmpty())
             client.AddParam("mobile", profile.getMobileNumber());
 
-        if(profile.getBloodGroup()!=BloodGroup.None)
+        if (profile.getBloodGroup() != BloodGroup.None)
             client.AddParam("blood_group", profile.getBloodGroup().value());
 
 //        client.AddParam("fb_profile_id", profile.getFbProfileId());
 //        client.AddParam("fb_username", profile.getFbUsername());
-        if(profile.getOrganization()!=null && !profile.getOrganization().isEmpty())
+        if (profile.getOrganization() != null && !profile.getOrganization().isEmpty())
             client.AddParam("organization", profile.getOrganization());
 
-        if(profile.getLocation().getStreet()!=null && !profile.getLocation().getStreet().isEmpty())
+        if (profile.getLocation().getStreet() != null && !profile.getLocation().getStreet().isEmpty())
             client.AddParam("street", profile.getLocation().getStreet());
 
-        if(profile.getLocation().getCity()!=null && !profile.getLocation().getCity().isEmpty())
+        if (profile.getLocation().getCity() != null && !profile.getLocation().getCity().isEmpty())
             client.AddParam("city", profile.getLocation().getCity());
 
-        if(profile.getLocation().getState()!=null && !profile.getLocation().getState().isEmpty())
+        if (profile.getLocation().getState() != null && !profile.getLocation().getState().isEmpty())
             client.AddParam("state", profile.getLocation().getState());
 
-        if(profile.getLocation().getCountry()!=null && !profile.getLocation().getCountry().isEmpty())
+        if (profile.getLocation().getCountry() != null && !profile.getLocation().getCountry().isEmpty())
             client.AddParam("country", profile.getLocation().getCountry());
 
-        if(profile.getLocation().getZip()!=null && !profile.getLocation().getZip().isEmpty())
+        if (profile.getLocation().getZip() != null && !profile.getLocation().getZip().isEmpty())
             client.AddParam("zip_code", profile.getLocation().getZip());
 
-        if(profile.getLocation().getLattitude()>0)
+        if (profile.getLocation().getLattitude() > 0)
             client.AddParam("lattitude", profile.getLocation().getLattitude());
 
-        if(profile.getLocation().getLongitude()>0)
+        if (profile.getLocation().getLongitude() > 0)
             client.AddParam("longitude", profile.getLocation().getLongitude());
 
-        if(profile.getLocation().getAddress()!=null && !profile.getLocation().getAddress().isEmpty())
+        if (profile.getLocation().getAddress() != null && !profile.getLocation().getAddress().isEmpty())
             client.AddParam("address", profile.getLocation().getAddress());
 
-        if(profile.getFbProfileId()!=null && !profile.getFbProfileId().isEmpty())
+        if (profile.getFbProfileId() != null && !profile.getFbProfileId().isEmpty())
             client.AddParam("fb_profile_id", profile.getFbProfileId());
 
-        if(profile.getFbUsername()!=null && !profile.getFbUsername().isEmpty())
+        if (profile.getFbUsername() != null && !profile.getFbUsername().isEmpty())
             client.AddParam("fb_username", profile.getFbUsername());
 
-        try{
+        try {
             client.Execute(RequestMethod.PUT);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         String responseString = client.getResponse();
-        if(client.getResponseCode() == 400){
-            if(client.getResponse() == "{\"mobile\": [\"User profile with this Mobile already exists.\"]}"){
+        if (client.getResponseCode() == 400) {
+            if (client.getResponse() == "{\"mobile\": [\"User profile with this Mobile already exists.\"]}") {
                 throw new IllegalArgumentException("mobile number already exists");
             } else {
                 throw new IllegalArgumentException("unknown validation error");
@@ -512,22 +496,22 @@ public class UserEP extends BaseEP {
         return processProfileResponse(responseString);
     }
 
-    private User updateUser(Long userId, String firstName, String lastName, String email){
-        String responce="1";
-        String baseurlString = Global_Application.url+"users/";
+    private User updateUser(Long userId, String firstName, String lastName, String email) {
+        String responce = "1";
+        String baseurlString = Global_Application.url + "users/";
 
-        if(userId!=null && userId>0)
+        if (userId != null && userId > 0)
             baseurlString += userId + "/";
 
         RestClient client = new RestClient(baseurlString);
-        client.AddHeader("Authorization","Token "+appPrefs.getToken().toString());
+        client.AddHeader("Authorization", "Token " + appPrefs.getToken().toString());
 
         client.AddParam("first_name", firstName);
         client.AddParam("last_name", lastName);
 
-        try{
-            if(userId==null || userId==0){
-                if(email!=null && !email.isEmpty())
+        try {
+            if (userId == null || userId == 0) {
+                if (email != null && !email.isEmpty())
                     client.AddParam("email", email);
 
                 client.Execute(RequestMethod.POST);
@@ -540,7 +524,7 @@ public class UserEP extends BaseEP {
         String responseString = client.getResponse();
         Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
-        if(user.getId() == getLoggedInUser().getId()){
+        if (user.getId() == getLoggedInUser().getId()) {
             user.setLoggedInUser(true);
         }
         return user;
@@ -550,17 +534,17 @@ public class UserEP extends BaseEP {
 
         List<User> users = new ArrayList<User>();
 
-        try{
+        try {
             JSONArray jsonUsers = new JSONArray(usersResponse);
-            for(int i=0; i<jsonUsers.length(); i++){
+            for (int i = 0; i < jsonUsers.length(); i++) {
                 User user = processUserResponse(jsonUsers.getJSONObject(i));
                 User loggedInUser = getLoggedInUser();
-                if(user.getId().equals(loggedInUser.getId())){
+                if (user.getId().equals(loggedInUser.getId())) {
                     user.setLoggedInUser(true);
                 }
                 users.add(user);
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -571,10 +555,10 @@ public class UserEP extends BaseEP {
 
         User user = new User();
 
-        try{
+        try {
             user.setId(jsonUser.getLong("id"));
 
-            if(!jsonUser.isNull("email"))
+            if (!jsonUser.isNull("email"))
                 user.setEmail(jsonUser.getString("email"));
 
             user.setUsername(jsonUser.getString("username"));
@@ -589,13 +573,13 @@ public class UserEP extends BaseEP {
 
         return user;
     }
+
     private User processUserResponse(String userResponse) {
 
         User user = null;
 
-        try{
-            if(userResponse!=null)
-            {
+        try {
+            if (userResponse != null) {
                 JSONObject jsonUser = new JSONObject(userResponse);
                 user = processUserResponse(jsonUser);
             }
@@ -606,11 +590,11 @@ public class UserEP extends BaseEP {
         return user;
     }
 
-    private BMIProfile processBMIProfileResponse(String profileResponse){
+    private BMIProfile processBMIProfileResponse(String profileResponse) {
 
         BMIProfile pd = null;
 
-        try{
+        try {
             /* need to deserialize Profile object */
             JSONObject jsonProfile = new JSONObject(profileResponse);
             pd = processBMIProfileResponse(jsonProfile);
@@ -621,7 +605,7 @@ public class UserEP extends BaseEP {
         return pd;
     }
 
-    private BMIProfile processBMIProfileResponse(JSONObject jsonProfile){
+    private BMIProfile processBMIProfileResponse(JSONObject jsonProfile) {
 
         BMIProfile pd = new BMIProfile();
 
@@ -691,7 +675,8 @@ public class UserEP extends BaseEP {
 
         return pd;
     }
-    private Profile processProfileResponse(JSONObject jsonProfile){
+
+    private Profile processProfileResponse(JSONObject jsonProfile) {
 
         Profile pd = new Profile();
         Profile.Location location = pd.new Location();
@@ -706,7 +691,7 @@ public class UserEP extends BaseEP {
 
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            if(!jsonProfile.isNull("date_of_birth"))
+            if (!jsonProfile.isNull("date_of_birth"))
                 pd.setDob(formatter.parse(jsonProfile.getString("date_of_birth")));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -722,70 +707,70 @@ public class UserEP extends BaseEP {
         }
 
         try {
-            if(!jsonProfile.isNull("fb_profile_id"))
+            if (!jsonProfile.isNull("fb_profile_id"))
                 pd.setFbProfileId(jsonProfile.getString("fb_profile_id"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("fb_username"))
+            if (!jsonProfile.isNull("fb_username"))
                 pd.setFbUsername(jsonProfile.getString("fb_username"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("organization"))
+            if (!jsonProfile.isNull("organization"))
                 pd.setOrganization(jsonProfile.getString("organization"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("profile_picture_url"))
+            if (!jsonProfile.isNull("profile_picture_url"))
                 pd.setProfilePicURL(jsonProfile.getString("profile_picture_url"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("mobile"))
+            if (!jsonProfile.isNull("mobile"))
                 pd.setMobileNumber(jsonProfile.getString("mobile"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("state"))
+            if (!jsonProfile.isNull("state"))
                 location.setState(jsonProfile.getString("state"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("street"))
+            if (!jsonProfile.isNull("street"))
                 location.setStreet(jsonProfile.getString("street"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("country"))
+            if (!jsonProfile.isNull("country"))
                 location.setCountry(jsonProfile.getString("country"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("city"))
+            if (!jsonProfile.isNull("city"))
                 location.setCity(jsonProfile.getString("city"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         try {
-            if(!jsonProfile.isNull("zip_code"))
+            if (!jsonProfile.isNull("zip_code"))
                 location.setZip(jsonProfile.getString("zip_code"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -804,7 +789,7 @@ public class UserEP extends BaseEP {
         }
 
         try {
-            if(!jsonProfile.isNull("address"))
+            if (!jsonProfile.isNull("address"))
                 location.setAddress(jsonProfile.getString("address"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -815,11 +800,12 @@ public class UserEP extends BaseEP {
 
         return pd;
     }
-    private Profile processProfileResponse(String profileResponse){
+
+    private Profile processProfileResponse(String profileResponse) {
 
         Profile pd = null;
 
-        try{
+        try {
             /* need to deserialize Profile object */
             JSONObject jsonProfile = new JSONObject(profileResponse);
             pd = processProfileResponse(jsonProfile);
@@ -835,31 +821,37 @@ public class UserEP extends BaseEP {
         // Update the user data
         User updatedUser = updateUser(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
 
-        if(updatedUser==null)
+        if (updatedUser == null)
             return null;
 
-        Log.e(TAG, "user is : " +user);
-        Log.e(TAG, "updatedUser is : " +updatedUser);
-        Log.e(TAG, "user is : " +user);
+        Log.e(TAG, "user is : " + user);
+        Log.e(TAG, "updatedUser is : " + updatedUser);
+        Log.e(TAG, "user is : " + user);
 
         //Update profile data
-        if(user!=null &&  user.getProfile()!=null && user.getBmiProfile()!=null)
-        {
+        if (user != null && user.getProfile() != null && user.getBmiProfile() != null) {
             user.setId(updatedUser.getId());
-            try{
+            try {
                 user.setProfile(updateProfile(updatedUser.getId(), user.getProfile()));
                 user.setBmiProfile(updateBMIProfile(updatedUser.getId(), user.getBmiProfile()));
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
 
         User loggedInUser = ga.getLoggedInUser();
-        if(loggedInUser.getId()==user.getId())
+        if (loggedInUser.getId() == user.getId())
             ga.setLoggedInUser(user);
 
         return user;
+    }
+
+    private enum LoginType {
+        Email,
+        Mobile,
+        FB,
+        UserName;
     }
 
 }

@@ -5,14 +5,12 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
@@ -36,10 +34,10 @@ public class ForgotPassword extends BaseFragmentActivity {
         setContentView(R.layout.forgot_password);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        ga=((Global_Application)getApplicationContext());
-        userEndPoint=new UserEP(ForgotPassword.this, (Global_Application)getApplicationContext());
+        ga = ((Global_Application) getApplicationContext());
+        userEndPoint = new UserEP(ForgotPassword.this, (Global_Application) getApplicationContext());
 
-        Typeface tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
+        Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
         String strEmail = getIntent().getStringExtra("email");
 
@@ -51,27 +49,27 @@ public class ForgotPassword extends BaseFragmentActivity {
         btnMailMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Checker.isInternetOn(ForgotPassword.this)){
+                if (Checker.isInternetOn(ForgotPassword.this)) {
                     ga.GA_eventButtonPress("forgot_password_mail_me");
-                    if(isValid()){
+                    if (isValid()) {
                         ForgotPasswordTask task = new ForgotPasswordTask();
                         task.execute(etEmail.getText().toString());
                     }
-                }else{
+                } else {
                     Toast.makeText(ForgotPassword.this, R.string.networkNotAvailable, Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    private boolean isValid(){
+    private boolean isValid() {
         String email = etEmail.getText().toString();
-        if(email==null || email.isEmpty()){
+        if (email == null || email.isEmpty()) {
             etEmail.setError(getString(R.string.email_registered_with_us_is_mandatory));
             return false;
         }
 
-        if(!Validator.isEmailValid(email)){
+        if (!Validator.isEmailValid(email)) {
             etEmail.setError(getString(R.string.login_user_name_not_email));
             return false;
         }
@@ -94,9 +92,9 @@ public class ForgotPassword extends BaseFragmentActivity {
         protected void onPostExecute(Boolean aBoolean) {
             dialog.dismiss();
             int msgResId;
-            if(aBoolean){
+            if (aBoolean) {
                 msgResId = R.string.forgotPasswordTaskSuccess;
-            }else{
+            } else {
                 msgResId = R.string.forgotPasswordTaskFailure;
             }
             Toast.makeText(ForgotPassword.this, msgResId, Toast.LENGTH_LONG).show();

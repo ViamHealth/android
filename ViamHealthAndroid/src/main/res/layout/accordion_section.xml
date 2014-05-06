@@ -12,10 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10sp"
         android:layout_marginRight="10sp"
-        android:padding="5sp"
         android:background="@drawable/section_white"
         android:gravity="center_horizontal"
-        android:orientation="horizontal" >
-    </RelativeLayout>
+        android:orientation="horizontal"
+        android:padding="5sp"></RelativeLayout>
 
 </LinearLayout>

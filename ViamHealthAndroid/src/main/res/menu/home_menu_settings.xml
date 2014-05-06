@@ -1,32 +1,32 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_edit"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_edit_white"
-        android:title="@string/editProfile"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/editProfile" />
 
     <item
         android:id="@+id/menu_refresh"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_refresh_white"
-        android:title="@string/refresh"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/refresh" />
 
     <item
         android:id="@+id/menu_change_password"
         android:showAsAction="ifRoom"
-        android:title="@string/changePassword"/>
+        android:title="@string/changePassword" />
 
     <item
         android:id="@+id/menu_invite"
         android:showAsAction="ifRoom"
-        android:title="@string/inviteUser"/>
+        android:title="@string/inviteUser" />
 
     <item
         android:id="@+id/menu_logout"
-        android:showAsAction="ifRoom"
-        android:title="@string/logout"
+        android:icon="@drawable/ic_action_logout"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_action_logout"/>
+        android:showAsAction="ifRoom"
+        android:title="@string/logout" />
 
 </menu>

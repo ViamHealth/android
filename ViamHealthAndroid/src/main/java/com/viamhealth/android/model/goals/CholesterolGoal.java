@@ -3,8 +3,6 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.viamhealth.android.utils.JsonGraphDataBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,10 +14,41 @@ import java.util.List;
  */
 public class CholesterolGoal extends Goal {
 
+    public static final Parcelable.Creator<CholesterolGoal> CREATOR = new Parcelable.Creator<CholesterolGoal>() {
+        public CholesterolGoal createFromParcel(Parcel in) {
+            return new CholesterolGoal(in);
+        }
+
+        public CholesterolGoal[] newArray(int size) {
+            return new CholesterolGoal[size];
+        }
+    };
     int hdl;
     int ldl;
     int triglycerides;
     int total;
+
+    public CholesterolGoal() {
+    }
+
+    public CholesterolGoal(Parcel in) {
+        super(in);
+        hdl = in.readInt();
+        ldl = in.readInt();
+        triglycerides = in.readInt();
+        total = in.readInt();
+        int readingsCount = in.readInt();
+        Parcelable[] readArr = in.readParcelableArray(CholesterolGoalReading.class.getClassLoader());//new CholesterolGoalReading[readingsCount];
+        if (readingsCount > 0) {
+            //in.readTypedArray(readArr, CholesterolGoalReading.CREATOR);
+            this.readings = new ArrayList<GoalReadings>(readingsCount);
+            for (int i = 0; i < readingsCount; i++) {
+                this.readings.add((CholesterolGoalReading) readArr[i]);
+            }
+        } else {
+            this.readings = new ArrayList<GoalReadings>();
+        }
+    }
 
     @Override
     public List<GoalReadings> getReadings() {
@@ -29,7 +58,7 @@ public class CholesterolGoal extends Goal {
     @Override
     public void setReadings(List<GoalReadings> readings) {
         this.readings.clear();
-        for(GoalReadings reading : readings){
+        for (GoalReadings reading : readings) {
             this.readings.add((CholesterolGoalReading) reading);
         }
     }
@@ -59,8 +88,8 @@ public class CholesterolGoal extends Goal {
     }
 
     public int getTotal() {
-        if(total>0) return total;
-        return (hdl + ldl + (triglycerides/5));
+        if (total > 0) return total;
+        return (hdl + ldl + (triglycerides / 5));
     }
 
     public void setTotal(int total) {
@@ -77,28 +106,6 @@ public class CholesterolGoal extends Goal {
         this.healthyRange = (HealthyRange) healthyRange;
     }
 
-    public CholesterolGoal() {
-    }
-
-    public CholesterolGoal(Parcel in) {
-        super(in);
-        hdl = in.readInt();
-        ldl = in.readInt();
-        triglycerides = in.readInt();
-        total = in.readInt();
-        int readingsCount = in.readInt();
-        Parcelable[] readArr = in.readParcelableArray(CholesterolGoalReading.class.getClassLoader());//new CholesterolGoalReading[readingsCount];
-        if(readingsCount>0){
-            //in.readTypedArray(readArr, CholesterolGoalReading.CREATOR);
-            this.readings = new ArrayList<GoalReadings>(readingsCount);
-            for(int i=0; i<readingsCount; i++){
-                this.readings.add((CholesterolGoalReading)readArr[i]);
-            }
-        }else{
-            this.readings = new ArrayList<GoalReadings>();
-        }
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
@@ -106,7 +113,7 @@ public class CholesterolGoal extends Goal {
         dest.writeInt(ldl);
         dest.writeInt(triglycerides);
         dest.writeInt(total);
-        int readingsCount = this.readings==null?0:this.readings.size();
+        int readingsCount = this.readings == null ? 0 : this.readings.size();
         CholesterolGoalReading[] readArr = new CholesterolGoalReading[readingsCount];
         dest.writeInt(readingsCount);
         dest.writeTypedArray(this.readings.toArray(readArr), flags);
@@ -116,16 +123,6 @@ public class CholesterolGoal extends Goal {
     public int describeContents() {
         return super.describeContents();
     }
-
-    public static final Parcelable.Creator<CholesterolGoal> CREATOR = new Parcelable.Creator<CholesterolGoal>() {
-        public CholesterolGoal createFromParcel(Parcel in) {
-            return new CholesterolGoal(in);
-        }
-
-        public CholesterolGoal[] newArray(int size) {
-            return new CholesterolGoal[size];
-        }
-    };
 
     @Override
     public String toString() {

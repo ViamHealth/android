@@ -1,27 +1,17 @@
 package com.viamhealth.android.activities.fragments;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
-import com.viamhealth.android.dao.rest.endpoints.GoalsEP;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.rest.endpoints.WeightGoalEP;
-import com.viamhealth.android.model.enums.MedicalConditions;
 import com.viamhealth.android.model.goals.Goal;
 import com.viamhealth.android.model.goals.GoalReadings;
 import com.viamhealth.android.model.goals.WeightGoal;
@@ -29,35 +19,27 @@ import com.viamhealth.android.model.goals.WeightGoalReadings;
 import com.viamhealth.android.model.users.User;
 
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Weeks;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by naren on 10/10/13.
  */
 public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFocusChangeListener {
 
+    final Double idealWeightPerWeek = 0.5;
     EditText pHeight, pWeight, tWeight, targetDate;
     User user = null;
-
     boolean needHeightInput = false, isGoalConfigured = false;
     UserEP userEndPoint;
     WeightGoalEP goalsEndPoint;
     WeightGoal goal;
-
     ProgressDialog dialog;
     SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-
-    final Double idealWeightPerWeek = 0.5;
-
     ImageView warningImage;
     TextView warningText;
 
@@ -85,10 +67,10 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         warningText = (TextView) view.findViewById(R.id.tvWarning);
         warningImage.setVisibility(View.GONE);
 
-        if(user==null)
+        if (user == null)
             return null;
 
-        if(goal!=null){
+        if (goal != null) {
             isGoalConfigured = true;
             tWeight.setText(goal.getWeight().toString());
             targetDate.setText(formater.format(goal.getTargetDate()));
@@ -97,16 +79,15 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
             pWeight.setVisibility(View.GONE);
             pHeight.setEnabled(false);
         } else {//if goal is not yet configured
-            if(user.getBmiProfile().getHeight()>0){
+            if (user.getBmiProfile().getHeight() > 0) {
                 pHeight.setText(user.getBmiProfile().getHeight().toString());
                 pHeight.setEnabled(false);
                 pWeight.setText(user.getBmiProfile().getWeight().toString());
                 pWeight.setEnabled(false);
-                DecimalFormat d=new DecimalFormat("0.0");
+                DecimalFormat d = new DecimalFormat("0.0");
                 tWeight.setText(d.format(getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())));
                 targetDate.setText(formater.format(getIdealTargetDate()));
-                if(getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight())>=user.getBmiProfile().getWeight())
-                {
+                if (getIdealTargetWeight(user.getBmiProfile().getHeight(), user.getBmiProfile().getWeight()) >= user.getBmiProfile().getWeight()) {
                     warningText.setText("");
                 }
 
@@ -116,7 +97,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         tWeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus && targetDate.getText().length()==0){
+                if (!hasFocus && targetDate.getText().length() == 0) {
                     targetDate.setText(formater.format(getIdealTargetDate()));
                 }
             }
@@ -150,20 +131,20 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
     }
 
     public void onFocusChange(View v, boolean hasFocus) {
-        if(hasFocus)
+        if (hasFocus)
             return;
 
-        if(pHeight.getText().length()==0 || pWeight.getText().length()==0)
+        if (pHeight.getText().length() == 0 || pWeight.getText().length() == 0)
             return;
 
         int height = Integer.parseInt(pHeight.getText().toString());
         double weight = Double.parseDouble(pWeight.getText().toString());
-        DecimalFormat d=new DecimalFormat("0.0");
+        DecimalFormat d = new DecimalFormat("0.0");
         tWeight.setText(d.format((getIdealTargetWeight(height, weight))));
     }
 
     private Double getIdealTargetWeight(Integer height, Double weight) {
-        double heightInM = height.doubleValue()/100;
+        double heightInM = height.doubleValue() / 100;
         double idealBMI = 22.5;
         double idealWeight = idealBMI * heightInM * heightInM;
         return idealWeight;
@@ -194,7 +175,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
             double presentWeight = user.getBmiProfile().getWeight();
             double weightDiff = Math.abs(targetWeight - presentWeight);
 
-            return weightDiff/weeksForTarget;
+            return weightDiff / weeksForTarget;
         } catch (ParseException e) {
             e.printStackTrace();
             return 0;
@@ -204,28 +185,27 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
     @Override
     public boolean isValid() {
-        boolean isValid=true;
+        boolean isValid = true;
 
-        if(pHeight.getText().length()==0){
+        if (pHeight.getText().length() == 0) {
             pHeight.setError("Please fill the value for present height");
-            isValid=false;
+            isValid = false;
         }
-        if(pWeight.getText().length()==0){
+        if (pWeight.getText().length() == 0) {
             tWeight.setError("Please fill the value for present weight");
-            isValid=false;
+            isValid = false;
         }
-        if(tWeight.getText().length()==0){
+        if (tWeight.getText().length() == 0) {
             tWeight.setError("Please fill the value for target weight");
-            isValid=false;
+            isValid = false;
         }
-        if(targetDate.getText().length()==0){
+        if (targetDate.getText().length() == 0) {
             targetDate.setError("Please fill the value for target date");
-            isValid=false;
+            isValid = false;
         }
 
         return isValid;
     }
-
 
 
     @Override
@@ -233,9 +213,9 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
         WeightGoal weightGoal = new WeightGoal();
         setDefaultGoalAttributes(goal, weightGoal);
         weightGoal.setWeight(Double.parseDouble(tWeight.getText().toString()));
-        try{
+        try {
             weightGoal.setTargetDate(formater.parse(targetDate.getText().toString()));
-        } catch(ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return weightGoal;
@@ -243,7 +223,7 @@ public class AddWeightGoalFragment extends AddGoalFragment implements View.OnFoc
 
     @Override
     public GoalReadings getGoalReadings() {
-        if(!isGoalConfigured) {
+        if (!isGoalConfigured) {
             WeightGoalReadings readings = new WeightGoalReadings();
             readings.setHeight(Integer.parseInt(pHeight.getText().toString()));
             readings.setWeight(Double.parseDouble(pWeight.getText().toString()));

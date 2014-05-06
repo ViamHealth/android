@@ -8,10 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.viamhealth.android.R;
-import com.viamhealth.android.model.goals.BPGoalReading;
-import com.viamhealth.android.model.goals.CholesterolGoal;
 import com.viamhealth.android.model.goals.CholesterolGoalReading;
-import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.GoalReadings;
 
 import java.util.Arrays;
@@ -36,10 +33,10 @@ public class AddCholesterolValue extends AddValueBaseFragment {
         super.onCreate(savedInstanceState);
 
         List<Parcelable> readings = Arrays.asList(getArguments().getParcelableArray("readings"));
-        if(readings!=null){
+        if (readings != null) {
             int count = readings.size();
             readingsMap = new HashMap<Date, CholesterolGoalReading>(count);
-            for(int i=0; i<count; i++){
+            for (int i = 0; i < count; i++) {
                 CholesterolGoalReading reading = (CholesterolGoalReading) readings.get(i);
                 readingsMap.put(reading.getReadingDate(), reading);
             }

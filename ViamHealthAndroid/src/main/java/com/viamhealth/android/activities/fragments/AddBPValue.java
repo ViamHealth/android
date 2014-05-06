@@ -9,9 +9,7 @@ import android.widget.EditText;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.model.goals.BPGoalReading;
-import com.viamhealth.android.model.goals.DiabetesGoalReading;
 import com.viamhealth.android.model.goals.GoalReadings;
-import com.viamhealth.android.model.goals.WeightGoalReadings;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -35,10 +33,10 @@ public class AddBPValue extends AddValueBaseFragment {
         super.onCreate(savedInstanceState);
 
         List<Parcelable> readings = Arrays.asList(getArguments().getParcelableArray("readings"));
-        if(readings!=null){
+        if (readings != null) {
             int count = readings.size();
             readingsMap = new HashMap<Date, BPGoalReading>(count);
-            for(int i=0; i<count; i++){
+            for (int i = 0; i < count; i++) {
                 BPGoalReading reading = (BPGoalReading) readings.get(i);
                 readingsMap.put(reading.getReadingDate(), reading);
             }

@@ -16,30 +16,34 @@ public enum RepeatMode {
     Monthly(3, R.string.monthly),
     Yearly(4, R.string.yearly),
     Custom(5, R.string.custom);
-
-    private int value;
-    private int resId;
-
-    RepeatMode(int value, int resId){
-        this.value = value;
-        this.resId = resId;
-    }
-
-    public int resId() {return resId;}
-    public int value() {return value;}
-
     private static final Map<Integer, RepeatMode> valuelookup = new HashMap<Integer, RepeatMode>();
 
     // Populate the lookup table on loading time
     static {
-        for (RepeatMode g : EnumSet.allOf(RepeatMode.class)){
+        for (RepeatMode g : EnumSet.allOf(RepeatMode.class)) {
             valuelookup.put(g.value(), g);
         }
+    }
+
+    private int value;
+    private int resId;
+
+    RepeatMode(int value, int resId) {
+        this.value = value;
+        this.resId = resId;
     }
 
     // This method can be used for reverse lookup purpose
     public static RepeatMode get(int value) {
         return valuelookup.get(value);
+    }
+
+    public int resId() {
+        return resId;
+    }
+
+    public int value() {
+        return value;
     }
 
 }

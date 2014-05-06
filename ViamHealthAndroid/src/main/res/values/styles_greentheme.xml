@@ -3,133 +3,138 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="EditTextGreentheme" parent="android:Widget.EditText">
-	  <item name="android:background">@drawable/edit_text_holo_light</item>
-	  <item name="android:textColor">@color/app_green</item>
-  </style>
+    <style name="EditTextGreentheme" parent="android:Widget.EditText">
+        <item name="android:background">@drawable/edit_text_holo_light</item>
+        <item name="android:textColor">@color/app_green</item>
+    </style>
 
-  <style name="TextViewGreentheme" parent="android:Widget.TextView">
-      <item name="android:textColor">@color/app_green</item>
-  </style>
+    <style name="TextViewGreentheme" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/app_green</item>
+    </style>
 
-  <style name="AutoCompleteTextViewGreentheme" parent="android:Widget.AutoCompleteTextView">
-      <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
-	  <item name="android:background">@drawable/edit_text_holo_light</item>
-	  <item name="android:textColor">@color/app_green</item>
-  </style>
+    <style name="AutoCompleteTextViewGreentheme" parent="android:Widget.AutoCompleteTextView">
+        <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
+        <item name="android:background">@drawable/edit_text_holo_light</item>
+        <item name="android:textColor">@color/app_green</item>
+    </style>
 
-  <style name="CheckBoxGreentheme" parent="android:Widget.CompoundButton.CheckBox">
-      <item name="android:button">@drawable/btn_check_holo_light</item>
-      <item name="android:textColor">@color/app_green</item>
-  </style>
+    <style name="CheckBoxGreentheme" parent="android:Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/btn_check_holo_light</item>
+        <item name="android:textColor">@color/app_green</item>
+    </style>
 
-  <style name="RadioButtonGreentheme" parent="android:Widget.CompoundButton.RadioButton">
-      <item name="android:button">@drawable/btn_radio_holo_light</item>
-  </style>
+    <style name="RadioButtonGreentheme" parent="android:Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/btn_radio_holo_light</item>
+    </style>
 
-  <style name="ButtonGreentheme" parent="android:Widget.Button">
-	  <item name="android:background">@drawable/btn_default_holo_light</item>
-	  <item name="android:minHeight">48dip</item>
-	  <item name="android:minWidth">64dip</item>
-	  <item name="android:textColor">@android:color/white</item>
-  </style>
+    <style name="ButtonGreentheme" parent="android:Widget.Button">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
-  <style name="ImageButtonGreentheme" parent="android:Widget.ImageButton">
-	  <item name="android:background">@drawable/btn_default_holo_light</item>
-  </style>
+    <style name="ImageButtonGreentheme" parent="android:Widget.ImageButton">
+        <item name="android:background">@drawable/btn_default_holo_light</item>
+    </style>
 
-  <style name="SpinnerGreentheme" parent="android:Widget.Spinner">
-      <item name="android:textColor">@android:color/white</item>
-      <item name="android:background">@drawable/spinner_background_holo_light</item>
-      <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
-  </style>
+    <style name="SpinnerGreentheme" parent="android:Widget.Spinner">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@drawable/spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/list_selector_holo_light</item>
+    </style>
 
-  <style name="SpinnerGreentheme.DropDown">
-      <item name="android:spinnerMode">dropdown</item>
-  </style>
+    <style name="SpinnerGreentheme.DropDown">
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
 
-  <style name="SpinnerDropDownItemGreentheme" parent="android:Widget.DropDownItem.Spinner">
-      <item name="android:checkMark">@drawable/btn_radio_holo_light</item>
-  </style>
-    
-  <style name="TabWidgetGreentheme" parent="android:Widget.TabWidget">
-      <item name="android:textColor">@android:color/white</item>
-      <item name="android:background">@color/app_green</item>
-  </style>
-    
-  <style name="TabGreentheme">
-      <item name="android:paddingLeft">16dip</item>
-      <item name="android:paddingRight">16dip</item>
-      <item name="android:background">@drawable/tab_indicator_holo</item>
-      <item name="android:layout_width">0dip</item>
-      <item name="android:layout_weight">1</item>
-      <item name="android:minWidth">80dip</item>
-  </style>
+    <style name="SpinnerDropDownItemGreentheme" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/btn_radio_holo_light</item>
+    </style>
 
-  <style name="TabTextGreentheme">
-	  <item name="android:textColor">@android:color/white</item>
-      <item name="android:textSize">12sp</item>
-      <item name="android:textStyle">bold</item>
-      <item name="android:textAllCaps">true</item>
-      <item name="android:ellipsize">marquee</item>
-      <item name="android:maxLines">2</item>
-      <item name="android:maxWidth">180dip</item>
-  </style>
+    <style name="TabWidgetGreentheme" parent="android:Widget.TabWidget">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:background">@color/app_green</item>
+    </style>
 
-  <style name="ProgressBarGreentheme" parent="android:Widget.ProgressBar.Horizontal">
-      <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo_light</item>
-      <item name="android:minHeight">16dip</item>
-      <item name="android:maxHeight">16dip</item>
-  </style>
+    <style name="TabGreentheme">
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+        <item name="android:background">@drawable/tab_indicator_holo</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minWidth">80dip</item>
+    </style>
 
-  <style name="SeekBarGreentheme" parent="android:Widget.SeekBar">
-      <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/scrubber_progress_horizontal_holo_light</item>
-      <item name="android:minHeight">13dip</item>
-      <item name="android:maxHeight">13dip</item>
-      <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
-      <item name="android:thumbOffset">16dip</item>
-      <item name="android:paddingLeft">16dip</item>
-      <item name="android:paddingRight">16dip</item>
-  </style>
+    <style name="TabTextGreentheme">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:maxWidth">180dip</item>
+    </style>
 
-  <style name="RatingBarGreentheme" parent="android:Widget.RatingBar">
-      <item name="android:progressDrawable">@drawable/ratingbar_full_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/ratingbar_full_holo_light</item>
-  </style>
+    <style name="ProgressBarGreentheme" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_holo_light</item>
+        <item name="android:indeterminateDrawable">
+            @drawable/progress_indeterminate_horizontal_holo_light
+        </item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
 
-  <style name="RatingBarBigGreentheme">
-      <item name="android:progressDrawable">@drawable/ratingbar_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/ratingbar_holo_light</item>
-      <item name="android:minHeight">35dip</item>
-      <item name="android:maxHeight">35dip</item>
-  </style>
+    <style name="SeekBarGreentheme" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:indeterminateDrawable">
+            @drawable/scrubber_progress_horizontal_holo_light
+        </item>
+        <item name="android:minHeight">13dip</item>
+        <item name="android:maxHeight">13dip</item>
+        <item name="android:thumb">@drawable/scrubber_control_selector_holo_light</item>
+        <item name="android:thumbOffset">16dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+    </style>
 
-  <style name="RatingBarSmallGreentheme">
-      <item name="android:progressDrawable">@drawable/ratingbar_small_holo_light</item>
-      <item name="android:indeterminateDrawable">@drawable/ratingbar_small_holo_light</item>
-      <item name="android:minHeight">16dip</item>
-      <item name="android:maxHeight">16dip</item>
-  </style>
+    <style name="RatingBarGreentheme" parent="android:Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/ratingbar_full_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/ratingbar_full_holo_light</item>
+    </style>
 
-  <style name="ToggleGreentheme" parent="android:Widget.Button.Toggle">
-      <item name="android:background">@drawable/btn_toggle_holo_light</item>
-      <item name="android:minHeight">48dip</item>
-	  <item name="android:textColor">@android:color/white</item>
-  </style>
+    <style name="RatingBarBigGreentheme">
+        <item name="android:progressDrawable">@drawable/ratingbar_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/ratingbar_holo_light</item>
+        <item name="android:minHeight">35dip</item>
+        <item name="android:maxHeight">35dip</item>
+    </style>
 
-  <style name="ListViewGreentheme" parent="android:Widget.ListView">
-      <item name="android:listSelector">@drawable/list_selector_holo_light</item>
-  </style>
+    <style name="RatingBarSmallGreentheme">
+        <item name="android:progressDrawable">@drawable/ratingbar_small_holo_light</item>
+        <item name="android:indeterminateDrawable">@drawable/ratingbar_small_holo_light</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
 
-  <style name="ListViewGreentheme.White" parent="android:Widget.ListView.White">
-      <item name="android:listSelector">@drawable/list_selector_holo_light</item>
-  </style>
+    <style name="ToggleGreentheme" parent="android:Widget.Button.Toggle">
+        <item name="android:background">@drawable/btn_toggle_holo_light</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
-  <style name="SpinnerItemGreentheme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-      <item name="android:textColor">@color/app_green</item>
-  </style>
+    <style name="ListViewGreentheme" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/list_selector_holo_light</item>
+    </style>
+
+    <style name="ListViewGreentheme.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/list_selector_holo_light</item>
+    </style>
+
+    <style name="SpinnerItemGreentheme" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/app_green</item>
+    </style>
 
 
     <!--<style name="NumberPickerGreentheme">

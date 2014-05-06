@@ -3,8 +3,6 @@ package com.viamhealth.android.model.goals;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.viamhealth.android.utils.JsonGraphDataBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,22 +14,18 @@ import java.util.List;
  */
 public class BPGoal extends Goal {
 
+    public static final Parcelable.Creator<BPGoal> CREATOR = new Parcelable.Creator<BPGoal>() {
+        public BPGoal createFromParcel(Parcel in) {
+            return new BPGoal(in);
+        }
+
+        public BPGoal[] newArray(int size) {
+            return new BPGoal[size];
+        }
+    };
     int systolicPressure;
     int diastolicPressure;
     int pulseRate;
-
-    @Override
-    public List<GoalReadings> getReadings() {
-        return readings;
-    }
-
-    @Override
-    public void setReadings(List<GoalReadings> readings) {
-        this.readings.clear();
-        for(GoalReadings reading : readings){
-            this.readings.add((BPGoalReading) reading);
-        }
-    }
 
     public BPGoal() {
 
@@ -44,14 +38,27 @@ public class BPGoal extends Goal {
         pulseRate = in.readInt();
         int readingsCount = in.readInt();
         Parcelable[] readArr = in.readParcelableArray(BPGoalReading.class.getClassLoader());//new BPGoalReading[readingsCount];
-        if(readingsCount>0){
+        if (readingsCount > 0) {
             //in.readTypedArray(readArr, BPGoalReading.CREATOR);
             this.readings = new ArrayList<GoalReadings>(readingsCount);
-            for(int i=0; i<readingsCount; i++){
-                this.readings.add((BPGoalReading)readArr[i]);
+            for (int i = 0; i < readingsCount; i++) {
+                this.readings.add((BPGoalReading) readArr[i]);
             }
-        }else{
+        } else {
             this.readings = new ArrayList<GoalReadings>();
+        }
+    }
+
+    @Override
+    public List<GoalReadings> getReadings() {
+        return readings;
+    }
+
+    @Override
+    public void setReadings(List<GoalReadings> readings) {
+        this.readings.clear();
+        for (GoalReadings reading : readings) {
+            this.readings.add((BPGoalReading) reading);
         }
     }
 
@@ -105,23 +112,13 @@ public class BPGoal extends Goal {
         return object;
     }
 
-    public static final Parcelable.Creator<BPGoal> CREATOR = new Parcelable.Creator<BPGoal>() {
-        public BPGoal createFromParcel(Parcel in) {
-            return new BPGoal(in);
-        }
-
-        public BPGoal[] newArray(int size) {
-            return new BPGoal[size];
-        }
-    };
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeInt(systolicPressure);
         dest.writeInt(diastolicPressure);
         dest.writeInt(pulseRate);
-        int readingsCount = this.readings==null?0:this.readings.size();
+        int readingsCount = this.readings == null ? 0 : this.readings.size();
         BPGoalReading[] readArr = new BPGoalReading[readingsCount];
         dest.writeInt(readingsCount);
         dest.writeParcelableArray(this.readings.toArray(readArr), flags);

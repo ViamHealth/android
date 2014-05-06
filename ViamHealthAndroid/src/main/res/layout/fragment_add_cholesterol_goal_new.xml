@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -7,166 +6,168 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/section_present"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:visibility="visible"
-            android:id="@+id/section_present"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/present"
-                android:id="@+id/textView"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:text="@string/present"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <EditText
                 android:id="@+id/add_goal_present_hdl"
-                android:hint="@string/hdl_value"
-                android:inputType="numberSigned"
-                android:layout_height="48dp"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="" />
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/hdl_value"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/add_goal_present_ldl"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical|center_horizontal"
                 android:hint="@string/ldl_value"
                 android:inputType="numberSigned"
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
                 android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:singleLine="true"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/add_goal_present_try"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical|center_horizontal"
                 android:hint="@string/tg_value"
                 android:inputType="numberSigned"
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
                 android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:singleLine="true"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/add_goal_present_total"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_height="48dp"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="5dp"
+                android:singleLine="true"
                 android:text="@string/total_cholesterol"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="18sp"
                 android:visibility="gone" />
         </LinearLayout>
+
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="visible"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/target"
-                android:id="@+id/textView2"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp" />
+                android:layout_marginTop="20dp"
+                android:text="@string/target"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <EditText
                 android:id="@+id/add_goal_target_hdl"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical|center_horizontal"
                 android:hint="@string/hdl_value"
                 android:inputType="numberSigned"
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
                 android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"/>
+                android:singleLine="true"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/add_goal_target_ldl"
-                android:hint="@string/ldl_value"
-                android:inputType="numberSigned"
-                android:layout_height="48dp"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:textIsSelectable="false" />
+                android:gravity="center_vertical|center_horizontal"
+                android:hint="@string/ldl_value"
+                android:inputType="numberSigned"
+                android:padding="5dp"
+                android:singleLine="true"
+                android:textIsSelectable="false"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/add_goal_target_try"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical|center_horizontal"
                 android:hint="@string/tg_value"
                 android:inputType="numberSigned"
-                android:layout_height="48dp"
-                android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
                 android:padding="5dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"/>
+                android:singleLine="true"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/add_goal_target_total"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_height="48dp"
                 android:layout_width="match_parent"
-                android:textSize="18sp"
-                android:gravity="center_vertical|center_horizontal"
-                android:singleLine="true"
-                android:padding="5dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:padding="5dp"
+                android:singleLine="true"
                 android:text="@string/total_cholesterol"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="18sp"
                 android:visibility="gone" />
 
         </LinearLayout>
 
     </LinearLayout>
+
     <EditText
         android:id="@+id/add_goal_target_date"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:gravity="center_vertical|center_horizontal"
         android:hint="@string/targetDate"
         android:inputType="date"
-        android:layout_height="48dp"
-        android:layout_width="match_parent"
-        android:textSize="18sp"
-        android:gravity="center_vertical|center_horizontal"
-        android:singleLine="true"
         android:padding="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center" />
+        android:singleLine="true"
+        android:textSize="18sp" />
 
 </LinearLayout>

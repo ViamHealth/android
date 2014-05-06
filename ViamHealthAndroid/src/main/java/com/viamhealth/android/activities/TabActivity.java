@@ -6,9 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
-
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,22 +21,17 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
-import com.google.analytics.tracking.android.EasyTracker;
-
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.GoalFragment;
-
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
-import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,45 +41,39 @@ import java.util.List;
  */
 public class TabActivity extends BaseFragmentActivity implements View.OnClickListener, ActionBar.OnNavigationListener {
 
+    private static final float HEADER_TOP_MARGIN_DP = 58.0f;
+    private final List<User> users = new ArrayList<User>();
     TabHost mTabHost;
-
     TabManager mTabManager;
-
     Animation animationMoveIn, animationMoveOut;
     FrameLayout tabContent;//, tabHeader;
     TabWidget tabs;
-
     ActionBar actionBar;
-
     boolean headerIsVisible = true;
     Global_Application ga;
     private User user = null;
-    private Parcelable[] pUsers=null;
-    private final List<User> users = new ArrayList<User>();
-
-    private static final float HEADER_TOP_MARGIN_DP = 58.0f;
+    private Parcelable[] pUsers = null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.tab_main_activity);
-        ga=((Global_Application)getApplicationContext());
-        mTabHost = (TabHost)findViewById(R.id.tabHost);
+        ga = ((Global_Application) getApplicationContext());
+        mTabHost = (TabHost) findViewById(R.id.tabHost);
         mTabHost.setup();
         mTabHost.setOnClickListener(this);
         mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent, true);
 
-        Global_Application ga=((Global_Application)getApplicationContext());
+        Global_Application ga = ((Global_Application) getApplicationContext());
         Intent intent = getIntent();
         user = (User) intent.getParcelableExtra("user");
         pUsers = intent.getParcelableArrayExtra("users");
 
         users.clear();
-        for(int i=0; i<pUsers.length; i++){
+        for (int i = 0; i < pUsers.length; i++) {
             users.add((User) pUsers[i]);
         }
-
 
 
         actionBar = getSupportActionBar();
@@ -95,8 +82,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setLogo(R.drawable.ic_launcher);
         actionBar.setTitle(user.getName());
-
-
 
 
         //TODO use Action Bar to create the Header
@@ -113,8 +98,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         List<String> strUserNames = new ArrayList<String>(users.size());
         //strUserNames.add(user.getName());
         int currentUserIndex = 0;
-        for(int i=0; i<users.size(); i++){
-            if(users.get(i).getId().equals(user.getId()))
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getId().equals(user.getId()))
                 currentUserIndex = i;
             strUserNames.add(users.get(i).getName());
         }
@@ -130,21 +115,20 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         /* Create the Tab Header */
         //mTabManager.addHeader(R.id.tabHeader, TabHeaderFragment.class, bundle);
 
-        SharedPreferences pref = getSharedPreferences("User"+user.getName()+user.getId(), Context.MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("User" + user.getName() + user.getId(), Context.MODE_PRIVATE);
         // To comment
 
-        Boolean isTab=getIntent().getBooleanExtra("isTab", false);
-        Actions action = (Actions)getIntent().getSerializableExtra("action");
+        Boolean isTab = getIntent().getBooleanExtra("isTab", false);
+        Actions action = (Actions) getIntent().getSerializableExtra("action");
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", user);
         bundle.putSerializable("action", action);
-        bundle.putParcelableArray("users",pUsers);
-        SharedPreferences.Editor edit1=pref.edit();
-        if(isTab==true)
-        {
-            edit1.putBoolean("isTest",true); //MJ:set to true
-            edit1.putBoolean("isGoal",true);
+        bundle.putParcelableArray("users", pUsers);
+        SharedPreferences.Editor edit1 = pref.edit();
+        if (isTab == true) {
+            edit1.putBoolean("isTest", true); //MJ:set to true
+            edit1.putBoolean("isGoal", true);
         }
         /*
         else
@@ -158,20 +142,16 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         //To comment
 
 
-
-        if((pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false) && user.getProfile().getAge()>=18)
-        {
+        if ((pref.getBoolean("isGoal", false) == false || pref.getBoolean("isTest", false) == false) && user.getProfile().getAge() >= 18) {
             FragmentTransaction fm = TabActivity.this.getSupportFragmentManager().beginTransaction();
-            GoalFragment fragment = (GoalFragment)SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
+            GoalFragment fragment = (GoalFragment) SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
             //GoalFragment fragment=new GoalFragment();
             fragment.setArguments(bundle);
-            fm.replace(R.id.realtabcontent,fragment,"goals");
+            fm.replace(R.id.realtabcontent, fragment, "goals");
             fm.commit();
             //fm.addToBackStack("goals");
             TabActivity.this.getSupportFragmentManager().executePendingTransactions();
-        }
-        else
-        {
+        } else {
         /* Create Tabs */
             mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                     mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
@@ -201,13 +181,12 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         tabs = (TabWidget) findViewById(android.R.id.tabs);
 
 
-
-        if(action == Actions.UploadFiles){
+        if (action == Actions.UploadFiles) {
             mTabHost.setCurrentTabByTag("files");
             //mTabManager.selectTab(TabTypes.Files.name());
             FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
             fragment.pickFile();
-        } else if(action == Actions.SetGoal){
+        } else if (action == Actions.SetGoal) {
             mTabHost.setCurrentTabByTag("goals");
 
             //mTabManager.selectTab(TabTypes.Goals.name());
@@ -217,8 +196,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             //mTabManager.selectTab(savedInstanceState.getString("tab"));
             //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
-
-
 
 
     }
@@ -235,7 +212,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         //mSelected.setText("Selected: " + mLocations[itemPosition]);
         User usr = users.get(itemPosition);
-        if(usr.getId().equals(user.getId()))
+        if (usr.getId().equals(user.getId()))
             return false;
 
         Toast.makeText(TabActivity.this, "Selected User " + usr.getName(), Toast.LENGTH_LONG).show();
@@ -267,7 +244,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retVal = super.onOptionsItemSelected(item);
-        if(item.getItemId()==R.id.menu_logout){
+        if (item.getItemId() == R.id.menu_logout) {
             ga.GA_eventButtonPress("tab_menu_logout");
             Intent returnIntent = new Intent(TabActivity.this, Home.class);
             returnIntent.putExtra("logout", true);
@@ -276,31 +253,31 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             return true;
         }
 
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             ga.GA_eventButtonPress("tab_home");
             finish();
             return true;
         }
 
-        if(item.getItemId() == R.id.menu_toc) {
+        if (item.getItemId() == R.id.menu_toc) {
             ga.GA_eventButtonPress("tab_menu_terms_n_conditions");
             Intent returnIntent = new Intent(TabActivity.this, TermsActivity.class);
             startActivity(returnIntent);
             return true;
         }
 
-        if(item.getItemId() == R.id.menu_edit){
+        if (item.getItemId() == R.id.menu_edit) {
             //GoalFragment fm1= (GoalFragment)getSupportFragmentManager().findFragmentByTag("goals");
-           // if(fm1.isVisible())
+            // if(fm1.isVisible())
             //{
-                Intent editIntent = new Intent(TabActivity.this, EditGoals.class);
-                startActivity(editIntent);
+            Intent editIntent = new Intent(TabActivity.this, EditGoals.class);
+            startActivity(editIntent);
             //}
         }
 
-        if(item.getItemId() == R.id.menu_invite) {
+        if (item.getItemId() == R.id.menu_invite) {
             ga.GA_eventButtonPress("tab_menu_invite");
-            InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application)getApplicationContext());
+            InviteUser inviteUser = new InviteUser(TabActivity.this, (Global_Application) getApplicationContext());
             inviteUser.show();
         }
         return retVal;
@@ -310,8 +287,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if(mTabManager.getCurrentSelectedTab().equals("goals")){
-            if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (mTabManager.getCurrentSelectedTab().equals("goals")) {
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 tabs.setVisibility(View.GONE);
                 return;
             }
@@ -322,15 +299,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if(mTabManager.getCurrentSelectedTab()!=null)
-        {
-            if(mTabManager.getCurrentSelectedTab().equals("goals")){
-                if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-                    if(headerIsVisible){
+        if (mTabManager.getCurrentSelectedTab() != null) {
+            if (mTabManager.getCurrentSelectedTab().equals("goals")) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    if (headerIsVisible) {
                         //tabHeader.setAnimation(animationMoveOut);
                         headerIsVisible = false;
-                    }
-                    else{
+                    } else {
                         //tabHeader.setAnimation(animationMoveIn);
                         headerIsVisible = true;
                     }
@@ -344,10 +319,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public enum Actions { UploadFiles, SetGoal; }
-
-
-
+    public enum Actions {UploadFiles, SetGoal;}
 
 
 }

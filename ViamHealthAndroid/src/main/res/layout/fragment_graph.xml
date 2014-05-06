@@ -2,43 +2,43 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp">
+    android:layout_marginBottom="20dp"
+    android:layout_marginTop="20dp">
 
 
     <WebView
+        android:id="@+id/webView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/webView"
-        android:layout_gravity="center"
-        android:layout_above="@+id/timelineLayout" />
+        android:layout_above="@+id/timelineLayout"
+        android:layout_gravity="center" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/timelineLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="false"
-        android:id="@+id/timelineLayout"
-        android:layout_alignParentBottom="true">
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/timeline"
-            android:id="@+id/textView2"
             android:layout_gravity="center_horizontal"
+            android:text="@string/timeline"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000000"
+            android:textIsSelectable="false"
             android:textStyle="bold"
-			android:visibility="gone"
-            android:textIsSelectable="false" />
+            android:visibility="gone" />
 
         <ProgressBar
+            android:id="@+id/timeLineProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:id="@+id/timeLineProgressBar"
             android:layout_margin="20dp"
             android:progressDrawable="@drawable/timelineprogressbar" />
 

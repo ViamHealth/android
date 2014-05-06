@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2011 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2011 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,13 +14,13 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TabGreentheme"
+    android:layout_width="0dip"
     android:layout_height="75dp"
     android:layout_weight="1"
-    android:orientation="vertical"
-    android:padding="5dp"
     android:gravity="center"
-    style="@style/TabGreentheme"
-    android:layout_width="0dip">
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
         android:id="@android:id/icon"
@@ -33,13 +32,13 @@
 
     <TextView
         android:id="@android:id/title"
-        android:textSize="10sp"
+        style="@style/TabTextGreentheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@android:id/icon"
-        style="@style/TabTextGreentheme"
-        android:text="@string/tab_label_goal" />
+        android:layout_centerHorizontal="true"
+        android:text="@string/tab_label_goal"
+        android:textSize="10sp" />
 
 </RelativeLayout>
