@@ -16,11 +16,11 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 import com.viamhealth.android.model.MedicationData;
-import com.viamhealth.android.model.enums.MedicalConditions;
-import com.viamhealth.android.model.goals.Goal;
+
+
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.ui.helper.ExtendedImageDownloader;
-import com.viamhealth.android.model.GoalData;
+
 
 import android.app.Application;
 import android.graphics.Bitmap;
@@ -36,7 +36,7 @@ public class Global_Application extends Application
 	public static String foodType,nextfood,prevfood;
 	public static String nextbrekfast,nextlunch,nextsnacks,nextdinner,nextExercise,nextfile,nextmedical,nextmedication,watchupdate,update="0";
 	int foodPos;
-	ArrayList<GoalData> lstResult = new ArrayList<GoalData>();
+
 
 	public static String selectedfoodid,selectedexerciseid,food_item,food_quantity,meal_type,weight,user_calories,time_spent,exercise_value;
 	public static double totalcal=0;
@@ -53,7 +53,7 @@ public class Global_Application extends Application
     public String selected_date;
 
 
-    public static Map<MedicalConditions, Goal> goalsConfiguredMap = new LinkedHashMap<MedicalConditions, Goal>();
+
 
 
     public static ArrayList<MedicationData>	listData = new ArrayList<MedicationData>();
@@ -144,6 +144,15 @@ public class Global_Application extends Application
             this.loggedInUser.setLoggedInUser(true);
     }
 
+    public String getDownload() {
+        return download;
+    }
+
+
+
+
+
+    /* Unused functions. Need toc ehck before deleting */
     public boolean isCalcelflg() {
 		return calcelflg;
 	}
@@ -324,23 +333,14 @@ public class Global_Application extends Application
 	}
 
 
-	public void setlstResult(int i,GoalData val)
-	 {
-		lstResult.add(i,val);
-	 }
-	 public GoalData getlstResult(int i)
-	 {
-		  return lstResult.get(i);
-	 }
+
 	public Bitmap getImg() {
 		return img;
 	}
 	public void setImg(Bitmap img) {
 		this.img = img;
 	}
-	public String getDownload() {
-		return download;
-	}
+
 	public void setDownload(String download) {
 		this.download = download;
 	}

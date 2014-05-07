@@ -32,7 +32,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
-import com.viamhealth.android.activities.fragments.GoalFragment;
+
 
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.manager.TabManager;
@@ -159,26 +159,12 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
 
 
-        if((pref.getBoolean("isGoal",false)==false || pref.getBoolean("isTest",false)==false) && user.getProfile().getAge()>=18)
-        {
-            FragmentTransaction fm = TabActivity.this.getSupportFragmentManager().beginTransaction();
-            GoalFragment fragment = (GoalFragment)SherlockFragment.instantiate(TabActivity.this, GoalFragment.class.getName(), bundle);
-            //GoalFragment fragment=new GoalFragment();
-            fragment.setArguments(bundle);
-            fm.replace(R.id.realtabcontent,fragment,"goals");
-            fm.commit();
-            //fm.addToBackStack("goals");
-            TabActivity.this.getSupportFragmentManager().executePendingTransactions();
-        }
-        else
-        {
+
         /* Create Tabs */
             mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                     mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
                     ReminderFragmentNew.class, bundle);
-            mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                    mTabHost.newTabSpec("goals").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
-                    GoalFragment.class, bundle);
+
 
             //NewReminders.class, bundle);
             mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
@@ -186,7 +172,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                     //FileFragment.class, bundle);
                     FileFragment.class, bundle);
 
-        }
+
 
         animationMoveIn = new TranslateAnimation(0, 0, -29, 29);
         animationMoveIn.setDuration(2000);
@@ -289,14 +275,14 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             return true;
         }
 
-        if(item.getItemId() == R.id.menu_edit){
+        /*if(item.getItemId() == R.id.menu_edit){
             //GoalFragment fm1= (GoalFragment)getSupportFragmentManager().findFragmentByTag("goals");
            // if(fm1.isVisible())
             //{
                 Intent editIntent = new Intent(TabActivity.this, EditGoals.class);
                 startActivity(editIntent);
             //}
-        }
+        }*/
 
         if(item.getItemId() == R.id.menu_invite) {
             ga.GA_eventButtonPress("tab_menu_invite");

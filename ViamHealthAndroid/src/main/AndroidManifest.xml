@@ -108,18 +108,7 @@
 
         <activity android:name="com.viamhealth.android.activities.TermsActivity" >
         </activity>
-        <activity android:name="com.viamhealth.android.activities.EditGoals" >
-        </activity>
 
-
-        <activity android:name="com.viamhealth.android.activities.AddGoalActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name="com.viamhealth.android.activities.SelectGoals"
-            android:screenOrientation="portrait">
-        </activity>
 
         <activity android:name="com.viamhealth.android.activities.SelectFiles"
             android:screenOrientation="portrait">
@@ -129,15 +118,7 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="com.viamhealth.android.activities.AddGoalValue"
-            android:screenOrientation="portrait">
-        </activity>
 
-        <activity
-            android:name="com.viamhealth.android.activities.DeleteMedication"
-            android:theme="@android:style/Theme.Dialog"
-            android:screenOrientation="portrait">
-        </activity>
 
         <activity
             android:name="com.viamhealth.android.activities.ForgotPassword"
