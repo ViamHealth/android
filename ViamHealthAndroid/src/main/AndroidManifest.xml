@@ -213,6 +213,13 @@
             android:exported="true" >
         </service>
 
+        <receiver android:name="com.viamhealth.android.broadcast.ConnectionBroadcast">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 
