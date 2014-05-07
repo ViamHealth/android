@@ -7,29 +7,24 @@ import java.util.List;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.facebook.Session;
 import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.services.ServicesCommon;
+import com.viamhealth.android.provider.handlers.UserHandler;
 import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
-import com.viamhealth.android.utils.UIUtility;
-import com.viamhealth.android.utils.Validator;
+import com.viamhealth.android.utils.LogUtils;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -40,55 +35,43 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Parcelable;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
+public class Home extends BaseActivity implements OnClickListener {
+    Display display;
+    int width,height;
 
-public class Home extends BaseActivity implements OnClickListener{
-	Display display;
-	int width,height;
-	
-	LinearLayout main_layout, bottom_layout, core_layout;
-	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
-	List<FrameLayout> frames = new ArrayList<FrameLayout>();
 
-    RelativeLayout splashScreen;
-    ScrollView scroller;
-    ProgressBar bar;
-    TextView logoutMessage;
+    /** Parameters expected as part of the intent for Home Screen **/
+    public static final String KEY_FAMILY_LIST = "family";
 
-	ViamHealthPrefs appPrefs;
-	Global_Application ga;
-	int cnt=0,_count=0, selectedViewPosition = 0;
-	int w80,w90,h90,w20,h5,w5,w12,h30;
-	ArrayList<String> msgArray = new ArrayList<String>();
-	List<User> lstFamily = null;
-	ProgressDialog dialog;
+    LinearLayout main_layout;
+    List<LinearLayout> tiles = new ArrayList<LinearLayout>();
+    List<FrameLayout> frames = new ArrayList<FrameLayout>();
 
-	UserEP userEndPoint;
-	User user, selectedUser;
+    ViamHealthPrefs appPrefs;
+    Global_Application ga;
+    int cnt=0,_count=0, selectedViewPosition = 0;
+    int w80,w90,h90,w20,h5,w5,w12,h30;
+    ArrayList<String> msgArray = new ArrayList<String>();
+    List<User> lstFamily = null;
+    ProgressDialog dialog;
+
+    UserEP userEndPoint;
+    User user, selectedUser;
     private DisplayImageOptions options;
 
     boolean justRegistered = false;
@@ -96,9 +79,7 @@ public class Home extends BaseActivity implements OnClickListener{
 
     private ActionMode actionMode;
 
-    private final String TAG = "Home";
-
-    private static final int LOGIN_ACTIVITY = 10000;
+    private final String TAG = LogUtils.makeLogTag(Home.class);
 
     @Override
     protected void onStart() {
@@ -113,12 +94,12 @@ public class Home extends BaseActivity implements OnClickListener{
     }
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		
-		setContentView(R.layout.home);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        setContentView(R.layout.home);
 
         appPrefs = new ViamHealthPrefs(Home.this);
         ga=((Global_Application)getApplicationContext());
@@ -126,125 +107,62 @@ public class Home extends BaseActivity implements OnClickListener{
         user = ga.getLoggedInUser();
 
         //for generate square
-        scroller = (ScrollView)findViewById(R.id.scroller);
-        splashScreen = (RelativeLayout) findViewById(R.id.splash);
-        bar = (ProgressBar) splashScreen.findViewById(R.id.progressBar);
-        logoutMessage = (TextView) splashScreen.findViewById(R.id.logoutMsg);
-        logoutMessage.setVisibility(View.GONE);
+        main_layout = (LinearLayout)findViewById(R.id.main_layout);
 
-        scroller.setVisibility(View.GONE);
-        splashScreen.setVisibility(View.VISIBLE);
+        LogUtils.LOGD(TAG, "oncreate " + getIntent().toString());
 
-        if(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0) != 0 ){
-            NotificationManager mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-            mNM.cancel(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0));
-            ga.GA_eventGeneral("notification",Integer.toString(getIntent().getIntExtra(ServicesCommon.NOTIFICATION,0)),"LAUNCH");
+        lstFamily = getIntent().getParcelableArrayListExtra(KEY_FAMILY_LIST);
+        if(lstFamily==null || lstFamily.size()<1)
+            throw new IllegalArgumentException("KEY_FAMILY_LIST cannot be null or empty");
 
-        }
+        ScreenDimension();
 
-        if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
-            Intent loginIntent = new Intent(Home.this, Login.class);
-            startActivity(loginIntent);
-        }else{
-            if(getIntent().getBooleanExtra("logout", false)) {
-                logout();
-                return;
-            }
-
-            main_layout = (LinearLayout)findViewById(R.id.main_layout);
-
-            justRegistered = getIntent().getBooleanExtra("justRegistered", false);
-            lstFamily = getIntent().getParcelableArrayListExtra("family");
-
-            ScreenDimension();
-
-            next();
-        }
+        next();
     }
 
     private void next() {
         next(false);
     }
 
-    private void postLogin(){
-        main_layout = (LinearLayout)findViewById(R.id.main_layout);
-        justRegistered = getIntent().getBooleanExtra("justRegistered", false);
-        lstFamily = getIntent().getParcelableArrayListExtra("family");
-        ScreenDimension();
-        next();
-    }
     private void next(boolean moveToTabActivity) {
+        LogUtils.LOGD(TAG, "next method called");
         //if the only logged-in user has not yet created the profile than
         //force for profile creation
-        User user = ga.getLoggedInUser();
-        boolean getFamilyData = false;
-        if(user==null || lstFamily==null || lstFamily.size()==0){
-            getFamilyData = true;
+        User loggedInUser = ga.getLoggedInUser();
+
+        if(loggedInUser==null){
+            Intent intent = new Intent(Home.this, SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(SplashActivity.KEY_SHOULD_LOGOUT, true);
+            startActivity(intent);
+            return;
         }
 
+//        if(user==null)
+//            throw new Exception("logged in user is null");
+
+        //if any members profile available just generate the view
         if(lstFamily!=null && lstFamily.size()>0){
+            LogUtils.LOGD(TAG, "next: lstFamily is not null so generating the view");
             generateView();
-            splashScreen.setVisibility(View.GONE);
-            scroller.setVisibility(View.VISIBLE);
         }
 
-        if(!getFamilyData && !user.isProfileCreated()){
+        //
+        if(!loggedInUser.isProfileCreated()){
+            LogUtils.LOGD(TAG, "next: going to new profile activity ");
             // logged In User's profile not yet completed then show this
             Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
             addProfileIntent.putExtra("user", user);
             startActivityForResult(addProfileIntent, 0);
-        } else if(getFamilyData) {//fetch the data
-            lstFamily = new ArrayList<User>();
-            if(Checker.isInternetOn(Home.this)){
-                GetFamilyListTask task = new GetFamilyListTask();
-                task.applicationContext = Home.this;
-                task.execute();
-            }else{
-                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
-            }
         } else if(moveToTabActivity){//take the user to the goals screen for the loggedInUser\
-            splashScreen.setVisibility(View.GONE);
-            scroller.setVisibility(View.VISIBLE);
+            LogUtils.LOGD(TAG, "next: move to tab activity");
 
             //Monjyoti:commented
             Intent intent = new Intent(Home.this, TabActivity.class);
-            //Intent intent = new Intent(Home.this, SelectGoals.class);
-            //MJ:condition if first time,goalfragment else tabactivity
-            //Intent intent = new Intent(Home.this, GoalFragment.class);
-            intent.putExtra("user", user);
+            intent.putExtra("user", loggedInUser);
             Parcelable[] users = new Parcelable[lstFamily.size()];
             intent.putExtra("users", lstFamily.toArray(users));
             startActivity(intent);
-        }
-    }
-
-    private void logout() {
-        splashScreen.setVisibility(View.VISIBLE);
-        scroller.setVisibility(View.GONE);
-
-        logoutMessage.setVisibility(View.VISIBLE);
-
-        if(ga.getLoggedInUser().getProfile()!=null && ga.getLoggedInUser().getProfile().getFbProfileId()!=null
-                && !ga.getLoggedInUser().getProfile().getFbProfileId().isEmpty())
-            callFacebookLogout();
-
-        if(Checker.isInternetOn(Home.this)){
-            LogoutTask task = new LogoutTask();
-            task.execute();
-        }
-    }
-
-    public void callFacebookLogout() {
-        Session session = Session.getActiveSession();
-        if (session != null) {
-            if (!session.isClosed()) {
-                session.closeAndClearTokenInformation();
-            }
-        } else {
-            session = new Session(Home.this);
-            Session.setActiveSession(session);
-
-            session.closeAndClearTokenInformation();
         }
     }
 
@@ -258,7 +176,10 @@ public class Home extends BaseActivity implements OnClickListener{
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retVal = super.onOptionsItemSelected(item);
         if(item.getItemId()==R.id.menu_logout){
-            logout();
+            Intent intent = new Intent(Home.this, SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(SplashActivity.KEY_SHOULD_LOGOUT, true);
+            startActivity(intent);
             return false;
         }
 
@@ -273,13 +194,7 @@ public class Home extends BaseActivity implements OnClickListener{
         }
 
         if(item.getItemId() == R.id.menu_refresh) {
-            if(Checker.isInternetOn(Home.this)){
-                GetFamilyListTask task = new GetFamilyListTask();
-                task.applicationContext = Home.this;
-                task.execute();
-            }else{
-                Toast.makeText(Home.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
-            }
+            //getLoaderManager().restartLoader(USERS_LOADER, null, this);
         }
 
         if(item.getItemId()==R.id.menu_change_password){
@@ -324,7 +239,6 @@ public class Home extends BaseActivity implements OnClickListener{
                 public void onClick(DialogInterface dialog, int which) {
                     if(Checker.isInternetOn(Home.this)){
                         if(isValid()){
-                            ga.GA_eventButtonPress("home_change_password");
                             ChangePasswordTask task = new ChangePasswordTask();
                             task.execute(old.getText().toString(), newP.getText().toString());
                         }
@@ -340,12 +254,7 @@ public class Home extends BaseActivity implements OnClickListener{
         return retVal;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-	}
-
-	public void ScreenDimension(){
+    public void ScreenDimension(){
         display = getWindowManager().getDefaultDisplay();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
@@ -355,10 +264,12 @@ public class Home extends BaseActivity implements OnClickListener{
     private void generateTile(int position, boolean shouldCreateAddNewProfileTile) throws ImproperArgumentsPassedException {
         LinearLayout horizontalLinearLayout;
         int horizontalPosition = position/2;
+        LogUtils.LOGD(TAG, "Generating tiles for position - " + position + "; shouldCreateAddNewProfileTile - " + shouldCreateAddNewProfileTile);
         if(position%2==0 && main_layout.getChildCount()<=horizontalPosition){
             horizontalLinearLayout = new LinearLayout(Home.this);
             horizontalLinearLayout.setTag("HLL"+horizontalPosition);
             main_layout.addView(horizontalLinearLayout);
+            LogUtils.LOGD(TAG, "generatingTile>> just added the horizontalLinearLayout to mainLayout" );
         }else{
             horizontalLinearLayout = (LinearLayout) main_layout.findViewWithTag("HLL"+horizontalPosition);
         }
@@ -414,7 +325,6 @@ public class Home extends BaseActivity implements OnClickListener{
             frm.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    ga.GA_eventButtonPress("home_long_click");
                     int index = v.getId();
                     selectedViewPosition = index;
                     if(lstFamily.size() > index) {
@@ -430,7 +340,7 @@ public class Home extends BaseActivity implements OnClickListener{
             imgProfile.setLayoutParams(lp);
             imgProfile.setCropped(true);
             imgProfile.setTag("ppic");
-            Log.d(TAG, "GenerateTile::profilePic- default being set to - social_add_person");
+            LogUtils.LOGD(TAG, "GenerateTile::profilePic- default being set to - social_add_person");
             imgProfile.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_add_person));
 
             final ProfilePictureView ppv = imgProfile;
@@ -443,7 +353,7 @@ public class Home extends BaseActivity implements OnClickListener{
             if(u==null || u.getProfile()==null || //if user or proile is not yet set
                     (u.getProfile().getFbProfileId()!=null && !u.getProfile().getFbProfileId().isEmpty()) // if fbId is valid one then
                     || (u.getProfile().getProfilePicURL()==null || u.getProfile().getProfilePicURL().isEmpty() // if profilePic is default or not set then
-                            || u.getProfile().getProfilePicURL().endsWith("default_profile_picture_n.jpg"))){
+                    || u.getProfile().getProfilePicURL().endsWith("default_profile_picture_n.jpg"))){
                 iv.setVisibility(View.GONE);
                 imgProfile.setVisibility(View.VISIBLE);
 
@@ -454,7 +364,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
                     public void OnFileLoaded(File file) {
-                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        LogUtils.LOGD(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
                         iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
                         iv.setVisibility(View.VISIBLE);
                         ppv.setVisibility(View.GONE);
@@ -510,7 +420,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
                     public void OnFileLoaded(File file) {
-                        Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
+                        LogUtils.LOGD(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
                         iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
                         iv.setVisibility(View.VISIBLE);
                         ppv.setVisibility(View.GONE);
@@ -526,8 +436,8 @@ public class Home extends BaseActivity implements OnClickListener{
             txtName.setText(lstFamily.get(position).getName());
         }
     }
-	public void generateView(){
-	  	String[] str = appPrefs.getMenuList().split(",");
+    public void generateView(){
+        String[] str = appPrefs.getMenuList().split(",");
         for(int i = 0; i<lstFamily.size(); i++){
             try{
                 generateTile(i, false);
@@ -543,17 +453,17 @@ public class Home extends BaseActivity implements OnClickListener{
         } catch (ImproperArgumentsPassedException ime) {
             Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
         }
-	}
+    }
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-        Log.e("TAG", "id is : " + v.getId());
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        LogUtils.LOGD(TAG, "onclick: viewid is : " + v.getId());
         int index = v.getId();
         this.selectedViewPosition = index;
         LinearLayout tr1lay=(LinearLayout)tiles.get(index);
         Boolean shouldCreateProfile = index<lstFamily.size() && lstFamily.get(index).isProfileCreated() ?
-                                        false : true;
+                false : true;
 
         if(lstFamily.size() > index) {
             selectedUser = lstFamily.get(index);
@@ -578,16 +488,13 @@ public class Home extends BaseActivity implements OnClickListener{
                 startActivityForResult(addProfileIntent, index);
             }else{
                 Intent intent = new Intent(Home.this, TabActivity.class);
-                //Intent intent = new Intent(Home.this, SelectGoals.class);
-                //MJ:condition if first time then goalfragment,otherwise tabactivity
-                //Intent intent = new Intent(Home.this, GoalFragment.class);
                 intent.putExtra("user", selectedUser);
                 Parcelable[] users = new Parcelable[lstFamily.size()];
                 intent.putExtra("users", lstFamily.toArray(users));
                 startActivity(intent);
             }
         }
-	}
+    }
 
 
     @Override
@@ -602,28 +509,17 @@ public class Home extends BaseActivity implements OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
-        if(requestCode == LOGIN_ACTIVITY){
-            if(resultCode == Activity.RESULT_OK){
-                postLogin();
-            } else{
-                finish();
-            }
-        }
+
         if(resultCode==RESULT_OK){
             if(requestCode < 100) {
                 if(isEditMode && actionMode!=null)
                     actionMode.finish();
 
                 user = (User) data.getParcelableExtra("user");
-                if(Checker.isInternetOn(Home.this)){
-                    CallAddProfileTask task = new CallAddProfileTask();
-                    task.applicationContext = Home.this;
-                    task.execute();
-
-                }else{
-
-                }
+                UserHandler uh = new UserHandler(Home.this);
+                uh.saveLocally(user, false);
             }else{//it is from tabactivity
+
 
             }
         }
@@ -634,7 +530,6 @@ public class Home extends BaseActivity implements OnClickListener{
     {
         protected Context applicationContext;
         protected boolean isBeingUpdated;
-        protected boolean profilPicBugIsBugUpdated;
 
         @Override
         protected void onPreExecute()
@@ -648,7 +543,7 @@ public class Home extends BaseActivity implements OnClickListener{
         {
             if(result.toString().equals("0")){
                 try{
-                    if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                    if(isBeingUpdated){
                         generateTile(selectedViewPosition, false);
                     }else{
                         generateTile(lstFamily.size()-1, false);
@@ -659,81 +554,22 @@ public class Home extends BaseActivity implements OnClickListener{
                     Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
-                Intent intent = new Intent(Home.this, TabActivity.class);
-                intent.putExtra("user", user);
-                Parcelable[] users = new Parcelable[lstFamily.size()];
-                intent.putExtra("users", lstFamily.toArray(users));
-                startActivity(intent);
             }else{
                 dialog.dismiss();
-                if(result.toString().equals("1")){
-                    Toast.makeText(Home.this,
-                            "Email/Mobile No. already registered. Edit details for "+user.getFirstName() + ".",
-                            Toast.LENGTH_LONG).show();
-                    try{
-
-                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
-                            lstFamily.set(selectedViewPosition, user);
-                        }
-                        else
-                            lstFamily.add(user);
-                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
-                            generateTile(selectedViewPosition, false);
-                        }else{
-                            generateTile(lstFamily.size()-1, false);
-                            generateTile(lstFamily.size(), true);
-                        }
-
-
-                    } catch (ImproperArgumentsPassedException ime) {
-                        Toast.makeText(Home.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Toast.makeText(Home.this, "Not able to add a new profile.", Toast.LENGTH_SHORT).show();
-                }
-                Intent intent = new Intent(Home.this, Home.class);
-                ArrayList<User> families = (ArrayList<User>) lstFamily;
-                intent.putParcelableArrayListExtra("family", families);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
+                Toast.makeText(Home.this, "Not able to add a new profile...", Toast.LENGTH_SHORT).show();
             }
-
-
         }
 
         @Override
         protected String doInBackground(String... params) {
             UserEP userEP = new UserEP(Home.this, ga);
-
             isBeingUpdated = (user.getId()>0)? true: false;
-            profilPicBugIsBugUpdated = Boolean.FALSE;
-            if(isBeingUpdated == true){
-                profilPicBugIsBugUpdated = Boolean.TRUE;
-            } else {
-            for(User uu : lstFamily){
-                if(uu.getId() == user.getId()){
-                    profilPicBugIsBugUpdated = Boolean.TRUE;
-                    //isBeingUpdated = false;
-                }
-            }
-            }
-            try{
-                user = userEP.updateUser(user);
-                if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
-                    lstFamily.set(selectedViewPosition, user);
-                }
-                else
-                    lstFamily.add(user);
-                return "0";
-            } catch ( IllegalArgumentException e){
-                e.printStackTrace();
-                return "1";
-            }
-
-
-
+            user = userEP.updateUser(user);
+            if(isBeingUpdated)
+                lstFamily.set(selectedViewPosition, user);
+            else
+                lstFamily.add(user);
+            return "0";
         }
     }
 
@@ -772,70 +608,6 @@ public class Home extends BaseActivity implements OnClickListener{
             return isSuccess;
         }
     }
-
-    // async class for calling webservice and get responce message
-    public class GetFamilyListTask extends AsyncTask <String, Void,String>
-    {
-        protected Context applicationContext;
-
-        @Override
-        protected void onPreExecute() {
-            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-            dialog = new ProgressDialog(Home.this, R.style.StyledProgressDialog);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setMessage("loading your family");
-            //dialog.show();
-            Log.i("onPreExecute", "onPreExecute");
-
-        }
-
-        protected void onPostExecute(String result) {
-            if(lstFamily.isEmpty()){
-                logout();
-                return;
-            }
-            splashScreen.setVisibility(View.GONE);
-            scroller.setVisibility(View.VISIBLE);
-
-            next();
-            //dialog.dismiss();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            lstFamily.clear();
-            if(ga.getLoggedInUser()==null){
-                userEndPoint.getLoggedInUser();
-            }
-            lstFamily.addAll(userEndPoint.GetFamilyMembers());
-            return null;
-        }
-
-    }
-
-    public class LogoutTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected void onPreExecute() {
-            splashScreen.setVisibility(View.VISIBLE);
-            scroller.setVisibility(View.GONE);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            ga.setLoggedInUser(null);
-            appPrefs.setToken(null);
-            Intent i = new Intent(Home.this, Login.class);
-            startActivity(i);
-            finish();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            return userEndPoint.Logout();
-        }
-    }
-
 
     public class ChangePasswordTask extends AsyncTask<String, Void, Boolean> {
 
@@ -907,19 +679,17 @@ public class Home extends BaseActivity implements OnClickListener{
         }
 
         private void deleteUser() {
-            ga.GA_eventButtonPress("home_delete_user");
             View dialogView = LayoutInflater.from(Home.this).inflate(R.layout.delete_confirmation, null);
 
             TextView message = (TextView) dialogView.findViewById(R.id.confirmMessage);
-            message.setText("Are you sure?");// + selectedUser.getName() + "?");
+            message.setText("delete " + selectedUser.getName() + "?");
             AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.StyledProgressDialog);
             builder.setView(dialogView);
-            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     if (Checker.isInternetOn(Home.this)) {
-                        ga.GA_eventButtonPress("home_delete_user_confirm");
                         CallDeleteProfileTask task = new CallDeleteProfileTask();
                         task.applicationContext = Home.this;
                         task.execute();
@@ -931,14 +701,12 @@ public class Home extends BaseActivity implements OnClickListener{
         }
 
         private void shareUser() {
-            ga.GA_eventButtonPress("home_share_user");
             ShareUser share = new ShareUser(Home.this, ga, selectedUser);
             share.show();
             actionMode.finish();
         }
 
         private void editUser() {
-            ga.GA_eventButtonPress("home_share_user");
             Intent addProfileIntent = new Intent(Home.this, NewProfile.class);
             addProfileIntent.putExtra("user", selectedUser);
             addProfileIntent.putExtra("isEditMode", true);

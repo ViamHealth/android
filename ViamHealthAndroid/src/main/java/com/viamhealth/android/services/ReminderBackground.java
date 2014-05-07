@@ -14,6 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by monj on 5/2/14.
  */
+// This class will be obselete after removing wizard codebase.
 public class ReminderBackground extends IntentService {
 
     Global_Application ga;

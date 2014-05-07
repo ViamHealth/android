@@ -180,11 +180,64 @@ public class UserEP extends BaseEP {
         return _login(fbAccessToken, null, LoginType.FB);
     }
 
-    private enum LoginType {
+    public enum LoginType {
         Email,
         Mobile,
         FB,
         UserName;
+    }
+
+    public String login(String key, String password, LoginType type){
+        String baseurlString = Global_Application.url+"api-token-auth/";
+
+        RestClient client = new RestClient(baseurlString);
+
+        switch(type){
+            case FB:
+                client.AddParam("access_token", key);
+                break;
+
+            case Email:
+                client.AddParam("email",key);
+                client.AddParam("password",password);
+                break;
+
+            case Mobile:
+                client.AddParam("mobile",key);
+                client.AddParam("password",password);
+                break;
+
+            case UserName:
+                client.AddParam("username",key);
+                client.AddParam("password",password);
+                break;
+
+        }
+
+        try{
+            client.Execute(RequestMethod.POST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        String responseString = client.getResponse();
+        Log.i(TAG, "login:" + client.toString());
+        User user = null;
+        try {
+            JSONObject jObject = new JSONObject(responseString);
+            //TODO::implement proper error handling
+            String	responsetxt1 = jObject.getString("token");
+            if(responsetxt1.length()>0){
+                Log.i(TAG,"token is " + responsetxt1);
+                return responsetxt1;
+            }
+            //return responsetxt1;
+            //user = getLoggedInUser();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private User _login(String key, String password, LoginType type){
