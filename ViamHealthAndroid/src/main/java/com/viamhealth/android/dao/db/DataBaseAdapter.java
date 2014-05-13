@@ -2,7 +2,6 @@ package com.viamhealth.android.dao.db;
 
 import java.util.ArrayList;
 
-import com.viamhealth.android.model.GoalData;
 import com.viamhealth.android.model.ReminderData;
 import android.content.Context;
 import android.database.Cursor;
@@ -62,126 +61,9 @@ public class DataBaseAdapter {
 			myDatabase.close();
 		}
 }
-	public ArrayList<GoalData> insertGoal(String gn,String gd,String gv,String dates,String val){
-		ArrayList<GoalData> lstdata = new ArrayList<GoalData>();
-		 Log.e("TAG","Insert GoalActivity");
-		try{		
-			myDatabase = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE, null);
-			
-				 String query = "insert or ignore into goal (gn,gd,gv,dates,val,dates) values ('"+gn+"','"+gd+"','"+gv+"','"+dates+"','"+val+"','');";
-				 myDatabase.execSQL(query);
-				 String query1 = "SELECT id from goal order by id DESC limit 1";
-				 Cursor c = myDatabase.rawQuery(query1,null);
-				 if (c != null && c.moveToFirst()) 
-				 {
-				     int lastId = c.getInt(0);
-				     Log.e("TAG","Last id is : " + lastId);
-				     String query2 = "SELECT * from goal where id='"+ lastId+"'";
-				     Cursor resultset = myDatabase.rawQuery(query2, null);
-				     while(resultset.moveToNext()){   
-	                	 lstdata.add(new GoalData(resultset.getString(0),resultset.getString(1), resultset.getString(2), resultset.getString(3),
-	                			 				  resultset.getString(4), resultset.getString(5), resultset.getString(6)));
-	                 }
-	                 resultset.close();
-	                
-				 }
-				
-				 //myDatabase.close();
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				myDatabase.close();
-			}finally{
-				myDatabase.close();
-			}
-		return lstdata;
-	}
+
 	
-	public ArrayList<GoalData> getGoal(){
-		ArrayList<GoalData> lstdata = new ArrayList<GoalData>();
-		try{		
-				myDatabase = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE, null);
-				String query2 = "SELECT * from goal";
-			    Cursor resultset = myDatabase.rawQuery(query2, null);
-			    while(resultset.moveToNext()){   
-                	 lstdata.add(new GoalData(resultset.getString(0),resultset.getString(1), resultset.getString(2), resultset.getString(3),
-                			 				  resultset.getString(4), resultset.getString(5),resultset.getString(6)));
-                }
-                resultset.close();
-                myDatabase.close();
-			
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				myDatabase.close();
-			}finally{
-				myDatabase.close();
-			}
-		return lstdata;
-	}
-	public String AddNewValue(String Val,String id,String date){
-		String succes = "0";
-		ArrayList<GoalData> lstdata = new ArrayList<GoalData>();
-		String gv = "",dates1="";
-		try{		
-				myDatabase = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE, null);
-				String query2 = "SELECT * from goal where id='"+id+"'";
-			    Cursor resultset = myDatabase.rawQuery(query2, null);
-			    while(resultset.moveToNext()){   
-			    	gv=resultset.getString(3);
-			    	dates1=resultset.getString(6);
-			    }
-			    String temp="";
-			    if(dates1!=null){
-			    	temp=date+dates1;
-			    }else{
-			    	temp=date;
-			    }
-				String query3 = "UPDATE goal set gv='"+ (gv+Val)+"', dates1= '"+temp+"' where id='"+id +"'";
-			  /*  Cursor resultset1 = myDatabase.rawQuery(query3, null);
-			    while(resultset1.moveToNext()){   
-                	 lstdata.add(new GoalData(resultset.getString(0),resultset.getString(1), resultset.getString(2), resultset.getString(3),
-                			 				  resultset.getString(4), resultset.getString(5),resultset.getString(6)));
-                }*/
-				myDatabase.execSQL(query3);
-			    succes="0";
-			    resultset.close();
-			    return succes;
-              
-				
-			
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				myDatabase.close();
-			}finally{
-				myDatabase.close();
-			}
-		return succes;
-	}
-	
-	public void managegoal(String id,int status,String val){
-		String succes = "0";
-		try{		
-				myDatabase = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE, null);
-				if(status==0){
-					String query2 = "delete from goal where id='"+id+"'";
-					myDatabase.execSQL(query2);
-				}else{
-					String query3 = "UPDATE goal set val='"+ val+"' where id='"+id +"'";
-					myDatabase.execSQL(query3);
-				}
-				
-				myDatabase.close();
-			
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				myDatabase.close();
-			}finally{
-				myDatabase.close();
-			}
-	}
+
 	
 	public void insertReminder(String name,String date){
 		try{		

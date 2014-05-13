@@ -23,7 +23,6 @@ import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.FileFragment;
 import com.viamhealth.android.activities.fragments.FileListFragment;
 import com.viamhealth.android.activities.fragments.FileShowcaseActivity;
-import com.viamhealth.android.adapters.CheckboxGoalListAdapter;
 import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.Reminder;

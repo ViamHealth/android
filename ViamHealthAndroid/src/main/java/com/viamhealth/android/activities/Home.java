@@ -14,7 +14,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 
-import com.viamhealth.android.activities.fragments.GoalFragment;
+
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
 import com.viamhealth.android.manager.ImageSelector;

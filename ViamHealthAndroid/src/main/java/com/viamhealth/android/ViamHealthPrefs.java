@@ -43,14 +43,6 @@ public class ViamHealthPrefs {
 		this.prefsEditor = appSharedPrefs.edit();
 	}
 
-    public int getTargetCaloriesPerDay() {
-        return appSharedPrefs.getInt("targetCalories", 0);
-    }
-
-    public void setTargetCaloriesPerDay(int targetCaloriesPerDay) {
-        this.prefsEditor.putInt("targetCalories", targetCaloriesPerDay).commit();
-    }
-
     public String getSheight() {
 		return appSharedPrefs.getString(sheight, "0");
 	}
@@ -78,9 +70,7 @@ public class ViamHealthPrefs {
 	public void setToken(String _token) {
 		this.prefsEditor.putString(token, _token).commit();
 	}
-    public String getFBAccessToken() {
-        return appSharedPrefs.getString(fbtoken, null);
-    }
+
 
     public void setFBAccessToken(String _token) {
         this.prefsEditor.putString(fbtoken, _token).commit();
@@ -90,19 +80,51 @@ public class ViamHealthPrefs {
 		return appSharedPrefs.getString(menuList, "");
 	}
 
+    public String getUsername() {
+        return appSharedPrefs.getString(username, "");
+    }
+
+    public void setUsername(String _username) {
+        this.prefsEditor.putString(username, _username).commit();
+    }
+    public void setBtnprofile_hide(String _btnprofile_hide) {
+        this.prefsEditor.putString(btnprofile_hide, _btnprofile_hide).commit();
+    }
+
+    public String getUserid() {
+        return appSharedPrefs.getString(userid, "0");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /* Unused functions . Need toc heck before deleting*/
+
+    public int getTargetCaloriesPerDay() {
+        return appSharedPrefs.getInt("targetCalories", 0);
+    }
+
+    public void setTargetCaloriesPerDay(int targetCaloriesPerDay) {
+        this.prefsEditor.putInt("targetCalories", targetCaloriesPerDay).commit();
+    }
+
+    public String getFBAccessToken() {
+        return appSharedPrefs.getString(fbtoken, null);
+    }
+
 	public void setMenuList(String _menuList) {
 		this.prefsEditor.putString(menuList, _menuList).commit();
 	}
 
-	public String getUsername() {
-		return appSharedPrefs.getString(username, "");
-	}
-
-	public void setUsername(String _username) {
-		this.prefsEditor.putString(username, _username).commit();
-	}
-
-	public String getReloadgraph() {
+    public String getReloadgraph() {
 		return appSharedPrefs.getString(reloadgraph, "0");
 	}
 
@@ -202,10 +224,6 @@ public class ViamHealthPrefs {
 	}
 
 
-	public void setBtnprofile_hide(String _btnprofile_hide) {
-		this.prefsEditor.putString(btnprofile_hide, _btnprofile_hide).commit();
-	}
-
 
 	public String getBtnhealth_hide() {
 		return appSharedPrefs.getString(btnhealth_hide, "0");
@@ -227,9 +245,7 @@ public class ViamHealthPrefs {
 	}
 
 
-	public String getUserid() {
-		return appSharedPrefs.getString(userid, "0");
-	}
+
 
 
 	public void setUserid(String _userid) {
