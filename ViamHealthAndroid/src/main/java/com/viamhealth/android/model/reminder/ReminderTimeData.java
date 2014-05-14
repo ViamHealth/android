@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
-* Created by naren on 22/11/13.
-*/
+ * Created by naren on 22/11/13.
+ */
 public class ReminderTimeData implements Parcelable {
     Integer count;
 
@@ -17,7 +17,8 @@ public class ReminderTimeData implements Parcelable {
         this.count = count;
     }
 
-    public ReminderTimeData() {}
+    public ReminderTimeData() {
+    }
 
     public ReminderTimeData(Parcel in) {
         count = in.readInt();

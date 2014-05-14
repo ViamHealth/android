@@ -20,13 +20,19 @@ public enum BloodGroup {
 
     private final int value;
     private final String viewStr;
-    BloodGroup(int value, String viewStr){
+
+    BloodGroup(int value, String viewStr) {
         this.value = value;
         this.viewStr = viewStr;
     }
 
-    public int value() {return value;}
-    public String viewStr() {return viewStr;}
+    public int value() {
+        return value;
+    }
+
+    public String viewStr() {
+        return viewStr;
+    }
 
     // Lookup table
     private static final Map<Integer, BloodGroup> valuelookup = new HashMap<Integer, BloodGroup>();
@@ -34,13 +40,13 @@ public enum BloodGroup {
 
     // Populate the lookup table on loading time
     static {
-        for (BloodGroup bg : EnumSet.allOf(BloodGroup.class)){
+        for (BloodGroup bg : EnumSet.allOf(BloodGroup.class)) {
             valuelookup.put(bg.value(), bg);
             strlookup.put(bg.viewStr(), bg);
         }
     }
 
-    public static BloodGroup get(String viewStr){
+    public static BloodGroup get(String viewStr) {
         return strlookup.get(viewStr);
     }
 

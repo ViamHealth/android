@@ -18,13 +18,18 @@ public enum LifeStyle {
     private final int value;
     private final String key;
 
-    LifeStyle(int value, String key){
+    LifeStyle(int value, String key) {
         this.value = value;
         this.key = key;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
 
     // Lookup table
     private static final Map<Integer, LifeStyle> valuelookup = new HashMap<Integer, LifeStyle>();
@@ -32,7 +37,7 @@ public enum LifeStyle {
 
     // Populate the lookup table on loading time
     static {
-        for (LifeStyle bmi : EnumSet.allOf(LifeStyle.class)){
+        for (LifeStyle bmi : EnumSet.allOf(LifeStyle.class)) {
             valuelookup.put(bmi.value(), bmi);
             keylookup.put(bmi.key(), bmi);
         }

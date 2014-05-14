@@ -7,14 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
-import com.viamhealth.android.model.users.FbFamily;
-import com.viamhealth.android.model.users.User;
-
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.users.User;
 
 import java.util.List;
 
@@ -53,7 +50,7 @@ public class UsersMenuAdapter extends ArrayAdapter<User> {
         //relation.setText(values.get(position).getRelationship());
         relation.setVisibility(View.GONE);
 
-        if(user.getProfile()!=null && user.getProfile().getFbProfileId()!=null)
+        if (user.getProfile() != null && user.getProfile().getFbProfileId() != null)
             profilePic.setProfileId(user.getProfile().getFbProfileId());
         else
             profilePic.setVisibility(View.GONE);

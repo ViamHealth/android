@@ -15,13 +15,18 @@ public enum Gender {
     private final int value;
     private final String key;
 
-    Gender(int value, String key){
+    Gender(int value, String key) {
         this.value = value;
         this.key = key;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
 
     // Lookup table
     private static final Map<Integer, Gender> valuelookup = new HashMap<Integer, Gender>();
@@ -29,7 +34,7 @@ public enum Gender {
 
     // Populate the lookup table on loading time
     static {
-        for (Gender g : EnumSet.allOf(Gender.class)){
+        for (Gender g : EnumSet.allOf(Gender.class)) {
             valuelookup.put(g.value(), g);
             keylookup.put(g.key(), g);
         }

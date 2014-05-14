@@ -3,8 +3,10 @@ package com.viamhealth.android.ui;
 /**
  * Created by naren on 20/11/13.
  */
+
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -42,7 +44,12 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
         //Child clipping doesn't work with hardware acceleration in Android 3.x/4.x
         //You need to set this value here if using hardware acceleration in an
         // application targeted at these releases.
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+            // only for gingerbread and newer versions
+//        setLayerType
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
     }
 
     @Override
@@ -74,8 +81,8 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
         // to implement scrolling from a touch outside the pager bounds.
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mInitialTouch.x = (int)ev.getX();
-                mInitialTouch.y = (int)ev.getY();
+                mInitialTouch.x = (int) ev.getX();
+                mInitialTouch.y = (int) ev.getY();
             default:
                 ev.offsetLocation(mCenter.x - mInitialTouch.x, mCenter.y - mInitialTouch.y);
                 break;
@@ -92,7 +99,8 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
     }
 
     @Override
-    public void onPageSelected(int position) { }
+    public void onPageSelected(int position) {
+    }
 
     @Override
     public void onPageScrollStateChanged(int state) {

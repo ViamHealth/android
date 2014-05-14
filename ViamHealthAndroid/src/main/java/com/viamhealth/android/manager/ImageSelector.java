@@ -32,7 +32,7 @@ public class ImageSelector {
     private static final int CAMERA_PIC_REQUEST = 1337;
     private static final int LIBRARY_FILE_REQUEST = 1338;
 
-    public enum FileType { Image, All; }
+    public enum FileType {Image, All;}
 
     private Uri uri;
     private Bitmap bitmap;
@@ -60,14 +60,14 @@ public class ImageSelector {
     }
 
     protected void dispatchOnImageLoadEvent() {
-        if(this.onImageLoadedListener!=null){
+        if (this.onImageLoadedListener != null) {
             onImageLoadedListener.OnLoad(ImageSelector.this);
         }
     }
 
     public void pickFile(final FileType type) {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Library",
+                "Cancel"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("Upload from...");
@@ -81,20 +81,20 @@ public class ImageSelector {
                     Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     //camera.putExtra("android.intent.extras.CAMERA_FACING", 1);
                     camera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                    if(mFragment!=null)
+                    if (mFragment != null)
                         mFragment.startActivityForResult(camera, CAMERA_PIC_REQUEST);
                     else
                         mActivity.startActivityForResult(camera, CAMERA_PIC_REQUEST);
 
                 } else if (items[item].equals("Choose from Library")) {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    if(type==FileType.Image)
+                    if (type == FileType.Image)
                         photoPickerIntent.setType("image/*");
-                    if(type==FileType.All)
+                    if (type == FileType.All)
                         photoPickerIntent.setType("*/*");
                     photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
 
-                    if(mFragment!=null)
+                    if (mFragment != null)
                         mFragment.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
                     else
                         mActivity.startActivityForResult(photoPickerIntent, LIBRARY_FILE_REQUEST);
@@ -110,7 +110,7 @@ public class ImageSelector {
     }
 
     public String getFileName() {
-        if(file==null)
+        if (file == null)
             return null;
         return file.getName();
     }
@@ -124,7 +124,7 @@ public class ImageSelector {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, options);
 
-        if(!options.outMimeType.contains("image"))
+        if (!options.outMimeType.contains("image"))
             return null;
 
         options.inSampleSize = calculateInSampleSize(options, width, height);
@@ -143,7 +143,7 @@ public class ImageSelector {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length, options);
 
-        if(options.outMimeType==null || !options.outMimeType.contains("image"))
+        if (options.outMimeType == null || !options.outMimeType.contains("image"))
             return null;
 
         options.inSampleSize = calculateInSampleSize(options, width, height);
@@ -191,12 +191,12 @@ public class ImageSelector {
 
     public boolean onActivityResult(int requestCode, int resultCode, Intent data, OnImageLoadedListener listener) {
         setOnImageLoadedListener(listener);
-        Activity activity = mActivity==null ? mFragment.getActivity() : mActivity;
+        Activity activity = mActivity == null ? mFragment.getActivity() : mActivity;
 
-        if(requestCode==LIBRARY_FILE_REQUEST || requestCode==CAMERA_PIC_REQUEST){
-            if(resultCode==activity.RESULT_OK){
+        if (requestCode == LIBRARY_FILE_REQUEST || requestCode == CAMERA_PIC_REQUEST) {
+            if (resultCode == activity.RESULT_OK) {
                 System.gc();
-                if(requestCode==LIBRARY_FILE_REQUEST){
+                if (requestCode == LIBRARY_FILE_REQUEST) {
                     uri = data.getData();
                 }
                 getRealPathFromURI(activity, uri, new FileLoader.OnFileLoadedListener() {
@@ -227,39 +227,38 @@ public class ImageSelector {
         FilePath;
     }
 
-    public static void getRealPathFromURI(Context context, Uri uri, FileLoader.OnFileLoadedListener listener){
+    public static void getRealPathFromURI(Context context, Uri uri, FileLoader.OnFileLoadedListener listener) {
         String filePath = null;
 
         String scheme = uri.getScheme();
-        if(scheme==null)
+        if (scheme == null)
             return;
 
         if (scheme.equals("file")) {
             listener.OnFileLoaded(new File(uri.getPath()));
-        }
-        else if (scheme.equals("content")) {
+        } else if (scheme.equals("content")) {
             if (uri.toString().startsWith("content://com.android.gallery3d.provider")) {
                 uri = Uri.parse(uri.toString().replace("com.android.gallery3d", "com.google.android.gallery3d"));
             }
             String[] proj = {MediaStore.Files.FileColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME};
             UriType type;
-            if(uri.toString().startsWith("content://com.google.android.gallery3d.provider")){ // in case of picasa image from gallery
+            if (uri.toString().startsWith("content://com.google.android.gallery3d.provider")) { // in case of picasa image from gallery
                 type = UriType.PicasaImage;
-            }else{
+            } else {
                 type = UriType.FilePath;
             }
 
             Cursor cursor = context.getContentResolver().query(uri, proj, null, null, null);
             if (cursor != null) {
-                if(cursor.getCount() != 0){
+                if (cursor.getCount() != 0) {
                     cursor.moveToFirst();
-                    if(type==UriType.PicasaImage){// if it is a picasa image on newer devices with OS 3.0 and up
+                    if (type == UriType.PicasaImage) {// if it is a picasa image on newer devices with OS 3.0 and up
                         int columnIndex = cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME);
-                        if(columnIndex!=-1){
+                        if (columnIndex != -1) {
                             FileLoader loader = new FileLoader(context, null);
                             loader.LoadFile(uri.toString(), null, listener);
                         }
-                    }else if(type==UriType.FilePath){
+                    } else if (type == UriType.FilePath) {
                         int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
                         listener.OnFileLoaded(new File(cursor.getString(columnIndex)));
                     }

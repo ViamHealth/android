@@ -1,52 +1,35 @@
 package com.viamhealth.android.activities.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.ShareActionProvider;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
-import com.viamhealth.android.activities.AddReminder;
 import com.viamhealth.android.adapters.ReminderDataAdapter;
 import com.viamhealth.android.dao.rest.endpoints.ReminderEP;
-import com.viamhealth.android.manager.BaseFragmentManager;
-import com.viamhealth.android.model.FileData;
-import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.notification.NotifyManager;
-import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
 import com.viamhealth.android.utils.DateUtils;
-import com.viamhealth.android.utils.UIUtility;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +68,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
         isFirstTime = getArguments().getBoolean("isFirstTime");
         readings = getArguments().getParcelableArrayList("readings");
 
-        ga=((Global_Application)getSherlockActivity().getApplicationContext());
+        ga = ((Global_Application) getSherlockActivity().getApplicationContext());
 
         reminderEP = new ReminderEP(getActivity(), ga);
         super.onCreate(savedInstanceState);
@@ -109,8 +92,8 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==Activity.RESULT_OK){
-            if(requestCode==ADD_REMINDER_REQUEST){
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == ADD_REMINDER_REQUEST) {
                 Reminder reminder = data.getParcelableExtra("reminder");
 
             }
@@ -118,26 +101,26 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
     }
 
     protected View updateViewWithData(View view) {
-        TextView dateView = (TextView)view.findViewById(R.id.dateTextView);
+        TextView dateView = (TextView) view.findViewById(R.id.dateTextView);
         //ScrollView sView = (ScrollView)view.findViewById(R.id.scrollView);
         ListView list = (ListView) view.findViewById(android.R.id.list);
-        FrameLayout fL = (FrameLayout)view.findViewById(R.id.initial_layout);
+        FrameLayout fL = (FrameLayout) view.findViewById(R.id.initial_layout);
 
         dateView.setVisibility(View.VISIBLE);
 
         dateView.setText(DateUtils.getDisplayText(currentDate));
 
-        if(isFirstTime || readings==null || readings.isEmpty()){
+        if (isFirstTime || readings == null || readings.isEmpty()) {
             list.setVisibility(View.GONE);
             fL.setVisibility(View.VISIBLE);
             TextView tView = (TextView) view.findViewById(R.id.textView);
-            if(isFirstTime){
+            if (isFirstTime) {
                 tView.setText(R.string.reminder_initial_string);
                 dateView.setVisibility(View.GONE);
-            }else{
+            } else {
                 tView.setText(R.string.reminder_no_data);
             }
-        }else{
+        } else {
             list.setVisibility(View.VISIBLE);
             fL.setVisibility(View.GONE);
         }
@@ -151,7 +134,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
             }
         });
 
-        if(readings!=null && readings.size()>0){
+        if (readings != null && readings.size() > 0) {
             //construct the list view here
 
             adapter = new ReminderDataAdapter(getSherlockActivity(), R.layout.row_reminder_reading, readings, currentDate);
@@ -159,20 +142,19 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
             adapter.setOnSaveReminderAction(new ReminderDataAdapter.OnSaveReminderAction() {
                 @Override
                 public void OnSave(ReminderReading reading) {
-                    if(Checker.isInternetOn(getSherlockActivity())){
+                    if (Checker.isInternetOn(getSherlockActivity())) {
                         SaveAction task = new SaveAction();
                         task.reading = reading;
                         task.execute();
-                    }else{
+                    } else {
                         Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+            list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-                {
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     ga.GA_eventButtonPress("reminders_list_long_click");
                     if (actionMode != null) {
                         // if already in action mode - do nothing
@@ -183,10 +165,10 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                     getSherlockActivity().startActionMode(new ReminderListActionMode());
                     actionMode.invalidate();
                     return true;
-                    }
+                }
             });
 
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                     ga.GA_eventButtonPress("files_list_click");
@@ -294,9 +276,9 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
 
                 case R.id.action_mode_delete:
                     ga.GA_eventButtonPress("reminders_delete");
-                    if(adapter.getCheckedItemCount()>0){
+                    if (adapter.getCheckedItemCount() > 0) {
                         OnDelete(reminders);
-                    }else{
+                    } else {
                         Toast.makeText(getSherlockActivity(), "Please select atlest one reminder..", Toast.LENGTH_SHORT).show();
                     }
 
@@ -319,26 +301,28 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
 
     public interface OnRemiderDataChangeListener {
         public void OnAdd(Date date);
+
         public void OnEdit(Reminder reminder);
+
         public void OnDelete(Reminder[] reminders);
     }
 
     protected OnRemiderDataChangeListener listener;
 
-    public void setOnRemiderDataChangeListener(OnRemiderDataChangeListener listener){
+    public void setOnRemiderDataChangeListener(OnRemiderDataChangeListener listener) {
         this.listener = listener;
     }
 
-    protected void OnEdit(Reminder reminder){
-        if(listener!=null) listener.OnEdit(reminder);
+    protected void OnEdit(Reminder reminder) {
+        if (listener != null) listener.OnEdit(reminder);
     }
 
-    protected void OnDelete(Reminder[] reminders){
-        if(listener!=null) listener.OnDelete(reminders);
+    protected void OnDelete(Reminder[] reminders) {
+        if (listener != null) listener.OnDelete(reminders);
     }
 
-    protected void OnAdd(Date date){
-        if(listener!=null) listener.OnAdd(date);
+    protected void OnAdd(Date date) {
+        if (listener != null) listener.OnAdd(date);
     }
 
     public class SaveAction extends AsyncTask<Void, Void, Void> {

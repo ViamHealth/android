@@ -42,12 +42,12 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
 
     protected OnSaveReminderAction listener;
 
-    public void setOnSaveReminderAction(OnSaveReminderAction listener){
+    public void setOnSaveReminderAction(OnSaveReminderAction listener) {
         this.listener = listener;
     }
 
-    protected void onSaveReminderAction(ReminderReading reading){
-        if(this.listener!=null)
+    protected void onSaveReminderAction(ReminderReading reading) {
+        if (this.listener != null)
             listener.OnSave(reading);
     }
 
@@ -73,23 +73,23 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         final ReminderTimeData data = readings.get(position).getReminder().getReminderTimeData(time);
         final FrameLayout check = (FrameLayout) row.findViewById(checkResId);
         final TextView count = (TextView) row.findViewById(textResId);
-        if(data!=null && data.getCount()>0){
-            if(action!=null && action.isCheck()){
-                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
-            }else{
-                if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
-                }else{
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
+        if (data != null && data.getCount() > 0) {
+            if (action != null && action.isCheck()) {
+                check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
+            } else {
+                if (DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))) {
+                    check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
+                } else {
+                    check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
                 }
             }
 
             count.setText(data.getCount().toString());
             //count.setText("0");
             //count.setTextColor(android.R.color.white);
-        }else{
+        } else {
             //check.setVisibility(View.GONE);
-            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
+            check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
             count.setText("0");
             //count.setTextColor(android.R.color.black);
         }
@@ -97,24 +97,24 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(data!=null && data.getCount()>0){
-                    if(!action.isCheck()){
+                if (data != null && data.getCount() > 0) {
+                    if (!action.isCheck()) {
                         action.setCheck(true);
-                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
-                    }else{
+                        check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
+                    } else {
                         action.setCheck(false);
-                        if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
-                        }else{
-                            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
+                        if (DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))) {
+                            check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
+                        } else {
+                            check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
                         }
                     }
                     count.setText(data.getCount().toString());
                     //count.setTextColor(android.R.color.white);
                     readings.get(position).putAction(time, action);
                     onSaveReminderAction(readings.get(position));
-                }else{
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
+                } else {
+                    check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_default_selector));
                     count.setText("0");
                     //count.setTextColor(android.R.color.black);
                 }
@@ -128,28 +128,28 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         final long currentDate = reading.getReadingDate().getTime();
         final int milliSecDiff = 21 * 60 * 60 * 1000;
         final FrameLayout check = (FrameLayout) row.findViewById(R.id.completeCheck);
-        if(reading.isCompleteCheck()){
-            check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
-        }else{
-            if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
-            }else{
-                check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
+        if (reading.isCompleteCheck()) {
+            check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
+        } else {
+            if (DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))) {
+                check.setBackgroundDrawable (activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
+            } else {
+                check.setBackgroundDrawable (activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
             }
         }
 
         check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!reading.isCompleteCheck()){
+                if (!reading.isCompleteCheck()) {
                     reading.setCompleteCheck(true);
-                    check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
-                }else{
+                    check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
+                } else {
                     reading.setCompleteCheck(false);
-                    if(DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))){
-                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
-                    }else{
-                        check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
+                    if (DateUtils.hasElapsed(new Date(currentDate + milliSecDiff))) {
+                        check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_unchecked_selector));
+                    } else {
+                        check.setBackgroundDrawable(activity.getResources().getDrawable(R.drawable.medicine_check_amber_selector));
                     }
                 }
                 onSaveReminderAction(reading);
@@ -167,7 +167,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
         int nightTimeInMs = 21 * 60 * 60 * 1000;
 
         try {
-            if(row == null){
+            if (row == null) {
                 LayoutInflater inflater = activity.getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
             }
@@ -180,31 +180,31 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
 
         ImageView reminderIcon = (ImageView) row.findViewById(R.id.reminder_icon);
         final ReminderType type = readings.get(position).getReminder().getType();
-        if(type.iconId()==null){
+        if (type.iconId() == null) {
             reminderIcon.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             reminderIcon.setVisibility(View.VISIBLE);
             reminderIcon.setImageDrawable(activity.getResources().getDrawable(type.iconId()));
         }
-        TextView txtName = (TextView)row.findViewById(R.id.txtViewName);
+        TextView txtName = (TextView) row.findViewById(R.id.txtViewName);
         txtName.setText(readings.get(position).getReminder().getName());
 
-        TextView txtDesc = (TextView)row.findViewById(R.id.txtViewDesc);
+        TextView txtDesc = (TextView) row.findViewById(R.id.txtViewDesc);
         String desc = readings.get(position).getReminder().getDetails();
-        if(desc!=null && !desc.isEmpty()){
+        if (desc != null && !desc.isEmpty()) {
             txtDesc.setVisibility(View.VISIBLE);
             txtDesc.setText(desc);
-        }else{
+        } else {
             txtDesc.setVisibility(View.GONE);
         }
 
-        if(type == ReminderType.Medicine){
+        if (type == ReminderType.Medicine) {
             completeLayout.setVisibility(View.GONE);
             medicineLayout.setVisibility(View.VISIBLE);
             medicineCheckViewInit(ReminderTime.Morning, row, position, R.id.morningCheck, R.id.mornCount, mornTimeInMs);
             medicineCheckViewInit(ReminderTime.Noon, row, position, R.id.noonCheck, R.id.noonCount, noonTimeInMs);
             medicineCheckViewInit(ReminderTime.Night, row, position, R.id.nightCheck, R.id.nightCount, nightTimeInMs);
-        }else{
+        } else {
             completeLayout.setVisibility(View.VISIBLE);
             medicineLayout.setVisibility(View.GONE);
             completeCheckViewInit(row, position);

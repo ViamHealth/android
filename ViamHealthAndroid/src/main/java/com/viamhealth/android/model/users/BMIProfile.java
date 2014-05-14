@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.viamhealth.android.model.enums.BMIClassifier;
-import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.LifeStyle;
 
 /**
@@ -29,7 +28,7 @@ public class BMIProfile implements Parcelable {
     int totalCholesterol;
 
     public boolean isEmpty() {
-        if(height==0)
+        if (height == 0)
             return true;
 
         else

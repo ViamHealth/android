@@ -20,19 +20,24 @@ public enum RepeatMode {
     private int value;
     private int resId;
 
-    RepeatMode(int value, int resId){
+    RepeatMode(int value, int resId) {
         this.value = value;
         this.resId = resId;
     }
 
-    public int resId() {return resId;}
-    public int value() {return value;}
+    public int resId() {
+        return resId;
+    }
+
+    public int value() {
+        return value;
+    }
 
     private static final Map<Integer, RepeatMode> valuelookup = new HashMap<Integer, RepeatMode>();
 
     // Populate the lookup table on loading time
     static {
-        for (RepeatMode g : EnumSet.allOf(RepeatMode.class)){
+        for (RepeatMode g : EnumSet.allOf(RepeatMode.class)) {
             valuelookup.put(g.value(), g);
         }
     }

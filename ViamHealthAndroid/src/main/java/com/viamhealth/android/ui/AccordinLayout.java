@@ -59,7 +59,7 @@ public class AccordinLayout extends LinearLayout {
                 throw new IllegalArgumentException("Please set section_headers as reference to strings array.");
             }
 
-            if(!isInEditMode()){
+            if (!isInEditMode()) {
                 sectionHeaders = getResources().getStringArray(sectionHeadersResourceId);
             }
 
@@ -87,9 +87,9 @@ public class AccordinLayout extends LinearLayout {
         children = new View[childCount];
         wrappedChildren = new View[childCount];
 
-        if(isInEditMode()){
+        if (isInEditMode()) {
             sectionHeaders = new String[childCount];
-            for(int i=0; i<childCount; i++){
+            for (int i = 0; i < childCount; i++) {
                 sectionHeaders[i] = "Header " + i;
             }
         }

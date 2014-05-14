@@ -6,6 +6,7 @@ import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,11 +34,17 @@ public class InviteUser extends AsyncTask<Void, Void, Boolean> {
         this.application = app;
     }
 
-    public void show(){
+    public void show() {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_invite_user, null);
         final EditText etEmail = (EditText) view.findViewById(R.id.email);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogGreenTheme);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.AlertDialogGreenTheme);
+        final AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            builder = new AlertDialog.Builder(activity);
+        } else {
+            builder = new AlertDialog.Builder(activity,R.style.AlertDialogGreenTheme);
+        }
         builder.setView(view);
         builder.setTitle("Invite User");
         builder.setPositiveButton("Invite", new DialogInterface.OnClickListener() {
@@ -52,18 +59,18 @@ public class InviteUser extends AsyncTask<Void, Void, Boolean> {
             @Override
             public void onClick(View v) {
                 email = etEmail.getText().toString();
-                if(email==null || email.isEmpty()){
+                if (email == null || email.isEmpty()) {
                     etEmail.setError("email is mandatory");
                     return;
                 }
 
-                if(!Validator.isEmailValid(email)){
+                if (!Validator.isEmailValid(email)) {
                     etEmail.setError("email should be of type - abc@gmail.com");
                     return;
                 }
 
                 dialog.dismiss();
-                if(Checker.isInternetOn(activity)){
+                if (Checker.isInternetOn(activity)) {
                     execute();
                 }
             }
@@ -81,9 +88,9 @@ public class InviteUser extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         dialog.dismiss();
         String msg;
-        if(aBoolean){
+        if (aBoolean) {
             msg = "Invite sent successfully to " + email;
-        }else{
+        } else {
             msg = "Sorry! Couldn't sent the invite now. Please try after some time.";
         }
         Toast.makeText(this.activity, msg, Toast.LENGTH_LONG).show();

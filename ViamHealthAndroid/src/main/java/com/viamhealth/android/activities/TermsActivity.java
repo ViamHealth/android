@@ -24,7 +24,7 @@ public class TermsActivity extends BaseActivity {
         webview.getSettings().setJavaScriptEnabled(true);
 
         final Activity activity = this;
-        Toast.makeText(activity,"Loading...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, "Loading...", Toast.LENGTH_SHORT).show();
 
         webview.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -37,16 +37,17 @@ public class TermsActivity extends BaseActivity {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(activity, "Oh no! " + description, Toast.LENGTH_SHORT).show();
             }
-            public void onPageFinished(WebView view, String url){
+
+            public void onPageFinished(WebView view, String url) {
                 //Inject javascript code to the url given
                 //Not display the element
-                view.loadUrl("javascript:(function(){"+"document.getElementById('masthead').style.display ='none';"+"})()");
+                view.loadUrl("javascript:(function(){" + "document.getElementById('masthead').style.display ='none';" + "})()");
             }
         });
 
         webview.loadUrl("http://viamhealth.com/terms");
 
-        setContentView(webview );
+        setContentView(webview);
     }
 
 }

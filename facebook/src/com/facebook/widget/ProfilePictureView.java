@@ -27,10 +27,15 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
 import com.facebook.FacebookException;
 import com.facebook.LoggingBehavior;
 import com.facebook.android.R;
-import com.facebook.internal.*;
+import com.facebook.internal.ImageDownloader;
+import com.facebook.internal.ImageRequest;
+import com.facebook.internal.ImageResponse;
+import com.facebook.internal.Logger;
+import com.facebook.internal.Utility;
 
 import java.net.URISyntaxException;
 
@@ -47,7 +52,8 @@ public class ProfilePictureView extends FrameLayout {
     public interface OnErrorListener {
         /**
          * Called when a network or other error is encountered.
-         * @param error     a FacebookException representing the error that was encountered.
+         *
+         * @param error a FacebookException representing the error that was encountered.
          */
         void onError(FacebookException error);
     }
@@ -60,7 +66,7 @@ public class ProfilePictureView extends FrameLayout {
         void onLoad(Bitmap image);
     }
 
-   /**
+    /**
      * Tag used when logging calls are made by ProfilePictureView
      */
     public static final String TAG = ProfilePictureView.class.getSimpleName();
@@ -222,7 +228,7 @@ public class ProfilePictureView extends FrameLayout {
      * Sets the profile Id for this profile photo
      *
      * @param profileId The profileId
-     *               NULL/Empty String will show the blank profile photo
+     *                  NULL/Empty String will show the blank profile photo
      */
     public final void setProfileId(String profileId) {
         boolean force = false;
@@ -252,7 +258,7 @@ public class ProfilePictureView extends FrameLayout {
      * @param onErrorListener The Listener object to set
      */
     public final void setOnErrorListener(OnErrorListener onErrorListener) {
-      this.onErrorListener = onErrorListener;
+        this.onErrorListener = onErrorListener;
     }
 
     /**
@@ -319,6 +325,7 @@ public class ProfilePictureView extends FrameLayout {
     /**
      * Some of the current state is returned as a Bundle to allow quick restoration
      * of the ProfilePictureView object in scenarios like orientation changes.
+     *
      * @return a Parcelable containing the current state
      */
     @Override
@@ -339,6 +346,7 @@ public class ProfilePictureView extends FrameLayout {
 
     /**
      * If the passed in state is a Bundle, an attempt is made to restore from it.
+     *
      * @param state a Parcelable containing the current state
      */
     @Override
@@ -346,7 +354,7 @@ public class ProfilePictureView extends FrameLayout {
         if (state.getClass() != Bundle.class) {
             super.onRestoreInstanceState(state);
         } else {
-            Bundle instanceState = (Bundle)state;
+            Bundle instanceState = (Bundle) state;
             super.onRestoreInstanceState(instanceState.getParcelable(SUPER_STATE_KEY));
 
             profileId = instanceState.getString(PROFILE_ID_KEY);
@@ -355,7 +363,7 @@ public class ProfilePictureView extends FrameLayout {
             queryWidth = instanceState.getInt(BITMAP_WIDTH_KEY);
             queryHeight = instanceState.getInt(BITMAP_HEIGHT_KEY);
 
-            setImageBitmap((Bitmap)instanceState.getParcelable(BITMAP_KEY));
+            setImageBitmap((Bitmap) instanceState.getParcelable(BITMAP_KEY));
 
             if (instanceState.getBoolean(PENDING_REFRESH_KEY)) {
                 refreshImage(true);
@@ -411,21 +419,30 @@ public class ProfilePictureView extends FrameLayout {
     }
 
     private void setBlankProfilePicture() {
+
         if (customizedDefaultProfilePicture == null) {
-          int blankImageResource = isCropped() ?
-                  R.drawable.com_facebook_profile_picture_blank_square :
-                  R.drawable.com_facebook_profile_picture_blank_portrait;
-          setImageBitmap( BitmapFactory.decodeResource(getResources(), blankImageResource));
-	} else {
-          // Update profile image dimensions.
-          updateImageQueryParameters();
-          // Resize inputBitmap to new dimensions of queryWidth and queryHeight.
-          Bitmap scaledBitmap = Bitmap.createScaledBitmap(customizedDefaultProfilePicture, queryWidth, queryHeight, false);
-          setImageBitmap(scaledBitmap);
-	}
+            int blankImageResource = isCropped() ?
+                    R.drawable.com_facebook_profile_picture_blank_square :
+                    R.drawable.com_facebook_profile_picture_blank_portrait;
+            setImageBitmap(BitmapFactory.decodeResource(getResources(), blankImageResource));
+        } else {
+            // Update profile image dimensions.
+            updateImageQueryParameters();
+            System.out.println("queryWidth :" + queryWidth);
+            System.out.println("queryHeight :" + queryHeight);
+            if(queryWidth == 0){
+                queryWidth = 50;
+            }
+            if(queryHeight == 0){
+                queryHeight = 60;
+            }
+            // Resize inputBitmap to new dimensions of queryWidth and queryHeight.
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(customizedDefaultProfilePicture, queryWidth, queryHeight, false);
+            setImageBitmap(scaledBitmap);
+        }
     }
 
-    public void setOnImageLoadedListener(OnImageLoadedListener listener){
+    public void setOnImageLoadedListener(OnImageLoadedListener listener) {
         onImageLoadedListener = listener;
     }
 
@@ -433,7 +450,7 @@ public class ProfilePictureView extends FrameLayout {
         if (image != null && imageBitmap != null) {
             imageContents = imageBitmap; // Hold for save-restore cycles
             image.setImageBitmap(imageBitmap);
-            if(onImageLoadedListener!=null){
+            if (onImageLoadedListener != null) {
                 onImageLoadedListener.onLoad(imageBitmap);
             }
         }
@@ -443,17 +460,18 @@ public class ProfilePictureView extends FrameLayout {
         try {
             ImageRequest.Builder requestBuilder = new ImageRequest.Builder(
                     getContext(),
-                    ImageRequest.getProfilePictureUrl(profileId, queryWidth,  queryHeight));
+                    ImageRequest.getProfilePictureUrl(profileId, queryWidth, queryHeight));
 
             ImageRequest request = requestBuilder.setAllowCachedRedirects(allowCachedResponse)
                     .setCallerTag(this)
                     .setCallback(
-                    new ImageRequest.Callback() {
-                        @Override
-                        public void onCompleted(ImageResponse response) {
-                            processResponse(response);
-                        }
-                    })
+                            new ImageRequest.Callback() {
+                                @Override
+                                public void onCompleted(ImageResponse response) {
+                                    processResponse(response);
+                                }
+                            }
+                    )
                     .build();
 
             // Make sure to cancel the old request before sending the new one to prevent

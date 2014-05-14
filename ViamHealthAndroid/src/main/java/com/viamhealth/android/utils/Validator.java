@@ -8,8 +8,7 @@ import java.util.regex.Pattern;
  */
 public class Validator {
 
-    public static boolean isEmailValid(String email)
-    {
+    public static boolean isEmailValid(String email) {
         String regExpn = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$";
 
         CharSequence inputStr = email;
@@ -17,7 +16,7 @@ public class Validator {
         Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputStr);
 
-        if(matcher.matches())
+        if (matcher.matches())
             return true;
         else
             return false;

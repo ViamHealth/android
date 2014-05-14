@@ -9,9 +9,9 @@ import java.util.Locale;
  */
 public class DateUtils {
 
-    public static Date getToday(Date date){
+    public static Date getToday(Date date) {
         Calendar c = Calendar.getInstance();
-        if(date!=null)
+        if (date != null)
             c.setTime(date);
         c.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         c.set(Calendar.MINUTE, 0);
@@ -20,7 +20,7 @@ public class DateUtils {
         return c.getTime(); //the midnight, that's the first second of the day.
     }
 
-    public static String getDisplayText(Date date){
+    public static String getDisplayText(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         StringBuilder builder = new StringBuilder()
@@ -33,7 +33,7 @@ public class DateUtils {
 
     public static boolean hasElapsed(Date date) {
         Date now = new Date();
-        if(now.getTime()<=date.getTime()){
+        if (now.getTime() <= date.getTime()) {
             return false;
         }
         return true;

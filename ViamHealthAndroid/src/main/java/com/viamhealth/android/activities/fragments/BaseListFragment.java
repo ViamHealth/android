@@ -3,7 +3,6 @@ package com.viamhealth.android.activities.fragments;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Fields;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.MapBuilder;

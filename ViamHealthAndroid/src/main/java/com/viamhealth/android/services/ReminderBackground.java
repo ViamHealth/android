@@ -29,15 +29,14 @@ public class ReminderBackground extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
 
-        ga=(Global_Application)getApplicationContext();
-        reminderEP=new ReminderEP(ReminderBackground.this, ga);
-        ArrayList<Reminder> reminder=new ArrayList<Reminder>();
-        reminder=intent.getParcelableArrayListExtra("reminder");
-        user=intent.getParcelableExtra("user");
-        Log.e("Background Reminder","before adding the reminders");
-        for(int i=0;i<reminder.size();i++)
-        {
-            rem=reminderEP.add(user.getId(),reminder.get(i));
+        ga = (Global_Application) getApplicationContext();
+        reminderEP = new ReminderEP(ReminderBackground.this, ga);
+        ArrayList<Reminder> reminder = new ArrayList<Reminder>();
+        reminder = intent.getParcelableArrayListExtra("reminder");
+        user = intent.getParcelableExtra("user");
+        Log.e("Background Reminder", "before adding the reminders");
+        for (int i = 0; i < reminder.size(); i++) {
+            rem = reminderEP.add(user.getId(), reminder.get(i));
         }
 
 

@@ -3,17 +3,19 @@ package com.viamhealth.android.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.facebook.*;
+import com.facebook.FacebookRequestError;
+import com.facebook.LoggingBehavior;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
 import com.facebook.Settings;
-import com.viamhealth.android.R;
-
 import com.facebook.model.GraphObject;
+import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.FamilyListAdapter;
 import com.viamhealth.android.model.users.FbFamily;
 
@@ -41,15 +43,14 @@ public class FBFamilyListActivity extends BaseActivity {
         Session session = createSession();
         Settings.addLoggingBehavior(LoggingBehavior.INCLUDE_ACCESS_TOKENS);
 
-        if(session.isOpened()){
+        if (session.isOpened()) {
             getFamilyMembersDatafromFB(session);
-        }
-        else
+        } else
             finish();
     }
 
 
-    private void getFamilyMembersDatafromFB(final Session session){
+    private void getFamilyMembersDatafromFB(final Session session) {
         dialog = new ProgressDialog(FBFamilyListActivity.this);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setMessage("we are searching for your loved ones...");
@@ -61,11 +62,11 @@ public class FBFamilyListActivity extends BaseActivity {
                 GraphObject graphObject = response.getGraphObject();
                 FacebookRequestError error = response.getError();
                 if (graphObject != null) {
-                    try{
+                    try {
                         JSONObject jsonResponse = graphObject.getInnerJSONObject();
-                        if (jsonResponse!=null) {
+                        if (jsonResponse != null) {
                             JSONArray jsonData = jsonResponse.getJSONArray("data");
-                            for(int i=0; i<jsonData.length(); i++){
+                            for (int i = 0; i < jsonData.length(); i++) {
                                 FbFamily familyMember = new FbFamily();
                                 familyMember.setName(jsonData.getJSONObject(i).getString("name"));
                                 familyMember.setRelationship(jsonData.getJSONObject(i).getString("relationship"));
@@ -73,10 +74,10 @@ public class FBFamilyListActivity extends BaseActivity {
                                 families.add(familyMember);
                             }
                             dialog.dismiss();
-                            if(families.isEmpty()){
+                            if (families.isEmpty()) {
                                 finish();
-                                
-                            }else{
+
+                            } else {
                                 constructView();
                             }
 
@@ -100,7 +101,7 @@ public class FBFamilyListActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String profileId = (String)view.getTag();
+                String profileId = (String) view.getTag();
                 Intent intent = new Intent();
                 intent.putExtra("profileId", profileId);
                 setResult(RESULT_OK, intent);

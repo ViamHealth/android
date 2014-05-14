@@ -39,8 +39,8 @@ public class FamilyListAdapter extends ArrayAdapter<FbFamily> {
         TextView relation = (TextView) rowView.findViewById(R.id.fam_proile_relation);
         TextView name = (TextView) rowView.findViewById(R.id.fam_profile_name);
 
-        try{
-            profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(null, R.drawable.ic_social_person));
+        try {
+            profilePic.setDefaultProfilePicture(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_social_person));
             profilePic.setCropped(true);
             profilePic.setPresetSize(ProfilePictureView.NORMAL);
 
@@ -49,8 +49,8 @@ public class FamilyListAdapter extends ArrayAdapter<FbFamily> {
             profilePic.setProfileId(values.get(position).getId());
 
             rowView.setTag(values.get(position).getId());
-            Log.d(TAG, "Added " + values.get(position) + " at position "+ position);
-        }catch(Exception e){
+            Log.d(TAG, "Added " + values.get(position) + " at position " + position);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return rowView;

@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,6 @@ import com.viamhealth.android.utils.UIUtility;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -76,7 +74,7 @@ public class AddReminder extends BaseFragmentActivity {
         setContentView(R.layout.activity_add_reminder);
 
         appPrefs = new ViamHealthPrefs(AddReminder.this);
-        ga=((Global_Application)getApplicationContext());
+        ga = ((Global_Application) getApplicationContext());
 
         type = (ReminderType) getIntent().getSerializableExtra("type");
         reminder = (Reminder) getIntent().getParcelableExtra("reminder");
@@ -84,15 +82,15 @@ public class AddReminder extends BaseFragmentActivity {
         forDate = (Date) getIntent().getSerializableExtra("date");
 
 
-        if(reminder==null) {
+        if (reminder == null) {
             reminder = new Reminder();
             reminder.setStartDate(new Date());
         }
 
-        if(reminder.getId()>0) isEditMode = true;
+        if (reminder.getId() > 0) isEditMode = true;
 
         repeatBtn = (ImageButton) findViewById(R.id.repeatBtn);
-        if(isEditMode){
+        if (isEditMode) {
             repeatBtn.setVisibility(View.INVISIBLE);
         }
         repeatBtn.setOnClickListener(new OnRepeatBtnClickListener(AddReminder.this));
@@ -109,7 +107,7 @@ public class AddReminder extends BaseFragmentActivity {
             public void onClick(View v) {
                 ga.GA_eventButtonPress("reminder_save");
                 updateModelFromView();
-                if(isValid()){
+                if (isValid()) {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("reminder", reminder);
                     setResult(Activity.RESULT_OK, returnIntent);
@@ -119,9 +117,9 @@ public class AddReminder extends BaseFragmentActivity {
         });
 
         btnEnd = (Button) findViewById(R.id.btnEnd);
-        if(isEditMode){
+        if (isEditMode) {
             btnEnd.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             btnEnd.setVisibility(View.GONE);
         }
         btnEnd.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +143,7 @@ public class AddReminder extends BaseFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -153,9 +151,9 @@ public class AddReminder extends BaseFragmentActivity {
     }
 
     private void updateViewFromModel() {
-        if(reminder.getRepeatString(AddReminder.this).isEmpty()){
+        if (reminder.getRepeatString(AddReminder.this).isEmpty()) {
             repeatTextView.setVisibility(View.GONE);
-        }else{
+        } else {
             repeatTextView.setVisibility(View.VISIBLE);
             repeatTextView.setText(reminder.getRepeatString(AddReminder.this));
         }
@@ -163,34 +161,34 @@ public class AddReminder extends BaseFragmentActivity {
         etName.setText(reminder.getName());
         etNotes.setText(reminder.getDetails());
 
-        if(type!=ReminderType.Medicine){
+        if (type != ReminderType.Medicine) {
             medicineLayout.setVisibility(View.GONE);
             return;
         }
 
         ReminderTimeData dataM = reminder.getReminderTimeData(ReminderTime.Morning);
-        if(dataM!=null)
+        if (dataM != null)
             etMorningCount.setText(dataM.getCount().toString());
 
         ReminderTimeData dataNoon = reminder.getReminderTimeData(ReminderTime.Noon);
-        if(dataNoon!=null)
+        if (dataNoon != null)
             etNoonCount.setText(dataNoon.getCount().toString());
 
         ReminderTimeData dataN = reminder.getReminderTimeData(ReminderTime.Night);
-        if(dataN!=null)
+        if (dataN != null)
             etNightCount.setText(dataN.getCount().toString());
 
     }
 
     private boolean isValid() {
-        if(etName.getText().toString().isEmpty()){
+        if (etName.getText().toString().isEmpty()) {
             etName.setError("mandatory field");
             return false;
         }
 
-        if(type==ReminderType.Medicine){
-            if(etMorningCount.getText().toString().isEmpty() && etNoonCount.getText().toString().isEmpty()
-                    && etNightCount.getText().toString().isEmpty()){
+        if (type == ReminderType.Medicine) {
+            if (etMorningCount.getText().toString().isEmpty() && etNoonCount.getText().toString().isEmpty()
+                    && etNightCount.getText().toString().isEmpty()) {
                 Toast.makeText(AddReminder.this, "set dosage", Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -206,7 +204,7 @@ public class AddReminder extends BaseFragmentActivity {
 
         //Date today = new Date();
         //reminder.setStartDate(today);
-        if(type!=ReminderType.Medicine){
+        if (type != ReminderType.Medicine) {
             return;
         }
 
@@ -248,12 +246,12 @@ public class AddReminder extends BaseFragmentActivity {
 
         DialogFragment newFragment;
 
-        private boolean show(View v){
-            if(newFragment!=null /*&& newFragment.isVisible()*/)
+        private boolean show(View v) {
+            if (newFragment != null /*&& newFragment.isVisible()*/)
                 return true;
             EditText text = (EditText) v;
             int inputType = text.getInputType();
-            if(inputType==(InputType.TYPE_CLASS_DATETIME|InputType.TYPE_DATETIME_VARIATION_DATE)){//if the editText is a dateTime filed then showTheDatePicker
+            if (inputType == (InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE)) {//if the editText is a dateTime filed then showTheDatePicker
                 newFragment = new DatePickerFragment(text, null);
                 newFragment.show(getSupportFragmentManager(), "datePicker");
                 return true;
@@ -263,13 +261,13 @@ public class AddReminder extends BaseFragmentActivity {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-             return show(v);
+            return show(v);
         }
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             //if(hasFocus)
-                //show(v);
+            //show(v);
         }
 
         public OnRepeatBtnClickListener(Context context) {
@@ -296,8 +294,8 @@ public class AddReminder extends BaseFragmentActivity {
             frequeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    RepeatMode mode = modes[position+1];
-                    if(mode==RepeatMode.Custom){
+                    RepeatMode mode = modes[position + 1];
+                    if (mode == RepeatMode.Custom) {
                         //frequeSpinner.setVisibility(View.GONE);
                         etXDays.setVisibility(View.VISIBLE);
                         frequeSpinner1.setVisibility(View.VISIBLE);
@@ -311,7 +309,7 @@ public class AddReminder extends BaseFragmentActivity {
                 }
             });
 
-            String[] items1 = getSpinnerElements(modes, 1, modes.length-1);
+            String[] items1 = getSpinnerElements(modes, 1, modes.length - 1);
             adapter1 = new ArrayAdapter<String>(mContext, R.layout.custom_spinner_item, items1);
             frequeSpinner1.setAdapter(adapter1);
 
@@ -331,33 +329,33 @@ public class AddReminder extends BaseFragmentActivity {
         }
 
         protected void updateRepeatDataFromReminder() {
-            Date startDate = forDate==null?reminder.getStartDate():forDate;
+            Date startDate = forDate == null ? reminder.getStartDate() : forDate;
 
-            if(startDate!=null)
+            if (startDate != null)
                 etStartDate.setText(formater.format(startDate));
 
-            if(reminder.getRepeatICounter()!=null && reminder.getRepeatICounter()>0)
+            if (reminder.getRepeatICounter() != null && reminder.getRepeatICounter() > 0)
                 etDuration.setText(reminder.getRepeatICounter().toString());
 
             int position = 0;
             final RepeatMode[] modes = RepeatMode.values();
-            if(reminder.getRepeatEveryX()!=null && reminder.getRepeatEveryX()>1){
+            if (reminder.getRepeatEveryX() != null && reminder.getRepeatEveryX() > 1) {
                 position = reminder.getRepeatMode().ordinal() - 1;
                 etXDays.setVisibility(View.VISIBLE);
                 frequeSpinner1.setVisibility(View.VISIBLE);
                 frequeSpinner.setVisibility(View.GONE);
-                if(position>=0 && position<adapter1.getCount())
+                if (position >= 0 && position < adapter1.getCount())
                     frequeSpinner1.setSelection(position);
-            }else{
+            } else {
                 etXDays.setVisibility(View.GONE);
                 frequeSpinner1.setVisibility(View.GONE);
                 frequeSpinner.setVisibility(View.VISIBLE);
                 position = reminder.getRepeatMode().ordinal() - 1;
-                if(position>=0 && position<adapter.getCount())
+                if (position >= 0 && position < adapter.getCount())
                     frequeSpinner.setSelection(position);
             }
 
-            if(reminder.getRepeatEveryX()!=null && reminder.getRepeatEveryX()>0)
+            if (reminder.getRepeatEveryX() != null && reminder.getRepeatEveryX() > 0)
                 etXDays.setText(reminder.getRepeatEveryX().toString());
 
         }
@@ -370,17 +368,16 @@ public class AddReminder extends BaseFragmentActivity {
                 reminder.setStartDate(new Date());
             }
 
-            if(etDuration.getText().toString().trim().length()==0){
-             reminder.setRepeatICounter(1);
-            }
-            else{
+            if (etDuration.getText().toString().trim().length() == 0) {
+                reminder.setRepeatICounter(1);
+            } else {
                 reminder.setRepeatICounter(Integer.parseInt(etDuration.getText().toString()));
             }
 
             final RepeatMode[] modes = RepeatMode.values();
             int selectedPosition = frequeSpinner.getSelectedItemPosition();
-            RepeatMode selectedRepeatMode = (RepeatMode) modes[selectedPosition+1];
-            if(selectedRepeatMode!=RepeatMode.Custom && selectedRepeatMode!=RepeatMode.None){
+            RepeatMode selectedRepeatMode = (RepeatMode) modes[selectedPosition + 1];
+            if (selectedRepeatMode != RepeatMode.Custom && selectedRepeatMode != RepeatMode.None) {
                 reminder.setRepeatMode(selectedRepeatMode);
                 try {
                     reminder.setRepeatEveryX(Integer.parseInt(etXDays.getText().toString()));
@@ -390,9 +387,9 @@ public class AddReminder extends BaseFragmentActivity {
             }
         }
 
-        protected String[] getSpinnerElements(RepeatMode[] modes, int from, int to){
-            String[] items = new String[to-from];
-            for(int i=from, j=0; i<to; i++, j++){
+        protected String[] getSpinnerElements(RepeatMode[] modes, int from, int to) {
+            String[] items = new String[to - from];
+            for (int i = from, j = 0; i < to; i++, j++) {
                 items[j] = mContext.getString(modes[i].resId());
             }
             return items;
@@ -413,12 +410,12 @@ public class AddReminder extends BaseFragmentActivity {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View row = convertView;
 
-                if(row == null){
+                if (row == null) {
                     LayoutInflater inflater = activity.getLayoutInflater();
                     row = inflater.inflate(resourceId, parent, false);
                 }
 
-                TextView txtName = (TextView)row.findViewById(android.R.id.text1);
+                TextView txtName = (TextView) row.findViewById(android.R.id.text1);
                 txtName.setText(activity.getString(getItem(position).resId()));
 
                 row.setMinimumHeight(UIUtility.dpToPx(AddReminder.this, 36));

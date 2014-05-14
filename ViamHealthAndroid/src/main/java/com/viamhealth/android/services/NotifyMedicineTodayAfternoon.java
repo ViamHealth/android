@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * Created by kunal on 6/2/14.
  */
-public class NotifyMedicineTodayAfternoon extends IntentService{
-    public NotifyMedicineTodayAfternoon(){
+public class NotifyMedicineTodayAfternoon extends IntentService {
+    public NotifyMedicineTodayAfternoon() {
         super("com.viamhealth.android");
     }
 
@@ -37,27 +37,26 @@ public class NotifyMedicineTodayAfternoon extends IntentService{
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        ga = ((Global_Application)getApplicationContext());
+        mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        ga = ((Global_Application) getApplicationContext());
 
         String action = intent.getAction();
-        ga.GA_eventGeneral("notification",Integer.toString(NOTIFICATION),action);
+        ga.GA_eventGeneral("notification", Integer.toString(NOTIFICATION), action);
 
-        if(action.equals(ServicesCommon.ACTION_CREATE)) {
+        if (action.equals(ServicesCommon.ACTION_CREATE)) {
             buildNotification(intent);
-        } else if(action.equals(ServicesCommon.ACTION_ACTED)) {
+        } else if (action.equals(ServicesCommon.ACTION_ACTED)) {
             mNM.cancel(NOTIFICATION);
             List<ReminderReading> objects = ServicesCommon.getListReminderReadingFromIntent(intent);
-            for(ReminderReading rr : objects){
-                if(rr.getAction(ReminderTime.Morning).isCheck() == Boolean.TRUE){
+            for (ReminderReading rr : objects) {
+                if (rr.getAction(ReminderTime.Morning).isCheck() == Boolean.TRUE) {
                     continue;
                 }
                 rr.getAction(ReminderTime.Morning).setCheck(Boolean.TRUE);
-                ReminderEP rep = new ReminderEP(this,ga);
+                ReminderEP rep = new ReminderEP(this, ga);
                 rep.updateReading(rr);
             }
-        }
-        else if(action.equals(ServicesCommon.ACTION_DISMISS)) {
+        } else if (action.equals(ServicesCommon.ACTION_DISMISS)) {
             mNM.cancel(NOTIFICATION);
             try {
                 Thread.sleep(ServicesCommon.REMIND_AGAIN_TIME);
@@ -68,15 +67,15 @@ public class NotifyMedicineTodayAfternoon extends IntentService{
     }
 
 
-    private void buildNotification(Intent intent){
+    private void buildNotification(Intent intent) {
         NotificationCompat.Builder notification = ServicesCommon.getNotification(intent, this, NOTIFICATION);
-        notification.addAction(R.drawable.right,getString(R.string.notification_medicine_taken),getActedPendingIntent(intent));
-        notification.addAction(R.drawable.ic_action_reminders,getString(R.string.notification_remind),getDismissPendingIntent(intent));
+        notification.addAction(R.drawable.right, getString(R.string.notification_medicine_taken), getActedPendingIntent(intent));
+        notification.addAction(R.drawable.ic_action_reminders, getString(R.string.notification_remind), getDismissPendingIntent(intent));
         Notification not = notification.build();
         mNM.notify(NOTIFICATION, not);
     }
 
-    private PendingIntent getActedPendingIntent(Intent recievedIntent){
+    private PendingIntent getActedPendingIntent(Intent recievedIntent) {
         User user = ServicesCommon.getUserFromIntent(recievedIntent);
         List<ReminderReading> objects = ServicesCommon.getListReminderReadingFromIntent(recievedIntent);
         Parcel parcel_user = ServicesCommon.getUserParcel(user);
@@ -92,7 +91,7 @@ public class NotifyMedicineTodayAfternoon extends IntentService{
         return pi;
     }
 
-    private PendingIntent getDismissPendingIntent(Intent recievedIntent){
+    private PendingIntent getDismissPendingIntent(Intent recievedIntent) {
         User user = ServicesCommon.getUserFromIntent(recievedIntent);
         List<ReminderReading> objects = ServicesCommon.getListReminderReadingFromIntent(recievedIntent);
         Parcel parcel_user = ServicesCommon.getUserParcel(user);

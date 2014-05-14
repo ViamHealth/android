@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.viamhealth.android.model.reminder.ReminderReading;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

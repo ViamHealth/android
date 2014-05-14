@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by naren on 02/10/13.
  */
-public class Profile implements Parcelable{
+public class Profile implements Parcelable {
 
     private String organization;
     private String mobileNumber;
@@ -31,8 +31,7 @@ public class Profile implements Parcelable{
     public int getAge() {
         Calendar nowCal = Calendar.getInstance();
         Calendar dobCal = Calendar.getInstance();
-        if(dob == null)
-        {
+        if (dob == null) {
             return 0;
         }
         dobCal.setTime(dob);
@@ -111,7 +110,7 @@ public class Profile implements Parcelable{
 
 
     public void setLocation(GraphLocation location) {
-        if(this.location == null)
+        if (this.location == null)
             this.location = new Location(location);
 
         this.location.setStreet(location.getStreet());
@@ -144,7 +143,7 @@ public class Profile implements Parcelable{
         this.location = new Location();
     }
 
-    public class Location implements Parcelable{
+    public class Location implements Parcelable {
         String street;
         String city;
         String state;
@@ -239,13 +238,13 @@ public class Profile implements Parcelable{
         public String toShortString() {
             String ss = this.city;
 
-            if(ss==null || ss.isEmpty()) ss = this.state;
+            if (ss == null || ss.isEmpty()) ss = this.state;
             else ss += "," + this.state;
 
-            if(ss==null || ss.isEmpty()) ss = this.country;
+            if (ss == null || ss.isEmpty()) ss = this.country;
             else ss += "," + this.country;
 
-            if(ss==null || ss.isEmpty())
+            if (ss == null || ss.isEmpty())
                 ss = this.address;
 
             return ss;
@@ -321,9 +320,9 @@ public class Profile implements Parcelable{
 
         dest.writeString(organization);
         dest.writeString(mobileNumber);
-        Integer bg = bloodGroup==null?null:bloodGroup.value();
+        Integer bg = bloodGroup == null ? null : bloodGroup.value();
         dest.writeInt(bg);
-        Integer g = gender==null?Gender.Male.value():gender.value();
+        Integer g = gender == null ? Gender.Male.value() : gender.value();
         dest.writeInt(g);
         dest.writeValue(dob);
         dest.writeString(profilePicURL);

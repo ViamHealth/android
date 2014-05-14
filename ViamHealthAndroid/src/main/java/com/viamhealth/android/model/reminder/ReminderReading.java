@@ -82,7 +82,9 @@ public class ReminderReading implements NotificationObject, Parcelable {
         }
     };
 
-    public ReminderReading() {}
+    public ReminderReading() {
+    }
+
     public ReminderReading(Parcel in) {
         id = in.readLong();
         userId = in.readLong();
@@ -108,12 +110,13 @@ public class ReminderReading implements NotificationObject, Parcelable {
         ParcelableUtils.writeMap(mapAction, dest);
     }
 
-    public String toString(){
+    public String toString() {
         return "ReminderReading{" +
                 "id=" + id +
                 ", readingdate=" + readingDate.toString() +
-                ", reminder=" + reminder.getName() ;
+                ", reminder=" + reminder.getName();
     }
+
     /**
      * @return returns the id of the icon that needs
      * to be show in the notification bar, if nothing then return {@link NO_IMAGE}

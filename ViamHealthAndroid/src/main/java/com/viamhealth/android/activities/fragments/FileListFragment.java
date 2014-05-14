@@ -72,18 +72,18 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
         selectedUser = getArguments().getParcelable("user");
 
-        obj=new functionClass(getSherlockActivity());
-        ga=((Global_Application)getSherlockActivity().getApplicationContext());
+        obj = new functionClass(getSherlockActivity());
+        ga = ((Global_Application) getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getActivity());
 
         this.list = (ListView) v.findViewById(android.R.id.list);
 
-        if(Checker.isInternetOn(getSherlockActivity())){
+        if (Checker.isInternetOn(getSherlockActivity())) {
             CallFileNavigationTask task = new CallFileNavigationTask();
             task.activity = getSherlockActivity();
             task.execute();
-        }else{
-            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
         }
 
         return v;
@@ -103,12 +103,12 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     }
 
     private void initListView() {
-        if(files.size()==0){
-            Toast.makeText(getSherlockActivity(), "No files found...",Toast.LENGTH_SHORT).show();
+        if (files.size() == 0) {
+            Toast.makeText(getSherlockActivity(), "No files found...", Toast.LENGTH_SHORT).show();
             return;
         }
         //goal_count.setText("("+files.size()+")");
-        if(this.adapter==null)
+        if (this.adapter == null)
             this.adapter = new FileDataAdapter(getSherlockActivity(), R.layout.filelist, files);
         else
             this.adapter.notifyDataSetChanged();
@@ -117,7 +117,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             @Override
             public void onItemToggled(Object item, boolean isChecked, boolean isMultiMode) {
                 final FileData data = (FileData) item;
-                if(isMultiMode) { //change the title
+                if (isMultiMode) { //change the title
 //                    final String selected = getActivity().getString(R.string.selected);
 //                    if(adapter.getCheckedItemCount()==0){
 //                        actionMode.finish();
@@ -127,7 +127,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 //                        actionMode.setTitle(adapter.getCheckedItemCount() + " " + selected);
                     //return;
                 }
-                if(isChecked){
+                if (isChecked) {
                     FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
                     String fileName = data.getName();
                     final String fileExtension = UIUtility.getFileExtension(fileName);
@@ -139,10 +139,10 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                             updateShareActionProvider();
                         }
                     });
-                }else{
+                } else {
                     mapSelectedUris.remove(data.getId());
                     updateShareActionProvider();
-                    if(mapSelectedUris.size()==0)
+                    if (mapSelectedUris.size() == 0)
                         actionMode.finish();
                 }
             }
@@ -150,10 +150,9 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
         this.list.setAdapter(adapter);
 
-        this.list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        this.list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 ga.GA_eventButtonPress("files_list_long_click");
                 if (actionMode != null) {
                     // if already in action mode - do nothing
@@ -167,18 +166,16 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                 return true;
             }
         });
-        this.list.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 ga.GA_eventButtonPress("files_list_click");
                 if (actionMode != null) {
                     // if action mode, toggle checked state of item
                     adapter.toggleChecked(position);
-                    if(actionMode != null)
+                    if (actionMode != null)
                         actionMode.invalidate();
-                }else{
+                } else {
                     FileData data = files.get(position);
                     FileLoader loader = new FileLoader(getSherlockActivity(), appPrefs.getToken());
                     String fileName = data.getName();
@@ -193,12 +190,11 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                             newIntent.setDataAndType(Uri.fromFile(file), mimeType);
                             newIntent.setFlags(newIntent.FLAG_ACTIVITY_NEW_TASK);
                             try {
-                                if(getSherlockActivity()!=null)
-                                {
+                                if (getSherlockActivity() != null) {
                                     getSherlockActivity().startActivity(newIntent);
                                 }
                             } catch (android.content.ActivityNotFoundException e) {
-                                Toast.makeText(getSherlockActivity(), "No handler for this type of file.", 4000).show();
+                                Toast.makeText(getSherlockActivity(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -209,19 +205,19 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     }
 
     private void updateShareActionProvider() {
-        if(actionProvider==null)
+        if (actionProvider == null)
             return;
         ArrayList<Uri> uris = new ArrayList<Uri>(mapSelectedUris.values());
         Intent shareIntent = null;
-        if(mapSelectedUris.size()>1){
+        if (mapSelectedUris.size() > 1) {
             shareIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
             shareIntent.setType("*/*");
             shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-        }else if (mapSelectedUris.size() == 1){
+        } else if (mapSelectedUris.size() == 1) {
             Uri uri = uris.get(0);
             String extension = UIUtility.getFileExtension(uri.getLastPathSegment());
             String mimeType = MimeTypeMap.getSingleton().hasMimeType(extension) ?
-                                MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension):"*/*";
+                    MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) : "*/*";
 
             shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType(mimeType);
@@ -269,31 +265,31 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             }
         }
 
-        private void initShareActionProvider(Menu menu){
+        private void initShareActionProvider(Menu menu) {
             // Set file with share history to the provider and set the share intent.
             MenuItem actionItem = menu.findItem(R.id.action_mode_share);
             actionProvider = (ShareActionProvider) actionItem.getActionProvider();
             actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
             // Note that you can set/change the intent any time,
             // say when the user has selected an image.
-            if(mapSelectedUris.size()>0){
+            if (mapSelectedUris.size() > 0) {
                 updateShareActionProvider();
             }
         }
 
-        private void download(String strUrl, String fileName, String extension){
+        private void download(String strUrl, String fileName, String extension) {
             try {
                 String finalFileName = fileName;
-                if(fileName.lastIndexOf("." + extension)==-1){
+                if (fileName.lastIndexOf("." + extension) == -1) {
                     finalFileName += "." + extension;
                 }
 
                 DownloadManager.Request request = new DownloadManager.Request(Uri.parse(strUrl));
-                request.addRequestHeader("Authorization","Token " + appPrefs.getToken().toString());
+                request.addRequestHeader("Authorization", "Token " + appPrefs.getToken().toString());
                 request.setDescription(strUrl);
                 request.setTitle(fileName);
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,finalFileName);
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, finalFileName);
 
                 // get download service and enqueue file
                 DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
@@ -306,8 +302,8 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
         private void downloadFiles(ArrayList<FileData> files) {
             int filesCount = files.size();
-            DownloadManager downloadManager = (DownloadManager)getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-            for(int i=0; i<filesCount; i++){
+            DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+            for (int i = 0; i < filesCount; i++) {
                 Uri downloaUri = files.get(i).getUri();
                 MimeTypeMap mime = MimeTypeMap.getSingleton();
                 String extension = mime.getExtensionFromMimeType(files.get(i).getMimeType());
@@ -332,10 +328,10 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                 case R.id.action_mode_download:
                     ga.GA_eventButtonPress("files_download");
                     String url = null;
-                    if(adapter.getCheckedItemCount()>0){
+                    if (adapter.getCheckedItemCount() > 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getSherlockActivity());
                         StringBuilder strBuilder = new StringBuilder("Are you sure to download the below files?\n\n");
-                        for(FileData fd : files){
+                        for (FileData fd : files) {
                             strBuilder.append(fd.getName()).append("\n");
                         }
                         builder.setTitle("Downloading files...");
@@ -357,8 +353,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                         builder.show();
 
 
-
-                    }else{
+                    } else {
                         Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
                     }
 
@@ -369,22 +364,22 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
                     return true;
 
                 case R.id.action_mode_delete:
-                    if(adapter.getCheckedItemCount()>0){
+                    if (adapter.getCheckedItemCount() > 0) {
                         String[] fileIds = new String[checked.size()];
-                        int i=0;
+                        int i = 0;
                         for (FileData file : files) {
                             fileIds[i++] = file.getId();
                         }
-                        if(Checker.isInternetOn(getSherlockActivity())){
+                        if (Checker.isInternetOn(getSherlockActivity())) {
                             ga.GA_eventButtonPress("files_delete");
                             DeleteFileTask task = new DeleteFileTask();
                             task.activity = getSherlockActivity();
                             task.execute(fileIds);
                             //appPrefs.setReloadgraph("0");
-                        }else{
-                            Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(getSherlockActivity(), "Please select atlest one file..", Toast.LENGTH_SHORT).show();
                     }
 
@@ -399,7 +394,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
                 case R.id.action_mode_share:
 
-                    if(files.size()>0){
+                    if (files.size() > 0) {
                         ga.GA_eventButtonPress("files_share");
                         Intent sharingIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
                         sharingIntent.setType("*/*");
@@ -416,8 +411,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
         }
 
         @Override
-        public void onDestroyActionMode(ActionMode mode)
-        {
+        public void onDestroyActionMode(ActionMode mode) {
             adapter.exitMultiMode();
             // don't forget to remove it, because we are assuming that if it's not null we are in ActionMode
             actionMode = null;
@@ -427,27 +421,25 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
     @Override
     public void onDestroyView() {
-        if(actionMode!=null)
+        if (actionMode != null)
             actionMode.finish();
         super.onDestroyView();
     }
 
     @Override
     public void onDetach() {
-        if(actionMode!=null)
+        if (actionMode != null)
             actionMode.finish();
         super.onDetach();
     }
 
     // async class for calling webservice and get responce message
-    public class CallFileNavigationTask extends AsyncTask<String, Void,String>
-    {
+    public class CallFileNavigationTask extends AsyncTask<String, Void, String> {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
             dialog = new ProgressDialog(getSherlockActivity());
@@ -479,14 +471,12 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     }
 
     // async class for calling webservice and get responce message
-    public class DeleteFileTask extends AsyncTask <String, Void,String>
-    {
+    public class DeleteFileTask extends AsyncTask<String, Void, String> {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
             dialog = new ProgressDialog(getSherlockActivity());
@@ -497,19 +487,18 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
 
         }
 
-        protected void onPostExecute(String result)
-        {
+        protected void onPostExecute(String result) {
 
             Log.i("onPostExecute", "onPostExecute");
             dialog.dismiss();
-            if(Checker.isInternetOn(getSherlockActivity())){
+            if (Checker.isInternetOn(getSherlockActivity())) {
                 CallFileNavigationTask task = new CallFileNavigationTask();
                 task.activity = getSherlockActivity();
                 task.execute();
                 actionMode.finish();
                 //appPrefs.setReloadgraph("0");
-            }else{
-                Toast.makeText(getSherlockActivity(),"Network is not available....",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getSherlockActivity(), "Network is not available....", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -519,8 +508,8 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
             Log.i("doInBackground--Object", "doInBackground--Object");
             //String[] temp = delid.toString().substring(0, delid.length()-5).split(",");
 
-            for(int i=0;i<params.length;i++){
-                obj.FileDelete(Global_Application.url + "healthfiles/"+params[i]+"/");
+            for (int i = 0; i < params.length; i++) {
+                obj.FileDelete(Global_Application.url + "healthfiles/" + params[i] + "/");
             }
             return null;
         }
@@ -530,7 +519,7 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
     @Override
     public void onNewFileUploaded(FileData fileData) {
         files.add(0, fileData);
-        if(adapter==null){
+        if (adapter == null) {
             initListView();
         }
         adapter.notifyDataSetChanged();
