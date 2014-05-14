@@ -34,6 +34,7 @@ import com.viamhealth.android.activities.fragments.FileFragment;
 
 
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
+import com.viamhealth.android.activities.fragments.TaskScreenFragment;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
@@ -164,20 +165,26 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                     //FileFragment.class, bundle);
                     TaskScreen.class, bundle);*/
 
-            mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
-                    mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder, R.drawable.ic_action_reminders)),
-                    ReminderFragmentNew.class, bundle);
+        mTabManager.addTab(
+                mTabHost.newTabSpec("task_screen").setIndicator(getTabIndicator(R.string.tab_task_screen)),
+                TaskScreenFragment.class, bundle
+        );
 
-                if(user.getProfile().getAge() < 18 &&  user.getProfile().getAge() > 0 )
-                    mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
-                        mTabHost.newTabSpec("baby_growth").setIndicator(getTabIndicator(R.string.tab_label_goal, R.drawable.ic_action_goal_white)),
-                            BabyGoalFragment.class, bundle);
+        mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
+                mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder)),
+                ReminderFragmentNew.class, bundle);
 
-            //NewReminders.class, bundle);
-            mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
-                    mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file, R.drawable.ic_action_files)),
-                    //FileFragment.class, bundle);
-                    FileFragment.class, bundle);
+        if(user.getProfile().getAge() < 18 &&  user.getProfile().getAge() > 0 )
+            mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
+                mTabHost.newTabSpec("baby_growth").setIndicator(getTabIndicator(R.string.tab_label_kids)),
+                    BabyGoalFragment.class, bundle);
+
+        //NewReminders.class, bundle);
+        mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
+                mTabHost.newTabSpec("files").setIndicator(getTabIndicator(R.string.tab_label_file)),
+                //FileFragment.class, bundle);
+                FileFragment.class, bundle);
+
 
 
         animationMoveIn = new TranslateAnimation(0, 0, -29, 29);
@@ -260,6 +267,14 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         title.setText(getString(labelId));
         ImageView icon = (ImageView) tabIndicator.findViewById(android.R.id.icon);
         icon.setImageResource(drawableId);
+
+        return tabIndicator;
+    }
+
+    protected View getTabIndicator(int labelId) {
+        View tabIndicator = LayoutInflater.from(this).inflate(R.layout.tab_indicator_holo_no_image, mTabHost.getTabWidget(), false);
+        TextView title = (TextView) tabIndicator.findViewById(android.R.id.title);
+        title.setText(getString(labelId));
 
         return tabIndicator;
     }
