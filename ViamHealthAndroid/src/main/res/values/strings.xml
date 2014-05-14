@@ -169,7 +169,7 @@
     <string name="register_passwords_mismatch">buddy! passwords do not match</string>
     <string name="profile_email_not_present">email is a mandatory field to create a new profile</string>
     <string name="profile_email_not_valid">is this really a email-id?</string>
-    <string name="profile_first_name_not_present">first name or last name is mandatory to create a new profile</string>
+    <string name="profile_first_name_not_present">first name <!--or last name--> is mandatory to create a new profile</string>
     <string name="profile_dob_not_present">date of brth is mandatory to create a new profile</string>
     <string name="profile_height_not_present">height is mandatory to create a new profile</string>
     <string name="profile_weight_not_present">weight is mandatory to create a new profile</string>
