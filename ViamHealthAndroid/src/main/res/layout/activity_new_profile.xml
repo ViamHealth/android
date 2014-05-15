@@ -55,48 +55,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-
-                android:layout_marginTop="10dp"
-                android:foregroundGravity="center_vertical|center_horizontal">
-                <!--
-                android:background="@drawable/layout_border"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" -->
-                <com.facebook.widget.ProfilePictureView
-                    android:id="@+id/profilepic"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:foregroundGravity="center_vertical|center_horizontal"
-                    android:visibility="gone"
-                    facebook:is_cropped="true"
-                    facebook:preset_size="large" />
-
-                <ImageView
-                    android:id="@+id/profilepiclocal"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:foregroundGravity="center_vertical|center_horizontal"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/imgBtnUpload"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:src="@drawable/ic_action_upload" />
-
-            </FrameLayout>
 
             <com.viamhealth.android.ui.AccordinLayout
                 android:id="@+id/accordion_view"
@@ -166,7 +124,7 @@
                             android:ems="15"
                             android:enabled="true"
                             android:gravity="center_vertical|center_horizontal"
-                            android:hint="@string/first_name"
+                            android:hint="@string/name"
                             android:inputType="textCapWords" />
 
                         <EditText
@@ -200,7 +158,6 @@
                             android:hint="@string/last_name"
                             android:inputType="textCapWords"
                             android:visibility="gone" />
-
 
 
                         <LinearLayout
@@ -245,15 +202,15 @@
                                     android:id="@+id/radioMale"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/app_green"
-                                    android:text="Male" />
+                                    android:text="Male"
+                                    android:textColor="@color/app_green" />
 
                                 <RadioButton
                                     android:id="@+id/radioFemale"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/app_green"
-                                    android:text="Female" />
+                                    android:text="Female"
+                                    android:textColor="@color/app_green" />
 
                             </RadioGroup>
                         </LinearLayout>
@@ -285,8 +242,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:background="#ffffff"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
+                            android:orientation="horizontal">
 
                             <ImageView
                                 android:id="@+id/feet_image"
@@ -543,7 +499,8 @@
                         android:entries="@array/blood_groups"
                         android:focusableInTouchMode="true"
                         android:gravity="center_vertical|center_horizontal"
-                        android:spinnerMode="dropdown" />
+                        android:spinnerMode="dropdown"
+                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/profile_location"
@@ -566,6 +523,48 @@
                 </LinearLayout>
 
             </com.viamhealth.android.ui.AccordinLayout>
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+
+                android:layout_marginTop="10dp"
+                android:foregroundGravity="center_vertical|center_horizontal">
+                <!--
+                android:background="@drawable/layout_border"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" -->
+                <com.facebook.widget.ProfilePictureView
+                    android:id="@+id/profilepic"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:foregroundGravity="center_vertical|center_horizontal"
+                    android:visibility="gone"
+                    facebook:is_cropped="true"
+                    facebook:preset_size="large" />
+
+                <ImageView
+                    android:id="@+id/profilepiclocal"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:foregroundGravity="center_vertical|center_horizontal"
+                    android:visibility="gone" />
+
+                <ImageButton
+                    android:id="@+id/imgBtnUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:src="@drawable/ic_action_upload" />
+
+            </FrameLayout>
         </LinearLayout>
     </ScrollView>
 
