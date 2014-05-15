@@ -30,9 +30,9 @@ public class TaskEP extends BaseEP {
     public List<TaskData> list(long userId){
         List<TaskData> tasks = new ArrayList<TaskData>();
         Log.i("doInBackground--Object", "doInBackground--Object");
-        TaskData td = new TaskData("1","Did you take medicine yesterday ?","Yes","No");
+        TaskData td = new TaskData("1","Did you take medicine yesterday ?","Yes","No",0,"You did good",null);
         tasks.add(td);
-        TaskData td2 = new TaskData("2","Go for a walk today", "yes","no");
+        TaskData td2 = new TaskData("2","Go for a walk today", "yes","no",1,"Ok",null);
         tasks.add(td2);
         return tasks;
         /*
@@ -97,8 +97,8 @@ public class TaskEP extends BaseEP {
         try {
             obj.setId(jsonObject.getString("id"));
             obj.setMessage(jsonObject.getString("message"));
-            obj.setLabel_choice_1(jsonObject.getString("label_choice_1"));
-            obj.setLabel_choice_2(jsonObject.getString("label_choice_2"));
+            obj.setLabelChoice1(jsonObject.getString("label_choice_1"));
+            obj.setLabelChoice2(jsonObject.getString("label_choice_2"));
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
