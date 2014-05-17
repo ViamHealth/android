@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,19 +20,13 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.adapters.FileDataAdapter;
-import com.viamhealth.android.adapters.MultiSelectionAdapter;
 import com.viamhealth.android.adapters.TaskListAdapter;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
-import com.viamhealth.android.model.FileData;
 import com.viamhealth.android.model.TaskData;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
-import com.viamhealth.android.utils.UIUtility;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -115,10 +108,10 @@ public class TaskListFragment extends BaseListFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                view.setBackgroundColor(Color.parseColor("#ffffff"));
+                /*view.setBackgroundColor(Color.parseColor("#ffffff"));
                 Toast.makeText(getSherlockActivity(),
                         "Click ListItem Number " + position, Toast.LENGTH_LONG)
-                        .show();
+                        .show();*/
             }
         });
 

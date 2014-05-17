@@ -21,21 +21,13 @@ import java.util.List;
  */
 public class TaskEP extends BaseEP {
     private static String TAG = "TaskEP";
-    private static String API_RESOURCE = "task-list";
+    private static String API_RESOURCE = "tasks";
 
     public TaskEP(Context context, Application app) {
         super(context, app);
     }
 
     public List<TaskData> list(long userId){
-        List<TaskData> tasks = new ArrayList<TaskData>();
-        Log.i("doInBackground--Object", "doInBackground--Object");
-        TaskData td = new TaskData("1","Did you take medicine yesterday ?","Yes","No");
-        tasks.add(td);
-        TaskData td2 = new TaskData("2","Go for a walk today", "yes","no");
-        tasks.add(td2);
-        return tasks;
-        /*
         Params params = new Params();
         params.put("user",String.valueOf(userId));
         RestClient client = getRestClient(API_RESOURCE, params);
@@ -50,16 +42,17 @@ public class TaskEP extends BaseEP {
             e.printStackTrace();
         }
 
-        return new ArrayList<TaskData>();*/
+        return new ArrayList<TaskData>();
     }
 
     public void selectChoice(String taskId, String choice){
         Params params = new Params();
-        RestClient client = getRestClient(API_RESOURCE + "/" +taskId + "/update_choice/" + choice, params);
+        RestClient client = getRestClient(API_RESOURCE + "/" +taskId + "/set_choice/", params);
+        client.AddParam("set_choice", choice);
         try {
-            client.Execute(RequestMethod.PUT);
-            String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            client.Execute(RequestMethod.POST);
+            //String responseString = client.getResponse();
+            //Log.i(TAG, client.toString());
             //if(client.getResponseCode()== HttpStatus.SC_OK)
         }catch (Exception e) {
             e.printStackTrace();
@@ -97,8 +90,11 @@ public class TaskEP extends BaseEP {
         try {
             obj.setId(jsonObject.getString("id"));
             obj.setMessage(jsonObject.getString("message"));
-            obj.setLabel_choice_1(jsonObject.getString("label_choice_1"));
-            obj.setLabel_choice_2(jsonObject.getString("label_choice_2"));
+            obj.setLabelChoice1(jsonObject.getString("label_choice_1"));
+            obj.setLabelChoice2(jsonObject.getString("label_choice_2"));
+            obj.setFeedbackMessageChoice1(jsonObject.getString("choice_1_message"));
+            obj.setFeedbackMessageChoice2(jsonObject.getString("choice_2_message"));
+            obj.setSetChoice(jsonObject.getInt("set_choice"));
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

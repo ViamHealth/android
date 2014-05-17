@@ -1,5 +1,6 @@
 package com.viamhealth.android.adapters;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -46,7 +47,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.task_list_element, parent, false);
 
@@ -54,30 +55,61 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         final Button choice1 = (Button) rowView.findViewById(R.id.task_choice_1);
         final Button choice2 = (Button) rowView.findViewById(R.id.task_choice_2);
 
+        final TaskData tdObj = values.get(position);
         try{
-            message.setText(values.get(position).getMessage());
-            choice1.setText(values.get(position).getLabel_choice_1());
-            choice1.setTag(values.get(position).getId());
+            message.setText(tdObj.getMessage());
+            if(tdObj.getLabelChoice1() == null || tdObj.getLabelChoice1().trim().equals("")){
+                choice1.setVisibility(View.GONE);
+            } else {
+                choice1.setText(values.get(position).getLabelChoice1());
+                choice1.setTag(values.get(position).getId());
+                /*if (values.get(position).getSetChoice() == 1)
+                    choice1.setBackgroundColor(Color.parseColor("#c9c9c9"));*/
 
-            choice2.setText(values.get(position).getLabel_choice_2());
-            choice2.setTag(values.get(position).getId());
-            choice1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    choice2.setEnabled(false);
-                    selectChoice(v, 1);
-                    rowView.setBackgroundColor(Color.parseColor("#cccccc"));
-                }
-            });
-            choice2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    choice1.setEnabled(false);
-                    selectChoice(v, 2);
-                    rowView.setBackgroundColor(Color.parseColor("#cccccc"));
-                }
-            });
-            rowView.setTag(values.get(position).getId());
+                choice1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
+                        //choice1.setBackgroundColor(Color.parseColor("#c9c9c9"));
+                        //choice2.setBackgroundColor(Color.parseColor("green"));
+                        if (tdObj.getFeedbackMessageChoice1() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("") ) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            StringBuilder strBuilder = new StringBuilder(values.get(position).getFeedbackMessageChoice1());
+                            builder.setMessage(strBuilder.toString());
+                            builder.show();
+                        }
+                        selectChoice(v, 1);
+
+                    }
+                });
+            }
+            if(tdObj.getLabelChoice2() == null || tdObj.getLabelChoice2().trim().equals("")){
+                choice2.setVisibility(View.GONE);
+            } else {
+                choice2.setText(tdObj.getLabelChoice2());
+                choice2.setTag(tdObj.getId());
+                /*if (tdObj.getSetChoice() == 2)
+                    choice2.setBackgroundColor(Color.parseColor("#c9c9c9"));*/
+
+                choice2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
+                        //choice2.setBackgroundColor(Color.parseColor("#c9c9c9"));
+                        //choice1.setBackgroundColor(Color.parseColor("green"));
+                        if (tdObj.getFeedbackMessageChoice2() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("")) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            StringBuilder strBuilder = new StringBuilder(tdObj.getFeedbackMessageChoice2());
+                            builder.setMessage(strBuilder.toString());
+                            builder.show();
+                        }
+
+                        selectChoice(v, 2);
+
+                    }
+                });
+            }
+            rowView.setTag(tdObj.getId());
             Log.d(TAG, "Added " + values.get(position) + " at position " + position);
         }catch(Exception e){
             e.printStackTrace();
@@ -86,7 +118,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
     }
     public void selectChoice(View view, int choice){
         String set_choice="1";
-        Toast.makeText(context, "Working..", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "Working..", Toast.LENGTH_SHORT).show();
         if(choice == 1){
             set_choice = "1";
         } else if ( choice == 2 ){
