@@ -108,10 +108,10 @@ public class TaskListFragment extends BaseListFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                view.setBackgroundColor(Color.parseColor("#ffffff"));
+                /*view.setBackgroundColor(Color.parseColor("#ffffff"));
                 Toast.makeText(getSherlockActivity(),
                         "Click ListItem Number " + position, Toast.LENGTH_LONG)
-                        .show();
+                        .show();*/
             }
         });
 
