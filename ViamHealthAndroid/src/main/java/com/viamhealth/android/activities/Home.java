@@ -984,9 +984,9 @@ public class Home extends BaseActivity implements OnClickListener{
             gcm = GoogleCloudMessaging.getInstance(this);
             regid = getRegistrationId(getApplicationContext());
 
-            if (regid.isEmpty()) {
+            //if (regid.isEmpty()) {
                 registerInBackground();
-            }
+            //}
         } else {
             Log.i("GCM", "No valid Google Play Services APK found.");
         }

@@ -41,6 +41,7 @@ public class GCMEP {
             payload.put("reg_id", registration_id);
             RestClient client = new RestClient(baseurlString.toString());;
             //client.AddHeader("Authorization","ApiKey " + ga.getLoggedInUser().getUsername()+":"+appPrefs.getToken().toString());
+            client.AddHeader("Authorization","ApiKey " + ga.getLoggedInUser().getUsername()+":1");
             client.setJSONString(payload.toString());
             try {
                 client.Execute(RequestMethod.POST);
