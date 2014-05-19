@@ -20,6 +20,7 @@ package com.viamhealth.android.receivers;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.viamhealth.android.R;
+import com.viamhealth.android.activities.Home;
 import com.viamhealth.android.activities.TabActivity;
 
 import android.app.IntentService;
@@ -31,6 +32,9 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * This {@code IntentService} does the actual handling of the GCM message.
@@ -69,18 +73,9 @@ public class GcmIntentService extends IntentService {
                 sendNotification("Deleted messages on server: " + extras.toString());
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // This loop represents the service doing some work.
-                for (int i = 0; i < 5; i++) {
-                    Log.i(TAG, "Working... " + (i + 1)
-                            + "/5 @ " + SystemClock.elapsedRealtime());
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                    }
-                }
-                Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
+
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString());
+                sendNotification(extras.getString("msg"));
                 Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -94,18 +89,28 @@ public class GcmIntentService extends IntentService {
     private void sendNotification(String msg) {
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
+        String message = "";
+        String title = "";
+        try {
+            JSONObject nMsg = new JSONObject(msg);
+            title = nMsg.getString("title");
+            message = nMsg.getString("message");
+        } catch (JSONException e) {
+           message = msg;
+        }
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, TabActivity.class), 0);
+                new Intent(this, Home.class), 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_navigation_logo)
-                        .setContentTitle("GCM Notification")
+                        .setSmallIcon(R.drawable.ic_action_brand_logo)
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
-                        .setContentText(msg);
-
+                                .bigText(message))
+                        .setContentText(message);
+        if(!title.trim().equals("")){
+            mBuilder.setContentTitle(title);
+        }
         mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }

@@ -22,7 +22,6 @@ public class GCMEP {
     protected Context context;
     protected Global_Application ga;
     protected ViamHealthPrefs appPrefs;
-    private String tastyPieApiKey = "1111";
 
 
     public GCMEP(Context context, Application app) {
@@ -41,7 +40,7 @@ public class GCMEP {
             payload.put("dev_id", device_id);
             payload.put("reg_id", registration_id);
             RestClient client = new RestClient(baseurlString.toString());;
-            client.AddHeader("Authorization","ApiKey " + ga.getLoggedInUser().getUsername()+":"+tastyPieApiKey);
+            //client.AddHeader("Authorization","ApiKey " + ga.getLoggedInUser().getUsername()+":"+appPrefs.getToken().toString());
             client.setJSONString(payload.toString());
             try {
                 client.Execute(RequestMethod.POST);
