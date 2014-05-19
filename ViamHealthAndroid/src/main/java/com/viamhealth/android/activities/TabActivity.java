@@ -1,14 +1,20 @@
 package com.viamhealth.android.activities;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -27,6 +33,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.BabyGoalFragment;
@@ -35,10 +44,12 @@ import com.viamhealth.android.activities.fragments.FileFragment;
 
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.activities.fragments.TaskScreenFragment;
+import com.viamhealth.android.dao.rest.endpoints.GCMEP;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +76,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     private static final float HEADER_TOP_MARGIN_DP = 58.0f;
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -85,8 +97,6 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         for(int i=0; i<pUsers.length; i++){
             users.add((User) pUsers[i]);
         }
-
-
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayUseLogoEnabled(true);
