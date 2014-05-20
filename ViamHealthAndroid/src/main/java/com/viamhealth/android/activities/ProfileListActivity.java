@@ -2,7 +2,6 @@ package com.viamhealth.android.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,7 +34,6 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.widget.ProfilePictureView;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
@@ -43,7 +41,6 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.services.ServicesCommon;
 import com.viamhealth.android.tasks.InviteUser;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
@@ -87,22 +84,10 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
     private ActionMode actionMode;
 
-    private final String TAG = "Home";
+    private final String TAG = "ProfileList";
 
     private static final int LOGIN_ACTIVITY = 10000;
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //EasyTracker.getInstance(this).activityStart(this);  // Add this method.
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //EasyTracker.getInstance(this).activityStop(this);  // Add this method.
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

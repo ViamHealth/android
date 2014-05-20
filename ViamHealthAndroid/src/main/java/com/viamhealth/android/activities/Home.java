@@ -1,6 +1,5 @@
 package com.viamhealth.android.activities;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,6 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.Session;
-import com.facebook.widget.ProfilePictureView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -22,15 +20,10 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.GCMEP;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 
-import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.services.ServicesCommon;
 import com.viamhealth.android.tasks.InviteUser;
-import com.viamhealth.android.tasks.ShareUser;
-import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.Checker;
-import com.viamhealth.android.utils.UIUtility;
-import com.viamhealth.android.utils.Validator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -39,33 +32,22 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Display;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -73,7 +55,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.EasyTracker;
 
 public class Home extends BaseActivity implements OnClickListener{
 	Display display;
@@ -120,17 +101,6 @@ public class Home extends BaseActivity implements OnClickListener{
     private static final String PROPERTY_APP_VERSION = "appVersion";
     //GCM Vars end
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //EasyTracker.getInstance(this).activityStart(this);  // Add this method.
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //EasyTracker.getInstance(this).activityStop(this);  // Add this method.
-    }
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -552,12 +522,6 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected Boolean doInBackground(String... params) {
             return userEndPoint.ChangePassword(params[0], params[1]);
-        }
-    }
-
-    public class ImproperArgumentsPassedException extends Exception {
-        public ImproperArgumentsPassedException(String detailMessage) {
-            super(detailMessage);
         }
     }
 
