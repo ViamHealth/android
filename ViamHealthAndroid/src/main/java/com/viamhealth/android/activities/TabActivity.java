@@ -1,20 +1,13 @@
 package com.viamhealth.android.activities;
 
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,14 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.BabyGoalFragment;
@@ -44,12 +33,10 @@ import com.viamhealth.android.activities.fragments.FileFragment;
 
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.activities.fragments.TaskScreenFragment;
-import com.viamhealth.android.dao.rest.endpoints.GCMEP;
 import com.viamhealth.android.manager.TabManager;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,6 +78,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
         user = (User) intent.getParcelableExtra("user");
+        User loggedInUser = ga.getLoggedInUser();
         pUsers = intent.getParcelableArrayExtra("users");
 
         users.clear();
@@ -175,6 +163,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                     //FileFragment.class, bundle);
                     TaskScreen.class, bundle);*/
 
+
         mTabManager.addTab(
                 mTabHost.newTabSpec("task_screen").setIndicator(getTabIndicator(R.string.tab_task_screen)),
                 TaskScreenFragment.class, bundle
@@ -225,6 +214,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             //if (savedInstanceState != null) {
             //mTabManager.selectTab(savedInstanceState.getString("tab"));
             //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+        } else if(user.getId() != loggedInUser.getId()){
+            mTabHost.setCurrentTabByTag("reminder");
         }
 
 
@@ -316,6 +307,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         if(item.getItemId() == R.id.menu_toc) {
             ga.GA_eventButtonPress("tab_menu_terms_n_conditions");
             Intent returnIntent = new Intent(TabActivity.this, TermsActivity.class);
+            startActivity(returnIntent);
+            return true;
+        }
+
+        if(item.getItemId() == R.id.menu_profile_list) {
+            ga.GA_eventButtonPress("tab_r2_profile_list");
+            Intent returnIntent = new Intent(TabActivity.this, ProfileListActivity.class);
             startActivity(returnIntent);
             return true;
         }

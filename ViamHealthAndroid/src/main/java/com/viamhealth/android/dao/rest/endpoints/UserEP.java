@@ -538,8 +538,11 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        if(client.getResponseCode() == 500  ){
+            return null;
+        }
     //
-    //    Log.i(TAG, client.toString());
+        Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         if(user.getId() == getLoggedInUser().getId()){
             user.setLoggedInUser(true);
