@@ -97,7 +97,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                         //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
                         //choice2.setBackgroundColor(Color.parseColor("#c9c9c9"));
                         //choice1.setBackgroundColor(Color.parseColor("green"));
-                        if (tdObj.getFeedbackMessageChoice2() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("")) {
+                        if (tdObj.getFeedbackMessageChoice2() != null && !tdObj.getFeedbackMessageChoice2().trim().equals("")) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             StringBuilder strBuilder = new StringBuilder(tdObj.getFeedbackMessageChoice2());
                             builder.setMessage(strBuilder.toString());
