@@ -51,7 +51,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.task_list_element, parent, false);
 
-        TextView message = (TextView) rowView.findViewById(R.id.task_message);
+        final TextView message = (TextView) rowView.findViewById(R.id.task_message);
         final Button choice1 = (Button) rowView.findViewById(R.id.task_choice_1);
         final Button choice2 = (Button) rowView.findViewById(R.id.task_choice_2);
 
@@ -69,6 +69,11 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                 choice1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        choice2.setVisibility(View.INVISIBLE);
+                        choice1.setEnabled(false);
+                        choice2.setEnabled(false);
+                        message.setTextColor(Color.parseColor("#828282"));
+                        //rowView.setBackgroundColor(Color.parseColor("#828282"));
                         //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
                         //choice1.setBackgroundColor(Color.parseColor("#c9c9c9"));
                         //choice2.setBackgroundColor(Color.parseColor("green"));
@@ -94,7 +99,11 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                 choice2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
+                        choice1.setVisibility(View.INVISIBLE);
+                        choice1.setEnabled(false);
+                        choice2.setEnabled(false);
+                        message.setTextColor(Color.parseColor("#828282"));
+                        //rowView.setBackgroundColor(Color.parseColor("#828282"));
                         //choice2.setBackgroundColor(Color.parseColor("#c9c9c9"));
                         //choice1.setBackgroundColor(Color.parseColor("green"));
                         if (tdObj.getFeedbackMessageChoice2() != null && !tdObj.getFeedbackMessageChoice2().trim().equals("")) {

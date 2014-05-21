@@ -6,9 +6,10 @@
     android:layout_margin="8dp"
     android:background="#ffffff"
     android:orientation="horizontal"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="10dp"
     android:descendantFocusability="blocksDescendants">
 
 
@@ -20,10 +21,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
-        android:padding="4dp"
+        android:padding="20dp"
         android:text=""
         android:textColor="@color/row_textcolor_selector"
-        android:textSize="15sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,16 +40,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="8dp"
-            android:text=" " />
+            android:text="No "
+            android:background="#ffffff"
+            android:textColor="#828282" />
 
         <Button
             android:id="@+id/task_choice_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="8dp"
-            android:text=" " />
+            android:background="#ffffff"
+            android:text="Yes"
+            android:textColor="#828282"/>
     </LinearLayout>
 
 </RelativeLayout>

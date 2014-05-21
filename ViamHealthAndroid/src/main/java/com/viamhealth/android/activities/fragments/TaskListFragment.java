@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.ActionMode;
@@ -108,8 +110,18 @@ public class TaskListFragment extends BaseListFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                /*view.setBackgroundColor(Color.parseColor("#ffffff"));
-                Toast.makeText(getSherlockActivity(),
+                TextView message = (TextView)  view.findViewById(R.id.task_message);
+                if(message.getCurrentTextColor() == Color.parseColor("#828282") ){
+                    message.setTextColor(getResources().getColor(R.color.row_textcolor_selector));
+                    Button choice1 = (Button) view.findViewById(R.id.task_choice_1);
+                    Button choice2 = (Button) view.findViewById(R.id.task_choice_2);
+                    choice2.setVisibility(View.VISIBLE);
+                    choice1.setVisibility(View.VISIBLE);
+                    choice1.setEnabled(true);
+                    choice2.setEnabled(true);
+                }
+
+                /*Toast.makeText(getSherlockActivity(),
                         "Click ListItem Number " + position, Toast.LENGTH_LONG)
                         .show();*/
             }
