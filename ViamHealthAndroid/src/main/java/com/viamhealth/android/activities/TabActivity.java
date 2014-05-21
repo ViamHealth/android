@@ -87,11 +87,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         }
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setLogo(R.drawable.ic_launcher);
-        actionBar.setTitle(user.getName());
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setLogo(R.drawable.ic_launcher);
+        //actionBar.setTitle(user.getName());
 
 
 
@@ -99,11 +101,12 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         //TODO use Action Bar to create the Header
 
         /*** Action Bar Creation starts here ***/
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        //actionBar = getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setTitle("");
+
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setLogo(R.drawable.ic_action_white_brand);
 
         Context themedContext = actionBar.getThemedContext();
         //UsersMenuAdapter adapter = new UsersMenuAdapter(themedContext, users);
@@ -371,6 +374,22 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        user = (User) data.getParcelableExtra("user");
+        pUsers = data.getParcelableArrayExtra("users");
+        users.clear();
+        for(int i=0; i<pUsers.length; i++){
+            users.add((User) pUsers[i]);
+        }
+
+        Toast.makeText(TabActivity.this, "Selected User " + user.getName(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(TabActivity.this, TabActivity.class);
+        intent.putExtra("user", user);
+        Parcelable[] usrs = new Parcelable[users.size()];
+        intent.putExtra("users", users.toArray(usrs));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
     public enum Actions { UploadFiles, SetGoal; }

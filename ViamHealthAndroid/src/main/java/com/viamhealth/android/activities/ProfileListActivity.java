@@ -612,7 +612,9 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                 intent.putExtra("user", user);
                 Parcelable[] users = new Parcelable[lstFamily.size()];
                 intent.putExtra("users", lstFamily.toArray(users));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }else{
                 dialog.dismiss();
                 if(result.toString().equals("1")){
@@ -702,11 +704,19 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
             if(result){
                 dialog.dismiss();
                 lstFamily.remove(selectedViewPosition);
-                Intent intent = new Intent(ProfileListActivity.this, ProfileListActivity.class);
+                /*Intent intent = new Intent(ProfileListActivity.this, ProfileListActivity.class);
                 ArrayList<User> families = (ArrayList<User>) lstFamily;
                 intent.putParcelableArrayListExtra("family", families);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);*/
+
+                Intent intent = new Intent(ProfileListActivity.this, TabActivity.class);
+                intent.putExtra("user", ga.getLoggedInUser());
+                Parcelable[] users = new Parcelable[lstFamily.size()];
+                intent.putExtra("users", lstFamily.toArray(users));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                finish();
             }else{
                 dialog.dismiss();
                 Toast.makeText(ProfileListActivity.this, "Not able to delete "+selectedUser.getName()+"...", Toast.LENGTH_SHORT).show();
