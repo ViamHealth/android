@@ -62,6 +62,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     private final List<User> users = new ArrayList<User>();
 
     private static final float HEADER_TOP_MARGIN_DP = 58.0f;
+    private static final int DELETE_PROFILE_FROM_LIST = 10001;
+    private static final int ADD_PROFILE_FROM_LIST = 10002;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -375,20 +377,22 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        user = (User) data.getParcelableExtra("user");
-        pUsers = data.getParcelableArrayExtra("users");
-        users.clear();
-        for(int i=0; i<pUsers.length; i++){
-            users.add((User) pUsers[i]);
-        }
+        if (requestCode == ADD_PROFILE_FROM_LIST || requestCode == DELETE_PROFILE_FROM_LIST) {
+            user = (User) data.getParcelableExtra("user");
+            pUsers = data.getParcelableArrayExtra("users");
+            users.clear();
+            for (int i = 0; i < pUsers.length; i++) {
+                users.add((User) pUsers[i]);
+            }
 
-        Toast.makeText(TabActivity.this, "Selected User " + user.getName(), Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(TabActivity.this, TabActivity.class);
-        intent.putExtra("user", user);
-        Parcelable[] usrs = new Parcelable[users.size()];
-        intent.putExtra("users", users.toArray(usrs));
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+            Toast.makeText(TabActivity.this, "Selected User " + user.getName(), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(TabActivity.this, TabActivity.class);
+            intent.putExtra("user", user);
+            Parcelable[] usrs = new Parcelable[users.size()];
+            intent.putExtra("users", users.toArray(usrs));
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
 
     }
 

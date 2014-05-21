@@ -87,6 +87,8 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
     private final String TAG = "ProfileList";
 
     private static final int LOGIN_ACTIVITY = 10000;
+    private static final int DELETE_PROFILE_FROM_LIST = 10001;
+    private static final int ADD_PROFILE_FROM_LIST = 10002;
 
 
     @Override
@@ -613,7 +615,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                 Parcelable[] users = new Parcelable[lstFamily.size()];
                 intent.putExtra("users", lstFamily.toArray(users));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                startActivityForResult(intent, ADD_PROFILE_FROM_LIST);
                 finish();
             }else{
                 dialog.dismiss();
@@ -715,7 +717,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                 Parcelable[] users = new Parcelable[lstFamily.size()];
                 intent.putExtra("users", lstFamily.toArray(users));
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                startActivityForResult(intent, DELETE_PROFILE_FROM_LIST);
                 finish();
             }else{
                 dialog.dismiss();
