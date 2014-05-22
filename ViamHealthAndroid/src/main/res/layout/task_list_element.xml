@@ -41,17 +41,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="No "
-            android:background="#ffffff"
-            android:textColor="#828282" />
+            android:textColor="#ffffff" />
 
         <Button
             android:id="@+id/task_choice_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#ffffff"
             android:text="Yes"
-            android:textColor="#828282"/>
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
 </RelativeLayout>

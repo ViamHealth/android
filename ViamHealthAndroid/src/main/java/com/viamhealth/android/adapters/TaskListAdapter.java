@@ -59,6 +59,8 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         try{
             message.setText(tdObj.getMessage());
             if(tdObj.getSetChoice() != 0){
+                choice1.setTextColor(Color.parseColor("#828282"));
+                choice2.setTextColor(Color.parseColor("#828282"));
                 if(tdObj.getSetChoice() == 1){
                     choice2.setVisibility(View.INVISIBLE);
                     choice1.setEnabled(false);
@@ -80,6 +82,8 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                     @Override
                     public void onClick(View v) {
                         choice2.setVisibility(View.INVISIBLE);
+                        choice1.setTextColor(Color.parseColor("#828282"));
+                        choice2.setTextColor(Color.parseColor("#828282"));
                         choice1.setEnabled(false);
                         choice2.setEnabled(false);
                         message.setTextColor(Color.parseColor("#828282"));
@@ -89,7 +93,10 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                             builder.setMessage(strBuilder.toString());
                             builder.show();
                         }
+                        values.get(position).setSetChoice(1);
+                        notifyDataSetChanged();
                         selectChoice(v, 1);
+
 
                     }
                 });
@@ -102,6 +109,8 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                 choice2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        choice2.setTextColor(Color.parseColor("#828282"));
+                        choice1.setTextColor(Color.parseColor("#828282"));
                         choice1.setVisibility(View.INVISIBLE);
                         choice1.setEnabled(false);
                         choice2.setEnabled(false);
@@ -112,7 +121,8 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                             builder.setMessage(strBuilder.toString());
                             builder.show();
                         }
-
+                        values.get(position).setSetChoice(2);
+                        notifyDataSetChanged();
                         selectChoice(v, 2);
 
                     }
@@ -125,6 +135,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         }
         return rowView;
     }
+
     public void selectChoice(View view, int choice){
         String set_choice="1";
         //Toast.makeText(context, "Working..", Toast.LENGTH_SHORT).show();
@@ -151,6 +162,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         @Override
         protected String doInBackground(String... params) {
             String choice = params[0];
+            Log.d("CHOIDCE TAG", params.toString());
             String id = params[1];
             TaskEP tep = new TaskEP(context,ga);
             tep.selectChoice(id,choice);

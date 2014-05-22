@@ -30,6 +30,7 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,6 +106,30 @@ public class TaskListFragment extends BaseListFragment{
         else
             this.adapter.notifyDataSetChanged();
 
+        adapter.sort(new Comparator<TaskData>() {
+            @Override
+            public int compare(TaskData taskData, TaskData taskData2) {
+                int r = 0;
+                if(taskData.getSetChoice() != 0 && taskData2.getSetChoice() != 0 )
+                    if(taskData.getWeight() > taskData2.getWeight()){
+                        r = -1;
+                    }else {
+                        r = 1;
+                    }
+                else if(taskData.getSetChoice() != 0){
+                        r = 1;
+                }else if(taskData2.getSetChoice() != 0){
+                    r = -1;
+                } else {
+                    if(taskData.getWeight() > taskData2.getWeight()){
+                        r = -1;
+                    }else {
+                        r = 1;
+                    }
+                }
+                return r;
+            }
+        });
         this.list.setAdapter(adapter);
         this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,6 +144,9 @@ public class TaskListFragment extends BaseListFragment{
                     choice1.setVisibility(View.VISIBLE);
                     choice1.setEnabled(true);
                     choice2.setEnabled(true);
+                    choice2.setTextColor(Color.parseColor("#ffffff"));
+                    choice1.setTextColor(Color.parseColor("#ffffff"));
+                    //adapter.notifyDataSetChanged();
                 }
 
                 /*Toast.makeText(getSherlockActivity(),
