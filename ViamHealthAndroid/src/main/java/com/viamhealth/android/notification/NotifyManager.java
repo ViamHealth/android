@@ -66,11 +66,9 @@ public class NotifyManager {
     public boolean addReminders(User user, Context context, List<ReminderReading> readings, Date rrDate) {
 
         Global_Application ga = ((Global_Application) context.getApplicationContext());
-        System.out.println(" In alarm setter");
 
         if(user.getId() != ga.getLoggedInUser().getId())
             return Boolean.FALSE;
-        System.out.println("inside");
 
         Calendar rrCal = Calendar.getInstance();
         rrCal.setTime(rrDate);
@@ -83,10 +81,6 @@ public class NotifyManager {
         Calendar threeDayAfter = getLastThreeDays(3);
 
         if(rrCal.after(threeDayAfter) || rrCal.before(zeroDayAfter)){
-            System.out.println(" skipping entries for these dates ");
-            System.out.println(rrCal.getTime());
-            System.out.println("min allowed = " + zeroDayAfter.getTime());
-            System.out.println(" max allowed = " + threeDayAfter.getTime());
             return Boolean.FALSE;
         }
 
@@ -95,10 +89,6 @@ public class NotifyManager {
         Boolean setNotMedicineNoon = Boolean.TRUE;
         Boolean setNotMedicineEvening = Boolean.TRUE;
 
-        System.out.println(" right now hour "+rightNow.get(Calendar.HOUR));
-        System.out.println(rrCal.getTime());
-        System.out.println(zeroDayAfter.getTime());
-        System.out.println(rrCal.equals(zeroDayAfter));
         if(rrCal.equals(zeroDayAfter)){
             if(rightNow.get(Calendar.AM_PM) == Calendar.PM){
                 setNotOther = Boolean.FALSE;
@@ -151,7 +141,6 @@ public class NotifyManager {
         cal92.set(Calendar.SECOND, 0); cal92.set(Calendar.MILLISECOND, 0);
         cal92.set(Calendar.AM_PM, Calendar.PM);
 
-        System.out.println(" Other time = " + cal6.getTime());
         int readingsCount = readings.size();
         for(int i=0; i<readingsCount; i++){
             ReminderReading reading = readings.get(i);
@@ -199,11 +188,8 @@ public class NotifyManager {
         for (Iterator<Calendar> iter = keySet.iterator(); iter.hasNext(); ){
             Calendar cal = iter.next();
             if(mapTimeReadings.get(cal) == null){
-                System.out.println(" No readings for this date time" + cal.toString());
+
                 continue;
-            } else {
-                System.out.println( " Readings for "+cal.getTime()+" size=" + mapTimeReadings.get(cal).size());
-                System.out.println(mapTimeReadings.get(cal).get(0).toString());
             }
 
 
@@ -274,7 +260,7 @@ public class NotifyManager {
 
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
             PendingIntent pendingIntent = PendingIntent.getService(context, 0, myIntent, 0);
-            System.out.println(" Setting alarm for time " + cal.getTime());
+
             alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 
         }

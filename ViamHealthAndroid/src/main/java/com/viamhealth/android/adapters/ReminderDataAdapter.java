@@ -143,6 +143,7 @@ public class ReminderDataAdapter extends MultiSelectionAdapter<ReminderReading> 
             public void onClick(View v) {
                 if(!reading.isCompleteCheck()){
                     reading.setCompleteCheck(true);
+                    Log.d("NON MEDCINE TAG","Complete check is true");
                     check.setBackground(activity.getResources().getDrawable(R.drawable.medicine_check_checked_selector));
                 }else{
                     reading.setCompleteCheck(false);
