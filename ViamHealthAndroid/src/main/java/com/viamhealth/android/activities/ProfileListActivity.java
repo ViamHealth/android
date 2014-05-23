@@ -56,7 +56,7 @@ import java.util.List;
 public class ProfileListActivity extends BaseActivity implements View.OnClickListener {
 
     Display display;
-    int width,height;
+    int width, height;
 
     LinearLayout main_layout, bottom_layout, core_layout;
     List<LinearLayout> tiles = new ArrayList<LinearLayout>();
@@ -69,8 +69,8 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
     ViamHealthPrefs appPrefs;
     Global_Application ga;
-    int cnt=0,_count=0, selectedViewPosition = 0;
-    int w80,w90,h90,w20,h5,w5,w12,h30;
+    int cnt = 0, _count = 0, selectedViewPosition = 0;
+    int w80, w90, h90, w20, h5, w5, w12, h30;
     ArrayList<String> msgArray = new ArrayList<String>();
     List<User> lstFamily = null;
     ProgressDialog dialog;
@@ -100,12 +100,12 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.r2_profile_list_view);
 
         appPrefs = new ViamHealthPrefs(ProfileListActivity.this);
-        ga=((Global_Application)getApplicationContext());
+        ga = ((Global_Application) getApplicationContext());
         userEndPoint = new UserEP(this, ga);
         user = ga.getLoggedInUser();
 
         //for generate square
-        scroller = (ScrollView)findViewById(R.id.scroller);
+        scroller = (ScrollView) findViewById(R.id.scroller);
         splashScreen = (RelativeLayout) findViewById(R.id.splash);
         bar = (ProgressBar) splashScreen.findViewById(R.id.progressBar);
         logoutMessage = (TextView) splashScreen.findViewById(R.id.logoutMsg);
@@ -115,16 +115,16 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         splashScreen.setVisibility(View.VISIBLE);
 
 
-        if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
+        if (appPrefs.getToken() == null || appPrefs.getToken().isEmpty()) {
             Intent loginIntent = new Intent(ProfileListActivity.this, Login.class);
             startActivity(loginIntent);
-        }else{
-            if(getIntent().getBooleanExtra("logout", false)) {
+        } else {
+            if (getIntent().getBooleanExtra("logout", false)) {
                 //logout();
                 return;
             }
 
-            main_layout = (LinearLayout)findViewById(R.id.main_layout);
+            main_layout = (LinearLayout) findViewById(R.id.main_layout);
 
             justRegistered = getIntent().getBooleanExtra("justRegistered", false);
             lstFamily = getIntent().getParcelableArrayListExtra("family");
@@ -135,9 +135,9 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void postLogin(){
+    private void postLogin() {
 
-        main_layout = (LinearLayout)findViewById(R.id.main_layout);
+        main_layout = (LinearLayout) findViewById(R.id.main_layout);
         justRegistered = getIntent().getBooleanExtra("justRegistered", false);
         lstFamily = getIntent().getParcelableArrayListExtra("family");
         ScreenDimension();
@@ -153,31 +153,31 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         //force for profile creation
         User user = ga.getLoggedInUser();
         boolean getFamilyData = false;
-        if(user==null || lstFamily==null || lstFamily.size()==0){
+        if (user == null || lstFamily == null || lstFamily.size() == 0) {
             getFamilyData = true;
         }
 
-        if(lstFamily!=null && lstFamily.size()>0){
+        if (lstFamily != null && lstFamily.size() > 0) {
             generateView();
             splashScreen.setVisibility(View.GONE);
             scroller.setVisibility(View.VISIBLE);
         }
 
-        if(!getFamilyData && !user.isProfileCreated()){
+        if (!getFamilyData && !user.isProfileCreated()) {
             // logged In User's profile not yet completed then show this
             Intent addProfileIntent = new Intent(ProfileListActivity.this, NewProfile.class);
             addProfileIntent.putExtra("user", user);
             startActivityForResult(addProfileIntent, 0);
-        } else if(getFamilyData) {//fetch the data
+        } else if (getFamilyData) {//fetch the data
             lstFamily = new ArrayList<User>();
-            if(Checker.isInternetOn(ProfileListActivity.this)){
+            if (Checker.isInternetOn(ProfileListActivity.this)) {
                 GetFamilyListTask task = new GetFamilyListTask();
                 task.applicationContext = ProfileListActivity.this;
                 task.execute();
-            }else{
+            } else {
                 Toast.makeText(ProfileListActivity.this, R.string.networkNotAvailable, Toast.LENGTH_SHORT).show();
             }
-        } else if(moveToTabActivity){//take the user to the goals screen for the loggedInUser\
+        } else if (moveToTabActivity) {//take the user to the goals screen for the loggedInUser\
             splashScreen.setVisibility(View.GONE);
             scroller.setVisibility(View.VISIBLE);
 
@@ -201,32 +201,32 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         boolean retVal = super.onOptionsItemSelected(item);
-        if(item.getItemId()==R.id.menu_logout){
+        if (item.getItemId() == R.id.menu_logout) {
             //logout();
             return false;
         }
 
-        if(item.getItemId()==R.id.menu_edit){
+        if (item.getItemId() == R.id.menu_edit) {
             startActionMode(new HomeActionModeCallback());
             return false;
         }
 
-        if(item.getItemId() == R.id.menu_invite) {
+        if (item.getItemId() == R.id.menu_invite) {
             InviteUser inviteUser = new InviteUser(ProfileListActivity.this, ga);
             inviteUser.show();
         }
 
-        if(item.getItemId() == R.id.menu_refresh) {
-            if(Checker.isInternetOn(ProfileListActivity.this)){
+        if (item.getItemId() == R.id.menu_refresh) {
+            if (Checker.isInternetOn(ProfileListActivity.this)) {
                 GetFamilyListTask task = new GetFamilyListTask();
                 task.applicationContext = ProfileListActivity.this;
                 task.execute();
-            }else{
-                Toast.makeText(ProfileListActivity.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(ProfileListActivity.this, R.string.networkNotAvailable, Toast.LENGTH_SHORT).show();
             }
         }
 
-        if(item.getItemId()==R.id.menu_change_password){
+        if (item.getItemId() == R.id.menu_change_password) {
             View dialogView = LayoutInflater.from(ProfileListActivity.this).inflate(R.layout.dialog_change_password, null);
             final EditText old = (EditText) dialogView.findViewById(R.id.old);
             final EditText newP = (EditText) dialogView.findViewById(R.id.newP);
@@ -236,27 +236,27 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
             builder.setTitle(R.string.changePasswordTitle);
             builder.setView(dialogView);
             builder.setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
-                private boolean isValid(){
+                private boolean isValid() {
                     String oStr = old.getText().toString();
                     String nStr = newP.getText().toString();
                     String naStr = newP.getText().toString();
 
-                    if(oStr==null || oStr.isEmpty()){
+                    if (oStr == null || oStr.isEmpty()) {
                         old.setError(getString(R.string.oldPasswordMandatory));
                         return false;
                     }
 
-                    if(nStr==null || nStr.isEmpty()){
+                    if (nStr == null || nStr.isEmpty()) {
                         newP.setError(getString(R.string.newPasswordMandatory));
                         return false;
                     }
 
-                    if(naStr==null || naStr.isEmpty()){
+                    if (naStr == null || naStr.isEmpty()) {
                         newPAgain.setError(getString(R.string.confirmNewPasswordMandatory));
                         return false;
                     }
 
-                    if(!nStr.equals(naStr)){
+                    if (!nStr.equals(naStr)) {
                         newP.setError(getString(R.string.newPasswordsDoNotMatch));
                         return false;
                     }
@@ -266,13 +266,13 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if(Checker.isInternetOn(ProfileListActivity.this)){
-                        if(isValid()){
+                    if (Checker.isInternetOn(ProfileListActivity.this)) {
+                        if (isValid()) {
                             ga.GA_eventButtonPress("home_change_password");
                             ChangePasswordTask task = new ChangePasswordTask();
                             task.execute(old.getText().toString(), newP.getText().toString());
                         }
-                    }else{
+                    } else {
                         Toast.makeText(ProfileListActivity.this, R.string.networkNotAvailable, Toast.LENGTH_LONG).show();
                     }
                 }
@@ -289,7 +289,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         super.onResume();
     }
 
-    public void ScreenDimension(){
+    public void ScreenDimension() {
         display = getWindowManager().getDefaultDisplay();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         width = display.getWidth();
@@ -298,17 +298,17 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
     private void generateTile(int position, boolean shouldCreateAddNewProfileTile) throws ImproperArgumentsPassedException {
         LinearLayout horizontalLinearLayout;
-        int horizontalPosition = position/2;
-        if(position%2==0 && main_layout.getChildCount()<=horizontalPosition){
+        int horizontalPosition = position / 2;
+        if (position % 2 == 0 && main_layout.getChildCount() <= horizontalPosition) {
             horizontalLinearLayout = new LinearLayout(ProfileListActivity.this);
-            horizontalLinearLayout.setTag("HLL"+horizontalPosition);
+            horizontalLinearLayout.setTag("HLL" + horizontalPosition);
             main_layout.addView(horizontalLinearLayout);
-        }else{
-            horizontalLinearLayout = (LinearLayout) main_layout.findViewWithTag("HLL"+horizontalPosition);
+        } else {
+            horizontalLinearLayout = (LinearLayout) main_layout.findViewWithTag("HLL" + horizontalPosition);
         }
 
 
-        if(shouldCreateAddNewProfileTile){
+        if (shouldCreateAddNewProfileTile) {
             LinearLayout tile = new LinearLayout(ProfileListActivity.this);
             tile.setOrientation(LinearLayout.VERTICAL);
             tile.setLayoutParams(new FrameLayout.LayoutParams(width / 2, width / 2));
@@ -325,19 +325,19 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         }
 
         //create or re-create the tile for the user
-        LinearLayout tile = position<tiles.size()?tiles.get(position):null;
-        if(lstFamily == null || position>=lstFamily.size())
+        LinearLayout tile = position < tiles.size() ? tiles.get(position) : null;
+        if (lstFamily == null || position >= lstFamily.size())
             throw new ImproperArgumentsPassedException("Either there are no members in the family or the postion is greater than or equal to the family size");
 
         ProfilePictureView imgProfile = null;
         ImageView imgView = null;
-        if(tile!=null){
-            imgProfile = (ProfilePictureView)tile.findViewWithTag("ppic");
-            imgView = (ImageView)tile.findViewWithTag("ppiciv");
+        if (tile != null) {
+            imgProfile = (ProfilePictureView) tile.findViewWithTag("ppic");
+            imgView = (ImageView) tile.findViewWithTag("ppiciv");
         }
-        if(tile == null || imgProfile == null || imgView == null){ // if the tiel is not yet created then create it
-            if(tile != null){
-                horizontalLinearLayout.removeViewAt(position%2);
+        if (tile == null || imgProfile == null || imgView == null) { // if the tiel is not yet created then create it
+            if (tile != null) {
+                horizontalLinearLayout.removeViewAt(position % 2);
                 tiles.remove(position);
             }
 
@@ -349,7 +349,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
             tile.setPadding(2, 2, 2, 2);
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    width/2, width/2);
+                    width / 2, width / 2);
 
             FrameLayout frm = new FrameLayout(ProfileListActivity.this);
             frm.setLayoutParams(lp);
@@ -361,7 +361,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     ga.GA_eventButtonPress("home_long_click");
                     int index = v.getId();
                     selectedViewPosition = index;
-                    if(lstFamily.size() > index) {
+                    if (lstFamily.size() > index) {
                         selectedUser = lstFamily.get(index);
                     }
                     startActionMode(new HomeActionModeCallback());
@@ -384,16 +384,16 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             User u = lstFamily.get(position);
-            if(u==null || u.getProfile()==null || //if user or proile is not yet set
-                    (u.getProfile().getFbProfileId()!=null && !u.getProfile().getFbProfileId().isEmpty()) // if fbId is valid one then
-                    || (u.getProfile().getProfilePicURL()==null || u.getProfile().getProfilePicURL().isEmpty() // if profilePic is default or not set then
-                    || u.getProfile().getProfilePicURL().endsWith("default_profile_picture_n.jpg"))){
+            if (u == null || u.getProfile() == null || //if user or proile is not yet set
+                    (u.getProfile().getFbProfileId() != null && !u.getProfile().getFbProfileId().isEmpty()) // if fbId is valid one then
+                    || (u.getProfile().getProfilePicURL() == null || u.getProfile().getProfilePicURL().isEmpty() // if profilePic is default or not set then
+                    || u.getProfile().getProfilePicURL().endsWith("default_profile_picture_n.jpg"))) {
                 iv.setVisibility(View.GONE);
                 imgProfile.setVisibility(View.VISIBLE);
 
-                if(u!=null && u.getProfile()!=null)
+                if (u != null && u.getProfile() != null)
                     imgProfile.setProfileId(u.getProfile().getFbProfileId());
-            }else{
+            } else {
                 FileLoader loader = new FileLoader(ProfileListActivity.this, null);
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
@@ -437,7 +437,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
             horizontalLinearLayout.addView(tile);
             tiles.add(tile);
         } else {
-            imgProfile = (ProfilePictureView)tile.findViewWithTag("ppic");
+            imgProfile = (ProfilePictureView) tile.findViewWithTag("ppic");
             imgView = (ImageView) tile.findViewWithTag("ppiciv");
 
             Animation anim = AnimationUtils.loadAnimation(ProfileListActivity.this, R.anim.fade_in);
@@ -448,38 +448,39 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
             final ProfilePictureView ppv = imgProfile;
             final ImageView iv = imgView;
             User u = lstFamily.get(position);
-            if(u!=null && u.getProfile()!=null && u.getProfile().getProfilePicURL()!=null &&
-                    !u.getProfile().getProfilePicURL().isEmpty()){
+            if (u != null && u.getProfile() != null && u.getProfile().getProfilePicURL() != null &&
+                    !u.getProfile().getProfilePicURL().isEmpty()) {
                 FileLoader loader = new FileLoader(ProfileListActivity.this, null);
                 loader.LoadFile(u.getProfile().getProfilePicURL(), u.getEmail() + "profilePic", new FileLoader.OnFileLoadedListener() {
                     @Override
                     public void OnFileLoaded(File file) {
                         Log.d(TAG, "GenerateTile::profilePic- default being set to - " + file.getAbsolutePath());
-                        iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width/2, width/2));
+                        iv.setImageBitmap(ImageSelector.getReducedBitmapfromFile(file.getAbsolutePath(), width / 2, width / 2));
                         iv.setVisibility(View.VISIBLE);
                         ppv.setVisibility(View.GONE);
                     }
                 });
-            }else{
+            } else {
                 imgProfile.setProfileId(u.getProfile().getFbProfileId());
                 iv.setVisibility(View.GONE);
                 imgProfile.setVisibility(View.VISIBLE);
             }
 
-            TextView txtName = (TextView)tile.findViewWithTag("pname");
+            TextView txtName = (TextView) tile.findViewWithTag("pname");
             txtName.setText(lstFamily.get(position).getName());
         }
     }
-    public void generateView(){
+
+    public void generateView() {
         String[] str = appPrefs.getMenuList().split(",");
-        for(int i = 0; i<lstFamily.size(); i++){
-            try{
+        for (int i = 0; i < lstFamily.size(); i++) {
+            try {
                 generateTile(i, false);
             } catch (ImproperArgumentsPassedException ime) {
                 Toast.makeText(ProfileListActivity.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
             }
         }
-        try{
+        try {
             //do not create a tile if there is only one profile and which is not yet created
             /*if(lstFamily.size()==1 && !lstFamily.get(0).isProfileCreated())
                 return;*/
@@ -495,32 +496,31 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         Log.e("TAG", "id is : " + v.getId());
         int index = v.getId();
         this.selectedViewPosition = index;
-        LinearLayout tr1lay=(LinearLayout)tiles.get(index);
-        Boolean shouldCreateProfile = index<lstFamily.size() && lstFamily.get(index).isProfileCreated() ?
+        LinearLayout tr1lay = (LinearLayout) tiles.get(index);
+        Boolean shouldCreateProfile = index < lstFamily.size() && lstFamily.get(index).isProfileCreated() ?
                 false : true;
 
-        if(lstFamily.size() > index) {
+        if (lstFamily.size() > index) {
             selectedUser = lstFamily.get(index);
         }
 
 
-        if(isEditMode){
-            if(actionMode!=null){
+        if (isEditMode) {
+            if (actionMode != null) {
                 actionMode.setTitle(selectedUser.getName() + " selected");
             }
-        }else{
-            if(shouldCreateProfile){
+        } else {
+            if (shouldCreateProfile) {
                 appPrefs.setBtnprofile_hide("1");
                 Long userId = null;
                 Boolean isLoggedInUser = false;
 
                 Intent addProfileIntent = new Intent(ProfileListActivity.this, NewProfile.class);
-                if(lstFamily.size() > index)
-                {
+                if (lstFamily.size() > index) {
                     addProfileIntent.putExtra("user", selectedUser);
                 }
                 startActivityForResult(addProfileIntent, index);
-            }else{
+            } else {
                 ga.GA_eventButtonPress("home_single_click__user");
                 Intent addProfileIntent = new Intent(ProfileListActivity.this, NewProfile.class);
                 addProfileIntent.putExtra("user", selectedUser);
@@ -542,7 +542,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        if(actionMode!=null){
+        if (actionMode != null) {
             actionMode.finish();
         }
 
@@ -552,28 +552,28 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         this.selectedViewPosition = requestCode;
-        if(requestCode == LOGIN_ACTIVITY){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == LOGIN_ACTIVITY) {
+            if (resultCode == Activity.RESULT_OK) {
                 postLogin();
-            } else{
+            } else {
                 finish();
             }
         }
-        if(resultCode==RESULT_OK){
-            if(requestCode < 100) {
-                if(isEditMode && actionMode!=null)
+        if (resultCode == RESULT_OK) {
+            if (requestCode < 100) {
+                if (isEditMode && actionMode != null)
                     actionMode.finish();
 
                 user = (User) data.getParcelableExtra("user");
-                if(Checker.isInternetOn(ProfileListActivity.this)){
+                if (Checker.isInternetOn(ProfileListActivity.this)) {
                     CallAddProfileTask task = new CallAddProfileTask();
                     task.applicationContext = ProfileListActivity.this;
                     task.execute();
 
-                }else{
+                } else {
 
                 }
-            }else{//it is from tabactivity
+            } else {//it is from tabactivity
 
             }
         }
@@ -581,28 +581,25 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
 
     // async class for calling webservice and get responce message
-    public class CallAddProfileTask extends AsyncTask<String, Void, String>
-    {
+    public class CallAddProfileTask extends AsyncTask<String, Void, String> {
         protected Context applicationContext;
         protected boolean isBeingUpdated;
         protected boolean profilPicBugIsBugUpdated;
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             dialog = new ProgressDialog(ProfileListActivity.this, R.style.StyledProgressDialog);
             dialog.setMessage("capturing your profile...");
             dialog.show();
         }
 
-        protected void onPostExecute(String result)
-        {
-            if(result.toString().equals("0")){
-                try{
-                    if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+        protected void onPostExecute(String result) {
+            if (result.toString().equals("0")) {
+                try {
+                    if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
                         generateTile(selectedViewPosition, false);
-                    }else{
-                        generateTile(lstFamily.size()-1, false);
+                    } else {
+                        generateTile(lstFamily.size() - 1, false);
                         generateTile(lstFamily.size(), true);
                     }
 
@@ -610,7 +607,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(ProfileListActivity.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
-                if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
+                if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
                     Intent intent = new Intent(ProfileListActivity.this, TabActivity.class);
                     intent.putExtra("user", user);
                     Parcelable[] users = new Parcelable[lstFamily.size()];
@@ -628,23 +625,22 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     startActivityForResult(intent, ADD_PROFILE_FROM_LIST);
                     finish();
                 }
-            }else{
+            } else {
                 dialog.dismiss();
-                if(result.toString().equals("1")){
+                if (result.toString().equals("1")) {
                     Toast.makeText(ProfileListActivity.this,
-                            "Email/Mobile No. already registered. Edit details for "+user.getFirstName() + ".",
+                            "Email/Mobile No. already registered. Edit details for " + user.getFirstName() + ".",
                             Toast.LENGTH_LONG).show();
-                    try{
+                    try {
 
-                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                        if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
                             lstFamily.set(selectedViewPosition, user);
-                        }
-                        else
+                        } else
                             lstFamily.add(user);
-                        if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                        if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
                             generateTile(selectedViewPosition, false);
-                        }else{
-                            generateTile(lstFamily.size()-1, false);
+                        } else {
+                            generateTile(lstFamily.size() - 1, false);
                             generateTile(lstFamily.size(), true);
                         }
 
@@ -671,50 +667,47 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         protected String doInBackground(String... params) {
             UserEP userEP = new UserEP(ProfileListActivity.this, ga);
 
-            isBeingUpdated = (user.getId()>0)? true: false;
+            isBeingUpdated = (user.getId() > 0) ? true : false;
             profilPicBugIsBugUpdated = Boolean.FALSE;
-            if(isBeingUpdated == true){
+            if (isBeingUpdated == true) {
                 profilPicBugIsBugUpdated = Boolean.TRUE;
             } else {
-                for(User uu : lstFamily){
-                    if(uu.getId() == user.getId()){
+                for (User uu : lstFamily) {
+                    if (uu.getId() == user.getId()) {
                         profilPicBugIsBugUpdated = Boolean.TRUE;
                         //isBeingUpdated = false;
                     }
                 }
             }
-            try{
+            try {
                 user = userEP.updateUser(user);
-                if(isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
                     lstFamily.set(selectedViewPosition, user);
-                }
-                else
+                } else
                     lstFamily.add(user);
                 return "0";
-            } catch ( IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 e.printStackTrace();
                 return "1";
             }
-
 
 
         }
     }
 
     // async class for calling webservice and get responce message
-    public class CallDeleteProfileTask extends AsyncTask<String, Void, Boolean>
-    {
+    public class CallDeleteProfileTask extends AsyncTask<String, Void, Boolean> {
         protected Context applicationContext;
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             dialog = new ProgressDialog(ProfileListActivity.this, R.style.StyledProgressDialog);
             dialog.setMessage("deleting the profile....");
             dialog.show();
         }
 
         protected void onPostExecute(Boolean result) {
-            if(result){
+            if (result) {
                 dialog.dismiss();
                 lstFamily.remove(selectedViewPosition);
                 /*Intent intent = new Intent(ProfileListActivity.this, ProfileListActivity.class);
@@ -730,9 +723,9 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivityForResult(intent, DELETE_PROFILE_FROM_LIST);
                 finish();
-            }else{
+            } else {
                 dialog.dismiss();
-                Toast.makeText(ProfileListActivity.this, "Not able to delete "+selectedUser.getName()+"...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileListActivity.this, "Not able to delete " + selectedUser.getName() + "...", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -746,8 +739,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
     }
 
     // async class for calling webservice and get responce message
-    public class GetFamilyListTask extends AsyncTask <String, Void,String>
-    {
+    public class GetFamilyListTask extends AsyncTask<String, Void, String> {
         protected Context applicationContext;
 
         @Override
@@ -762,7 +754,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         }
 
         protected void onPostExecute(String result) {
-            if(lstFamily.isEmpty()){
+            if (lstFamily.isEmpty()) {
                 //logout();
                 return;
             }
@@ -776,7 +768,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         @Override
         protected String doInBackground(String... params) {
             lstFamily.clear();
-            if(ga.getLoggedInUser()==null){
+            if (ga.getLoggedInUser() == null) {
                 userEndPoint.getLoggedInUser();
             }
             lstFamily.addAll(userEndPoint.GetFamilyMembers());
@@ -799,9 +791,9 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         protected void onPostExecute(Boolean aBoolean) {
             dialog.dismiss();
             String msg;
-            if(aBoolean){
+            if (aBoolean) {
                 msg = "Changed your password successfully.";
-            }else{
+            } else {
                 msg = "Sorry! Couldn't change your password. Please try after some time.";
             }
             Toast.makeText(ProfileListActivity.this, msg, Toast.LENGTH_LONG).show();
@@ -838,7 +830,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem menuItem) {
-            switch(menuItem.getItemId()){
+            switch (menuItem.getItemId()) {
                 case R.id.action_mode_edit: //edit
                     editUser();
                     return true;

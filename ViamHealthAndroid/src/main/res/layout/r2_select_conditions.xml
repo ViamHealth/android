@@ -2,38 +2,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_margin="8dp"
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="WHat conditions are your fighting ?"
-        android:id="@+id/textView2" />
+        android:layout_margin="4dp"
+        android:text="What conditions are your fighting ?"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
     </ListView>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Other :-"
-        android:id="@+id/textView" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        style="@android:style/TextAppearance"
+        android:text="Other :-" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
     </EditText>
+
     <Button
-    android:layout_width="match_parent"
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    android:text="Save"
-    android:id="@+id/btn_save"
-    android:layout_gravity="center_horizontal|bottom" />
+        android:layout_gravity="center_horizontal|bottom"
+        android:text="Save" />
 
 </LinearLayout>

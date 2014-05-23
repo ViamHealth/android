@@ -35,22 +35,22 @@ import java.util.List;
  */
 public class ConditionsList extends ListActivity {
 
-    private final ArrayList<String> items= new ArrayList<String>();
+    private final ArrayList<String> items = new ArrayList<String>();
     User selectedUser;
     SharedPreferences userPref;
-    Global_Application ga=null;
+    Global_Application ga = null;
 
 
-    List<User>  users= new ArrayList<User>();
-    private Parcelable[] pUsers=null;
+    List<User> users = new ArrayList<User>();
+    private Parcelable[] pUsers = null;
     private static final int ADD_PROFILE_FROM_LIST = 10002;
 
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.r2_select_conditions);
-        Button btn = (Button)findViewById(R.id.btn_save);
-        final EditText txt = (EditText)findViewById(R.id.editText);
+        Button btn = (Button) findViewById(R.id.btn_save);
+        final EditText txt = (EditText) findViewById(R.id.editText);
 
         selectedUser = getIntent().getParcelableExtra("user");
         pUsers = getIntent().getParcelableArrayExtra("users");
@@ -59,57 +59,53 @@ public class ConditionsList extends ListActivity {
             users.add((User) pUsers[i]);
         }
 
-        userPref=getSharedPreferences("User" + selectedUser.getName()+selectedUser.getId(), Context.MODE_PRIVATE);
+        userPref = getSharedPreferences("User" + selectedUser.getName() + selectedUser.getId(), Context.MODE_PRIVATE);
 
-        ga=(Global_Application)getApplicationContext();
+        ga = (Global_Application) getApplicationContext();
 
         final ConditionListAdapter adapter = new ConditionListAdapter(
                 getLayoutInflater());
 
         btn.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                   StringBuffer str = new StringBuffer();
-                   String fstr = "";
-                   String text = txt.getText().toString().trim();
-                   if(text.isEmpty()){
-                   } else {
-                       str.append(text);
-                   }
-                   for(int i=0; i<adapter.dataList.size(); i++){
-                       ConditionData cd = (ConditionData)adapter.dataList.get(i);
-                       if(cd.isSelected()){
-                           if(str.length() > 0)
-                                str.append(",");
-                           str.append(cd.getName());
+            @Override
+            public void onClick(View view) {
+                StringBuffer str = new StringBuffer();
+                String fstr = "";
+                String text = txt.getText().toString().trim();
+                if (text.isEmpty()) {
+                } else {
+                    str.append(text);
+                }
+                for (int i = 0; i < adapter.dataList.size(); i++) {
+                    ConditionData cd = (ConditionData) adapter.dataList.get(i);
+                    if (cd.isSelected()) {
+                        if (str.length() > 0)
+                            str.append(",");
+                        str.append(cd.getName());
 
-                       }
-                   }
-                   if(str.length() > 0) {
-                       fstr = str.toString();
-                       PostConditionsNavigationTask task = new PostConditionsNavigationTask();
-                       task.execute(fstr.toLowerCase());
-                   }
+                    }
+                }
+                if (str.length() > 0) {
+                    fstr = str.toString();
+                    PostConditionsNavigationTask task = new PostConditionsNavigationTask();
+                    task.execute(fstr.toLowerCase());
+                }
 
-               }
-           });
-
+            }
+        });
 
 
         getListView().setAdapter(adapter);
     }
 
 
-
     // async class for calling webservice and get responce message
-    public class PostConditionsNavigationTask extends AsyncTask<String, Void,String>
-    {
+    public class PostConditionsNavigationTask extends AsyncTask<String, Void, String> {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
 
             //dialog = ProgressDialog.show(activity, "Calling", "Please wait...", true);
             dialog = new ProgressDialog(ConditionsList.this);
@@ -135,10 +131,8 @@ public class ConditionsList extends ListActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            ConditionsEP tep = new ConditionsEP(ConditionsList.this,ga);
+            ConditionsEP tep = new ConditionsEP(ConditionsList.this, ga);
             tep.postConditions(params[0], selectedUser);
-
-
             return null;
         }
 
