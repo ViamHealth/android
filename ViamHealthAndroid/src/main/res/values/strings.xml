@@ -328,5 +328,6 @@
     <string name="targetNettCalories">Target Net Calories</string>
     <string name="schedule">schedule</string>
     <string name="endReminder">end reminder</string>
+    <string name="menu_profile_list">Manage Users</string>
 
 </resources>
