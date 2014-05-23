@@ -121,11 +121,11 @@
     <string name="register">Register</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_new_profile">NewProfile</string>
-    <string name="name">name</string>
+    <string name="name">name *</string>
     <string name="first_name">First Name*</string>
     <string name="last_name">Last Name</string>
     <string name="dob">date of birth*</string>
-    <string name="email">\@email*</string>
+    <string name="email">\@email *</string>
     <string name="phone">mobile number</string>
     <string name="location">location</string>
     <string name="organization">organization</string>
@@ -169,7 +169,7 @@
     <string name="register_passwords_mismatch">buddy! passwords do not match</string>
     <string name="profile_email_not_present">email is a mandatory field to create a new profile</string>
     <string name="profile_email_not_valid">is this really a email-id?</string>
-    <string name="profile_first_name_not_present">first name <!--or last name--> is mandatory to create a new profile</string>
+    <string name="profile_first_name_not_present">Name <!--or last name--> is mandatory to create a new profile</string>
     <string name="profile_dob_not_present">date of brth is mandatory to create a new profile</string>
     <string name="profile_height_not_present">height is mandatory to create a new profile</string>
     <string name="profile_weight_not_present">weight is mandatory to create a new profile</string>

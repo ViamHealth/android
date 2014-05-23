@@ -336,7 +336,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         actionBar.setLogo(R.drawable.ic_action_white_brand);
         /*** Action bar Creation Ends Here ***/
 
-        email.requestFocus();
+        firstName.requestFocus();
     }
 
     @Override
@@ -762,11 +762,10 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     private boolean validate() {
         boolean isValid = true;
         //Email is not mandatory so removing this check
-//        if(email.getText().length()==0){
-//            email.setError(getString(R.string.profile_email_not_present));
-//            isValid=false;
-//        } else
-        if (email.getText().length() > 0 && !Validator.isEmailValid(email.getText().toString())) {
+        if(email.getText().length()==0){
+            email.setError(getString(R.string.profile_email_not_present));
+            isValid=false;
+        } else if (email.getText().length() > 0 && !Validator.isEmailValid(email.getText().toString())) {
             email.setError(getString(R.string.profile_email_not_valid));
             isValid = false;
         }
