@@ -107,6 +107,9 @@
         <activity android:name="com.viamhealth.android.activities.AddReminder"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name="com.viamhealth.android.activities.ConditionsList"
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name="com.viamhealth.android.activities.ProfileListActivity"
             android:screenOrientation="portrait">
         </activity>
