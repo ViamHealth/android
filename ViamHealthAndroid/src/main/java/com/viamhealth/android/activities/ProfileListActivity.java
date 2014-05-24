@@ -607,7 +607,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(ProfileListActivity.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
-                if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) {
+                if ( (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE) || !user.getProfile().isMinor()) {
                     Intent intent = new Intent(ProfileListActivity.this, TabActivity.class);
                     intent.putExtra("user", user);
                     Parcelable[] users = new Parcelable[lstFamily.size()];

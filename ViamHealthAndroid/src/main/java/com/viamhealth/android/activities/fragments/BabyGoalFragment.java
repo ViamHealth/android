@@ -26,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +176,12 @@ public class BabyGoalFragment extends BaseFragment {
                 }
                 immunization_data_updated = false;
             }
-
+            Collections.sort(data, new Comparator<Immunization>() {
+                @Override
+                public int compare(Immunization fruite1, Immunization fruite2) {
+                    return (int)fruite1.getRecommendedAge() - (int)fruite2.getRecommendedAge();
+                }
+            });
             JSONArray listData = new JSONArray();
             int j = 0;
             for(Immunization i : data){
@@ -183,6 +190,15 @@ public class BabyGoalFragment extends BaseFragment {
                     object.put("immunization_id", i.getId());
                     object.put("title", i.getLabel());
                     object.put("recommended_age", i.getRecommendedAge());
+                    if(i.scheduleDate(selectedUser.getProfile().getDob()) != ""){
+                        object.put("schedule_date_string", i.scheduleDate(selectedUser.getProfile().getDob()));
+                        object.put("header_string", "");
+                    }
+                    else {
+                        object.put("header_string", i.scheduleTimeFrame(selectedUser.getProfile().getDob()));
+                        object.put("schedule_date_string", "");
+                    }
+
                     if(i.getUserImmunization() != null){
                         object.put("user", i.getUserImmunization().getUserId());
                         object.put("is_completed", i.getUserImmunization().isCompleted());

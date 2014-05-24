@@ -178,7 +178,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder)),
                 ReminderFragmentNew.class, bundle);
 
-        if(user.getProfile().getAge() < 18 &&  user.getProfile().getAge() > 0 )
+        if(user.getProfile().isMinor())
             mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
                 mTabHost.newTabSpec("baby_growth").setIndicator(getTabIndicator(R.string.tab_label_kids)),
                     BabyGoalFragment.class, bundle);

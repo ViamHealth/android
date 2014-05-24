@@ -1,5 +1,13 @@
 package com.viamhealth.android.model.immunization;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by kunal on 21/2/14.
  */
@@ -39,6 +47,44 @@ public class Immunization {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String scheduleDate(Date dob){
+        if(dob == null) return "";
+        DateTime sDate = new DateTime(dob);
+        DateTime today = new DateTime();
+        sDate = sDate.plusDays(((int) this.recommendedAge));
+        if(sDate.isAfter(today)){
+            DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MMM-yy").withLocale(Locale.US);
+            return formatter.print(sDate);
+        } else {
+            return "";
+        }
+    }
+
+    public String scheduleTimeFrame(Date dob){
+        if(dob == null) return "";
+        DateTime sDate = new DateTime(dob);
+        DateTime today = new DateTime();
+        sDate = sDate.plusDays(((int) this.recommendedAge));
+        if(sDate.isBefore(today)){
+            if(recommendedAge < 30 ){
+                if(recommendedAge <= 1){
+                    return "Birth";
+                }
+                else if(recommendedAge < 15) {
+                    return String.valueOf(recommendedAge) + " Days";
+                } else if(recommendedAge < 22){
+                    return "1 Week";
+                } else {
+                    return "2 Weeks";
+                }
+            }else {
+                return String.valueOf(recommendedAge/30) + " Months";
+            }
+        } else {
+            return "";
+        }
     }
 
     @Override

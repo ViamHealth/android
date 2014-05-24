@@ -66,6 +66,50 @@
     </div>
 </script>
 
+<script id="immunization-tpl-last-minute" type="text/x-handlebars-template">
+    <div class="topcoat-tab-bar full">
+        <label class="topcoat-tab-bar__item immunization-current-tab">
+            <input type="radio" name="topcoat" checked="checked">
+            <button class="topcoat-tab-bar__button full active">Schedule Next</button>
+        </label>
+        <label class="topcoat-tab-bar__item immunization-past-tab">
+            <input type="radio" name="topcoat">
+            <button class="topcoat-tab-bar__button full">Past Tracking</button>
+        </label>
+    </div>
+
+    <div class="topcoat-list" id="immunization-future">
+    </div>
+    <div class="topcoat-list" id="immunization-past" style="display:none;">
+    </div>
+</script>
+
+<script id="immunization-li-tpl-last-minute" type="text/x-handlebars-template">
+        {{#each this}}
+<!--        {{#if show_header}}<h3 class="topcoat-list__header">{{header_string}}</h3>{{/if}} -->
+        <ul class="topcoat-list__container immunization_list_to_do">
+            <li class="topcoat-list__item">
+                <p class="name">{{title}}</p>
+                {{#if show_header}}<p class="name" style="color:black;"><i>{{header_string}}</i></p>{{/if}}
+                <label class="topcoat-checkbox float-right-in-list">
+                    {{#if show_checkbox}}
+                    <input type="checkbox"
+                           class="immunization-is-completed"
+                           data-immunization-id="{{immunization_id}}"
+                           data-user-immunization-id="{{user_immunization_id}}"
+                    {{#if is_completed}} checked  {{/if}}
+                    >
+                    <div class="topcoat-checkbox__checkmark"></div>
+                    {{/if}}
+                    {{#if show_right_string }}
+                        {{schedule_date_string}}
+                    {{/if}}
+                </label>
+            </li>
+        </ul>
+        {{/each}}
+</script>
+
 <script id="immunization-tpl" type="text/x-handlebars-template">
     <div class="topcoat-list">
         <h3 class="topcoat-list__header">To do</h3>
