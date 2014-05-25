@@ -53,10 +53,10 @@ public class Immunization {
         if(dob == null) return "";
         DateTime sDate = new DateTime(dob);
         DateTime today = new DateTime();
-        sDate = sDate.plusDays(((int) this.recommendedAge));
-        if(sDate.isAfter(today)){
+        DateTime sDateNew  = sDate.plusWeeks(((int) this.recommendedAge));
+        if(sDateNew.isAfter(today)){
             DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MMM-yy").withLocale(Locale.US);
-            return formatter.print(sDate);
+            return formatter.print(sDateNew);
         } else {
             return "";
         }
@@ -65,11 +65,11 @@ public class Immunization {
     public String scheduleTimeFrame(Date dob){
         String rstring="";
         if(dob == null) return "";
-        DateTime sDate = new DateTime(dob);
+        /*DateTime sDate = new DateTime(dob);
         DateTime today = new DateTime();
-        sDate = sDate.plusDays(((int) this.recommendedAge));
+        DateTime sDateNew = sDate.plusWeeks(((int) this.recommendedAge));*/
 
-        //if(sDate.isBefore(today)){
+        //if(sDateNew.isBefore(today)){
             if(recommendedAge < 24 ) {
                 if (recommendedAge < 1) {
                     rstring = "At Birth";
@@ -95,9 +95,11 @@ public class Immunization {
         int rInt = 0;
         if(dob == null) return rInt;
         DateTime sDate = new DateTime(dob);
+
         DateTime today = new DateTime();
-        sDate = sDate.plusDays(((int) this.recommendedAge));
-        if(sDate.isBefore(today)) rInt = 1;
+        DateTime sDateNew = sDate.plusWeeks((int) this.recommendedAge);
+
+        if(sDateNew.isBefore(today)) rInt = 1;
         else rInt = 2;
         return rInt;
     }

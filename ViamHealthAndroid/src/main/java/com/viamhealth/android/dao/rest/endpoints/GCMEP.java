@@ -46,8 +46,8 @@ public class GCMEP {
             try {
                 client.Execute(RequestMethod.POST);
                 String responseString = client.getResponse();
-                Log.i("GCPEP", client.toString());
-                Log.i("GCPEP", responseString);
+                //Log.i("GCPEP", client.toString());
+                //Log.i("GCPEP", responseString);
             } catch(Exception e){
                 e.printStackTrace();
             }

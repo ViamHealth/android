@@ -129,7 +129,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
                 });
             }
             rowView.setTag(tdObj.getId());
-            Log.d(TAG, "Added " + values.get(position) + " at position " + position);
+            //Log.d(TAG, "Added " + values.get(position) + " at position " + position);
         }catch(Exception e){
             e.printStackTrace();
         }

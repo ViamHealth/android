@@ -34,7 +34,7 @@ public class TaskEP extends BaseEP {
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            //Log.i(TAG, client.toString());
 
             if(client.getResponseCode()== HttpStatus.SC_OK)
                 return processTaskList(responseString);
@@ -52,7 +52,7 @@ public class TaskEP extends BaseEP {
         try {
             client.Execute(RequestMethod.POST);
             //String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            //Log.i(TAG, client.toString());
             //if(client.getResponseCode()== HttpStatus.SC_OK)
         }catch (Exception e) {
             e.printStackTrace();
