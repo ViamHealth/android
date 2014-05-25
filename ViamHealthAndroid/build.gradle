@@ -26,6 +26,15 @@ android {
         abortOnError false
     }
 
+    signingConfigs {
+        release {
+            storeFile file("viamhealth-release-key.keystore")
+            storePassword ""
+            keyAlias ""
+            keyPassword ""
+        }
+    }
+
     buildTypes {
         debug {
             packageNameSuffix '.debug'
@@ -34,6 +43,7 @@ android {
 
         release {
             runProguard false
+            signingConfig signingConfigs.release
         }
     }
 
