@@ -34,6 +34,10 @@ border-bottom: none;
     /*border-bottom: none;*/
     clear: both;
 }
+.topcoat-list__header {
+
+    font-size: 1.2em;
+    }
 .topcoat-list__item {
 border-top: 1px solid #fff;
 border-bottom: 1px solid #dedede;

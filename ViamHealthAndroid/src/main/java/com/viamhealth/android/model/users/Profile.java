@@ -180,7 +180,8 @@ public class Profile implements Parcelable{
     }
 
     public boolean isMinor() {
-        return this.getAge() < 10;
+        if(this.getAgeInMonths() < 120) return true;
+        else return false;
     }
 
     public class Location implements Parcelable{

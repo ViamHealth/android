@@ -5,10 +5,10 @@
     BabyGrowthStorage =  {
         getImmunizationData: function(){
             var b = [
-                {"is_completed":true,"user_immunization_id":1,"title":"BCG","immunization_id":1,"recommended_age":134,"user":2,"schedule_date_string":"ababbaba","header_string":""},
-                {"recommended_age":123,"title":"Hepatitis B1","immunization_id":2,"schedule_date_string":"ababbaba","header_string":""},
-                {"recommended_age":0,"title":"OPV1","immunization_id":3,"header_string":"9090909"},
-                {"recommended_age":128,"title":"Pneumococcal Booster","immunization_id":4,"header_string":"7878"}
+                {"is_completed":true,"user_immunization_id":1,"title":"BCG","immunization_id":1,"recommended_age":134,"user":2,"schedule_date_string":"ababbaba","header_string":"","list_item_type":"1"},
+                {"recommended_age":123,"title":"Hepatitis B1","immunization_id":2,"schedule_date_string":"ababbaba","header_string":"","list_item_type":"1"},
+                {"recommended_age":0,"title":"OPV1","immunization_id":3,"header_string":"9090909","list_item_type":"1"},
+                {"recommended_age":128,"title":"Pneumococcal Booster","immunization_id":4,"header_string":"7878","list_item_type":"1"}
                 ];
             return JSON.stringify(b);
         },

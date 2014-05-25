@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="What conditions are your fighting ?"
+        android:text="Are you worried about any of the following?"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
@@ -19,21 +19,30 @@
         android:layout_height="wrap_content">
     </ListView>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        style="@android:style/TextAppearance"
-        android:text="Other :-" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="56dp">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@android:style/TextAppearance"
+            android:text="Other :-"
+            android:textColor="@color/app_green"
+            android:layout_weight="4"
+            android:textIsSelectable="false" />
 
-    </EditText>
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type here"
+            android:layout_weight="1">
+
+        </EditText>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_save"

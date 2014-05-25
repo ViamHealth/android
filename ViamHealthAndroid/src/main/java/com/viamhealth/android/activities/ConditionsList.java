@@ -15,15 +15,13 @@ import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.adapters.ConditionListAdapter;
 import com.viamhealth.android.dao.rest.endpoints.ConditionsEP;
-import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.model.ConditionData;
-import com.viamhealth.android.model.TaskData;
-import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.users.User;
 
 import java.util.ArrayList;
@@ -49,6 +47,7 @@ public class ConditionsList extends ListActivity {
         super.onCreate(icicle);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.r2_select_conditions);
+        TextView titleText = (TextView) findViewById(R.id.textView2);
         Button btn = (Button) findViewById(R.id.btn_save);
         final EditText txt = (EditText) findViewById(R.id.editText);
 
@@ -62,6 +61,10 @@ public class ConditionsList extends ListActivity {
         userPref = getSharedPreferences("User" + selectedUser.getName() + selectedUser.getId(), Context.MODE_PRIVATE);
 
         ga = (Global_Application) getApplicationContext();
+        User Luser = ga.getLoggedInUser();
+        if(Luser.getId() != selectedUser.getId()){
+            titleText.setText("Is "+ selectedUser.getName() + " worried about any of the following?");
+        }
 
         final ConditionListAdapter adapter = new ConditionListAdapter(
                 getLayoutInflater());

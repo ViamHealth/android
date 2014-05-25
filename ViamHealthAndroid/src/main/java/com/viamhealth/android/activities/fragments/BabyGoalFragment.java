@@ -157,7 +157,7 @@ public class BabyGoalFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println(object.toString());
+            //System.out.println(object.toString());
             return object.toString();
         }
 
@@ -190,13 +190,14 @@ public class BabyGoalFragment extends BaseFragment {
                     object.put("immunization_id", i.getId());
                     object.put("title", i.getLabel());
                     object.put("recommended_age", i.getRecommendedAge());
-                    if(i.scheduleDate(selectedUser.getProfile().getDob()) != ""){
+                    if(i.scheduleDate(selectedUser.getProfile().getDob()) != null){
                         object.put("schedule_date_string", i.scheduleDate(selectedUser.getProfile().getDob()));
-                        object.put("header_string", "");
-                    }
-                    else {
                         object.put("header_string", i.scheduleTimeFrame(selectedUser.getProfile().getDob()));
+                        object.put("list_item_type", i.getListItemType(selectedUser.getProfile().getDob()));
+                    }else {
                         object.put("schedule_date_string", "");
+                        object.put("header_string", "");
+                        object.put("list_item_type","0");
                     }
 
                     if(i.getUserImmunization() != null){

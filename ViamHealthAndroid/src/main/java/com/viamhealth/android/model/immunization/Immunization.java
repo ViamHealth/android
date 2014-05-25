@@ -63,28 +63,47 @@ public class Immunization {
     }
 
     public String scheduleTimeFrame(Date dob){
+        String rstring="";
         if(dob == null) return "";
         DateTime sDate = new DateTime(dob);
         DateTime today = new DateTime();
         sDate = sDate.plusDays(((int) this.recommendedAge));
-        if(sDate.isBefore(today)){
+
+        //if(sDate.isBefore(today)){
             if(recommendedAge < 30 ){
                 if(recommendedAge <= 1){
-                    return "Birth";
+                    rstring =  "At Birth";
                 }
                 else if(recommendedAge < 15) {
-                    return String.valueOf(recommendedAge) + " Days";
+                    rstring = "Age: " + String.valueOf(recommendedAge) + " Days";
                 } else if(recommendedAge < 22){
-                    return "1 Week";
+                    rstring = "Age: 1 Week";
                 } else {
-                    return "2 Weeks";
+                    rstring = "Age: 2 Weeks";
                 }
+            }else if(recommendedAge < 30*12){
+                rstring=  "Age: " + String.valueOf(recommendedAge/30) + " Month(s)";
             }else {
-                return String.valueOf(recommendedAge/30) + " Months";
+                rstring = "Age: " + String.valueOf(recommendedAge/(30*12)) + " Year(s)";
             }
-        } else {
-            return "";
-        }
+        //} else {
+        //    return "";
+        //}
+        //if(!sDate.isBefore(today)) System.out.println("KUNAL " + rstring );
+        return rstring;
+    }
+
+    public int getListItemType(Date dob) {
+        System.out.println("KUNAL - in here2");
+        int rInt = 0;
+        if(dob == null) return rInt;
+        DateTime sDate = new DateTime(dob);
+        DateTime today = new DateTime();
+        sDate = sDate.plusDays(((int) this.recommendedAge));
+        if(sDate.isBefore(today)) rInt = 1;
+        else rInt = 2;
+        System.out.println("KUNAL - " + String.valueOf(rInt));
+        return rInt;
     }
 
     @Override
@@ -104,4 +123,6 @@ public class Immunization {
                     ", userImmunization='null'" +
                     "} ";
     }
+
+
 }

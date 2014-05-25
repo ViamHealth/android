@@ -86,12 +86,17 @@
 
 <script id="immunization-li-tpl-last-minute" type="text/x-handlebars-template">
         {{#each this}}
-<!--        {{#if show_header}}<h3 class="topcoat-list__header">{{header_string}}</h3>{{/if}} -->
+        {{#if show_header}}<h3 class="topcoat-list__header">{{header_string}}</h3>{{/if}}
         <ul class="topcoat-list__container immunization_list_to_do">
             <li class="topcoat-list__item">
                 <p class="name">{{title}}</p>
-                {{#if show_header}}<p class="name" style="color:black;"><i>{{header_string}}</i></p>{{/if}}
+                <!--{{#if show_header}}<p class="name" style="color:black;"><i>{{header_string}}</i></p>{{/if}}-->
                 <label class="topcoat-checkbox float-right-in-list">
+                    {{#if show_right_string }}
+                    <span style="color:black;">{{schedule_date_string}}</span>
+                    <br/>
+                    {{/if}}
+
                     {{#if show_checkbox}}
                     <input type="checkbox"
                            class="immunization-is-completed"
@@ -101,9 +106,7 @@
                     >
                     <div class="topcoat-checkbox__checkmark"></div>
                     {{/if}}
-                    {{#if show_right_string }}
-                        {{schedule_date_string}}
-                    {{/if}}
+
                 </label>
             </li>
         </ul>

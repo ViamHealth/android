@@ -203,7 +203,7 @@
     <string name="target_tryglecerides">target tryglecerides</string>
     <string name="file_title">description of the file</string>
     <string name="profile_height">how tall are you?(cm)*</string>
-    <string name="profile_weight">how much do you weigh?(kg)*</string>
+    <string name="profile_weight">Weight (kg)*</string>
     <string name="add_weight">Add</string>
     <string name="title_activity_add_goal_value">Add Value</string>
     <string name="title_activity_add_weight">Add Weight</string>
