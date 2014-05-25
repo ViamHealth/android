@@ -4,7 +4,6 @@ var TrackGrowthGraphView = function (adapter, template) {
         this.el = $('<div/>');
     };
     this.render = function() {
-    console.log('here');
         this.el.html(template());
         this.load_graph();
         return this;
@@ -15,8 +14,6 @@ var TrackGrowthGraphView = function (adapter, template) {
         var that = this;
 
         adapter.getGrowthChartData().done(function(data){
-        console.log(data);
-        console.log(data.track_growth);
             var track_growth_length = data.track_growth.length;
 
              if(data.user_track_growth)

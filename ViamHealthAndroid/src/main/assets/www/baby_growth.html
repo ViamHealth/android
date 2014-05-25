@@ -11,7 +11,7 @@
     <script type="text/javascript" src="lib/handlebars.js"></script>
     <script type="text/javascript" src="lib/pageslider.js"></script>
     <script type="text/javascript" src="lib/date.js"></script>
-    <script type="text/javascript" src="lib/highcharts.js"></script>
+    <!--<script type="text/javascript" src="lib/highcharts.js"></script>-->
 
 </head>
 <body>
@@ -49,15 +49,40 @@
 </script>
 
 <script id="add-track-growth-tpl" type="text/x-handlebars-template">
-    <h3 class="topcoat-list__header">Add data</h3>
-    <div id="track-growth-form">
-        Entry date :- <input type="text" class="topcoat-text-input track-growth-form-date" value="today" placeholder="type date.Eg. 7 feb">
-        <br/>
-        Height :- <input type="text" class="topcoat-text-input" value="" placeholder="Enter Height">
-        <br/>
-        Weight :- <input type="text" class="topcoat-text-input" value="" placeholder="Enter Weight">
-        <br/>
-        <button class="topcoat-button--large--cta" >Save</button>
+    <div id="track-growth-form-container" >
+        <h3 class="topcoat-list__header">Enter height & weight details</h3>
+        <div id="track-growth-form" style="background-color:white; padding:20px;padding-top:5px;">
+            <p>
+                <input type="text" class="topcoat-text-input track-growth-form-date full" value="today" placeholder="type date.Eg. 7 feb">
+            </p>
+            <p>
+                <input type="number" class="topcoat-text-input full" value="" placeholder="Enter Height (in cms)">
+            </p>
+            <p>
+                <input type="number" class="topcoat-text-input full" value="" placeholder="Enter Weight (in kgs)">
+            </p>
+            <p>
+                <button class="topcoat-button--large--cta full save-growth-form"  style="background-color:#37AA4F;border: 1px solid #37AA4F;">Save</button>
+            </p>
+        </div>
+    </div>
+    <div id="growth-form-result" style="display:none;background-color:white;">
+        <h3 class="topcoat-list__header">Percentile statistics</h3>
+        <div style="padding:20px;">
+        <p>Your child is <span style="color:#37AA4F;">30 kilos</span>.
+            <br/>
+            That is at the <span style="color:#37AA4F;">46th percentile</span> for weight.
+        </p>
+        <div class="spacer">
+            <hr>
+        </div>
+        <p>Your child is <span style="color:#37AA4F;">137 cms</span>
+            <br/>
+                That is at the <span style="color:#37AA4F;">83rd percentile</span> for height.</p>
+        </div>
+        <div class="spacer">
+            <hr>
+        </div>
     </div>
 </script>
 <script id="track-growth-graph-tpl" type="text/x-handlebars-template">
@@ -112,41 +137,6 @@
         </ul>
         {{/each}}
 </script>
-
-<script id="immunization-tpl" type="text/x-handlebars-template">
-    <div class="topcoat-list">
-        <h3 class="topcoat-list__header">To do</h3>
-        <ul class="topcoat-list__container immunization_list_to_do">
-        </ul>
-    </div>
-    <div class="topcoat-list">
-        <h3 class="topcoat-list__header">Past</h3>
-        <ul class="topcoat-list__container immunization_list_past">
-        </ul>
-    </div>
-    <div class="topcoat-list">
-        <h3 class="topcoat-list__header">Future</h3>
-        <ul class="topcoat-list__container immunization_list_future">
-        </ul>
-    </div>
-</script>
-<script id="immunization-li-tpl" type="text/x-handlebars-template">
-    {{#each this}}
-    <li class="topcoat-list__item">
-        <p class="name">{{title}}</p>
-        <label class="topcoat-checkbox float-right-in-list">
-            <input type="checkbox"
-                   class="immunization-is-completed"
-                   data-immunization-id="{{immunization_id}}"
-                   data-user-immunization-id="{{user_immunization_id}}"
-                   {{#if is_completed}} checked  {{/if}}
-            >
-            <div class="topcoat-checkbox__checkmark"></div>
-        </label>
-    </li>
-    {{/each}}
-</script>
-
 
 
 <script type="text/javascript" src="js/baby_growth/data.js"></script>

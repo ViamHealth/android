@@ -70,22 +70,20 @@ public class Immunization {
         sDate = sDate.plusDays(((int) this.recommendedAge));
 
         //if(sDate.isBefore(today)){
-            if(recommendedAge < 30 ){
-                if(recommendedAge <= 1){
-                    rstring =  "At Birth";
-                }
-                else if(recommendedAge < 15) {
-                    rstring = "Age: " + String.valueOf(recommendedAge) + " Days";
-                } else if(recommendedAge < 22){
-                    rstring = "Age: 1 Week";
+            if(recommendedAge < 24 ) {
+                if (recommendedAge < 1) {
+                    rstring = "At Birth";
                 } else {
-                    rstring = "Age: 2 Weeks";
+                    rstring = "Age: " + String.valueOf(recommendedAge) + " Weeks";
                 }
-            }else if(recommendedAge < 30*12){
+            } else {
+                rstring = "Age: " + String.valueOf(Math.round(((3*1.0)/13)*recommendedAge)) + " Months";
+            }
+            /*}else if(recommendedAge < 52){
                 rstring=  "Age: " + String.valueOf(recommendedAge/30) + " Month(s)";
             }else {
                 rstring = "Age: " + String.valueOf(recommendedAge/(30*12)) + " Year(s)";
-            }
+            }*/
         //} else {
         //    return "";
         //}
@@ -94,7 +92,6 @@ public class Immunization {
     }
 
     public int getListItemType(Date dob) {
-        System.out.println("KUNAL - in here2");
         int rInt = 0;
         if(dob == null) return rInt;
         DateTime sDate = new DateTime(dob);
@@ -102,7 +99,6 @@ public class Immunization {
         sDate = sDate.plusDays(((int) this.recommendedAge));
         if(sDate.isBefore(today)) rInt = 1;
         else rInt = 2;
-        System.out.println("KUNAL - " + String.valueOf(rInt));
         return rInt;
     }
 

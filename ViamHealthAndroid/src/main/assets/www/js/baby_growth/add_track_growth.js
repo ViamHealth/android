@@ -3,12 +3,21 @@ var AddTrackGrowthView = function (adapter, template) {
         // Define a div wrapper for the view. The div wrapper is used to attach events.
         this.el = $('<div/>');
         this.el.on('blur', '.track-growth-form-date', this.load_date_widget);
+        this.el.on('click', '.save-growth-form', this.save_growth_form);
 
     };
     this.render = function() {
         this.el.html(template());
         this.load_date_widget();
         return this;
+    };
+
+    this.save_growth_form = function(event){
+        $( "#track-growth-form-container" ).slideUp( "slow", function() {
+            $("#growth-form-result").slideDown("slow", function(){
+            });
+          });
+
     };
 
     this.load_date_widget = function(event){

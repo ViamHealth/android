@@ -174,7 +174,7 @@
     <string name="profile_height_not_present">height is mandatory to create a new profile</string>
     <string name="profile_weight_not_present">weight is mandatory to create a new profile</string>
     <string name="tab_label_goal">Goals</string>
-    <string name="tab_label_kids">Kids</string>
+    <string name="tab_label_kids">Kid Tracker</string>
     <string name="tab_label_journal">Journal</string>
     <string name="tab_label_reminder">Reminders</string>
     <string name="tab_label_file">Files</string>
@@ -203,7 +203,7 @@
     <string name="target_tryglecerides">target tryglecerides</string>
     <string name="file_title">description of the file</string>
     <string name="profile_height">how tall are you?(cm)*</string>
-    <string name="profile_weight">Weight (kg)*</string>
+    <string name="profile_weight">weight (kg)*</string>
     <string name="add_weight">Add</string>
     <string name="title_activity_add_goal_value">Add Value</string>
     <string name="title_activity_add_weight">Add Weight</string>
