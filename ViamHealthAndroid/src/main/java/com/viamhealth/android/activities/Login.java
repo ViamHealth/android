@@ -13,6 +13,7 @@ import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.db.DataBaseAdapter;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -60,26 +61,26 @@ import java.io.InputStream;
 
 
 public class Login extends BaseFragmentActivity implements OnClickListener, FBLoginFragment.OnSessionStateChangeListener {
-	private static ProgressDialog dialog;
-	
-	Button login_btn;
-	Global_Application ga;
-	EditText user_name, user_password;
-	TextView sign_up, forgotPassword;
-	UserEP userEndPoint;
+    private static ProgressDialog dialog;
 
-	DataBaseAdapter dbAdapter;
+    Button login_btn;
+    Global_Application ga;
+    EditText user_name, user_password;
+    TextView sign_up, forgotPassword;
+    UserEP userEndPoint;
+
+    DataBaseAdapter dbAdapter;
     FBLoginFragment fbLoginFragment;
     ViamHealthPrefs appPrefs;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-        ga=((Global_Application)getApplicationContext());
 
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);  
-		setContentView(R.layout.login_new);
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ga = ((Global_Application) getApplicationContext());
+
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.login_new);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
@@ -94,39 +95,39 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
                     .findFragmentById(R.id.fbLoginFragment);
         }
 
-		appPrefs = new ViamHealthPrefs(Login.this);
+        appPrefs = new ViamHealthPrefs(Login.this);
 
-        dbAdapter=new DataBaseAdapter(getApplicationContext());
+        dbAdapter = new DataBaseAdapter(getApplicationContext());
         dbAdapter.createDatabase();
         dbAdapter.insertDefaulValues();
 
-        userEndPoint=new UserEP(Login.this, (Global_Application)getApplicationContext());
+        userEndPoint = new UserEP(Login.this, (Global_Application) getApplicationContext());
 
-        Typeface tf = Typeface.createFromAsset(this.getAssets(),"Roboto-Condensed.ttf");
+        Typeface tf = Typeface.createFromAsset(this.getAssets(), "Roboto-Condensed.ttf");
 
         ScreenDimension();
 
-        user_name = (EditText)findViewById(R.id.user_name);
-        user_password = (EditText)findViewById(R.id.user_password);
+        user_name = (EditText) findViewById(R.id.user_name);
+        user_password = (EditText) findViewById(R.id.user_password);
         user_password.setTypeface(tf);
         user_name.setTypeface(tf);
 
-        login_btn=(Button)findViewById(R.id.login_btn);
+        login_btn = (Button) findViewById(R.id.login_btn);
         login_btn.setOnClickListener(this);
         login_btn.setTypeface(tf);
 
-        sign_up=(TextView)findViewById(R.id.sign_up);
+        sign_up = (TextView) findViewById(R.id.sign_up);
         sign_up.setOnClickListener(this);
         sign_up.setTypeface(tf);
 
-        forgotPassword = (TextView)findViewById(R.id.forgotPassword);
+        forgotPassword = (TextView) findViewById(R.id.forgotPassword);
         forgotPassword.setOnClickListener(this);
         forgotPassword.setTypeface(tf);
-	}
+    }
 
     @Override
     public void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if(state.isOpened()){
+        if (state.isOpened()) {
             //Logged in through facebook
             //String fbToken = session.getAccessToken();
             //Toast.makeText(Login.this, "FB Access Token is - " + fbToken, Toast.LENGTH_LONG).show();
@@ -176,103 +177,102 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
             }
 
             return ld;
-        }
-        finally {
+        } finally {
             brd.recycle();
             return null;
         }
     }
 
     // onclick method of all clikable control
-	@Override    
-	public void onClick(View v) 
-	{
-		// TODO Auto-generated method stub
-		if(v==login_btn){
-			if(Checker.isInternetOn(Login.this)){
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        if (v == login_btn) {
+            if (Checker.isInternetOn(Login.this)) {
                 ga.GA_eventButtonPress("login_email_button");
-				if(validation()){
-					CallLoginTask task = new CallLoginTask();
-					task.applicationContext = Login.this;
+                if (validation()) {
+                    CallLoginTask task = new CallLoginTask();
+                    task.applicationContext = Login.this;
                     task.username = user_name.getText().toString();
                     task.password = user_password.getText().toString();
-					task.execute();
-				} else {
-                    ga.GA_eventGeneral("login_email","failure","invalid input");
+                    task.execute();
+                } else {
+                    ga.GA_eventGeneral("login_email", "failure", "invalid input");
                 }
-			}else{
-				Toast.makeText(Login.this,R.string.networkNotAvailable,Toast.LENGTH_SHORT).show();
-			}
-		}
-		if(v==sign_up){
-			//redirect registration activity
-			Intent i = new Intent(Login.this, Register.class);
-			startActivity(i);
-		}
-        if(v==forgotPassword){
+            } else {
+                Toast.makeText(Login.this, R.string.networkNotAvailable, Toast.LENGTH_SHORT).show();
+            }
+        }
+        if (v == sign_up) {
+            //redirect registration activity
+            Intent i = new Intent(Login.this, Register.class);
+            startActivity(i);
+
+        }
+        if (v == forgotPassword) {
             ga.GA_eventButtonPress("forgot_password_button");
 
             Intent i = new Intent(Login.this, ForgotPassword.class);
             i.putExtra("email", user_name.getText().toString());
             startActivity(i);
-        }
-	}
 
-	// function for validation
-	public boolean validation(){
-		boolean valid=true;
-		if(user_name.getText().length()==0){
-			user_name.setError(getString(R.string.login_user_name_not_present));
-			valid=false;
-		} else if(!Validator.isEmailValid(user_name.getText().toString())){
-            user_name.setError(getString(R.string.login_user_name_not_email));
-            valid=false;
         }
-		if(user_password.getText().length()==0){
-			user_password.setError(getString(R.string.login_user_password_not_present));
-			valid=false;
-		}
+    }
+
+    // function for validation
+    public boolean validation() {
+        boolean valid = true;
+        if (user_name.getText().length() == 0) {
+            user_name.setError(getString(R.string.login_user_name_not_present));
+            valid = false;
+        } else if (!Validator.isEmailValid(user_name.getText().toString())) {
+            user_name.setError(getString(R.string.login_user_name_not_email));
+            valid = false;
+        }
+        if (user_password.getText().length() == 0) {
+            user_password.setError(getString(R.string.login_user_password_not_present));
+            valid = false;
+        }
 
         return valid;
-	}
+    }
 
-	// async class for calling webservice and get responce message
-	public class CallLoginTask extends AsyncTask <String, Void,String>
-	{
-		protected Context applicationContext;
+    // async class for calling webservice and get responce message
+    public class CallLoginTask extends AsyncTask<String, Void, String> {
+        protected Context applicationContext;
         protected String username, password;
 
-		@Override
-		protected void onPreExecute() {
-			//dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
-			dialog = new ProgressDialog(Login.this, R.style.StyledProgressDialog);
-			dialog.setMessage(getString(R.string.loginMessage));
-			dialog.show();
-		}
-		 
-		protected void onPostExecute(String response) {
-			if(!response.equals("0")){
-                ga.GA_eventGeneral("login_email","failure","wrong credentials");
+        @Override
+        protected void onPreExecute() {
+            //dialog = ProgressDialog.show(applicationContext, "Calling", "Please wait...", true);
+            dialog = new ProgressDialog(Login.this, R.style.StyledProgressDialog);
+            dialog.setMessage(getString(R.string.loginMessage));
+            dialog.show();
+        }
+
+        protected void onPostExecute(String response) {
+            if (!response.equals("0")) {
+                ga.GA_eventGeneral("login_email", "failure", "wrong credentials");
                 dialog.dismiss();
                 Toast.makeText(Login.this, R.string.loginFailureMessage, Toast.LENGTH_SHORT).show();
-			}else{
-                ga.GA_eventGeneral("login_email","success");
+            } else {
+                ga.GA_eventGeneral("login_email", "success");
                 dialog.dismiss();
                 //appPrefs.setUsername(user_name.getText().toString().trim());
-                Intent i=new Intent(Login.this, Home.class);
+                Intent i = new Intent(Login.this, Home.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
-			}
-		}  
+            }
+        }
 
-		@Override
-		protected String doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			//return userEndPoint.Login(username, password);
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            //return userEndPoint.Login(username, password);
             userEndPoint.Login(username, password);
             return "0";
-		}
-		   
-	}     
+        }
+
+    }
 }

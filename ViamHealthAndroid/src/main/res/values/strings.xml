@@ -301,7 +301,7 @@
     <string name="hint_reminder_drappointment_name">doctor name</string>
     <string name="hint_reminder_other_name">name</string>
     <string name="copyright">\u00A9 2013 Viam Health</string>
-    <string name="forgotPassword">Forgot Password?</string>
+    <string name="forgotPassword">Forgot Password ?</string>
     <string name="mailMe">Mail Me</string>
     <string name="oldPassword">#old password</string>
     <string name="newPassword">#new password</string>

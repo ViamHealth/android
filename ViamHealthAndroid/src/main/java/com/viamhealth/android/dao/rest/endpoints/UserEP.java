@@ -90,7 +90,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-       // Log.i(TAG, client.toString());
+        Log.i(TAG , client.toString());
         User user = processUserResponse(responseString);
         user.setLoggedInUser(true);
         ga.setLoggedInUser(user);
@@ -221,7 +221,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-       // Log.i(TAG, "login:" + client.toString());
+        Log.i(TAG, "login:" + client.toString());
         User user = null;
         try {
             JSONObject jObject = new JSONObject(responseString);
