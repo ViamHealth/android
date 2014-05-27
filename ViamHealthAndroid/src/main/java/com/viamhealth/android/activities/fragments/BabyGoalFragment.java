@@ -21,6 +21,9 @@ import com.viamhealth.android.model.trackgrowth.TrackGrowthData;
 import com.viamhealth.android.model.trackgrowth.UserTrackGrowthData;
 import com.viamhealth.android.model.users.User;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,6 +116,27 @@ public class BabyGoalFragment extends BaseFragment {
             if(age == 0)
                 Toast.makeText(mContext,"Age not specified",Toast.LENGTH_LONG);
             return String.valueOf(age);
+        }
+
+        @JavascriptInterface
+        public void updateUserTrackData(String sdate, String sheight, String sweight){
+            DateTime edate;
+            if(sdate == ""){
+               edate = new DateTime();
+            }else {
+                DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
+                edate = formatter.parseDateTime(sdate);
+            }
+
+            UserTrackGrowthData obj = new UserTrackGrowthData();
+            obj.setUserId(selectedUser.getId());
+            obj.setEntryDate(edate.toDate());
+            obj.setWeight(Float.valueOf(sweight));
+            obj.setHeight(Float.valueOf(sheight));
+
+            UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+            ep.update(obj);
+
         }
 
         @JavascriptInterface

@@ -22,14 +22,16 @@
             alert(message);
         },
         getGrowthChartData: function(){
-
-        var b=
+            var b=
 '{"user_track_growth": [{"user": 1, "age": 1037, "height": 111.0, "id": 1, "entry_date": "2014-01-10"}, {"weight": 35.0, "age": 1095, "height": 110.0, "user": 1, "id": 2, "entry_date": "2014-03-09"}], "track_growth": [{"age": 0, "label": "Birth", "weight": 89.0, "height": 45.0}, {"age": 90, "label": "3 months", "weight": 45.0, "height": 112.0}, {"age": 356, "label": "1 year", "weight": 23.0, "height": 112.0}]}';
-        return b;
+            return b;
+        },
+        updateUserTrackData: function(d,h,w){
+            alert(d);
         }
     };
-
 */
+
 
 
 

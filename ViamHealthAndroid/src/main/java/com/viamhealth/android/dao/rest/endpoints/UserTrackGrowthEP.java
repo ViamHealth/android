@@ -18,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,11 +35,36 @@ public class UserTrackGrowthEP extends BaseEP {
     public UserTrackGrowthEP(Context context, Application app) {
         super(context, app);
     }
-    /*
-    private RestClient addParams(RestClient client, UserImmunization obj){
 
+    private RestClient addParams(RestClient client, UserTrackGrowthData obj){
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        client.AddParam("user", obj.getUserId().toString());
+        client.AddParam("entry_date", df.format(obj.getEntryDate()));
+        client.AddParam("height", obj.getHeight().toString());
+        client.AddParam("weight", obj.getWeight().toString());
+        return client;
     }
-    */
+
+
+    public boolean update(UserTrackGrowthData obj){
+        Params params = new Params();
+        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        RestClient client = getRestClient(API_RESOURCE + "/" + df.format(obj.getEntryDate()), params);
+        client = addParams(client, obj);
+        try {
+            client.Execute(RequestMethod.PUT);
+            String responseString = client.getResponse();
+            Log.i(TAG, client.toString());
+
+            if(client.getResponseCode()== HttpStatus.SC_CREATED){
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
 
     public Map<String,List<TrackGrowth>> list(long userId){
 

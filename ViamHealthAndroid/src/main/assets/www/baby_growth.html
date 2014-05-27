@@ -53,13 +53,15 @@
         <h3 class="topcoat-list__header">Enter height & weight details</h3>
         <div id="track-growth-form" style="background-color:white; padding:20px;padding-top:5px;">
             <p>
-                <input type="text" class="topcoat-text-input track-growth-form-date full" value="today" placeholder="type date.Eg. 7 feb">
+                <input type="date" class="topcoat-text-input track-growth-form-date full" value="today" placeholder="type date.Eg. 7 feb">
             </p>
             <p>
-                <input type="number" class="topcoat-text-input full" value="" placeholder="Enter Height (in cms)">
+                <input type="number" class="topcoat-text-input track-growth-form-height full" value="" placeholder="Enter Height (in cms)">
+                <div class="height_error" style="display:none;color:red;">Please check height</div>
             </p>
             <p>
-                <input type="number" class="topcoat-text-input full" value="" placeholder="Enter Weight (in kgs)">
+                <input type="number" class="topcoat-text-input track-growth-form-weight full" value="" placeholder="Enter Weight (in kgs)">
+            <div class="weight_error" style="display:none;color:red;">Please check weight</div>
             </p>
             <p>
                 <button class="topcoat-button--large--cta full save-growth-form"  style="background-color:#37AA4F;border: 1px solid #37AA4F;">Save</button>
