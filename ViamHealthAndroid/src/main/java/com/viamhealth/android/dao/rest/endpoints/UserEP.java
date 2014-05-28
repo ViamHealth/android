@@ -241,8 +241,10 @@ public class UserEP extends BaseEP {
 
     // function for call login service
     public String Login(String username,String password) {
-        String	responsetxt="1";
-        _login(username, password, LoginType.Email);
+        String	responsetxt="0";
+        User user = _login(username, password, LoginType.Email);
+        if(user == null)
+            responsetxt = "1";
         return responsetxt;
     }
 
