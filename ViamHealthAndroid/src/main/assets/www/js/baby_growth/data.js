@@ -41,4 +41,10 @@ var BabyGrowthData = function () {
     this.updateUserTrackData =  function(d,h,w){
          BabyGrowthStorage.updateUserTrackData(d,h,w);
      }
+    this.getPercentileData = function(d,h,w){
+        var deferred = $.Deferred(),
+            data = JSON.parse(BabyGrowthStorage.getPercentileData(d,h,w));
+        deferred.resolve(data);
+        return deferred.promise();
+    }
 }

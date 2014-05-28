@@ -8,6 +8,9 @@ import com.viamhealth.android.model.enums.BloodGroup;
 import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.enums.Relation;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -41,6 +44,22 @@ public class Profile implements Parcelable{
         //Long diff = now.getTime() - dob.getTime();
     }
 
+    public int getAgeInDays(Date inputDate){
+        if(dob == null)
+        {
+            return 0;
+        }
+        DateTime iDate;
+        if(inputDate == null ){
+            iDate = new DateTime();
+        }else {
+            iDate = new DateTime(inputDate);
+        }
+        DateTime dobJT = new DateTime(dob);
+
+        return Days.daysBetween(iDate.withTimeAtStartOfDay(), dobJT.withTimeAtStartOfDay()).getDays();
+
+    }
     public int getAgeInMonths(){
         Calendar nowCal = Calendar.getInstance();
         Calendar dobCal = Calendar.getInstance();

@@ -9,6 +9,7 @@ import com.viamhealth.android.dao.restclient.old.RequestMethod;
 import com.viamhealth.android.model.immunization.Immunization;
 import com.viamhealth.android.model.immunization.UserImmunization;
 import com.viamhealth.android.model.trackgrowth.TrackGrowth;
+import com.viamhealth.android.model.trackgrowth.TrackGrowthAdvData;
 import com.viamhealth.android.model.trackgrowth.TrackGrowthData;
 import com.viamhealth.android.model.trackgrowth.UserTrackGrowthData;
 
@@ -43,6 +44,32 @@ public class UserTrackGrowthEP extends BaseEP {
         client.AddParam("height", obj.getHeight().toString());
         client.AddParam("weight", obj.getWeight().toString());
         return client;
+    }
+
+
+    public TrackGrowthAdvData getPercentileData(String gender, int age){
+        if(gender == null || age == 0 )
+            return null;
+        Params params = new Params();
+        params.put("gender", gender);
+        params.put("age", String.valueOf(age));
+        RestClient client = getRestClient("percentile_data/", params);
+        try {
+            client.Execute(RequestMethod.GET);
+            String responseString = client.getResponse();
+            Log.i(TAG, client.toString());
+
+            if(client.getResponseCode()== HttpStatus.SC_NOT_FOUND){
+                return null;
+            } else {
+                return processTrackGrowthAdvDataObject(responseString);
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
     }
 
 
@@ -136,6 +163,35 @@ public class UserTrackGrowthEP extends BaseEP {
             obj.setLabel(jsonObject.getString("label"));
             obj.setWeight(Float.valueOf(jsonObject.getString("weight")));
             obj.setHeight(Float.valueOf(jsonObject.getString("height")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return obj;
+    }
+
+    private TrackGrowthAdvData processTrackGrowthAdvDataObject(String responseString){
+        TrackGrowthAdvData obj = new TrackGrowthAdvData();
+        try {
+            JSONObject jsonObject = new JSONObject(responseString);
+
+            obj.setAge(jsonObject.getLong("age"));
+            obj.setGender(jsonObject.getString("label"));
+            obj.setWeight_3n(Float.valueOf(jsonObject.getString("weight_3n")));
+            obj.setHeight_3n(Float.valueOf(jsonObject.getString("height_3n")));
+            obj.setWeight_2n(Float.valueOf(jsonObject.getString("weight_2n")));
+            obj.setHeight_2n(Float.valueOf(jsonObject.getString("height_2n")));
+            obj.setWeight_1n(Float.valueOf(jsonObject.getString("weight_1n")));
+            obj.setHeight_1n(Float.valueOf(jsonObject.getString("height_1n")));
+            obj.setWeight_0(Float.valueOf(jsonObject.getString("weight_0")));
+            obj.setHeight_0(Float.valueOf(jsonObject.getString("height_0")));
+            obj.setWeight_1(Float.valueOf(jsonObject.getString("weight_1")));
+            obj.setHeight_1(Float.valueOf(jsonObject.getString("height_1")));
+            obj.setWeight_2(Float.valueOf(jsonObject.getString("weight_2")));
+            obj.setHeight_2(Float.valueOf(jsonObject.getString("height_2")));
+            obj.setWeight_3(Float.valueOf(jsonObject.getString("weight_3")));
+            obj.setHeight_3(Float.valueOf(jsonObject.getString("height_3")));
+
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
