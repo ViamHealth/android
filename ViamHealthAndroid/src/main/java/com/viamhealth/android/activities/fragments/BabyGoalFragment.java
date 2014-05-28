@@ -14,9 +14,11 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.ImmunizationEP;
 import com.viamhealth.android.dao.rest.endpoints.UserTrackGrowthEP;
+import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.immunization.Immunization;
 import com.viamhealth.android.model.immunization.UserImmunization;
 import com.viamhealth.android.model.trackgrowth.TrackGrowth;
+import com.viamhealth.android.model.trackgrowth.TrackGrowthAdvData;
 import com.viamhealth.android.model.trackgrowth.TrackGrowthData;
 import com.viamhealth.android.model.trackgrowth.UserTrackGrowthData;
 import com.viamhealth.android.model.users.User;
@@ -28,6 +30,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -116,6 +121,141 @@ public class BabyGoalFragment extends BaseFragment {
             if(age == 0)
                 Toast.makeText(mContext,"Age not specified",Toast.LENGTH_LONG);
             return String.valueOf(age);
+        }
+
+        @JavascriptInterface
+        public String getPercentileData(String sdate, String height, String weight){
+            System.out.println("sdate="+sdate+", height= "+height+" weiht="+weight);
+            UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+            Date ddate;
+            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            try {
+               ddate  = df.parse(sdate);
+            } catch (ParseException e) {
+                return "";
+            }
+            TrackGrowthAdvData obj = ep.getPercentileData(selectedUser.getProfile().getGender().key(),selectedUser.getProfile().getAgeInDays(ddate));
+            Float fheight = Float.valueOf(height);
+            Float fweight = Float.valueOf(height);
+            Float pl=0F;
+            Float ph=0F;
+            Float hl=0F;
+            Float hh=0F;
+            Float heightPercentile=0F;
+            Float weightPercentile=0F;
+            JSONObject tgdObject = new JSONObject();
+            if(obj == null){
+                try {
+                    tgdObject.put("error","Could not fetch the details.Please try again later.");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                if (fheight < obj.getHeight_3n()) {
+                    ph = obj.getPercentile_3n();
+                    pl = 0F;
+                    hh = obj.getHeight_3n();
+                    hl = 0F;
+                } else if (fheight < obj.getHeight_2n()) {
+                    ph = obj.getPercentile_2n();
+                    pl = obj.getPercentile_3n();
+                    hh = obj.getHeight_2n();
+                    hl = obj.getHeight_3n();
+                } else if (fheight < obj.getHeight_1n()) {
+                    ph = obj.getPercentile_1n();
+                    pl = obj.getPercentile_2n();
+                    hh = obj.getHeight_1n();
+                    hl = obj.getHeight_2n();
+                } else if (fheight < obj.getHeight_0()) {
+                    ph = obj.getPercentile_0();
+                    pl = obj.getPercentile_1n();
+                    hh = obj.getHeight_0();
+                    hl = obj.getHeight_1n();
+                } else if (fheight < obj.getHeight_1()) {
+                    ph = obj.getPercentile_1();
+                    pl = obj.getPercentile_0();
+                    hh = obj.getHeight_1();
+                    hl = obj.getHeight_0();
+                } else if (fheight < obj.getHeight_2()) {
+                    ph = obj.getPercentile_2();
+                    pl = obj.getPercentile_1();
+                    hh = obj.getHeight_2();
+                    hl = obj.getHeight_1();
+                } else if (fheight < obj.getHeight_3()) {
+                    ph = obj.getPercentile_3();
+                    pl = obj.getPercentile_2();
+                    hh = obj.getHeight_3();
+                    hl = obj.getHeight_2();
+                } else {
+                    ph = 100F;
+                    pl = obj.getPercentile_3n();
+                    hh = obj.getHeight_3n() + 1F;//Random. as No value available
+                    hl = obj.getHeight_3n();
+                }
+
+                 heightPercentile = ((ph - pl) / (hh - hl)) * (fheight - hl) + hl;
+
+
+                if (fweight < obj.getWeight_3n()) {
+                    ph = obj.getPercentile_3n();
+                    pl = 0F;
+                    hh = obj.getWeight_3n();
+                    hl = 0F;
+                } else if (fweight < obj.getWeight_2n()) {
+                    ph = obj.getPercentile_2n();
+                    pl = obj.getPercentile_3n();
+                    hh = obj.getWeight_2n();
+                    hl = obj.getWeight_3n();
+                } else if (fweight < obj.getWeight_1n()) {
+                    ph = obj.getPercentile_1n();
+                    pl = obj.getPercentile_2n();
+                    hh = obj.getWeight_1n();
+                    hl = obj.getWeight_2n();
+                } else if (fweight < obj.getWeight_0()) {
+                    ph = obj.getPercentile_0();
+                    pl = obj.getPercentile_1n();
+                    hh = obj.getWeight_0();
+                    hl = obj.getWeight_1n();
+                } else if (fweight < obj.getWeight_1()) {
+                    ph = obj.getPercentile_1();
+                    pl = obj.getPercentile_0();
+                    hh = obj.getWeight_1();
+                    hl = obj.getWeight_0();
+                } else if (fweight < obj.getWeight_2()) {
+                    ph = obj.getPercentile_2();
+                    pl = obj.getPercentile_1();
+                    hh = obj.getWeight_2();
+                    hl = obj.getWeight_1();
+                } else if (fweight < obj.getWeight_3()) {
+                    ph = obj.getPercentile_3();
+                    pl = obj.getPercentile_2();
+                    hh = obj.getWeight_3();
+                    hl = obj.getWeight_2();
+                } else {
+                    ph = 100F;
+                    pl = obj.getPercentile_3n();
+                    hh = obj.getWeight_3n() + 1F;//Random. as No value available
+                    hl = obj.getWeight_3n();
+                }
+
+                 weightPercentile = ((ph - pl) / (hh - hl)) * (fweight - hl) + hl;
+                try {
+                    tgdObject.put("error","");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                tgdObject.put("heightPercentile",String.valueOf(heightPercentile));
+                tgdObject.put("weightPercentile",String.valueOf(weightPercentile));
+                tgdObject.put("weight",weight);
+                tgdObject.put("height",height);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return tgdObject.toString();
         }
 
         @JavascriptInterface

@@ -27,11 +27,15 @@
             return b;
         },
         updateUserTrackData: function(d,h,w){
-            alert(d);
+            //alert(d);
+        },
+        getPercentileData: function(d,h,w){
+            var b = '{"heightPercentile": "33.0", "weightPercentile": "56.0", "height": "45", "weight":"23","error": ""}';
+            return b;
         }
     };
-*/
 
+*/
 
 
 

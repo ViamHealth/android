@@ -31,12 +31,25 @@ var AddTrackGrowthView = function (adapter, template) {
         }
         if(clform == false) return;
 
-        adapter.updateUserTrackData($(ddate).val(),$(height).val().trim(),$(weight).val().trim());
-
         $( "#track-growth-form-container" ).slideUp( "slow", function() {
             $("#growth-form-result").slideDown("slow", function(){
             });
-          });
+        });
+
+        adapter.getPercentileData($(ddate).val(),$(height).val().trim(),$(weight).val().trim()).done(function(res){
+            var j = $("#growth-form-result");
+            if(res.error == ""){
+                $(j).find(".child_weight_percentile").html(res.weightPercentile);
+                $(j).find(".child_height_percentile").html(res.heightPercentile);
+                $(j).find(".child_weight").html(res.weight);
+                $(j).find(".child_height").html(res.height);
+                $(j).find(".loading_message").hide();
+                $(j).find(".message").show();
+            } else {
+                adapter.showToast(res.error);
+            }
+        });
+        adapter.updateUserTrackData($(ddate).val(),$(height).val().trim(),$(weight).val().trim());
 
     };
 
