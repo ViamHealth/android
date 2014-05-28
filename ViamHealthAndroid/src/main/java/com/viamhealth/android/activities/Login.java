@@ -250,6 +250,14 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
             dialog.show();
         }
 
+        @Override
+        protected String doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            //return userEndPoint.Login(username, password);
+            String responseCode = userEndPoint.Login(username, password);
+            return responseCode;
+        }
+
         protected void onPostExecute(String response) {
             if (!response.equals("0")) {
                 ga.GA_eventGeneral("login_email", "failure", "wrong credentials");
@@ -266,13 +274,6 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
             }
         }
 
-        @Override
-        protected String doInBackground(String... params) {
-            // TODO Auto-generated method stub
-            //return userEndPoint.Login(username, password);
-            userEndPoint.Login(username, password);
-            return "0";
-        }
 
     }
 }

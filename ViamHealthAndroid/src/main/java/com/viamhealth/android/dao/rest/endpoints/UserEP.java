@@ -167,7 +167,7 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
-       // Log.i(TAG, client.toString());
+        Log.i(TAG, client.toString());
 
         if(client.getResponseCode()==HttpStatus.SC_OK ||
                 client.getResponseCode()==HttpStatus.SC_NO_CONTENT)
@@ -241,8 +241,13 @@ public class UserEP extends BaseEP {
 
     // function for call login service
     public String Login(String username,String password) {
-        String	responsetxt="1";
-        _login(username, password, LoginType.Email);
+        String	responsetxt = "";
+        User user = _login(username, password, LoginType.Email);
+        if(user != null){
+            responsetxt = "0";
+        }else {
+            responsetxt = "1";
+        }
         return responsetxt;
     }
 

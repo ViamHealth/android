@@ -4,77 +4,80 @@
     android:layout_height="fill_parent"
     android:background="#37AA4F">
 
-    <ScrollView android:layout_height="match_parent"
+    <ScrollView
+        android:id="@+id/scroller"
         android:layout_width="fill_parent"
-        android:splitMotionEvents="false"
+        android:layout_height="match_parent"
         android:fadingEdgeLength="0dp"
-        android:visibility="gone"
-        android:id="@+id/scroller">
-
-            <LinearLayout
-                android:id="@+id/main_layout"
-                android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
-                android:padding="5dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:baselineAligned="false"
-                android:visibility="visible">
-
-            </LinearLayout>
-
-    </ScrollView>
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/splash"
-        android:visibility="visible">
-
-            <ImageView
-                android:id="@+id/imgLogo"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:src="@drawable/original_logo_white"
-                android:layout_alignParentTop="false"
-                android:layout_marginTop="100dp"
-                android:layout_centerInParent="true" />
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:textSize="12dp"
-                android:textColor="#ffffff"
-                android:gravity="center_horizontal"
-                android:layout_alignParentBottom="true"
-                android:text="@string/copyright" />
+        android:splitMotionEvents="false"
+        android:visibility="gone">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/main_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="visible">
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/splash"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
             android:layout_alignParentTop="false"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/original_logo_white_new" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_horizontal"
+            android:text="@string/copyright"
+            android:textColor="#ffffff"
+            android:textSize="12dp" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_below="@+id/imgLogo"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_below="@+id/imgLogo">
+            android:orientation="horizontal">
 
             <ProgressBar
+                android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/progressBar"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/imgLogo" />
+                android:layout_below="@+id/imgLogo"
+                android:layout_centerHorizontal="true" />
 
             <TextView
+                android:id="@+id/logoutMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/loggingOutMsg"
-                android:id="@+id/logoutMsg"
-                android:layout_toRightOf="@+id/progressBar"
                 android:layout_alignTop="@+id/progressBar"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/progressBar"
+                android:text="@string/loggingOutMsg"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </LinearLayout>
 
     </RelativeLayout>

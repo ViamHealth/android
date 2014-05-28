@@ -21,6 +21,7 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -195,17 +196,19 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
 
         protected void onPostExecute(String result) {
             Log.i("After Sign-Up", result);
-            if (result.equals("0")) {//just registered
-                dialog.dismiss();
-                Intent i = new Intent(Register.this, Home.class);
-                i.putExtra("justRegistered", true);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                finish();
-            } else {
-                dialog.dismiss();
-                user_name.setError("Already registered!");
-                //Toast.makeText(Register.this, "User with this user name already exist",Toast.LENGTH_SHORT).show();
+            if (!TextUtils.isEmpty(result)) {
+                if (result.equals("0")) {//just registered
+                    dialog.dismiss();
+                    Intent i = new Intent(Register.this, Home.class);
+                    i.putExtra("justRegistered", true);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
+                } else {
+                    dialog.dismiss();
+                    user_name.setError("Already registered!");
+                    //Toast.makeText(Register.this, "User with this user name already exist",Toast.LENGTH_SHORT).show();
+                }
             }
         }
 

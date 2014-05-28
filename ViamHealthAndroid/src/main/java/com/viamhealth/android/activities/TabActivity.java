@@ -300,6 +300,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             returnIntent.putExtra("logout", true);
             returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(returnIntent);
+            finish();
             return true;
         }
 

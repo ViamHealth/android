@@ -482,14 +482,13 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 //    }
 
     private void updateGender(Gender gender) {
-        if(gender == Gender.Male){
+        if (gender == Gender.Male) {
             radioMaleButton.setChecked(true);
             radioFemaleButton.setChecked(false);
-        }
-        else if(gender == Gender.Female) {
+        } else if (gender == Gender.Female) {
             radioMaleButton.setChecked(false);
             radioFemaleButton.setChecked(true);
-        }else{
+        } else {
             radioMaleButton.setChecked(false);
             radioFemaleButton.setChecked(false);
         }
@@ -828,16 +827,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         }
 
         @Override
-        protected void onPostExecute(FileUploader.Response response) {
-            dialog.dismiss();
-            Log.d(TAG, "AsyncTask : generating user from model");
-            User newUser = generateModelFromView();
-            newUser.getProfile().setProfilePicURL(response.getProfilePicUrl());
-            Log.d(TAG, "AsyncTask : generated user from model " + newUser);
-            updateUser(newUser);
-        }
-
-        @Override
         protected FileUploader.Response doInBackground(Void... params) {
             FileUploader uploader = new FileUploader(appPrefs.getToken());
             long userId = 0;
@@ -858,6 +847,18 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
             return response;
         }
+
+        @Override
+        protected void onPostExecute(FileUploader.Response response) {
+            dialog.dismiss();
+            Log.d(TAG, "AsyncTask : generating user from model");
+            User newUser = generateModelFromView();
+            newUser.getProfile().setProfilePicURL(response.getProfilePicUrl());
+            Log.d(TAG, "AsyncTask : generated user from model " + newUser);
+            updateUser(newUser);
+        }
+
+
     }
 
 }
