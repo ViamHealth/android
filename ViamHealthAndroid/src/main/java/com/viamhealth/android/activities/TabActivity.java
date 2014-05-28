@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
@@ -64,6 +62,9 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     private final List<User> users = new ArrayList<User>();
 
     private static final float HEADER_TOP_MARGIN_DP = 58.0f;
+    private static final int DELETE_PROFILE_FROM_LIST = 10001;
+    private static final int ADD_PROFILE_FROM_LIST = 10002;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         Global_Application ga=((Global_Application)getApplicationContext());
         Intent intent = getIntent();
         user = (User) intent.getParcelableExtra("user");
+        User loggedInUser = ga.getLoggedInUser();
         pUsers = intent.getParcelableArrayExtra("users");
 
         users.clear();
@@ -86,14 +88,14 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             users.add((User) pUsers[i]);
         }
 
-
-
         actionBar = getSupportActionBar();
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setLogo(R.drawable.ic_launcher);
-        actionBar.setTitle(user.getName());
+        actionBar.setDisplayUseLogoEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setLogo(R.drawable.ic_launcher);
+        //actionBar.setTitle(user.getName());
 
 
 
@@ -101,11 +103,12 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         //TODO use Action Bar to create the Header
 
         /*** Action Bar Creation starts here ***/
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setLogo(R.drawable.ic_action_white_brand);
+        //actionBar = getSupportActionBar();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setTitle("");
+
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setLogo(R.drawable.ic_action_white_brand);
 
         Context themedContext = actionBar.getThemedContext();
         //UsersMenuAdapter adapter = new UsersMenuAdapter(themedContext, users);
@@ -165,6 +168,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                     //FileFragment.class, bundle);
                     TaskScreen.class, bundle);*/
 
+
         mTabManager.addTab(
                 mTabHost.newTabSpec("task_screen").setIndicator(getTabIndicator(R.string.tab_task_screen)),
                 TaskScreenFragment.class, bundle
@@ -174,7 +178,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder)),
                 ReminderFragmentNew.class, bundle);
 
-        if(user.getProfile().getAge() < 18 &&  user.getProfile().getAge() > 0 )
+        if(user.getProfile().isMinor())
             mTabManager.addTab(//getString(R.string.tab_label_goal), getResources().getDrawable(R.drawable.tab_goal)
                 mTabHost.newTabSpec("baby_growth").setIndicator(getTabIndicator(R.string.tab_label_kids)),
                     BabyGoalFragment.class, bundle);
@@ -215,6 +219,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             //if (savedInstanceState != null) {
             //mTabManager.selectTab(savedInstanceState.getString("tab"));
             //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+        } else if(user.getId() != loggedInUser.getId()){
+            mTabHost.setCurrentTabByTag("reminder");
         }
 
 
@@ -310,6 +316,13 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
             return true;
         }
 
+        if(item.getItemId() == R.id.menu_profile_list) {
+            ga.GA_eventButtonPress("tab_r2_profile_list");
+            Intent returnIntent = new Intent(TabActivity.this, ProfileListActivity.class);
+            startActivity(returnIntent);
+            return true;
+        }
+
         /*if(item.getItemId() == R.id.menu_edit){
             //GoalFragment fm1= (GoalFragment)getSupportFragmentManager().findFragmentByTag("goals");
            // if(fm1.isVisible())
@@ -363,6 +376,24 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ADD_PROFILE_FROM_LIST || requestCode == DELETE_PROFILE_FROM_LIST) {
+            user = (User) data.getParcelableExtra("user");
+            pUsers = data.getParcelableArrayExtra("users");
+            users.clear();
+            for (int i = 0; i < pUsers.length; i++) {
+                users.add((User) pUsers[i]);
+            }
+
+            Toast.makeText(TabActivity.this, "Selected User " + user.getName(), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(TabActivity.this, TabActivity.class);
+            intent.putExtra("user", user);
+            Parcelable[] usrs = new Parcelable[users.size()];
+            intent.putExtra("users", users.toArray(usrs));
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+
     }
 
     public enum Actions { UploadFiles, SetGoal; }

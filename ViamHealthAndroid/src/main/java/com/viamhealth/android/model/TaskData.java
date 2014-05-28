@@ -11,11 +11,14 @@ public class TaskData {
     Integer setChoice = 0;
     String feedbackMessageChoice1;
     String feedbackMessageChoice2;
+    Integer weight=0;
 
     public TaskData() {
     }
 
-    public TaskData(String id, String message, String labelChoice1, String labelChoice2, Integer setChoice, String feedbackMessageChoice1, String feedbackMessageChoice2) {
+    public TaskData(String id, String message, String labelChoice1, String labelChoice2,
+                    Integer setChoice, String feedbackMessageChoice1,
+                    String feedbackMessageChoice2, Integer weight) {
         this.id = id;
         this.message = message;
         this.labelChoice1 = labelChoice1;
@@ -23,6 +26,7 @@ public class TaskData {
         this.setChoice = setChoice;
         this.feedbackMessageChoice1 = feedbackMessageChoice1;
         this.feedbackMessageChoice2 = feedbackMessageChoice2;
+        this.weight = weight;
     }
 
     public String getLabelChoice1() {
@@ -82,4 +86,11 @@ public class TaskData {
         this.message = message;
     }
 
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
 }

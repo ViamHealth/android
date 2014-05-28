@@ -129,7 +129,6 @@ public class ReminderFragmentNew extends BaseFragment {
 
         //Clear all previous alarms to send notifications
 
-        System.out.println(" cancelling previous alarms");
         cancelAlarms(NotifyService.class);
         cancelAlarms(NotifyServiceOne.class);
         cancelAlarms(NotifyServiceTwo.class);

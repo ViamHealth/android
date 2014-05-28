@@ -16,7 +16,8 @@ var HomeView = function (adapter, template) {
     };
     this.loadTrackGrowth = function(event){
         event.preventDefault();
-        location.hash = '#' + 'track_growth';
+        //adapter.showToast("Purposefully temporary disabled by Kunal");
+        location.hash = '#' + 'add_track_growth';
     };
     this.initialize();
 }

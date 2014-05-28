@@ -8,14 +8,16 @@
         android:icon="@drawable/ic_action_logout"/>
 
     <item
+        android:id="@+id/menu_profile_list"
+        android:showAsAction="never"
+        android:title="@string/menu_profile_list"/>
+
+    <item
         android:id="@+id/menu_invite"
         android:showAsAction="never"
         android:title="@string/inviteUser"/>
 
-    <item
-        android:id="@+id/menu_edit"
-        android:showAsAction="always"
-        android:title="@string/editDelete"/>
+
 
     <item
         android:id="@+id/menu_toc"

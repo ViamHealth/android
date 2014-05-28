@@ -39,7 +39,7 @@ public class ImmunizationEP extends BaseEP {
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            //Log.i(TAG, client.toString());
 
             if(client.getResponseCode()== HttpStatus.SC_OK)
                 return processImmunizationList(responseString);
@@ -72,7 +72,7 @@ public class ImmunizationEP extends BaseEP {
         try {
             client.Execute(RequestMethod.POST);
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            //Log.i(TAG, client.toString());
 
             if(client.getResponseCode()== HttpStatus.SC_CREATED){
                 try{
@@ -108,7 +108,7 @@ public class ImmunizationEP extends BaseEP {
         try {
             client.Execute(RequestMethod.PUT);
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            //Log.i(TAG, client.toString());
 
             if(client.getResponseCode()== HttpStatus.SC_OK){
                 try{

@@ -21,11 +21,17 @@ import com.viamhealth.android.model.trackgrowth.TrackGrowthData;
 import com.viamhealth.android.model.trackgrowth.UserTrackGrowthData;
 import com.viamhealth.android.model.users.User;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +119,27 @@ public class BabyGoalFragment extends BaseFragment {
         }
 
         @JavascriptInterface
+        public void updateUserTrackData(String sdate, String sheight, String sweight){
+            DateTime edate;
+            if(sdate == ""){
+               edate = new DateTime();
+            }else {
+                DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
+                edate = formatter.parseDateTime(sdate);
+            }
+
+            UserTrackGrowthData obj = new UserTrackGrowthData();
+            obj.setUserId(selectedUser.getId());
+            obj.setEntryDate(edate.toDate());
+            obj.setWeight(Float.valueOf(sweight));
+            obj.setHeight(Float.valueOf(sheight));
+
+            UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+            ep.update(obj);
+
+        }
+
+        @JavascriptInterface
         public String getGrowthChartData(){
 
             if(trackGrowthDataUpdated == true){
@@ -155,7 +182,7 @@ public class BabyGoalFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println(object.toString());
+            //System.out.println(object.toString());
             return object.toString();
         }
 
@@ -174,7 +201,12 @@ public class BabyGoalFragment extends BaseFragment {
                 }
                 immunization_data_updated = false;
             }
-
+            Collections.sort(data, new Comparator<Immunization>() {
+                @Override
+                public int compare(Immunization fruite1, Immunization fruite2) {
+                    return (int)fruite1.getRecommendedAge() - (int)fruite2.getRecommendedAge();
+                }
+            });
             JSONArray listData = new JSONArray();
             int j = 0;
             for(Immunization i : data){
@@ -183,6 +215,16 @@ public class BabyGoalFragment extends BaseFragment {
                     object.put("immunization_id", i.getId());
                     object.put("title", i.getLabel());
                     object.put("recommended_age", i.getRecommendedAge());
+                    if(i.scheduleDate(selectedUser.getProfile().getDob()) != null){
+                        object.put("schedule_date_string", i.scheduleDate(selectedUser.getProfile().getDob()));
+                        object.put("header_string", i.scheduleTimeFrame(selectedUser.getProfile().getDob()));
+                        object.put("list_item_type", i.getListItemType(selectedUser.getProfile().getDob()));
+                    }else {
+                        object.put("schedule_date_string", "");
+                        object.put("header_string", "");
+                        object.put("list_item_type","0");
+                    }
+
                     if(i.getUserImmunization() != null){
                         object.put("user", i.getUserImmunization().getUserId());
                         object.put("is_completed", i.getUserImmunization().isCompleted());

@@ -161,6 +161,7 @@ public class ReminderPagerFragment extends BaseListFragment implements ReminderF
                 public void OnSave(ReminderReading reading) {
                     if(Checker.isInternetOn(getSherlockActivity())){
                         SaveAction task = new SaveAction();
+                        Log.d("SAVING READING", reading.toString());
                         task.reading = reading;
                         task.execute();
                     }else{

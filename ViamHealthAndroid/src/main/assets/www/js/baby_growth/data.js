@@ -37,4 +37,8 @@ var BabyGrowthData = function () {
         deferred.resolve(data);
         return deferred.promise();
     }
+
+    this.updateUserTrackData =  function(d,h,w){
+         BabyGrowthStorage.updateUserTrackData(d,h,w);
+     }
 }

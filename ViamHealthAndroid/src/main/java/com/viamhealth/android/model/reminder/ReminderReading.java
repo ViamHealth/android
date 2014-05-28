@@ -112,6 +112,7 @@ public class ReminderReading implements NotificationObject, Parcelable {
         return "ReminderReading{" +
                 "id=" + id +
                 ", readingdate=" + readingDate.toString() +
+                ", isCOmplete=" + String.valueOf(completeCheck) +
                 ", reminder=" + reminder.getName() ;
     }
     /**

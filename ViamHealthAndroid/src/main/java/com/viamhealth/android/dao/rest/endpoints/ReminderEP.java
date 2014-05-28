@@ -89,7 +89,7 @@ public class ReminderEP extends BaseEP {
             return null;
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
         return processReminder(responseString);
     }
 
@@ -104,7 +104,7 @@ public class ReminderEP extends BaseEP {
             e.printStackTrace();
         }
 
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
 
         if(client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
@@ -129,7 +129,7 @@ public class ReminderEP extends BaseEP {
             return null;
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
         return processReminder(responseString);
     }
 
@@ -152,7 +152,7 @@ public class ReminderEP extends BaseEP {
             return null;
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
         return processReminders(responseString);
     }
 
@@ -167,7 +167,7 @@ public class ReminderEP extends BaseEP {
             e.printStackTrace();
         }
 
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
 
         if(client.getResponseCode() != HttpStatus.SC_NO_CONTENT)
             return false;
@@ -237,10 +237,13 @@ public class ReminderEP extends BaseEP {
 
         isCheck = addCheckParam(client, reading.getAction(ReminderTime.Night), "night_check");
         completeCheck = !isCheck ? false : completeCheck;
-
-        //TODO complete check should consider only those times when there is atleast more than 1 dosage
-        client.AddParam("complete_check", completeCheck.toString());
-
+        Boolean otherCompleteCheck = reading.isCompleteCheck();
+        if(otherCompleteCheck){
+            client.AddParam("complete_check", "true");
+        } else {
+            //TODO complete check should consider only those times when there is atleast more than 1 dosage
+            client.AddParam("complete_check", completeCheck.toString());
+        }
         try {
             client.Execute(RequestMethod.PUT);
         }catch (Exception e) {
@@ -251,7 +254,7 @@ public class ReminderEP extends BaseEP {
             return null;
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
         return processReminderReading(responseString);
     }
 
@@ -268,7 +271,7 @@ public class ReminderEP extends BaseEP {
             return null;
 
         String responseString = client.getResponse();
-        Log.i(TAG, client.toString());
+        //Log.i(TAG, client.toString());
 
         return processReminderReadings(responseString);
     }

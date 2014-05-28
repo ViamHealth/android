@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#37AA4F">
+
+    <ScrollView android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:splitMotionEvents="false"
+        android:fadingEdgeLength="0dp"
+        android:visibility="gone"
+        android:id="@+id/scroller">
+
+        <LinearLayout
+            android:id="@+id/main_layout"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:padding="5dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:baselineAligned="false"
+            android:visibility="visible">
+
+        </LinearLayout>
+
+    </ScrollView>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/splash"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:src="@drawable/original_logo_white"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="100dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textSize="12dp"
+            android:textColor="#ffffff"
+            android:gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
+            android:text="@string/copyright"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_below="@+id/imgLogo">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/imgLogo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/loggingOutMsg"
+                android:id="@+id/logoutMsg"
+                android:layout_toRightOf="@+id/progressBar"
+                android:layout_alignTop="@+id/progressBar"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

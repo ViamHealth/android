@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.ActionMode;
@@ -28,6 +30,7 @@ import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,13 +106,50 @@ public class TaskListFragment extends BaseListFragment{
         else
             this.adapter.notifyDataSetChanged();
 
+        adapter.sort(new Comparator<TaskData>() {
+            @Override
+            public int compare(TaskData taskData, TaskData taskData2) {
+                int r = 0;
+                if(taskData.getSetChoice() != 0 && taskData2.getSetChoice() != 0 )
+                    if(taskData.getWeight() > taskData2.getWeight()){
+                        r = -1;
+                    }else {
+                        r = 1;
+                    }
+                else if(taskData.getSetChoice() != 0){
+                        r = 1;
+                }else if(taskData2.getSetChoice() != 0){
+                    r = -1;
+                } else {
+                    if(taskData.getWeight() > taskData2.getWeight()){
+                        r = -1;
+                    }else {
+                        r = 1;
+                    }
+                }
+                return r;
+            }
+        });
         this.list.setAdapter(adapter);
         this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                /*view.setBackgroundColor(Color.parseColor("#ffffff"));
-                Toast.makeText(getSherlockActivity(),
+                TextView message = (TextView)  view.findViewById(R.id.task_message);
+                if(message.getCurrentTextColor() == Color.parseColor("#828282") ){
+                    message.setTextColor(getResources().getColor(R.color.row_textcolor_selector));
+                    Button choice1 = (Button) view.findViewById(R.id.task_choice_1);
+                    Button choice2 = (Button) view.findViewById(R.id.task_choice_2);
+                    choice2.setVisibility(View.VISIBLE);
+                    choice1.setVisibility(View.VISIBLE);
+                    choice1.setEnabled(true);
+                    choice2.setEnabled(true);
+                    choice2.setTextColor(Color.parseColor("#ffffff"));
+                    choice1.setTextColor(Color.parseColor("#ffffff"));
+                    //adapter.notifyDataSetChanged();
+                }
+
+                /*Toast.makeText(getSherlockActivity(),
                         "Click ListItem Number " + position, Toast.LENGTH_LONG)
                         .show();*/
             }

@@ -179,6 +179,11 @@ public class Profile implements Parcelable{
         this.location = new Location();
     }
 
+    public boolean isMinor() {
+        if(this.getAgeInMonths() < 120) return true;
+        else return false;
+    }
+
     public class Location implements Parcelable{
         String street;
         String city;

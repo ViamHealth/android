@@ -5,10 +5,10 @@
     BabyGrowthStorage =  {
         getImmunizationData: function(){
             var b = [
-                {"is_completed":true,"user_immunization_id":1,"title":"BCG","immunization_id":1,"recommended_age":134,"user":2},
-                {"recommended_age":123,"title":"Hepatitis B1","immunization_id":2},
-                {"recommended_age":0,"title":"OPV1","immunization_id":3},
-                {"recommended_age":128,"title":"Pneumococcal Booster","immunization_id":4}
+                {"is_completed":true,"user_immunization_id":1,"title":"BCG","immunization_id":1,"recommended_age":134,"user":2,"schedule_date_string":"ababbaba","header_string":"","list_item_type":"1"},
+                {"recommended_age":123,"title":"Hepatitis B1","immunization_id":2,"schedule_date_string":"ababbaba","header_string":"","list_item_type":"1"},
+                {"recommended_age":0,"title":"OPV1","immunization_id":3,"header_string":"9090909","list_item_type":"1"},
+                {"recommended_age":128,"title":"Pneumococcal Booster","immunization_id":4,"header_string":"7878","list_item_type":"1"}
                 ];
             return JSON.stringify(b);
         },
@@ -22,10 +22,12 @@
             alert(message);
         },
         getGrowthChartData: function(){
-
-        var b=
+            var b=
 '{"user_track_growth": [{"user": 1, "age": 1037, "height": 111.0, "id": 1, "entry_date": "2014-01-10"}, {"weight": 35.0, "age": 1095, "height": 110.0, "user": 1, "id": 2, "entry_date": "2014-03-09"}], "track_growth": [{"age": 0, "label": "Birth", "weight": 89.0, "height": 45.0}, {"age": 90, "label": "3 months", "weight": 45.0, "height": 112.0}, {"age": 356, "label": "1 year", "weight": 23.0, "height": 112.0}]}';
-        return b;
+            return b;
+        },
+        updateUserTrackData: function(d,h,w){
+            alert(d);
         }
     };
 */
@@ -35,8 +37,8 @@
 
 
     var homeTpl = Handlebars.compile($("#baby-growth-home-tpl").html());
-    var immunizationTpl = Handlebars.compile($("#immunization-tpl").html());
-    var immunizationLiTpl = Handlebars.compile($("#immunization-li-tpl").html());
+    var immunizationTpl = Handlebars.compile($("#immunization-tpl-last-minute").html());
+    var immunizationLiTpl = Handlebars.compile($("#immunization-li-tpl-last-minute").html());
     var trackGrowthTpl = Handlebars.compile($("#track-growth-tpl").html());
     var addTrackGrowthTpl = Handlebars.compile($("#add-track-growth-tpl").html());
     var trackGrowthGraphTpl = Handlebars.compile($("#track-growth-graph-tpl").html());

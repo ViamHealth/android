@@ -4,7 +4,7 @@ a {
 }
 
 .chevron {
-    background: transparent url(../lib/topcoat/img/next_blue.svg);
+    background: transparent url(../lib/topcoat/img/next.svg);
     background-repeat: no-repeat;
     background-size: contain;
     width: 20px;
@@ -22,6 +22,8 @@ border-bottom: none;
 }
 
 .topcoat-list li {
+    background-color: white;
+    color: #37AA4F;
     position: relative;
     text-align: left;
     clear: both;
@@ -31,6 +33,14 @@ border-bottom: none;
 .topcoat-list__container {
     /*border-bottom: none;*/
     clear: both;
+}
+.topcoat-list__header {
+
+    font-size: 1.2em;
+    }
+.topcoat-list__item {
+border-top: 1px solid #fff;
+border-bottom: 1px solid #dedede;
 }
 
 .immunization_task.topcoat-switch__toggle:before {

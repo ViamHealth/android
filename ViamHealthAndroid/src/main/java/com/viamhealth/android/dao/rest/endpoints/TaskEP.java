@@ -34,7 +34,7 @@ public class TaskEP extends BaseEP {
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
-            Log.i(TAG, client.toString());
+            //Log.i(TAG, client.toString());
 
             if(client.getResponseCode()== HttpStatus.SC_OK)
                 return processTaskList(responseString);
@@ -95,6 +95,7 @@ public class TaskEP extends BaseEP {
             obj.setFeedbackMessageChoice1(jsonObject.getString("choice_1_message"));
             obj.setFeedbackMessageChoice2(jsonObject.getString("choice_2_message"));
             obj.setSetChoice(jsonObject.getInt("set_choice"));
+            obj.setWeight(jsonObject.getInt("weight"));
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

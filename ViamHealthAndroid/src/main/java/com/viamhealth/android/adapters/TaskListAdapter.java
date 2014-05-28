@@ -51,34 +51,52 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View rowView = inflater.inflate(R.layout.task_list_element, parent, false);
 
-        TextView message = (TextView) rowView.findViewById(R.id.task_message);
+        final TextView message = (TextView) rowView.findViewById(R.id.task_message);
         final Button choice1 = (Button) rowView.findViewById(R.id.task_choice_1);
         final Button choice2 = (Button) rowView.findViewById(R.id.task_choice_2);
 
         final TaskData tdObj = values.get(position);
         try{
             message.setText(tdObj.getMessage());
+            if(tdObj.getSetChoice() != 0){
+                choice1.setTextColor(Color.parseColor("#828282"));
+                choice2.setTextColor(Color.parseColor("#828282"));
+                if(tdObj.getSetChoice() == 1){
+                    choice2.setVisibility(View.INVISIBLE);
+                    choice1.setEnabled(false);
+                    choice2.setEnabled(false);
+                    message.setTextColor(Color.parseColor("#828282"));
+                } else if(tdObj.getSetChoice() == 2){
+                    choice1.setVisibility(View.INVISIBLE);
+                    choice1.setEnabled(false);
+                    choice2.setEnabled(false);
+                    message.setTextColor(Color.parseColor("#828282"));
+                }
+            }
             if(tdObj.getLabelChoice1() == null || tdObj.getLabelChoice1().trim().equals("")){
                 choice1.setVisibility(View.GONE);
             } else {
                 choice1.setText(values.get(position).getLabelChoice1());
                 choice1.setTag(values.get(position).getId());
-                /*if (values.get(position).getSetChoice() == 1)
-                    choice1.setBackgroundColor(Color.parseColor("#c9c9c9"));*/
-
                 choice1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
-                        //choice1.setBackgroundColor(Color.parseColor("#c9c9c9"));
-                        //choice2.setBackgroundColor(Color.parseColor("green"));
+                        choice2.setVisibility(View.INVISIBLE);
+                        choice1.setTextColor(Color.parseColor("#828282"));
+                        choice2.setTextColor(Color.parseColor("#828282"));
+                        choice1.setEnabled(false);
+                        choice2.setEnabled(false);
+                        message.setTextColor(Color.parseColor("#828282"));
                         if (tdObj.getFeedbackMessageChoice1() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("") ) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             StringBuilder strBuilder = new StringBuilder(values.get(position).getFeedbackMessageChoice1());
                             builder.setMessage(strBuilder.toString());
                             builder.show();
                         }
+                        values.get(position).setSetChoice(1);
+                        notifyDataSetChanged();
                         selectChoice(v, 1);
+
 
                     }
                 });
@@ -88,34 +106,36 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
             } else {
                 choice2.setText(tdObj.getLabelChoice2());
                 choice2.setTag(tdObj.getId());
-                /*if (tdObj.getSetChoice() == 2)
-                    choice2.setBackgroundColor(Color.parseColor("#c9c9c9"));*/
-
                 choice2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //rowView.setBackgroundColor(Color.parseColor("#cccccc"));
-                        //choice2.setBackgroundColor(Color.parseColor("#c9c9c9"));
-                        //choice1.setBackgroundColor(Color.parseColor("green"));
-                        if (tdObj.getFeedbackMessageChoice2() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("")) {
+                        choice2.setTextColor(Color.parseColor("#828282"));
+                        choice1.setTextColor(Color.parseColor("#828282"));
+                        choice1.setVisibility(View.INVISIBLE);
+                        choice1.setEnabled(false);
+                        choice2.setEnabled(false);
+                        message.setTextColor(Color.parseColor("#828282"));
+                        if (tdObj.getFeedbackMessageChoice2() != null && !tdObj.getFeedbackMessageChoice2().trim().equals("")) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             StringBuilder strBuilder = new StringBuilder(tdObj.getFeedbackMessageChoice2());
                             builder.setMessage(strBuilder.toString());
                             builder.show();
                         }
-
+                        values.get(position).setSetChoice(2);
+                        notifyDataSetChanged();
                         selectChoice(v, 2);
 
                     }
                 });
             }
             rowView.setTag(tdObj.getId());
-            Log.d(TAG, "Added " + values.get(position) + " at position " + position);
+            //Log.d(TAG, "Added " + values.get(position) + " at position " + position);
         }catch(Exception e){
             e.printStackTrace();
         }
         return rowView;
     }
+
     public void selectChoice(View view, int choice){
         String set_choice="1";
         //Toast.makeText(context, "Working..", Toast.LENGTH_SHORT).show();
@@ -142,6 +162,7 @@ public class TaskListAdapter extends ArrayAdapter<TaskData> {
         @Override
         protected String doInBackground(String... params) {
             String choice = params[0];
+            Log.d("CHOIDCE TAG", params.toString());
             String id = params[1];
             TaskEP tep = new TaskEP(context,ga);
             tep.selectChoice(id,choice);
