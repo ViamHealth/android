@@ -470,10 +470,12 @@ public class FileListFragment extends BaseListFragment implements FileFragment.O
         protected String doInBackground(String... params) {
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
+            if (files != null && files.size() > 0) {
             files.clear();
             files.addAll(obj.getFile(selectedUser.getId(), null));
 
-            return null;
+            }
+            return "";
         }
 
     }

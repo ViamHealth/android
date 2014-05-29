@@ -90,6 +90,9 @@ public class UserEP extends BaseEP {
         }
 
         String responseString = client.getResponse();
+        if(client.getResponseCode() != HttpStatus.SC_CREATED){
+            return null;
+        }
        // Log.i(TAG, client.toString());
         User user = processUserResponse(responseString);
         user.setLoggedInUser(true);
@@ -231,7 +234,7 @@ public class UserEP extends BaseEP {
                // Log.i(TAG,"token is " + responsetxt1);
                 appPrefs.setToken(responsetxt1);
             }
-            user = getLoggedInUser();
+            user = getLoggedInUser(true);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -249,8 +252,12 @@ public class UserEP extends BaseEP {
     }
 
     public User getLoggedInUser() {
+        return getLoggedInUser(false);
+    }
 
-        if(ga.getLoggedInUser()!=null)
+    public User getLoggedInUser(boolean force_fetch) {
+
+        if(ga.getLoggedInUser()!=null && force_fetch != true)
             return ga.getLoggedInUser();
         User user=null;
 

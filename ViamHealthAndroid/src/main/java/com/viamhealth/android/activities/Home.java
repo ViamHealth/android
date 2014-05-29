@@ -135,6 +135,7 @@ public class Home extends BaseActivity implements OnClickListener{
         if(appPrefs.getToken()==null || appPrefs.getToken().isEmpty()){
             Intent loginIntent = new Intent(Home.this, Login.class);
             startActivity(loginIntent);
+            finish();
         }else{
             if(getIntent().getBooleanExtra("logout", false)) {
                 logout();
@@ -464,9 +465,10 @@ public class Home extends BaseActivity implements OnClickListener{
         @Override
         protected String doInBackground(String... params) {
             lstFamily.clear();
-            if(ga.getLoggedInUser()==null){
-                userEndPoint.getLoggedInUser();
-            }
+            //if(ga.getLoggedInUser()==null){
+                User u = userEndPoint.getLoggedInUser(true);
+                ga.setLoggedInUser(u);
+            //}
             lstFamily.addAll(userEndPoint.GetFamilyMembers());
             return null;
         }

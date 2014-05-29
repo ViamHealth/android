@@ -152,6 +152,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         //if the only logged-in user has not yet created the profile than
         //force for profile creation
         User user = ga.getLoggedInUser();
+
         boolean getFamilyData = false;
         if (user == null || lstFamily == null || lstFamily.size() == 0) {
             getFamilyData = true;
@@ -568,6 +569,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                 if (Checker.isInternetOn(ProfileListActivity.this)) {
                     CallAddProfileTask task = new CallAddProfileTask();
                     task.applicationContext = ProfileListActivity.this;
+                    task.justRegistered = justRegistered;
                     task.execute();
 
                 } else {
@@ -585,6 +587,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         protected Context applicationContext;
         protected boolean isBeingUpdated;
         protected boolean profilPicBugIsBugUpdated;
+        protected boolean justRegistered=false;
 
         @Override
         protected void onPreExecute() {
@@ -607,7 +610,8 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(ProfileListActivity.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
-                if ( isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE){
+                if ( isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE && !justRegistered
+                        ){
                     Intent intent = new Intent(ProfileListActivity.this, TabActivity.class);
                     intent.putExtra("user", user);
                     Parcelable[] users = new Parcelable[lstFamily.size()];

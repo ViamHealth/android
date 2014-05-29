@@ -57,7 +57,7 @@ public class Profile implements Parcelable{
         }
         DateTime dobJT = new DateTime(dob);
 
-        return Days.daysBetween(iDate.withTimeAtStartOfDay(), dobJT.withTimeAtStartOfDay()).getDays();
+        return Days.daysBetween(dobJT.withTimeAtStartOfDay(), iDate.withTimeAtStartOfDay()).getDays();
 
     }
     public int getAgeInMonths(){

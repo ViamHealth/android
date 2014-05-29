@@ -53,7 +53,7 @@ public class UserTrackGrowthEP extends BaseEP {
         Params params = new Params();
         params.put("gender", gender);
         params.put("age", String.valueOf(age));
-        RestClient client = getRestClient("percentile_data/", params);
+        RestClient client = getRestClient("percentile_data", params);
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
@@ -75,7 +75,7 @@ public class UserTrackGrowthEP extends BaseEP {
 
     public boolean update(UserTrackGrowthData obj){
         Params params = new Params();
-        DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         RestClient client = getRestClient(API_RESOURCE + "/" + df.format(obj.getEntryDate()), params);
         client = addParams(client, obj);
         try {
@@ -176,7 +176,7 @@ public class UserTrackGrowthEP extends BaseEP {
             JSONObject jsonObject = new JSONObject(responseString);
 
             obj.setAge(jsonObject.getLong("age"));
-            obj.setGender(jsonObject.getString("label"));
+            obj.setGender(jsonObject.getString("gender"));
             obj.setWeight_3n(Float.valueOf(jsonObject.getString("weight_3n")));
             obj.setHeight_3n(Float.valueOf(jsonObject.getString("height_3n")));
             obj.setWeight_2n(Float.valueOf(jsonObject.getString("weight_2n")));

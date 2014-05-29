@@ -208,6 +208,7 @@ public class Login extends BaseFragmentActivity implements OnClickListener, FBLo
 			//redirect registration activity
 			Intent i = new Intent(Login.this, Register.class);
 			startActivity(i);
+            finish();
 		}
         if(v==forgotPassword){
             ga.GA_eventButtonPress("forgot_password_button");

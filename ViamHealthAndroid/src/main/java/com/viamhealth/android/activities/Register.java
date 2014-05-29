@@ -53,7 +53,7 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
     TextView txtbtnCancel;
 
     UserEP obj;
-
+    Global_Application ga;
     DataBaseAdapter dbAdapter;
     Typeface tf;
 
@@ -70,7 +70,7 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.register_new);
 
-
+        ga = ((Global_Application) getApplicationContext());
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
             fbLoginFragment = new FBLoginFragment();
@@ -123,6 +123,8 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
     public void onClick(View v) {
 
         if(v==txtbtnCancel){
+            Intent i = new Intent(Register.this, Login.class);
+            startActivity(i);
             finish();
         }
         if(v==btnRegister){
@@ -185,14 +187,14 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
             Log.i("After Sign-Up", result);
             if(result.equals("0")){//just registered
                 dialog.dismiss();
-                Intent i = new Intent(Register.this,Home.class);
+                Intent i = new Intent(Register.this, ProfileListActivity.class);
                 i.putExtra("justRegistered", true);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 finish();
             }else{
                 dialog.dismiss();
-                user_name.setError("already registered!");
+                user_name.setError("Already registered!");
                 //Toast.makeText(Register.this, "User with this user name already exist",Toast.LENGTH_SHORT).show();
             }
         }
@@ -202,11 +204,15 @@ public class Register extends BaseFragmentActivity implements OnClickListener, F
             // TODO Auto-generated method stub
             Log.i("doInBackground--Object", "doInBackground--Object");
 
-            String result = "1";
+            String result = "0";
 
             User createdUser = obj.SignUp(username, password);
-            if(createdUser!=null) {
+            if(createdUser==null) {
+                result = "1";
                 //result = obj.Login(username, password);
+            } else {
+                result = obj.Login(username, password);
+                ga.setLoggedInUser(user);
             }
             return result;
         }

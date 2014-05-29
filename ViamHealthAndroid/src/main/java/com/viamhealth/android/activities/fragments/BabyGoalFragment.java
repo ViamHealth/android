@@ -125,18 +125,17 @@ public class BabyGoalFragment extends BaseFragment {
 
         @JavascriptInterface
         public String getPercentileData(String sdate, String height, String weight){
-            System.out.println("sdate="+sdate+", height= "+height+" weiht="+weight);
             UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
             Date ddate;
-            DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             try {
                ddate  = df.parse(sdate);
             } catch (ParseException e) {
-                return "";
+                ddate = new Date();
             }
             TrackGrowthAdvData obj = ep.getPercentileData(selectedUser.getProfile().getGender().key(),selectedUser.getProfile().getAgeInDays(ddate));
             Float fheight = Float.valueOf(height);
-            Float fweight = Float.valueOf(height);
+            Float fweight = Float.valueOf(weight);
             Float pl=0F;
             Float ph=0F;
             Float hl=0F;
@@ -193,8 +192,13 @@ public class BabyGoalFragment extends BaseFragment {
                     hl = obj.getHeight_3n();
                 }
 
-                 heightPercentile = ((ph - pl) / (hh - hl)) * (fheight - hl) + hl;
 
+                 heightPercentile = ((ph - pl) / (hh - hl)) * (fheight - hl) + pl;
+
+                ph = 0F;
+                pl = 0F;
+                hh = 0F;
+                hl = 0F;
 
                 if (fweight < obj.getWeight_3n()) {
                     ph = obj.getPercentile_3n();
@@ -233,22 +237,29 @@ public class BabyGoalFragment extends BaseFragment {
                     hl = obj.getWeight_2();
                 } else {
                     ph = 100F;
-                    pl = obj.getPercentile_3n();
-                    hh = obj.getWeight_3n() + 1F;//Random. as No value available
-                    hl = obj.getWeight_3n();
+                    pl = obj.getPercentile_3();
+                    hh = obj.getWeight_3() + 1F;//Random. as No value available
+                    hl = obj.getWeight_3();
                 }
 
-                 weightPercentile = ((ph - pl) / (hh - hl)) * (fweight - hl) + hl;
+
+
+                 weightPercentile = ((ph - pl) / (hh - hl)) * (fweight - hl) + pl;
                 try {
                     tgdObject.put("error","");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+            if(heightPercentile > 100 ) heightPercentile = 100F;
+            else if(heightPercentile < 0 ) heightPercentile = 0F;
+            if(weightPercentile > 100 ) weightPercentile = 100F;
+            else if(weightPercentile < 0 ) weightPercentile = 0F;
+
 
             try {
-                tgdObject.put("heightPercentile",String.valueOf(heightPercentile));
-                tgdObject.put("weightPercentile",String.valueOf(weightPercentile));
+                tgdObject.put("heightPercentile",String.valueOf(Math.round(heightPercentile*100.0)/100.0));
+                tgdObject.put("weightPercentile",String.valueOf(Math.round(weightPercentile*100.0)/100.0));
                 tgdObject.put("weight",weight);
                 tgdObject.put("height",height);
 
@@ -261,7 +272,7 @@ public class BabyGoalFragment extends BaseFragment {
         @JavascriptInterface
         public void updateUserTrackData(String sdate, String sheight, String sweight){
             DateTime edate;
-            if(sdate == ""){
+            if(sdate ==null || sdate.trim().isEmpty()){
                edate = new DateTime();
             }else {
                 DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
