@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="#ffffff"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="10dp"
+    >
+
+    <TextView
+        android:id="@+id/task_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text=""
+        android:textColor="@color/row_textcolor_selector"
+        android:textSize="16sp" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/input_systolic_pressure"
+            android:inputType="numberDecimal"
+            android:hint="Systolic Pressure"
+             />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/input_diastolic_pressure"
+            android:inputType="numberDecimal"
+            android:hint="Diastolic Pressure"
+             />
+
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/input_pulse_rate"
+            android:inputType="numberDecimal"
+            android:hint="Pulse Rate"
+ />
+
+        <Button
+            style="@style/ButtonGreentheme"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="Save"
+            android:id="@+id/btn_save"
+         />
+    </LinearLayout>
+
+
+</LinearLayout>
+

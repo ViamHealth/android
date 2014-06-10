@@ -1,9 +1,12 @@
 package com.viamhealth.android.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Kunal on 14/5/14.
  */
-public class TaskData {
+public class TaskData implements Parcelable {
     String id;
     String message;
     String labelChoice1;
@@ -11,7 +14,8 @@ public class TaskData {
     Integer setChoice = 0;
     String feedbackMessageChoice1;
     String feedbackMessageChoice2;
-    Integer weight=0;
+    Integer weight = 0;
+    Integer taskType;
 
     public TaskData() {
     }
@@ -93,4 +97,54 @@ public class TaskData {
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
+
+    public Integer getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(Integer type) {
+        this.taskType = type;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeString(this.getId());
+        dest.writeString(this.getMessage());
+        dest.writeString(this.getLabelChoice1());
+        dest.writeString(this.getLabelChoice2());
+        dest.writeInt(this.getSetChoice());
+        dest.writeString(this.getFeedbackMessageChoice1());
+        dest.writeString(this.getFeedbackMessageChoice2());
+        dest.writeInt(this.getWeight());
+        dest.writeInt(this.getTaskType());
+
+    }
+
+    public TaskData(Parcel in) {
+        this.id = in.readString();
+        this.message = in.readString();
+        this.labelChoice1 = in.readString();
+        this.labelChoice2 = in.readString();
+        this.setChoice = in.readInt();
+        this.feedbackMessageChoice1 = in.readString();
+        this.feedbackMessageChoice2 = in.readString();
+        this.weight = in.readInt();
+        this.taskType = in.readInt();
+    }
+
+    public static final Parcelable.Creator<TaskData> CREATOR
+            = new Parcelable.Creator<TaskData>() {
+        public TaskData createFromParcel(Parcel in) {
+            return new TaskData(in);
+        }
+
+        public TaskData[] newArray(int size) {
+            return new TaskData[size];
+        }
+    };
 }

@@ -2,7 +2,6 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
@@ -27,56 +26,74 @@ public class TaskEP extends BaseEP {
         super(context, app);
     }
 
-    public List<TaskData> list(long userId){
+    public List<TaskData> list(long userId) {
         Params params = new Params();
-        params.put("user",String.valueOf(userId));
+        params.put("user", String.valueOf(userId));
         RestClient client = getRestClient(API_RESOURCE, params);
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
             //Log.i(TAG, client.toString());
 
-            if(client.getResponseCode()== HttpStatus.SC_OK)
+            if (client.getResponseCode() == HttpStatus.SC_OK)
                 return processTaskList(responseString);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return new ArrayList<TaskData>();
     }
 
-    public void selectChoice(String taskId, String choice){
+    public void selectChoice(String taskId, String choice) {
         Params params = new Params();
-        RestClient client = getRestClient(API_RESOURCE + "/" +taskId + "/set_choice/", params);
+        RestClient client = getRestClient(API_RESOURCE + "/" + taskId + "/set_choice", params);
         client.AddParam("set_choice", choice);
         try {
             client.Execute(RequestMethod.POST);
             //String responseString = client.getResponse();
             //Log.i(TAG, client.toString());
             //if(client.getResponseCode()== HttpStatus.SC_OK)
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private List<TaskData> processTaskList(String responseString){
+    public void addBPData(String taskId, String sBp, String dBp, String pulseRate, String user_id) {
+        Params params = new Params();
+        RestClient client = getRestClient(API_RESOURCE + "/" + taskId + "/set_blood_pressure", params);
+        client.AddParam("systolic_pressure", sBp);
+        client.AddParam("diastolic_pressure", dBp);
+        client.AddParam("pulse_rate", pulseRate);
+        client.AddParam("user", user_id);
+
+        try {
+            client.Execute(RequestMethod.POST);
+            //String responseString = client.getResponse();
+            //Log.i(TAG, client.toString());
+            //if(client.getResponseCode()== HttpStatus.SC_OK)
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private List<TaskData> processTaskList(String responseString) {
 
 
         List<TaskData> tasks = new ArrayList<TaskData>();
-        try{
+        try {
             JSONObject response = new JSONObject(responseString);
 
             JSONArray array = response.getJSONArray("results");
-            for(int i=0; i<array.length(); i++){
-                try{
+            for (int i = 0; i < array.length(); i++) {
+                try {
                     TaskData obj = processTaskObject(array.getJSONObject(i));
                     tasks.add(obj);
-                } catch(RuntimeException e){
+                } catch (RuntimeException e) {
                     e.printStackTrace();
                     continue;
                 }
             }
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -96,6 +113,7 @@ public class TaskEP extends BaseEP {
             obj.setFeedbackMessageChoice2(jsonObject.getString("choice_2_message"));
             obj.setSetChoice(jsonObject.getInt("set_choice"));
             obj.setWeight(jsonObject.getInt("weight"));
+            obj.setTaskType(jsonObject.getInt("task_type"));
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
