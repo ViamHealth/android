@@ -420,6 +420,8 @@ public class Home extends BaseActivity implements OnClickListener{
                 user = (User) data.getParcelableExtra("user");
                 if(Checker.isInternetOn(Home.this)){
                     Log.e("HOME", "Code broken due to move of profile list from home. In onActivityResult");
+                    ga.setLoggedInUser(user);
+                    next(true);
                     /*CallAddProfileTask task = new CallAddProfileTask();
                     task.applicationContext = Home.this;
                     task.execute();*/
