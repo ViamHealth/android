@@ -42,7 +42,7 @@ public abstract class DispatcherAdapter extends BaseAdapter {
                         throw new RuntimeException("The class " + clazz.getName() + " should have the annotation DelegateAdapterField");
                     }
 
-                    long itemtype = delegateAdapterType.itemType();
+                    long itemtype = delegateAdapterType.itemType().value();
 
                     if (mDelegateAdapterSparseArray.get(itemtype) != null) {
                         throw new RuntimeException("The item type " + itemtype + " is already defined!");

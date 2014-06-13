@@ -17,9 +17,10 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.model.TaskData;
+import com.viamhealth.android.model.enums.TaskItemType;
 import com.viamhealth.android.utils.Checker;
 
-@DelegateAdapterType(itemType = 0)
+@DelegateAdapterType(itemType = TaskItemType.SimpleText)
 public class SimpleTextDelegateAdapter implements DelegateAdapter {
 
     protected Context mContext;

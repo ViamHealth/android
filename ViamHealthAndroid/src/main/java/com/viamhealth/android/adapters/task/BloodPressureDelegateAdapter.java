@@ -11,8 +11,9 @@ import android.widget.TextView;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.BloodPressureTaskItemActivity;
 import com.viamhealth.android.model.TaskData;
+import com.viamhealth.android.model.enums.TaskItemType;
 
-@DelegateAdapterType(itemType = 1)
+@DelegateAdapterType(itemType = TaskItemType.BloodPressure)
 public class BloodPressureDelegateAdapter implements DelegateAdapter {
 
     protected Context mContext;
