@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Kunal on 13/6/14.
+ * Created by Kunal on 17/6/14.
  */
-public enum TaskItemType {
-    SimpleText(1, "1"),
-    BloodPressure(2, "2"),
-    Challenge(3, "3");
+public enum TaskAdapterType {
+    SimpleText(0, "0"),
+    BloodPressure(1, "1"),
+    Challenge(2, "2");
 
     private final int value;
     private final String key;
 
-    TaskItemType(int value, String key){
+    TaskAdapterType(int value, String key){
         this.value = value;
         this.key = key;
     }
@@ -24,23 +24,23 @@ public enum TaskItemType {
     public String key() {return key;}
 
     // Lookup table
-    private static final Map<Integer, TaskItemType> valuelookup = new HashMap<Integer, TaskItemType>();
-    private static final Map<String, TaskItemType> keylookup = new HashMap<String, TaskItemType>();
+    private static final Map<Integer, TaskAdapterType> valuelookup = new HashMap<Integer, TaskAdapterType>();
+    private static final Map<String, TaskAdapterType> keylookup = new HashMap<String, TaskAdapterType>();
 
     // Populate the lookup table on loading time
     static {
-        for (TaskItemType g : EnumSet.allOf(TaskItemType.class)){
+        for (TaskAdapterType g : EnumSet.allOf(TaskAdapterType.class)){
             valuelookup.put(g.value(), g);
             keylookup.put(g.key(), g);
         }
     }
 
     // This method can be used for reverse lookup purpose
-    public static TaskItemType get(int value) {
+    public static TaskAdapterType get(int value) {
         return valuelookup.get(value);
     }
 
-    public static TaskItemType get(String key) {
+    public static TaskAdapterType get(String key) {
         return keylookup.get(key);
     }
 

@@ -19,16 +19,15 @@ import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.adapters.task.ATaskListAdapter;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
-import com.viamhealth.android.model.TaskData;
+import com.viamhealth.android.model.tasks.Task;
+import com.viamhealth.android.model.tasks.TaskData;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Kunal on 14/5/14.
@@ -37,7 +36,7 @@ public class TaskListFragment extends BaseListFragment {
 
     private ATaskListAdapter adapter = null;
     private ListView list;
-    private final List<TaskData> tasks = new ArrayList<TaskData>();
+    private final List<Task> tasks = new ArrayList<Task>();
 
     private functionClass obj;
     private Global_Application ga;
@@ -150,29 +149,29 @@ public class TaskListFragment extends BaseListFragment {
         @Override
         protected String doInBackground(String... params) {
             TaskEP tep = new TaskEP(getSherlockActivity(), ga);
-            List<TaskData> ts = tep.list(selectedUser.getId());
+            List<Task> ts = tep.list(selectedUser.getId());
 
-            Collections.sort(ts, new Comparator<TaskData>() {
+            Collections.sort(ts, new Comparator<Task>() {
                 @Override
-                public int compare(TaskData taskData, TaskData taskData2) {
+                public int compare(Task taskData, Task taskData2) {
                     int r = 0;
-                    if (taskData.getSetChoice() != 0 && taskData2.getSetChoice() != 0)
+                    //if (taskData.getSetChoice() != 0 && taskData2.getSetChoice() != 0)
                         if (taskData.getWeight() > taskData2.getWeight()) {
                             r = -1;
                         } else {
                             r = 1;
                         }
-                    else if (taskData.getSetChoice() != 0) {
+                    /*else if (taskData.getSetChoice() != 0) {
                         r = 1;
                     } else if (taskData2.getSetChoice() != 0) {
                         r = -1;
-                    } else {
+                    } else {*/
                         if (taskData.getWeight() > taskData2.getWeight()) {
                             r = -1;
                         } else {
                             r = 1;
                         }
-                    }
+                    //}
                     return r;
                 }
             });

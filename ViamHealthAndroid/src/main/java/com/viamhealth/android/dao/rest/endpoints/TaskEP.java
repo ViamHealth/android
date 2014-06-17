@@ -2,10 +2,15 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
-import com.viamhealth.android.model.TaskData;
+import com.viamhealth.android.model.enums.TaskItemType;
+import com.viamhealth.android.model.tasks.BloodPressureTask;
+import com.viamhealth.android.model.tasks.ChallengeTask;
+import com.viamhealth.android.model.tasks.Task;
+import com.viamhealth.android.model.tasks.TaskData;
 
 import org.apache.http.HttpStatus;
 import org.json.JSONArray;
@@ -26,14 +31,14 @@ public class TaskEP extends BaseEP {
         super(context, app);
     }
 
-    public List<TaskData> list(long userId) {
+    public List<Task> list(long userId) {
         Params params = new Params();
         params.put("user", String.valueOf(userId));
         RestClient client = getRestClient(API_RESOURCE, params);
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
-            //Log.i(TAG, client.toString());
+            Log.i(TAG, responseString);
 
             if (client.getResponseCode() == HttpStatus.SC_OK)
                 return processTaskList(responseString);
@@ -41,7 +46,7 @@ public class TaskEP extends BaseEP {
             e.printStackTrace();
         }
 
-        return new ArrayList<TaskData>();
+        return new ArrayList<Task>();
     }
 
     public void selectChoice(String taskId, String choice) {
@@ -76,17 +81,26 @@ public class TaskEP extends BaseEP {
         }
     }
 
-    private List<TaskData> processTaskList(String responseString) {
+    private List<Task> processTaskList(String responseString) {
 
 
-        List<TaskData> tasks = new ArrayList<TaskData>();
+        List<Task> tasks = new ArrayList<Task>();
         try {
             JSONObject response = new JSONObject(responseString);
 
             JSONArray array = response.getJSONArray("results");
             for (int i = 0; i < array.length(); i++) {
                 try {
-                    TaskData obj = processTaskObject(array.getJSONObject(i));
+                    Task obj;
+                    JSONObject jsonObject = array.getJSONObject(i);
+                    int taskType = jsonObject.getInt("task_type");
+                    if(taskType == TaskItemType.Challenge.value()) {
+                        obj = processChallengeTaskObject(jsonObject);
+                    } else if(taskType == TaskItemType.BloodPressure.value()){
+                        obj = processBloodPressureTaskObject(jsonObject);
+                    } else {
+                         obj = processTaskObject(jsonObject);
+                    }
                     tasks.add(obj);
                 } catch (RuntimeException e) {
                     e.printStackTrace();
@@ -97,7 +111,18 @@ public class TaskEP extends BaseEP {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
+        ChallengeTask tt = new ChallengeTask();
+        tt.setId("12322134");
+        tt.setLabelChoice1("Accept");
+        tt.setMessage("This is good for you");
+       tt.setTitle("5 day walk challenge");
+        tt.setBigMessage(" you have accepted the challenege");
+        tt.setDayNum(0);
+        tt.setDayWiseValues(new ArrayList<String>());
+        tt.setJoinedCount(22);
+        tt.setNumDays(5);
+        tt.setWeight(999);
+        tasks.add(tt);
         return tasks;
 
     }
@@ -113,7 +138,40 @@ public class TaskEP extends BaseEP {
             obj.setFeedbackMessageChoice2(jsonObject.getString("choice_2_message"));
             obj.setSetChoice(jsonObject.getInt("set_choice"));
             obj.setWeight(jsonObject.getInt("weight"));
-            obj.setTaskType(jsonObject.getInt("task_type"));
+            //obj.setTaskType(jsonObject.getInt("task_type"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return obj;
+    }
+
+    private BloodPressureTask processBloodPressureTaskObject(JSONObject jsonObject) {
+        BloodPressureTask obj = new BloodPressureTask();
+        try {
+            obj.setId(jsonObject.getString("id"));
+            obj.setMessage(jsonObject.getString("message"));
+            obj.setLabelChoice1(jsonObject.getString("label_choice_1"));
+            obj.setLabelChoice2(jsonObject.getString("label_choice_2"));
+            obj.setFeedbackMessageChoice1(jsonObject.getString("choice_1_message"));
+            obj.setFeedbackMessageChoice2(jsonObject.getString("choice_2_message"));
+            obj.setSetChoice(jsonObject.getInt("set_choice"));
+            obj.setWeight(jsonObject.getInt("weight"));
+            //obj.setTaskType(jsonObject.getInt("task_type"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return obj;
+    }
+
+    private Task processChallengeTaskObject(JSONObject jsonObject) {
+        ChallengeTask obj = new ChallengeTask();
+        try {
+            obj.setId(jsonObject.getString("id"));
+            obj.setMessage(jsonObject.getString("message"));
+            obj.setLabelChoice1(jsonObject.getString("label_choice_1"));
+            obj.setWeight(jsonObject.getInt("weight"));
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

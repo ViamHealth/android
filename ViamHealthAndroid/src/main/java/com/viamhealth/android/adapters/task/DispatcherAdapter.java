@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.viamhealth.android.model.tasks.Task;
+import com.viamhealth.android.model.tasks.TaskData;
+
 public abstract class DispatcherAdapter extends BaseAdapter {
     private LongSparseArray<DelegateAdapter> mDelegateAdapterSparseArray;
     protected Context mContext;
@@ -68,7 +71,7 @@ public abstract class DispatcherAdapter extends BaseAdapter {
         if (delegateAdapter == null) {
             throw new RuntimeException("Unknown type " + itemtype + " called");
         }
-        return mDelegateAdapterSparseArray.get(itemtype).getView(mContext, position, convertView, parent, mLayoutInflater, (com.viamhealth.android.model.TaskData) getItem(position));
+        return mDelegateAdapterSparseArray.get(itemtype ).getView(mContext, position, convertView, parent, mLayoutInflater, (Task) getItem(position));
     }
 
     @Override

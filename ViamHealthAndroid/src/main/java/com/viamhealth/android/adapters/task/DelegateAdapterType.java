@@ -1,5 +1,6 @@
 package com.viamhealth.android.adapters.task;
 
+import com.viamhealth.android.model.enums.TaskAdapterType;
 import com.viamhealth.android.model.enums.TaskItemType;
 
 import java.lang.annotation.ElementType;
@@ -14,5 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface DelegateAdapterType {
-    TaskItemType itemType() default TaskItemType.SimpleText;
+    TaskAdapterType itemType() default TaskAdapterType.SimpleText;
 }
