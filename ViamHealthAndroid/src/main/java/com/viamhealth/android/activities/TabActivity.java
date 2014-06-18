@@ -411,6 +411,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     }
 
+    @Deprecated
     public enum TabActions { UploadFiles, SetGoal; }
 
 
