@@ -2,11 +2,14 @@ package com.viamhealth.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.enums.SelectedCurrentTab;
 import com.viamhealth.android.model.tasks.ChallengeTask;
 import com.viamhealth.android.model.users.User;
 
@@ -20,7 +23,7 @@ public class ChallengeActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.challenge_item);
         ga = ((Global_Application) getApplicationContext());
@@ -28,8 +31,22 @@ public class ChallengeActivity extends BaseFragmentActivity {
         Intent intent = getIntent();
         final ChallengeTask item = (ChallengeTask) intent.getParcelableExtra("taskData");
         TextView t = (TextView) findViewById(R.id.textView);
+        Button button = (Button) findViewById(R.id.button);
 
         t.setText(item.getId());
+
+        button.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ChallengeActivity.this, TabActivity.class);
+                i.putExtra("user", ga.getLoggedInUser());
+                i.putExtra("selectedCurrentTab", SelectedCurrentTab.ChallengesAndTrack);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                finish();
+            }
+        });
 
     }
 }
