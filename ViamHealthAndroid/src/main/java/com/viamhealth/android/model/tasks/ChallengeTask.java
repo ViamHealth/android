@@ -100,7 +100,7 @@ public class ChallengeTask implements Task, Parcelable {
     }
 
     public void setNumDays(Integer numDaysset) {
-        this.numDays = numDays;
+        this.numDays = numDaysset;
     }
 
     public Integer getDayNum() {
@@ -136,10 +136,10 @@ public class ChallengeTask implements Task, Parcelable {
         //dest.writeInt(this.getTaskType());
         dest.writeInt(this.getJoinedCount());
         dest.writeString(this.getMessage());
-        dest.writeString(getBigMessage());
-        dest.writeInt(getNumDays());
-        dest.writeInt(getDayNum());
-        dest.writeStringList(getDayWiseValues());
+        dest.writeString(this.getBigMessage());
+        dest.writeInt(this.getNumDays());
+        dest.writeInt(this.getDayNum());
+        dest.writeStringList(this.getDayWiseValues());
 
     }
 
@@ -168,4 +168,16 @@ public class ChallengeTask implements Task, Parcelable {
             return new ChallengeTask[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "Challengetask{" +
+                "id='" + getId() + '\'' +
+                ", title='" + getTitle() + '\'' +
+                ", labelChoice='" + getLabelChoice1() + '\'' +
+                ", joinedCount='" + getJoinedCount() + '\'' +
+                ", numDays=" + getNumDays() +
+                "} ";
+    }
+
 }

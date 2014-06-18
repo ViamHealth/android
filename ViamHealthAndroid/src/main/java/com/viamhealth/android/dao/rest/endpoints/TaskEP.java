@@ -63,6 +63,23 @@ public class TaskEP extends BaseEP {
         }
     }
 
+    public boolean acceptChallenge(String taskId) {
+        Params params = new Params();
+        RestClient client = getRestClient(API_RESOURCE + "/" + taskId + "/accept_challenge", params);
+
+        try {
+            client.Execute(RequestMethod.POST);
+            if(client.getResponseCode()== HttpStatus.SC_NO_CONTENT){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public void addBPData(String taskId, String sBp, String dBp, String pulseRate, String user_id) {
         Params params = new Params();
         RestClient client = getRestClient(API_RESOURCE + "/" + taskId + "/set_blood_pressure", params);
