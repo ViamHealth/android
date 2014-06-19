@@ -2,15 +2,14 @@ package com.viamhealth.android.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
+import com.viamhealth.android.model.ChallengeData;
 import com.viamhealth.android.model.enums.SelectedCurrentTab;
-import com.viamhealth.android.model.tasks.ChallengeTask;
 import com.viamhealth.android.model.users.User;
 
 /**
@@ -29,7 +28,7 @@ public class ChallengeActivity extends BaseFragmentActivity {
         ga = ((Global_Application) getApplicationContext());
 
         Intent intent = getIntent();
-        final ChallengeTask item = (ChallengeTask) intent.getParcelableExtra("taskData");
+        final ChallengeData item = (ChallengeData) intent.getParcelableExtra("taskData");
         TextView t = (TextView) findViewById(R.id.textView);
         Button button = (Button) findViewById(R.id.button);
 

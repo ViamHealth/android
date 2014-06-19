@@ -6,9 +6,9 @@ import android.util.Log;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
+import com.viamhealth.android.model.ChallengeData;
 import com.viamhealth.android.model.enums.TaskItemType;
 import com.viamhealth.android.model.tasks.BloodPressureTask;
-import com.viamhealth.android.model.tasks.ChallengeTask;
 import com.viamhealth.android.model.tasks.Task;
 import com.viamhealth.android.model.tasks.TaskData;
 
@@ -128,7 +128,7 @@ public class TaskEP extends BaseEP {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        ChallengeTask tt = new ChallengeTask();
+        ChallengeData tt = new ChallengeData();
         tt.setId("12322134");
         tt.setLabelChoice1("Accept");
         tt.setMessage("This is good for you");
@@ -183,7 +183,7 @@ public class TaskEP extends BaseEP {
     }
 
     private Task processChallengeTaskObject(JSONObject jsonObject) {
-        ChallengeTask obj = new ChallengeTask();
+        ChallengeData obj = new ChallengeData();
         try {
             obj.setId(jsonObject.getString("id"));
             obj.setMessage(jsonObject.getString("message"));

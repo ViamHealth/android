@@ -16,4 +16,23 @@
         android:layout_gravity="center"
         />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/zero_items_in_list"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You keep track of the health stats and activities here."
+            />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Add today's Health Stats"
+            android:id="@+id/button" />
+    </LinearLayout>
 </LinearLayout>

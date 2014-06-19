@@ -17,10 +17,9 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.ChallengeActivity;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
+import com.viamhealth.android.model.ChallengeData;
 import com.viamhealth.android.model.enums.TaskAdapterType;
-import com.viamhealth.android.model.tasks.ChallengeTask;
 import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
 
 /**
  * Created by Kunal on 13/6/14.
@@ -46,7 +45,7 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
             final TextView textViewStatString = (TextView) rowView.findViewById(R.id.text_view_stat_string);
             final Button choice = (Button) rowView.findViewById(R.id.task_choice);
 
-            final ChallengeTask tdObj = (ChallengeTask) item;
+            final ChallengeData tdObj = (ChallengeData) item;
 
             try {
                 heading.setText(tdObj.getTitle());
@@ -93,7 +92,7 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
     {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
-        protected ChallengeTask task;
+        protected ChallengeData task;
 
         @Override
         protected void onPreExecute() {

@@ -28,6 +28,7 @@ import com.actionbarsherlock.view.Window;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.BabyGoalFragment;
+import com.viamhealth.android.activities.fragments.ChallengeAndTrackerFragment;
 import com.viamhealth.android.activities.fragments.FileFragment;
 
 
@@ -181,6 +182,11 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                 TaskScreenFragment.class, bundle
         );
 
+        mTabManager.addTab(
+                mTabHost.newTabSpec("challenge_and_tracker").setIndicator(getTabIndicator(R.string.tab_challenges_and_tracker)),
+                ChallengeAndTrackerFragment.class, bundle
+        );
+
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder)),
                 ReminderFragmentNew.class, bundle);
@@ -213,7 +219,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
         if(selectedCurrentTab != null){
             if(selectedCurrentTab == SelectedCurrentTab.ChallengesAndTrack){
-                mTabHost.setCurrentTabByTag("files");
+                mTabHost.setCurrentTabByTag("challenge_and_tracker");
             }
         } else {
 
