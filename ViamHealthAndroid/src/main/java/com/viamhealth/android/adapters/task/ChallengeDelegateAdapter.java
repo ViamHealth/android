@@ -64,7 +64,7 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
                     @Override
                     public void onClick(View view) {
 
-                        Log.d("challenge task pre",tdObj.toString());
+                        Log.d("challenge data pre",tdObj.toString());
                         AcceptChallengeTask task = new AcceptChallengeTask();
                         task.task = tdObj;
                         task.execute();

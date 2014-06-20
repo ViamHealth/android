@@ -128,7 +128,7 @@ public class TaskEP extends BaseEP {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        /*ChallengeTask tt = new ChallengeTask();
+        ChallengeData tt = new ChallengeData();
         tt.setId("12322134");
         tt.setLabelChoice1("Accept");
         tt.setMessage("This is good for you");
@@ -139,7 +139,7 @@ public class TaskEP extends BaseEP {
         tt.setJoinedCount(22);
         tt.setNumDays(5);
         tt.setWeight(999);
-        tasks.add(tt);*/
+        tasks.add(tt);
         return tasks;
 
     }
