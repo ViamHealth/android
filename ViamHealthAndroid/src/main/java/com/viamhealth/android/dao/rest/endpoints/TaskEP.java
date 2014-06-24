@@ -80,6 +80,24 @@ public class TaskEP extends BaseEP {
         }
     }
 
+    public void addBPData(String sBp, String dBp, String pulseRate, String user_id) {
+        Params params = new Params();
+        RestClient client = getRestClient(API_RESOURCE  + "/set_blood_pressure", params);
+        client.AddParam("systolic_pressure", sBp);
+        client.AddParam("diastolic_pressure", dBp);
+        client.AddParam("pulse_rate", pulseRate);
+        client.AddParam("user", user_id);
+
+        try {
+            client.Execute(RequestMethod.POST);
+            //String responseString = client.getResponse();
+            //Log.i(TAG, client.toString());
+            //if(client.getResponseCode()== HttpStatus.SC_OK)
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addBPData(String taskId, String sBp, String dBp, String pulseRate, String user_id) {
         Params params = new Params();
         RestClient client = getRestClient(API_RESOURCE + "/" + taskId + "/set_blood_pressure", params);
@@ -128,7 +146,7 @@ public class TaskEP extends BaseEP {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        ChallengeData tt = new ChallengeData();
+        /*ChallengeData tt = new ChallengeData();
         tt.setId("12322134");
         tt.setLabelChoice1("Accept");
         tt.setMessage("This is good for you");
@@ -139,7 +157,7 @@ public class TaskEP extends BaseEP {
         tt.setJoinedCount(22);
         tt.setNumDays(5);
         tt.setWeight(999);
-        tasks.add(tt);
+        tasks.add(tt);*/
         return tasks;
 
     }

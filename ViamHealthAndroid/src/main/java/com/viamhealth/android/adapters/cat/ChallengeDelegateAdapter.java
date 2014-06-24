@@ -21,6 +21,8 @@ import com.viamhealth.android.model.ChallengeData;
 import com.viamhealth.android.model.cat.CatData;
 import com.viamhealth.android.model.enums.CatAdapterType;
 
+import java.text.SimpleDateFormat;
+
 
 /**
  * Created by Kunal on 18/6/14.
@@ -44,10 +46,13 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
             final TextView textViewStat = (TextView) rowView.findViewById(R.id.text_view_stat);
             final TextView textViewStatString = (TextView) rowView.findViewById(R.id.text_view_stat_string);
             final Button choice = (Button) rowView.findViewById(R.id.task_choice);
+            TextView dateHeader = (TextView) rowView.findViewById(R.id.dateHeader);
 
             final ChallengeData tdObj = (ChallengeData) item;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd, MMM");
 
             try {
+                dateHeader.setText(sdf.format(tdObj.getStartDate()) + " - " + sdf.format(tdObj.getEndDate()));
                 heading.setText(tdObj.getTitle());
                 if (tdObj.getDayNum() == 0) {
                     textViewStat.setText(tdObj.getJoinedCount().toString());

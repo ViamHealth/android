@@ -4,11 +4,21 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Date"
+        android:id="@+id/dateHeader"
+        android:textColor="#ffac3c"
+        android:textStyle="bold|italic" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:id="@+id/weightHealthStatsCat"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"

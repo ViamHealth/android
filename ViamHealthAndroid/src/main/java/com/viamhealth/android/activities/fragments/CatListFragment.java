@@ -22,11 +22,14 @@ import com.viamhealth.android.adapters.cat.CatListAdapter;
 import com.viamhealth.android.dao.rest.endpoints.CatEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.cat.CatData;
+import com.viamhealth.android.model.tasks.Task;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -36,6 +39,7 @@ public class CatListFragment  extends BaseListFragment{
     private CatListAdapter adapter = null;
     private ListView list;
     private LinearLayout zeroItemsMessageContainer;
+    private LinearLayout addLatestContainer;
     private final List<CatData> tasks = new ArrayList<CatData>();
 
     private functionClass obj;
@@ -52,7 +56,7 @@ public class CatListFragment  extends BaseListFragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.task_list, null);
+        View v = inflater.inflate(R.layout.cat_task_list, null);
 
         selectedUser = getArguments().getParcelable("user");
 
@@ -62,6 +66,7 @@ public class CatListFragment  extends BaseListFragment{
 
         this.list = (ListView) v.findViewById(android.R.id.list);
         this.zeroItemsMessageContainer = (LinearLayout) v.findViewById(R.id.zero_items_in_list);
+        this.addLatestContainer = (LinearLayout) v.findViewById(R.id.add_latest_health_stats_container);
 
         if (Checker.isInternetOn(getSherlockActivity())) {
             CallCATListNavigationTask task = new CallCATListNavigationTask();
@@ -90,11 +95,13 @@ public class CatListFragment  extends BaseListFragment{
     private void initListView() {
         if (tasks.size() == 0) {
             this.zeroItemsMessageContainer.setVisibility(View.VISIBLE);
+            this.addLatestContainer.setVisibility(View.GONE);
             this.list.setVisibility(View.GONE);
             Toast.makeText(getSherlockActivity(), "No task found...", Toast.LENGTH_SHORT).show();
             return;
         }
         this.zeroItemsMessageContainer.setVisibility(View.GONE);
+        this.addLatestContainer.setVisibility(View.VISIBLE);
         this.list.setVisibility(View.VISIBLE);
 
         if (this.adapter == null) {
@@ -104,6 +111,10 @@ public class CatListFragment  extends BaseListFragment{
             this.adapter.notifyDataSetChanged();
 
         this.list.setAdapter(adapter);
+        this.list.post(new Runnable(){
+            public void run() {
+                list.setSelection(list.getCount() - 1);
+        }});
 
 
     }
@@ -138,6 +149,18 @@ public class CatListFragment  extends BaseListFragment{
             CatEP tep = new CatEP(getSherlockActivity(), ga);
             List<CatData> ts = tep.list(selectedUser.getId());
 
+            Collections.sort(ts, new Comparator<CatData>() {
+                @Override
+                public int compare(CatData t1, CatData t2) {
+                    int r = 0;
+                    if(t1.getStartDate().getTime() > t2.getStartDate().getTime()){
+                        r = 1;
+                    } else {
+                        r = -1;
+                    }
+                    return r;
+                }
+            });
             tasks.addAll(ts);
             return null;
         }
