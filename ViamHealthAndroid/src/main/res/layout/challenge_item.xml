@@ -8,19 +8,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="3 Days 500 m Challenge"
         android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp" />
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="4">
+            android:layout_weight="8">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -71,60 +73,81 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Day 1"
+                android:id="@+id/text_yesterday_data"
+                android:gravity="center"
+                android:textColor="#292929"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today     "
+                android:id="@+id/text_today_data"
+                android:textColor="#000000"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:text="Yesterday"
-            android:id="@+id/text_yesterday_data"
-            android:layout_weight="1"
-            android:gravity="center|bottom" />
+            android:id="@+id/linearLayout"
+            android:layout_weight="1">
 
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New ToggleButton"
-            android:id="@+id/toggleButton"
-            android:layout_weight="1"
-            android:textOff="Incompleted"
-            android:textOn="Completed" />
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500 m"
+                android:id="@+id/checkBox" />
 
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500 m"
+                android:id="@+id/checkBox2" />
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:text="Today     "
-            android:id="@+id/text_today_data"
-            android:layout_weight="1"
-            android:gravity="center" />
-
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New ToggleButton"
-            android:id="@+id/toggleButton2"
-            android:layout_weight="1"
-            android:textOff="Incompleted"
-            android:textOn="Completed" />
-
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="More.."
+        android:id="@+id/textView2"
+        android:layout_gravity="right" />
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="This is dummy challeng text. This is a dummy challleng etetx.  "
+        android:text="Text explaining about the challenge. ext explaining about the challenge. ext explaining about the challenge. ext explaining about the challenge. ext explaining about the challenge. ext explaining about the challenge."
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/task_message" />
 
-    <Button
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Go to goals screen"
-        android:id="@+id/button" />
+        android:layout_height="fill_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Go to goals screen"
+            android:id="@+id/button" />
+    </RelativeLayout>
+
 </LinearLayout>
