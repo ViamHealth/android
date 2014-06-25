@@ -1,5 +1,8 @@
+
 package com.viamhealth.android.activities;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -7,12 +10,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -56,14 +61,14 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import antistatic.spinnerwheel.AbstractWheel;
 import antistatic.spinnerwheel.OnWheelChangedListener;
 import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
-public class NewProfile extends BaseFragmentActivity implements View.OnClickListener,
-        EditText.OnFocusChangeListener {
+public class NewProfile extends BaseFragmentActivity implements View.OnClickListener {
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
 
@@ -89,11 +94,40 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
     Profile profile = null;
     ImageView imgView = null;
 
+/*--date--*/
+
+    static final int DATE_DIALG_ID = 1;
+    private Button pickDate;
+    private DatePicker dpResult;
+
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+//    static final int DATE_DIALOG_ID = 1;
+
+    int minYear;
+    int minMonth;
+    int minDay;
+
+    int maxYear = 1954;
+    int maxMonth;
+    int maxDay;
+
+    // these are the minimum dates to set Datepicker..
+    private int year;
+    private int month;
+    private int day;
+
+    public String dateOutput = null;
+
+/*--date--*/
+
     boolean isImageSelected = false;
 
     private final String TAG = "NewProfile";
     private RadioButton radioMaleButton;
     private RadioButton radioFemaleButton;
+    private int id;
 
     private enum UserType {
         Manual, FB;
@@ -272,8 +306,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         firstName = (EditText) findViewById(R.id.profile_first_name);
         lastName = (EditText) findViewById(R.id.profile_last_name);
-        dob = (EditText) findViewById(R.id.profile_dob);
-        dob.setOnFocusChangeListener(this);
         location = (EditText) findViewById(R.id.profile_location);
         organization = (EditText) findViewById(R.id.profile_organization);
         mobileNumber = (EditText) findViewById(R.id.profile_phone);
@@ -337,7 +369,128 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         /*** Action bar Creation Ends Here ***/
 
         firstName.requestFocus();
+
+        /*--date start--*/
+
+        /*--date previous change--
+        dob = (EditText) findViewById(R.id.profile_dob);
+        dob.setOnFocusChangeListener(this);
+        ----*/
+
+        final Calendar c = Calendar.getInstance();
+        mYear = (c.get(Calendar.YEAR) - 10);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+        setCurrentDateOnView();
+        pickDate = (Button) findViewById(R.id.tvDateButton);
+        pickDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                onCreateDialog(DATE_DIALG_ID);
+            }
+        });
+
+        pickDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                showDialog(DATE_DIALG_ID);
+            }
+        });
+
+        /*--date end--*/
     }
+
+   public void setCurrentDateOnView()
+   {
+       dpResult = (DatePicker) findViewById(R.id.dpResult);
+       final Calendar c = Calendar.getInstance();
+       year  = (c.get(Calendar.YEAR));
+       month = (c.get(Calendar.MONTH));
+       day   = (c.get(Calendar.DAY_OF_MONTH));
+
+       minYear = year;
+       minMonth = month;
+       mDay = day;
+
+       maxMonth = month;
+       maxDay = day;
+
+       dpResult.init(year, month, day, null);
+   }
+
+
+    @Override
+    protected Dialog onCreateDialog(int id)
+    {
+        DatePickerDialog _date = null;
+        switch (DATE_DIALG_ID)
+        {
+            case DATE_DIALG_ID:
+            {
+                if(Build.VERSION.SDK_INT >= 11)
+                {
+                    _date = new DatePickerDialog(NewProfile.this , R.style.Theme_Viamhealth , datePickListener , year , month , day)
+                    {
+                        public void onDateChanged (DatePicker view, int ChangeYear, int ChangeMonthOfYear, int ChangeDayOfMonth)
+                        {
+                            if(ChangeYear > year || ChangeYear < maxYear)
+                            {
+                                view.updateDate(year , month , day);
+                            }
+                            if(ChangeYear == year && ChangeDayOfMonth > month)
+                            {
+                                view.updateDate(year , month , day);
+                            }
+                            if(ChangeYear == year && ChangeMonthOfYear == month && ChangeDayOfMonth > day)
+                            {
+                                view.updateDate(year , month , day);
+                            }
+
+                            dateOutput = String.format("Date Selected: %02d/%02d/%04d",
+                                    ChangeDayOfMonth , ChangeDayOfMonth + 1, ChangeYear);
+                        }
+                    };
+                }
+                else
+                {
+                    _date = new DatePickerDialog(NewProfile.this , datePickListener , year , mYear , mDay)
+                    {
+                        public void onDateChanged (DatePicker view, int ChangeYear, int ChangeMonthOfYear, int ChangeDayOfMonth)
+                        {
+                            if(ChangeYear > year || ChangeYear < maxYear)
+                            {
+                                view.updateDate(year , month , day);
+                            }
+                            if(ChangeYear == year && ChangeDayOfMonth > month)
+                            {
+                                view.updateDate(year , month , day);
+                            }
+                            if(ChangeYear == year && ChangeMonthOfYear == month && ChangeDayOfMonth > day)
+                            {
+                                view.updateDate(year , month , day);
+                            }
+                            dateOutput = String.format("Date Selected: %02d/%02d/%04d",
+                                    ChangeDayOfMonth , ChangeDayOfMonth + 1, ChangeYear);
+                        }
+                    };
+                }
+            }
+        }
+        return _date;
+    }
+
+    private DatePickerDialog.OnDateSetListener datePickListener = new DatePickerDialog.OnDateSetListener()
+    {
+        @Override
+        public void onDateSet(DatePicker datePicker, int selectedYear, int selectedMonth, int selectedDay)
+        {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+            pickDate.setText(new StringBuilder().append(day).append("/").append(month).append("/").append(year).append(" "));
+            dpResult.init(year, month, day, null);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -504,7 +657,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         if (user.getProfile() != null) {
             if (user.getProfile().getDob() != null) {
                 SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
-                dob.setText(formater.format(user.getProfile().getDob()));
+                pickDate.setText(formater.format(user.getProfile().getDob()));
             }
 
             updateGender(user.getProfile().getGender());
@@ -628,7 +781,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         profile.getLocation().setAddress(location.getText().toString());
         //Gender is updated in updateGender profile.setGender();
-        String strDOB = dob.getText().toString();
+        String strDOB = pickDate.getText().toString();
         try {
             SimpleDateFormat formater = new SimpleDateFormat("dd/MM/yyyy");
             profile.setDob(formater.parse(strDOB));
@@ -775,8 +928,8 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             isValid = false;
         }
 
-        if (dob.getText().length() == 0) {
-            dob.setError(getString(R.string.profile_dob_not_present));
+        if (pickDate.getText().length() == 0) {
+            pickDate.setError(getString(R.string.profile_dob_not_present));
             isValid = false;
         }
 
@@ -798,21 +951,6 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
         return isValid;
 
-    }
-
-
-    @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        EditText text = (EditText) v;
-        int inputType = text.getInputType();
-        if (hasFocus) {//when focused in
-            if (inputType == (InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE)) {//if the editText is a dateTime filed then showTheDatePicker
-                DialogFragment newFragment = new DatePickerFragment(text, null);
-                newFragment.show(this.getSupportFragmentManager(), "datePicker");
-            }
-        } else {//when focused out
-
-        }
     }
 
     public class UploadProfilePicTask extends AsyncTask<Void, Void, FileUploader.Response> {
@@ -858,6 +996,26 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
             Log.i(TAG, "AsyncTask : Uploaded the file with response as " + response);
             return response;
         }
-    }
 
-}
+        /*--date prev function
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        EditText text = (EditText) v;
+        int inputType = text.getInputType();
+        if (hasFocus) {//when focused in
+            if (inputType == (InputType.TYPE_CLASS_DATETIME | InputType.TYPE_DATETIME_VARIATION_DATE)) {//if the editText is a dateTime filed then showTheDatePicker
+                DialogFragment newFragment = new DatePickerFragment(text, null);
+                newFragment.show(this.getSupportFragmentManager(), "datePicker");
+            }
+        } else {//when focused out
+        }
+    }
+*/
+
+
+    }
+ }
+
+/**
+ * Created by Abhilash chikara (Date Changes) on 19/06/14.
+ */
