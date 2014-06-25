@@ -28,6 +28,7 @@ public class TaskScreenFragment extends BaseFragment {
     private User selectedUser;
 
     private ActionBar actionBar;
+    private ImageSelector imageSelector;
 
     private final String TAG = "TaskScreenFragment";
 
@@ -50,6 +51,8 @@ public class TaskScreenFragment extends BaseFragment {
         actionBar = getSherlockActivity().getSupportActionBar();
 
         setHasOptionsMenu(true);
+
+        imageSelector = new ImageSelector(this);
 
         return view;
     }
