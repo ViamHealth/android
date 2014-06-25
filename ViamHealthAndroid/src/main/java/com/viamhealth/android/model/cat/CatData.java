@@ -10,4 +10,5 @@ public interface CatData {
     public Integer getCatAdapterType();
     public Date getStartDate();
     public Date getEndDate();
+
 }

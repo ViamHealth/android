@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class TaskListFragment extends BaseListFragment {
 
     private ATaskListAdapter adapter = null;
     private ListView list;
+    private LinearLayout zeroItemsMessageContainer;
     private final List<Task> tasks = new ArrayList<Task>();
 
     private functionClass obj;
@@ -61,6 +63,7 @@ public class TaskListFragment extends BaseListFragment {
         appPrefs = new ViamHealthPrefs(getActivity());
 
         this.list = (ListView) v.findViewById(android.R.id.list);
+        this.zeroItemsMessageContainer = (LinearLayout) v.findViewById(R.id.zero_items_in_list);
 
         if (Checker.isInternetOn(getSherlockActivity())) {
             CallTaskListNavigationTask task = new CallTaskListNavigationTask();
@@ -88,9 +91,13 @@ public class TaskListFragment extends BaseListFragment {
 
     private void initListView() {
         if (tasks.size() == 0) {
+            this.zeroItemsMessageContainer.setVisibility(View.VISIBLE);
+            this.list.setVisibility(View.GONE);
             Toast.makeText(getSherlockActivity(), "No task found...", Toast.LENGTH_SHORT).show();
             return;
         }
+        this.zeroItemsMessageContainer.setVisibility(View.GONE);
+        this.list.setVisibility(View.VISIBLE);
 
         if (this.adapter == null) {
             this.adapter = new ATaskListAdapter(getSherlockActivity());

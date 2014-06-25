@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.model.ChallengeData;
@@ -18,6 +19,7 @@ import com.viamhealth.android.model.users.User;
 public class ChallengeActivity extends BaseFragmentActivity {
     Global_Application ga;
     User user;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +29,18 @@ public class ChallengeActivity extends BaseFragmentActivity {
         setContentView(R.layout.challenge_item);
         ga = ((Global_Application) getApplicationContext());
 
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+
         Intent intent = getIntent();
         final ChallengeData item = (ChallengeData) intent.getParcelableExtra("taskData");
         TextView t = (TextView) findViewById(R.id.textView);
         Button button = (Button) findViewById(R.id.button);
 
-        t.setText(item.getId());
+        t.setText(item.getTitle());
 
         button.setOnClickListener(new View.OnClickListener(){
 

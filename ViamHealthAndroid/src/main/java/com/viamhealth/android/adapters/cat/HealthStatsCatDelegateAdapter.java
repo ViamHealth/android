@@ -14,6 +14,8 @@ import com.viamhealth.android.model.cat.CatData;
 import com.viamhealth.android.model.cat.HealthStatsCatData;
 import com.viamhealth.android.model.enums.CatAdapterType;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Kunal on 19/6/14.
  */
@@ -34,6 +36,7 @@ public class HealthStatsCatDelegateAdapter implements DelegateAdapter {
 
             LinearLayout weightLayout = (LinearLayout) rowView.findViewById(R.id.weightHealthStatsCat);
             TextView weightText = (TextView) rowView.findViewById(R.id.weight);
+            TextView dateHeader = (TextView) rowView.findViewById(R.id.dateHeader);
 
             LinearLayout bpLayout = (LinearLayout) rowView.findViewById(R.id.bpHealthStatsCat);
             TextView diastolicText = (TextView) rowView.findViewById(R.id.diastolic_pressure);
@@ -42,8 +45,10 @@ public class HealthStatsCatDelegateAdapter implements DelegateAdapter {
 
 
             final HealthStatsCatData tdObj = (HealthStatsCatData) item;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd, MMM");
 
             try {
+                dateHeader.setText(sdf.format(tdObj.getStartDate()));
                 if(tdObj.isSetWeightReading()){
                     if(tdObj.getWeightReading() != null && tdObj.getWeightReading().getWeight() != null){
                         weightLayout.setVisibility(View.VISIBLE);

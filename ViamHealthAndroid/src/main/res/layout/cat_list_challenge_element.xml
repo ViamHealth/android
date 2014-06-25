@@ -14,6 +14,15 @@
 
     >
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Date"
+        android:id="@+id/dateHeader"
+        android:textColor="#ffac3c"
+        android:textStyle="bold|italic" />
+
 
     <LinearLayout
         android:orientation="horizontal"

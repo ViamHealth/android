@@ -225,7 +225,7 @@ public class ChallengeData implements Task, Parcelable, CatData {
 
     @Override
     public String toString() {
-        return "Challengetask{" +
+        return "ChallengeData{" +
                 "id='" + getId() + '\'' +
                 ", title='" + getTitle() + '\'' +
                 ", labelChoice='" + getLabelChoice1() + '\'' +
