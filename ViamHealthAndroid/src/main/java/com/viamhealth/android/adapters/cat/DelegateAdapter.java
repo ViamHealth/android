@@ -1,10 +1,11 @@
-package com.viamhealth.android.adapters.task;
+package com.viamhealth.android.adapters.cat;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.viamhealth.android.model.cat.CatData;
 import com.viamhealth.android.model.tasks.Task;
 
 /**
@@ -17,5 +18,5 @@ public interface DelegateAdapter {
             View convertView,
             ViewGroup parent,
             LayoutInflater inflater,
-            Task item);
+            CatData item);
 }

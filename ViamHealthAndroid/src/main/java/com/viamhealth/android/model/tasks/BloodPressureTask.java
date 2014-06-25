@@ -1,12 +1,15 @@
-package com.viamhealth.android.model;
+package com.viamhealth.android.model.tasks;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.viamhealth.android.model.enums.TaskAdapterType;
+import com.viamhealth.android.model.enums.TaskItemType;
+
 /**
- * Created by Kunal on 14/5/14.
+ * Created by Kunal on 17/6/14.
  */
-public class TaskData implements Parcelable {
+public class BloodPressureTask implements Parcelable, Task {
     String id;
     String message;
     String labelChoice1;
@@ -15,22 +18,14 @@ public class TaskData implements Parcelable {
     String feedbackMessageChoice1;
     String feedbackMessageChoice2;
     Integer weight = 0;
-    Integer taskType;
+    final Integer taskType = TaskItemType.BloodPressure.value();
+    final Integer adapterType = TaskAdapterType.BloodPressure.value();
 
-    public TaskData() {
+    public BloodPressureTask() {
     }
 
-    public TaskData(String id, String message, String labelChoice1, String labelChoice2,
-                    Integer setChoice, String feedbackMessageChoice1,
-                    String feedbackMessageChoice2, Integer weight) {
-        this.id = id;
-        this.message = message;
-        this.labelChoice1 = labelChoice1;
-        this.labelChoice2 = labelChoice2;
-        this.setChoice = setChoice;
-        this.feedbackMessageChoice1 = feedbackMessageChoice1;
-        this.feedbackMessageChoice2 = feedbackMessageChoice2;
-        this.weight = weight;
+    public Integer getAdapterType() {
+        return adapterType;
     }
 
     public String getLabelChoice1() {
@@ -102,10 +97,6 @@ public class TaskData implements Parcelable {
         return taskType;
     }
 
-    public void setTaskType(Integer type) {
-        this.taskType = type;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -121,11 +112,11 @@ public class TaskData implements Parcelable {
         dest.writeString(this.getFeedbackMessageChoice1());
         dest.writeString(this.getFeedbackMessageChoice2());
         dest.writeInt(this.getWeight());
-        dest.writeInt(this.getTaskType());
+        //dest.writeInt(this.getTaskType());
 
     }
 
-    public TaskData(Parcel in) {
+    public BloodPressureTask(Parcel in) {
         this.id = in.readString();
         this.message = in.readString();
         this.labelChoice1 = in.readString();
@@ -134,17 +125,17 @@ public class TaskData implements Parcelable {
         this.feedbackMessageChoice1 = in.readString();
         this.feedbackMessageChoice2 = in.readString();
         this.weight = in.readInt();
-        this.taskType = in.readInt();
+        //this.taskType = in.readInt();
     }
 
-    public static final Parcelable.Creator<TaskData> CREATOR
-            = new Parcelable.Creator<TaskData>() {
-        public TaskData createFromParcel(Parcel in) {
-            return new TaskData(in);
+    public static final Parcelable.Creator<BloodPressureTask> CREATOR
+            = new Parcelable.Creator<BloodPressureTask>() {
+        public BloodPressureTask createFromParcel(Parcel in) {
+            return new BloodPressureTask(in);
         }
 
-        public TaskData[] newArray(int size) {
-            return new TaskData[size];
+        public BloodPressureTask[] newArray(int size) {
+            return new BloodPressureTask[size];
         }
     };
 }

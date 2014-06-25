@@ -454,8 +454,11 @@ public class Home extends BaseActivity implements OnClickListener{
 
         protected void onPostExecute(String result) {
             if(lstFamily.isEmpty()){
+                ga.setLstfamilyglobal(null);
                 logout();
                 return;
+            } else {
+                ga.setLstfamilyglobal(lstFamily);
             }
             //splashScreen.setVisibility(View.GONE);
             //scroller.setVisibility(View.VISIBLE);
@@ -472,6 +475,7 @@ public class Home extends BaseActivity implements OnClickListener{
                 ga.setLoggedInUser(u);
             //}
             lstFamily.addAll(userEndPoint.GetFamilyMembers());
+
             return null;
         }
 

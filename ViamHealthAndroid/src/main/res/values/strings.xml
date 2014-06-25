@@ -31,6 +31,7 @@
     <string name="confirmNewPasswordMandatory">confirm the new password</string>
     <string name="newPasswordsDoNotMatch">new passwords do not match</string>
 
+    <string name="apiSentError">Action was not completed. Please try again later.</string>
     <string name="networkNotAvailable">Network not availble. Please check your internet connection and then try again.</string>
     <string name="none">None</string>
     <string name="changePassword">Change Password</string>
@@ -180,6 +181,7 @@
     <string name="tab_label_file">Files</string>
     <string name="tab_label_profiles">Profiles</string>
     <string name="tab_task_screen">Home</string>
+    <string name="tab_challenges_and_tracker">Track</string>
     <string name="addgoal">+ Add Goal</string>
     <string name="title_add_goal">Add Goal</string>
     <string name="goal_settings">Goal Settings</string>

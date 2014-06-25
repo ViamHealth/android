@@ -1,4 +1,4 @@
-package com.viamhealth.android.adapters.task;
+package com.viamhealth.android.adapters.cat;
 
 /**
  * Created by Kunal on 6/6/14.
@@ -11,8 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
+import com.viamhealth.android.model.cat.CatData;
 
 public abstract class DispatcherAdapter extends BaseAdapter {
     private LongSparseArray<DelegateAdapter> mDelegateAdapterSparseArray;
@@ -71,7 +70,7 @@ public abstract class DispatcherAdapter extends BaseAdapter {
         if (delegateAdapter == null) {
             throw new RuntimeException("Unknown type " + itemtype + " called");
         }
-        return mDelegateAdapterSparseArray.get(itemtype ).getView(mContext, position, convertView, parent, mLayoutInflater, (Task) getItem(position));
+        return mDelegateAdapterSparseArray.get(itemtype ).getView(mContext, position, convertView, parent, mLayoutInflater, (CatData) getItem(position));
     }
 
     @Override

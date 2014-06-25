@@ -17,28 +17,30 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.adapters.task.ATaskListAdapter;
-import com.viamhealth.android.dao.rest.endpoints.TaskEP;
+
+import com.viamhealth.android.adapters.cat.CatListAdapter;
+import com.viamhealth.android.dao.rest.endpoints.CatEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
+import com.viamhealth.android.model.cat.CatData;
 import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by Kunal on 14/5/14.
+ * Created by Kunal on 18/6/14.
  */
-public class TaskListFragment extends BaseListFragment {
-
-    private ATaskListAdapter adapter = null;
+public class CatListFragment  extends BaseListFragment{
+    private CatListAdapter adapter = null;
     private ListView list;
     private LinearLayout zeroItemsMessageContainer;
-    private final List<Task> tasks = new ArrayList<Task>();
+    private LinearLayout addLatestContainer;
+    private final List<CatData> tasks = new ArrayList<CatData>();
 
     private functionClass obj;
     private Global_Application ga;
@@ -54,7 +56,7 @@ public class TaskListFragment extends BaseListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.task_list, null);
+        View v = inflater.inflate(R.layout.cat_task_list, null);
 
         selectedUser = getArguments().getParcelable("user");
 
@@ -64,9 +66,10 @@ public class TaskListFragment extends BaseListFragment {
 
         this.list = (ListView) v.findViewById(android.R.id.list);
         this.zeroItemsMessageContainer = (LinearLayout) v.findViewById(R.id.zero_items_in_list);
+        this.addLatestContainer = (LinearLayout) v.findViewById(R.id.add_latest_health_stats_container);
 
         if (Checker.isInternetOn(getSherlockActivity())) {
-            CallTaskListNavigationTask task = new CallTaskListNavigationTask();
+            CallCATListNavigationTask task = new CallCATListNavigationTask();
             task.activity = getSherlockActivity();
             task.execute();
         } else {
@@ -92,45 +95,33 @@ public class TaskListFragment extends BaseListFragment {
     private void initListView() {
         if (tasks.size() == 0) {
             this.zeroItemsMessageContainer.setVisibility(View.VISIBLE);
+            this.addLatestContainer.setVisibility(View.GONE);
             this.list.setVisibility(View.GONE);
             Toast.makeText(getSherlockActivity(), "No task found...", Toast.LENGTH_SHORT).show();
             return;
         }
         this.zeroItemsMessageContainer.setVisibility(View.GONE);
+        this.addLatestContainer.setVisibility(View.VISIBLE);
         this.list.setVisibility(View.VISIBLE);
 
         if (this.adapter == null) {
-            this.adapter = new ATaskListAdapter(getSherlockActivity());
+            this.adapter = new CatListAdapter(getSherlockActivity());
             this.adapter.setListData(tasks);
         } else
             this.adapter.notifyDataSetChanged();
 
         this.list.setAdapter(adapter);
-        /*this.list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                TextView message = (TextView)  view.findViewById(R.id.task_message);
-                if(message.getCurrentTextColor() == Color.parseColor("#828282") ){
-                    message.setTextColor(getResources().getColor(R.color.row_textcolor_selector));
-                    Button choice1 = (Button) view.findViewById(R.id.task_choice_1);
-                    Button choice2 = (Button) view.findViewById(R.id.task_choice_2);
-                    choice2.setVisibility(View.VISIBLE);
-                    choice1.setVisibility(View.VISIBLE);
-                    choice1.setEnabled(true);
-                    choice2.setEnabled(true);
-                    choice2.setTextColor(Color.parseColor("#ffffff"));
-                    choice1.setTextColor(Color.parseColor("#ffffff"));
-                    //adapter.notifyDataSetChanged();
-                }
-            }
-        });*/
+        this.list.post(new Runnable(){
+            public void run() {
+                list.setSelection(list.getCount() - 1);
+        }});
+
 
     }
 
 
     // async class for calling webservice and get responce message
-    public class CallTaskListNavigationTask extends AsyncTask<String, Void, String> {
+    public class CallCATListNavigationTask extends AsyncTask<String, Void, String> {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
 
@@ -155,39 +146,25 @@ public class TaskListFragment extends BaseListFragment {
 
         @Override
         protected String doInBackground(String... params) {
-            TaskEP tep = new TaskEP(getSherlockActivity(), ga);
-            List<Task> ts = tep.list(selectedUser.getId());
+            CatEP tep = new CatEP(getSherlockActivity(), ga);
+            List<CatData> ts = tep.list(selectedUser.getId());
 
-            Collections.sort(ts, new Comparator<Task>() {
+            Collections.sort(ts, new Comparator<CatData>() {
                 @Override
-                public int compare(Task taskData, Task taskData2) {
+                public int compare(CatData t1, CatData t2) {
                     int r = 0;
-                    //if (taskData.getSetChoice() != 0 && taskData2.getSetChoice() != 0)
-                        if (taskData.getWeight() > taskData2.getWeight()) {
-                            r = -1;
-                        } else {
-                            r = 1;
-                        }
-                    /*else if (taskData.getSetChoice() != 0) {
+                    if(t1.getStartDate().getTime() > t2.getStartDate().getTime()){
                         r = 1;
-                    } else if (taskData2.getSetChoice() != 0) {
+                    } else {
                         r = -1;
-                    } else {*/
-                        if (taskData.getWeight() > taskData2.getWeight()) {
-                            r = -1;
-                        } else {
-                            r = 1;
-                        }
-                    //}
+                    }
                     return r;
                 }
             });
             tasks.addAll(ts);
-
             return null;
         }
 
     }
-
 
 }

@@ -6,30 +6,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * Created by Kunal on 14/5/14.
+ * Created by Kunal on 18/6/14.
  */
-public class TaskScreenFragment extends BaseFragment {
+public class ChallengeAndTrackerFragment extends BaseFragment {
 
     private Global_Application ga;
     private ViamHealthPrefs appPrefs;
 
     private User selectedUser;
 
-    private ActionBar actionBar;
-
-    private final String TAG = "TaskScreenFragment";
+    private final String TAG = "CATFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,12 +35,10 @@ public class TaskScreenFragment extends BaseFragment {
         Bundle args = new Bundle();
         args.putParcelable("user", selectedUser);
         FragmentTransaction fm = getSherlockActivity().getSupportFragmentManager().beginTransaction();
-        TaskListFragment fragment = (TaskListFragment) SherlockFragment.instantiate(getSherlockActivity(), TaskListFragment.class.getName(), args);
+        CatListFragment fragment = (CatListFragment) SherlockFragment.instantiate(getSherlockActivity(), CatListFragment.class.getName(), args);
         fm.add(R.id.taskList, fragment, "task-list");
         fm.commit();
 
-
-        actionBar = getSherlockActivity().getSupportActionBar();
 
         setHasOptionsMenu(true);
 

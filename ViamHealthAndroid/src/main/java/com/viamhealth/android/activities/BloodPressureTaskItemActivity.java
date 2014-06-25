@@ -22,7 +22,7 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
-import com.viamhealth.android.model.TaskData;
+import com.viamhealth.android.model.tasks.BloodPressureTask;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
@@ -53,7 +53,7 @@ public class BloodPressureTaskItemActivity extends BaseFragmentActivity {
         ga = ((Global_Application) getApplicationContext());
 
         Intent intent = getIntent();
-        final TaskData item = (TaskData) intent.getParcelableExtra("taskData");
+        final BloodPressureTask item = (BloodPressureTask) intent.getParcelableExtra("taskData");
 
         message = (TextView) findViewById(R.id.task_message);
         editsBP = (EditText) findViewById(R.id.input_systolic_pressure);

@@ -28,12 +28,14 @@ import com.actionbarsherlock.view.Window;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.fragments.BabyGoalFragment;
+import com.viamhealth.android.activities.fragments.ChallengeAndTrackerFragment;
 import com.viamhealth.android.activities.fragments.FileFragment;
 
 
 import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.activities.fragments.TaskScreenFragment;
 import com.viamhealth.android.manager.TabManager;
+import com.viamhealth.android.model.enums.SelectedCurrentTab;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.tasks.InviteUser;
 
@@ -59,7 +61,7 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
     Global_Application ga;
     private User user = null;
     private Parcelable[] pUsers=null;
-    private final List<User> users = new ArrayList<User>();
+    private  List<User> users = new ArrayList<User>();
 
     private static final float HEADER_TOP_MARGIN_DP = 58.0f;
     private static final int DELETE_PROFILE_FROM_LIST = 10001;
@@ -83,10 +85,15 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         User loggedInUser = ga.getLoggedInUser();
         pUsers = intent.getParcelableArrayExtra("users");
 
-        users.clear();
-        for(int i=0; i<pUsers.length; i++){
-            users.add((User) pUsers[i]);
+        if(pUsers != null ){
+            users.clear();
+            for(int i=0; i<pUsers.length; i++){
+                users.add((User) pUsers[i]);
+            }
+        } else {
+            users = ga.getLstfamilyglobal();
         }
+
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayUseLogoEnabled(false);
@@ -136,7 +143,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         // To comment
 
         Boolean isTab=getIntent().getBooleanExtra("isTab", false);
-        Actions action = (Actions)getIntent().getSerializableExtra("action");
+        TabActions action = (TabActions)getIntent().getSerializableExtra("action");
+        SelectedCurrentTab selectedCurrentTab = (SelectedCurrentTab)getIntent().getSerializableExtra("selectedCurrentTab");
 
         Bundle bundle = new Bundle();
         bundle.putParcelable("user", user);
@@ -174,6 +182,11 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
                 TaskScreenFragment.class, bundle
         );
 
+        mTabManager.addTab(
+                mTabHost.newTabSpec("challenge_and_tracker").setIndicator(getTabIndicator(R.string.tab_challenges_and_tracker)),
+                ChallengeAndTrackerFragment.class, bundle
+        );
+
         mTabManager.addTab(//, getResources().getDrawable(R.drawable.tab_journal)
                 mTabHost.newTabSpec("reminder").setIndicator(getTabIndicator(R.string.tab_label_reminder)),
                 ReminderFragmentNew.class, bundle);
@@ -204,23 +217,30 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
         tabs = (TabWidget) findViewById(android.R.id.tabs);
 
 
+        if(selectedCurrentTab != null){
+            if(selectedCurrentTab == SelectedCurrentTab.ChallengesAndTrack){
+                mTabHost.setCurrentTabByTag("challenge_and_tracker");
+            }
+        } else {
 
-        if(action == Actions.UploadFiles){
-            mTabHost.setCurrentTabByTag("files");
-            //mTabManager.selectTab(TabTypes.Files.name());
-            FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
-            fragment.pickFile();
-        } else if(action == Actions.SetGoal){
-            mTabHost.setCurrentTabByTag("goals");
+            //TODO : Move these to SelectedCurrentTab enum instead
+            if (action == TabActions.UploadFiles) {
+                mTabHost.setCurrentTabByTag("files");
+                //mTabManager.selectTab(TabTypes.Files.name());
+                FileFragment fragment = (FileFragment) mTabManager.getCurrentSelectedTabFragment();
+                fragment.pickFile();
+            } else if (action == TabActions.SetGoal) {
+                mTabHost.setCurrentTabByTag("goals");
 
-            //mTabManager.selectTab(TabTypes.Goals.name());
-            //}
+                //mTabManager.selectTab(TabTypes.Goals.name());
+                //}
 
-            //if (savedInstanceState != null) {
-            //mTabManager.selectTab(savedInstanceState.getString("tab"));
-            //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
-        } else if(user.getId() != loggedInUser.getId()){
-            mTabHost.setCurrentTabByTag("reminder");
+                //if (savedInstanceState != null) {
+                //mTabManager.selectTab(savedInstanceState.getString("tab"));
+                //mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+            } else if (user.getId() != loggedInUser.getId()) {
+                mTabHost.setCurrentTabByTag("reminder");
+            }
         }
 
 
@@ -397,7 +417,8 @@ public class TabActivity extends BaseFragmentActivity implements View.OnClickLis
 
     }
 
-    public enum Actions { UploadFiles, SetGoal; }
+    @Deprecated
+    public enum TabActions { UploadFiles, SetGoal; }
 
 
 
