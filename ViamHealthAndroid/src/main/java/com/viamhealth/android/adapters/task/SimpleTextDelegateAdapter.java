@@ -16,18 +16,16 @@ import android.widget.Toast;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
-import com.viamhealth.android.model.enums.TaskAdapterType;
-import com.viamhealth.android.model.tasks.TaskData;
-import com.viamhealth.android.model.tasks.Task;
+import com.viamhealth.android.model.TaskData;
 import com.viamhealth.android.utils.Checker;
 
-@DelegateAdapterType(itemType = TaskAdapterType.SimpleText)
+@DelegateAdapterType(itemType = 0)
 public class SimpleTextDelegateAdapter implements DelegateAdapter {
 
     protected Context mContext;
 
     @Override
-    public View getView(Context context, int position, View convertView, ViewGroup parent, LayoutInflater inflater,  Task item ) {
+    public View getView(Context context, int position, View convertView, ViewGroup parent, LayoutInflater inflater, TaskData item) {
         mContext = context;
         if (convertView == null) {
             final View rowView = inflater.inflate(R.layout.task_list_element, parent, false);
@@ -36,8 +34,7 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
             final Button choice1 = (Button) rowView.findViewById(R.id.task_choice_1);
             final Button choice2 = (Button) rowView.findViewById(R.id.task_choice_2);
 
-            final TaskData tdObj = (TaskData) item;
-
+            final TaskData tdObj = item;
             try{
                 message.setText(tdObj.getMessage());
                 if(tdObj.getSetChoice() != 0){
