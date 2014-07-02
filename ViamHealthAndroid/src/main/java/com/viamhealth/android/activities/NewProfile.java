@@ -69,6 +69,7 @@ import antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
 public class NewProfile extends BaseFragmentActivity implements View.OnClickListener {
+    static final int DATE_DIALG_ID = 1;
 
     static final String PENDING_REQUEST_BUNDLE_KEY = "com.facebook.samples.graphapi:PendingRequest";
 
@@ -96,14 +97,14 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 
 /*--date--*/
 
-    static final int DATE_DIALG_ID = 1;
+//    static final int DATE_DIALG_ID = 1;
     private Button pickDate;
     private DatePicker dpResult;
 
     private int mYear;
     private int mMonth;
     private int mDay;
-//    static final int DATE_DIALOG_ID = 1;
+    static final int DATE_DIALOG_ID = 1;
 
     int minYear;
     int minMonth;
@@ -381,21 +382,23 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
         mYear = (c.get(Calendar.YEAR) - 10);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
+
         setCurrentDateOnView();
         pickDate = (Button) findViewById(R.id.tvDateButton);
-        pickDate.setOnClickListener(new View.OnClickListener() {
+        pickDate.setOnClickListener(new View.OnClickListener()
+        {
             public void onClick(View view)
             {
-                onCreateDialog(DATE_DIALG_ID);
+                showDialog(DATE_DIALG_ID);
             }
         });
-
-        pickDate.setOnClickListener(new View.OnClickListener() {
+/*        pickDate.setOnClickListener(new View.OnClickListener()
+        {
             public void onClick(View v) {
                 showDialog(DATE_DIALG_ID);
             }
         });
-
+*/
         /*--date end--*/
     }
 
@@ -417,12 +420,11 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
        dpResult.init(year, month, day, null);
    }
 
-
     @Override
     protected Dialog onCreateDialog(int id)
     {
         DatePickerDialog _date = null;
-        switch (DATE_DIALG_ID)
+        switch (id)
         {
             case DATE_DIALG_ID:
             {
@@ -452,7 +454,7 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
                 }
                 else
                 {
-                    _date = new DatePickerDialog(NewProfile.this , datePickListener , year , mYear , mDay)
+                    _date = new DatePickerDialog(NewProfile.this , datePickListener , year , month , day)
                     {
                         public void onDateChanged (DatePicker view, int ChangeYear, int ChangeMonthOfYear, int ChangeDayOfMonth)
                         {

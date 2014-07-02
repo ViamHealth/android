@@ -360,13 +360,13 @@ public class AddReminder extends BaseFragmentActivity {
                 }
             });
 
-            pickDate.setOnClickListener(new View.OnClickListener() {
+/*            pickDate.setOnClickListener(new View.OnClickListener() {
 //                @Override
                 public void onClick(View view) {
                     showDialog(DATE_DIALG_ID);
                 }
             });
-
+*/
             etXDays.setVisibility(View.GONE);
 
             final RepeatMode[] modes = RepeatMode.values();
@@ -607,7 +607,6 @@ public class AddReminder extends BaseFragmentActivity {
 
         }
     }
-
 }
 
 /**
