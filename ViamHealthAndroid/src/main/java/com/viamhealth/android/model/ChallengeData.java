@@ -12,6 +12,7 @@ import com.viamhealth.android.model.tasks.Task;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -206,7 +207,9 @@ public class ChallengeData implements Task, Parcelable, CatData {
         setBigMessage(in.readString());
         setNumDays(in.readInt());
         setDayNum(in.readInt());
-        setDayWiseValues(in.readArrayList(String.class.getClassLoader()));
+        List<String> stringList = new ArrayList<String>();
+        in.readStringList(stringList);
+        setDayWiseValues(stringList);
         Long l = in.readLong();
         if( l != 0 )
             setAcceptedDate(new Date(l));
