@@ -59,6 +59,7 @@ import android.widget.Toast;
 public class Home extends BaseActivity implements OnClickListener{
 	Display display;
 	int width,height;
+    //Testing for github branching
 	
 	LinearLayout main_layout, bottom_layout, core_layout;
 	List<LinearLayout> tiles = new ArrayList<LinearLayout>();
