@@ -95,7 +95,13 @@ public class CatEP extends BaseEP {
         tt.setTitle("5 day walk challenge");
         tt.setBigMessage(" you have accepted the challenege");
         tt.setDayNum(0);
-        tt.setDayWiseValues(new ArrayList<String>());
+        List<String> dwv = new ArrayList<String>();
+        dwv.add("false");
+        dwv.add("true");
+        dwv.add("false");
+        dwv.add("true");
+        dwv.add("false");
+        tt.setDayWiseValues(dwv);
         tt.setJoinedCount(22);
         tt.setNumDays(5);
         tt.setWeight(999);
