@@ -19,6 +19,14 @@
 
 <resources>
 
+    <style name="AppTheme2">
+
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:background">@drawable/add_btn</item>
+
+    </style>
+
+
     <style name="Theme.Viamhealth" parent="@style/Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarItemBackground">@drawable/selectable_background_viamhealth</item>
         <item name="popupMenuStyle">@style/PopupMenu.Viamhealth</item>
@@ -53,7 +61,7 @@
         <item name="progressBarStyle">@style/ProgressBar.Viamhealth</item>
     </style>
 	
-    <style name="PopupMenu.Viamhealth" parent="@style/Widget.Sherlock.ListPopupWindow">	
+    <style name="PopupMenu.Viamhealth" parent="@style/Widget.Sherlock.ListPopupWindow">
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_viamhealth</item>	
     </style>
 	
@@ -83,6 +91,14 @@
     <style name="Theme.Viamhealth.Widget" parent="@style/Theme.Sherlock">
         <item name="popupMenuStyle">@style/PopupMenu.Viamhealth</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.Viamhealth</item>
+    </style>
+
+    <style name="EditTextViewStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:background">@drawable/edit_text</item>
     </style>
 
 </resources>
