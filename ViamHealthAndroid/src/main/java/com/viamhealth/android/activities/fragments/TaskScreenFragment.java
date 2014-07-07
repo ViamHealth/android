@@ -20,7 +20,8 @@ import java.util.Set;
 /**
  * Created by Kunal on 14/5/14.
  */
-public class TaskScreenFragment extends BaseFragment {
+public class TaskScreenFragment extends BaseFragment
+{
 
     private Global_Application ga;
     private ViamHealthPrefs appPrefs;
