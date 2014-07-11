@@ -30,7 +30,8 @@ public class Global_Application extends Application
 {
 	public Bitmap img;
 	public String download;
-	public static String url="http://api.viamhealth.com/";
+	//public static String url="http://api.viamhealth.com/";
+    public static String url="http://devapi.viamhealth.com/";
 	public int inviteuser_flg=0;
 	DataBaseAdapter dbAdapter;
 	public static String foodType,nextfood,prevfood;

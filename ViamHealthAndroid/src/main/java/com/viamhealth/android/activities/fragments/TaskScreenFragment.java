@@ -20,8 +20,7 @@ import java.util.Set;
 /**
  * Created by Kunal on 14/5/14.
  */
-public class TaskScreenFragment extends BaseFragment
-{
+public class TaskScreenFragment extends BaseFragment {
 
     private Global_Application ga;
     private ViamHealthPrefs appPrefs;
@@ -29,6 +28,7 @@ public class TaskScreenFragment extends BaseFragment
     private User selectedUser;
 
     private ActionBar actionBar;
+    private ImageSelector imageSelector;
 
     private final String TAG = "TaskScreenFragment";
 
@@ -47,11 +47,14 @@ public class TaskScreenFragment extends BaseFragment
         fm.add(R.id.taskList, fragment, "task-list");
         fm.commit();
 
-
         actionBar = getSherlockActivity().getSupportActionBar();
 
         setHasOptionsMenu(true);
 
+        imageSelector = new ImageSelector(this);
+
         return view;
     }
 }
+
+

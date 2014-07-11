@@ -4,20 +4,33 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-
+<!--
     <com.viamhealth.android.ui.PagerContainer
+ -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:id="@+id/container"
         android:background="#cccccc">
+        <!--
+                    <ViewPager
+                    android:layout_width="300dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/viewpager"
+                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center_horizontal" >
+                    </ViewPager>
+                -->
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center_horizontal" />
-
+                        <android.support.v4.view.ViewPager
+                            android:id="@+id/viewpager"
+                            android:layout_width="300dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="20dp"
+                            android:layout_gravity="center_horizontal" />
+<!--
    </com.viamhealth.android.ui.PagerContainer>
-</LinearLayout>
+-->
+    </FrameLayout>
+    </LinearLayout>

@@ -3,28 +3,27 @@ package com.viamhealth.android.adapters.task;
 import android.content.Context;
 import android.view.LayoutInflater;
 
-import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
+import com.viamhealth.android.model.TaskData;
 
 import java.util.List;
 
 @DelegateAdaptersAnnotation(delegateAdapters = {
         SimpleTextDelegateAdapter.class,
-        BloodPressureDelegateAdapter.class,
-        ChallengeDelegateAdapter.class
+        BloodPressureDelegateAdapter.class
         //AddAdapterHere.class
-        //Increase count in getViewTypeCount
 })
+
 public class ATaskListAdapter extends DispatcherAdapter {
 
     private LayoutInflater mLayoutInflater;
-    private List<Task> mData;
+    private List<TaskData> mData;
 
-    public ATaskListAdapter(Context context) {
+    public ATaskListAdapter(Context context)
+    {
         super(context);
     }
 
-    public void setListData(List<Task> tasks) {
+    public void setListData(List<TaskData> tasks) {
         this.mData = tasks;
     }
 
@@ -45,12 +44,12 @@ public class ATaskListAdapter extends DispatcherAdapter {
 
     @Override
     public int getItemViewType(int i) {
-        return mData.get(i).getAdapterType() ;
+        return mData.get(i).getTaskType() - 1;
     }
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return 2;
     }
 
 }

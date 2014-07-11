@@ -80,7 +80,9 @@ import java.util.Map;
 public class ReminderFragmentNew extends BaseFragment {
 
     View mView;
-    PagerContainer mContainer;
+//    PagerContainer mContainer;
+    FrameLayout mContainer;
+
     ViewPager mViewPager;
 
     ActionBar mActionBar;
@@ -117,8 +119,15 @@ public class ReminderFragmentNew extends BaseFragment {
         tf = Typeface.createFromAsset(getSherlockActivity().getAssets(), "Roboto-Condensed.ttf");
 
         mActionBar = getSherlockActivity().getSupportActionBar();
-        mContainer = (PagerContainer) mView.findViewById(R.id.container);
-        mViewPager = mContainer.getViewPager();
+
+//        mContainer = (PagerContainer) mView.findViewById(R.id.container);
+        mContainer = (FrameLayout) mView.findViewById(R.id.container);
+
+//        mViewPager = mContainer.getViewPager();
+        mViewPager = (ViewPager) mView.findViewById(R.id.viewpager);
+
+//        mViewPager = (ViewPager) mView.findViewById(R.id.viewpager);
+//        mViewPager.setVisibility(mViewPager.VISIBLE);
 
         mDialog = new ProgressDialog(getSherlockActivity());
         mDialog.setCanceledOnTouchOutside(false);

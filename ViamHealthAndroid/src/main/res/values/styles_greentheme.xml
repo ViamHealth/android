@@ -67,6 +67,7 @@
   </style>
 
   <style name="TabTextGreentheme">
+
 	  <item name="android:textColor">@android:color/white</item>
       <item name="android:textSize">12sp</item>
       <item name="android:textStyle">bold</item>
@@ -74,6 +75,7 @@
       <item name="android:ellipsize">marquee</item>
       <item name="android:maxLines">2</item>
       <item name="android:maxWidth">180dip</item>
+
   </style>
 
   <style name="ProgressBarGreentheme" parent="android:Widget.ProgressBar.Horizontal">

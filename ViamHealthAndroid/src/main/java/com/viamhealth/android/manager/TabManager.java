@@ -1,5 +1,6 @@
 package com.viamhealth.android.manager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * Created by naren on 07/10/13.
  */
-public class TabManager implements TabHost.OnTabChangeListener {
+public class TabManager extends Activity implements TabHost.OnTabChangeListener {
 
     private final FragmentActivity mActivity;
     private final TabHost mTabHost;
@@ -27,13 +28,15 @@ public class TabManager implements TabHost.OnTabChangeListener {
     private final Map<String, TabInfo> mTabs = new HashMap<String, TabInfo>();
     TabInfo mLastTab;
 
-    static final class TabInfo {
+    static final class TabInfo
+    {
         private final String tag;
         private final Class clss;
         private final Bundle args;
         private Fragment fragment;
 
-        TabInfo(String _tag, Class _class, Bundle _args) {
+        TabInfo(String _tag, Class _class, Bundle _args)
+        {
             tag = _tag;
             clss = _class;
             args = _args;

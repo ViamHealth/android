@@ -19,12 +19,27 @@
 
 <resources>
 
+    <style name="tab">
+
+        <item name="android:background">#000000</item>
+        <item name="android:textColor">#ffffff</item>
+
+    </style>
+
     <style name="AppTheme2">
 
         <item name="android:textColor">#ffffff</item>
-        <item name="android:background">@drawable/add_btn</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">#ff333333</item>
+<!--        <item name="android:background">@drawable/add_btn</item>  -->
 
     </style>
+
+    <style name="CustomActionBarTheme">
+
+    </style>
+
 
 
     <style name="Theme.Viamhealth" parent="@style/Theme.Sherlock.Light.DarkActionBar">

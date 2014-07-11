@@ -11,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
-
 public abstract class DispatcherAdapter extends BaseAdapter {
     private LongSparseArray<DelegateAdapter> mDelegateAdapterSparseArray;
     protected Context mContext;
@@ -45,7 +42,7 @@ public abstract class DispatcherAdapter extends BaseAdapter {
                         throw new RuntimeException("The class " + clazz.getName() + " should have the annotation DelegateAdapterField");
                     }
 
-                    long itemtype = delegateAdapterType.itemType().value();
+                    long itemtype = delegateAdapterType.itemType();
 
                     if (mDelegateAdapterSparseArray.get(itemtype) != null) {
                         throw new RuntimeException("The item type " + itemtype + " is already defined!");
@@ -71,7 +68,7 @@ public abstract class DispatcherAdapter extends BaseAdapter {
         if (delegateAdapter == null) {
             throw new RuntimeException("Unknown type " + itemtype + " called");
         }
-        return mDelegateAdapterSparseArray.get(itemtype ).getView(mContext, position, convertView, parent, mLayoutInflater, (Task) getItem(position));
+        return mDelegateAdapterSparseArray.get(itemtype).getView(mContext, position, convertView, parent, mLayoutInflater, (com.viamhealth.android.model.TaskData) getItem(position));
     }
 
     @Override

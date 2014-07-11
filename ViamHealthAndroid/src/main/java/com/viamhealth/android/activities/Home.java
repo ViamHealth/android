@@ -282,8 +282,7 @@ public class Home extends BaseActivity implements OnClickListener{
             final EditText old = (EditText) dialogView.findViewById(R.id.old);
             final EditText newP = (EditText) dialogView.findViewById(R.id.newP);
             final EditText newPAgain = (EditText) dialogView.findViewById(R.id.new_again);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(Home.this, R.style.AlertDialogGreenTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this , R.style.AlertDialogGreenTheme);
             builder.setTitle(R.string.changePasswordTitle);
             builder.setView(dialogView);
             builder.setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
@@ -454,11 +453,8 @@ public class Home extends BaseActivity implements OnClickListener{
 
         protected void onPostExecute(String result) {
             if(lstFamily.isEmpty()){
-                ga.setLstfamilyglobal(null);
                 logout();
                 return;
-            } else {
-                ga.setLstfamilyglobal(lstFamily);
             }
             //splashScreen.setVisibility(View.GONE);
             //scroller.setVisibility(View.VISIBLE);
@@ -475,7 +471,6 @@ public class Home extends BaseActivity implements OnClickListener{
                 ga.setLoggedInUser(u);
             //}
             lstFamily.addAll(userEndPoint.GetFamilyMembers());
-
             return null;
         }
 

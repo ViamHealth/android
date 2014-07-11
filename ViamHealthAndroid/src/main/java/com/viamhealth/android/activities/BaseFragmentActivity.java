@@ -12,8 +12,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 /**
  * Created by naren on 05/10/13.
  */
-public class BaseFragmentActivity extends SherlockFragmentActivity {
-
+public class BaseFragmentActivity extends SherlockFragmentActivity
+{
     Display display;
     int height,width;
     protected int w15,w20,h10,w10,w5,h40,h5,h8,h20;

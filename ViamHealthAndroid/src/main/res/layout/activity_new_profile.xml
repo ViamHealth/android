@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:accordion="http://schemas.android.com/apk/res-auto"
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,6 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".NewProfile">
+
 
     <LinearLayout
         android:id="@+id/fbLoginFragment"
@@ -111,20 +113,24 @@
                             android:editable="true"
                             android:ems="15"
                             android:enabled="true"
-                            android:gravity="center_vertical|center_horizontal"
                             android:hint="@string/name"
                             android:inputType="textCapWords" />
-
+<!--                             android:gravity="center_vertical|center_horizontal"
+-->
                         <EditText
                             android:id="@+id/input_weight"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:ems="10"
-                            android:gravity="center_horizontal"
-                            android:hint="@string/profile_weight"
-                            android:inputType="numberDecimal" />
+                            android:inputType="numberDecimal"
+                            android:hint="Weight *(kg)"
+                            />
 
+<!--
+ android:hint="@string/profile_weight"
+android:gravity="center_horizontal"
+-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -148,7 +154,8 @@
                                 android:layout_height="5dp"
                                 android:minDate="1"
                                 android:maxDate="31"
-                                android:visibility="invisible"/>
+                                android:visibility="invisible"
+                                />
 
                         </LinearLayout>
 
@@ -589,6 +596,4 @@
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
-
-
 </RelativeLayout>
