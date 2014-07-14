@@ -90,19 +90,17 @@ public class AddReminder extends BaseFragmentActivity {
         forDate = (Date) getIntent().getSerializableExtra("date");
 
 
-        if(reminder==null)
-        {
+        if(reminder==null) {
             reminder = new Reminder();
             reminder.setStartDate(new Date());
         }
 
         if(reminder.getId()>0) isEditMode = true;
+
         repeatBtn = (ImageButton) findViewById(R.id.repeatBtn);
-        if(isEditMode)
-        {
+        if(isEditMode){
             repeatBtn.setVisibility(View.INVISIBLE);
         }
-
 /*
         repeatBtn.setOnClickListener(new OnRepeatBtnClickListener(AddReminder.this){
             @Override
@@ -111,9 +109,8 @@ public class AddReminder extends BaseFragmentActivity {
             }
         });
 */
-
         repeatBtn.setOnClickListener(new OnRepeatBtnClickListener(AddReminder.this));
-        repeatTextView = (TextView) findViewById(R.id.repeatTextView);
+            repeatTextView = (TextView) findViewById(R.id.repeatTextView);
         etName = (EditText) findViewById(R.id.reminder_name);
         etMorningCount = (EditText) findViewById(R.id.etMorningCount);
         etNoonCount = (EditText) findViewById(R.id.etNoonCount);
@@ -121,11 +118,9 @@ public class AddReminder extends BaseFragmentActivity {
         etNotes = (EditText) findViewById(R.id.etComment);
         medicineLayout = (LinearLayout) findViewById(R.id.medicine_layout);
         btnSave = (Button) findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(new View.OnClickListener()
-        {
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ga.GA_eventButtonPress("reminder_save");
                 updateModelFromView();
                 if(isValid()){
@@ -138,19 +133,14 @@ public class AddReminder extends BaseFragmentActivity {
         });
 
         btnEnd = (Button) findViewById(R.id.btnEnd);
-        if(isEditMode)
-        {
+        if(isEditMode){
             btnEnd.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        }else{
             btnEnd.setVisibility(View.GONE);
         }
-        btnEnd.setOnClickListener(new View.OnClickListener()
-        {
+        btnEnd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ga.GA_eventButtonPress("reminder_end");
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("end", true);
@@ -168,8 +158,7 @@ public class AddReminder extends BaseFragmentActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==android.R.id.home){
             finish();
             return true;
@@ -177,14 +166,10 @@ public class AddReminder extends BaseFragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateViewFromModel()
-    {
-        if(reminder.getRepeatString(AddReminder.this).isEmpty())
-        {
+    private void updateViewFromModel() {
+        if(reminder.getRepeatString(AddReminder.this).isEmpty()){
             repeatTextView.setVisibility(View.GONE);
-        }
-        else
-        {
+        }else{
             repeatTextView.setVisibility(View.VISIBLE);
             repeatTextView.setText(reminder.getRepeatString(AddReminder.this));
         }
@@ -192,8 +177,7 @@ public class AddReminder extends BaseFragmentActivity {
         etName.setText(reminder.getName());
         etNotes.setText(reminder.getDetails());
 
-        if(type!=ReminderType.Medicine)
-        {
+        if(type!=ReminderType.Medicine){
             medicineLayout.setVisibility(View.GONE);
             return;
         }
@@ -212,19 +196,15 @@ public class AddReminder extends BaseFragmentActivity {
 
     }
 
-    private boolean isValid()
-    {
-        if(etName.getText().toString().isEmpty())
-        {
+    private boolean isValid() {
+        if(etName.getText().toString().isEmpty()){
             etName.setError("mandatory field");
             return false;
         }
 
-        if(type==ReminderType.Medicine)
-        {
+        if(type==ReminderType.Medicine){
             if(etMorningCount.getText().toString().isEmpty() && etNoonCount.getText().toString().isEmpty()
-                    && etNightCount.getText().toString().isEmpty())
-            {
+                    && etNightCount.getText().toString().isEmpty()){
                 Toast.makeText(AddReminder.this, "set dosage", Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -233,62 +213,47 @@ public class AddReminder extends BaseFragmentActivity {
         return true;
     }
 
-    private void updateModelFromView()
-    {
+    private void updateModelFromView() {
         reminder.setName(etName.getText().toString());
         reminder.setDetails(etNotes.getText().toString());
         reminder.setType(type);
 
         //Date today = new Date();
         //reminder.setStartDate(today);
-        if(type!=ReminderType.Medicine)
-        {
+        if(type!=ReminderType.Medicine){
             return;
         }
 
         ReminderTimeData data1 = new ReminderTimeData();
         try {
             data1.setCount(Integer.parseInt(etMorningCount.getText().toString()));
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             data1.setCount(0);
-        }
-        finally
-        {
+        } finally {
             reminder.putReminderTimeData(ReminderTime.Morning, data1);
         }
 
         ReminderTimeData data2 = new ReminderTimeData();
         try {
             data2.setCount(Integer.parseInt(etNoonCount.getText().toString()));
-            }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             data2.setCount(0);
-        }
-        finally
-        {
+        } finally {
             reminder.putReminderTimeData(ReminderTime.Noon, data2);
         }
 
         ReminderTimeData data3 = new ReminderTimeData();
-        try
-        {
+        try {
             data3.setCount(Integer.parseInt(etNightCount.getText().toString()));
-        }
-        catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             data3.setCount(0);
-        }
-        finally
-        {
+        } finally {
             reminder.putReminderTimeData(ReminderTime.Night, data3);
         }
     }
 
-    public class OnRepeatBtnClickListener implements View.OnClickListener
-    {
+    public class OnRepeatBtnClickListener implements View.OnClickListener{
+
         final Context mContext;
         EditText etXDays, etDuration;
         Spinner frequeSpinner, frequeSpinner1;
@@ -297,6 +262,7 @@ public class AddReminder extends BaseFragmentActivity {
 
 //        EditText etStartDate;
         static final int DATE_DIALG_ID = 1;
+        private Button pickDate;
         private DatePicker dpResult;
 
         public int mYear;
@@ -345,20 +311,17 @@ public class AddReminder extends BaseFragmentActivity {
         }
 */
 //        @Override
-        public void onFocusChange(View v, boolean hasFocus)
-        {
+        public void onFocusChange(View v, boolean hasFocus) {
             //if(hasFocus)
                 //show(v);
         }
 
-        public OnRepeatBtnClickListener(Context context)
-        {
+        public OnRepeatBtnClickListener(Context context) {
             mContext = context;
         }
 
         @Override
-        public void onClick(View v)
-        {
+        public void onClick(View v) {
             final View dialogView = LayoutInflater.from(AddReminder.this).inflate(R.layout.dialog_repeat, null);
 //          etStartDate = (EditText) dialogView.findViewById(R.id.etStartDate);
 
@@ -370,7 +333,7 @@ public class AddReminder extends BaseFragmentActivity {
 //            mDay = mDay + 1;
             setCurrentDateOnView();
 
-//            pickDate = (Button) dialogView.findViewById(R.id.tvDateButton);
+            pickDate = (Button) dialogView.findViewById(R.id.tvDateButton);
             etDuration = (EditText) dialogView.findViewById(R.id.etDuration);
             frequeSpinner = (Spinner) dialogView.findViewById(R.id.frequencySpinner);
             frequeSpinner1 = (Spinner) dialogView.findViewById(R.id.frequencySpinner1);
@@ -390,20 +353,20 @@ public class AddReminder extends BaseFragmentActivity {
             });
             */
 
-/*            pickDate.setOnClickListener(new View.OnClickListener() {
+            pickDate.setOnClickListener(new View.OnClickListener() {
 //                @Override
                 public void onClick(View view) {
                     onCreateDialog(DATE_DIALG_ID);
                 }
             });
-*/
-/*            pickDate.setOnClickListener(new View.OnClickListener() {
+
+            pickDate.setOnClickListener(new View.OnClickListener() {
 //                @Override
                 public void onClick(View view) {
                     showDialog(DATE_DIALG_ID);
                 }
             });
-*/
+
             etXDays.setVisibility(View.GONE);
 
             final RepeatMode[] modes = RepeatMode.values();
@@ -537,7 +500,7 @@ public class AddReminder extends BaseFragmentActivity {
                 month = selectedMonth;
                 day = selectedDay;
 
-//                pickDate.setText(new StringBuilder().append(day).append("/").append(month).append("/").append(year).append(" "));
+                pickDate.setText(new StringBuilder().append(day).append("/").append(month).append("/").append(year).append(" "));
                 dpResult.init(year, month, day, null);
             }
         };
@@ -548,7 +511,7 @@ public class AddReminder extends BaseFragmentActivity {
             Date startDate = forDate==null?reminder.getStartDate():forDate;
 
             if(startDate!=null) {
-//                pickDate.setText(formater.format(startDate));
+                pickDate.setText(formater.format(startDate));
 //                etStartDate.setText(formater.format(startDate));
             }
 
@@ -579,14 +542,14 @@ public class AddReminder extends BaseFragmentActivity {
         }
 
         protected void accumulateRepeatInformation(View view) {
-//            String startDate = pickDate.getText().toString();
+            String startDate = pickDate.getText().toString();
 //            String startDate = etStartDate.getText().toString();
-  /*          try {
- //               reminder.setStartDate(formater.parse(startDate));
+            try {
+                reminder.setStartDate(formater.parse(startDate));
             } catch (ParseException e) {
                 reminder.setStartDate(new Date());
             }
-*/
+
             if(etDuration.getText().toString().trim().length()==0){
              reminder.setRepeatICounter(1);
             }
@@ -644,6 +607,7 @@ public class AddReminder extends BaseFragmentActivity {
 
         }
     }
+
 }
 
 /**

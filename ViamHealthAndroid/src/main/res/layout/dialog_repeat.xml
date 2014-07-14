@@ -16,45 +16,46 @@
             android:text="@string/from"
             android:id="@+id/textView"
             android:layout_gravity="center" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:inputType="date"
-            android:ems="10"
-            android:id="@+id/etStartDate"
-            android:layout_gravity="right"
-            android:layout_marginLeft="20dp"
-            android:hint="@string/fromdate"
-            android:gravity="center_horizontal" />
         <!--
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:orientation="horizontal">
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:inputType="date"
+                    android:ems="10"
+                    android:id="@+id/etStartDate"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="20dp"
+                    android:hint="@string/fromdate"
+                    android:gravity="center_horizontal" />
+         -->
 
-                    <Button
-                        android:id="@+id/tvDateButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="DD/MM/YY"
-                        android:textColor="#999999"
-                        android:textStyle="bold"
-                        android:background="@drawable/edit_text"
-                        android:layout_gravity="center"
-                        android:drawableRight="@drawable/calendar"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:orientation="horizontal">
 
-                    <DatePicker
-                        android:id="@+id/dpResult"
-                        android:layout_width="wrap_content"
-                        android:layout_height="5dp"
-                        android:minDate="1"
-                        android:maxDate="31"
-                        android:visibility="invisible"/>
+                            <Button
+                                android:id="@+id/tvDateButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="DD/MM/YY"
+                                android:textColor="#999999"
+                                android:textStyle="bold"
+                                android:background="@drawable/edit_text"
+                                android:layout_gravity="center"
+                                android:drawableRight="@drawable/calendar"/>
 
-                </LinearLayout>
-        -->
+                            <DatePicker
+                                android:id="@+id/dpResult"
+                                android:layout_width="wrap_content"
+                                android:layout_height="5dp"
+                                android:minDate="1"
+                                android:maxDate="31"
+                                android:visibility="invisible"/>
+
+                        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
