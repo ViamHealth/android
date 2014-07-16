@@ -43,7 +43,7 @@ public class ChallengeActivity extends BaseFragmentActivity {
         TextView t = (TextView) findViewById(R.id.textView);
         Button button = (Button) findViewById(R.id.button);
         final ListView listView = (ListView) findViewById(android.R.id.list);
-        ChallengeDayValuesAdapter adapter = new ChallengeDayValuesAdapter(ChallengeActivity.this, item.getDayWiseValues());
+        ChallengeDayValuesAdapter adapter = new ChallengeDayValuesAdapter(ChallengeActivity.this, item.getDayWiseValues(), item);
         listView.setAdapter(adapter);
 
         t.setText(item.getTitle());

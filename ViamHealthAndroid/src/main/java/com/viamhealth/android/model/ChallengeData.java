@@ -37,10 +37,14 @@ public class ChallengeData implements Task, Parcelable, CatData {
     private Integer numDays;
     private Integer dayNum = 0; //0 = not accepted
     private List<String> dayWiseValues; //Completed,1,0,number of steps,km of walk etc
+    private String dayValueString; //Typ eof value . eg. Steps
+    private Integer dayValueType;
     private Date acceptedDate;
 
     public ChallengeData() {
     }
+
+
 
     @Override
     public Integer getCatType() {
@@ -157,7 +161,21 @@ public class ChallengeData implements Task, Parcelable, CatData {
         this.dayWiseValues = dayWiseValues;
     }
 
+    public String getDayValueString() {
+        return dayValueString;
+    }
 
+    public void setDayValueString(String dayValueString) {
+        this.dayValueString = dayValueString;
+    }
+
+    public Integer getDayValueType() {
+        return dayValueType;
+    }
+
+    public void setDayValueType(Integer dayValueType) {
+        this.dayValueType = dayValueType;
+    }
 
     public Date getAcceptedDate() {
         return acceptedDate;
@@ -189,6 +207,9 @@ public class ChallengeData implements Task, Parcelable, CatData {
         dest.writeInt(this.getNumDays());
         dest.writeInt(this.getDayNum());
         dest.writeStringList(this.getDayWiseValues());
+        if(this.getDayValueString() != null)
+            dest.writeString(this.getDayValueString());
+        dest.writeInt(this.getDayValueType());
         if(this.getAcceptedDate() != null )
             dest.writeLong(this.getAcceptedDate().getTime());
         else
@@ -210,6 +231,10 @@ public class ChallengeData implements Task, Parcelable, CatData {
         List<String> stringList = new ArrayList<String>();
         in.readStringList(stringList);
         setDayWiseValues(stringList);
+        String dvs = in.readString();
+        if ( dvs != null )
+            setDayValueString(dvs);
+        setDayValueType(in.readInt());
         Long l = in.readLong();
         if( l != 0 )
             setAcceptedDate(new Date(l));
