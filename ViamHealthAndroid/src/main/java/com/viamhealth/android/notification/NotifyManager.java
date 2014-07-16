@@ -9,7 +9,6 @@ import android.os.Parcel;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.model.enums.ReminderTime;
 import com.viamhealth.android.model.enums.ReminderType;
-import com.viamhealth.android.model.reminder.Reminder;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.services.NotifyMedicineThreeAfternoon;
@@ -50,14 +49,14 @@ public class NotifyManager {
     }
 
 
-    public static Calendar getLastThreeDays(int i){
+    public static Calendar getLastThreeDays(int i) {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         cal.set(Calendar.AM_PM, Calendar.AM);
-        if(i>0){
+        if (i > 0) {
             cal.add(Calendar.DATE, i);
         }
         return cal;
@@ -67,7 +66,7 @@ public class NotifyManager {
 
         Global_Application ga = ((Global_Application) context.getApplicationContext());
 
-        if(user.getId() != ga.getLoggedInUser().getId())
+        if (user.getId() != ga.getLoggedInUser().getId())
             return Boolean.FALSE;
 
         Calendar rrCal = Calendar.getInstance();
@@ -80,7 +79,7 @@ public class NotifyManager {
         Calendar twoDayAfter = getLastThreeDays(2);
         Calendar threeDayAfter = getLastThreeDays(3);
 
-        if(rrCal.after(threeDayAfter) || rrCal.before(zeroDayAfter)){
+        if (rrCal.after(threeDayAfter) || rrCal.before(zeroDayAfter)) {
             return Boolean.FALSE;
         }
 
@@ -89,22 +88,21 @@ public class NotifyManager {
         Boolean setNotMedicineNoon = Boolean.TRUE;
         Boolean setNotMedicineEvening = Boolean.TRUE;
 
-        if(rrCal.equals(zeroDayAfter)){
-            if(rightNow.get(Calendar.AM_PM) == Calendar.PM){
+        if (rrCal.equals(zeroDayAfter)) {
+            if (rightNow.get(Calendar.AM_PM) == Calendar.PM) {
                 setNotOther = Boolean.FALSE;
                 setNotMedicineMorning = Boolean.FALSE;
-                if(  rightNow.get(Calendar.HOUR)  >= ServicesCommon.MEDICINE_NOON_HOUR){
+                if (rightNow.get(Calendar.HOUR) >= ServicesCommon.MEDICINE_NOON_HOUR) {
                     setNotMedicineNoon = Boolean.FALSE;
                 }
-                if(  rightNow.get(Calendar.HOUR)  >= ServicesCommon.MEDICINE_EVENING_HOUR){
+                if (rightNow.get(Calendar.HOUR) >= ServicesCommon.MEDICINE_EVENING_HOUR) {
                     setNotMedicineEvening = Boolean.FALSE;
                 }
-            }
-            else{
-                if(rightNow.get(Calendar.HOUR) >= ServicesCommon.OTHERS_HOUR){
+            } else {
+                if (rightNow.get(Calendar.HOUR) >= ServicesCommon.OTHERS_HOUR) {
                     setNotOther = Boolean.FALSE;
                 }
-                if(rightNow.get(Calendar.HOUR) >= ServicesCommon.MEDICINE_MORNING_HOUR){
+                if (rightNow.get(Calendar.HOUR) >= ServicesCommon.MEDICINE_MORNING_HOUR) {
                     setNotMedicineMorning = Boolean.FALSE;
                 }
             }
@@ -116,67 +114,75 @@ public class NotifyManager {
         Calendar cal6 = Calendar.getInstance();
         cal6.setTime(rrDate);
         //cal6.add(Calendar.MINUTE, 10);
-        cal6.set(Calendar.HOUR, ServicesCommon.OTHERS_HOUR); cal6.set(Calendar.MINUTE, 0);
-        cal6.set(Calendar.SECOND, 0); cal6.set(Calendar.MILLISECOND, 0);
+        cal6.set(Calendar.HOUR, ServicesCommon.OTHERS_HOUR);
+        cal6.set(Calendar.MINUTE, 0);
+        cal6.set(Calendar.SECOND, 0);
+        cal6.set(Calendar.MILLISECOND, 0);
         cal6.set(Calendar.AM_PM, Calendar.AM);
 
         Calendar cal9 = Calendar.getInstance();
         cal9.setTime(rrDate);
         //cal9.add(Calendar.MINUTE, 1);
-        cal9.set(Calendar.HOUR, ServicesCommon.MEDICINE_MORNING_HOUR); cal9.set(Calendar.MINUTE, 0);
-        cal9.set(Calendar.SECOND, 0); cal9.set(Calendar.MILLISECOND, 0);
+        cal9.set(Calendar.HOUR, ServicesCommon.MEDICINE_MORNING_HOUR);
+        cal9.set(Calendar.MINUTE, 0);
+        cal9.set(Calendar.SECOND, 0);
+        cal9.set(Calendar.MILLISECOND, 0);
         cal9.set(Calendar.AM_PM, Calendar.AM);
 
         Calendar cal3 = Calendar.getInstance();
         cal3.setTime(rrDate);
         //cal3.add(Calendar.MINUTE, 7);
-        cal3.set(Calendar.HOUR, ServicesCommon.MEDICINE_NOON_HOUR); cal3.set(Calendar.MINUTE, 0);
-        cal3.set(Calendar.SECOND, 0); cal3.set(Calendar.MILLISECOND, 0);
+        cal3.set(Calendar.HOUR, ServicesCommon.MEDICINE_NOON_HOUR);
+        cal3.set(Calendar.MINUTE, 0);
+        cal3.set(Calendar.SECOND, 0);
+        cal3.set(Calendar.MILLISECOND, 0);
         cal3.set(Calendar.AM_PM, Calendar.PM);
 
         Calendar cal92 = Calendar.getInstance();
         cal92.setTime(rrDate);
         //cal92.add(Calendar.MINUTE, 5);
-        cal92.set(Calendar.HOUR, ServicesCommon.MEDICINE_EVENING_HOUR); cal92.set(Calendar.MINUTE, 0);
-        cal92.set(Calendar.SECOND, 0); cal92.set(Calendar.MILLISECOND, 0);
+        cal92.set(Calendar.HOUR, ServicesCommon.MEDICINE_EVENING_HOUR);
+        cal92.set(Calendar.MINUTE, 0);
+        cal92.set(Calendar.SECOND, 0);
+        cal92.set(Calendar.MILLISECOND, 0);
         cal92.set(Calendar.AM_PM, Calendar.PM);
 
         int readingsCount = readings.size();
-        for(int i=0; i<readingsCount; i++){
+        for (int i = 0; i < readingsCount; i++) {
             ReminderReading reading = readings.get(i);
 
-            if(reading.getReminder().getType()== ReminderType.Medicine){
+            if (reading.getReminder().getType() == ReminderType.Medicine) {
 
-                if( setNotMedicineMorning
+                if (setNotMedicineMorning
                         && reading.getReminder().getReminderTimeData(ReminderTime.Morning).getCount() > 0
-                        && reading.getAction(ReminderTime.Morning).isCheck() == Boolean.FALSE ){
+                        && reading.getAction(ReminderTime.Morning).isCheck() == Boolean.FALSE) {
                     List<ReminderReading> rs9M = mapTimeReadings.get(cal9);
-                    if(rs9M==null) rs9M = new ArrayList<ReminderReading>();
+                    if (rs9M == null) rs9M = new ArrayList<ReminderReading>();
                     rs9M.add(reading);
                     mapTimeReadings.put(cal9, rs9M);
                 }
 
-                if( setNotMedicineNoon
+                if (setNotMedicineNoon
                         && reading.getReminder().getReminderTimeData(ReminderTime.Noon).getCount() > 0
-                        && reading.getAction(ReminderTime.Noon).isCheck() == Boolean.FALSE ){
+                        && reading.getAction(ReminderTime.Noon).isCheck() == Boolean.FALSE) {
                     List<ReminderReading> rs3P = mapTimeReadings.get(cal3);
-                    if(rs3P==null) rs3P = new ArrayList<ReminderReading>();
+                    if (rs3P == null) rs3P = new ArrayList<ReminderReading>();
                     rs3P.add(reading);
                     mapTimeReadings.put(cal3, rs3P);
                 }
-                if( setNotMedicineEvening
+                if (setNotMedicineEvening
                         && reading.getReminder().getReminderTimeData(ReminderTime.Night).getCount() > 0
-                        && reading.getAction(ReminderTime.Night).isCheck() == Boolean.FALSE ){
+                        && reading.getAction(ReminderTime.Night).isCheck() == Boolean.FALSE) {
                     List<ReminderReading> rs9P = mapTimeReadings.get(cal92);
-                    if(rs9P==null) rs9P = new ArrayList<ReminderReading>();
+                    if (rs9P == null) rs9P = new ArrayList<ReminderReading>();
                     rs9P.add(reading);
                     mapTimeReadings.put(cal92, rs9P);
                 }
-            }else{
-                if( setNotOther
-                    && reading.isCompleteCheck() == Boolean.FALSE ){
+            } else {
+                if (setNotOther
+                        && reading.isCompleteCheck() == Boolean.FALSE) {
                     List<ReminderReading> rs6P = mapTimeReadings.get(cal6);
-                    if(rs6P==null) rs6P = new ArrayList<ReminderReading>();
+                    if (rs6P == null) rs6P = new ArrayList<ReminderReading>();
                     rs6P.add(reading);
                     mapTimeReadings.put(cal6, rs6P);
                 }
@@ -185,65 +191,61 @@ public class NotifyManager {
 
         Set<Calendar> keySet = mapTimeReadings.keySet();
 
-        for (Iterator<Calendar> iter = keySet.iterator(); iter.hasNext(); ){
+        for (Iterator<Calendar> iter = keySet.iterator(); iter.hasNext(); ) {
             Calendar cal = iter.next();
-            if(mapTimeReadings.get(cal) == null){
+            if (mapTimeReadings.get(cal) == null) {
 
                 continue;
             }
 
 
-            Intent myIntent= null;
+            Intent myIntent = null;
 
-            if(rrCal.equals(zeroDayAfter)){
+            if (rrCal.equals(zeroDayAfter)) {
                 if (cal == cal6)
-                    myIntent  = new Intent(context , NotifyService.class);
-                else if(cal==cal9)
-                    myIntent  = new Intent(context , NotifyMedicineTodayMorning.class);
-                else if(cal==cal3)
-                    myIntent  = new Intent(context , NotifyMedicineTodayAfternoon.class);
-                else if(cal==cal92)
-                    myIntent  = new Intent(context , NotifyMedicineTodayNight.class);
+                    myIntent = new Intent(context, NotifyService.class);
+                else if (cal == cal9)
+                    myIntent = new Intent(context, NotifyMedicineTodayMorning.class);
+                else if (cal == cal3)
+                    myIntent = new Intent(context, NotifyMedicineTodayAfternoon.class);
+                else if (cal == cal92)
+                    myIntent = new Intent(context, NotifyMedicineTodayNight.class);
                 else
                     throw new IllegalArgumentException();
-            }
-            else if(rrCal.equals(oneDayAfter)){
+            } else if (rrCal.equals(oneDayAfter)) {
                 if (cal == cal6)
-                    myIntent  = new Intent(context , NotifyServiceOne.class);
-                else if(cal==cal9)
-                    myIntent  = new Intent(context , NotifyMedicineTomorrowMorning.class);
-                else if(cal==cal3)
-                    myIntent  = new Intent(context , NotifyMedicineTomorrowAfternoon.class);
-                else if(cal==cal92)
-                    myIntent  = new Intent(context , NotifyMedicineTomorrowNight.class);
+                    myIntent = new Intent(context, NotifyServiceOne.class);
+                else if (cal == cal9)
+                    myIntent = new Intent(context, NotifyMedicineTomorrowMorning.class);
+                else if (cal == cal3)
+                    myIntent = new Intent(context, NotifyMedicineTomorrowAfternoon.class);
+                else if (cal == cal92)
+                    myIntent = new Intent(context, NotifyMedicineTomorrowNight.class);
                 else
                     throw new IllegalArgumentException();
-            }
-            else if(rrCal.equals(twoDayAfter)){
+            } else if (rrCal.equals(twoDayAfter)) {
                 if (cal == cal6)
-                    myIntent  = new Intent(context , NotifyServiceTwo.class);
-                else if(cal==cal9)
-                    myIntent  = new Intent(context , NotifyMedicineTwoMorning.class);
-                else if(cal==cal3)
-                    myIntent  = new Intent(context , NotifyMedicineTwoAfternoon.class);
-                else if(cal==cal92)
-                    myIntent  = new Intent(context , NotifyMedicineTwoNight.class);
+                    myIntent = new Intent(context, NotifyServiceTwo.class);
+                else if (cal == cal9)
+                    myIntent = new Intent(context, NotifyMedicineTwoMorning.class);
+                else if (cal == cal3)
+                    myIntent = new Intent(context, NotifyMedicineTwoAfternoon.class);
+                else if (cal == cal92)
+                    myIntent = new Intent(context, NotifyMedicineTwoNight.class);
                 else
                     throw new IllegalArgumentException();
-            }
-            else if(rrCal.equals(threeDayAfter)){
+            } else if (rrCal.equals(threeDayAfter)) {
                 if (cal == cal6)
-                    myIntent  = new Intent(context , NotifyServiceThree.class);
-                else if(cal==cal9)
-                    myIntent  = new Intent(context , NotifyMedicineThreeMorning.class);
-                else if(cal==cal3)
-                    myIntent  = new Intent(context , NotifyMedicineThreeAfternoon.class);
-                else if(cal==cal92)
-                    myIntent  = new Intent(context , NotifyMedicineThreeNight.class);
+                    myIntent = new Intent(context, NotifyServiceThree.class);
+                else if (cal == cal9)
+                    myIntent = new Intent(context, NotifyMedicineThreeMorning.class);
+                else if (cal == cal3)
+                    myIntent = new Intent(context, NotifyMedicineThreeAfternoon.class);
+                else if (cal == cal92)
+                    myIntent = new Intent(context, NotifyMedicineThreeNight.class);
                 else
                     throw new IllegalArgumentException();
-            }
-            else {
+            } else {
                 throw new IllegalArgumentException();
             }
 

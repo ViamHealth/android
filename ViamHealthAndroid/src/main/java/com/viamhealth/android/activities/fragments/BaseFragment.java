@@ -3,7 +3,6 @@ package com.viamhealth.android.activities.fragments;
 import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Fields;
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.MapBuilder;
@@ -23,7 +22,7 @@ public class BaseFragment extends SherlockFragment {
         mTracker = GoogleAnalytics.getInstance(getSherlockActivity()).getTracker(getString(R.string.ga_trackingId));
     }
 
-    public String getScreenName(){
+    public String getScreenName() {
         return getClass().getSimpleName();
     }
 

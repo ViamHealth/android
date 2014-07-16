@@ -21,7 +21,6 @@ import com.viamhealth.android.adapters.task.ATaskListAdapter;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
@@ -163,21 +162,21 @@ public class TaskListFragment extends BaseListFragment {
                 public int compare(Task taskData, Task taskData2) {
                     int r = 0;
                     //if (taskData.getSetChoice() != 0 && taskData2.getSetChoice() != 0)
-                        if (taskData.getWeight() > taskData2.getWeight()) {
-                            r = -1;
-                        } else {
-                            r = 1;
-                        }
+                    if (taskData.getWeight() > taskData2.getWeight()) {
+                        r = -1;
+                    } else {
+                        r = 1;
+                    }
                     /*else if (taskData.getSetChoice() != 0) {
                         r = 1;
                     } else if (taskData2.getSetChoice() != 0) {
                         r = -1;
                     } else {*/
-                        if (taskData.getWeight() > taskData2.getWeight()) {
-                            r = -1;
-                        } else {
-                            r = 1;
-                        }
+                    if (taskData.getWeight() > taskData2.getWeight()) {
+                        r = -1;
+                    } else {
+                        r = 1;
+                    }
                     //}
                     return r;
                 }

@@ -2,7 +2,6 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
@@ -45,18 +44,18 @@ public class ReminderEP extends BaseEP {
         client.AddParam("type", reminder.getType().value());
         client.AddParam("name", reminder.getName());
         client.AddParam("details", reminder.getDetails());
-        if(reminder.getReminderTimeData(ReminderTime.Morning)!=null)
+        if (reminder.getReminderTimeData(ReminderTime.Morning) != null)
             client.AddParam("morning_count", reminder.getReminderTimeData(ReminderTime.Morning).getCount());
-        if(reminder.getReminderTimeData(ReminderTime.Noon)!=null)
+        if (reminder.getReminderTimeData(ReminderTime.Noon) != null)
             client.AddParam("afternoon_count", reminder.getReminderTimeData(ReminderTime.Noon).getCount());
-        if(reminder.getReminderTimeData(ReminderTime.Evening)!=null)
+        if (reminder.getReminderTimeData(ReminderTime.Evening) != null)
             client.AddParam("evening_count", reminder.getReminderTimeData(ReminderTime.Evening).getCount());
-        if(reminder.getReminderTimeData(ReminderTime.Night)!=null)
+        if (reminder.getReminderTimeData(ReminderTime.Night) != null)
             client.AddParam("night_count", reminder.getReminderTimeData(ReminderTime.Night).getCount());
 
         client.AddParam("start_date", formater.format(reminder.getStartDate()));
 
-        if(reminder.getEndDate()!=null)
+        if (reminder.getEndDate() != null)
             client.AddParam("end_date", formater.format(reminder.getEndDate()));
 
         client.AddParam("repeat_mode", reminder.getRepeatMode().value());
@@ -64,7 +63,7 @@ public class ReminderEP extends BaseEP {
         client.AddParam("repeat_hour", reminder.getRepeatHour());
         client.AddParam("repeat_min", reminder.getRepeatMin());
 
-        if(reminder.getRepeatWeekDay() != RepeatWeekDay.None)
+        if (reminder.getRepeatWeekDay() != RepeatWeekDay.None)
             client.AddParam("repeat_weekday", reminder.getRepeatWeekDay().value());
 
         client.AddParam("repeat_every_x", reminder.getRepeatEveryX());
@@ -72,7 +71,7 @@ public class ReminderEP extends BaseEP {
         return client;
     }
 
-    public Reminder add(Long userId, Reminder reminder){
+    public Reminder add(Long userId, Reminder reminder) {
         Params params = new Params();
         params.put("user", userId.toString());
 
@@ -81,11 +80,11 @@ public class ReminderEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.POST);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_CREATED)
+        if (client.getResponseCode() != HttpStatus.SC_CREATED)
             return null;
 
         String responseString = client.getResponse();
@@ -93,26 +92,26 @@ public class ReminderEP extends BaseEP {
         return processReminder(responseString);
     }
 
-    public boolean endReminder(Reminder reminder){
+    public boolean endReminder(Reminder reminder) {
         Params params = new Params();
 
         RestClient client = getRestClient("reminders/" + reminder.getId() + "/end", params);
 
         try {
             client.Execute(RequestMethod.POST);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         //Log.i(TAG, client.toString());
 
-        if(client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() == HttpStatus.SC_NO_CONTENT)
             return true;
 
         return false;
     }
 
-    public Reminder update(Reminder reminder){
+    public Reminder update(Reminder reminder) {
         Params params = new Params();
         params.put("user", reminder.getUserId().toString());
 
@@ -121,11 +120,11 @@ public class ReminderEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.PUT);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_OK)
+        if (client.getResponseCode() != HttpStatus.SC_OK)
             return null;
 
         String responseString = client.getResponse();
@@ -133,22 +132,22 @@ public class ReminderEP extends BaseEP {
         return processReminder(responseString);
     }
 
-    public Map<ReminderType, List<Reminder>> get(Long userId, ReminderType type){
+    public Map<ReminderType, List<Reminder>> get(Long userId, ReminderType type) {
         Params params = new Params();
         params.put("user", userId.toString());
         params.put("page_size", "100");
 
-        if(type!=null)
+        if (type != null)
             params.put("type", String.valueOf(type.value()));
 
         RestClient client = getRestClient("reminders", params);
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_OK)
+        if (client.getResponseCode() != HttpStatus.SC_OK)
             return null;
 
         String responseString = client.getResponse();
@@ -156,51 +155,51 @@ public class ReminderEP extends BaseEP {
         return processReminders(responseString);
     }
 
-    public boolean delete(Long reminderId){
+    public boolean delete(Long reminderId) {
         Params params = new Params();
 
         RestClient client = getRestClient("reminders/" + reminderId, params);
 
         try {
             client.Execute(RequestMethod.DELETE);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         //Log.i(TAG, client.toString());
 
-        if(client.getResponseCode() != HttpStatus.SC_NO_CONTENT)
+        if (client.getResponseCode() != HttpStatus.SC_NO_CONTENT)
             return false;
 
         return true;
     }
 
-    public Map<Date, List<ReminderReading>> getReadings(List<Date> dates, Long userId){
+    public Map<Date, List<ReminderReading>> getReadings(List<Date> dates, Long userId) {
         Params params = new Params();
         params.put("user", userId.toString());
 
-        if(dates!=null){
+        if (dates != null) {
             int count = dates.size();
             StringBuilder builder = new StringBuilder();
-            for(int i=0; i<count; i++){
+            for (int i = 0; i < count; i++) {
                 builder.append(formater.format(dates.get(i)));
-                if(i!=count-1)
+                if (i != count - 1)
                     builder.append(",");
             }
             params.put("reading_date", builder.toString());
         }
 
         List<ReminderReading> readings = getReadings(params);
-        int count = readings==null ? 0 : readings.size();
+        int count = readings == null ? 0 : readings.size();
         Map<Date, List<ReminderReading>> mapResult = new HashMap<Date, List<ReminderReading>>();
         Date today = new Date();
         int dayInMilliSecs = 24 * 60 * 60 * 1000;
-        for(int i=0; i<count; i++){
+        for (int i = 0; i < count; i++) {
             ReminderReading r = readings.get(i);
             //TODO need to just do r.getReadingDate once the server sid ebug is fixed
             Date midnightDate = DateUtils.getToday(r.getReadingDate());
             List<ReminderReading> rs = mapResult.get(midnightDate);
-            if(rs == null){
+            if (rs == null) {
                 rs = new ArrayList<ReminderReading>();
             }
             rs.add(r);
@@ -210,12 +209,12 @@ public class ReminderEP extends BaseEP {
 
     }
 
-    protected boolean addCheckParam(RestClient client, Action action, String paramKey){
+    protected boolean addCheckParam(RestClient client, Action action, String paramKey) {
         boolean isCheck = true;
-        if(action!=null){
+        if (action != null) {
             isCheck = action.isCheck();
             client.AddParam(paramKey, action.isCheck().toString());
-        }else
+        } else
             isCheck = false;
         return isCheck;
     }
@@ -238,7 +237,7 @@ public class ReminderEP extends BaseEP {
         isCheck = addCheckParam(client, reading.getAction(ReminderTime.Night), "night_check");
         completeCheck = !isCheck ? false : completeCheck;
         Boolean otherCompleteCheck = reading.isCompleteCheck();
-        if(otherCompleteCheck){
+        if (otherCompleteCheck) {
             client.AddParam("complete_check", "true");
         } else {
             //TODO complete check should consider only those times when there is atleast more than 1 dosage
@@ -246,11 +245,11 @@ public class ReminderEP extends BaseEP {
         }
         try {
             client.Execute(RequestMethod.PUT);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_OK)
+        if (client.getResponseCode() != HttpStatus.SC_OK)
             return null;
 
         String responseString = client.getResponse();
@@ -258,16 +257,16 @@ public class ReminderEP extends BaseEP {
         return processReminderReading(responseString);
     }
 
-    protected List<ReminderReading> getReadings(Params params){
+    protected List<ReminderReading> getReadings(Params params) {
         params.put("page_size", "100");
         RestClient client = getRestClient("reminderreadings", params);
         try {
             client.Execute(RequestMethod.GET);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(client.getResponseCode() != HttpStatus.SC_OK)
+        if (client.getResponseCode() != HttpStatus.SC_OK)
             return null;
 
         String responseString = client.getResponse();
@@ -276,11 +275,11 @@ public class ReminderEP extends BaseEP {
         return processReminderReadings(responseString);
     }
 
-    public List<ReminderReading> getReadings(Date date, Long userId){
+    public List<ReminderReading> getReadings(Date date, Long userId) {
         Params params = new Params();
         params.put("user", userId.toString());
 
-        if(date!=null)
+        if (date != null)
             params.put("reading_date", formater.format(date));
 
         return getReadings(params);
@@ -291,9 +290,9 @@ public class ReminderEP extends BaseEP {
             JSONObject response = new JSONObject(responseString);
             JSONArray array = response.getJSONArray("results");
             List<ReminderReading> readings = new ArrayList<ReminderReading>();
-            for(int i=0; i<array.length(); i++){
+            for (int i = 0; i < array.length(); i++) {
                 ReminderReading reading = processReminderReading(array.getJSONObject(i));
-                if(reading==null) continue;
+                if (reading == null) continue;
                 readings.add(reading);
             }
             return readings;
@@ -316,16 +315,16 @@ public class ReminderEP extends BaseEP {
     }
 
     protected Map<ReminderType, List<Reminder>> processReminders(String responseString) {
-        try{
+        try {
             JSONObject response = new JSONObject(responseString);
             JSONArray array = response.getJSONArray("results");
             Map<ReminderType, List<Reminder>> mapReminders = new HashMap<ReminderType, List<Reminder>>();
-            for(int i=0; i<array.length(); i++){
+            for (int i = 0; i < array.length(); i++) {
                 Reminder reminder = processReminder(array.getJSONObject(i));
-                if(reminder==null) continue;
+                if (reminder == null) continue;
 
                 List<Reminder> reminders = mapReminders.get(reminder.getType());
-                if(reminders==null){
+                if (reminders == null) {
                     reminders = new ArrayList<Reminder>();
                 }
                 reminders.add(reminder);
@@ -333,7 +332,7 @@ public class ReminderEP extends BaseEP {
                 mapReminders.put(reminder.getType(), reminders);
             }
             return mapReminders;
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 

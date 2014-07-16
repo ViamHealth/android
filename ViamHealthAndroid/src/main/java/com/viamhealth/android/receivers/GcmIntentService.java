@@ -17,21 +17,18 @@ package com.viamhealth.android.receivers;
  */
 
 
-
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.viamhealth.android.R;
-import com.viamhealth.android.activities.Home;
-import com.viamhealth.android.activities.TabActivity;
-
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.viamhealth.android.R;
+import com.viamhealth.android.activities.Home;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +48,7 @@ public class GcmIntentService extends IntentService {
     public GcmIntentService() {
         super("GcmIntentService");
     }
+
     public static final String TAG = "GCM";
 
     @Override
@@ -96,7 +94,7 @@ public class GcmIntentService extends IntentService {
             title = nMsg.getString("title");
             message = nMsg.getString("message");
         } catch (JSONException e) {
-           message = msg;
+            message = msg;
         }
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
@@ -108,7 +106,7 @@ public class GcmIntentService extends IntentService {
                         .setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(message))
                         .setContentText(message);
-        if(!title.trim().equals("")){
+        if (!title.trim().equals("")) {
             mBuilder.setContentTitle(title);
         }
         mBuilder.setContentIntent(contentIntent);

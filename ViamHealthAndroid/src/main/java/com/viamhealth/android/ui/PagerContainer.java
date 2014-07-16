@@ -3,6 +3,7 @@ package com.viamhealth.android.ui;
 /**
  * Created by naren on 20/11/13.
  */
+
 import android.content.Context;
 import android.graphics.Point;
 import android.support.v4.view.ViewPager;
@@ -74,8 +75,8 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
         // to implement scrolling from a touch outside the pager bounds.
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                mInitialTouch.x = (int)ev.getX();
-                mInitialTouch.y = (int)ev.getY();
+                mInitialTouch.x = (int) ev.getX();
+                mInitialTouch.y = (int) ev.getY();
             default:
                 ev.offsetLocation(mCenter.x - mInitialTouch.x, mCenter.y - mInitialTouch.y);
                 break;
@@ -92,7 +93,8 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
     }
 
     @Override
-    public void onPageSelected(int position) { }
+    public void onPageSelected(int position) {
+    }
 
     @Override
     public void onPageScrollStateChanged(int state) {

@@ -53,7 +53,7 @@ public class ChallengeActivity extends BaseFragmentActivity {
             }
         });
 
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {

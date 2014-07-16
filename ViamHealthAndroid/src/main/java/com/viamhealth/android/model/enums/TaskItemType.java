@@ -15,13 +15,18 @@ public enum TaskItemType {
     private final int value;
     private final String key;
 
-    TaskItemType(int value, String key){
+    TaskItemType(int value, String key) {
         this.value = value;
         this.key = key;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
 
     // Lookup table
     private static final Map<Integer, TaskItemType> valuelookup = new HashMap<Integer, TaskItemType>();
@@ -29,7 +34,7 @@ public enum TaskItemType {
 
     // Populate the lookup table on loading time
     static {
-        for (TaskItemType g : EnumSet.allOf(TaskItemType.class)){
+        for (TaskItemType g : EnumSet.allOf(TaskItemType.class)) {
             valuelookup.put(g.value(), g);
             keylookup.put(g.key(), g);
         }

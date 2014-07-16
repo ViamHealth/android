@@ -7,7 +7,6 @@ public class TrackGrowthData extends TrackGrowth {
     private String label;
 
 
-
     public String getLabel() {
         return label;
     }
@@ -15,7 +14,6 @@ public class TrackGrowthData extends TrackGrowth {
     public void setLabel(String label) {
         this.label = label;
     }
-
 
 
 }

@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
-* Created by naren on 24/11/13.
-*/
+ * Created by naren on 24/11/13.
+ */
 
 public class Action implements Parcelable {
 
@@ -21,6 +21,7 @@ public class Action implements Parcelable {
 
     public Action() {
     }
+
     public Action(Parcel in) {
         check = (Boolean) in.readValue(null);
     }

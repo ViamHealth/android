@@ -14,13 +14,18 @@ public enum CatAdapterType {
     private final int value;
     private final String key;
 
-    CatAdapterType(int value, String key){
+    CatAdapterType(int value, String key) {
         this.value = value;
         this.key = key;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
 
     // Lookup table
     private static final Map<Integer, CatAdapterType> valuelookup = new HashMap<Integer, CatAdapterType>();
@@ -28,7 +33,7 @@ public enum CatAdapterType {
 
     // Populate the lookup table on loading time
     static {
-        for (CatAdapterType g : EnumSet.allOf(CatAdapterType.class)){
+        for (CatAdapterType g : EnumSet.allOf(CatAdapterType.class)) {
             valuelookup.put(g.value(), g);
             keylookup.put(g.key(), g);
         }

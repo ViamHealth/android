@@ -151,88 +151,88 @@ public class FBUser {
         this.locale = locale;
     }
 
-    public static FBUser deserialize(JSONObject jsonProfile){
+    public static FBUser deserialize(JSONObject jsonProfile) {
         FBUser fbUser = new FBUser();
 
-        try{
+        try {
             fbUser.setProfileId(jsonProfile.getString("id"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setFirstName(jsonProfile.getString("first_name"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setLastName(jsonProfile.getString("last_name"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setName(jsonProfile.getString("name"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setProfileUsername(jsonProfile.getString("username"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setProfileLink(jsonProfile.getString("link"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             SimpleDateFormat formater = new SimpleDateFormat("MM/dd/yyyy");
             fbUser.setBirthday(formater.parse(jsonProfile.getString("birthday")));
-        } catch(ParseException p){
+        } catch (ParseException p) {
 
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
-            if(jsonProfile.getJSONObject("hometown")!=null)
+        try {
+            if (jsonProfile.getJSONObject("hometown") != null)
                 fbUser.setHometown(jsonProfile.getJSONObject("hometown").getString("name"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
-            if(jsonProfile.getJSONObject("location")!=null)
+        try {
+            if (jsonProfile.getJSONObject("location") != null)
                 fbUser.setLocation(jsonProfile.getJSONObject("location").getString("name"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setGender(jsonProfile.getString("gender").toUpperCase());
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
-        try{
+        try {
             fbUser.setEmail(jsonProfile.getString("email"));
-        } catch (JSONException j){
+        } catch (JSONException j) {
             //jsut eat up the exception
         }
 
         try {
             JSONArray workList = jsonProfile.getJSONArray("work");
-            if(workList!=null && workList.length()>0){
+            if (workList != null && workList.length() > 0) {
                 fbUser.setLatestEmployer(workList.getJSONObject(0).getJSONObject("employer").getString("name"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -240,15 +240,14 @@ public class FBUser {
     }
 
     /**
-     *
      * @param @nullable user
      * @return
      */
     public User toUser(User user) {
-        if(user==null)
+        if (user == null)
             user = new User();
 
-        if(email!=null && email.isEmpty())
+        if (email != null && email.isEmpty())
             user.setEmail(email);
 
         //get first name and last name
@@ -256,7 +255,7 @@ public class FBUser {
         user.setLastName(getLastName());
 
         Profile profile = user.getProfile();
-        if(profile==null)
+        if (profile == null)
             profile = new Profile();
 
         //get DOB

@@ -587,7 +587,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
         protected Context applicationContext;
         protected boolean isBeingUpdated;
         protected boolean profilPicBugIsBugUpdated;
-        protected boolean justRegistered=false;
+        protected boolean justRegistered = false;
 
         @Override
         protected void onPreExecute() {
@@ -610,8 +610,8 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     Toast.makeText(ProfileListActivity.this, "Not able to load the profiles", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
-                if ( isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE && !justRegistered
-                        ){
+                if (isBeingUpdated && profilPicBugIsBugUpdated == Boolean.TRUE && !justRegistered
+                        ) {
                     Intent intent = new Intent(ProfileListActivity.this, TabActivity.class);
                     intent.putExtra("user", user);
                     Parcelable[] users = new Parcelable[lstFamily.size()];
@@ -619,7 +619,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivityForResult(intent, ADD_PROFILE_FROM_LIST);
                     finish();
-                } else if(user.getProfile().isMinor()){
+                } else if (user.getProfile().isMinor()) {
                     Intent intent = new Intent(ProfileListActivity.this, TabActivity.class);
                     intent.putExtra("user", user);
                     Parcelable[] users = new Parcelable[lstFamily.size()];
@@ -627,8 +627,7 @@ public class ProfileListActivity extends BaseActivity implements View.OnClickLis
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivityForResult(intent, ADD_PROFILE_FROM_LIST);
                     finish();
-                }
-                else {
+                } else {
                     //Send to wizard
                     Intent intent = new Intent(ProfileListActivity.this, ConditionsList.class);
                     intent.putExtra("user", user);

@@ -69,7 +69,7 @@ public class TaskEP extends BaseEP {
 
         try {
             client.Execute(RequestMethod.POST);
-            if(client.getResponseCode()== HttpStatus.SC_NO_CONTENT){
+            if (client.getResponseCode() == HttpStatus.SC_NO_CONTENT) {
                 return true;
             } else {
                 return false;
@@ -82,7 +82,7 @@ public class TaskEP extends BaseEP {
 
     public void addBPData(String sBp, String dBp, String pulseRate, String user_id) {
         Params params = new Params();
-        RestClient client = getRestClient(API_RESOURCE  + "/set_blood_pressure", params);
+        RestClient client = getRestClient(API_RESOURCE + "/set_blood_pressure", params);
         client.AddParam("systolic_pressure", sBp);
         client.AddParam("diastolic_pressure", dBp);
         client.AddParam("pulse_rate", pulseRate);
@@ -129,12 +129,12 @@ public class TaskEP extends BaseEP {
                     Task obj;
                     JSONObject jsonObject = array.getJSONObject(i);
                     int taskType = jsonObject.getInt("task_type");
-                    if(taskType == TaskItemType.Challenge.value()) {
+                    if (taskType == TaskItemType.Challenge.value()) {
                         obj = processChallengeTaskObject(jsonObject);
-                    } else if(taskType == TaskItemType.BloodPressure.value()){
+                    } else if (taskType == TaskItemType.BloodPressure.value()) {
                         obj = processBloodPressureTaskObject(jsonObject);
                     } else {
-                         obj = processTaskObject(jsonObject);
+                        obj = processTaskObject(jsonObject);
                     }
                     tasks.add(obj);
                 } catch (RuntimeException e) {

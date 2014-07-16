@@ -18,10 +18,14 @@ import java.util.List;
  */
 public class ConditionListAdapter extends BaseAdapter implements View.OnClickListener {
 
-    /** The inflator used to inflate the XML layout */
+    /**
+     * The inflator used to inflate the XML layout
+     */
     private LayoutInflater inflator;
 
-    /** A list containing some sample data to show. */
+    /**
+     * A list containing some sample data to show.
+     */
     public List dataList;
 
     public ConditionListAdapter(LayoutInflater inflator) {

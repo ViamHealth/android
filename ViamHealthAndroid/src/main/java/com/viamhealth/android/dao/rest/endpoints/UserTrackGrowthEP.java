@@ -6,8 +6,6 @@ import android.util.Log;
 
 import com.viamhealth.android.dao.restclient.core.RestClient;
 import com.viamhealth.android.dao.restclient.old.RequestMethod;
-import com.viamhealth.android.model.immunization.Immunization;
-import com.viamhealth.android.model.immunization.UserImmunization;
 import com.viamhealth.android.model.trackgrowth.TrackGrowth;
 import com.viamhealth.android.model.trackgrowth.TrackGrowthAdvData;
 import com.viamhealth.android.model.trackgrowth.TrackGrowthData;
@@ -37,7 +35,7 @@ public class UserTrackGrowthEP extends BaseEP {
         super(context, app);
     }
 
-    private RestClient addParams(RestClient client, UserTrackGrowthData obj){
+    private RestClient addParams(RestClient client, UserTrackGrowthData obj) {
         DateFormat df = new SimpleDateFormat("yyyy-mm-dd");
         client.AddParam("user", obj.getUserId().toString());
         client.AddParam("entry_date", df.format(obj.getEntryDate()));
@@ -47,8 +45,8 @@ public class UserTrackGrowthEP extends BaseEP {
     }
 
 
-    public TrackGrowthAdvData getPercentileData(String gender, int age){
-        if(gender == null || age == 0 )
+    public TrackGrowthAdvData getPercentileData(String gender, int age) {
+        if (gender == null || age == 0)
             return null;
         Params params = new Params();
         params.put("gender", gender);
@@ -59,13 +57,13 @@ public class UserTrackGrowthEP extends BaseEP {
             String responseString = client.getResponse();
             Log.i(TAG, client.toString());
 
-            if(client.getResponseCode()== HttpStatus.SC_NOT_FOUND){
+            if (client.getResponseCode() == HttpStatus.SC_NOT_FOUND) {
                 return null;
             } else {
                 return processTrackGrowthAdvDataObject(responseString);
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
@@ -73,7 +71,7 @@ public class UserTrackGrowthEP extends BaseEP {
     }
 
 
-    public boolean update(UserTrackGrowthData obj){
+    public boolean update(UserTrackGrowthData obj) {
         Params params = new Params();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         RestClient client = getRestClient(API_RESOURCE + "/" + df.format(obj.getEntryDate()), params);
@@ -83,79 +81,79 @@ public class UserTrackGrowthEP extends BaseEP {
             String responseString = client.getResponse();
             Log.i(TAG, client.toString());
 
-            if(client.getResponseCode()== HttpStatus.SC_CREATED){
+            if (client.getResponseCode() == HttpStatus.SC_CREATED) {
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         return true;
     }
 
-    public Map<String,List<TrackGrowth>> list(long userId){
+    public Map<String, List<TrackGrowth>> list(long userId) {
 
         Params params = new Params();
-        params.put("user",String.valueOf(userId));
+        params.put("user", String.valueOf(userId));
         RestClient client = getRestClient(API_RESOURCE, params);
         try {
             client.Execute(RequestMethod.GET);
             String responseString = client.getResponse();
             Log.i(TAG, client.toString());
 
-            if(client.getResponseCode()== HttpStatus.SC_OK)
+            if (client.getResponseCode() == HttpStatus.SC_OK)
                 return processListResponse(responseString);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
         return null;
     }
 
-    private Map<String,List<TrackGrowth>>
-        processListResponse(String responseString){
+    private Map<String, List<TrackGrowth>>
+    processListResponse(String responseString) {
 
         Map<String, List<TrackGrowth>> data = new HashMap<String, List<TrackGrowth>>();
         List<TrackGrowth> trackGrowthDataList = new ArrayList<TrackGrowth>();
         List<TrackGrowth> userTrackGrowthList = new ArrayList<TrackGrowth>();
 
-        try{
+        try {
             JSONObject response = new JSONObject(responseString);
             JSONArray array = response.getJSONArray("track_growth");
-            for(int i=0; i < array.length(); i++){
-                try{
+            for (int i = 0; i < array.length(); i++) {
+                try {
                     TrackGrowthData obj = processTrackGrowthDataObject(array.getJSONObject(i));
                     trackGrowthDataList.add(obj);
-                } catch(RuntimeException e){
+                } catch (RuntimeException e) {
                     e.printStackTrace();
                     continue;
                 }
             }
 
             JSONArray uarray = response.getJSONArray("user_track_growth");
-            for(int i=0; i < uarray.length(); i++){
-                try{
+            for (int i = 0; i < uarray.length(); i++) {
+                try {
                     UserTrackGrowthData obj = processUserTrackGrowthDataObject(uarray.getJSONObject(i));
                     userTrackGrowthList.add(obj);
-                } catch(RuntimeException e){
+                } catch (RuntimeException e) {
                     e.printStackTrace();
                     continue;
                 }
             }
 
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
 
-        data.put("track_growth",  trackGrowthDataList);
+        data.put("track_growth", trackGrowthDataList);
         data.put("user_track_growth", userTrackGrowthList);
 
         return data;
 
     }
 
-    private TrackGrowthData processTrackGrowthDataObject(JSONObject jsonObject){
+    private TrackGrowthData processTrackGrowthDataObject(JSONObject jsonObject) {
         TrackGrowthData obj = new TrackGrowthData();
         try {
             obj.setId(jsonObject.getLong("id"));
@@ -170,7 +168,7 @@ public class UserTrackGrowthEP extends BaseEP {
         return obj;
     }
 
-    private TrackGrowthAdvData processTrackGrowthAdvDataObject(String responseString){
+    private TrackGrowthAdvData processTrackGrowthAdvDataObject(String responseString) {
         TrackGrowthAdvData obj = new TrackGrowthAdvData();
         try {
             JSONObject jsonObject = new JSONObject(responseString);
@@ -200,7 +198,7 @@ public class UserTrackGrowthEP extends BaseEP {
     }
 
 
-    private UserTrackGrowthData processUserTrackGrowthDataObject(JSONObject jsonObject){
+    private UserTrackGrowthData processUserTrackGrowthDataObject(JSONObject jsonObject) {
         UserTrackGrowthData obj = new UserTrackGrowthData();
         try {
             obj.setId(jsonObject.getLong("id"));
@@ -208,10 +206,10 @@ public class UserTrackGrowthEP extends BaseEP {
             obj.setAge(jsonObject.getLong("age"));
             obj.setEntryDate(Date.valueOf(jsonObject.getString("entry_date")));
             String weight = jsonObject.getString("weight");
-            if(weight != null)
+            if (weight != null)
                 obj.setWeight(Float.valueOf(weight));
             String height = jsonObject.getString("height");
-            if(height != null)
+            if (height != null)
                 obj.setHeight(Float.valueOf(jsonObject.getString("height")));
 
         } catch (JSONException e) {

@@ -2,10 +2,7 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
-import com.viamhealth.android.dao.restclient.core.RestClient;
-import com.viamhealth.android.dao.restclient.old.RequestMethod;
 import com.viamhealth.android.model.ChallengeData;
 import com.viamhealth.android.model.cat.CatData;
 import com.viamhealth.android.model.cat.HealthStatsCatData;
@@ -13,8 +10,6 @@ import com.viamhealth.android.model.enums.CatType;
 import com.viamhealth.android.model.healthreadings.BloodPressureReading;
 import com.viamhealth.android.model.healthreadings.WeightReading;
 
-
-import org.apache.http.HttpStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,7 +51,7 @@ public class CatEP extends BaseEP {
 
     private List<CatData> processCatList(String responseString) {
         List<CatData> tasks = new ArrayList<CatData>();
-        if(responseString != "") {
+        if (responseString != "") {
             try {
                 JSONObject response = new JSONObject(responseString);
 

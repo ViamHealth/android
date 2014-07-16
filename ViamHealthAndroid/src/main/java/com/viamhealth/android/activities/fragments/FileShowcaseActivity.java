@@ -35,14 +35,14 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.file_fragment_new);
-        selectedUser=getIntent().getParcelableExtra("user");
+        selectedUser = getIntent().getParcelableExtra("user");
         Bundle args = new Bundle();
         args.putParcelable("user", selectedUser);
-        TextView tv=(TextView)findViewById(R.id.textView1);
-        tv.setText(tv.getText().toString()+getIntent().getStringExtra("testName"));
+        TextView tv = (TextView) findViewById(R.id.textView1);
+        tv.setText(tv.getText().toString() + getIntent().getStringExtra("testName"));
         //args.putString("testName",getIntent().getStringExtra("testName"));
-        Button skip= (Button)findViewById(R.id.btn_skip);
-        ga=(Global_Application)getApplicationContext();
+        Button skip = (Button) findViewById(R.id.btn_skip);
+        ga = (Global_Application) getApplicationContext();
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,7 +51,7 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
             }
         });
 
-        Button remind= (Button)findViewById(R.id.btn_remind);
+        Button remind = (Button) findViewById(R.id.btn_remind);
         remind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,7 +61,7 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
             }
         });
 
-        Button next= (Button)findViewById(R.id.btn_next);
+        Button next = (Button) findViewById(R.id.btn_next);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,15 +71,14 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         });
 
         FragmentTransaction fm = FileShowcaseActivity.this.getSupportFragmentManager().beginTransaction();
-        FileFragment fragment = (FileFragment)SherlockFragment.instantiate(FileShowcaseActivity.this, FileFragment.class.getName(), args);
+        FileFragment fragment = (FileFragment) SherlockFragment.instantiate(FileShowcaseActivity.this, FileFragment.class.getName(), args);
         fm.add(R.id.realfilecontent, fragment, "file-list");
         fm.commit();
-        ga.GA_eventGeneral("ui_action","launch_screen","wizard_upload_file_next");
+        ga.GA_eventGeneral("ui_action", "launch_screen", "wizard_upload_file_next");
     }
 
 
-    void setReminder()
-    {
+    void setReminder() {
         Intent intentservice = new Intent(FileShowcaseActivity.this, ReminderBackground.class);
         Reminder reminder = new Reminder();
         reminder.setName(getIntent().getStringExtra("testName"));
@@ -88,19 +87,16 @@ public class FileShowcaseActivity extends BaseFragmentActivity {
         Date dt = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(dt);
-        if(cal.get(Calendar.DAY_OF_WEEK)==Calendar.SATURDAY)
-        {
-            cal.add(Calendar.DATE,1);
-        }
-        else
-        {
-            cal.add(Calendar.DATE,2);
+        if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            cal.add(Calendar.DATE, 1);
+        } else {
+            cal.add(Calendar.DATE, 2);
         }
         reminder.setStartDate(cal.getTime());
         reminder.setEndDate(cal.getTime());
         rem1.add(reminder);
         intentservice.putParcelableArrayListExtra("reminder", rem1);
-        intentservice.putExtra("user",selectedUser);
+        intentservice.putExtra("user", selectedUser);
         startService(intentservice);
         finish();
     }

@@ -17,17 +17,14 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-
 import com.viamhealth.android.adapters.cat.CatListAdapter;
 import com.viamhealth.android.dao.rest.endpoints.CatEP;
 import com.viamhealth.android.dao.restclient.old.functionClass;
 import com.viamhealth.android.model.cat.CatData;
-import com.viamhealth.android.model.tasks.Task;
 import com.viamhealth.android.model.users.User;
 import com.viamhealth.android.utils.Checker;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,7 +32,7 @@ import java.util.List;
 /**
  * Created by Kunal on 18/6/14.
  */
-public class CatListFragment  extends BaseListFragment{
+public class CatListFragment extends BaseListFragment {
     private CatListAdapter adapter = null;
     private ListView list;
     private LinearLayout zeroItemsMessageContainer;
@@ -111,10 +108,11 @@ public class CatListFragment  extends BaseListFragment{
             this.adapter.notifyDataSetChanged();
 
         this.list.setAdapter(adapter);
-        this.list.post(new Runnable(){
+        this.list.post(new Runnable() {
             public void run() {
                 list.setSelection(list.getCount() - 1);
-        }});
+            }
+        });
 
 
     }
@@ -153,7 +151,7 @@ public class CatListFragment  extends BaseListFragment{
                 @Override
                 public int compare(CatData t1, CatData t2) {
                     int r = 0;
-                    if(t1.getStartDate().getTime() > t2.getStartDate().getTime()){
+                    if (t1.getStartDate().getTime() > t2.getStartDate().getTime()) {
                         r = 1;
                     } else {
                         r = -1;

@@ -15,13 +15,18 @@ public enum CatType {
     private final int value;
     private final String key;
 
-    CatType(int value, String key){
+    CatType(int value, String key) {
         this.value = value;
         this.key = key;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
 
     // Lookup table
     private static final Map<Integer, CatType> valuelookup = new HashMap<Integer, CatType>();
@@ -29,7 +34,7 @@ public enum CatType {
 
     // Populate the lookup table on loading time
     static {
-        for (CatType g : EnumSet.allOf(CatType.class)){
+        for (CatType g : EnumSet.allOf(CatType.class)) {
             valuelookup.put(g.value(), g);
             keylookup.put(g.key(), g);
         }

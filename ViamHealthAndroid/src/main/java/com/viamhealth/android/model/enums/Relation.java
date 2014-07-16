@@ -27,20 +27,26 @@ public enum Relation {
 
     private final int value;
     private final int resId;
-    Relation(int value, int resId){
+
+    Relation(int value, int resId) {
         this.value = value;
         this.resId = resId;
     }
 
-    public int value() {return value;}
-    public int resId() {return resId;}
+    public int value() {
+        return value;
+    }
+
+    public int resId() {
+        return resId;
+    }
 
     // Lookup table
     private static final Map<Integer, Relation> valuelookup = new HashMap<Integer, Relation>();
 
     // Populate the lookup table on loading time
     static {
-        for (Relation bg : EnumSet.allOf(Relation.class)){
+        for (Relation bg : EnumSet.allOf(Relation.class)) {
             valuelookup.put(bg.value(), bg);
         }
     }

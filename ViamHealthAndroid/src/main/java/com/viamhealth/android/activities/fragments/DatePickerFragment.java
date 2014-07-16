@@ -3,7 +3,6 @@ package com.viamhealth.android.activities.fragments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -53,7 +52,7 @@ public class DatePickerFragment extends BaseDialogFragment implements DatePicker
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         mEditText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-        if(mListener!=null){
+        if (mListener != null) {
             mListener.OnDateChange();
         }
     }

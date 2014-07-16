@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.viamhealth.android.model.cat.CatData;
-import com.viamhealth.android.model.tasks.Task;
 
 /**
  * Created by Kunal on 6/6/14.

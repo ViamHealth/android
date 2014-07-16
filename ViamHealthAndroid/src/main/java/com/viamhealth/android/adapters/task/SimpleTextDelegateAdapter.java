@@ -17,8 +17,8 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.model.enums.TaskAdapterType;
-import com.viamhealth.android.model.tasks.TaskData;
 import com.viamhealth.android.model.tasks.Task;
+import com.viamhealth.android.model.tasks.TaskData;
 import com.viamhealth.android.utils.Checker;
 
 @DelegateAdapterType(itemType = TaskAdapterType.SimpleText)
@@ -27,7 +27,7 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
     protected Context mContext;
 
     @Override
-    public View getView(Context context, int position, View convertView, ViewGroup parent, LayoutInflater inflater,  Task item ) {
+    public View getView(Context context, int position, View convertView, ViewGroup parent, LayoutInflater inflater, Task item) {
         mContext = context;
         if (convertView == null) {
             final View rowView = inflater.inflate(R.layout.task_list_element, parent, false);
@@ -38,24 +38,24 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
 
             final TaskData tdObj = (TaskData) item;
 
-            try{
+            try {
                 message.setText(tdObj.getMessage());
-                if(tdObj.getSetChoice() != 0){
+                if (tdObj.getSetChoice() != 0) {
                     choice1.setTextColor(Color.parseColor("#828282"));
                     choice2.setTextColor(Color.parseColor("#828282"));
-                    if(tdObj.getSetChoice() == 1){
+                    if (tdObj.getSetChoice() == 1) {
                         choice2.setVisibility(View.INVISIBLE);
                         choice1.setEnabled(false);
                         choice2.setEnabled(false);
                         message.setTextColor(Color.parseColor("#828282"));
-                    } else if(tdObj.getSetChoice() == 2){
+                    } else if (tdObj.getSetChoice() == 2) {
                         choice1.setVisibility(View.INVISIBLE);
                         choice1.setEnabled(false);
                         choice2.setEnabled(false);
                         message.setTextColor(Color.parseColor("#828282"));
                     }
                 }
-                if(tdObj.getLabelChoice1() == null || tdObj.getLabelChoice1().trim().equals("")){
+                if (tdObj.getLabelChoice1() == null || tdObj.getLabelChoice1().trim().equals("")) {
                     choice1.setVisibility(View.GONE);
                 } else {
                     choice1.setText(tdObj.getLabelChoice1());
@@ -69,7 +69,7 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
                             choice1.setEnabled(false);
                             choice2.setEnabled(false);
                             message.setTextColor(Color.parseColor("#828282"));
-                            if (tdObj.getFeedbackMessageChoice1() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("") ) {
+                            if (tdObj.getFeedbackMessageChoice1() != null && !tdObj.getFeedbackMessageChoice1().trim().equals("")) {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                 StringBuilder strBuilder = new StringBuilder(tdObj.getFeedbackMessageChoice1());
                                 builder.setMessage(strBuilder.toString());
@@ -83,7 +83,7 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
                         }
                     });
                 }
-                if(tdObj.getLabelChoice2() == null || tdObj.getLabelChoice2().trim().equals("")){
+                if (tdObj.getLabelChoice2() == null || tdObj.getLabelChoice2().trim().equals("")) {
                     choice2.setVisibility(View.GONE);
                 } else {
                     choice2.setText(tdObj.getLabelChoice2());
@@ -112,7 +112,7 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
                 }
                 rowView.setTag(tdObj.getId());
                 //Log.d(TAG, "Added " + values.get(position) + " at position " + position);
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return rowView;
@@ -120,25 +120,24 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
         return convertView;
     }
 
-    public void selectChoice(View view, int choice){
-        String set_choice="1";
-        if(choice == 1){
+    public void selectChoice(View view, int choice) {
+        String set_choice = "1";
+        if (choice == 1) {
             set_choice = "1";
-        } else if ( choice == 2 ){
+        } else if (choice == 2) {
             set_choice = "2";
         }
-        if(Checker.isInternetOn(mContext)){
+        if (Checker.isInternetOn(mContext)) {
             CallTaskChoiceTask task = new CallTaskChoiceTask();
             task.execute(set_choice, view.getTag().toString());
-        }else{
+        } else {
             Toast.makeText(mContext, "Network is not available....", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     // async class for calling webservice and get responce message
-    public class CallTaskChoiceTask extends AsyncTask<String, Void,String>
-    {
+    public class CallTaskChoiceTask extends AsyncTask<String, Void, String> {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
 
@@ -146,8 +145,8 @@ public class SimpleTextDelegateAdapter implements DelegateAdapter {
         protected String doInBackground(String... params) {
             String choice = params[0];
             String id = params[1];
-            TaskEP tep = new TaskEP(mContext, ((Global_Application)mContext.getApplicationContext()));
-            tep.selectChoice(id,choice);
+            TaskEP tep = new TaskEP(mContext, ((Global_Application) mContext.getApplicationContext()));
+            tep.selectChoice(id, choice);
             return null;
         }
 

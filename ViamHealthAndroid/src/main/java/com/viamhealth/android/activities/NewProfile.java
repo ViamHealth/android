@@ -41,11 +41,11 @@ import com.viamhealth.android.activities.fragments.FBLoginFragment;
 import com.viamhealth.android.dao.rest.endpoints.FileUploader;
 import com.viamhealth.android.dao.rest.endpoints.UserEP;
 import com.viamhealth.android.manager.ImageSelector;
+import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.users.BMIProfile;
 import com.viamhealth.android.model.users.FBUser;
 import com.viamhealth.android.model.users.Profile;
 import com.viamhealth.android.model.users.User;
-import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.tasks.ShareUser;
 import com.viamhealth.android.ui.helper.FileLoader;
 import com.viamhealth.android.utils.UIUtility;
@@ -482,14 +482,13 @@ public class NewProfile extends BaseFragmentActivity implements View.OnClickList
 //    }
 
     private void updateGender(Gender gender) {
-        if(gender == Gender.Male){
+        if (gender == Gender.Male) {
             radioMaleButton.setChecked(true);
             radioFemaleButton.setChecked(false);
-        }
-        else if(gender == Gender.Female) {
+        } else if (gender == Gender.Female) {
             radioMaleButton.setChecked(false);
             radioFemaleButton.setChecked(true);
-        }else{
+        } else {
             radioMaleButton.setChecked(false);
             radioFemaleButton.setChecked(false);
         }

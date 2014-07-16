@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * Created by Kunal on 19/6/14.
  */
-public class HealthStatsCatData implements  Parcelable, CatData {
+public class HealthStatsCatData implements Parcelable, CatData {
     final Integer catAdapterType = CatAdapterType.HealthStats.value();
     final Integer catType = CatType.HealthStats.value();
     private Date readingDate;
@@ -40,16 +40,16 @@ public class HealthStatsCatData implements  Parcelable, CatData {
         return this.getReadingDate();
     }
 
-    public Boolean isSetWeightReading(){
-        if (this.weightReading == null ){
+    public Boolean isSetWeightReading() {
+        if (this.weightReading == null) {
             return Boolean.FALSE;
         } else {
             return Boolean.TRUE;
         }
     }
 
-    public Boolean isSetBloodPressureReading(){
-        if (this.bloodPressureReading == null ){
+    public Boolean isSetBloodPressureReading() {
+        if (this.bloodPressureReading == null) {
             return Boolean.FALSE;
         } else {
             return Boolean.TRUE;

@@ -31,7 +31,7 @@ public class ChallengeData implements Task, Parcelable, CatData {
     final Integer catType = CatType.Challlenge.value();
 
     private String labelChoice1;
-    private Integer joinedCount= 2 ;
+    private Integer joinedCount = 2;
     private String message; // Explanatory Message
     private String bigMessage;
     private Integer numDays;
@@ -45,7 +45,6 @@ public class ChallengeData implements Task, Parcelable, CatData {
     }
 
 
-
     @Override
     public Integer getCatType() {
         return this.catType;
@@ -57,12 +56,13 @@ public class ChallengeData implements Task, Parcelable, CatData {
     }
 
     @Override
-    public Date getStartDate(){
+    public Date getStartDate() {
         DateTime dateTime = new DateTime(this.getAcceptedDate());
         dateTime = dateTime.plusDays(1);
         Date endD = dateTime.toDate();
         return endD;
     }
+
     @Override
     public Date getEndDate() {
         DateTime dateTime = new DateTime(this.getStartDate());
@@ -186,8 +186,6 @@ public class ChallengeData implements Task, Parcelable, CatData {
     }
 
 
-
-
     @Override
     public int describeContents() {
         return 0;
@@ -207,10 +205,10 @@ public class ChallengeData implements Task, Parcelable, CatData {
         dest.writeInt(this.getNumDays());
         dest.writeInt(this.getDayNum());
         dest.writeStringList(this.getDayWiseValues());
-        if(this.getDayValueString() != null)
+        if (this.getDayValueString() != null)
             dest.writeString(this.getDayValueString());
         dest.writeInt(this.getDayValueType());
-        if(this.getAcceptedDate() != null )
+        if (this.getAcceptedDate() != null)
             dest.writeLong(this.getAcceptedDate().getTime());
         else
             dest.writeLong(0);
@@ -232,11 +230,11 @@ public class ChallengeData implements Task, Parcelable, CatData {
         in.readStringList(stringList);
         setDayWiseValues(stringList);
         String dvs = in.readString();
-        if ( dvs != null )
+        if (dvs != null)
             setDayValueString(dvs);
         setDayValueType(in.readInt());
         Long l = in.readLong();
-        if( l != 0 )
+        if (l != 0)
             setAcceptedDate(new Date(l));
     }
 

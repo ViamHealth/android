@@ -28,7 +28,7 @@ public class ChallengeAndTrackerFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_task_screen, container, false);
 
-        ga = ((Global_Application)getSherlockActivity().getApplicationContext());
+        ga = ((Global_Application) getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
         selectedUser = getArguments().getParcelable("user");
 

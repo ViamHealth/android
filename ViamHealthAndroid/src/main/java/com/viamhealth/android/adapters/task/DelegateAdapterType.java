@@ -1,7 +1,6 @@
 package com.viamhealth.android.adapters.task;
 
 import com.viamhealth.android.model.enums.TaskAdapterType;
-import com.viamhealth.android.model.enums.TaskItemType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -28,8 +28,7 @@ import com.viamhealth.android.utils.Validator;
 /**
  * Created by naren on 28/11/13.
  */
-public class ShareUser extends AsyncTask<Void, Void, Boolean>
-{
+public class ShareUser extends AsyncTask<Void, Void, Boolean> {
     protected Context mContext;
     protected Application mApplication;
     protected String email;
@@ -43,7 +42,7 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
         this.mUserToShare = userToShare;
     }
 
-    public void show(){
+    public void show() {
         View dialogView = LayoutInflater.from(mContext).inflate(R.layout.share_profile, null);
 
         final EditText shareTo = (EditText) dialogView.findViewById(R.id.shareTo);
@@ -59,8 +58,8 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
                                 "share_self",
                                 null)
                         .build());
-                if(isChecked && (shareTo.getText().toString()==null || shareTo.getText().toString().isEmpty())) {
-                    if(mUserToShare.getEmail()!=null && !mUserToShare.getEmail().isEmpty()){
+                if (isChecked && (shareTo.getText().toString() == null || shareTo.getText().toString().isEmpty())) {
+                    if (mUserToShare.getEmail() != null && !mUserToShare.getEmail().isEmpty()) {
                         shareTo.setText(mUserToShare.getEmail());
                         shareTo.setEnabled(false);
                     }
@@ -69,7 +68,7 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
                         /*else if(selectedUser.getProfile()!=null && selectedUser.getProfile().getMobileNumber()!=null
                                     && !selectedUser.getProfile().getMobileNumber().isEmpty())
                             shareTo.setText(selectedUser.getProfile().getMobileNumber());*/
-                }else{
+                } else {
                     shareTo.setText("");
                     shareTo.setEnabled(true);
                 }
@@ -80,9 +79,9 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 String un = shareTo.getText().toString();
-                if(un.matches("^[0-9]{1,10}$"))
+                if (un.matches("^[0-9]{1,10}$"))
                     shareTo.setInputType(InputType.TYPE_CLASS_PHONE);
-                else if(Validator.isEmailValid(un))
+                else if (Validator.isEmailValid(un))
                     shareTo.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
                 else
                     shareTo.setError("email of abc@gmail.com or mobile number without country code like 1234512345");
@@ -93,7 +92,7 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AlertDialogGreenTheme);
         builder.setView(dialogView);
         builder.setCancelable(true);
-        builder.setTitle("Share "+mUserToShare.getName()+" with ...");
+        builder.setTitle("Share " + mUserToShare.getName() + " with ...");
         builder.setPositiveButton("share", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -113,12 +112,12 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
                                 null)
                         .build());
                 email = shareTo.getText().toString();
-                if(email==null || email.isEmpty()){
+                if (email == null || email.isEmpty()) {
                     shareTo.setError("email is mandatory");
                     return;
                 }
 
-                if(!Validator.isEmailValid(email)){
+                if (!Validator.isEmailValid(email)) {
                     shareTo.setError("email should be of type - abc@gmail.com");
                     return;
                 }
@@ -126,7 +125,7 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
                 mIsSelf = chkBox.isChecked();
 
                 dialog.dismiss();
-                if(Checker.isInternetOn((Activity)mContext)){
+                if (Checker.isInternetOn((Activity) mContext)) {
                     execute();
                 }
             }
@@ -134,16 +133,16 @@ public class ShareUser extends AsyncTask<Void, Void, Boolean>
     }
 
     @Override
-    protected void onPreExecute(){
+    protected void onPreExecute() {
         mDialog = new ProgressDialog(mContext, R.style.StyledProgressDialog);
         mDialog.setMessage("sharing the profile....");
         mDialog.show();
     }
 
     protected void onPostExecute(Boolean result) {
-        if(result){
+        if (result) {
             mDialog.dismiss();
-        }else{
+        } else {
             mDialog.dismiss();
             Toast.makeText(mContext, "Not able to share " + mUserToShare.getName() + " to " + email + "...", Toast.LENGTH_SHORT).show();
         }

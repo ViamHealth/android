@@ -1,7 +1,6 @@
 package com.viamhealth.android.adapters;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.facebook.widget.ProfilePictureView;
 import com.viamhealth.android.R;
 import com.viamhealth.android.model.ChallengeData;
 
@@ -47,28 +45,26 @@ public class ChallengeDayValuesAdapter extends ArrayAdapter<String> {
         String dayVal = values.get(position).toString();
         String valText = "";
         int countVals = values.size();
-        if(position == countVals -1 ){
+        if (position == countVals - 1) {
             valText = "Today";
-        }
-        else if(position == countVals -2 ){
+        } else if (position == countVals - 2) {
             valText = "Yesterday";
-        }
-        else {
+        } else {
             Date DBDByesterday = new Date(System.currentTimeMillis() - 24 * position * 60 * 60 * 1000L);
             SimpleDateFormat dateformatMMMdd = new SimpleDateFormat("MMM, dd");
             valText = dateformatMMMdd.format(DBDByesterday);
         }
 
-        try{
-            if(challengeData.getDayValueString() != null){
+        try {
+            if (challengeData.getDayValueString() != null) {
                 dayValueString.setText(challengeData.getDayValueString());
             }
             data.setText(valText);
 
-            if ( challengeData.getDayValueType() == 1) { // boolean
-            //if(dayVal.equalsIgnoreCase("false")|| dayVal.equalsIgnoreCase("true") ){
+            if (challengeData.getDayValueType() == 1) { // boolean
+                //if(dayVal.equalsIgnoreCase("false")|| dayVal.equalsIgnoreCase("true") ){
                 toggleButton.setVisibility(View.VISIBLE);
-                if(dayVal.equalsIgnoreCase("true")){
+                if (dayVal.equalsIgnoreCase("true")) {
                     toggleButton.setChecked(true);
                 }
             } else {
@@ -76,7 +72,7 @@ public class ChallengeDayValuesAdapter extends ArrayAdapter<String> {
             }
             rowView.setTag(position);
             Log.d(TAG, "Added " + values.get(position) + " at position " + position);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return rowView;

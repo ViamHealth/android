@@ -70,7 +70,7 @@ public abstract class DispatcherAdapter extends BaseAdapter {
         if (delegateAdapter == null) {
             throw new RuntimeException("Unknown type " + itemtype + " called");
         }
-        return mDelegateAdapterSparseArray.get(itemtype ).getView(mContext, position, convertView, parent, mLayoutInflater, (CatData) getItem(position));
+        return mDelegateAdapterSparseArray.get(itemtype).getView(mContext, position, convertView, parent, mLayoutInflater, (CatData) getItem(position));
     }
 
     @Override

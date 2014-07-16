@@ -7,8 +7,11 @@ import java.util.Date;
  */
 public interface CatData {
     public Integer getCatType();
+
     public Integer getCatAdapterType();
+
     public Date getStartDate();
+
     public Date getEndDate();
 
 }

@@ -161,20 +161,20 @@ public class Reminder implements Parcelable {
 
     public String getRepeatString(Context context) {
 
-        if(startDate==null || repeatMode==RepeatMode.None || repeatEveryX<1)
+        if (startDate == null || repeatMode == RepeatMode.None || repeatEveryX < 1)
             return "";
 
         //once every <2> <week> from <stDate>, <x> times
         StringBuilder builder = new StringBuilder();
         builder = builder.append("once every ");
 
-        if(repeatEveryX>1)
-                builder = builder.append(repeatEveryX).append(" ");
+        if (repeatEveryX > 1)
+            builder = builder.append(repeatEveryX).append(" ");
 
-        builder = builder.append(context.getString(repeatMode.resId())).append(repeatEveryX>1?"s ":" ")
-                    .append("from").append(" ")
-                    .append(DateUtils.getDisplayText(startDate)).append(", ")
-                    .append(repeatICounter).append(" times");
+        builder = builder.append(context.getString(repeatMode.resId())).append(repeatEveryX > 1 ? "s " : " ")
+                .append("from").append(" ")
+                .append(DateUtils.getDisplayText(startDate)).append(", ")
+                .append(repeatICounter).append(" times");
 
         return builder.toString();
     }

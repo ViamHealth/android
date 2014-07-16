@@ -64,7 +64,7 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
                     @Override
                     public void onClick(View view) {
 
-                        Log.d("challenge data pre",tdObj.toString());
+                        Log.d("challenge data pre", tdObj.toString());
                         AcceptChallengeTask task = new AcceptChallengeTask();
                         task.task = tdObj;
                         task.execute();
@@ -88,8 +88,7 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
     }
 
     // async class for calling webservice and get responce message
-    public class AcceptChallengeTask extends AsyncTask<String, Void,String>
-    {
+    public class AcceptChallengeTask extends AsyncTask<String, Void, String> {
         protected FragmentActivity activity;
         protected ProgressDialog dialog;
         protected ChallengeData task;
@@ -106,18 +105,19 @@ public class ChallengeDelegateAdapter implements DelegateAdapter {
 
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            if(result == "0"){
-                Toast.makeText(mContext,R.string.apiSentError,Toast.LENGTH_LONG).show();
-            }else {
+            if (result == "0") {
+                Toast.makeText(mContext, R.string.apiSentError, Toast.LENGTH_LONG).show();
+            } else {
                 Intent i = new Intent(mContext, ChallengeActivity.class);
-                Log.d("challenge task",task.toString());
+                Log.d("challenge task", task.toString());
                 i.putExtra("taskData", task);
                 mContext.startActivity(i);
             }
         }
+
         @Override
         protected String doInBackground(String... params) {
-            TaskEP tep = new TaskEP(mContext, ((Global_Application)mContext.getApplicationContext()));
+            TaskEP tep = new TaskEP(mContext, ((Global_Application) mContext.getApplicationContext()));
             return "1";
             /*if(tep.acceptChallenge(task.getId())){
                 return "1";

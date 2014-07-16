@@ -4,14 +4,11 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.support.v4.app.NotificationCompat;
 
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.Home;
-import com.viamhealth.android.activities.TabActivity;
-import com.viamhealth.android.activities.fragments.ReminderFragmentNew;
 import com.viamhealth.android.model.enums.ReminderType;
 import com.viamhealth.android.model.reminder.ReminderReading;
 import com.viamhealth.android.model.users.User;
@@ -56,48 +53,45 @@ public class UserReminderNotifyHandler extends NotificationHandler {
         String contentText = "";
 
         //if(notifyObjects.size()>1){
-            contentTitle = "";
-            String medicines = "Medicine(s) -";
-            String labTests = "[ Lab test(s) - ";
-            String drApp = "[ Dr. Appointment(s) -";
-            String Other = "[ Other - ";
-            Boolean haveMedicine = Boolean.FALSE;
-            Boolean haveLabTest = Boolean.FALSE;
-            Boolean haveDrApp = Boolean.FALSE;
-            Boolean haveOther = Boolean.FALSE;
+        contentTitle = "";
+        String medicines = "Medicine(s) -";
+        String labTests = "[ Lab test(s) - ";
+        String drApp = "[ Dr. Appointment(s) -";
+        String Other = "[ Other - ";
+        Boolean haveMedicine = Boolean.FALSE;
+        Boolean haveLabTest = Boolean.FALSE;
+        Boolean haveDrApp = Boolean.FALSE;
+        Boolean haveOther = Boolean.FALSE;
 
-            for(int i=0;i<notifyObjects.size();i++){
-                if( notifyObjects.get(i).getReminder().getType() == ReminderType.Medicine){
-                    haveMedicine = Boolean.TRUE;
-                    medicines = medicines + notifyObjects.get(i).getReminder().getName()+", ";
-                }
-                else if( notifyObjects.get(i).getReminder().getType() == ReminderType.DrAppointments){
-                    haveDrApp = Boolean.TRUE;
-                    drApp = drApp +notifyObjects.get(i).getReminder().getName()+", ";
-                }
-                else if( notifyObjects.get(i).getReminder().getType() == ReminderType.LabTests){
-                    haveLabTest = Boolean.TRUE;
-                    labTests = labTests +notifyObjects.get(i).getReminder().getName()+", ";
-                }
-                else if( notifyObjects.get(i).getReminder().getType() == ReminderType.Other){
-                    haveOther = Boolean.TRUE;
-                    Other = Other +notifyObjects.get(i).getReminder().getName() +", ";
-                }
-
-            }
-            if(haveMedicine == Boolean.TRUE){
-                contentTitle = contentTitle + medicines;
-                contentText = "Time to take your medicines";
-            } else {
-                contentText = "You have " + notifyObjects.size() + " new reminders";
+        for (int i = 0; i < notifyObjects.size(); i++) {
+            if (notifyObjects.get(i).getReminder().getType() == ReminderType.Medicine) {
+                haveMedicine = Boolean.TRUE;
+                medicines = medicines + notifyObjects.get(i).getReminder().getName() + ", ";
+            } else if (notifyObjects.get(i).getReminder().getType() == ReminderType.DrAppointments) {
+                haveDrApp = Boolean.TRUE;
+                drApp = drApp + notifyObjects.get(i).getReminder().getName() + ", ";
+            } else if (notifyObjects.get(i).getReminder().getType() == ReminderType.LabTests) {
+                haveLabTest = Boolean.TRUE;
+                labTests = labTests + notifyObjects.get(i).getReminder().getName() + ", ";
+            } else if (notifyObjects.get(i).getReminder().getType() == ReminderType.Other) {
+                haveOther = Boolean.TRUE;
+                Other = Other + notifyObjects.get(i).getReminder().getName() + ", ";
             }
 
-            if(haveDrApp == Boolean.TRUE)
-                contentTitle = contentTitle + drApp + " ] ";
-            if(haveLabTest == Boolean.TRUE)
-                contentTitle = contentTitle + labTests + " ] ";
-            if(haveOther == Boolean.TRUE)
-                contentTitle = contentTitle + Other + " ] ";
+        }
+        if (haveMedicine == Boolean.TRUE) {
+            contentTitle = contentTitle + medicines;
+            contentText = "Time to take your medicines";
+        } else {
+            contentText = "You have " + notifyObjects.size() + " new reminders";
+        }
+
+        if (haveDrApp == Boolean.TRUE)
+            contentTitle = contentTitle + drApp + " ] ";
+        if (haveLabTest == Boolean.TRUE)
+            contentTitle = contentTitle + labTests + " ] ";
+        if (haveOther == Boolean.TRUE)
+            contentTitle = contentTitle + Other + " ] ";
         /*}else if(notifyObjects.size()==1){
             contentTitle = notifyObjects.get(0).getTitle();
             largeIconId = notifyObjects.get(0).getIcon();

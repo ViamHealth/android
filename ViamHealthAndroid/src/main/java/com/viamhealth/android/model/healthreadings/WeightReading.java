@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by Kunal on 19/6/14.
  */
-public class WeightReading extends HealthReading implements Parcelable{
+public class WeightReading extends HealthReading implements Parcelable {
     double weight;
 
     public WeightReading() {
@@ -18,7 +18,7 @@ public class WeightReading extends HealthReading implements Parcelable{
     }
 
     public void setWeight(Double weight) {
-        if(weight!=null)
+        if (weight != null)
             this.weight = weight;
         else
             this.weight = 0.0;

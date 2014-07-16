@@ -1,7 +1,6 @@
 package com.viamhealth.android.manager;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -107,8 +106,8 @@ public class TabManager implements TabHost.OnTabChangeListener {
             FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
 
             //add header if not present in the trasaction
-            if(mTabHeader != null && !isHeaderAdded){
-                if(mTabHeader.fragment == null){
+            if (mTabHeader != null && !isHeaderAdded) {
+                if (mTabHeader.fragment == null) {
                     mTabHeader.fragment = Fragment.instantiate(mActivity, mTabHeader.clss.getName(), mTabHeader.args);
                     ft.add(mHeaderContainerId, mTabHeader.fragment, mTabHeader.tag);
                     isHeaderAdded = true;
@@ -122,7 +121,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
             }
             if (newTab != null) {
                 if (newTab.fragment == null) {
-                    newTab.fragment = Fragment.instantiate(mActivity,newTab.clss.getName(),newTab.args);
+                    newTab.fragment = Fragment.instantiate(mActivity, newTab.clss.getName(), newTab.args);
                     ft.add(mContainerId, newTab.fragment, newTab.tag);
                 } else {
                     ft.attach(newTab.fragment);
@@ -130,7 +129,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
             }
             mLastTab = newTab;
             ft.commit();
-            if(mShouldExecuteTransaction)
+            if (mShouldExecuteTransaction)
                 mActivity.getSupportFragmentManager().executePendingTransactions();
         }
     }

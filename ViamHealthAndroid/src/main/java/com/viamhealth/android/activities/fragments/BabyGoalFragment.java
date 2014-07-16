@@ -14,7 +14,6 @@ import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.dao.rest.endpoints.ImmunizationEP;
 import com.viamhealth.android.dao.rest.endpoints.UserTrackGrowthEP;
-import com.viamhealth.android.model.enums.Gender;
 import com.viamhealth.android.model.immunization.Immunization;
 import com.viamhealth.android.model.immunization.UserImmunization;
 import com.viamhealth.android.model.trackgrowth.TrackGrowth;
@@ -58,7 +57,7 @@ public class BabyGoalFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_baby_growth, container,false);
+        View view = inflater.inflate(R.layout.fragment_baby_growth, container, false);
         mWebview = (WebView) view.findViewById(R.id.webViewBabyGrowth);
         init();
 
@@ -82,7 +81,7 @@ public class BabyGoalFragment extends BaseFragment {
         webSettings.setDomStorageEnabled(true);
         //those two lines seem necessary to keep data that were stored even if the app was killed.
         webSettings.setDatabaseEnabled(true);
-        webSettings.setDatabasePath(getActivity().getFilesDir().getParentFile().getPath()+"/databases/");
+        webSettings.setDatabasePath(getActivity().getFilesDir().getParentFile().getPath() + "/databases/");
     }
 
 
@@ -105,51 +104,53 @@ public class BabyGoalFragment extends BaseFragment {
             mContext = c;
             this.selectedUser = selectedUser;
         }
+
         @JavascriptInterface
-        public void showToast(String message){
+        public void showToast(String message) {
             final String msg = message;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext,msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, msg, Toast.LENGTH_LONG).show();
                 }
             });
         }
+
         @JavascriptInterface
-        public String getUserAgeInMonths(){
+        public String getUserAgeInMonths() {
             int age = selectedUser.getProfile().getAgeInMonths();
-            if(age == 0)
-                Toast.makeText(mContext,"Age not specified",Toast.LENGTH_LONG);
+            if (age == 0)
+                Toast.makeText(mContext, "Age not specified", Toast.LENGTH_LONG);
             return String.valueOf(age);
         }
 
         @JavascriptInterface
-        public String getPercentileData(String sdate, String height, String weight){
+        public String getPercentileData(String sdate, String height, String weight) {
             UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
             Date ddate;
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             try {
-               ddate  = df.parse(sdate);
+                ddate = df.parse(sdate);
             } catch (ParseException e) {
                 ddate = new Date();
             }
-            TrackGrowthAdvData obj = ep.getPercentileData(selectedUser.getProfile().getGender().key(),selectedUser.getProfile().getAgeInDays(ddate));
+            TrackGrowthAdvData obj = ep.getPercentileData(selectedUser.getProfile().getGender().key(), selectedUser.getProfile().getAgeInDays(ddate));
             Float fheight = Float.valueOf(height);
             Float fweight = Float.valueOf(weight);
-            Float pl=0F;
-            Float ph=0F;
-            Float hl=0F;
-            Float hh=0F;
-            Float heightPercentile=0F;
-            Float weightPercentile=0F;
+            Float pl = 0F;
+            Float ph = 0F;
+            Float hl = 0F;
+            Float hh = 0F;
+            Float heightPercentile = 0F;
+            Float weightPercentile = 0F;
             JSONObject tgdObject = new JSONObject();
-            if(obj == null){
+            if (obj == null) {
                 try {
-                    tgdObject.put("error","Could not fetch the details.Please try again later.");
+                    tgdObject.put("error", "Could not fetch the details.Please try again later.");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else {
+            } else {
                 if (fheight < obj.getHeight_3n()) {
                     ph = obj.getPercentile_3n();
                     pl = 0F;
@@ -193,7 +194,7 @@ public class BabyGoalFragment extends BaseFragment {
                 }
 
 
-                 heightPercentile = ((ph - pl) / (hh - hl)) * (fheight - hl) + pl;
+                heightPercentile = ((ph - pl) / (hh - hl)) * (fheight - hl) + pl;
 
                 ph = 0F;
                 pl = 0F;
@@ -243,25 +244,24 @@ public class BabyGoalFragment extends BaseFragment {
                 }
 
 
-
-                 weightPercentile = ((ph - pl) / (hh - hl)) * (fweight - hl) + pl;
+                weightPercentile = ((ph - pl) / (hh - hl)) * (fweight - hl) + pl;
                 try {
-                    tgdObject.put("error","");
+                    tgdObject.put("error", "");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-            if(heightPercentile > 100 ) heightPercentile = 100F;
-            else if(heightPercentile < 0 ) heightPercentile = 0F;
-            if(weightPercentile > 100 ) weightPercentile = 100F;
-            else if(weightPercentile < 0 ) weightPercentile = 0F;
+            if (heightPercentile > 100) heightPercentile = 100F;
+            else if (heightPercentile < 0) heightPercentile = 0F;
+            if (weightPercentile > 100) weightPercentile = 100F;
+            else if (weightPercentile < 0) weightPercentile = 0F;
 
 
             try {
-                tgdObject.put("heightPercentile",String.valueOf(Math.round(heightPercentile*100.0)/100.0));
-                tgdObject.put("weightPercentile",String.valueOf(Math.round(weightPercentile*100.0)/100.0));
-                tgdObject.put("weight",weight);
-                tgdObject.put("height",height);
+                tgdObject.put("heightPercentile", String.valueOf(Math.round(heightPercentile * 100.0) / 100.0));
+                tgdObject.put("weightPercentile", String.valueOf(Math.round(weightPercentile * 100.0) / 100.0));
+                tgdObject.put("weight", weight);
+                tgdObject.put("height", height);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -270,11 +270,11 @@ public class BabyGoalFragment extends BaseFragment {
         }
 
         @JavascriptInterface
-        public void updateUserTrackData(String sdate, String sheight, String sweight){
+        public void updateUserTrackData(String sdate, String sheight, String sweight) {
             DateTime edate;
-            if(sdate ==null || sdate.trim().isEmpty()){
-               edate = new DateTime();
-            }else {
+            if (sdate == null || sdate.trim().isEmpty()) {
+                edate = new DateTime();
+            } else {
                 DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-mm-dd");
                 edate = formatter.parseDateTime(sdate);
             }
@@ -291,9 +291,9 @@ public class BabyGoalFragment extends BaseFragment {
         }
 
         @JavascriptInterface
-        public String getGrowthChartData(){
+        public String getGrowthChartData() {
 
-            if(trackGrowthDataUpdated == true){
+            if (trackGrowthDataUpdated == true) {
                 UserTrackGrowthEP ep = new UserTrackGrowthEP(mContext, ((Global_Application) mContext.getApplicationContext()));
                 trackGrowthMap = ep.list(selectedUser.getId());
             }
@@ -303,28 +303,28 @@ public class BabyGoalFragment extends BaseFragment {
             try {
                 List<TrackGrowth> trackGrowthList = trackGrowthMap.get("track_growth");
                 JSONArray trackGrowthDataJsonList = new JSONArray();
-                for( TrackGrowth trackGrowth : trackGrowthList){
+                for (TrackGrowth trackGrowth : trackGrowthList) {
                     TrackGrowthData trackGrowthData = (TrackGrowthData) trackGrowth;
                     JSONObject tgdObject = new JSONObject();
-                    tgdObject.put("id",trackGrowthData.getId());
-                    tgdObject.put("label",trackGrowthData.getLabel());
-                    tgdObject.put("age",trackGrowthData.getAge());
-                    tgdObject.put("height",trackGrowthData.getHeight());
-                    tgdObject.put("weight",trackGrowthData.getWeight());
+                    tgdObject.put("id", trackGrowthData.getId());
+                    tgdObject.put("label", trackGrowthData.getLabel());
+                    tgdObject.put("age", trackGrowthData.getAge());
+                    tgdObject.put("height", trackGrowthData.getHeight());
+                    tgdObject.put("weight", trackGrowthData.getWeight());
                     trackGrowthDataJsonList.put(tgdObject);
                 }
 
                 List<TrackGrowth> trackGrowthList1 = trackGrowthMap.get("user_track_growth");
                 JSONArray userTrackGrowthDataJsonList = new JSONArray();
-                for( TrackGrowth trackGrowth : trackGrowthList1){
+                for (TrackGrowth trackGrowth : trackGrowthList1) {
                     UserTrackGrowthData userTrackGrowthData = (UserTrackGrowthData) trackGrowth;
                     JSONObject tgdObject = new JSONObject();
-                    tgdObject.put("id",userTrackGrowthData.getId());
-                    tgdObject.put("user",userTrackGrowthData.getUserId());
-                    tgdObject.put("age",userTrackGrowthData.getAge());
-                    tgdObject.put("height",userTrackGrowthData.getHeight());
-                    tgdObject.put("weight",userTrackGrowthData.getWeight());
-                    tgdObject.put("entry_date",userTrackGrowthData.getEntryDate());
+                    tgdObject.put("id", userTrackGrowthData.getId());
+                    tgdObject.put("user", userTrackGrowthData.getUserId());
+                    tgdObject.put("age", userTrackGrowthData.getAge());
+                    tgdObject.put("height", userTrackGrowthData.getHeight());
+                    tgdObject.put("weight", userTrackGrowthData.getWeight());
+                    tgdObject.put("entry_date", userTrackGrowthData.getEntryDate());
                     userTrackGrowthDataJsonList.put(tgdObject);
                 }
                 object.put("track_growth", trackGrowthDataJsonList);
@@ -338,16 +338,16 @@ public class BabyGoalFragment extends BaseFragment {
         }
 
         @JavascriptInterface
-        public String getImmunizationData(){
-            List<Immunization>  data = new ArrayList<Immunization>();
-            if(immunization_data_updated == false ){
-                for (Map.Entry<Long, Immunization> entry : immunizationMap.entrySet()){
+        public String getImmunizationData() {
+            List<Immunization> data = new ArrayList<Immunization>();
+            if (immunization_data_updated == false) {
+                for (Map.Entry<Long, Immunization> entry : immunizationMap.entrySet()) {
                     data.add(entry.getValue());
                 }
             } else {
                 ImmunizationEP iep = new ImmunizationEP(mContext, ((Global_Application) mContext.getApplicationContext()));
-                data  = iep.list(selectedUser.getId());
-                for(Immunization entry : data ){
+                data = iep.list(selectedUser.getId());
+                for (Immunization entry : data) {
                     immunizationMap.put(entry.getId(), entry);
                 }
                 immunization_data_updated = false;
@@ -355,33 +355,32 @@ public class BabyGoalFragment extends BaseFragment {
             Collections.sort(data, new Comparator<Immunization>() {
                 @Override
                 public int compare(Immunization fruite1, Immunization fruite2) {
-                    return (int)fruite1.getRecommendedAge() - (int)fruite2.getRecommendedAge();
+                    return (int) fruite1.getRecommendedAge() - (int) fruite2.getRecommendedAge();
                 }
             });
             JSONArray listData = new JSONArray();
             int j = 0;
-            for(Immunization i : data){
+            for (Immunization i : data) {
                 JSONObject object = new JSONObject();
                 try {
                     object.put("immunization_id", i.getId());
                     object.put("title", i.getLabel());
                     object.put("recommended_age", i.getRecommendedAge());
-                    if(i.scheduleDate(selectedUser.getProfile().getDob()) != null){
+                    if (i.scheduleDate(selectedUser.getProfile().getDob()) != null) {
                         object.put("schedule_date_string", i.scheduleDate(selectedUser.getProfile().getDob()));
                         object.put("header_string", i.scheduleTimeFrame(selectedUser.getProfile().getDob()));
                         object.put("list_item_type", i.getListItemType(selectedUser.getProfile().getDob()));
-                    }else {
+                    } else {
                         object.put("schedule_date_string", "");
                         object.put("header_string", "");
-                        object.put("list_item_type","0");
+                        object.put("list_item_type", "0");
                     }
 
-                    if(i.getUserImmunization() != null){
+                    if (i.getUserImmunization() != null) {
                         object.put("user", i.getUserImmunization().getUserId());
                         object.put("is_completed", i.getUserImmunization().isCompleted());
                         object.put("user_immunization_id", i.getUserImmunization().getId());
-                    }
-                    else{
+                    } else {
                         object.put("user", null);
                         object.put("is_completed", null);
                         object.put("user_immunization_id", null);
@@ -389,10 +388,10 @@ public class BabyGoalFragment extends BaseFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                try{
-                    listData.put(j,object);
+                try {
+                    listData.put(j, object);
                     j++;
-                } catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -400,7 +399,7 @@ public class BabyGoalFragment extends BaseFragment {
         }
 
         @JavascriptInterface
-        public boolean updateIsCompleted( String immunization_id_string, String is_completed){
+        public boolean updateIsCompleted(String immunization_id_string, String is_completed) {
             Long user_immunization_id = 0L;
             Long immunization_id = Long.parseLong(immunization_id_string);
 
@@ -408,17 +407,17 @@ public class BabyGoalFragment extends BaseFragment {
 
             Immunization old_immunization_object = immunizationMap.get(immunization_id);
 
-            if(old_immunization_object == null){
+            if (old_immunization_object == null) {
                 //Something went wrong, or race condition achieved
                 System.out.println("Race condition for updating immunization object ? ");
                 return false;
             }
 
-            if(old_immunization_object.getUserImmunization() != null && old_immunization_object.getUserImmunization().getId() != null ){
+            if (old_immunization_object.getUserImmunization() != null && old_immunization_object.getUserImmunization().getId() != null) {
                 user_immunization_id = old_immunization_object.getUserImmunization().getId();
             }
 
-            if(user_immunization_id == 0L){
+            if (user_immunization_id == 0L) {
                 UserImmunization obj = new UserImmunization();
                 obj.setCompleted(true);
                 obj.setUserId(this.selectedUser.getId());
@@ -428,7 +427,7 @@ public class BabyGoalFragment extends BaseFragment {
                     immunization_data_updated = true;
                     old_immunization_object.setUserImmunization(ui);
                     immunizationMap.put(immunization_id, old_immunization_object);
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     return false;
                 }
@@ -443,7 +442,7 @@ public class BabyGoalFragment extends BaseFragment {
                     immunization_data_updated = true;
                     old_immunization_object.setUserImmunization(ui);
                     immunizationMap.put(immunization_id, old_immunization_object);
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     return false;
                 }

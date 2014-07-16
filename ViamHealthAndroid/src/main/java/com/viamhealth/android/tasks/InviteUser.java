@@ -33,7 +33,7 @@ public class InviteUser extends AsyncTask<Void, Void, Boolean> {
         this.application = app;
     }
 
-    public void show(){
+    public void show() {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_invite_user, null);
         final EditText etEmail = (EditText) view.findViewById(R.id.email);
 
@@ -52,18 +52,18 @@ public class InviteUser extends AsyncTask<Void, Void, Boolean> {
             @Override
             public void onClick(View v) {
                 email = etEmail.getText().toString();
-                if(email==null || email.isEmpty()){
+                if (email == null || email.isEmpty()) {
                     etEmail.setError("email is mandatory");
                     return;
                 }
 
-                if(!Validator.isEmailValid(email)){
+                if (!Validator.isEmailValid(email)) {
                     etEmail.setError("email should be of type - abc@gmail.com");
                     return;
                 }
 
                 dialog.dismiss();
-                if(Checker.isInternetOn(activity)){
+                if (Checker.isInternetOn(activity)) {
                     execute();
                 }
             }
@@ -81,9 +81,9 @@ public class InviteUser extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         dialog.dismiss();
         String msg;
-        if(aBoolean){
+        if (aBoolean) {
             msg = "Invite sent successfully to " + email;
-        }else{
+        } else {
             msg = "Sorry! Couldn't sent the invite now. Please try after some time.";
         }
         Toast.makeText(this.activity, msg, Toast.LENGTH_LONG).show();

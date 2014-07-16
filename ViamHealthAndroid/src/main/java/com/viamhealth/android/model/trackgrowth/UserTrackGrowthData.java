@@ -1,7 +1,5 @@
 package com.viamhealth.android.model.trackgrowth;
 
-import com.viamhealth.android.model.BaseModel;
-
 import java.util.Date;
 
 /**

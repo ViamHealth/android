@@ -1,11 +1,8 @@
 package com.viamhealth.android.adapters.cat;
 
 import android.content.Context;
-import android.view.LayoutInflater;
-
 
 import com.viamhealth.android.model.cat.CatData;
-import com.viamhealth.android.adapters.cat.ChallengeDelegateAdapter;
 
 import java.util.List;
 
@@ -44,7 +41,7 @@ public class CatListAdapter extends DispatcherAdapter {
 
     @Override
     public int getItemViewType(int i) {
-        return mData.get(i).getCatAdapterType() ;
+        return mData.get(i).getCatAdapterType();
     }
 
     @Override

@@ -15,13 +15,18 @@ public enum TaskAdapterType {
     private final int value;
     private final String key;
 
-    TaskAdapterType(int value, String key){
+    TaskAdapterType(int value, String key) {
         this.value = value;
         this.key = key;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
 
     // Lookup table
     private static final Map<Integer, TaskAdapterType> valuelookup = new HashMap<Integer, TaskAdapterType>();
@@ -29,7 +34,7 @@ public enum TaskAdapterType {
 
     // Populate the lookup table on loading time
     static {
-        for (TaskAdapterType g : EnumSet.allOf(TaskAdapterType.class)){
+        for (TaskAdapterType g : EnumSet.allOf(TaskAdapterType.class)) {
             valuelookup.put(g.value(), g);
             keylookup.put(g.key(), g);
         }

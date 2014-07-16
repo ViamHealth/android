@@ -12,6 +12,7 @@ import java.util.Date;
  */
 public class HealthReading extends BaseModel implements Parcelable {
     Date readingDate;
+
     public Date getReadingDate() {
         return readingDate;
     }
@@ -44,6 +45,6 @@ public class HealthReading extends BaseModel implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeLong(this.readingDate==null?0:this.readingDate.getTime());
+        dest.writeLong(this.readingDate == null ? 0 : this.readingDate.getTime());
     }
 }

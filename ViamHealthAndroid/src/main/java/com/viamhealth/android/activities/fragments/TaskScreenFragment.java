@@ -11,11 +11,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.ViamHealthPrefs;
-import com.viamhealth.android.manager.ImageSelector;
 import com.viamhealth.android.model.users.User;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Kunal on 14/5/14.
@@ -35,7 +31,7 @@ public class TaskScreenFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tab_fragment_task_screen, container, false);
 
-        ga = ((Global_Application)getSherlockActivity().getApplicationContext());
+        ga = ((Global_Application) getSherlockActivity().getApplicationContext());
         appPrefs = new ViamHealthPrefs(getSherlockActivity());
         selectedUser = getArguments().getParcelable("user");
 

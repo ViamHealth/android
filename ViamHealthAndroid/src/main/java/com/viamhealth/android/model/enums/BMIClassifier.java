@@ -22,17 +22,28 @@ public enum BMIClassifier {
     private final double min;
     private final double max;
 
-    BMIClassifier(int value, String key, double min, double max){
+    BMIClassifier(int value, String key, double min, double max) {
         this.value = value;
         this.key = key;
         this.min = min;
         this.max = max;
     }
 
-    public int value() {return value;}
-    public String key() {return key;}
-    public double min() {return min;}
-    public double max() {return max;}
+    public int value() {
+        return value;
+    }
+
+    public String key() {
+        return key;
+    }
+
+    public double min() {
+        return min;
+    }
+
+    public double max() {
+        return max;
+    }
 
     // Lookup table
     private static final Map<Integer, BMIClassifier> valuelookup = new HashMap<Integer, BMIClassifier>();
@@ -40,7 +51,7 @@ public enum BMIClassifier {
 
     // Populate the lookup table on loading time
     static {
-        for (BMIClassifier bmi : EnumSet.allOf(BMIClassifier.class)){
+        for (BMIClassifier bmi : EnumSet.allOf(BMIClassifier.class)) {
             valuelookup.put(bmi.value(), bmi);
             keylookup.put(bmi.key(), bmi);
         }

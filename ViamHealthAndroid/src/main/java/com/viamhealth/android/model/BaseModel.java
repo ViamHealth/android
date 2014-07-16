@@ -67,8 +67,8 @@ public abstract class BaseModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if(id==null)
-            id=0L;
+        if (id == null)
+            id = 0L;
         dest.writeLong(id);
         dest.writeValue(created);
         dest.writeValue(updated);

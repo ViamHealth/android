@@ -1,11 +1,9 @@
 package com.viamhealth.android.adapters.cat;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,21 +47,22 @@ public class HealthStatsCatDelegateAdapter implements DelegateAdapter {
 
             try {
                 dateHeader.setText(sdf.format(tdObj.getStartDate()));
-                if(tdObj.isSetWeightReading()){
-                    if(tdObj.getWeightReading() != null && tdObj.getWeightReading().getWeight() != null){
+                if (tdObj.isSetWeightReading()) {
+                    if (tdObj.getWeightReading() != null && tdObj.getWeightReading().getWeight() != null) {
                         weightLayout.setVisibility(View.VISIBLE);
                         weightText.setText(tdObj.getWeightReading().getWeight().toString());
                     }
                 }
-                if(tdObj.isSetBloodPressureReading()){
-                    if(tdObj.getBloodPressureReading() != null ){
+                if (tdObj.isSetBloodPressureReading()) {
+                    if (tdObj.getBloodPressureReading() != null) {
                         bpLayout.setVisibility(View.VISIBLE);
-                        if(tdObj.getBloodPressureReading().getDiastolicPressure() != null) {
+                        if (tdObj.getBloodPressureReading().getDiastolicPressure() != null) {
                             diastolicText.setText(tdObj.getBloodPressureReading().getDiastolicPressure().toString());
-                        }if(tdObj.getBloodPressureReading().getSystolicPressure() != null) {
+                        }
+                        if (tdObj.getBloodPressureReading().getSystolicPressure() != null) {
                             systolicText.setText(tdObj.getBloodPressureReading().getSystolicPressure().toString());
                         }
-                        if(tdObj.getBloodPressureReading().getPulseRate() != null){
+                        if (tdObj.getBloodPressureReading().getPulseRate() != null) {
                             pulseRateText.setText(tdObj.getBloodPressureReading().getPulseRate().toString());
                         }
                     }

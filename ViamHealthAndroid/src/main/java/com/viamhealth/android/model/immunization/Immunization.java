@@ -4,7 +4,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -49,12 +48,12 @@ public class Immunization {
         this.label = label;
     }
 
-    public String scheduleDate(Date dob){
-        if(dob == null) return "";
+    public String scheduleDate(Date dob) {
+        if (dob == null) return "";
         DateTime sDate = new DateTime(dob);
         DateTime today = new DateTime();
-        DateTime sDateNew  = sDate.plusWeeks(((int) this.recommendedAge));
-        if(sDateNew.isAfter(today)){
+        DateTime sDateNew = sDate.plusWeeks(((int) this.recommendedAge));
+        if (sDateNew.isAfter(today)) {
             DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MMM-yy").withLocale(Locale.US);
             return formatter.print(sDateNew);
         } else {
@@ -62,23 +61,23 @@ public class Immunization {
         }
     }
 
-    public String scheduleTimeFrame(Date dob){
-        String rstring="";
-        if(dob == null) return "";
+    public String scheduleTimeFrame(Date dob) {
+        String rstring = "";
+        if (dob == null) return "";
         /*DateTime sDate = new DateTime(dob);
         DateTime today = new DateTime();
         DateTime sDateNew = sDate.plusWeeks(((int) this.recommendedAge));*/
 
         //if(sDateNew.isBefore(today)){
-            if(recommendedAge < 24 ) {
-                if (recommendedAge < 1) {
-                    rstring = "At Birth";
-                } else {
-                    rstring = "Age: " + String.valueOf(recommendedAge) + " Weeks";
-                }
+        if (recommendedAge < 24) {
+            if (recommendedAge < 1) {
+                rstring = "At Birth";
             } else {
-                rstring = "Age: " + String.valueOf(Math.round(((3*1.0)/13)*recommendedAge)) + " Months";
+                rstring = "Age: " + String.valueOf(recommendedAge) + " Weeks";
             }
+        } else {
+            rstring = "Age: " + String.valueOf(Math.round(((3 * 1.0) / 13) * recommendedAge)) + " Months";
+        }
             /*}else if(recommendedAge < 52){
                 rstring=  "Age: " + String.valueOf(recommendedAge/30) + " Month(s)";
             }else {
@@ -93,26 +92,26 @@ public class Immunization {
 
     public int getListItemType(Date dob) {
         int rInt = 0;
-        if(dob == null) return rInt;
+        if (dob == null) return rInt;
         DateTime sDate = new DateTime(dob);
 
         DateTime today = new DateTime();
         DateTime sDateNew = sDate.plusWeeks((int) this.recommendedAge);
 
-        if(sDateNew.isBefore(today)) rInt = 1;
+        if (sDateNew.isBefore(today)) rInt = 1;
         else rInt = 2;
         return rInt;
     }
 
     @Override
     public String toString() {
-        if(userImmunization != null)
+        if (userImmunization != null)
             return "Immunization{" +
-                "id='" + id + '\'' +
-                ", label='" + label + '\'' +
-                ", recommenedAge='" + recommendedAge + '\'' +
-                ", userImmunization=" + userImmunization.toString() + '\''+
-                "} ";
+                    "id='" + id + '\'' +
+                    ", label='" + label + '\'' +
+                    ", recommenedAge='" + recommendedAge + '\'' +
+                    ", userImmunization=" + userImmunization.toString() + '\'' +
+                    "} ";
         else
             return "Immunization{" +
                     "id='" + id + '\'' +

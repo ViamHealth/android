@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 
 import com.viamhealth.android.model.tasks.Task;
-import com.viamhealth.android.model.tasks.TaskData;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class ATaskListAdapter extends DispatcherAdapter {
 
     @Override
     public int getItemViewType(int i) {
-        return mData.get(i).getAdapterType() ;
+        return mData.get(i).getAdapterType();
     }
 
     @Override

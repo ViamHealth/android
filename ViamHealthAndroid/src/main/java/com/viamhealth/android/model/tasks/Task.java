@@ -5,6 +5,8 @@ package com.viamhealth.android.model.tasks;
  */
 public interface Task {
     public Integer getWeight();
+
     public Integer getTaskType();
+
     public Integer getAdapterType();
 }

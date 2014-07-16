@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * Created by naren on 02/10/13.
  */
-public class Profile implements Parcelable{
+public class Profile implements Parcelable {
 
     private String organization;
     private String mobileNumber;
@@ -34,8 +34,7 @@ public class Profile implements Parcelable{
     public int getAge() {
         Calendar nowCal = Calendar.getInstance();
         Calendar dobCal = Calendar.getInstance();
-        if(dob == null)
-        {
+        if (dob == null) {
             return 0;
         }
         dobCal.setTime(dob);
@@ -44,15 +43,14 @@ public class Profile implements Parcelable{
         //Long diff = now.getTime() - dob.getTime();
     }
 
-    public int getAgeInDays(Date inputDate){
-        if(dob == null)
-        {
+    public int getAgeInDays(Date inputDate) {
+        if (dob == null) {
             return 0;
         }
         DateTime iDate;
-        if(inputDate == null ){
+        if (inputDate == null) {
             iDate = new DateTime();
-        }else {
+        } else {
             iDate = new DateTime(inputDate);
         }
         DateTime dobJT = new DateTime(dob);
@@ -60,33 +58,32 @@ public class Profile implements Parcelable{
         return Days.daysBetween(dobJT.withTimeAtStartOfDay(), iDate.withTimeAtStartOfDay()).getDays();
 
     }
-    public int getAgeInMonths(){
+
+    public int getAgeInMonths() {
         Calendar nowCal = Calendar.getInstance();
         Calendar dobCal = Calendar.getInstance();
-        if(dob == null)
-        {
+        if (dob == null) {
             return 0;
         }
         dobCal.setTime(dob);
 
-        int years =  nowCal.get(Calendar.YEAR) - dobCal.get(Calendar.YEAR);
+        int years = nowCal.get(Calendar.YEAR) - dobCal.get(Calendar.YEAR);
         int currMonth = nowCal.get(Calendar.MONTH) + 1;
         int birthMonth = dobCal.get(Calendar.MONTH) + 1;
         int months = currMonth - birthMonth;
         //if month difference is in negative then reduce years by one and calculate the number of months.
-        if(months < 0)
-        {
+        if (months < 0) {
             years--;
             months = 12 - birthMonth + currMonth;
 
-            if(nowCal.get(Calendar.DATE)<dobCal.get(Calendar.DATE))
+            if (nowCal.get(Calendar.DATE) < dobCal.get(Calendar.DATE))
                 months--;
 
-        }else if(months == 0 && nowCal.get(Calendar.DATE) < dobCal.get(Calendar.DATE)){
+        } else if (months == 0 && nowCal.get(Calendar.DATE) < dobCal.get(Calendar.DATE)) {
             years--;
             months = 11;
         }
-        if(months == 12){
+        if (months == 12) {
             years++;
             months = 0;
         }
@@ -165,7 +162,7 @@ public class Profile implements Parcelable{
 
 
     public void setLocation(GraphLocation location) {
-        if(this.location == null)
+        if (this.location == null)
             this.location = new Location(location);
 
         this.location.setStreet(location.getStreet());
@@ -199,11 +196,11 @@ public class Profile implements Parcelable{
     }
 
     public boolean isMinor() {
-        if(this.getAgeInMonths() < 120) return true;
+        if (this.getAgeInMonths() < 120) return true;
         else return false;
     }
 
-    public class Location implements Parcelable{
+    public class Location implements Parcelable {
         String street;
         String city;
         String state;
@@ -298,13 +295,13 @@ public class Profile implements Parcelable{
         public String toShortString() {
             String ss = this.city;
 
-            if(ss==null || ss.isEmpty()) ss = this.state;
+            if (ss == null || ss.isEmpty()) ss = this.state;
             else ss += "," + this.state;
 
-            if(ss==null || ss.isEmpty()) ss = this.country;
+            if (ss == null || ss.isEmpty()) ss = this.country;
             else ss += "," + this.country;
 
-            if(ss==null || ss.isEmpty())
+            if (ss == null || ss.isEmpty())
                 ss = this.address;
 
             return ss;
@@ -380,9 +377,9 @@ public class Profile implements Parcelable{
 
         dest.writeString(organization);
         dest.writeString(mobileNumber);
-        Integer bg = bloodGroup==null?null:bloodGroup.value();
+        Integer bg = bloodGroup == null ? null : bloodGroup.value();
         dest.writeInt(bg);
-        Integer g = gender==null?Gender.Male.value():gender.value();
+        Integer g = gender == null ? Gender.Male.value() : gender.value();
         dest.writeInt(g);
         dest.writeValue(dob);
         dest.writeString(profilePicURL);

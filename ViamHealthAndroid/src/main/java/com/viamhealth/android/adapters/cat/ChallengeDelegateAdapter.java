@@ -1,22 +1,15 @@
 package com.viamhealth.android.adapters.cat;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.R;
 import com.viamhealth.android.activities.ChallengeActivity;
-import com.viamhealth.android.dao.rest.endpoints.TaskEP;
 import com.viamhealth.android.model.ChallengeData;
 import com.viamhealth.android.model.cat.CatData;
 import com.viamhealth.android.model.enums.CatAdapterType;

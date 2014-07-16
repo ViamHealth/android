@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,7 +24,6 @@ import com.viamhealth.android.model.ConditionData;
 import com.viamhealth.android.model.users.User;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -62,8 +60,8 @@ public class ConditionsList extends ListActivity {
 
         ga = (Global_Application) getApplicationContext();
         User Luser = ga.getLoggedInUser();
-        if(Luser.getId() != selectedUser.getId()){
-            titleText.setText("Is "+ selectedUser.getName() + " worried about any of the following?");
+        if (Luser.getId() != selectedUser.getId()) {
+            titleText.setText("Is " + selectedUser.getName() + " worried about any of the following?");
         }
 
         final ConditionListAdapter adapter = new ConditionListAdapter(

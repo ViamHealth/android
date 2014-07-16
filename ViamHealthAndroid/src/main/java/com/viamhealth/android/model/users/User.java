@@ -35,16 +35,16 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public boolean isProfileCreated() {
-        if((firstName==null || firstName.isEmpty()) && (lastName==null || lastName.isEmpty()))
+        if ((firstName == null || firstName.isEmpty()) && (lastName == null || lastName.isEmpty()))
             return false;
 
-        if(profile==null || bmiProfile==null)
+        if (profile == null || bmiProfile == null)
             return false;
 
-        if(profile.getDob()==null || bmiProfile.getHeight()==null || bmiProfile.getHeight()==0 || bmiProfile.getWeight()==null
-                || bmiProfile.getWeight()==0)
+        if (profile.getDob() == null || bmiProfile.getHeight() == null || bmiProfile.getHeight() == 0 || bmiProfile.getWeight() == null
+                || bmiProfile.getWeight() == 0)
             return false;
-        
+
         return true;
     }
 
@@ -61,10 +61,10 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getUsername() {
-        if((username==null || username.isEmpty()) && (email!=null && email.isEmpty()))
+        if ((username == null || username.isEmpty()) && (email != null && email.isEmpty()))
             return email;
 
-        if((username==null || username.isEmpty()) && (mobile!=null && mobile.isEmpty()))
+        if ((username == null || username.isEmpty()) && (mobile != null && mobile.isEmpty()))
             return mobile;
 
         return username;
@@ -91,23 +91,23 @@ public class User extends BaseModel implements Parcelable {
     }
 
     public String getName() {
-        if(name!=null && !name.isEmpty()){
+        if (name != null && !name.isEmpty()) {
             return name;
         }
 
-        if((firstName!=null && !firstName.isEmpty()) && (lastName!=null || !lastName.isEmpty()))
+        if ((firstName != null && !firstName.isEmpty()) && (lastName != null || !lastName.isEmpty()))
             return firstName + " " + lastName;
 
-        if(this.firstName!=null && !this.firstName.isEmpty())
+        if (this.firstName != null && !this.firstName.isEmpty())
             return firstName;
 
-        if(this.lastName!=null && !this.lastName.isEmpty())
+        if (this.lastName != null && !this.lastName.isEmpty())
             return lastName;
 
-        if(this.email!=null && !this.email.isEmpty() )
+        if (this.email != null && !this.email.isEmpty())
             return email;
 
-        if(username!=null && !username.isEmpty())
+        if (username != null && !username.isEmpty())
             return username;
 
         return name;

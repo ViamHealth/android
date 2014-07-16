@@ -2,7 +2,6 @@ package com.viamhealth.android.dao.rest.endpoints;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.viamhealth.android.Global_Application;
 import com.viamhealth.android.ViamHealthPrefs;
@@ -26,11 +25,11 @@ public class GCMEP {
 
     public GCMEP(Context context, Application app) {
         this.context = context;
-        this.ga = (Global_Application)app;
-        this.appPrefs=new ViamHealthPrefs(context);
+        this.ga = (Global_Application) app;
+        this.appPrefs = new ViamHealthPrefs(context);
     }
 
-    public void register(String device_id, String registration_id)  {
+    public void register(String device_id, String registration_id) {
         StringBuilder baseurlString = new StringBuilder(Global_Application.url)
                 .append("gcm/v1/device/register")
                 .append("/");
@@ -39,26 +38,24 @@ public class GCMEP {
             JSONObject payload = new JSONObject();
             payload.put("dev_id", device_id);
             payload.put("reg_id", registration_id);
-            RestClient client = new RestClient(baseurlString.toString());;
+            RestClient client = new RestClient(baseurlString.toString());
+            ;
             //client.AddHeader("Authorization","ApiKey " + ga.getLoggedInUser().getUsername()+":"+appPrefs.getToken().toString());
-            client.AddHeader("Authorization","ApiKey " + ga.getLoggedInUser().getUsername()+":1");
+            client.AddHeader("Authorization", "ApiKey " + ga.getLoggedInUser().getUsername() + ":1");
             client.setJSONString(payload.toString());
             try {
                 client.Execute(RequestMethod.POST);
                 String responseString = client.getResponse();
                 //Log.i("GCPEP", client.toString());
                 //Log.i("GCPEP", responseString);
-            } catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }
-        catch  (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             return;
         }
-
-
 
 
     }
